@@ -287,8 +287,14 @@ namespace Exchange.Base
                             transportResp.IsOutDataValid = provider.OutputData.IsOutDataValid;
                             break;
 
+                        //ТРАНСПОРТ НЕ ОТКРЫТ.
+                        case StatusDataExchange.NotOpenTransport:
+                            _logger.Warning($"Транспорт не открыт. KeyExchange {KeyExchange}");
+                            IsConnect = false;
+                            break;
+
                         //ТАЙМАУТ ОТВЕТА.
-                        case StatusDataExchange.EndWithTimeout: //TODO: Считать ли кол-во таймаутов до переоткрытия?
+                        case StatusDataExchange.EndWithTimeout: //TODO: Считать ли кол-во таймаутов до сброса IsConnect и переоткрытия?
                             IsConnect = false;
                             break;
 
@@ -296,10 +302,10 @@ namespace Exchange.Base
                         case StatusDataExchange.EndWithTimeoutCritical:
                         case StatusDataExchange.EndWithErrorCritical:
                             CycleReOpened(); 
-                            _logger.Warning($"ОБМЕН ЗАВЕРЩЕН КРИТИЧЕСКИ НЕ ПРАВИЛЬНО. ПЕРЕОТКРЫТИЕ СОЕДИНЕНИЯ. KeyExchange {KeyExchange}");
+                            _logger.Error($"ОБМЕН ЗАВЕРЩЕН КРИТИЧЕСКИ НЕ ПРАВИЛЬНО. ПЕРЕОТКРЫТИЕ СОЕДИНЕНИЯ. KeyExchange {KeyExchange}");
                             break;
 
-                        //ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО.
+                        //ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО. Считаем попытки.
                         default:
                             if (++_countTryingTakeData > ExchangeOption.CountBadTrying)
                             {

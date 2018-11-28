@@ -6,6 +6,7 @@
     public enum StatusDataExchange
     {
         None,
+        NotOpenTransport,
         Start,
         Process,
         End,

@@ -162,7 +162,7 @@ namespace Transport.TcpIp.Concrete
         public async Task<StatusDataExchange> DataExchangeAsync(int timeRespoune, ITransportDataProvider dataProvider, CancellationToken ct)
         {
             if (!IsOpen)
-                return StatusDataExchange.None;
+                return StatusDataExchange.NotOpenTransport;
 
             if (dataProvider == null)
                 return StatusDataExchange.None;
