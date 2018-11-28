@@ -250,3 +250,7 @@ System.Net.Internals.SocketExceptionFactory+ExtendedSocketException (0x80004005)
    at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
    at Transport.TcpIp.Concrete.TcpIpTransport.<ReOpen>d__39.MoveNext() in D:\Git\CWS\src\Communication.TcpIp\Concrete\TcpIpTransport.cs:line 146
 2018-11-28 13:24:29.865 +07:00 [WRN] коннект для транспорта НЕ ОТКРЫТ: TransportType= TcpIp  Key=TcpIp table 1
+2018-11-28 18:53:06.041 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2018-11-28 18:53:21.231 +07:00 [DBG] KeyExchange TcpIp_table_46 START>>>>>>>
+2018-11-28 18:53:40.087 +07:00 [WRN] Heartbeat took longer than ""00:00:01"" at ""2018-11-28T11:53:32.9399094+00:00"".
+2018-11-28 18:53:40.110 +07:00 [DBG] KeyExchange TcpIp_table_46 STOP<<<<<<<<

@@ -256,14 +256,15 @@ namespace Exchange.Base
             transportResponseWrapper.KeyExchange = KeyExchange;
             transportResponseWrapper.DataAction = DataAction.CycleAction;
             ResponseChangeRx.OnNext(transportResponseWrapper);
-            await Task.Delay(3000, ct); //DEBUG
+            await Task.Delay(3000, ct); //TODO: Продумать как задвать время цикл. обмена
         }
 
         /// <summary>
         /// Отправка порции данных.
         /// </summary>
         /// <returns>Ответ на отправку порции данных</returns>
-        private int _countTryingTakeData = 0;
+        private int _countErrorTrying = 0;
+        private int _countTimeoutTrying = 0;
         private async Task<ResponsePieceOfDataWrapper<TIn>> SendingPieceOfData(InDataWrapper<TIn> inData, CancellationToken ct)
         {
             var transportResponseWrapper = new ResponsePieceOfDataWrapper<TIn>();
@@ -280,7 +281,8 @@ namespace Exchange.Base
                         //ОБМЕН ЗАВЕРШЕН ПРАВИЛЬНО.
                         case StatusDataExchange.End:
                             IsConnect = true;
-                            _countTryingTakeData = 0;
+                            _countErrorTrying = 0;
+                            _countTimeoutTrying = 0;
                             LastSendData = provider.InputData;
                             transportResp.ResponseData = provider.OutputData.ResponseData;
                             transportResp.Encoding = provider.OutputData.Encoding;
@@ -294,8 +296,13 @@ namespace Exchange.Base
                             break;
 
                         //ТАЙМАУТ ОТВЕТА.
-                        case StatusDataExchange.EndWithTimeout: //TODO: Считать ли кол-во таймаутов до сброса IsConnect и переоткрытия?
-                            IsConnect = false;
+                        case StatusDataExchange.EndWithTimeout:
+                            if (++_countTimeoutTrying > ExchangeOption.NumberTimeoutTrying)
+                            {
+                                _countTimeoutTrying = 0;
+                                IsConnect = false;
+                                _logger.Warning($"ТАЙМАУТ ОТВЕТА. KeyExchange {KeyExchange}");
+                            }
                             break;
 
                         //ОБМЕН ЗАВЕРЩЕН КРИТИЧЕСКИ НЕ ПРАВИЛЬНО. ПЕРЕОТКРЫТИЕ СОЕДИНЕНИЯ.
@@ -306,10 +313,10 @@ namespace Exchange.Base
                             break;
 
                         //ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО. Считаем попытки.
-                        default:
-                            if (++_countTryingTakeData > ExchangeOption.CountBadTrying)
+                        default:  //EndWithError
+                            if (++_countErrorTrying > ExchangeOption.NumberErrorTrying)
                             {
-                                _countTryingTakeData = 0;
+                                _countErrorTrying = 0;
                                 IsConnect = false;
                                 _logger.Warning($"ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО. KeyExchange {KeyExchange}");
                                 CycleReOpened();
@@ -333,10 +340,10 @@ namespace Exchange.Base
                 }
             });
 
-            int countTryingSendData = 0;
+            int numberPreparedPackages = 0; //кол-во подготовленных к отправке пакетов
             try
             {   //ЗАПУСК КОНВЕЕРА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ
-                countTryingSendData= await _dataProvider.StartExchangePipeline(inData);
+                numberPreparedPackages= await _dataProvider.StartExchangePipeline(inData);
             }
             catch (Exception ex)
             {
@@ -353,7 +360,7 @@ namespace Exchange.Base
 
             var countIsValid = transportResponseWrapper.ResponsesItems.Count(resp => resp.IsOutDataValid);
             var countAll = transportResponseWrapper.ResponsesItems.Count(resp => resp.IsOutDataValid);
-            _logger.Information($"ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= {KeyExchange} успех/ответов/запросов=  ({countIsValid} / {countAll} / {countTryingSendData})");
+            _logger.Information($"ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= {KeyExchange} успех/ответов/запросов=  ({countIsValid} / {countAll} / {numberPreparedPackages})");
           
             return transportResponseWrapper;
         }

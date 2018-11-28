@@ -76,7 +76,8 @@ namespace DAL.Abstract.Extensions
                     Key = "TcpIp_table_46",
                     KeyTransport = new KeyTransport("TcpIp table 1", TransportType.TcpIp),
                     AutoStartCycleFunc = true, // DEBUG
-                    CountBadTrying = 30,
+                    NumberErrorTrying = 30,
+                    NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
                     {
                         Name = "ByRules",
@@ -393,7 +394,8 @@ namespace DAL.Abstract.Extensions
                     Key = "TcpIp_table_59",
                     KeyTransport = new KeyTransport("TcpIp table 1", TransportType.TcpIp),
                     AutoStartCycleFunc = false, // DEBUG
-                    CountBadTrying = 30,
+                    NumberErrorTrying = 30,
+                    NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
                     {
                         Name = "ByRules",
@@ -710,7 +712,8 @@ namespace DAL.Abstract.Extensions
                     Key = "TcpIp_table_NONE",
                     KeyTransport = new KeyTransport("TcpIp table 1", TransportType.TcpIp),
                     AutoStartCycleFunc = false, // DEBUG
-                    CountBadTrying = 30,
+                    NumberErrorTrying = 30,
+                    NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
                     {
                         Name = "ByRules",
