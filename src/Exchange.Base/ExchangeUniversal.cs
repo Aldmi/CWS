@@ -328,7 +328,7 @@ namespace Exchange.Base
                 {
                     transportResp.RequestData = provider.InputData;
                     transportResp.Status = status;
-                    transportResp.Message = provider.StatusString.ToString();
+                    transportResp.MessageDict = new Dictionary<string, string>(provider.StatusDict);
                     transportResponseWrapper.ResponsesItems.Add(transportResp);
                 }
             });
@@ -343,7 +343,7 @@ namespace Exchange.Base
                 //ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ.
                 IsConnect = false;
                 transportResponseWrapper.ExceptionExchangePipline = ex;
-                transportResponseWrapper.Message = _dataProvider.StatusString.ToString();
+                transportResponseWrapper.MessageDict = new Dictionary<string, string>(_dataProvider.StatusDict);
                 _logger.Error(ex, $"ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange {KeyExchange}");
             }
             finally

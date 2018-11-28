@@ -1,4 +1,5 @@
-﻿using System.Reactive.Subjects;
+﻿using System.Collections.Generic;
+using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
 using Exchange.Base.Model;
@@ -13,7 +14,7 @@ namespace Exchange.Base.DataProviderAbstract
         bool IsOutDataValid { get; }                                 //флаг валидности выходных данных (OutputData)
          
         string ProviderName { get;  }                                 //Название провайдера
-        StringBuilder StatusString { get; }                           //Статус провайдера.
+        Dictionary<string, string> StatusDict{ get; }              //Статус провайдера.
         int TimeRespone { get; }                                      //Время на ответ
 
         Task<int> StartExchangePipeline(InDataWrapper<TInput> inData);                     //Запустить конвеер обмена. После окончания подготовки порции данных конвеером, срабатывает RaiseSendDataRx.

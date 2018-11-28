@@ -16,7 +16,7 @@ namespace Exchange.Base.Model
         public DataAction DataAction { get; set; }                 //Действие
 
         public Exception ExceptionExchangePipline { get; set; }    //Критическая Ошибка обработки данных в конвеере.
-        public string Message { get; set; }                        //Доп. информация
+        public Dictionary<string, string> MessageDict { get; set; }        //Доп. информация
         public List<ResponseDataItem<TIn>> ResponsesItems { get; set; } = new List<ResponseDataItem<TIn>>();
                
         public Dictionary<string, dynamic> DataBag { get; set; }     //Не типизированный контейнер для передачи любых данных
@@ -29,7 +29,7 @@ namespace Exchange.Base.Model
     public class ResponseDataItem<TIn>
     {
         public string RequestId { get; set; }
-        public string Message { get; set; }                   //Доп. информация
+        public Dictionary<string, string> MessageDict { get; set; }   //Доп. информация
         public StatusDataExchange Status { get; set; }
         public string StatusStr => Status.ToString();
 

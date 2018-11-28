@@ -1,6 +1,4 @@
-2018-11-28 12:07:29.938 +07:00 [ERR] ТРАНСПОРТ УЖЕ НАХОДИТСЯ В ЦИКЛЕ ПЕРЕОТКРЫТИЯ "TransportType= TcpIp  Key=TcpIp table 1"  KeyExchange "TcpIp_table_46"
-2018-11-28 12:07:39.391 +07:00 [ERR] ТРАНСПОРТ УЖЕ НАХОДИТСЯ В ЦИКЛЕ ПЕРЕОТКРЫТИЯ "TransportType= TcpIp  Key=TcpIp table 1"  KeyExchange "TcpIp_table_46"
-2018-11-28 12:07:41.335 +07:00 [ERR] Ошибка инициализации соединения: "Попытка установить соединение была безуспешной, т.к. от другого компьютера за требуемое время не получен нужный отклик, или было разорвано уже установленное соединение из-за неверного отклика уже подключенного компьютера 10.27.15.199:4001"
+2018-11-28 13:24:29.802 +07:00 [ERR] Ошибка инициализации соединения: "Попытка установить соединение была безуспешной, т.к. от другого компьютера за требуемое время не получен нужный отклик, или было разорвано уже установленное соединение из-за неверного отклика уже подключенного компьютера 10.27.15.199:4001"
 System.Net.Internals.SocketExceptionFactory+ExtendedSocketException (0x80004005): Попытка установить соединение была безуспешной, т.к. от другого компьютера за требуемое время не получен нужный отклик, или было разорвано уже установленное соединение из-за неверного отклика уже подключенного компьютера 10.27.15.199:4001
    at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
    at System.Net.Sockets.Socket.EndConnect(IAsyncResult asyncResult)
@@ -10,6 +8,4 @@ System.Net.Internals.SocketExceptionFactory+ExtendedSocketException (0x80004005)
 --- End of stack trace from previous location where exception was thrown ---
    at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
    at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
-   at Transport.TcpIp.Concrete.TcpIpTransport.<ReOpen>d__39.MoveNext() in D:\Git\CommunicationWebService_Ver2\src\Communication.TcpIp\Concrete\TcpIpTransport.cs:line 146
-2018-11-28 12:07:48.813 +07:00 [ERR] ТРАНСПОРТ УЖЕ НАХОДИТСЯ В ЦИКЛЕ ПЕРЕОТКРЫТИЯ "TransportType= TcpIp  Key=TcpIp table 1"  KeyExchange "TcpIp_table_46"
-2018-11-28 12:07:58.254 +07:00 [ERR] ТРАНСПОРТ УЖЕ НАХОДИТСЯ В ЦИКЛЕ ПЕРЕОТКРЫТИЯ "TransportType= TcpIp  Key=TcpIp table 1"  KeyExchange "TcpIp_table_46"
+   at Transport.TcpIp.Concrete.TcpIpTransport.<ReOpen>d__39.MoveNext() in D:\Git\CWS\src\Communication.TcpIp\Concrete\TcpIpTransport.cs:line 146

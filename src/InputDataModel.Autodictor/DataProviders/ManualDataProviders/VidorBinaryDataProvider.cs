@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reactive.Subjects;
 using System.Text;
@@ -83,6 +84,7 @@ namespace InputDataModel.Autodictor.DataProviders.ManualDataProviders
         public bool IsOutDataValid { get; }
         public Subject<ResponseDataItem<AdInputType>> OutputDataChangeRx { get; }
         public string ProviderName { get; set; }
+        public Dictionary<string, string> StatusDict { get; }
         public StringBuilder StatusString { get; set; }
         public string Message { get; }
 
