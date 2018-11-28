@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.3.0" />
+    <PackageReference Include="morelinq" Version="3.0.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
+    <PackageReference Include="SerilogTimings" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Communication.SerialPort\Transport.SerialPort.csproj" />
+    <ProjectReference Include="..\Communication.TcpIp\Transport.TcpIp.csproj" />
+    <ProjectReference Include="..\Device.Base\DeviceForExchange.csproj" />
+    <ProjectReference Include="..\Exchange.Base\Exchange.Base.csproj" />
+    <ProjectReference Include="..\Infrastructure.MessageBroker1\Infrastructure.MessageBroker.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.EventBus.csproj" />
+    <ProjectReference Include="..\InputDataModel.Autodictor\InputDataModel.Autodictor.csproj" />
+    <ProjectReference Include="..\InputDataModel.Base\InputDataModel.Base.csproj" />
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\Transport.Base\Transport.Base.csproj" />
+    <ProjectReference Include="..\Transport.Http\Transport.Http.csproj" />
+    <ProjectReference Include="..\Worker.Background\Worker.Background.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.EntityFrameworkCore">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.entityframeworkcore\2.0.3\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

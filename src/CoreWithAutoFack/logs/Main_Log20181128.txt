@@ -1,0 +1,35 @@
+2018-11-28 12:07:15.916 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2018-11-28 12:07:20.460 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp_table_46 успех/ответов/запросов=  (0 / 0 / 10)
+2018-11-28 12:07:23.677 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp_table_46 успех/ответов/запросов=  (0 / 0 / 10)
+2018-11-28 12:07:26.823 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp_table_46 успех/ответов/запросов=  (0 / 0 / 10)
+2018-11-28 12:07:29.936 +07:00 [WRN] ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО. KeyExchange TcpIp_table_46
+2018-11-28 12:07:29.938 +07:00 [ERR] ТРАНСПОРТ УЖЕ НАХОДИТСЯ В ЦИКЛЕ ПЕРЕОТКРЫТИЯ "TransportType= TcpIp  Key=TcpIp table 1"  KeyExchange "TcpIp_table_46"
+2018-11-28 12:07:29.973 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp_table_46 успех/ответов/запросов=  (0 / 0 / 10)
+2018-11-28 12:07:33.126 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp_table_46 успех/ответов/запросов=  (0 / 0 / 10)
+2018-11-28 12:07:36.279 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp_table_46 успех/ответов/запросов=  (0 / 0 / 10)
+2018-11-28 12:07:39.389 +07:00 [WRN] ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО. KeyExchange TcpIp_table_46
+2018-11-28 12:07:39.391 +07:00 [ERR] ТРАНСПОРТ УЖЕ НАХОДИТСЯ В ЦИКЛЕ ПЕРЕОТКРЫТИЯ "TransportType= TcpIp  Key=TcpIp table 1"  KeyExchange "TcpIp_table_46"
+2018-11-28 12:07:39.420 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp_table_46 успех/ответов/запросов=  (0 / 0 / 10)
+2018-11-28 12:07:41.335 +07:00 [ERR] Ошибка инициализации соединения: "Попытка установить соединение была безуспешной, т.к. от другого компьютера за требуемое время не получен нужный отклик, или было разорвано уже установленное соединение из-за неверного отклика уже подключенного компьютера 10.27.15.199:4001"
+System.Net.Internals.SocketExceptionFactory+ExtendedSocketException (0x80004005): Попытка установить соединение была безуспешной, т.к. от другого компьютера за требуемое время не получен нужный отклик, или было разорвано уже установленное соединение из-за неверного отклика уже подключенного компьютера 10.27.15.199:4001
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Net.Sockets.Socket.EndConnect(IAsyncResult asyncResult)
+   at System.Net.Sockets.TcpClient.EndConnect(IAsyncResult asyncResult)
+   at System.Net.Sockets.TcpClient.<>c.<ConnectAsync>b__27_1(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Transport.TcpIp.Concrete.TcpIpTransport.<ReOpen>d__39.MoveNext() in D:\Git\CommunicationWebService_Ver2\src\Communication.TcpIp\Concrete\TcpIpTransport.cs:line 146
+2018-11-28 12:07:41.393 +07:00 [WRN] коннект для транспорта НЕ ОТКРЫТ: TransportType= TcpIp  Key=TcpIp table 1
+2018-11-28 12:07:42.564 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp_table_46 успех/ответов/запросов=  (0 / 0 / 10)
+2018-11-28 12:07:45.701 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp_table_46 успех/ответов/запросов=  (0 / 0 / 10)
+2018-11-28 12:07:48.811 +07:00 [WRN] ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО. KeyExchange TcpIp_table_46
+2018-11-28 12:07:48.813 +07:00 [ERR] ТРАНСПОРТ УЖЕ НАХОДИТСЯ В ЦИКЛЕ ПЕРЕОТКРЫТИЯ "TransportType= TcpIp  Key=TcpIp table 1"  KeyExchange "TcpIp_table_46"
+2018-11-28 12:07:48.844 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp_table_46 успех/ответов/запросов=  (0 / 0 / 10)
+2018-11-28 12:07:51.985 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp_table_46 успех/ответов/запросов=  (0 / 0 / 10)
+2018-11-28 12:07:55.137 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp_table_46 успех/ответов/запросов=  (0 / 0 / 10)
+2018-11-28 12:07:58.253 +07:00 [WRN] ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО. KeyExchange TcpIp_table_46
+2018-11-28 12:07:58.254 +07:00 [ERR] ТРАНСПОРТ УЖЕ НАХОДИТСЯ В ЦИКЛЕ ПЕРЕОТКРЫТИЯ "TransportType= TcpIp  Key=TcpIp table 1"  KeyExchange "TcpIp_table_46"
+2018-11-28 12:07:58.285 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp_table_46 успех/ответов/запросов=  (0 / 0 / 10)
+2018-11-28 12:08:01.439 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp_table_46 успех/ответов/запросов=  (0 / 0 / 10)

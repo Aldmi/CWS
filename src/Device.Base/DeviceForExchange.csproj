@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.3.0" />
+    <PackageReference Include="morelinq" Version="3.0.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
+    <PackageReference Include="SerilogTimings" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DAL.Abstract\DAL.Abstract.csproj" />
+    <ProjectReference Include="..\Exchange.Base\Exchange.Base.csproj" />
+    <ProjectReference Include="..\Infrastructure.MessageBroker1\Infrastructure.MessageBroker.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.EventBus.csproj" />
+    <ProjectReference Include="..\InputDataModel.Base\InputDataModel.Base.csproj" />
+    <ProjectReference Include="..\Transport.Base\Transport.Base.csproj" />
+  </ItemGroup>
+
+</Project>
