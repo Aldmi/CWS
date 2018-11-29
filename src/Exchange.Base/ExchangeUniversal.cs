@@ -13,6 +13,8 @@ using Exchange.Base.Model;
 using Exchange.Base.RxModel;
 using InputDataModel.Base;
 using Serilog;
+using Serilog.Events;
+using SerilogTimings.Extensions;
 using Shared.Enums;
 using Shared.Types;
 using Transport.Base.Abstract;
@@ -343,7 +345,11 @@ namespace Exchange.Base
             int numberPreparedPackages = 0; //кол-во подготовленных к отправке пакетов
             try
             {   //ЗАПУСК КОНВЕЕРА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ
-                numberPreparedPackages= await _dataProvider.StartExchangePipeline(inData);
+              //  using (_logger.TimeOperation("TimeOpertaion TakeDataAsync"))
+                using (_logger.OperationAt(LogEventLevel.Information).Time("TimeOpertaion End Exchanage Pipeline"))
+                {
+                    numberPreparedPackages = await _dataProvider.StartExchangePipeline(inData);
+                }
             }
             catch (Exception ex)
             {

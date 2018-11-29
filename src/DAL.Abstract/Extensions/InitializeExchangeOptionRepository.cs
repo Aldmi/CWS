@@ -1057,9 +1057,9 @@ namespace DAL.Abstract.Extensions
                                         new ViewRuleOption
                                         {
                                             Id = 1,
-                                            StartPosition = 2,
-                                            Count = 6,
-                                            BatchSize = 2,
+                                            StartPosition = 0,
+                                            Count = 9,
+                                            BatchSize = 1,
                                             RequestOption = new RequestOption
                                             {
                                                 Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
@@ -1075,7 +1075,145 @@ namespace DAL.Abstract.Extensions
                                                 TimeRespone = 260,
                                                 Format = "X2"
                                             }
-                                        }
+                                        },
+                                        //{StationDeparture}-{StationArrival}
+                                        new ViewRuleOption
+                                        {
+                                            Id = 2,
+                                            StartPosition = 0,
+                                            Count = 9,
+                                            BatchSize = 1,
+                                            RequestOption = new RequestOption
+                                            {
+                                                Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                                                Body = "%0101A07D{(rowNumber*11-11):X3}{(rowNumber*11-2):X3}0004000E%10{NumberOfCharacters:X2}01\\\"{StationDeparture}-{StationArrival}\\\"",
+                                                Footer = "{CRCXor:X2}\u0003",
+                                                MaxBodyLenght = 200,
+                                                Format = "Windows-1251"
+                                            },
+                                            ResponseOption = new ResponseOption
+                                            {
+                                                Body = "0246463038254130373741434B454103",
+                                                Lenght = 16,
+                                                TimeRespone = 260,
+                                                Format = "X2"
+                                            }
+                                        },
+                                        //{TArrival:t}
+                                        new ViewRuleOption
+                                        {
+                                            Id = 3,
+                                            StartPosition = 0,
+                                            Count = 9,
+                                            BatchSize = 1,
+                                            RequestOption = new RequestOption
+                                            {
+                                                Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                                                Body = "%0108009B{(rowNumber*11-11):X3}{(rowNumber*11-2):X3}0040001E%10{NumberOfCharacters:X2}01\\\"{TArrival:t}\\\"",
+                                                Footer = "{CRCXor:X2}\u0003",
+                                                MaxBodyLenght = 200,
+                                                Format = "Windows-1251"
+                                            },
+                                            ResponseOption = new ResponseOption
+                                            {
+                                                Body = "0246463038254130373741434B454103",
+                                                Lenght = 16,
+                                                TimeRespone = 260,
+                                                Format = "X2"
+                                            }
+                                        },
+                                        //{TDepart:t}
+                                        new ViewRuleOption
+                                        {
+                                            Id = 4,
+                                            StartPosition = 0,
+                                            Count = 9,
+                                            BatchSize = 1,
+                                            RequestOption = new RequestOption
+                                            {
+                                                Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                                                Body = "%0109F0BC{(rowNumber*11-11):X3}{(rowNumber*11-2):X3}0040001E%10{NumberOfCharacters:X2}01\\\"{TDepart:t}\\\"",
+                                                Footer = "{CRCXor:X2}\u0003",
+                                                MaxBodyLenght = 200,
+                                                Format = "Windows-1251"
+                                            },
+                                            ResponseOption = new ResponseOption
+                                            {
+                                                Body = "0246463038254130373741434B454103",
+                                                Lenght = 16,
+                                                TimeRespone = 260,
+                                                Format = "X2"
+                                            }
+                                        },
+                                        //{PathNumber}
+                                        new ViewRuleOption
+                                        {
+                                            Id = 5,
+                                            StartPosition = 0,
+                                            Count = 9,
+                                            BatchSize = 1,
+                                            RequestOption = new RequestOption
+                                            {
+                                                Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                                                Body = "%010D50E3{(rowNumber*11-11):X3}{(rowNumber*11-2):X3}0000001E%10{NumberOfCharacters:X2}01\\\"{PathNumber}\\\"",
+                                                Footer = "{CRCXor:X2}\u0003",
+                                                MaxBodyLenght = 200,
+                                                Format = "Windows-1251"
+                                            },
+                                            ResponseOption = new ResponseOption
+                                            {
+                                                Body = "0246463038254130373741434B454103",
+                                                Lenght = 16,
+                                                TimeRespone = 260,
+                                                Format = "X2"
+                                            }
+                                        },
+                                        //{DelayTime}
+                                        new ViewRuleOption
+                                        {
+                                            Id = 6,
+                                            StartPosition = 0,
+                                            Count = 9,
+                                            BatchSize = 1,
+                                            RequestOption = new RequestOption
+                                            {
+                                                Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                                                Body = "%010E60FF{(rowNumber*11-11):X3}{(rowNumber*11-2):X3}0040001E%10{NumberOfCharacters:X2}01\\\"{DelayTime}\\\"",
+                                                Footer = "{CRCXor:X2}\u0003",
+                                                MaxBodyLenght = 200,
+                                                Format = "Windows-1251"
+                                            },
+                                            ResponseOption = new ResponseOption
+                                            {
+                                                Body = "0246463038254130373741434B454103",
+                                                Lenght = 16,
+                                                TimeRespone = 260,
+                                                Format = "X2"
+                                            }
+                                        },
+                                        //{Platform}
+                                        //new ViewRuleOption
+                                        //{
+                                        //    Id = 7,
+                                        //    StartPosition = 0,
+                                        //    Count = 9,
+                                        //    BatchSize = 1,
+                                        //    RequestOption = new RequestOption
+                                        //    {
+                                        //        Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                                        //        Body = "%010C20D2{(rowNumber*11-11):X3}{(rowNumber*11-2):X3}0000001E%10{NumberOfCharacters:X2}01\\\"{Platform}\\\"",
+                                        //        Footer = "{CRCXor:X2}\u0003",
+                                        //        MaxBodyLenght = 200,
+                                        //        Format = "Windows-1251"
+                                        //    },
+                                        //    ResponseOption = new ResponseOption
+                                        //    {
+                                        //        Body = "0246463038254130373741434B454103",
+                                        //        Lenght = 16,
+                                        //        TimeRespone = 260,
+                                        //        Format = "X2"
+                                        //    }
+                                        //}
                                     }
                                 },
                                 //КОМАНДА ОЧИСТКИ
