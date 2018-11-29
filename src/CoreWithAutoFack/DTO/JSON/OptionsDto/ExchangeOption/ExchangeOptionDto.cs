@@ -17,6 +17,7 @@ namespace WebServer.DTO.JSON.OptionsDto.ExchangeOption
         public ProviderOptionDto Provider { get; set; }
 
         public bool AutoStartCycleFunc { get; set; }
-        public int CountBadTrying { get; set; }
+        public int NumberErrorTrying { get; set; }   
+        public int NumberTimeoutTrying { get; set; } 
     }
 }

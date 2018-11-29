@@ -157,11 +157,13 @@ namespace DeviceForExchange
         {
             if (!exchange.IsStartedTransportBg)
             {
+                _logger.Information($"Отправка данных НЕ удачна, Бекграунд обмена {exchange.KeyExchange} НЕ ЗАПЦУЩЕН");
                 await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, Бекграунд обмена {exchange.KeyExchange} НЕ ЗАПЦУЩЕН");
                 return;
             }
             if (!exchange.IsOpen)
             {
+                _logger.Information($"Отправка данных НЕ удачна, соединение транспорта для обмена {exchange.KeyExchange} НЕ ОТКРЫТО");
                 await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, соединение транспорта для обмена {exchange.KeyExchange} НЕ ОТКРЫТО");
                 return;
             }
@@ -174,6 +176,7 @@ namespace DeviceForExchange
                 case DataAction.CycleAction:
                     if (!exchange.IsStartedCycleExchange)
                     {
+                        _logger.Information($"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН");
                         await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН");
                         return;
                     }

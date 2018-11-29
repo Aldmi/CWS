@@ -71,6 +71,18 @@ namespace DAL.Abstract.Extensions
                         "TcpIp_table_NONE"
                     }
                 },
+                new DeviceOption
+                {
+                    Id = 2,
+                    Description = "Табло2",
+                    Name = "Vidor9Str",
+                    TopicName4MessageBroker = "Vidor9Str", //String.Empty
+                    AutoBuild = true,
+                    ExchangeKeys = new List<string>
+                    {
+                        "TcpIp_table_PribOtpr9Str"
+                    }
+                },
                 //new DeviceOption
                 //{
                 //    Id = 2,

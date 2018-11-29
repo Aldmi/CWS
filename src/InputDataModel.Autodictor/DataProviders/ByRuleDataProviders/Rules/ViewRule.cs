@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -60,13 +58,17 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             }
             else
             {
+                int numberOfBatch = 0;
                 foreach (var batch in viewedItems.Batch(Option.BatchSize))
                 {
-                    var resStr = CreateStringRequest(batch);
+                    var startItemIndex = Option.StartPosition + (numberOfBatch++ * Option.BatchSize);
+                    var stringRequest = CreateStringRequest(batch, startItemIndex);
                     yield return new ViewRuleRequestModelWrapper
                     {
+                        StartItemIndex = startItemIndex,
+                        BatchSize = Option.BatchSize,
                         BatchedData = batch,
-                        StringRequest = resStr,
+                        StringRequest = stringRequest,
                         RequestOption = Option.RequestOption,
                         ResponseOption = Option.ResponseOption
                     };
@@ -124,7 +126,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         /// Создать строку Запроса (используя форматную строку) из одного батча данных.
         /// </summary>
         /// <returns></returns>
-        private string CreateStringRequest(IEnumerable<AdInputType> batch)
+        private string CreateStringRequest(IEnumerable<AdInputType> batch, int startItemIndex)
         {
             var items = batch.ToList();
 
@@ -159,11 +161,11 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
             //ЗАПОЛНИТЬ ТЕЛО ЗАПРОСА (вставить НЕЗАВИСИМЫЕ данные)-------------------------------------------------------------------------
             var resBodyStr = new StringBuilder();
-            var startRow = Option.StartPosition;
+
             for (var i = 0; i < items.Count; i++)
             {
                 var item = items[i];
-                var currentRow = startRow + i + 1;
+                var currentRow = startItemIndex + i + 1;
                 var res = MakeBodySectionIndependentInserts(body, item, currentRow);
                 resBodyStr.Append(res);
             }
@@ -456,13 +458,16 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
 
     /// <summary>
-    /// Единица запроса обработанная ViewRule
+    /// Единица запроса обработанная ViewRule.
+    /// 
     /// </summary>
     public class ViewRuleRequestModelWrapper
     {
-        public IEnumerable<AdInputType> BatchedData { get; set; }    //набор входных данных на базе которых созданна StringRequest
-        public string StringRequest { get; set; }                   //строка запроса, созданная по правилам RequestOption
-        public RequestOption RequestOption { get; set; }            //Запрос
-        public ResponseOption ResponseOption { get; set; }          //Ответ
+        public int StartItemIndex { get; set; }                     //Начальный индекс (в базовом массиве, после TakeItems) элемента после разбиения на батчи.
+        public int BatchSize { get; set; }                          //Размер батча.
+        public IEnumerable<AdInputType> BatchedData { get; set; }   //Набор входных данных на базе которых созданна StringRequest.
+        public string StringRequest { get; set; }                   //Строка запроса, созданная по правилам RequestOption.
+        public RequestOption RequestOption { get; set; }            //Запрос.
+        public ResponseOption ResponseOption { get; set; }          //Ответ.
     }
 }

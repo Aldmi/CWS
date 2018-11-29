@@ -75,7 +75,7 @@ namespace DAL.Abstract.Extensions
                     Id = 2,
                     Key = "TcpIp_table_46",
                     KeyTransport = new KeyTransport("TcpIp table 1", TransportType.TcpIp),
-                    AutoStartCycleFunc = true, // DEBUG
+                    AutoStartCycleFunc = false, // DEBUG
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -1023,7 +1023,119 @@ namespace DAL.Abstract.Extensions
                             }
                         }
                     }
-                }
+                },
+                //МНОГОСТРОЧКА
+                new ExchangeOption
+                {
+                    Id = 5,
+                    Key = "TcpIp_table_PribOtpr9Str",
+                    KeyTransport = new KeyTransport("TcpIp table PribOtpr9Str", TransportType.TcpIp),
+                    AutoStartCycleFunc = false, // DEBUG
+                    NumberErrorTrying = 30,
+                    NumberTimeoutTrying = 5,
+                    Provider = new ProviderOption
+                    {
+                        Name = "ByRules",
+                        ByRulesProviderOption = new ByRulesProviderOption
+                        {
+                            Rules = new List<RuleOption>
+                            {
+                                //ДАННЫЕ ДЛЯ МНОГОСТР. ТАБЛО ПРИБ/ОТПР
+                                new RuleOption
+                                {
+                                    Name = "PribOtpr9Str_46",
+                                    AddressDevice = "64",
+                                    //WhereFilter = "(TypeTrain == \"Suburban\") && (PathNumber == \"2\" || PathNumber == \"3\" || PathNumber == \"4\")",
+                                    WhereFilter = "true",
+                                    OrderBy = "Id",
+                                    //OrderBy = "ArrivalTime",
+                                    TakeItems = 9, //2
+                                    DefaultItemJson= "{\"pathNumber\": \"5\"}",  //"{}" - дефолтный конструктор типа
+                                    ViewRules = new List<ViewRuleOption>
+                                    {
+                                        //{NumberOfTrain}
+                                        new ViewRuleOption
+                                        {
+                                            Id = 1,
+                                            StartPosition = 2,
+                                            Count = 6,
+                                            BatchSize = 2,
+                                            RequestOption = new RequestOption
+                                            {
+                                                Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                                                Body = "%01000018{(rowNumber*11-11):X3}{(rowNumber*11-2):X3}0000001E%10{NumberOfCharacters:X2}01\\\"{NumberOfTrain}\\\"",
+                                                Footer = "{CRCXor:X2}\u0003",
+                                                MaxBodyLenght = 200,
+                                                Format = "Windows-1251"
+                                            },
+                                            ResponseOption = new ResponseOption
+                                            {
+                                                Body = "0246463038254130373741434B454103",
+                                                Lenght = 16,
+                                                TimeRespone = 260,
+                                                Format = "X2"
+                                            }
+                                        }
+                                    }
+                                },
+                                //КОМАНДА ОЧИСТКИ
+                                new RuleOption
+                                {
+                                    Name = "Command_Clear",
+                                    AddressDevice = "64",
+                                    ViewRules = new List<ViewRuleOption>
+                                    {
+                                        new ViewRuleOption
+                                        {
+                                            Id = 1,
+                                            RequestOption = new RequestOption
+                                            {
+                                                Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                                                Body = "%23",
+                                                Footer = "{CRCXor:X2}\u0003",
+                                                Format = "Windows-1251"
+                                            },
+                                            ResponseOption = new ResponseOption
+                                            {
+                                                Body = "0246463038254130373741434B454103",
+                                                Lenght = 16,
+                                                TimeRespone = 260,
+                                                Format = "X2"
+                                            }
+                                        }
+                                    }
+                                },
+                                //КОМАНДА ПЕРЕЗАГРУЗКИ
+                                new RuleOption
+                                {
+                                    Name = "Command_Restart",
+                                    AddressDevice = "64", 
+                                    ViewRules = new List<ViewRuleOption>
+                                    {
+                                        new ViewRuleOption
+                                        {
+                                            Id = 1,
+                                            RequestOption = new RequestOption
+                                            {
+                                                Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                                                Body = "%39",
+                                                Footer = "{CRCXor:X2}\u0003",
+                                                Format = "Windows-1251"
+                                            },
+                                            ResponseOption = new ResponseOption
+                                            {
+                                                Body = "0246463038254130373741434B454103",
+                                                Lenght = 16,
+                                                TimeRespone = 260,
+                                                Format = "X2"
+                                            }
+                                        }
+                                    }
+                                },
+                            }
+                        }
+                    }
+                },
             };
 
             await rep.AddRangeAsync(exchanges);

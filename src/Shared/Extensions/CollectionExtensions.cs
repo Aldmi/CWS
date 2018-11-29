@@ -31,6 +31,7 @@ namespace Shared.Extensions
         }
 
 
+
         public static string ArrayByteToString(this IEnumerable<byte> source, string format)
         {
             var stringBuilder = new StringBuilder();
