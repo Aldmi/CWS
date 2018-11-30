@@ -138,36 +138,76 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             {
                 StatusDict.Clear();
                 StatusDict["RuleName"] = $"\"{rule.Option.Name}\"";
-                //КОМАНДА-------------------------------------------------------------
-                if (IsCommandHandler(inData.Command, rule.Option.Name))
+                switch(SwitchInDataHandler(inData.Command, rule.Option.Name))
                 {
-                    StatusDict["Command"] = $"{inData.Command}";
-                    var commandViewRule = rule.ViewRules.FirstOrDefault();
-                    _currentRequest = commandViewRule?.GetCommandRequestString();
-                    InputData = new InDataWrapper<AdInputType> { Command = inData.Command };
-                    RaiseSendDataRx.OnNext(this);
-                    countTryingSendData++;
-                    continue;
-                }
-                //ДАННЫЕ--------------------------------------------------------------
-                var takesItems = FilteredAndOrderedAndTakesItems(inData.Datas, rule.Option.WhereFilter, rule.Option.OrderBy, rule.Option.TakeItems, rule.Option.DefaultItemJson)?.ToList();
-                if (IsDataHandler(inData.Command, takesItems))
-                {
-                    foreach (var viewRule in rule.ViewRules)
-                    {
-                        foreach (var request in viewRule.GetDataRequestString(takesItems))
-                        {
-                            if (request == null) //правило отображения не подходит под ДАННЫЕ
-                                continue;
+                    //КОМАНДА-------------------------------------------------------------
+                    case RuleSwitcher4InData.CommandHanler:
+                        StatusDict["Command"] = $"{inData.Command}";
+                        var commandViewRule = rule.ViewRules.FirstOrDefault();
+                        _currentRequest = commandViewRule?.GetCommandRequestString();
+                        InputData = new InDataWrapper<AdInputType> { Command = inData.Command };
+                        RaiseSendDataRx.OnNext(this);
+                        countTryingSendData++;
+                        continue;
 
-                            _currentRequest = request;
-                            InputData = new InDataWrapper<AdInputType> { Datas = _currentRequest.BatchedData.ToList() };
-                            StatusDict["viewRule.Id"] = $"{viewRule.Option.Id}. CountItem4Sending = {InputData.Datas.Count}";
-                            RaiseSendDataRx.OnNext(this);
-                            countTryingSendData++;
+                    //ДАННЫЕ--------------------------------------------------------------  
+                    case RuleSwitcher4InData.InDataHandler:
+                        var takesItems = FilteredAndOrderedAndTakesItems(inData.Datas, rule.Option.WhereFilter, rule.Option.OrderBy, rule.Option.TakeItems, rule.Option.DefaultItemJson)?.ToList();
+                        if (takesItems != null && takesItems.Any())
+                        {
+                            foreach (var viewRule in rule.ViewRules)
+                            {
+                                foreach (var request in viewRule.GetDataRequestString(takesItems))
+                                {
+                                    if (request == null) //правило отображения не подходит под ДАННЫЕ
+                                        continue;
+
+                                    _currentRequest = request;
+                                    InputData = new InDataWrapper<AdInputType>
+                                        {Datas = _currentRequest.BatchedData.ToList()};
+                                    StatusDict["viewRule.Id"] =
+                                        $"{viewRule.Option.Id}. CountItem4Sending = {InputData.Datas.Count}";
+                                    RaiseSendDataRx.OnNext(this);
+                                    countTryingSendData++;
+                                }
+                            }
                         }
-                    }
+                        continue;
+
+                    default:
+                       continue;
                 }
+
+                ////КОМАНДА-------------------------------------------------------------
+                //if (IsCommandHandler(inData.Command, rule.Option.Name))
+                //{
+                //    StatusDict["Command"] = $"{inData.Command}";
+                //    var commandViewRule = rule.ViewRules.FirstOrDefault();
+                //    _currentRequest = commandViewRule?.GetCommandRequestString();
+                //    InputData = new InDataWrapper<AdInputType> { Command = inData.Command };
+                //    RaiseSendDataRx.OnNext(this);
+                //    countTryingSendData++;
+                //    continue;
+                //}
+                ////ДАННЫЕ--------------------------------------------------------------
+                //var takesItems = FilteredAndOrderedAndTakesItems(inData.Datas, rule.Option.WhereFilter, rule.Option.OrderBy, rule.Option.TakeItems, rule.Option.DefaultItemJson)?.ToList();
+                //if (IsDataHandler(inData.Command, takesItems))
+                //{
+                //    foreach (var viewRule in rule.ViewRules)
+                //    {
+                //        foreach (var request in viewRule.GetDataRequestString(takesItems))
+                //        {
+                //            if (request == null) //правило отображения не подходит под ДАННЫЕ
+                //                continue;
+
+                //            _currentRequest = request;
+                //            InputData = new InDataWrapper<AdInputType> { Datas = _currentRequest.BatchedData.ToList() };
+                //            StatusDict["viewRule.Id"] = $"{viewRule.Option.Id}. CountItem4Sending = {InputData.Datas.Count}";
+                //            RaiseSendDataRx.OnNext(this);
+                //            countTryingSendData++;
+                //        }
+                //    }
+                //}
             }
             //Конвеер обработки входных данных завершен    
             StatusDict.Clear();

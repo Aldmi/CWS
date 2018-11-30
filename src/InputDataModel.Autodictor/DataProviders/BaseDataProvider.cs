@@ -27,6 +27,25 @@ namespace InputDataModel.Autodictor.DataProviders
 
 
 
+        /// <summary>
+        /// Определяет обработчик входных данных.
+        /// Команда или Данные.
+        /// </summary>
+        /// <param name="command">Идентификатор команды в входных данных</param>
+        /// <param name="handlerName">Имя обработчика входных данных</param>
+        /// <returns></returns>
+        public RuleSwitcher4InData SwitchInDataHandler(Command4Device command, string handlerName)
+        {
+            var commandPrefix = "Command_";
+            var commandName = $"{commandPrefix}{command.ToString()}";  //Command_On, Command_Off, Command_Restart, Command_Clear
+            if(commandName.Equals(handlerName))
+                return RuleSwitcher4InData.CommandHanler;
+            
+            if((command == Command4Device.None) && (!handlerName.Contains(commandPrefix)))
+                return RuleSwitcher4InData.InDataHandler;
+
+            return RuleSwitcher4InData.None;
+        }
 
 
         /// <summary>
@@ -114,5 +133,15 @@ namespace InputDataModel.Autodictor.DataProviders
             var adInputType = JsonConvert.DeserializeObject<AdInputType>(defaultItemJson);
             return adInputType;
         }
+    }
+
+    /// <summary>
+    /// Выбор Обработчика входных данных.
+    /// </summary>
+    public enum RuleSwitcher4InData
+    {
+        None,
+        CommandHanler,
+        InDataHandler
     }
 }

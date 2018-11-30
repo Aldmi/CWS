@@ -1217,42 +1217,42 @@ namespace DAL.Abstract.Extensions
                                     }
                                 },
                                 //СИНХР ВРЕМЕНИ
-                                //new RuleOption
-                                //{
-                                //    Name = "PribOtpr9Str_46_SyncTime",
-                                //    AddressDevice = "64",
-                                //    //WhereFilter = "(TypeTrain == \"Suburban\") && (PathNumber == \"2\" || PathNumber == \"3\" || PathNumber == \"4\")",
-                                //    WhereFilter = "true",
-                                //    OrderBy = "Id",
-                                //    TakeItems = 1, //2
-                                //    DefaultItemJson= "{}",  //"{}" - дефолтный конструктор типа
-                                //    ViewRules = new List<ViewRuleOption>
-                                //    {
-                                //        //Синхр. Времени
-                                //        new ViewRuleOption
-                                //        {
-                                //            Id = 1,
-                                //            StartPosition = 0,
-                                //            Count = 1,
-                                //            BatchSize = 1000,
-                                //            RequestOption = new RequestOption
-                                //            {
-                                //                Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
-                                //                Body = "%30{SyncTInSec:X5}%010C60EF03B0470000001E%110406NNNNN",
-                                //                Footer = "{CRCXor:X2}\u0003",
-                                //                MaxBodyLenght = 200,
-                                //                Format = "Windows-1251"
-                                //            },
-                                //            ResponseOption = new ResponseOption
-                                //            {
-                                //                Body = "0246463038254130373741434B454103",
-                                //                Lenght = 16,
-                                //                TimeRespone = 260,
-                                //                Format = "X2"
-                                //            }
-                                //        }
-                                //    }
-                                //},
+                                new RuleOption
+                                {
+                                    Name = "PribOtpr9Str_46_SyncTime",
+                                    AddressDevice = "64",
+                                    //WhereFilter = "(TypeTrain == \"Suburban\") && (PathNumber == \"2\" || PathNumber == \"3\" || PathNumber == \"4\")",
+                                    WhereFilter = "true",
+                                    OrderBy = "Id",
+                                    TakeItems = 1, //2
+                                    DefaultItemJson= "{}",  //"{}" - дефолтный конструктор типа
+                                    ViewRules = new List<ViewRuleOption>
+                                    {
+                                        //Синхр. Времени
+                                        new ViewRuleOption
+                                        {
+                                            Id = 1,
+                                            StartPosition = 0,
+                                            Count = 1,
+                                            BatchSize = 1000,
+                                            RequestOption = new RequestOption
+                                            {
+                                                Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                                                Body = "%30{SyncTInSec:X5}%010C60EF03B0470000001E%110406NNNNN",
+                                                Footer = "{CRCXor:X2}\u0003",
+                                                MaxBodyLenght = 200,
+                                                Format = "Windows-1251"
+                                            },
+                                            ResponseOption = new ResponseOption
+                                            {
+                                                Body = "0246463038254130373741434B454103",
+                                                Lenght = 16,
+                                                TimeRespone = 260,
+                                                Format = "X2"
+                                            }
+                                        }
+                                    }
+                                },
                                 //КОМАНДА ОЧИСТКИ
                                 new RuleOption
                                 {
