@@ -10,6 +10,7 @@ using Exchange.Base.DataProviderAbstract;
 using Exchange.Base.Model;
 using InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules;
 using InputDataModel.Autodictor.Model;
+using Serilog;
 using Shared.Extensions;
 using Shared.Helpers;
 
@@ -29,14 +30,14 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         #region ctor
 
-        public ByRulesDataProvider(ProviderOption providerOption)
+        public ByRulesDataProvider(ProviderOption providerOption, ILogger logger) : base(logger)
         {
             var option = providerOption.ByRulesProviderOption;
-            if(option == null)
-               throw new ArgumentNullException(providerOption.Name);
+            if (option == null)
+                throw new ArgumentNullException(providerOption.Name);
 
             ProviderName = providerOption.Name;
-           _rules = option.Rules.Select(opt=> new Rule(opt)).ToList();
+            _rules = option.Rules.Select(opt => new Rule(opt)).ToList();
         }
 
         #endregion
@@ -47,13 +48,13 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         #region prop
 
         public string ProviderName { get; }
-        public Dictionary<string, string> StatusDict { get;  } = new Dictionary<string, string>();
+        public Dictionary<string, string> StatusDict { get; } = new Dictionary<string, string>();
         public InDataWrapper<AdInputType> InputData { get; set; }
         public ResponseDataItem<AdInputType> OutputData { get; set; }
         public bool IsOutDataValid { get; set; }
 
         public int TimeRespone => _currentRequest.ResponseOption.TimeRespone;        //Время на ответ
-        public int CountSetDataByte => _currentRequest.ResponseOption.Lenght;                                   
+        public int CountSetDataByte => _currentRequest.ResponseOption.Lenght;
 
         #endregion
 
@@ -76,9 +77,9 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             var stringRequset = _currentRequest.StringRequest;
             var format = _currentRequest.RequestOption.Format;
 
-            StatusDict["GetDataByte.StringRequest"]= $"\"{stringRequset}\". Lenght= \"{stringRequset.Length}\"";
+            StatusDict["GetDataByte.StringRequest"] = $"\"{stringRequset}\". Lenght= \"{stringRequset.Length}\"";
             //Преобразовываем КОНЕЧНУЮ строку в массив байт
-            var resultBuffer= stringRequset.ConvertString2ByteArray(format);      
+            var resultBuffer = stringRequset.ConvertString2ByteArray(format);
             StatusDict["GetDataByte.ByteRequest"] = $"\"{ resultBuffer.ArrayByteToString("X2")}\" Lenght= \"{resultBuffer.Length}\"";
             return resultBuffer;
         }
@@ -101,17 +102,17 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                     IsOutDataValid = IsOutDataValid
                 };
                 return false;
-            }       
+            }
             var stringResponse = data.ArrayByteToString(format);
             IsOutDataValid = (stringResponse == _currentRequest.ResponseOption.Body);
             OutputData = new ResponseDataItem<AdInputType>
-            {   
+            {
                 ResponseData = stringResponse,
-                Encoding = format,   
-                IsOutDataValid = IsOutDataValid            
+                Encoding = format,
+                IsOutDataValid = IsOutDataValid
             };
             StatusDict["SetDataByte.StringResponse"] = $"\"{stringResponse}\" Length= \"{data.Length}\"";
-            return IsOutDataValid;   
+            return IsOutDataValid;
         }
 
         #endregion
@@ -126,7 +127,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             //TODO: тут можно не дополнять,
             if (inData == null)
             {
-                inData= new InDataWrapper<AdInputType>
+                inData = new InDataWrapper<AdInputType>
                 {
                     Datas = new List<AdInputType>()
                 };
@@ -143,7 +144,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                     StatusDict["Command"] = $"{inData.Command}";
                     var commandViewRule = rule.ViewRules.FirstOrDefault();
                     _currentRequest = commandViewRule?.GetCommandRequestString();
-                    InputData = new InDataWrapper<AdInputType> { Command = inData.Command };             
+                    InputData = new InDataWrapper<AdInputType> { Command = inData.Command };
                     RaiseSendDataRx.OnNext(this);
                     countTryingSendData++;
                     continue;

@@ -25,7 +25,7 @@ namespace InputDataModel.Autodictor.DataProviders.ManualDataProviders
 
         #region ctor
 
-        public VidorBinaryDataProvider(ProviderOption providerOption)
+        public VidorBinaryDataProvider(ProviderOption providerOption) : base(null)
         {
             _providerOption = providerOption.ManualProviderOption;
             if(_providerOption == null)

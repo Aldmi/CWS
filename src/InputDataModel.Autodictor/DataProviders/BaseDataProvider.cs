@@ -6,11 +6,29 @@ using System.Text.RegularExpressions;
 using InputDataModel.Autodictor.Model;
 using InputDataModel.Base;
 using Newtonsoft.Json;
+using Serilog;
 
 namespace InputDataModel.Autodictor.DataProviders
 {
     public class BaseDataProvider
     {
+        private readonly ILogger _logger;
+
+
+
+        #region ctor
+
+        public BaseDataProvider(ILogger logger)
+        {
+            _logger = logger;
+        }
+
+        #endregion
+
+
+
+
+
         /// <summary>
         /// Подходит ли обработчик для обработки команды.
         /// </summary>
@@ -33,7 +51,6 @@ namespace InputDataModel.Autodictor.DataProviders
         public bool IsDataHandler(Command4Device command, IEnumerable<AdInputType> data4Handle)
         {
             return (command == Command4Device.None) && (data4Handle != null) && (data4Handle.Any());
-
         }
 
 
@@ -86,7 +103,7 @@ namespace InputDataModel.Autodictor.DataProviders
             }
             catch (Exception ex)
             {
-                //LOG
+                _logger.Warning($"FilteredAndOrderedAndTakesItems Exception: {ex}");            
                 return null;
             }
         }

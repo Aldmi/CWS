@@ -293,7 +293,7 @@ namespace Exchange.Base
 
                         //ТРАНСПОРТ НЕ ОТКРЫТ.
                         case StatusDataExchange.NotOpenTransport:
-                            _logger.Warning($"Транспорт не открыт. KeyExchange {KeyExchange}");
+                            _logger.Error($"Транспорт не открыт. KeyExchange: {KeyExchange}  KeyTransport: {KeyTransport}");
                             IsConnect = false;
                             break;
 

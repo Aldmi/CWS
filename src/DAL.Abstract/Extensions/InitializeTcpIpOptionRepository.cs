@@ -30,10 +30,10 @@ namespace DAL.Abstract.Extensions
                 {
                     Id=2,
                     Name = "TcpIp table PribOtpr9Str",
-                    IpAddress = "192.168.100.3",
-                    IpPort = 50000,
-                    //IpAddress = "10.27.15.194",
-                    //IpPort =  4001,
+                    //IpAddress = "192.168.100.3",
+                    //IpPort = 50000,
+                    IpAddress = "10.27.15.194",
+                    IpPort =  4001,
                     AutoStart = true,
                 }
             };

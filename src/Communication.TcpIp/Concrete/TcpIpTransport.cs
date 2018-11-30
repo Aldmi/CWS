@@ -152,7 +152,7 @@ namespace Transport.TcpIp.Concrete
             {
                 IsOpen = false;
                 StatusString = $"Ошибка инициализации соединения: \"{ex.Message}\"";
-                _logger.Error(ex, StatusString);
+                _logger.Debug(ex, StatusString); //TODO:??
                 Dispose();
             }
             return false;
