@@ -25,6 +25,7 @@ namespace WebServer.Controllers
 
         private readonly ISimpleBackground _background;
         private readonly InputDataApplyService<AdInputType> _inputDataApplyService;
+        private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         #endregion
@@ -37,10 +38,12 @@ namespace WebServer.Controllers
         public InputDataController(IConfiguration config,
                                    IIndex<string, ISimpleBackground> background,
                                    InputDataApplyService<AdInputType> inputDataApplyService,
+                                   IMapper mapper,
                                    ILogger logger)
                                   
         {
             _inputDataApplyService = inputDataApplyService;
+            _mapper = mapper;
             _logger = logger;
             var backgroundName= config["MessageBrokerConsumer4InData:Name"];
            _background = background[backgroundName];
@@ -122,20 +125,8 @@ namespace WebServer.Controllers
         {
             try
             {
-                var errors= await _inputDataApplyService.ApplyInputData(inputDatas);
-                if (errors.Any())
-                {
-                    var errorCompose = new StringBuilder("Ошибка при отправке даных: ");
-                    foreach (var err in errors)
-                    {
-                        errorCompose.AppendLine(err);
-                    }
-                    _logger.Error($"{errorCompose}");
-                    ModelState.AddModelError("SendData4Devices", errorCompose.ToString());
-                    return BadRequest(ModelState);
-                }
-                    
-               return Ok();
+                var res = await InputDataHandler(inputDatas);
+                return res;
             }
             catch (Exception ex)
             {
@@ -145,19 +136,54 @@ namespace WebServer.Controllers
         }
 
 
+        /// <summary>
+        /// Отправить данные на 1 Device.
+        /// Идентификационные данные задаются в Header запроса
+        /// </summary>
+        /// <param name="adInputType4XmlList"></param>
+        /// <param name="deviceName"></param>
+        /// <param name="exchangeName"></param>
+        /// <param name="dataAction"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
         [HttpPost("SendDataXml4Devices")]
         [Produces("application/xml")]
-        public async Task<IActionResult> SendDataXml4Devices([FromBody] AdInputType4XmlDtoContainer adInputType4XmlList)
+        public async Task<IActionResult> SendDataXml4Devices([FromBody] AdInputType4XmlDtoContainer adInputType4XmlList,
+                                                             [FromHeader] string deviceName,
+                                                             [FromHeader] string exchangeName,
+                                                             [FromHeader] string dataAction,
+                                                             [FromHeader] string command)
         {
-            //try
-            //{
-            //    var first = adInputType4XmlList.Trains.FirstOrDefault();
-            //    var res = _mapper.Map<List<AdInputType>>(trainsList.Trains);
-            //}
-            //catch (Exception e)
-            //{
+            try
+            {
+                if(!Enum.TryParse(dataAction, out DataAction dataActionParsed))
+                {
+                    ModelState.AddModelError("SendDataXml4Devices", "DataAction Error Parse");
+                    return BadRequest(ModelState);
+                }
+                if (!Enum.TryParse(command, out Command4Device commandParse))
+                {
+                    ModelState.AddModelError("SendDataXml4Devices", "Command4Device Error Parse");
+                    return BadRequest(ModelState);
+                }
+                var data = _mapper.Map<List<AdInputType>>(adInputType4XmlList.Trains);
+                var inputData = new InputData<AdInputType>
+                {
+                    DeviceName = deviceName,
+                    ExchangeName = exchangeName,
+                    DataAction = dataActionParsed,
+                    Command = commandParse,
+                    Data = data
+                };
 
-            //}
+                var res = await InputDataHandler(new List<InputData<AdInputType>> {inputData}); //TODO:Добавить в Mapper
+                return res;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Ошибка в InputDataController/SendDataXml4Devices");
+                throw;
+            }
 
             return Ok();
 
@@ -183,6 +209,23 @@ namespace WebServer.Controllers
             //_logger.Error(ex, "Ошибка в InputDataController/SendDataXml4Devices");
             //    throw;
             //}
+        }
+
+
+        private async Task<ActionResult> InputDataHandler(IEnumerable<InputData<AdInputType>> inputDatas)
+        {
+            var errors = await _inputDataApplyService.ApplyInputData(inputDatas);
+            if (errors.Any())
+            {
+                var errorCompose = new StringBuilder("Error in sending data: ");
+                foreach (var err in errors)
+                {
+                    errorCompose.AppendLine(err);
+                }
+                ModelState.AddModelError("SendData4Devices", errorCompose.ToString());
+                return BadRequest(ModelState);
+            }
+            return Ok();
         }
 
         #endregion

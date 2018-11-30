@@ -258,7 +258,7 @@ namespace Exchange.Base
             transportResponseWrapper.KeyExchange = KeyExchange;
             transportResponseWrapper.DataAction = DataAction.CycleAction;
             ResponseChangeRx.OnNext(transportResponseWrapper);
-            await Task.Delay(3000, ct); //TODO: Продумать как задвать время цикл. обмена
+            await Task.Delay(500, ct); //TODO: Продумать как задвать время цикл. обмена
         }
 
         /// <summary>
