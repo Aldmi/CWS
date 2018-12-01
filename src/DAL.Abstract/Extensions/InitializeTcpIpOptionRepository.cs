@@ -24,7 +24,7 @@ namespace DAL.Abstract.Extensions
                    //IpAddress = "192.168.0.47",
                    IpAddress = "10.27.15.199",
                    IpPort = 4001,
-                   AutoStart = true,
+                   AutoStartBg = true,
                 },
                 new TcpIpOption
                 {
@@ -34,7 +34,23 @@ namespace DAL.Abstract.Extensions
                     //IpPort = 50000,
                     IpAddress = "10.27.15.194",
                     IpPort =  4001,
-                    AutoStart = true,
+                    AutoStartBg = true,
+                },
+                new TcpIpOption
+                {
+                    Id=3,
+                    Name = "TcpIp table TestPeronn_70_52_48",
+                    IpAddress = "10.27.15.209",
+                    IpPort =  4001,
+                    AutoStartBg = true,
+                },
+                new TcpIpOption
+                {
+                    Id=4,
+                    Name = "TcpIp table TestPeronn_45_55_9",
+                    IpAddress = "10.27.15.210",
+                    IpPort =  4001,
+                    AutoStartBg = true,
                 }
             };
 

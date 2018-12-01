@@ -22,6 +22,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         private readonly List<Rule> _rules;                   // Набор правил, для обработки данных.
         private ViewRuleRequestModelWrapper _currentRequest;  // Созданный запрос, после подготовки данных. 
+        private readonly ILogger _logger;
 
         #endregion
 
@@ -37,7 +38,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 throw new ArgumentNullException(providerOption.Name);
 
             ProviderName = providerOption.Name;
-            _rules = option.Rules.Select(opt => new Rule(opt)).ToList();
+            _rules = option.Rules.Select(opt => new Rule(opt, logger)).ToList();
+            _logger = logger;
         }
 
         #endregion
@@ -136,13 +138,13 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             var countTryingSendData = 0; //Счетчик попыток отправит подготовленные данные.
             foreach (var rule in _rules)
             {
-                StatusDict.Clear();
-                StatusDict["RuleName"] = $"\"{rule.Option.Name}\"";
+                StatusDict.Clear();             
                 switch(SwitchInDataHandler(inData.Command, rule.Option.Name))
                 {
                     //КОМАНДА-------------------------------------------------------------
                     case RuleSwitcher4InData.CommandHanler:
                         StatusDict["Command"] = $"{inData.Command}";
+                        //_logger.Information($"Отправка КОМАНДЫ: {inData.Command}");
                         var commandViewRule = rule.ViewRules.FirstOrDefault();
                         _currentRequest = commandViewRule?.GetCommandRequestString();
                         InputData = new InDataWrapper<AdInputType> { Command = inData.Command };
@@ -155,6 +157,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                         var takesItems = FilteredAndOrderedAndTakesItems(inData.Datas, rule.Option.WhereFilter, rule.Option.OrderBy, rule.Option.TakeItems, rule.Option.DefaultItemJson)?.ToList();
                         if (takesItems != null && takesItems.Any())
                         {
+                            StatusDict["RuleName"] = $"{rule.Option.Name}";
+                            //_logger.Information($"Отправка ДАННЫХ через {rule.Option.Name}. Кол-во данных:{takesItems.Count}");
                             foreach (var viewRule in rule.ViewRules)
                             {
                                 foreach (var request in viewRule.GetDataRequestString(takesItems))
@@ -163,10 +167,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                                         continue;
 
                                     _currentRequest = request;
-                                    InputData = new InDataWrapper<AdInputType>
-                                        {Datas = _currentRequest.BatchedData.ToList()};
-                                    StatusDict["viewRule.Id"] =
-                                        $"{viewRule.Option.Id}. CountItem4Sending = {InputData.Datas.Count}";
+                                    InputData = new InDataWrapper<AdInputType>{Datas = _currentRequest.BatchedData.ToList()};
+                                    StatusDict["viewRule.Id"] =$"{viewRule.Option.Id}";
                                     RaiseSendDataRx.OnNext(this);
                                     countTryingSendData++;
                                 }
@@ -177,37 +179,6 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                     default:
                        continue;
                 }
-
-                ////КОМАНДА-------------------------------------------------------------
-                //if (IsCommandHandler(inData.Command, rule.Option.Name))
-                //{
-                //    StatusDict["Command"] = $"{inData.Command}";
-                //    var commandViewRule = rule.ViewRules.FirstOrDefault();
-                //    _currentRequest = commandViewRule?.GetCommandRequestString();
-                //    InputData = new InDataWrapper<AdInputType> { Command = inData.Command };
-                //    RaiseSendDataRx.OnNext(this);
-                //    countTryingSendData++;
-                //    continue;
-                //}
-                ////ДАННЫЕ--------------------------------------------------------------
-                //var takesItems = FilteredAndOrderedAndTakesItems(inData.Datas, rule.Option.WhereFilter, rule.Option.OrderBy, rule.Option.TakeItems, rule.Option.DefaultItemJson)?.ToList();
-                //if (IsDataHandler(inData.Command, takesItems))
-                //{
-                //    foreach (var viewRule in rule.ViewRules)
-                //    {
-                //        foreach (var request in viewRule.GetDataRequestString(takesItems))
-                //        {
-                //            if (request == null) //правило отображения не подходит под ДАННЫЕ
-                //                continue;
-
-                //            _currentRequest = request;
-                //            InputData = new InDataWrapper<AdInputType> { Datas = _currentRequest.BatchedData.ToList() };
-                //            StatusDict["viewRule.Id"] = $"{viewRule.Option.Id}. CountItem4Sending = {InputData.Datas.Count}";
-                //            RaiseSendDataRx.OnNext(this);
-                //            countTryingSendData++;
-                //        }
-                //    }
-                //}
             }
             //Конвеер обработки входных данных завершен    
             StatusDict.Clear();

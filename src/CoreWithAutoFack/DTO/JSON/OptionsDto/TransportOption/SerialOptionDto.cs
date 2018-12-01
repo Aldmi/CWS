@@ -7,7 +7,7 @@ namespace WebServer.DTO.JSON.OptionsDto.TransportOption
     {
         public int Id { get; set; }
 
-        public bool AutoStart { get; set; }
+        public bool AutoStartBg { get; set; }
 
         [Required(ErrorMessage = "Имя последовательного порта не может быть NULL")]
         public string Port { get; set; }

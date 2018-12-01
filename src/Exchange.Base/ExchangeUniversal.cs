@@ -293,7 +293,7 @@ namespace Exchange.Base
 
                         //ТРАНСПОРТ НЕ ОТКРЫТ.
                         case StatusDataExchange.NotOpenTransport:
-                            _logger.Error($"Транспорт не открыт. KeyExchange: {KeyExchange}  KeyTransport: {KeyTransport}");
+                            _logger.Error($"ПОПЫТКА ОТПРАВИТЬ ЗАПРОС НА НЕ ОТКРЫТЫЙ ТРАНСПОРТ. KeyExchange: {KeyExchange}  KeyTransport: {KeyTransport}");
                             IsConnect = false;
                             break;
 
@@ -345,7 +345,6 @@ namespace Exchange.Base
             int numberPreparedPackages = 0; //кол-во подготовленных к отправке пакетов
             try
             {   //ЗАПУСК КОНВЕЕРА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ
-              //  using (_logger.TimeOperation("TimeOpertaion TakeDataAsync"))
                 using (_logger.OperationAt(LogEventLevel.Information).Time("TimeOpertaion End Exchanage Pipeline"))
                 {
                     numberPreparedPackages = await _dataProvider.StartExchangePipeline(inData);
@@ -364,10 +363,10 @@ namespace Exchange.Base
                 subscription.Dispose();      
             }
 
+            //ВЫВОД ОТЧЕТА ОБ ОТПРАВКИ ПОРЦИИ ДАННЫХ.
             var countIsValid = transportResponseWrapper.ResponsesItems.Count(resp => resp.IsOutDataValid);
             var countAll = transportResponseWrapper.ResponsesItems.Count(resp => resp.IsOutDataValid);
             _logger.Information($"ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= {KeyExchange} успех/ответов/запросов=  ({countIsValid} / {countAll} / {numberPreparedPackages})");
-          
             return transportResponseWrapper;
         }
 

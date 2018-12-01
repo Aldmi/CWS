@@ -119,7 +119,7 @@ namespace Transport.TcpIp.Concrete
                 res = await ReOpen();
                 if (!res)
                 {
-                    _logger.Warning($"коннект для транспорта НЕ ОТКРЫТ: {KeyTransport}");
+                    _logger.Warning($"коннект для транспорта НЕ ОТКРЫТ: {KeyTransport}  {StatusString}");
                     await Task.Delay(TimeCycleReOpened, _ctsCycleReOpened.Token);
                 }
             }

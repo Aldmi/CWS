@@ -62,7 +62,7 @@ namespace DAL.Abstract.Extensions
                     Description = "Табло1",
                     Name = "Vidor1",
                     TopicName4MessageBroker = "Vidor1", //String.Empty
-                    AutoBuild = true,
+                    AutoBuild = false,  //true
                     ExchangeKeys = new List<string>
                     {
                         //"SP_COM1_Vidor1",
@@ -77,10 +77,39 @@ namespace DAL.Abstract.Extensions
                     Description = "Табло2",
                     Name = "Vidor9Str",
                     TopicName4MessageBroker = "Vidor9Str", //String.Empty
-                    AutoBuild = true,
+                    AutoBuild = false,
                     ExchangeKeys = new List<string>
                     {
                         "TcpIp_table_PribOtpr9Str"
+                    }
+                },
+                new DeviceOption
+                {
+                    Id = 3,
+                    Description = "Табло3",
+                    Name = "TestPeronn_70_52_48",
+                    TopicName4MessageBroker = "TestPeronn", //String.Empty
+                    AutoBuild = true,
+                    ExchangeKeys = new List<string>
+                    {
+                        "TcpIp_table_TestPeronn_70",
+                        "TcpIp_table_TestPeronn_52",
+                        "TcpIp_table_TestPeronn_48"
+                    }
+                },
+                new DeviceOption
+                {
+                    Id = 4,
+                    Description = "Табло3",
+                    Name = "TestPeronn_45_55_9",
+                    TopicName4MessageBroker = "TestPeronn", //String.Empty
+                    AutoBuild = true,
+                    ExchangeKeys = new List<string>
+                    {
+                        "TcpIp_table_TestPeronn_45",
+                        "TcpIp_table_TestPeronn_55",
+                        //"TcpIp_table_TestPeronn_9",
+                        "TcpIp_table_TestPeronn_9_Slim",               
                     }
                 },
                 //new DeviceOption

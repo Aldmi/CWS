@@ -21,6 +21,6 @@ namespace DAL.EFCore.Entities.Transport
         [Range(0,65535)]
         public int IpPort { get; set; }                 
 
-        public bool AutoStart { get; set; }
+        public bool AutoStartBg { get; set; }
     }
 }

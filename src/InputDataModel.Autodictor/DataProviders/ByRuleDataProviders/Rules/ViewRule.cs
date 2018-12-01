@@ -7,6 +7,7 @@ using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
 using NCalc;
+using Serilog;
 using Shared.CrcCalculate;
 using Shared.Extensions;
 using Shared.Helpers;
@@ -24,6 +25,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
         private readonly string _addressDevice;
         public readonly ViewRuleOption Option;
+        private readonly ILogger _logger;
 
         #endregion
 
@@ -31,10 +33,11 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
         #region ctor
 
-        public ViewRule(string addressDevice, ViewRuleOption option)
+        public ViewRule(string addressDevice, ViewRuleOption option, ILogger logger)
         {
             _addressDevice = addressDevice;
             Option = option;
+            _logger = logger;
         }
 
         #endregion
@@ -295,6 +298,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var startIndex = Option.RequestOption.MaxBodyLenght;
             var lenght = resBodyStr.Length - Option.RequestOption.MaxBodyLenght;
             resBodyStr.Remove(startIndex, lenght);
+            _logger.Information($"Срока тела запроса была обрезанна на {lenght} симовлов");
             return resBodyStr;
         }
 

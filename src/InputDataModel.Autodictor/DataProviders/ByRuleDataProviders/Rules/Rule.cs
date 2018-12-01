@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
+using Serilog;
 
 namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 {
@@ -9,6 +10,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         #region fields
 
         public readonly RuleOption Option;
+        private readonly ILogger _logger;
 
         #endregion
 
@@ -17,10 +19,11 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
         #region ctor
 
-        public Rule(RuleOption option)
+        public Rule(RuleOption option, ILogger logger)
         {
             Option = option;
-            ViewRules= option.ViewRules.Select(opt=> new ViewRule(Option.AddressDevice, opt)).ToList();
+            _logger = logger;
+            ViewRules= option.ViewRules.Select(opt=> new ViewRule(Option.AddressDevice, opt, _logger)).ToList();
         }
 
         #endregion

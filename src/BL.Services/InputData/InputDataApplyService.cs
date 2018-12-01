@@ -44,7 +44,7 @@ namespace BL.Services.InputData
                     continue;
                 }
 
-                if(_mediatorForStorages.GetExchange(inData.ExchangeName) == null)
+                if(!string.IsNullOrEmpty(inData.ExchangeName) && (_mediatorForStorages.GetExchange(inData.ExchangeName) == null))
                 {
                   errors.Add($"Обмен не найденн: {inData.ExchangeName}");
                   continue;
