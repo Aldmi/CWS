@@ -9,7 +9,8 @@ namespace Exchange.Base.Model
     /// <typeparam name="TIn"></typeparam>
     public class InDataWrapper<TIn>
     {
-        public List<TIn> Datas { get; set; }
-        public Command4Device Command { get; set; }
+        public string DirectHandlerName { get; set; }       //Непосредственное имя обработчика (если == null, то логика сама выбирает обработчик )
+        public List<TIn> Datas { get; set; }                //Данные
+        public Command4Device Command { get; set; }         //Команды
     }
 }

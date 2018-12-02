@@ -2759,8 +2759,8 @@ namespace DAL.Abstract.Extensions
                                 {
                                     Name = "Peron_9",
                                     AddressDevice = "9",
-                                    //WhereFilter = "(TypeTrain == \"Suburban\") && (PathNumber == \"2\" || PathNumber == \"3\" || PathNumber == \"4\")",
-                                    WhereFilter = "true",
+                                    WhereFilter = "(PathNumber == \"2\")",
+                                    //WhereFilter = "true",
                                     OrderBy = "Id",
                                     //OrderBy = "ArrivalTime",
                                     TakeItems = 1, //2

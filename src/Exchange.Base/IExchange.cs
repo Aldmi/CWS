@@ -39,9 +39,9 @@ namespace Exchange.Base
 
 
         #region SendData
-        void SendCommand(Command4Device command);                              //однократно выполняемая команда
-        void SendOneTimeData(IEnumerable<T> inData);                           //однократно отсылаемые данные (если указанны правила, то только для этих правил)
-        void SendCycleTimeData(IEnumerable<T> inData);                         //циклически отсылаемые данные
+        void SendCommand(Command4Device command);                                        //однократно выполняемая команда
+        void SendOneTimeData(IEnumerable<T> inData, string directHandlerName);    //однократно отсылаемые данные (если указанны правила, то только для этих правил)
+        void SendCycleTimeData(IEnumerable<T> inData, string directHandlerName);  //циклически отсылаемые данные
         #endregion
 
 

@@ -11,6 +11,7 @@ using Exchange.Base.Model;
 using InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules;
 using InputDataModel.Autodictor.Extensions;
 using InputDataModel.Autodictor.Model;
+using InputDataModel.Base;
 using Serilog;
 using Shared.Extensions;
 using Shared.Helpers;
@@ -124,23 +125,23 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         #region Methode
 
-        public async Task<int> StartExchangePipeline(InDataWrapper<AdInputType> inData)
+        public async Task StartExchangePipeline(InDataWrapper<AdInputType> inData)
         {
-            //DEBUG
-            //TODO: тут можно не дополнять,
+            //ЕСЛИ ДАННЫХ ДЛЯ ОТПРАВКИ НЕТ (например для Цикл. обмена при старте)
             if (inData == null)
             {
                 inData = new InDataWrapper<AdInputType>
                 {
-                    Datas = new List<AdInputType>()
+                    Datas = new List<AdInputType>(),
+                    Command = Command4Device.None,
+                    DirectHandlerName = string.Empty
                 };
             }
 
-            var countTryingSendData = 0; //Счетчик попыток отправит подготовленные данные.
             foreach (var rule in _rules)
             {
-                StatusDict.Clear();             
-                switch(SwitchInDataHandler(inData.Command, rule.Option.Name))
+                StatusDict.Clear();
+                switch (SwitchInDataHandler(inData, rule.Option.Name))
                 {
                     //КОМАНДА-------------------------------------------------------------
                     case RuleSwitcher4InData.CommandHanler:
@@ -150,46 +151,61 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                         _currentRequest = commandViewRule?.GetCommandRequestString();
                         InputData = new InDataWrapper<AdInputType> { Command = inData.Command };
                         RaiseSendDataRx.OnNext(this);
-                        countTryingSendData++;
+                        continue;
+
+                    //ДАННЫЕ ДЛЯ УКАЗАНОГО RULE--------------------------------------------------------------  
+                    case RuleSwitcher4InData.InDataDirectHandler:
+                        var takesItems = inData.Datas?.Order(rule.Option.OrderBy, _logger)
+                                                     ?.TakeItems(rule.Option.TakeItems, rule.Option.DefaultItemJson, _logger)
+                                                     ?.ToList();
+                        ViewRuleSendData(rule, takesItems);
                         continue;
 
                     //ДАННЫЕ--------------------------------------------------------------  
                     case RuleSwitcher4InData.InDataHandler:
-                        //var takesItems = FilteredAndOrderedAndTakesItems(inData.Datas, rule.Option.WhereFilter, rule.Option.OrderBy, rule.Option.TakeItems, rule.Option.DefaultItemJson)?.ToList();
-                        var takesItems = inData.Datas?.Filter(rule.Option.WhereFilter, _logger)
-                                                     ?.Order(rule.Option.OrderBy, _logger)
-                                                     ?.TakeItems(rule.Option.TakeItems, rule.Option.DefaultItemJson, _logger)
-                                                     ?.ToList();
+                        var filtredItems = inData.Datas?.Filter(rule.Option.WhereFilter, _logger);
+                        if (filtredItems == null || !filtredItems.Any())
+                        continue;
 
-                        if (takesItems != null && takesItems.Any())
-                        {
-                            StatusDict["RuleName"] = $"{rule.Option.Name}";
-                            //_logger.Information($"Отправка ДАННЫХ через {rule.Option.Name}. Кол-во данных:{takesItems.Count}");
-                            foreach (var viewRule in rule.ViewRules)
-                            {
-                                foreach (var request in viewRule.GetDataRequestString(takesItems))
-                                {
-                                    if (request == null) //правило отображения не подходит под ДАННЫЕ
-                                        continue;
-
-                                    _currentRequest = request;
-                                    InputData = new InDataWrapper<AdInputType>{Datas = _currentRequest.BatchedData.ToList()};
-                                    StatusDict["viewRule.Id"] =$"{viewRule.Option.Id}";
-                                    RaiseSendDataRx.OnNext(this);
-                                    countTryingSendData++;
-                                }
-                            }
-                        }
+                        takesItems = filtredItems?.Order(rule.Option.OrderBy, _logger)
+                                                 ?.TakeItems(rule.Option.TakeItems, rule.Option.DefaultItemJson, _logger)
+                                                 ?.ToList();
+                        ViewRuleSendData(rule, takesItems);
                         continue;
 
                     default:
-                       continue;
+                        continue;
                 }
             }
             //Конвеер обработки входных данных завершен    
             StatusDict.Clear();
             await Task.CompletedTask;
-            return countTryingSendData;
+        }
+
+
+        /// <summary>
+        /// Отобразить данные через коллекцию ViewRules у правила.
+        /// </summary>
+        private void ViewRuleSendData(Rule rule, List<AdInputType> takesItems)
+        {
+            if (takesItems != null && takesItems.Any())
+            {
+                StatusDict["RuleName"] = $"{rule.Option.Name}";
+                //_logger.Information($"Отправка ДАННЫХ через {rule.Option.Name}. Кол-во данных:{takesItems.Count}");
+                foreach (var viewRule in rule.ViewRules)
+                {
+                    foreach (var request in viewRule.GetDataRequestString(takesItems))
+                    {
+                        if (request == null) //правило отображения не подходит под ДАННЫЕ
+                            continue;
+
+                        _currentRequest = request;
+                        InputData = new InDataWrapper<AdInputType> { Datas = _currentRequest.BatchedData.ToList() };
+                        StatusDict["viewRule.Id"] = $"{viewRule.Option.Id}";
+                        RaiseSendDataRx.OnNext(this);
+                    }
+                }
+            }
         }
 
         #endregion

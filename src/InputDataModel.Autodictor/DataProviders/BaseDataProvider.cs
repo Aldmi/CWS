@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Text.RegularExpressions;
+using Exchange.Base.Model;
 using InputDataModel.Autodictor.Model;
 using InputDataModel.Base;
 using Newtonsoft.Json;
@@ -27,25 +28,59 @@ namespace InputDataModel.Autodictor.DataProviders
 
 
 
+        ///// <summary>
+        ///// Определяет обработчик входных данных.
+        ///// Команда или Данные.
+        ///// </summary>
+        ///// <param name="command">Идентификатор команды в входных данных</param>
+        ///// <param name="handlerName">Имя обработчика входных данных</param>
+        ///// <returns></returns>
+        //public RuleSwitcher4InData SwitchInDataHandler(Command4Device command, string handlerName)
+        //{
+        //    var commandPrefix = "Command_";
+        //    var commandName = $"{commandPrefix}{command.ToString()}";  //Command_On, Command_Off, Command_Restart, Command_Clear
+        //    if(commandName.Equals(handlerName))
+        //        return RuleSwitcher4InData.CommandHanler;
+
+        //    if((command == Command4Device.None) && (!handlerName.Contains(commandPrefix)))
+        //        return RuleSwitcher4InData.InDataHandler;
+
+        //    return RuleSwitcher4InData.None;
+        //}
+
+
         /// <summary>
         /// Определяет обработчик входных данных.
         /// Команда или Данные.
         /// </summary>
-        /// <param name="command">Идентификатор команды в входных данных</param>
+        /// <param name="inData">Обертка над входными данными</param>
         /// <param name="handlerName">Имя обработчика входных данных</param>
         /// <returns></returns>
-        public RuleSwitcher4InData SwitchInDataHandler(Command4Device command, string handlerName)
+        public RuleSwitcher4InData SwitchInDataHandler(InDataWrapper<AdInputType> inData, string handlerName)
         {
+            var command = inData.Command;
+            var directHandlerName = inData.DirectHandlerName ?? string.Empty;
             var commandPrefix = "Command_";
             var commandName = $"{commandPrefix}{command.ToString()}";  //Command_On, Command_Off, Command_Restart, Command_Clear
-            if(commandName.Equals(handlerName))
-                return RuleSwitcher4InData.CommandHanler;
-            
-            if((command == Command4Device.None) && (!handlerName.Contains(commandPrefix)))
-                return RuleSwitcher4InData.InDataHandler;
 
-            return RuleSwitcher4InData.None;
+            if (handlerName.Equals(commandName))
+                return RuleSwitcher4InData.CommandHanler;
+
+            switch (command)
+            {
+                case Command4Device.None when (handlerName.Equals(directHandlerName)):
+                    return RuleSwitcher4InData.InDataDirectHandler;
+
+                case Command4Device.None when (string.IsNullOrEmpty(directHandlerName)) && (!handlerName.Contains(commandPrefix)):
+                    return RuleSwitcher4InData.InDataHandler;
+
+                default:
+                    return RuleSwitcher4InData.None;
+            }
         }
+
+
+  
 
 
 
@@ -118,6 +153,7 @@ namespace InputDataModel.Autodictor.DataProviders
     {
         None,
         CommandHanler,
-        InDataHandler
+        InDataHandler,
+        InDataDirectHandler
     }
 }

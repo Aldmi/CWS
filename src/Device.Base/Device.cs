@@ -134,7 +134,7 @@ namespace DeviceForExchange
         /// <param name="dataAction"></param>
         /// <param name="inData"></param>
         /// <param name="command4Device"></param>
-        public async Task Send2ConcreteExchanges(string keyExchange, DataAction dataAction, List<TIn> inData, Command4Device command4Device = Command4Device.None)
+        public async Task Send2ConcreteExchanges(string keyExchange, DataAction dataAction, List<TIn> inData, Command4Device command4Device = Command4Device.None, string directHandlerName = null)
         {
             var exchange = Exchanges.FirstOrDefault(exch=> exch.KeyExchange == keyExchange);
             if (exchange == null)
@@ -142,7 +142,7 @@ namespace DeviceForExchange
                 await Send2Produder(Option.TopicName4MessageBroker, $"Обмен не найденн для этого ус-ва {keyExchange}");
                 return;
             }
-            await SendDataOrCommand(exchange, dataAction, inData, command4Device);  
+            await SendDataOrCommand(exchange, dataAction, inData, command4Device, directHandlerName);  
         }
 
 
@@ -153,7 +153,7 @@ namespace DeviceForExchange
         /// <param name="dataAction"></param>
         /// <param name="inData"></param>
         /// <param name="command4Device"></param>
-        private async Task SendDataOrCommand(IExchange<TIn> exchange, DataAction dataAction, List<TIn> inData, Command4Device command4Device = Command4Device.None)
+        private async Task SendDataOrCommand(IExchange<TIn> exchange, DataAction dataAction, List<TIn> inData, Command4Device command4Device = Command4Device.None, string directHandlerName = null)
         {
             if (!exchange.IsStartedTransportBg)
             {
@@ -170,7 +170,7 @@ namespace DeviceForExchange
             switch (dataAction)
             {
                 case DataAction.OneTimeAction:
-                    exchange?.SendOneTimeData(inData);
+                    exchange.SendOneTimeData(inData, directHandlerName);
                     break;
 
                 case DataAction.CycleAction:
@@ -180,11 +180,11 @@ namespace DeviceForExchange
                         await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН");
                         return;
                     }
-                    exchange?.SendCycleTimeData(inData);
+                    exchange.SendCycleTimeData(inData, directHandlerName);
                     break;
 
                 case DataAction.CommandAction:
-                    exchange?.SendCommand(command4Device);
+                    exchange.SendCommand(command4Device);
                     break;
 
                 default:

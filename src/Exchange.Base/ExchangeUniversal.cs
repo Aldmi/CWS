@@ -196,11 +196,11 @@ namespace Exchange.Base
         /// Отправить данные для однократно выставляемой функции.
         /// Функция выставляется на БГ.
         /// </summary>
-        public void SendOneTimeData(IEnumerable<TIn> inData)
+        public void SendOneTimeData(IEnumerable<TIn> inData, string directHandlerName)
         {
             if (inData != null)
             {
-                var dataWrapper= new InDataWrapper<TIn>{Datas = inData.ToList()};
+                var dataWrapper= new InDataWrapper<TIn>{Datas = inData.ToList(), DirectHandlerName = directHandlerName };
                 _inDataQueue.Enqueue(dataWrapper);
                 _transportBackground.AddOneTimeAction(OneTimeActionAsync);
             }
@@ -210,7 +210,7 @@ namespace Exchange.Base
         /// <summary>
         /// Выставить данные для цикл. функции.
         /// </summary>
-        public void SendCycleTimeData(IEnumerable<TIn> inData)
+        public void SendCycleTimeData(IEnumerable<TIn> inData, string directHandlerName)
         {
             //TODO: В текущей реализации Цикл. Отправки данных, данные переданные в inData могут пропасть.
             //TODO: Т.к. сохраняется только одно (последнее занчение) для отправки.
@@ -224,7 +224,7 @@ namespace Exchange.Base
             //TODO: Вести контроль переполнения очереди ("если элементов > 100, то элементы не добавлять и сообщть от этом в возвращаемом занчении SendCycleTimeData").
             if (inData != null)
             {
-                var dataWrapper = new InDataWrapper<TIn> { Datas = inData.ToList() };
+                var dataWrapper = new InDataWrapper<TIn> { Datas = inData.ToList(), DirectHandlerName = directHandlerName};
                 _data4CycleFunc = dataWrapper;
             }
         }
@@ -342,12 +342,11 @@ namespace Exchange.Base
                 }
             });
 
-            int numberPreparedPackages = 0; //кол-во подготовленных к отправке пакетов
             try
             {   //ЗАПУСК КОНВЕЕРА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ
                 using (_logger.OperationAt(LogEventLevel.Information).Time("TimeOpertaion End Exchanage Pipeline"))
                 {
-                    numberPreparedPackages = await _dataProvider.StartExchangePipeline(inData);
+                  await _dataProvider.StartExchangePipeline(inData);
                 }
             }
             catch (Exception ex)
@@ -364,6 +363,7 @@ namespace Exchange.Base
             }
 
             //ВЫВОД ОТЧЕТА ОБ ОТПРАВКИ ПОРЦИИ ДАННЫХ.
+            var numberPreparedPackages = transportResponseWrapper.ResponsesItems.Count;//кол-во подготовленных к отправке пакетов
             var countIsValid = transportResponseWrapper.ResponsesItems.Count(resp => resp.IsOutDataValid);
             var countAll = transportResponseWrapper.ResponsesItems.Count(resp => resp.IsOutDataValid);
             _logger.Information($"ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= {KeyExchange} успех/ответов/запросов=  ({countIsValid} / {countAll} / {numberPreparedPackages})");

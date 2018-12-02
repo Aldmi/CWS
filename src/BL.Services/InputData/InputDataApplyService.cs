@@ -56,7 +56,7 @@ namespace BL.Services.InputData
                 }
                 else
                 {
-                    tasks.Add(device.Send2ConcreteExchanges(inData.ExchangeName, inData.DataAction, inData.Data, inData.Command));
+                    tasks.Add(device.Send2ConcreteExchanges(inData.ExchangeName, inData.DataAction, inData.Data, inData.Command, inData.DirectHandlerName));
                 }
             }
 

@@ -15,6 +15,11 @@ namespace InputDataModel.Base
         public string ExchangeName { get; set; }
 
         /// <summary>
+        /// Обмен
+        /// </summary>
+        public string DirectHandlerName { get; set; }
+
+        /// <summary>
         /// Действие
         /// </summary>
         public DataAction DataAction { get; set; }
