@@ -9,6 +9,7 @@ using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Exchange.Base.DataProviderAbstract;
 using Exchange.Base.Model;
 using InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules;
+using InputDataModel.Autodictor.Extensions;
 using InputDataModel.Autodictor.Model;
 using Serilog;
 using Shared.Extensions;
@@ -154,7 +155,12 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
                     //ДАННЫЕ--------------------------------------------------------------  
                     case RuleSwitcher4InData.InDataHandler:
-                        var takesItems = FilteredAndOrderedAndTakesItems(inData.Datas, rule.Option.WhereFilter, rule.Option.OrderBy, rule.Option.TakeItems, rule.Option.DefaultItemJson)?.ToList();
+                        //var takesItems = FilteredAndOrderedAndTakesItems(inData.Datas, rule.Option.WhereFilter, rule.Option.OrderBy, rule.Option.TakeItems, rule.Option.DefaultItemJson)?.ToList();
+                        var takesItems = inData.Datas?.Filter(rule.Option.WhereFilter, _logger)
+                                                     ?.Order(rule.Option.OrderBy, _logger)
+                                                     ?.TakeItems(rule.Option.TakeItems, rule.Option.DefaultItemJson, _logger)
+                                                     ?.ToList();
+
                         if (takesItems != null && takesItems.Any())
                         {
                             StatusDict["RuleName"] = $"{rule.Option.Name}";
