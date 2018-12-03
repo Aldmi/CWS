@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Autofac;
 using AutoMapper;
 using BL.Services.Actions;
@@ -22,6 +24,7 @@ using MoreLinq;
 using Newtonsoft.Json;
 using Serilog;
 using WebServer.AutofacModules;
+using WebServer.DTO.XML;
 using WebServer.Extensions;
 using Worker.Background.Abstarct;
 
@@ -275,7 +278,7 @@ namespace WebServer
             //{
             //    Formatting = Formatting.Indented,             //Отступы дочерних элементов 
             //    NullValueHandling = NullValueHandling.Ignore,  //Игнорировать пустые теги
-               
+
             //};
 
             //StringBuilder stringBuilder = new StringBuilder();
@@ -287,9 +290,8 @@ namespace WebServer
             //}; 
             //var jsonResp = JsonConvert.SerializeObject(responsePieceOfDataWrapper, settings);
             //logger.Error(jsonResp);
-            
-            //DEBUG-----------------------------------------------------------
 
+            //DEBUG-----------------------------------------------------------
         }
     }
 }

@@ -5,6 +5,7 @@ using DAL.Abstract.Entities.Options.Exchange;
 using DAL.Abstract.Entities.Options.Transport;
 using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WebServer.DTO.JSON.OptionsDto.DeviceOption;
 using WebServer.DTO.JSON.OptionsDto.ExchangeOption;
 using WebServer.DTO.JSON.OptionsDto.TransportOption;
@@ -37,7 +38,7 @@ namespace WebServer.AutoMapperConfig
                 {
                     NameRu = src.TypeName,
                     NameAliasRu = src.TypeAlias,
-                    Num = src.TrainType
+                    Num = ConvertString2Int(src.TrainType)
                 }))
                 .ForMember(dest => dest.VagonDirection, opt => opt.MapFrom(src => new VagonDirection(src.VagonDirection)))
                 .ForMember(dest => dest.StationArrival, opt => opt.MapFrom(src => new Station
@@ -86,7 +87,16 @@ namespace WebServer.AutoMapperConfig
         }
 
 
-        public DateTime? ConvertString2DataTime(string str)
+        private int? ConvertString2Int(string str)
+        {
+            if (int.TryParse(str, out var r))
+                return r;
+                    
+            return null;
+        }
+
+
+        private DateTime? ConvertString2DataTime(string str)
         {
             if (DateTime.TryParse(str, out DateTime val))
             {
@@ -96,7 +106,7 @@ namespace WebServer.AutoMapperConfig
         }
 
 
-        public DateTime? ConvertString2DataTimeMinute(string minute)
+        private DateTime? ConvertString2DataTimeMinute(string minute)
         {
             if (int.TryParse(minute, out var val))
             {
@@ -107,7 +117,7 @@ namespace WebServer.AutoMapperConfig
         }
 
 
-        public TimeSpan? ConvertString2TimeSpan(string str)
+        private TimeSpan? ConvertString2TimeSpan(string str)
         {
             if (TimeSpan.TryParse(str, out var val))
             {

@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 using Autofac.Features.Indexed;
 using AutoMapper;
 using BL.Services.InputData;
 using InputDataModel.Autodictor.Model;
 using InputDataModel.Base;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Serilog;
@@ -54,7 +59,7 @@ namespace WebServer.Controllers
 
 
 
-        #region Methode
+        #region Api
 
         // GET api/InputData/GetBackgroundState
         [HttpGet("GetBackgroundState")]
@@ -139,6 +144,7 @@ namespace WebServer.Controllers
         /// <summary>
         /// Отправить данные на 1 Device.
         /// Идентификационные данные задаются в Header запроса
+        /// Формат POST запроса application/xml
         /// </summary>
         /// <param name="adInputType4XmlList"></param>
         /// <param name="deviceName"></param>
@@ -158,7 +164,12 @@ namespace WebServer.Controllers
         {
             try
             {
-                if(!Enum.TryParse(dataAction, out DataAction dataActionParsed))
+                if (string.IsNullOrEmpty(deviceName))
+                {
+                    ModelState.AddModelError("SendDataXml4Devices", "deviceName == null");
+                    return BadRequest(ModelState);
+                }
+                if (!Enum.TryParse(dataAction, out DataAction dataActionParsed))
                 {
                     ModelState.AddModelError("SendDataXml4Devices", "DataAction Error Parse");
                     return BadRequest(ModelState);
@@ -179,7 +190,7 @@ namespace WebServer.Controllers
                     Data = data
                 };
 
-                var res = await InputDataHandler(new List<InputData<AdInputType>> {inputData});
+                var res = await InputDataHandler(new List<InputData<AdInputType>> { inputData });
                 return res;
             }
             catch (Exception ex)
@@ -189,6 +200,111 @@ namespace WebServer.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Отправить данные на 1 Device.
+        /// Формат POST запроса Multipart.
+        /// XML передается как файл с именем username в FromForm виде.
+        /// </summary>
+        /// <param name="username">Имя фала</param>
+        /// <param name="deviceName"></param>
+        /// <param name="exchangeName"></param>
+        /// <param name="directHandlerName"></param>
+        /// <param name="dataAction"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPost("SendDataXmlMultipart4Devices")]
+        public async Task<IActionResult> SendDataXmlMultipart4Devices([FromForm] IFormFile username,
+                                                                      [FromHeader] string deviceName,
+                                                                      [FromHeader] string exchangeName,
+                                                                      [FromHeader] string directHandlerName,
+                                                                      [FromHeader] string dataAction,
+                                                                      [FromHeader] string command)
+        {
+
+            //DEBUG---------------------------------------------------
+            deviceName = "TestPeronn_45_55_9";
+            exchangeName = "TcpIp_table_TestPeronn_9_Slim";
+            directHandlerName = null;
+            dataAction = "OneTimeAction";
+            command = "None";
+            //DEBUG---------------------------------------------------
+
+            var xmlFile = username;
+            if (xmlFile == null)
+            {
+                return BadRequest("Multipart Data == null");
+            }
+            if (string.IsNullOrEmpty(deviceName))
+            {
+                ModelState.AddModelError("SendDataXml4Devices", "deviceName == null");
+                return BadRequest(ModelState);
+            }
+            if (!Enum.TryParse(dataAction, out DataAction dataActionParsed))
+            {
+                ModelState.AddModelError("SendDataXml4Devices", "DataAction Error Parse");
+                return BadRequest(ModelState);
+            }
+            if (!Enum.TryParse(command, out Command4Device commandParse))
+            {
+                ModelState.AddModelError("SendDataXml4Devices", "Command4Device Error Parse");
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                if (username.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await xmlFile.CopyToAsync(memoryStream);
+                        #region Debug
+                        //System.IO.File.WriteAllBytes(@"D:\\Git\\CWS\\src\\CoreWithAutoFack\\InDataXml.xml", memoryStream.ToArray());
+                        //var str= Encoding.Default.GetString(memoryStream.ToArray());
+                        #endregion
+                        var formatter = new XmlSerializer(typeof(AdInputType4XmlDtoContainer));
+                        memoryStream.Position = 0;
+                        var adInputType4XmlList = (AdInputType4XmlDtoContainer)formatter.Deserialize(memoryStream);
+                        var data = _mapper.Map<List<AdInputType>>(adInputType4XmlList.Trains);
+                        var inputData = new InputData<AdInputType>
+                        {
+                            DeviceName = deviceName,
+                            ExchangeName = exchangeName,
+                            DirectHandlerName = directHandlerName,
+                            DataAction = dataActionParsed,
+                            Command = commandParse,
+                            Data = data
+                        };
+                        var res = await InputDataHandler(new List<InputData<AdInputType>> { inputData });
+                        return res;
+                    }
+                }
+                return BadRequest("Размер XML файла равен 0");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Ошибка в InputDataController/SendDataXmlMultipart4Devices");
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// helthCheck по адресу api/InputData/SendDataXml4Devices
+        /// Нужно для Клиентского ПО, для поднятия флага ISConnect 
+        /// </summary>
+        // GET api/InputData/SendDataXml4Devices
+        [HttpGet("SendDataXmlMultipart4Devices")]
+        public IActionResult SendDataXml4DevicesGet()
+        {
+            return Ok();
+        }
+
+        #endregion
+
+
+
+        #region Methods
 
         private async Task<ActionResult> InputDataHandler(IEnumerable<InputData<AdInputType>> inputDatas)
         {
@@ -205,6 +321,7 @@ namespace WebServer.Controllers
             }
             return Ok();
         }
+
 
         #endregion
     }

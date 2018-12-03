@@ -2517,8 +2517,8 @@ namespace DAL.Abstract.Extensions
                                 {
                                     Name = "Peron_9",
                                     AddressDevice = "9",
-                                    WhereFilter = "(PathNumber == \"2\")",
-                                    //WhereFilter = "true",
+                                    //WhereFilter = "(PathNumber == \"2\")",
+                                    WhereFilter = "true",
                                     OrderBy = "Id",
                                     //OrderBy = "ArrivalTime",
                                     TakeItems = 1, //2

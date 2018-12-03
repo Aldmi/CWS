@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace WebServer.DTO.XML
 {
 
+    [Serializable]
     [XmlRoot("tlist")]
     public class AdInputType4XmlDtoContainer
     {
@@ -11,14 +13,14 @@ namespace WebServer.DTO.XML
         public List<AdInputType4XmlDto> Trains { get; set; } = new List<AdInputType4XmlDto>();
     }
 
-
+    [Serializable]
     public class AdInputType4XmlDto
     {
         public int Id { get; set; }
         public int  ScheduleId { get; set; }                             //ID поезда в годовом расписании (из ЦИС)
         public int TrnId { get; set; }                                   //уникальный ID отправления поезда из ЦИС
         public string TrainNumber { get; set; }                          //номер поезда в формате Num1/Num2 если 2 номера и Num1 если 1 номер
-        public int TrainType { get; set; }                               //Тип поезда в цифровом виде
+        public string TrainType { get; set; }                            //Тип поезда в цифровом виде
         public string DirectionStation  { get; set; }                    // направление движения (Тверское, Ленинградское и т.д.)
         public string StartStation { get; set; }                         //начальная станция
         public string EndStation { get; set; }                           //конечная станция
