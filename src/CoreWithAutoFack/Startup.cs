@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.HealthChecks;
 using MoreLinq;
 using Newtonsoft.Json;
 using Serilog;
@@ -42,6 +43,11 @@ namespace WebServer
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks(checks =>
+            {
+                checks.AddValueTaskCheck("HTTP Endpoint", () => new ValueTask<IHealthCheckResult>(HealthCheckResult.Healthy("Ok")));
+            });
+
             services.AddSerilogServices();
             services.AddTransient<IConfiguration>(provider => AppConfiguration);
 

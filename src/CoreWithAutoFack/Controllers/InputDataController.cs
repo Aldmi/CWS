@@ -179,7 +179,7 @@ namespace WebServer.Controllers
                     Data = data
                 };
 
-                var res = await InputDataHandler(new List<InputData<AdInputType>> {inputData}); //TODO:Добавить в Mapper
+                var res = await InputDataHandler(new List<InputData<AdInputType>> {inputData});
                 return res;
             }
             catch (Exception ex)

@@ -14,6 +14,7 @@ namespace WebServer
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseHealthChecks("/")
                 .ConfigureServices(services => services.AddAutofac())
                 .UseSerilog()
                 .UseStartup<Startup>()
