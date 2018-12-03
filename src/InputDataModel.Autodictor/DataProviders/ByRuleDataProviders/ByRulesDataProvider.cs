@@ -38,9 +38,12 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             var option = providerOption.ByRulesProviderOption;
             if (option == null)
                 throw new ArgumentNullException(providerOption.Name);
-
+      
             ProviderName = providerOption.Name;
             _rules = option.Rules.Select(opt => new Rule(opt, logger)).ToList();
+            RuleName4DefaultHandle = string.IsNullOrEmpty(option.RuleName4DefaultHandle)
+                ? _rules.First().Option.Name
+                : option.RuleName4DefaultHandle;
             _logger = logger;
         }
 
@@ -51,6 +54,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         #region prop
 
+        public string RuleName4DefaultHandle { get; }
         public string ProviderName { get; }
         public Dictionary<string, string> StatusDict { get; } = new Dictionary<string, string>();
         public InDataWrapper<AdInputType> InputData { get; set; }
@@ -134,9 +138,10 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 {
                     Datas = new List<AdInputType>(),
                     Command = Command4Device.None,
-                    DirectHandlerName = string.Empty
+                    DirectHandlerName = RuleName4DefaultHandle
                 };
             }
+        
 
             foreach (var rule in _rules)
             {
@@ -164,8 +169,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                     //ДАННЫЕ--------------------------------------------------------------  
                     case RuleSwitcher4InData.InDataHandler:
                         var filtredItems = inData.Datas?.Filter(rule.Option.WhereFilter, _logger);
-                        if (filtredItems == null || !filtredItems.Any())
-                        continue;
+                        //if (filtredItems == null || !filtredItems.Any())
+                        //continue;
 
                         takesItems = filtredItems?.Order(rule.Option.OrderBy, _logger)
                                                  ?.TakeItems(rule.Option.TakeItems, rule.Option.DefaultItemJson, _logger)

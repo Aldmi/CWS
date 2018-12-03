@@ -4,6 +4,7 @@ namespace DAL.EFCore.Entities.Exchange.ProvidersOption
 {
     public class EfByRulesProviderOption
     {
+        public string RuleName4DefaultHandle { get; set; }
         public List<EfRuleOption> Rules { get; set; }
     }
 

@@ -2503,7 +2503,7 @@ namespace DAL.Abstract.Extensions
                     Id = 12,
                     Key = "TcpIp_table_TestPeronn_9_Slim",
                     KeyTransport = new KeyTransport("TcpIp table TestPeronn_45_55_9", TransportType.TcpIp),
-                    AutoStartCycleFunc = false, // DEBUG
+                    AutoStartCycleFunc = true, // DEBUG
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption

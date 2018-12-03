@@ -4,6 +4,7 @@ namespace DAL.Abstract.Entities.Options.Exchange.ProvidersOption
 {
     public class ByRulesProviderOption
     {
+        public string RuleName4DefaultHandle { get; set; }
         public List<RuleOption> Rules { get; set; }
     }
 

@@ -4,6 +4,7 @@ namespace WebServer.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption
 {
     public class ByRulesProviderOptionDto
     {
+        public string RuleName4DefaultHandle { get; set; }
         public List<RuleDto> RulesDto { get; set; }
     }
 
