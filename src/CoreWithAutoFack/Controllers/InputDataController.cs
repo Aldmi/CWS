@@ -143,6 +143,7 @@ namespace WebServer.Controllers
         /// <param name="adInputType4XmlList"></param>
         /// <param name="deviceName"></param>
         /// <param name="exchangeName"></param>
+        /// <param name="directHandlerName"></param>
         /// <param name="dataAction"></param>
         /// <param name="command"></param>
         /// <returns></returns>
@@ -151,6 +152,7 @@ namespace WebServer.Controllers
         public async Task<IActionResult> SendDataXml4Devices([FromBody] AdInputType4XmlDtoContainer adInputType4XmlList,
                                                              [FromHeader] string deviceName,
                                                              [FromHeader] string exchangeName,
+                                                             [FromHeader] string directHandlerName,
                                                              [FromHeader] string dataAction,
                                                              [FromHeader] string command)
         {
@@ -171,6 +173,7 @@ namespace WebServer.Controllers
                 {
                     DeviceName = deviceName,
                     ExchangeName = exchangeName,
+                    DirectHandlerName = directHandlerName,
                     DataAction = dataActionParsed,
                     Command = commandParse,
                     Data = data
@@ -184,31 +187,6 @@ namespace WebServer.Controllers
                 _logger.Error(ex, "Ошибка в InputDataController/SendDataXml4Devices");
                 throw;
             }
-
-            return Ok();
-
-
-            //try
-            //{
-            //    var errors= await _inputDataApplyService.ApplyInputData(inputDatas);
-            //    if (errors.Any())
-            //    {
-            //        var errorCompose = new StringBuilder("Error in sending data: ");
-            //        foreach (var err in errors)
-            //        {
-            //            errorCompose.AppendLine(err);
-            //        }     
-            //        ModelState.AddModelError("SendData4Devices", errorCompose.ToString());
-            //        return BadRequest(ModelState);
-            //    }
-
-            //    return Ok();
-            //}
-            //catch (Exception ex)
-            //{
-            //_logger.Error(ex, "Ошибка в InputDataController/SendDataXml4Devices");
-            //    throw;
-            //}
         }
 
 
