@@ -40,14 +40,8 @@ namespace DAL.EFCore.DbContext
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //Context сам получает строку подключения при миграции и работе.
-            //(Рабоатет для миграции и работы!!!!!!!)
-            // var config = JsonConfigLib.GetConfiguration();
-            //var connectionString = config.GetConnectionString("MainDbConnection");
-            //optionsBuilder.UseSqlServer(connectionString);
-            //optionsBuilder.UseSqlServer(connectionString, ob => ob.MigrationsAssembly(typeof(Context).GetTypeInfo().Assembly.GetName().Name));\
-
-            optionsBuilder.UseSqlServer(_connStr);
+            //optionsBuilder.UseSqlServer(_connStr);
+            optionsBuilder.UseNpgsql(_connStr);
         }
 
 

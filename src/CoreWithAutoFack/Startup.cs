@@ -70,7 +70,9 @@ namespace WebServer
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            var connectionString = AppConfiguration.GetConnectionString("OptionDbConnection");
+            //OptionDbConnectionUseSqlServer
+            //OptionDbConnectionUseNpgsql
+            var connectionString = AppConfiguration.GetConnectionString("OptionDbConnectionUseNpgsql");
             builder.RegisterModule(new RepositoryAutofacModule(connectionString));
             builder.RegisterModule(new EventBusAutofacModule());
             builder.RegisterModule(new ControllerAutofacModule());
@@ -100,9 +102,10 @@ namespace WebServer
                               IConfiguration config,
                               IMapper mapper)
         {
+            //Проверка настройки маппинга
             try
             {
-                mapper.ConfigurationProvider.AssertConfigurationIsValid(); //Проверка настройки маппинга
+                mapper.ConfigurationProvider.AssertConfigurationIsValid(); 
             }
             catch (Exception ex)
             {

@@ -1,12 +1,21 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+
 
 
 namespace Shared.Helpers
 {
     public static class HelpersByteArray
     {
+        static HelpersByteArray()
+        {
+            //Добавить обработку кодировки Windows-1251
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
+
+
         public static byte[] ConvertString2ByteArray(this string str, string format)
         {
             byte[] resultBuffer = null;
@@ -20,11 +29,9 @@ namespace Shared.Helpers
                 default:
                     resultBuffer = Encoding.GetEncoding(format).GetBytes(str).ToArray();
                     break;
+        
             }
             return resultBuffer;
         }
-
-
-
     }
 }

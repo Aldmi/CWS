@@ -172,9 +172,9 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                         if (filtredItems == null || !filtredItems.Any())
                             continue;
 
-                        takesItems = filtredItems?.Order(rule.Option.OrderBy, _logger)
-                                                 ?.TakeItems(rule.Option.TakeItems, rule.Option.DefaultItemJson, _logger)
-                                                 ?.ToList();
+                        takesItems = filtredItems.Order(rule.Option.OrderBy, _logger)
+                                                 .TakeItems(rule.Option.TakeItems, rule.Option.DefaultItemJson, _logger)
+                                                 .ToList();
                         ViewRuleSendData(rule, takesItems);
                         continue;
 
