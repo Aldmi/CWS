@@ -169,8 +169,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                     //ДАННЫЕ--------------------------------------------------------------  
                     case RuleSwitcher4InData.InDataHandler:
                         var filtredItems = inData.Datas?.Filter(rule.Option.WhereFilter, _logger);
-                        //if (filtredItems == null || !filtredItems.Any())
-                        //continue;
+                        if (filtredItems == null || !filtredItems.Any())
+                            continue;
 
                         takesItems = filtredItems?.Order(rule.Option.OrderBy, _logger)
                                                  ?.TakeItems(rule.Option.TakeItems, rule.Option.DefaultItemJson, _logger)
