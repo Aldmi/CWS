@@ -212,6 +212,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 ["TypeAlias"] = string.IsNullOrEmpty(typeAlias) ? " " : typeAlias,
                 [nameof(uit.NumberOfTrain)] = string.IsNullOrEmpty(uit.NumberOfTrain) ? " " : uit.NumberOfTrain,
                 [nameof(uit.PathNumber)] = string.IsNullOrEmpty(uit.PathNumber) ? " " : uit.PathNumber,
+                [nameof(uit.Platform)] = string.IsNullOrEmpty(uit.Platform) ? " " : uit.Platform,
                 [nameof(uit.Event)] = string.IsNullOrEmpty(eventTrain) ? " " : eventTrain,
                 [nameof(uit.Addition)] = string.IsNullOrEmpty(addition) ? " " : addition,
                 ["Stations"] = string.IsNullOrEmpty(stations) ? " " : stations,
@@ -410,17 +411,6 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 matchString = Regex.Match(requestFillBodyWithoutConstantCharacters, "{Nbyte(.*)}(.*)").Groups[1].Value;
                 lenght = matchString.Length;
             }
-
-            ////ОГРАНИЧНИЕ ДЛИННЫ ПОСЫЛКИ------------------------------------------------------------------
-            //var limetedStr = requestFillBodyWithoutConstantCharacters;
-            //if (RequestRule.MaxLenght.HasValue && lenght >= RequestRule.MaxLenght)
-            //{
-            //    var removeCount = lenght - RequestRule.MaxLenght.Value;
-            //    limetedStr = matchString.Remove(RequestRule.MaxLenght.Value, removeCount);
-            //    lenght = limetedStr.Length;
-            //    requestFillBodyWithoutConstantCharacters =
-            //        requestFillBodyWithoutConstantCharacters.Replace(matchString, limetedStr);
-            //}
 
             //ЗАПОНЯЕМ ВСЕ СЕКЦИИ ДО CRC
             var subStr = requestFillBodyWithoutConstantCharacters.Split('}');

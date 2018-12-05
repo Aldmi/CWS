@@ -13,6 +13,8 @@ namespace InputDataModel.Autodictor.Model
 
         public string NumberOfTrain { get; set; }                    //Номер поезда
         public string PathNumber { get; set; }                       //Номер пути
+        public string Platform { get; set; }                         //Номер Платформы
+        
 
         public EventTrain Event { get; set; }                        //Событие (ОТПР./ПРИБ./СТОЯНКА)
         public TypeTrain TrainType { get; set; }                     //тип поезда

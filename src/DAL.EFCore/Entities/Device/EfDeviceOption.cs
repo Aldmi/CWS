@@ -13,6 +13,9 @@ namespace DAL.EFCore.Entities.Device
         [MaxLength(256)]
         public string Name { get; set; }
 
+
+        //public string NameNew111 { get; set; }
+
         [Required]
         [MaxLength(256)]
         public string TopicName4MessageBroker { get; set; }         //Название топика для брокера обмена

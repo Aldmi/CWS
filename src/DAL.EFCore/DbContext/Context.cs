@@ -1,4 +1,5 @@
-﻿using DAL.EFCore.DbContext.EntitiConfiguration;
+﻿using System;
+using DAL.EFCore.DbContext.EntitiConfiguration;
 using DAL.EFCore.Entities.Device;
 using DAL.EFCore.Entities.Exchange;
 using DAL.EFCore.Entities.Transport;
@@ -25,11 +26,19 @@ namespace DAL.EFCore.DbContext
 
         #region ctor
 
-        public Context(string connStr)
+        public Context(string connStr, HowCreateDb howCreateDb = HowCreateDb.Migrate )
         {
             _connStr = connStr;
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;//Отключение Tracking для всего контекста
-            Database.EnsureCreated(); //Если БД нет, то создать.
+            switch (howCreateDb)
+            {
+                case HowCreateDb.Migrate:
+                    Database.Migrate();       //Если БД нет, то создать по схемам МИГРАЦИИ.
+                    break;
+                case HowCreateDb.EnsureCreated:
+                    Database.EnsureCreated(); //Если БД нет, то создать. (ОТКЛЮЧАТЬ ПРИ МИГРАЦИИ)
+                    break;
+            }
         }
 
         #endregion
@@ -56,4 +65,12 @@ namespace DAL.EFCore.DbContext
 
         #endregion
     }
+
+
+    public enum HowCreateDb
+    {
+        None,                 //Не создавать
+        Migrate,              //С помощью последней миграции 
+        EnsureCreated         //Принудительно
+    } 
 }

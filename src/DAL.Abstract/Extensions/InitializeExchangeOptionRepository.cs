@@ -1026,7 +1026,7 @@ namespace DAL.Abstract.Extensions
                                     WhereFilter = "true",
                                     OrderBy = "Id",
                                     //OrderBy = "ArrivalTime",
-                                    TakeItems = 9, //2
+                                    TakeItems = 9,
                                     DefaultItemJson= "{}",  //"{}" - дефолтный конструктор типа
                                     ViewRules = new List<ViewRuleOption>
                                     {

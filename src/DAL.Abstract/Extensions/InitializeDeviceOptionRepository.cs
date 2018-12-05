@@ -77,7 +77,7 @@ namespace DAL.Abstract.Extensions
                     Description = "Табло2",
                     Name = "Vidor9Str",
                     TopicName4MessageBroker = "Vidor9Str", //String.Empty
-                    AutoBuild = false,
+                    AutoBuild = true,
                     ExchangeKeys = new List<string>
                     {
                         "TcpIp_table_PribOtpr9Str"
@@ -89,7 +89,7 @@ namespace DAL.Abstract.Extensions
                     Description = "Табло3",
                     Name = "TestPeronn_70_52_48",
                     TopicName4MessageBroker = "TestPeronn", //String.Empty
-                    AutoBuild = true,
+                    AutoBuild = false,
                     ExchangeKeys = new List<string>
                     {
                         "TcpIp_table_TestPeronn_70",
@@ -103,7 +103,7 @@ namespace DAL.Abstract.Extensions
                     Description = "Табло3",
                     Name = "TestPeronn_45_55_9",
                     TopicName4MessageBroker = "TestPeronn", //String.Empty
-                    AutoBuild = true,
+                    AutoBuild = false,
                     ExchangeKeys = new List<string>
                     {
                         "TcpIp_table_TestPeronn_45",

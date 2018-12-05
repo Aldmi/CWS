@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Design;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Shared.ForConfigFiles;
 
@@ -11,9 +12,12 @@ namespace DAL.EFCore.DbContext
     {
         public Context CreateDbContext(string[] args)
         {
-            var config = JsonConfigLib.GetConfiguration();
+            Console.WriteLine("Migration Started>>>>>>>>>>>>>>>>>>>>>>>>>");
+            var path = @"D:\\Git\\CWS\\src\\CoreWithAutoFack";
+            var config = JsonConfigLib.GetConfiguration(path);
             var connectionString = config.GetConnectionString("OptionDbConnectionUseNpgsql");
-            return new Context(connectionString);
+            Console.WriteLine($"Connection string = {connectionString}");
+            return new Context(connectionString, HowCreateDb.None);
         }
     }
 }

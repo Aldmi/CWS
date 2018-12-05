@@ -26,13 +26,13 @@ namespace WebServer.AutoMapperConfig
             CreateMap<HttpOption, HttpOptionDto>().ReverseMap();
             CreateMap<TransportOption, TransportOptionsDto>().ReverseMap();
 
-
             //AdInputType xml in Data mapping-------------------------------------------------------------------------
             CreateMap<AdInputType4XmlDto, AdInputType>()
                 .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.ScheduleId))
                 .ForMember(dest => dest.Lang, opt => opt.MapFrom(src => Lang.Ru))
                 .ForMember(dest => dest.NumberOfTrain, opt => opt.MapFrom(src => src.TrainNumber))
                 .ForMember(dest => dest.PathNumber, opt => opt.MapFrom(src => src.TrackNumber))
+                .ForMember(dest => dest.Platform, opt => opt.MapFrom(src => src.Platform))
                 .ForMember(dest => dest.Event, opt => opt.MapFrom(src => new EventTrain(src.Direction)))
                 .ForMember(dest => dest.TrainType, opt => opt.MapFrom(src => new TypeTrain
                 {

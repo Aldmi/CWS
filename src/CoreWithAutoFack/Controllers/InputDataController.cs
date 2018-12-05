@@ -223,11 +223,11 @@ namespace WebServer.Controllers
         {
 
             //DEBUG---------------------------------------------------
-            deviceName = "TestPeronn_45_55_9";
-            exchangeName = "TcpIp_table_TestPeronn_9_Slim";
-            directHandlerName = null;
-            dataAction = "OneTimeAction";
-            command = "None";
+            //deviceName = "TestPeronn_45_55_9";
+            //exchangeName = "TcpIp_table_TestPeronn_9_Slim";
+            //directHandlerName = null;
+            //dataAction = "OneTimeAction";
+            //command = "None";
             //DEBUG---------------------------------------------------
 
             var xmlFile = username;
