@@ -3,9 +3,12 @@ using AutoMapper;
 using DAL.Abstract.Entities.Options.Device;
 using DAL.Abstract.Entities.Options.Exchange;
 using DAL.Abstract.Entities.Options.Transport;
+using DeviceForExchange;
+using Exchange.Base;
 using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using WebServer.DTO.JSON.DevicesStateDto;
 using WebServer.DTO.JSON.OptionsDto.DeviceOption;
 using WebServer.DTO.JSON.OptionsDto.ExchangeOption;
 using WebServer.DTO.JSON.OptionsDto.TransportOption;
@@ -18,15 +21,17 @@ namespace WebServer.AutoMapperConfig
     {
         public MappingProfile()
         {
-            //Option mapping-----------------------------------------------------------------------------------------
+            #region Option mapping
             CreateMap<DeviceOption, DeviceOptionDto>().ReverseMap();
             CreateMap<ExchangeOption, ExchangeOptionDto>().ReverseMap();
             CreateMap<SerialOption, SerialOptionDto>().ReverseMap();
             CreateMap<TcpIpOption, TcpIpOptionDto>().ReverseMap();
             CreateMap<HttpOption, HttpOptionDto>().ReverseMap();
             CreateMap<TransportOption, TransportOptionsDto>().ReverseMap();
+            #endregion
 
-            //AdInputType xml in Data mapping-------------------------------------------------------------------------
+
+            #region AdInputType xml in Data mapping
             CreateMap<AdInputType4XmlDto, AdInputType>()
                 .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.ScheduleId))
                 .ForMember(dest => dest.Lang, opt => opt.MapFrom(src => Lang.Ru))
@@ -84,6 +89,17 @@ namespace WebServer.AutoMapperConfig
                     NameAliasRu = src.DaysOfGoingAlias,
                     NameAliasEng = src.DaysOfGoingAliasEng
                 }));
+            #endregion
+
+
+            #region DeviceStateDto mapping
+            CreateMap<Device<AdInputType>, DeviceStateDto>()
+                .ForMember(dest => dest.Option, opt => opt.MapFrom(src => src.Option))
+                .ForMember(dest => dest.Exchanges, opt => opt.MapFrom(src => src.Exchanges));
+
+            CreateMap<IExchange<AdInputType>, ExchangeStateDto>()
+                .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.KeyExchange));
+            #endregion
         }
 
 

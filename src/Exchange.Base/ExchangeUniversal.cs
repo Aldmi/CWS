@@ -41,10 +41,14 @@ namespace Exchange.Base
         #region prop
         public string KeyExchange => ExchangeOption.Key;
         public bool AutoStartCycleFunc => ExchangeOption.AutoStartCycleFunc;
+        public string ProviderName => ExchangeOption.Provider.Name;
+        public int NumberErrorTrying => ExchangeOption.NumberErrorTrying;
+        public int NumberTimeoutTrying => ExchangeOption.NumberTimeoutTrying;
         public KeyTransport KeyTransport => ExchangeOption.KeyTransport;
         public bool IsOpen => _transport.IsOpen;
+        public bool IsCycleReopened => _transport.IsCycleReopened;
         public bool IsStartedTransportBg => _transportBackground.IsStarted;
-        public bool IsStartedCycleExchange { get; private set; }
+        public bool IsStartedCycleFunc { get; private set; }
 
         private bool _isConnect;
         public bool IsConnect
@@ -160,7 +164,7 @@ namespace Exchange.Base
         public void StartCycleExchange()
         {
             _transportBackground.AddCycleAction(CycleTimeActionAsync);
-            IsStartedCycleExchange = true;
+            IsStartedCycleFunc = true;
         }
 
         /// <summary>
@@ -169,7 +173,7 @@ namespace Exchange.Base
         public void StopCycleExchange()
         {
             _transportBackground.RemoveCycleFunc(CycleTimeActionAsync);
-            IsStartedCycleExchange = false;
+            IsStartedCycleFunc = false;
         }
 
         #endregion
@@ -299,7 +303,7 @@ namespace Exchange.Base
 
                         //ТАЙМАУТ ОТВЕТА.
                         case StatusDataExchange.EndWithTimeout:
-                            if (++_countTimeoutTrying > ExchangeOption.NumberTimeoutTrying)
+                            if (++_countTimeoutTrying > NumberTimeoutTrying)
                             {
                                 _countTimeoutTrying = 0;
                                 IsConnect = false;
@@ -316,7 +320,7 @@ namespace Exchange.Base
 
                         //ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО. Считаем попытки.
                         default:  //EndWithError
-                            if (++_countErrorTrying > ExchangeOption.NumberErrorTrying)
+                            if (++_countErrorTrying > NumberErrorTrying)
                             {
                                 _countErrorTrying = 0;
                                 IsConnect = false;

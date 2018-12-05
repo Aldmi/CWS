@@ -174,7 +174,7 @@ namespace DeviceForExchange
                     break;
 
                 case DataAction.CycleAction:
-                    if (!exchange.IsStartedCycleExchange)
+                    if (!exchange.IsStartedCycleFunc)
                     {
                         _logger.Information($"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН");
                         await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН");

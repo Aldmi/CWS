@@ -229,7 +229,7 @@ namespace BL.Services.Mediators
                 if (exchangeKeys.Count(key => key == exchKey) == 1)
                 {
                     var removingExch = _exchangeStorageService.Get(exchKey);
-                    if (removingExch.IsStartedCycleExchange)
+                    if (removingExch.IsStartedCycleFunc)
                     {
                         removingExch.StopCycleExchange();
                     }

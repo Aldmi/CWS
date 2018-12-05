@@ -202,7 +202,7 @@ namespace WebServer
             //ОСТАНОВ НА ОБМЕНЕ ЦИКЛИЧЕСКОГО ОБМЕНА.
             foreach (var exchange in exchangeServices.Values)
             {
-                if (exchange.IsStartedCycleExchange)
+                if (exchange.IsStartedCycleFunc)
                 {
                     lifetimeApp.ApplicationStopping.Register(() => exchange.StopCycleExchange());
                 }

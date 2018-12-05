@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using BL.Services.Actions;
 using BL.Services.Exceptions;
 using BL.Services.Mediators;
 using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using WebServer.DTO.JSON.DevicesStateDto;
 
 namespace WebServer.Controllers
 {
@@ -24,6 +26,7 @@ namespace WebServer.Controllers
 
         private readonly MediatorForStorages<AdInputType> _mediatorForStorages;
         private readonly DeviceActionService<AdInputType> _deviceActionService;
+        private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         #endregion
@@ -35,10 +38,12 @@ namespace WebServer.Controllers
 
         public DevicesController(MediatorForStorages<AdInputType> mediatorForStorages,
                                  DeviceActionService<AdInputType> deviceActionService,
+                                 IMapper mapper,
                                  ILogger logger)
         {
             _mediatorForStorages = mediatorForStorages;
             _deviceActionService = deviceActionService;
+            _mapper = mapper;
             _logger = logger;
         }
 
@@ -54,8 +59,9 @@ namespace WebServer.Controllers
         public async Task<IActionResult> GetDevices()
         {
             var devices = _mediatorForStorages.GetDevices();
+            var devicesStateDto = _mapper.Map<List<DeviceStateDto>>(devices);
             await Task.CompletedTask;
-            return new JsonResult(devices);
+            return new JsonResult(devicesStateDto);
         }
 
 

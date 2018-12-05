@@ -52,7 +52,7 @@ namespace BL.Services.Actions
             if (exchange == null)
                 throw new ActionHandlerException($"Обмен с таким ключем Не найден: {exchnageKey}");
 
-            if (exchange.IsStartedCycleExchange)
+            if (exchange.IsStartedCycleFunc)
                 throw new ActionHandlerException($"Цикл. обмен уже запущен: {exchnageKey}");
 
             exchange.StartCycleExchange();
@@ -69,7 +69,7 @@ namespace BL.Services.Actions
             if (exchange == null)
                 throw new ActionHandlerException($"Обмен с таким ключем Не найден: {exchnageKey}");
 
-            if (!exchange.IsStartedCycleExchange)
+            if (!exchange.IsStartedCycleFunc)
                 throw new ActionHandlerException($"Цикл. обмен уже остановлен: {exchnageKey}");
 
             exchange.StopCycleExchange();
