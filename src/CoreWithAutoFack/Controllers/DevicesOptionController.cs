@@ -66,6 +66,7 @@ namespace WebServer.Controllers
         {
             try
             {
+                //TODO: Добавить GetOptionAgregator в _mediatorForOptionsRep. Сделать по аналогии GetOptionAgregatorForDeviceAsync()
                 var deviceOptions = await _mediatorForOptionsRep.GetDeviceOptionsAsync();
                 var exchangeOptions = await _mediatorForOptionsRep.GetExchangeOptionsAsync();
                 var transportOption = await _mediatorForOptionsRep.GetTransportOptionsAsync();

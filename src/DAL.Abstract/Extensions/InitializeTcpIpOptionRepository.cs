@@ -20,38 +20,123 @@ namespace DAL.Abstract.Extensions
                 new TcpIpOption
                 {
                    Id=1,
-                   Name = "TcpIp table 1",
-                   //IpAddress = "192.168.0.47",
-                   IpAddress = "10.27.15.199",
+                   Name = "TcpIp=194",
+                   IpAddress = "10.27.15.194",
                    IpPort = 4001,
                    AutoStartBg = true,
                 },
                 new TcpIpOption
                 {
                     Id=2,
-                    Name = "TcpIp table PribOtpr9Str",
-                    //IpAddress = "192.168.100.3",
-                    //IpPort = 50000,
-                    IpAddress = "10.27.15.194",
-                    IpPort =  4001,
+                    Name = "TcpIp=195",
+                    IpAddress = "10.27.15.195",
+                    IpPort = 4001,
                     AutoStartBg = true,
                 },
                 new TcpIpOption
                 {
                     Id=3,
-                    Name = "TcpIp table TestPeronn_70_52_48",
-                    IpAddress = "10.27.15.209",
-                    IpPort =  4001,
+                    Name = "TcpIp=196",
+                    IpAddress = "10.27.15.196",
+                    IpPort = 4001,
                     AutoStartBg = true,
                 },
                 new TcpIpOption
                 {
                     Id=4,
-                    Name = "TcpIp table TestPeronn_45_55_9",
-                    IpAddress = "10.27.15.210",
-                    IpPort =  4001,
+                    Name = "TcpIp=197",
+                    IpAddress = "10.27.15.197",
+                    IpPort = 4001,
                     AutoStartBg = true,
-                }
+                },
+                new TcpIpOption
+                {
+                    Id=5,
+                    Name = "TcpIp=198",
+                    IpAddress = "10.27.15.198",
+                    IpPort = 4001,
+                    AutoStartBg = true,
+                },
+                new TcpIpOption
+                {
+                    Id=6,
+                    Name = "TcpIp=199",
+                    IpAddress = "10.27.15.199",
+                    IpPort = 4001,
+                    AutoStartBg = true,
+                },
+                new TcpIpOption
+                {
+                    Id=7,
+                    Name = "TcpIp=200",
+                    IpAddress = "10.27.15.200",
+                    IpPort = 4001,
+                    AutoStartBg = true,
+                },
+                new TcpIpOption
+                {
+                    Id=8,
+                    Name = "TcpIp=201",
+                    IpAddress = "10.27.15.201",
+                    IpPort = 4001,
+                    AutoStartBg = true,
+                },
+                //new TcpIpOption       //СТОЛБ 9(не работает)
+                //{
+                //    Id=9,
+                //    Name = "TcpIp=199",
+                //    IpAddress = "10.27.15.202",
+                //    IpPort = 4001,
+                //    AutoStartBg = true,
+                //},
+                new TcpIpOption
+                {
+                    Id=10,
+                    Name = "TcpIp=203",
+                    IpAddress = "10.27.15.203",
+                    IpPort = 4001,
+                    AutoStartBg = true,
+                },
+                new TcpIpOption
+                {
+                    Id=11,
+                    Name = "TcpIp=204",
+                    IpAddress = "10.27.15.204",
+                    IpPort = 4001,
+                    AutoStartBg = true,
+                },
+                new TcpIpOption
+                {
+                    Id=12,
+                    Name = "TcpIp=205",
+                    IpAddress = "10.27.15.205",
+                    IpPort = 4001,
+                    AutoStartBg = true,
+                },
+                new TcpIpOption
+                {
+                    Id=13,
+                    Name = "TcpIp=206",
+                    IpAddress = "10.27.15.206",
+                    IpPort = 4001,
+                    AutoStartBg = true,
+                },
+                new TcpIpOption
+                {
+                    Id=14,
+                    Name = "TcpIp=207",
+                    IpAddress = "10.27.15.207",
+                    IpPort = 4001,
+                    AutoStartBg = true,
+                },
+                new TcpIpOption
+                {
+                    Id=15,
+                    Name = "TcpIp=208",
+                    IpAddress = "10.27.15.208",
+                    IpPort = 4001,
+                    AutoStartBg = true,
+                },
             };
 
             await rep.AddRangeAsync(tcpIpList);
