@@ -84,7 +84,7 @@ namespace DAL.Abstract.Extensions
                 //new TcpIpOption       //СТОЛБ 9(не работает)
                 //{
                 //    Id=9,
-                //    Name = "TcpIp=199",
+                //    Name = "TcpIp=202",
                 //    IpAddress = "10.27.15.202",
                 //    IpPort = 4001,
                 //    AutoStartBg = true,
@@ -134,6 +134,22 @@ namespace DAL.Abstract.Extensions
                     Id=15,
                     Name = "TcpIp=208",
                     IpAddress = "10.27.15.208",
+                    IpPort = 4001,
+                    AutoStartBg = true,
+                },
+                new TcpIpOption
+                {
+                    Id=16,
+                    Name = "TcpIp=209",
+                    IpAddress = "10.27.15.209",
+                    IpPort = 4001,
+                    AutoStartBg = true,
+                },
+                new TcpIpOption
+                {
+                    Id=17,
+                    Name = "TcpIp=210",
+                    IpAddress = "10.27.15.210",
                     IpPort = 4001,
                     AutoStartBg = true,
                 },
