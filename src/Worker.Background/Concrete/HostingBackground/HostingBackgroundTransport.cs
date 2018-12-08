@@ -3,6 +3,9 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MoreLinq;
+using MoreLinq.Extensions;
+using Serilog;
 using Shared.Types;
 using Worker.Background.Abstarct;
 
@@ -14,7 +17,7 @@ namespace Worker.Background.Concrete.HostingBackground
 
         private readonly ConcurrentDictionary<int, Func<CancellationToken, Task>> _cycleTimeFuncDict = new ConcurrentDictionary<int, Func<CancellationToken, Task>>();
         private readonly ConcurrentQueue<Func<CancellationToken, Task>> _oneTimeFuncQueue = new ConcurrentQueue<Func<CancellationToken, Task>>();
-
+        private readonly ILogger _logger;
         #endregion
 
 
@@ -29,8 +32,9 @@ namespace Worker.Background.Concrete.HostingBackground
 
         #region ctor
 
-        public HostingBackgroundTransport(KeyTransport keyTransport, bool autoStart) : base(autoStart)
+        public HostingBackgroundTransport(KeyTransport keyTransport, bool autoStart, ILogger logger) : base(autoStart)
         {
+            _logger = logger;
             KeyTransport = keyTransport;
         }
 
@@ -80,6 +84,7 @@ namespace Worker.Background.Concrete.HostingBackground
         /// </summary>
         /// <param name="stoppingToken"></param>
         /// <returns></returns>
+        private int indexCycleFunc = 0;
         protected override async Task ProcessAsync(CancellationToken stoppingToken)
         {
             //вызов одиночной функции запроса---------------------------------------------------------------
@@ -93,9 +98,27 @@ namespace Worker.Background.Concrete.HostingBackground
             else
             {
                 //вызов циклических функций--------------------------------------------------------------------
-                if (_cycleTimeFuncDict != null && _cycleTimeFuncDict.Count > 0)
+                try//DEBUG
                 {
-                    await _cycleTimeFuncDict[0](stoppingToken);
+                    if (_cycleTimeFuncDict != null && !_cycleTimeFuncDict.IsEmpty)
+                    {
+                        //if (indexCycleFunc > _cycleTimeFuncDict.Count - 1)
+                        //    indexCycleFunc = 0;
+
+                        if (_cycleTimeFuncDict.ContainsKey(indexCycleFunc))
+                        {
+                            await _cycleTimeFuncDict[indexCycleFunc](stoppingToken);
+                            indexCycleFunc++;
+                        }
+                        else
+                        {
+                            indexCycleFunc = _cycleTimeFuncDict.FirstOrDefault().Key; //TODO: не оптимальное перечисление элементов словаря 
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Fatal($"HostingBackgroundTransport.ProcessAsync {ex}");
                 }
             }
 

@@ -29,15 +29,15 @@ namespace DAL.Abstract.Extensions
                     AutoBuild = true,
                     ExchangeKeys = new List<string>
                     {
-                        "TcpIp=200 Plat=2 P=10 Stolb=10 Addr=2",
-                        "TcpIp=200 Plat=2 P=10 Stolb=10 Addr=1",
+                        //"TcpIp=200 Plat=2 P=10 Stolb=10 Addr=2",
+                        //"TcpIp=200 Plat=2 P=10 Stolb=10 Addr=1",
 
-                        "TcpIp=201 Plat=2 P=10 Stolb=9 Addr=5",
-                        "TcpIp=201 Plat=2 P=10 Stolb=9 Addr=14",
+                        //"TcpIp=201 Plat=2 P=10 Stolb=9 Addr=5",
+                        //"TcpIp=201 Plat=2 P=10 Stolb=9 Addr=14",
 
-                        "TcpIp=209 Plat=2 P=10 Stolb=_ Addr=70",
+                        "TcpIp=209 Plat=2 P=10 Stolb=_ Addr=9",
 
-                        "TcpIp=210 Plat=2 P=10 Stolb=_ Addr=9"
+                        "TcpIp=210 Plat=2 P=10 Stolb=_ Addr=70"
                     }
                 },
                 new DeviceOption
@@ -49,27 +49,27 @@ namespace DAL.Abstract.Extensions
                     AutoBuild = true,
                     ExchangeKeys = new List<string>
                     {
-                        "TcpIp=200 Plat=2 P=12 Stolb=10 Addr=25",
-                        "TcpIp=200 Plat=2 P=12 Stolb=10 Addr=21",
+                        //"TcpIp=200 Plat=2 P=12 Stolb=10 Addr=25",
+                        //"TcpIp=200 Plat=2 P=12 Stolb=10 Addr=21",
 
-                        "TcpIp=201 Plat=2 P=12 Stolb=9 Addr=6",
-                        "TcpIp=201 Plat=2 P=12 Stolb=9 Addr=7",
+                        //"TcpIp=201 Plat=2 P=12 Stolb=9 Addr=6",
+                        //"TcpIp=201 Plat=2 P=12 Stolb=9 Addr=7",
 
-                        "TcpIp=196 Plat=1 P=12 Stolb=_ Addr=71",
-                        "TcpIp=196 Plat=1 P=12 Stolb=_ Addr=72",
+                        //"TcpIp=196 Plat=1 P=12 Stolb=_ Addr=71",
+                        //"TcpIp=196 Plat=1 P=12 Stolb=_ Addr=72",
 
-                        "TcpIp=197 Plat=1 P=12 Stolb=_ Addr=47",
-                        "TcpIp=197 Plat=1 P=12 Stolb=X Addr=60",
+                        //"TcpIp=197 Plat=1 P=12 Stolb=_ Addr=47",
+                        //"TcpIp=197 Plat=1 P=12 Stolb=X Addr=60",
 
-                        "TcpIp=198 Plat=1 P=12 Stolb=_ Addr=57",
-                        "TcpIp=198 Plat=1 P=12 Stolb=_ Addr=58",
+                        //"TcpIp=198 Plat=1 P=12 Stolb=_ Addr=57",
+                        //"TcpIp=198 Plat=1 P=12 Stolb=_ Addr=58",
 
-                        "TcpIp=199 Plat=1 P=12 Stolb=_ Addr=46",
-                        "TcpIp=199 Plat=1 P=12 Stolb=_ Addr=59",
+                        //"TcpIp=199 Plat=1 P=12 Stolb=_ Addr=46",
+                        //"TcpIp=199 Plat=1 P=12 Stolb=_ Addr=59",
 
-                        "TcpIp=209 Plat=2 P=12 Stolb=_ Addr=70",
+                        "TcpIp=209 Plat=2 P=12 Stolb=_ Addr=9",
 
-                        "TcpIp=210 Plat=2 P=12 Stolb=_ Addr=9"
+                        "TcpIp=210 Plat=2 P=12 Stolb=_ Addr=70"
                     }
                 },
                 new DeviceOption
@@ -81,18 +81,18 @@ namespace DAL.Abstract.Extensions
                     AutoBuild = true,
                     ExchangeKeys = new List<string>
                     {
-                        "TcpIp=203 Plat=3 P=6 Stolb=7 Addr=49",
-                        "TcpIp=203 Plat=3 P=6 Stolb=7 Addr=51",
+                        //"TcpIp=203 Plat=3 P=6 Stolb=7 Addr=49",
+                        //"TcpIp=203 Plat=3 P=6 Stolb=7 Addr=51",
 
-                        "TcpIp=204 Plat=3 P=6 Stolb=6 Addr=17",
-                        "TcpIp=204 Plat=3 P=6 Stolb=6 Addr=19",
+                        //"TcpIp=204 Plat=3 P=6 Stolb=6 Addr=17",
+                        //"TcpIp=204 Plat=3 P=6 Stolb=6 Addr=19",
 
-                        "TcpIp=205 Plat=3 P=6 Stolb=5 Addr=61",
-                        "TcpIp=205 Plat=3 P=6 Stolb=5 Addr=62",
+                        //"TcpIp=205 Plat=3 P=6 Stolb=5 Addr=61",
+                        //"TcpIp=205 Plat=3 P=6 Stolb=5 Addr=62",
 
-                        "TcpIp=209 Plat=3 P=6 Stolb=_ Addr=52",
+                        "TcpIp=209 Plat=3 P=6 Stolb=_ Addr=55",
 
-                        "TcpIp=210 Plat=3 P=6 Stolb=_ Addr=55"
+                        "TcpIp=210 Plat=3 P=6 Stolb=_ Addr=52"
                     }
                 },
                 new DeviceOption
@@ -104,18 +104,18 @@ namespace DAL.Abstract.Extensions
                     AutoBuild = true,
                     ExchangeKeys = new List<string>
                     {
-                        "TcpIp=203 Plat=3 P=8 Stolb=7 Addr=50",
-                        "TcpIp=203 Plat=3 P=8 Stolb=7 Addr=53",
+                        //"TcpIp=203 Plat=3 P=8 Stolb=7 Addr=50",
+                        //"TcpIp=203 Plat=3 P=8 Stolb=7 Addr=53",
 
-                        "TcpIp=204 Plat=3 P=8 Stolb=6 Addr=54",
-                        "TcpIp=204 Plat=3 P=8 Stolb=6 Addr=56",
+                        //"TcpIp=204 Plat=3 P=8 Stolb=6 Addr=54",
+                        //"TcpIp=204 Plat=3 P=8 Stolb=6 Addr=56",
 
-                        "TcpIp=205 Plat=3 P=8 Stolb=5 Addr=63",
-                        "TcpIp=205 Plat=3 P=8 Stolb=5 Addr=73",
+                        //"TcpIp=205 Plat=3 P=8 Stolb=5 Addr=63",
+                        //"TcpIp=205 Plat=3 P=8 Stolb=5 Addr=73",
 
-                        "TcpIp=209 Plat=3 P=8 Stolb=_ Addr=52",
+                        "TcpIp=209 Plat=3 P=8 Stolb=_ Addr=55",
 
-                        "TcpIp=210 Plat=3 P=8 Stolb=_ Addr=55"
+                        "TcpIp=210 Plat=3 P=8 Stolb=_ Addr=52"
                     }
                 },
                 new DeviceOption
@@ -127,18 +127,18 @@ namespace DAL.Abstract.Extensions
                     AutoBuild = true,
                     ExchangeKeys = new List<string>
                     {
-                        "TcpIp=206 Plat=4 P=5 Stolb=4 Addr=8",
-                        "TcpIp=206 Plat=4 P=5 Stolb=4 Addr=11",
+                        //"TcpIp=206 Plat=4 P=5 Stolb=4 Addr=8",
+                        //"TcpIp=206 Plat=4 P=5 Stolb=4 Addr=11",
 
-                        "TcpIp=207 Plat=4 P=5 Stolb=3 Addr=4",
-                        "TcpIp=207 Plat=4 P=5 Stolb=3 Addr=13",
+                        //"TcpIp=207 Plat=4 P=5 Stolb=3 Addr=4",
+                        //"TcpIp=207 Plat=4 P=5 Stolb=3 Addr=13",
 
-                        "TcpIp=208 Plat=4 P=5 Stolb=2 Addr=10",
-                        "TcpIp=208 Plat=4 P=5 Stolb=2 Addr=18",
+                        //"TcpIp=208 Plat=4 P=5 Stolb=2 Addr=10",
+                        //"TcpIp=208 Plat=4 P=5 Stolb=2 Addr=18",
 
-                        "TcpIp=209 Plat=4 P=5 Stolb=_ Addr=48",
+                        "TcpIp=209 Plat=4 P=5 Stolb=_ Addr=45",
 
-                        "TcpIp=210 Plat=4 P=5 Stolb=_ Addr=45"
+                        "TcpIp=210 Plat=4 P=5 Stolb=_ Addr=48"
                     }
                 },
                 new DeviceOption
@@ -150,18 +150,18 @@ namespace DAL.Abstract.Extensions
                     AutoBuild = true,
                     ExchangeKeys = new List<string>
                     {
-                        "TcpIp=206 Plat=4 P=3 Stolb=4 Addr=26",
-                        "TcpIp=206 Plat=4 P=3 Stolb=4 Addr=44",
+                        //"TcpIp=206 Plat=4 P=3 Stolb=4 Addr=26",
+                        //"TcpIp=206 Plat=4 P=3 Stolb=4 Addr=44",
 
-                        "TcpIp=207 Plat=4 P=3 Stolb=3 Addr=23",
-                        "TcpIp=207 Plat=4 P=3 Stolb=3 Addr=29",
+                        //"TcpIp=207 Plat=4 P=3 Stolb=3 Addr=23",
+                        //"TcpIp=207 Plat=4 P=3 Stolb=3 Addr=29",
 
-                        "TcpIp=208 Plat=4 P=3 Stolb=2 Addr=3",
-                        "TcpIp=208 Plat=4 P=3 Stolb=2 Addr=12",
+                        //"TcpIp=208 Plat=4 P=3 Stolb=2 Addr=3",
+                        //"TcpIp=208 Plat=4 P=3 Stolb=2 Addr=12",
 
-                        "TcpIp=209 Plat=4 P=3 Stolb=_ Addr=48",
+                        "TcpIp=209 Plat=4 P=3 Stolb=_ Addr=45",
 
-                        "TcpIp=210 Plat=4 P=3 Stolb=_ Addr=45"
+                        "TcpIp=210 Plat=4 P=3 Stolb=_ Addr=48"
                     }
                 },
 
@@ -169,22 +169,22 @@ namespace DAL.Abstract.Extensions
 
                 #region MultiStr
 
-                new DeviceOption
-                {
-                    Id = 7,
-                    Description = "9 строк табло. Прибытие/Отправление",
-                    Name = "PribOtpr_9Str_4Table",
-                    TopicName4MessageBroker = "PribOtpr_9Str_4Table",
-                    AutoBuild = true,
-                    ExchangeKeys = new List<string>
-                    {
-                        "TcpIp=194 Event=PribOtpr NItem=9 Addr=64",
+                //new DeviceOption
+                //{
+                //    Id = 7,
+                //    Description = "9 строк табло. Прибытие/Отправление",
+                //    Name = "PribOtpr_9Str_4Table",
+                //    TopicName4MessageBroker = "PribOtpr_9Str_4Table",
+                //    AutoBuild = true,
+                //    ExchangeKeys = new List<string>
+                //    {
+                //        "TcpIp=194 Event=PribOtpr NItem=9 Addr=64",
 
-                        "TcpIp=195 Event=PribOtpr NItem=9 Addr=65",
-                        "TcpIp=195 Event=PribOtpr NItem=9 Addr=66",
-                        "TcpIp=195 Event=PribOtpr NItem=9 Addr=67",
-                    }
-                },
+                //        "TcpIp=195 Event=PribOtpr NItem=9 Addr=65",
+                //        "TcpIp=195 Event=PribOtpr NItem=9 Addr=66",
+                //        "TcpIp=195 Event=PribOtpr NItem=9 Addr=67",
+                //    }
+                //},
 
                 #endregion
             };
