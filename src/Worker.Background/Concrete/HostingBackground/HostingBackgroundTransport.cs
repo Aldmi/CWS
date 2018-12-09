@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,8 +17,10 @@ namespace Worker.Background.Concrete.HostingBackground
         #region Field
 
         private readonly ConcurrentDictionary<int, Func<CancellationToken, Task>> _cycleTimeFuncDict = new ConcurrentDictionary<int, Func<CancellationToken, Task>>();
+        private IEnumerator<KeyValuePair<int, Func<CancellationToken, Task>>> _enumeratorCycleTimeFuncDict;
         private readonly ConcurrentQueue<Func<CancellationToken, Task>> _oneTimeFuncQueue = new ConcurrentQueue<Func<CancellationToken, Task>>();
         private readonly ILogger _logger;
+
         #endregion
 
 
@@ -36,6 +39,7 @@ namespace Worker.Background.Concrete.HostingBackground
         {
             _logger = logger;
             KeyTransport = keyTransport;
+           _enumeratorCycleTimeFuncDict = _cycleTimeFuncDict.GetEnumerator();
         }
 
         #endregion
@@ -85,6 +89,7 @@ namespace Worker.Background.Concrete.HostingBackground
         /// <param name="stoppingToken"></param>
         /// <returns></returns>
         private int indexCycleFunc = 0;
+
         protected override async Task ProcessAsync(CancellationToken stoppingToken)
         {
             //вызов одиночной функции запроса---------------------------------------------------------------
@@ -102,18 +107,30 @@ namespace Worker.Background.Concrete.HostingBackground
                 {
                     if (_cycleTimeFuncDict != null && !_cycleTimeFuncDict.IsEmpty)
                     {
-                        //if (indexCycleFunc > _cycleTimeFuncDict.Count - 1)
-                        //    indexCycleFunc = 0;
-
-                        if (_cycleTimeFuncDict.ContainsKey(indexCycleFunc))
+                        if (_enumeratorCycleTimeFuncDict.MoveNext())
                         {
-                            await _cycleTimeFuncDict[indexCycleFunc](stoppingToken);
-                            indexCycleFunc++;
+                            var cycleFunc = _enumeratorCycleTimeFuncDict.Current.Value;
+                            await cycleFunc(stoppingToken);
                         }
                         else
                         {
-                            indexCycleFunc = _cycleTimeFuncDict.FirstOrDefault().Key; //TODO: не оптимальное перечисление элементов словаря 
+                            _enumeratorCycleTimeFuncDict.Dispose();
+                            _enumeratorCycleTimeFuncDict = _cycleTimeFuncDict.GetEnumerator();
                         }
+                    
+
+                        //if (_cycleTimeFuncDict.ContainsKey(indexCycleFunc))
+                        //{
+                        //    if (_cycleTimeFuncDict.TryGetValue(indexCycleFunc, out var cycleFunc))
+                        //    {
+                        //       await cycleFunc(stoppingToken);
+                        //       indexCycleFunc++;
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    indexCycleFunc = _cycleTimeFuncDict.FirstOrDefault().Key; //TODO: не оптимальное перечисление элементов словаря 
+                        //}
                     }
                 }
                 catch (Exception ex)
