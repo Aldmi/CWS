@@ -16,8 +16,8 @@ namespace Worker.Background.Concrete.HostingBackground
     {
         #region Field
 
-        private readonly ConcurrentDictionary<int, Func<CancellationToken, Task>> _cycleTimeFuncDict = new ConcurrentDictionary<int, Func<CancellationToken, Task>>();
-        private IEnumerator<KeyValuePair<int, Func<CancellationToken, Task>>> _enumeratorCycleTimeFuncDict;
+        private readonly ConcurrentDictionary<Guid, Func<CancellationToken, Task>> _cycleTimeFuncDict = new ConcurrentDictionary<Guid, Func<CancellationToken, Task>>();
+        private IEnumerator<KeyValuePair<Guid, Func<CancellationToken, Task>>> _enumeratorCycleTimeFuncDict;
         private readonly ConcurrentQueue<Func<CancellationToken, Task>> _oneTimeFuncQueue = new ConcurrentQueue<Func<CancellationToken, Task>>();
         private readonly ILogger _logger;
 
@@ -55,7 +55,7 @@ namespace Worker.Background.Concrete.HostingBackground
         public void AddCycleAction(Func<CancellationToken, Task> action)
         {
             if (action != null)
-                _cycleTimeFuncDict.TryAdd(_cycleTimeFuncDict.Count, action);
+                _cycleTimeFuncDict.TryAdd(Guid.NewGuid(), action);
         }
 
 
@@ -88,8 +88,7 @@ namespace Worker.Background.Concrete.HostingBackground
         /// </summary>
         /// <param name="stoppingToken"></param>
         /// <returns></returns>
-        private int indexCycleFunc = 0;
-
+        //private int indexCycleFunc = 0;
         protected override async Task ProcessAsync(CancellationToken stoppingToken)
         {
             //вызов одиночной функции запроса---------------------------------------------------------------
