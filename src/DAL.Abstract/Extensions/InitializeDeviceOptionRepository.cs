@@ -26,14 +26,14 @@ namespace DAL.Abstract.Extensions
                     Description = "Платформа= 2. ПУТЬ= 10. Столбы= 10,9",
                     Name = "Plat2.P10",
                     TopicName4MessageBroker = "Plat2.P10",
-                    AutoBuild = true,
+                    AutoBuild = false,
                     ExchangeKeys = new List<string>
                     {
-                        //"TcpIp=200 Plat=2 P=10 Stolb=10 Addr=2",
-                        //"TcpIp=200 Plat=2 P=10 Stolb=10 Addr=1",
+                        "TcpIp=200 Plat=2 P=10 Stolb=10 Addr=2",
+                        "TcpIp=200 Plat=2 P=10 Stolb=10 Addr=1",
 
-                        //"TcpIp=201 Plat=2 P=10 Stolb=9 Addr=5",
-                        //"TcpIp=201 Plat=2 P=10 Stolb=9 Addr=14",
+                        "TcpIp=201 Plat=2 P=10 Stolb=9 Addr=5",
+                        "TcpIp=201 Plat=2 P=10 Stolb=9 Addr=14",
 
                         "TcpIp=209 Plat=2 P=10 Stolb=_ Addr=9",
 
@@ -55,17 +55,17 @@ namespace DAL.Abstract.Extensions
                         //"TcpIp=201 Plat=2 P=12 Stolb=9 Addr=6",
                         //"TcpIp=201 Plat=2 P=12 Stolb=9 Addr=7",
 
-                        //"TcpIp=196 Plat=1 P=12 Stolb=_ Addr=71",
-                        //"TcpIp=196 Plat=1 P=12 Stolb=_ Addr=72",
+                        "TcpIp=196 Plat=1 P=12 Stolb=_ Addr=71",
+                        "TcpIp=196 Plat=1 P=12 Stolb=_ Addr=72",
 
-                        //"TcpIp=197 Plat=1 P=12 Stolb=_ Addr=47",
-                        //"TcpIp=197 Plat=1 P=12 Stolb=X Addr=60",
+                        "TcpIp=197 Plat=1 P=12 Stolb=_ Addr=47",
+                        "TcpIp=197 Plat=1 P=12 Stolb=_ Addr=60",
 
-                        //"TcpIp=198 Plat=1 P=12 Stolb=_ Addr=57",
-                        //"TcpIp=198 Plat=1 P=12 Stolb=_ Addr=58",
+                        "TcpIp=198 Plat=1 P=12 Stolb=_ Addr=57",
+                        "TcpIp=198 Plat=1 P=12 Stolb=_ Addr=58",
 
-                        //"TcpIp=199 Plat=1 P=12 Stolb=_ Addr=46",
-                        //"TcpIp=199 Plat=1 P=12 Stolb=_ Addr=59",
+                        "TcpIp=199 Plat=1 P=12 Stolb=_ Addr=46",
+                        "TcpIp=199 Plat=1 P=12 Stolb=_ Addr=59",
 
                         "TcpIp=209 Plat=2 P=12 Stolb=_ Addr=9",
 
@@ -78,17 +78,17 @@ namespace DAL.Abstract.Extensions
                     Description = "Платформа= 3. ПУТЬ= 6. Столбы= 7,6,5",
                     Name = "Plat3.P6",
                     TopicName4MessageBroker = "Plat3.P6",
-                    AutoBuild = true,
+                    AutoBuild = false,
                     ExchangeKeys = new List<string>
                     {
-                        //"TcpIp=203 Plat=3 P=6 Stolb=7 Addr=49",
-                        //"TcpIp=203 Plat=3 P=6 Stolb=7 Addr=51",
+                        "TcpIp=203 Plat=3 P=6 Stolb=7 Addr=49",
+                        "TcpIp=203 Plat=3 P=6 Stolb=7 Addr=51",
 
-                        //"TcpIp=204 Plat=3 P=6 Stolb=6 Addr=17",
-                        //"TcpIp=204 Plat=3 P=6 Stolb=6 Addr=19",
+                        "TcpIp=204 Plat=3 P=6 Stolb=6 Addr=17",
+                        "TcpIp=204 Plat=3 P=6 Stolb=6 Addr=19",
 
-                        //"TcpIp=205 Plat=3 P=6 Stolb=5 Addr=61",
-                        //"TcpIp=205 Plat=3 P=6 Stolb=5 Addr=62",
+                        "TcpIp=205 Plat=3 P=6 Stolb=5 Addr=61",
+                        "TcpIp=205 Plat=3 P=6 Stolb=5 Addr=62",
 
                         "TcpIp=209 Plat=3 P=6 Stolb=_ Addr=55",
 
@@ -101,7 +101,7 @@ namespace DAL.Abstract.Extensions
                     Description = "Платформа= 3. ПУТЬ= 8. Столбы= 7,6,5",
                     Name = "Plat3.P8",
                     TopicName4MessageBroker = "Plat3.P8",
-                    AutoBuild = true,
+                    AutoBuild = false,
                     ExchangeKeys = new List<string>
                     {
                         //"TcpIp=203 Plat=3 P=8 Stolb=7 Addr=50",
@@ -124,7 +124,7 @@ namespace DAL.Abstract.Extensions
                     Description = "Платформа= 4. ПУТЬ= 5. Столбы= 4,3,2",
                     Name = "Plat4.P5",
                     TopicName4MessageBroker = "Plat4.P5",
-                    AutoBuild = true,
+                    AutoBuild = false,
                     ExchangeKeys = new List<string>
                     {
                         //"TcpIp=206 Plat=4 P=5 Stolb=4 Addr=8",
@@ -147,7 +147,7 @@ namespace DAL.Abstract.Extensions
                     Description = "Платформа= 4. ПУТЬ= 3. Столбы= 4,3,2",
                     Name = "Plat4.P3",
                     TopicName4MessageBroker = "Plat4.P3",
-                    AutoBuild = true,
+                    AutoBuild = false,
                     ExchangeKeys = new List<string>
                     {
                         //"TcpIp=206 Plat=4 P=3 Stolb=4 Addr=26",
@@ -169,22 +169,22 @@ namespace DAL.Abstract.Extensions
 
                 #region MultiStr
 
-                //new DeviceOption
-                //{
-                //    Id = 7,
-                //    Description = "9 строк табло. Прибытие/Отправление",
-                //    Name = "PribOtpr_9Str_4Table",
-                //    TopicName4MessageBroker = "PribOtpr_9Str_4Table",
-                //    AutoBuild = true,
-                //    ExchangeKeys = new List<string>
-                //    {
-                //        "TcpIp=194 Event=PribOtpr NItem=9 Addr=64",
+                new DeviceOption
+                {
+                    Id = 7,
+                    Description = "9 строк табло. Прибытие/Отправление",
+                    Name = "PribOtpr_9Str_4Table",
+                    TopicName4MessageBroker = "PribOtpr_9Str_4Table",
+                    AutoBuild = true,
+                    ExchangeKeys = new List<string>
+                    {
+                        "TcpIp=194 Event=PribOtpr NItem=9 Addr=64",
 
-                //        "TcpIp=195 Event=PribOtpr NItem=9 Addr=65",
-                //        "TcpIp=195 Event=PribOtpr NItem=9 Addr=66",
-                //        "TcpIp=195 Event=PribOtpr NItem=9 Addr=67",
-                //    }
-                //},
+                        "TcpIp=195 Event=PribOtpr NItem=9 Addr=65",
+                        "TcpIp=195 Event=PribOtpr NItem=9 Addr=66",
+                        "TcpIp=195 Event=PribOtpr NItem=9 Addr=67",
+                    }
+                },
 
                 #endregion
             };
