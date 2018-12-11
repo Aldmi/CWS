@@ -117,7 +117,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -144,7 +144,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -249,7 +249,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -276,7 +276,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -381,7 +381,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -408,7 +408,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -513,7 +513,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -540,7 +540,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -595,7 +595,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 1000,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         },
@@ -618,7 +618,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 1000,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -645,7 +645,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -672,7 +672,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -777,7 +777,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -804,7 +804,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -916,7 +916,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -943,7 +943,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1048,7 +1048,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1075,7 +1075,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1180,7 +1180,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1207,7 +1207,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1312,7 +1312,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1339,7 +1339,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1444,7 +1444,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1471,7 +1471,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1576,7 +1576,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1603,7 +1603,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1708,7 +1708,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1735,7 +1735,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1840,7 +1840,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1867,7 +1867,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1972,7 +1972,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -1999,7 +1999,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -2104,7 +2104,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -2131,7 +2131,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -2236,7 +2236,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -2263,7 +2263,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -2368,7 +2368,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -2395,7 +2395,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -2500,7 +2500,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -2527,7 +2527,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -2632,7 +2632,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -2659,7 +2659,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -2771,7 +2771,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -2798,7 +2798,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -2903,7 +2903,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -2930,7 +2930,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3035,7 +3035,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3062,7 +3062,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3167,7 +3167,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3194,7 +3194,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3299,7 +3299,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3326,7 +3326,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3431,7 +3431,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3458,7 +3458,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3563,7 +3563,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3590,7 +3590,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3695,7 +3695,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3722,7 +3722,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3834,7 +3834,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3861,7 +3861,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3966,7 +3966,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -3993,7 +3993,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -4098,7 +4098,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -4125,7 +4125,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -4230,7 +4230,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -4257,7 +4257,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -4362,7 +4362,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -4389,7 +4389,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -4494,7 +4494,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -4521,7 +4521,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -4626,7 +4626,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -4653,7 +4653,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -4758,7 +4758,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -4785,7 +4785,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -4897,7 +4897,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -4924,7 +4924,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5029,7 +5029,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5056,7 +5056,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5161,7 +5161,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5188,7 +5188,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5293,7 +5293,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5320,7 +5320,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5425,7 +5425,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5452,7 +5452,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5557,7 +5557,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5584,7 +5584,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5689,7 +5689,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5716,7 +5716,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5821,7 +5821,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5848,7 +5848,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5959,7 +5959,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -5986,7 +5986,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -6091,7 +6091,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -6118,7 +6118,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -6223,7 +6223,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -6250,7 +6250,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -6355,7 +6355,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -6382,7 +6382,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -6487,7 +6487,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -6514,7 +6514,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -6619,7 +6619,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -6646,7 +6646,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -6751,7 +6751,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -6778,7 +6778,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -6883,7 +6883,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }
@@ -6910,7 +6910,7 @@ namespace DAL.Abstract.Extensions
                                             {
                                                 Body = "0246463038254130373741434B454103",
                                                 Lenght = 16,
-                                                TimeRespone = 260,
+                                                TimeRespone = 800,
                                                 Format = "X2"
                                             }
                                         }

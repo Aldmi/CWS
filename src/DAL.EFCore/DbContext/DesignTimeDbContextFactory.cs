@@ -17,7 +17,7 @@ namespace DAL.EFCore.DbContext
             var config = JsonConfigLib.GetConfiguration(path);
             var connectionString = config.GetConnectionString("OptionDbConnectionUseNpgsql");
             Console.WriteLine($"Connection string = {connectionString}");
-            return new Context(connectionString, HowCreateDb.None);
+            return new Context(connectionString);
         }
     }
 }

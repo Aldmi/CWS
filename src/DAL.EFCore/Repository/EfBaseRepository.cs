@@ -8,6 +8,7 @@ using DAL.EFCore.DbContext;
 using DAL.EFCore.Entities;
 using DAL.EFCore.Mappers;
 using Microsoft.EntityFrameworkCore;
+using Shared.Enums;
 
 namespace DAL.EFCore.Repository
 {
@@ -247,6 +248,16 @@ namespace DAL.EFCore.Repository
 
         #endregion
 
+
+
+        #region CreateDeleteDb
+
+        public async Task CreateDb(HowCreateDb howCreateDb)
+        {
+          await  Context.CreateDb(howCreateDb);
+        }
+
+        #endregion
 
 
 

@@ -23,6 +23,7 @@ using Microsoft.Extensions.HealthChecks;
 using MoreLinq;
 using Newtonsoft.Json;
 using Serilog;
+using Shared.Enums;
 using WebServer.AutofacModules;
 using WebServer.DTO.XML;
 using WebServer.Extensions;
@@ -232,6 +233,15 @@ namespace WebServer
             var env = scope.Resolve<IHostingEnvironment>();      
             if (env.IsDevelopment()) //TODO: добавить переменную окружения OS (win/linux)
             {
+                //СОЗДАНИЕ БД (если не созданно)--------------------------------------------------
+                try
+                {
+                    await scope.Resolve<ISerialPortOptionRepository>().CreateDb(HowCreateDb.Migrate);
+                }
+                catch (Exception ex)
+                {
+                  logger.Fatal($"Ошибка создания БД на основе миграций {ex}");
+                }
                 //ИНИЦИАЛИЦИЯ РЕПОЗИТОРИЕВ--------------------------------------------------------
                 try
                 {
@@ -275,26 +285,6 @@ namespace WebServer
                     logger.Error(innerException, "ОШИБКА СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ");
                 }
             }
-
-            //DEBUG--------------------------------------------------
-            //var settings = new JsonSerializerSettings
-            //{
-            //    Formatting = Formatting.Indented,             //Отступы дочерних элементов 
-            //    NullValueHandling = NullValueHandling.Ignore,  //Игнорировать пустые теги
-
-            //};
-
-            //StringBuilder stringBuilder = new StringBuilder();
-            //stringBuilder.AppendLine("\"Str1\"");
-            //stringBuilder.AppendLine("Str2");
-            //ResponsePieceOfDataWrapper<AdInputType> responsePieceOfDataWrapper = new ResponsePieceOfDataWrapper<AdInputType>
-            //{
-            //    Message = stringBuilder.ToString()
-            //}; 
-            //var jsonResp = JsonConvert.SerializeObject(responsePieceOfDataWrapper, settings);
-            //logger.Error(jsonResp);
-
-            //DEBUG-----------------------------------------------------------
         }
     }
 }

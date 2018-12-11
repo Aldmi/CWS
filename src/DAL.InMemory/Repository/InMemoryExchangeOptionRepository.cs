@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using DAL.Abstract.Concrete;
 using DAL.Abstract.Entities.Options.Exchange;
+using Shared.Enums;
 
 namespace DAL.InMemory.Repository
 {
@@ -185,6 +186,11 @@ namespace DAL.InMemory.Repository
         {
             await Task.CompletedTask;
             return IsExist(predicate);
+        }
+
+        public Task CreateDb(HowCreateDb howCreateDb)
+        {
+            throw new NotImplementedException();
         }
 
 

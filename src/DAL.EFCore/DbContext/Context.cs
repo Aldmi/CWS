@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using DAL.EFCore.DbContext.EntitiConfiguration;
 using DAL.EFCore.Entities.Device;
 using DAL.EFCore.Entities.Exchange;
 using DAL.EFCore.Entities.Transport;
 using Microsoft.EntityFrameworkCore;
+using Shared.Enums;
 
 namespace DAL.EFCore.DbContext
 {
@@ -26,19 +28,10 @@ namespace DAL.EFCore.DbContext
 
         #region ctor
 
-        public Context(string connStr, HowCreateDb howCreateDb = HowCreateDb.Migrate )
+        public Context(string connStr)
         {
             _connStr = connStr;
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;//Отключение Tracking для всего контекста
-            switch (howCreateDb)
-            {
-                case HowCreateDb.Migrate:
-                    Database.Migrate();       //Если БД нет, то создать по схемам МИГРАЦИИ.
-                    break;
-                case HowCreateDb.EnsureCreated:
-                    Database.EnsureCreated(); //Если БД нет, то создать. (ОТКЛЮЧАТЬ ПРИ МИГРАЦИИ)
-                    break;
-            }
         }
 
         #endregion
@@ -64,13 +57,24 @@ namespace DAL.EFCore.DbContext
         }
 
         #endregion
+
+
+
+        #region Methode
+
+        public async Task CreateDb(HowCreateDb howCreateDb)
+        {
+            switch (howCreateDb)
+            {
+                case HowCreateDb.Migrate:
+                   await Database.MigrateAsync();       //Если БД нет, то создать по схемам МИГРАЦИИ.
+                    break;
+                case HowCreateDb.EnsureCreated:
+                    Database.EnsureCreated();           //Если БД нет, то создать. (ОТКЛЮЧАТЬ ПРИ МИГРАЦИИ)
+                    break;
+            }
+        }
+
+        #endregion
     }
-
-
-    public enum HowCreateDb
-    {
-        None,                 //Не создавать
-        Migrate,              //С помощью последней миграции 
-        EnsureCreated         //Принудительно
-    } 
 }

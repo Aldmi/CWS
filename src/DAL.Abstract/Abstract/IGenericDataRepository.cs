@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Shared.Enums;
 
 namespace DAL.Abstract.Abstract
 {
@@ -38,5 +39,7 @@ namespace DAL.Abstract.Abstract
 
         bool IsExist(Expression<Func<T, bool>> predicate);
         Task<bool> IsExistAsync(Expression<Func<T, bool>> predicate);
+
+        Task CreateDb(HowCreateDb howCreateDb);
     }
 }

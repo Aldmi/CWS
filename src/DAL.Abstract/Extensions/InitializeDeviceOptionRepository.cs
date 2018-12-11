@@ -26,7 +26,7 @@ namespace DAL.Abstract.Extensions
                     Description = "Платформа= 2. ПУТЬ= 10. Столбы= 10,9",
                     Name = "Plat2.P10",
                     TopicName4MessageBroker = "Plat2.P10",
-                    AutoBuild = false,
+                    AutoBuild = true,
                     ExchangeKeys = new List<string>
                     {
                         "TcpIp=200 Plat=2 P=10 Stolb=10 Addr=2",
@@ -46,7 +46,7 @@ namespace DAL.Abstract.Extensions
                     Description = "Платформа= 2,1. ПУТЬ= 12. Столбы= 10,9,X",
                     Name = "(Plat2&Plat1).P12",
                     TopicName4MessageBroker = "(Plat2&Plat1).P12",
-                    AutoBuild = true,
+                    AutoBuild = false,
                     ExchangeKeys = new List<string>
                     {
                         //"TcpIp=200 Plat=2 P=12 Stolb=10 Addr=25",
@@ -175,7 +175,7 @@ namespace DAL.Abstract.Extensions
                     Description = "9 строк табло. Прибытие/Отправление",
                     Name = "PribOtpr_9Str_4Table",
                     TopicName4MessageBroker = "PribOtpr_9Str_4Table",
-                    AutoBuild = true,
+                    AutoBuild = false,
                     ExchangeKeys = new List<string>
                     {
                         "TcpIp=194 Event=PribOtpr NItem=9 Addr=64",
