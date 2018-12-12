@@ -370,7 +370,13 @@ namespace Exchange.Base
             var numberPreparedPackages = transportResponseWrapper.ResponsesItems.Count;//кол-во подготовленных к отправке пакетов
             var countIsValid = transportResponseWrapper.ResponsesItems.Count(resp => resp.IsOutDataValid);
             var countAll = transportResponseWrapper.ResponsesItems.Count(resp => resp.IsOutDataValid);
-            _logger.Information($"ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= {KeyExchange} успех/ответов/запросов=  ({countIsValid} / {countAll} / {numberPreparedPackages})");
+            string errorStat= String.Empty;
+            if (countIsValid < numberPreparedPackages)
+            {
+                errorStat = transportResponseWrapper.ResponsesItems.Select(r => r.Status.ToString()).Aggregate((i, j) => i + " | " + j);
+            }
+
+            _logger.Information($"ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= {KeyExchange} успех/ответов/запросов=  ({countIsValid} / {countAll} / {numberPreparedPackages})   [{errorStat}]");
             return transportResponseWrapper;
         }
 

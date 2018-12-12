@@ -299,18 +299,18 @@ namespace Transport.TcpIp.Concrete
 
 
             //DEBUG-----------------------
-            for (int j = 0; j < 10; j++)
-            {
-                var trash = new byte[4096];
-                var res = _netStream.DataAvailable;
-                if (res)
-                {
-                    var n = _netStream.Read(trash, 0, trash.Length);
-                    Debug.WriteLine("В буффере после чтения остались данные. Маленкьое время ожидания ответа.");
-                    break;
-                }
-                await Task.Delay(200, ct);
-            }
+            //for (int j = 0; j < 10; j++)
+            //{
+            //    var trash = new byte[4096];
+            //    var res = _netStream.DataAvailable;
+            //    if (res)
+            //    {
+            //        var n = _netStream.Read(trash, 0, trash.Length);
+            //        Debug.WriteLine("В буффере после чтения остались данные. Маленкьое время ожидания ответа.");
+            //        break;
+            //    }
+            //    await Task.Delay(200, ct);
+            //}
             //DEBUG-----------------------
 
             //Очистить остатки буфера от мусора
