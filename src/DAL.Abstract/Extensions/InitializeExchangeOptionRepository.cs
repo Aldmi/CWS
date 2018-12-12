@@ -27,7 +27,7 @@ namespace DAL.Abstract.Extensions
                     Id = 1,
                     Key = "TcpIp=200 Plat=2 P=10 Stolb=10 Addr=2",
                     KeyTransport = new KeyTransport("TcpIp=200", TransportType.TcpIp),
-                   AutoStartCycleFunc = false,
+                  AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -159,7 +159,7 @@ namespace DAL.Abstract.Extensions
                     Id = 2,
                     Key = "TcpIp=200 Plat=2 P=10 Stolb=10 Addr=1",
                     KeyTransport = new KeyTransport("TcpIp=200", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -291,7 +291,7 @@ namespace DAL.Abstract.Extensions
                     Id = 3,
                     Key = "TcpIp=201 Plat=2 P=10 Stolb=9 Addr=5",
                     KeyTransport = new KeyTransport("TcpIp=201", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -423,7 +423,7 @@ namespace DAL.Abstract.Extensions
                     Id = 4,
                     Key = "TcpIp=201 Plat=2 P=10 Stolb=9 Addr=14",
                     KeyTransport = new KeyTransport("TcpIp=201", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -555,7 +555,7 @@ namespace DAL.Abstract.Extensions
                     Id = 5,
                     Key = "TcpIp=209 Plat=2 P=10 Stolb=_ Addr=9",
                     KeyTransport = new KeyTransport("TcpIp=209", TransportType.TcpIp),
-                   AutoStartCycleFunc = false,
+                  AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -687,7 +687,7 @@ namespace DAL.Abstract.Extensions
                     Id = 6,
                     Key = "TcpIp=210 Plat=2 P=10 Stolb=_ Addr=70",
                     KeyTransport = new KeyTransport("TcpIp=210", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -826,7 +826,7 @@ namespace DAL.Abstract.Extensions
                     Id = 50,
                     Key = "TcpIp=200 Plat=2 P=12 Stolb=10 Addr=25",
                     KeyTransport = new KeyTransport("TcpIp=200", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -958,7 +958,7 @@ namespace DAL.Abstract.Extensions
                     Id = 51,
                     Key = "TcpIp=200 Plat=2 P=12 Stolb=10 Addr=21",
                     KeyTransport = new KeyTransport("TcpIp=200", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -1090,7 +1090,7 @@ namespace DAL.Abstract.Extensions
                     Id = 52,
                     Key = "TcpIp=201 Plat=2 P=12 Stolb=9 Addr=6",
                     KeyTransport = new KeyTransport("TcpIp=201", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -1222,7 +1222,7 @@ namespace DAL.Abstract.Extensions
                     Id = 53,
                     Key = "TcpIp=201 Plat=2 P=12 Stolb=9 Addr=7",
                     KeyTransport = new KeyTransport("TcpIp=201", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -1354,7 +1354,7 @@ namespace DAL.Abstract.Extensions
                     Id = 54,
                     Key = "TcpIp=196 Plat=1 P=12 Stolb=_ Addr=71",
                     KeyTransport = new KeyTransport("TcpIp=196", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -1486,7 +1486,7 @@ namespace DAL.Abstract.Extensions
                     Id = 55,
                     Key = "TcpIp=196 Plat=1 P=12 Stolb=_ Addr=72",
                     KeyTransport = new KeyTransport("TcpIp=196", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -1618,7 +1618,7 @@ namespace DAL.Abstract.Extensions
                     Id = 56,
                     Key = "TcpIp=197 Plat=1 P=12 Stolb=_ Addr=47",
                     KeyTransport = new KeyTransport("TcpIp=197", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -1750,7 +1750,7 @@ namespace DAL.Abstract.Extensions
                     Id = 57,
                     Key = "TcpIp=197 Plat=1 P=12 Stolb=_ Addr=60",
                     KeyTransport = new KeyTransport("TcpIp=197", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -1882,7 +1882,7 @@ namespace DAL.Abstract.Extensions
                     Id = 58,
                     Key = "TcpIp=198 Plat=1 P=12 Stolb=_ Addr=57",
                     KeyTransport = new KeyTransport("TcpIp=198", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -2014,7 +2014,7 @@ namespace DAL.Abstract.Extensions
                     Id = 59,
                     Key = "TcpIp=198 Plat=1 P=12 Stolb=_ Addr=58",
                     KeyTransport = new KeyTransport("TcpIp=198", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -2146,7 +2146,7 @@ namespace DAL.Abstract.Extensions
                     Id = 60,
                     Key = "TcpIp=199 Plat=1 P=12 Stolb=_ Addr=46",
                     KeyTransport = new KeyTransport("TcpIp=199", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -2278,7 +2278,7 @@ namespace DAL.Abstract.Extensions
                     Id = 61,
                     Key = "TcpIp=199 Plat=1 P=12 Stolb=_ Addr=59",
                     KeyTransport = new KeyTransport("TcpIp=199", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -2410,7 +2410,7 @@ namespace DAL.Abstract.Extensions
                     Id = 62,
                     Key = "TcpIp=209 Plat=2 P=12 Stolb=_ Addr=9",
                     KeyTransport = new KeyTransport("TcpIp=209", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -2542,7 +2542,7 @@ namespace DAL.Abstract.Extensions
                     Id = 63,
                     Key = "TcpIp=210 Plat=2 P=12 Stolb=_ Addr=70",
                     KeyTransport = new KeyTransport("TcpIp=210", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -2681,7 +2681,7 @@ namespace DAL.Abstract.Extensions
                     Id = 100,
                     Key = "TcpIp=203 Plat=3 P=6 Stolb=7 Addr=49",
                     KeyTransport = new KeyTransport("TcpIp=203", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -2813,7 +2813,7 @@ namespace DAL.Abstract.Extensions
                     Id = 101,
                     Key = "TcpIp=203 Plat=3 P=6 Stolb=7 Addr=51",
                     KeyTransport = new KeyTransport("TcpIp=203", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -2945,7 +2945,7 @@ namespace DAL.Abstract.Extensions
                     Id = 102,
                     Key = "TcpIp=204 Plat=3 P=6 Stolb=6 Addr=17",
                     KeyTransport = new KeyTransport("TcpIp=204", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -3077,7 +3077,7 @@ namespace DAL.Abstract.Extensions
                     Id = 103,
                     Key = "TcpIp=204 Plat=3 P=6 Stolb=6 Addr=19",
                     KeyTransport = new KeyTransport("TcpIp=204", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -3209,7 +3209,7 @@ namespace DAL.Abstract.Extensions
                     Id = 104,
                     Key = "TcpIp=205 Plat=3 P=6 Stolb=5 Addr=61",
                     KeyTransport = new KeyTransport("TcpIp=205", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -3341,7 +3341,7 @@ namespace DAL.Abstract.Extensions
                     Id = 105,
                     Key = "TcpIp=205 Plat=3 P=6 Stolb=5 Addr=62",
                     KeyTransport = new KeyTransport("TcpIp=205", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -3473,7 +3473,7 @@ namespace DAL.Abstract.Extensions
                     Id = 106,
                     Key = "TcpIp=209 Plat=3 P=6 Stolb=_ Addr=55",
                     KeyTransport = new KeyTransport("TcpIp=209", TransportType.TcpIp),
-                   AutoStartCycleFunc = false,
+                  AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -3605,7 +3605,7 @@ namespace DAL.Abstract.Extensions
                     Id = 28,
                     Key = "TcpIp=210 Plat=3 P=6 Stolb=_ Addr=52",
                     KeyTransport = new KeyTransport("TcpIp=210", TransportType.TcpIp),
-                   AutoStartCycleFunc = false,
+                  AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -3744,7 +3744,7 @@ namespace DAL.Abstract.Extensions
                     Id = 150,
                     Key = "TcpIp=203 Plat=3 P=8 Stolb=7 Addr=50",
                     KeyTransport = new KeyTransport("TcpIp=203", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -3876,7 +3876,7 @@ namespace DAL.Abstract.Extensions
                     Id = 151,
                     Key = "TcpIp=203 Plat=3 P=8 Stolb=7 Addr=53",
                     KeyTransport = new KeyTransport("TcpIp=203", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -4008,7 +4008,7 @@ namespace DAL.Abstract.Extensions
                     Id = 152,
                     Key = "TcpIp=204 Plat=3 P=8 Stolb=6 Addr=54",
                     KeyTransport = new KeyTransport("TcpIp=204", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -4140,7 +4140,7 @@ namespace DAL.Abstract.Extensions
                     Id = 153,
                     Key = "TcpIp=204 Plat=3 P=8 Stolb=6 Addr=56",
                     KeyTransport = new KeyTransport("TcpIp=204", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -4272,7 +4272,7 @@ namespace DAL.Abstract.Extensions
                     Id = 154,
                     Key = "TcpIp=205 Plat=3 P=8 Stolb=5 Addr=63",
                     KeyTransport = new KeyTransport("TcpIp=205", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -4404,7 +4404,7 @@ namespace DAL.Abstract.Extensions
                     Id = 155,
                     Key = "TcpIp=205 Plat=3 P=8 Stolb=5 Addr=73",
                     KeyTransport = new KeyTransport("TcpIp=205", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -4536,7 +4536,7 @@ namespace DAL.Abstract.Extensions
                     Id = 156,
                     Key = "TcpIp=209 Plat=3 P=8 Stolb=_ Addr=55",
                     KeyTransport = new KeyTransport("TcpIp=209", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -4668,7 +4668,7 @@ namespace DAL.Abstract.Extensions
                     Id = 157,
                     Key = "TcpIp=210 Plat=3 P=8 Stolb=_ Addr=52",
                     KeyTransport = new KeyTransport("TcpIp=210", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -4807,7 +4807,7 @@ namespace DAL.Abstract.Extensions
                     Id = 200,
                     Key = "TcpIp=206 Plat=4 P=5 Stolb=4 Addr=8",
                     KeyTransport = new KeyTransport("TcpIp=206", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -4939,7 +4939,7 @@ namespace DAL.Abstract.Extensions
                     Id = 201,
                     Key = "TcpIp=206 Plat=4 P=5 Stolb=4 Addr=11",
                     KeyTransport = new KeyTransport("TcpIp=206", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -5071,7 +5071,7 @@ namespace DAL.Abstract.Extensions
                     Id = 202,
                     Key = "TcpIp=207 Plat=4 P=5 Stolb=3 Addr=4",
                     KeyTransport = new KeyTransport("TcpIp=207", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -5203,7 +5203,7 @@ namespace DAL.Abstract.Extensions
                     Id = 203,
                     Key = "TcpIp=207 Plat=4 P=5 Stolb=3 Addr=13",
                     KeyTransport = new KeyTransport("TcpIp=207", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -5335,7 +5335,7 @@ namespace DAL.Abstract.Extensions
                     Id = 204,
                     Key = "TcpIp=208 Plat=4 P=5 Stolb=2 Addr=10",
                     KeyTransport = new KeyTransport("TcpIp=208", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -5467,7 +5467,7 @@ namespace DAL.Abstract.Extensions
                     Id = 205,
                     Key = "TcpIp=208 Plat=4 P=5 Stolb=2 Addr=18",
                     KeyTransport = new KeyTransport("TcpIp=208", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -5599,7 +5599,7 @@ namespace DAL.Abstract.Extensions
                     Id = 206,
                     Key = "TcpIp=209 Plat=4 P=5 Stolb=_ Addr=45",
                     KeyTransport = new KeyTransport("TcpIp=209", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -5731,7 +5731,7 @@ namespace DAL.Abstract.Extensions
                     Id = 207,
                     Key = "TcpIp=210 Plat=4 P=5 Stolb=_ Addr=48",
                     KeyTransport = new KeyTransport("TcpIp=210", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -5869,7 +5869,7 @@ namespace DAL.Abstract.Extensions
                     Id = 250,
                     Key = "TcpIp=206 Plat=4 P=3 Stolb=4 Addr=26",
                     KeyTransport = new KeyTransport("TcpIp=206", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -6001,7 +6001,7 @@ namespace DAL.Abstract.Extensions
                     Id = 251,
                     Key = "TcpIp=206 Plat=4 P=3 Stolb=4 Addr=44",
                     KeyTransport = new KeyTransport("TcpIp=206", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -6133,7 +6133,7 @@ namespace DAL.Abstract.Extensions
                     Id = 252,
                     Key = "TcpIp=207 Plat=4 P=3 Stolb=3 Addr=23",
                     KeyTransport = new KeyTransport("TcpIp=207", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -6265,7 +6265,7 @@ namespace DAL.Abstract.Extensions
                     Id = 253,
                     Key = "TcpIp=207 Plat=4 P=3 Stolb=3 Addr=29",
                     KeyTransport = new KeyTransport("TcpIp=207", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -6397,7 +6397,7 @@ namespace DAL.Abstract.Extensions
                     Id = 254,
                     Key = "TcpIp=208 Plat=4 P=3 Stolb=2 Addr=3",
                     KeyTransport = new KeyTransport("TcpIp=208", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -6529,7 +6529,7 @@ namespace DAL.Abstract.Extensions
                     Id = 255,
                     Key = "TcpIp=208 Plat=4 P=3 Stolb=2 Addr=12",
                     KeyTransport = new KeyTransport("TcpIp=208", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -6661,7 +6661,7 @@ namespace DAL.Abstract.Extensions
                     Id = 256,
                     Key = "TcpIp=209 Plat=4 P=3 Stolb=_ Addr=45",
                     KeyTransport = new KeyTransport("TcpIp=209", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -6793,7 +6793,7 @@ namespace DAL.Abstract.Extensions
                     Id = 257,
                     Key = "TcpIp=210 Plat=4 P=3 Stolb=_ Addr=48",
                     KeyTransport = new KeyTransport("TcpIp=210", TransportType.TcpIp),
-                  AutoStartCycleFunc = false,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 30,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -6932,7 +6932,7 @@ namespace DAL.Abstract.Extensions
                     Id = 300,
                     Key = "TcpIp=194 Event=PribOtpr NItem=9 Addr=64",
                     KeyTransport = new KeyTransport("TcpIp=194", TransportType.TcpIp),
-                  AutoStartCycleFunc = true,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 60,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -6959,7 +6959,7 @@ namespace DAL.Abstract.Extensions
                                             Id = 1,
                                             StartPosition = 0,
                                             Count = 9,
-                                            BatchSize = 3,
+                                            BatchSize = 5,
                                             RequestOption = new RequestOption
                                             {
                                                 Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
@@ -6982,7 +6982,7 @@ namespace DAL.Abstract.Extensions
                                             Id = 2,
                                             StartPosition = 0,
                                             Count = 9,
-                                            BatchSize = 3,
+                                            BatchSize = 5,
                                             RequestOption = new RequestOption
                                             {
                                                 Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
@@ -7005,7 +7005,7 @@ namespace DAL.Abstract.Extensions
                                             Id = 3,
                                             StartPosition = 0,
                                             Count = 9,
-                                            BatchSize = 3,
+                                            BatchSize = 5,
                                             RequestOption = new RequestOption
                                             {
                                                 Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
@@ -7028,7 +7028,7 @@ namespace DAL.Abstract.Extensions
                                             Id = 4,
                                             StartPosition = 0,
                                             Count = 9,
-                                            BatchSize = 3,
+                                            BatchSize = 5,
                                             RequestOption = new RequestOption
                                             {
                                                 Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
@@ -7051,7 +7051,7 @@ namespace DAL.Abstract.Extensions
                                             Id = 5,
                                             StartPosition = 0,
                                             Count = 9,
-                                            BatchSize = 3,
+                                            BatchSize = 5,
                                             RequestOption = new RequestOption
                                             {
                                                 Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
@@ -7074,7 +7074,7 @@ namespace DAL.Abstract.Extensions
                                             Id = 6,
                                             StartPosition = 0,
                                             Count = 9,
-                                            BatchSize = 3,
+                                            BatchSize = 5,
                                             RequestOption = new RequestOption
                                             {
                                                 Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
@@ -7097,7 +7097,7 @@ namespace DAL.Abstract.Extensions
                                             Id = 7,
                                             StartPosition = 0,
                                             Count = 9,
-                                            BatchSize = 3,
+                                            BatchSize = 5,
                                             RequestOption = new RequestOption
                                             {
                                                 Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
@@ -7202,7 +7202,7 @@ namespace DAL.Abstract.Extensions
                     Id = 301,
                     Key = "TcpIp=195 Event=PribOtpr NItem=9 Addr=65",
                     KeyTransport = new KeyTransport("TcpIp=195", TransportType.TcpIp),
-                  AutoStartCycleFunc = true,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 60,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -7472,7 +7472,7 @@ namespace DAL.Abstract.Extensions
                     Id = 302,
                     Key = "TcpIp=195 Event=PribOtpr NItem=9 Addr=66",
                     KeyTransport = new KeyTransport("TcpIp=195", TransportType.TcpIp),
-                  AutoStartCycleFunc = true,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 60,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption
@@ -7742,7 +7742,7 @@ namespace DAL.Abstract.Extensions
                     Id = 303,
                     Key = "TcpIp=195 Event=PribOtpr NItem=9 Addr=67",
                     KeyTransport = new KeyTransport("TcpIp=195", TransportType.TcpIp),
-                  AutoStartCycleFunc = true,
+                 AutoStartCycleFunc = false,
                     NumberErrorTrying = 60,
                     NumberTimeoutTrying = 5,
                     Provider = new ProviderOption

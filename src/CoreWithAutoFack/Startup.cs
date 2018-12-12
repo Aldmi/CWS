@@ -23,6 +23,8 @@ using Microsoft.Extensions.HealthChecks;
 using MoreLinq;
 using Newtonsoft.Json;
 using Serilog;
+using Serilog.Core;
+using Serilog.Events;
 using Shared.Enums;
 using WebServer.AutofacModules;
 using WebServer.DTO.XML;
@@ -52,7 +54,8 @@ namespace WebServer
                 checks.AddValueTaskCheck("HTTP Endpoint", () => new ValueTask<IHealthCheckResult>(HealthCheckResult.Healthy("Ok")));
             });
 
-            services.AddSerilogServices();
+            services.AddSerilogServices(LogEventLevel.Debug);
+
             services.AddTransient<IConfiguration>(provider => AppConfiguration);
 
             services.AddMvc()

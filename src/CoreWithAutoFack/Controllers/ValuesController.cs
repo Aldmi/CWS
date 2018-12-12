@@ -9,8 +9,11 @@ using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
 using InputDataModel.Base;
 using Microsoft.AspNetCore.Mvc;
+using Serilog.Core;
+using Serilog.Events;
 using Transport.SerialPort.Abstract;
 using WebServer.DTO.JSON.OptionsDto.ExchangeOption;
+using WebServer.Extensions;
 using Worker.Background.Abstarct;
 
 namespace WebServer.Controllers
@@ -204,7 +207,21 @@ namespace WebServer.Controllers
         [HttpGet("{id}")]
         public IEnumerable<string> Get(int id)
         {
-            return  new List<string>{"str1", "str2"};
+            switch (id)
+            {
+                case 0:
+                    SerilogExtensions.ChangeLogEventLevel(LogEventLevel.Debug);
+                    break;
+
+                case 1:
+                    SerilogExtensions.ChangeLogEventLevel(LogEventLevel.Error);
+                    break;
+            }
+     
+
+
+
+            return new List<string>{"str1", "str2"};
         }
 
         // POST api/values
