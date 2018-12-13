@@ -27,6 +27,8 @@ namespace Exchange.Base
     public class ExchangeUniversal<TIn> : IExchange<TIn>
     {
         #region field
+
+        private const int MaxDataInQueue = 100;
         protected readonly ExchangeOption ExchangeOption;
         private readonly ITransport _transport;
         private readonly ITransportBackground _transportBackground;
@@ -73,6 +75,9 @@ namespace Exchange.Base
                 LastSendDataChangeRx.OnNext(new LastSendDataChangeRxModel<TIn> {KeyExchange = KeyExchange, LastSendData = LastSendData});
             }
         }
+
+        public bool IsFullOneTimeDataQueue => _inDataQueue.Count >= MaxDataInQueue; 
+        public bool IsFullCycleTimeDataQueue { get; } //TODO: создать очередь и для циклю данных
         #endregion
 
 
@@ -258,10 +263,13 @@ namespace Exchange.Base
         protected async Task CycleTimeActionAsync(CancellationToken ct)
         {
             var inData = _data4CycleFunc;
-            var transportResponseWrapper = await SendingPieceOfData(inData, ct);
-            transportResponseWrapper.KeyExchange = KeyExchange;
-            transportResponseWrapper.DataAction = DataAction.CycleAction;
-            ResponseChangeRx.OnNext(transportResponseWrapper);
+            if (_transport.IsOpen)
+            {
+                var transportResponseWrapper = await SendingPieceOfData(inData, ct);
+                transportResponseWrapper.KeyExchange = KeyExchange;
+                transportResponseWrapper.DataAction = DataAction.CycleAction;
+                ResponseChangeRx.OnNext(transportResponseWrapper);
+            }
             await Task.Delay(500, ct); //TODO: Продумать как задвать время цикл. обмена
         }
 

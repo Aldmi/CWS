@@ -31,6 +31,8 @@ namespace Exchange.Base
         bool IsStartedTransportBg { get; }                                        //Запущен бекграунд на транспорте
         bool IsStartedCycleFunc { get; }                                          //Флаг цикл. обмена
         InDataWrapper<T> LastSendData { get; }                                    //Последние отосланные данные 
+        bool IsFullOneTimeDataQueue { get; }                                      //Очередь однокртаных данных переполненна
+        bool IsFullCycleTimeDataQueue { get; }                                    //Очередь циклических данных переполненна
         #endregion
 
 
