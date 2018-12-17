@@ -299,7 +299,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var startIndex = Option.RequestOption.MaxBodyLenght;
             var lenght = resBodyStr.Length - Option.RequestOption.MaxBodyLenght;
             resBodyStr.Remove(startIndex, lenght);
-            _logger.Information($"Срока тела запроса была обрезанна на {lenght} симовлов");
+            _logger.Information($"Срока тела запроса была обрезанна на {lenght} симовлов для ViewRuleId {Option.Id}");      
             return resBodyStr;
         }
 

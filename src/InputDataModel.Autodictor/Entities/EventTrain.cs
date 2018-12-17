@@ -21,6 +21,11 @@
                     NameRu = "Отправление";
                     NameAliasRu = "ОТПР.";
                     break;
+
+                case 2:
+                    NameRu = "Отправление";
+                    NameAliasRu = "ОТПР.";
+                    break;
             }
         }
 
