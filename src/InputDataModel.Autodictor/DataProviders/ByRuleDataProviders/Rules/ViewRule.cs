@@ -162,28 +162,30 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var footer = Option.RequestOption.Footer;//" {CRCXor:X2}\u0003";
             //DEBUG----------------------------------------------------
 
-            //ЗАПОЛНИТЬ ТЕЛО ЗАПРОСА (вставить НЕЗАВИСИМЫЕ данные)-------------------------------------------------------------------------
-            var resBodyStr = new StringBuilder();
-
+            //ЗАПОЛНИТЬ ТЕЛО ЗАПРОСА (вставить НЕЗАВИСИМЫЕ данные)-------------------------------------------------------------------------         
+            var listBodyStr= new List<string>();
             for (var i = 0; i < items.Count; i++)
             {
                 var item = items[i];
                 var currentRow = startItemIndex + i + 1;
                 var res = MakeBodySectionIndependentInserts(body, item, currentRow);
-                resBodyStr.Append(res);
+
+                //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ В ТЕЛО ЗАПРОСА--------------------------------------------------------------------------------------
+                var resBodyDependentStr = MakeBodyDependentInserts(res);
+                listBodyStr.Add(resBodyDependentStr);
             }
 
-            //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ В ТЕЛО ЗАПРОСА--------------------------------------------------------------------------------------
-            var resBodyDependentStr= MakeBodyDependentInserts(resBodyStr.ToString());
+            //ОГРАНИЧИТЬ ДЛИННУ ТЕЛА ЗАПРОСА----------------------------------------------------------------------------------------------------
+            var listLimitBodyStr= LimitBodySectionLenght(listBodyStr);
+            if(listLimitBodyStr.Count == 0)
+               return null;
 
-            //ОГРАНИЧИТЬ ДЛИННУ ТЕЛА ЗАПРОСА------------------------------------------------------------------------------------------------
-            var limitBodyStr= LimitBodySectionLenght(new StringBuilder(resBodyDependentStr));
-
-            //КОНКАТЕНИРОВАТЬ СТРОКИ В СУММАРНУЮ СТРОКУ-------------------------------------------------------------------------------------
+            //КОНКАТЕНИРОВАТЬ СТРОКИ В СУММАРНУЮ СТРОКУ-----------------------------------------------------------------------------------------
             //resSumStr содержит только ЗАВИСИМЫЕ данные: {AddressDevice} {NByte} {CRC}}
+            var limitBodyStr = listLimitBodyStr.Aggregate((i, j) => i + j);
             var resSumStr = header + limitBodyStr + footer;
 
-            //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})-------------------------------------------------
+            //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})-------------------------------------------------------------------------
             var resDependencyStr = MakeDependentInserts(resSumStr);
 
             return resDependencyStr;
@@ -291,16 +293,21 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         /// <summary>
         /// Ограничить длинну строки
         /// </summary>
-        private StringBuilder LimitBodySectionLenght(StringBuilder resBodyStr)
+        private List<string> LimitBodySectionLenght(List<string> bodyList)
         {
-            if (resBodyStr.Length < Option.RequestOption.MaxBodyLenght)
-                return resBodyStr;
+            double totalBodyCount= bodyList.Sum(s => s.Length);
+            if (totalBodyCount < Option.RequestOption.MaxBodyLenght)
+               return bodyList;
 
-            var startIndex = Option.RequestOption.MaxBodyLenght;
-            var lenght = resBodyStr.Length - Option.RequestOption.MaxBodyLenght;
-            resBodyStr.Remove(startIndex, lenght);
-            _logger.Information($"Срока тела запроса была обрезанна на {lenght} симовлов для ViewRuleId {Option.Id}");      
-            return resBodyStr;
+            double extraLenght= totalBodyCount - Option.RequestOption.MaxBodyLenght;
+            double averageLenght = (totalBodyCount / bodyList.Count);              //Средний размер одного элемента
+            double extraItem = extraLenght / averageLenght;                        //Кол-во лишних элементов.
+            var extraItemRounded= (int)Math.Ceiling(extraItem);                    //Кол-во лишних элементов округленное в большую сторону
+            extraItemRounded = extraItemRounded == 0 ? 1 : extraItemRounded;       //Если небольшое превышение, то все равно нужно выставить 1 элемент на удаление
+            bodyList.RemoveRange(extraItemRounded - 1, extraItemRounded);          //удалим лишние элементы.
+            totalBodyCount = bodyList.Sum(s => s.Length);
+            _logger.Information($"Срока тела запроса была обрезанна на {extraLenght}. Удаленно {extraItem} элементов для ViewRuleId {Option.Id}. Текущая длинна обрезанной строки {totalBodyCount}");
+            return bodyList;
         }
 
 

@@ -6212,7 +6212,7 @@ namespace DAL.Abstract.Extensions
                                             Id = 2,
                                             StartPosition = 0,
                                             Count = 9,
-                                            BatchSize = 1000,
+                                            BatchSize = 3,
                                             RequestOption = new RequestOption
                                             {
                                                 Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
@@ -6482,7 +6482,7 @@ namespace DAL.Abstract.Extensions
                                             Id = 2,
                                             StartPosition = 0,
                                             Count = 9,
-                                            BatchSize = 5,
+                                            BatchSize = 3,
                                             RequestOption = new RequestOption
                                             {
                                                 Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
@@ -6752,7 +6752,7 @@ namespace DAL.Abstract.Extensions
                                             Id = 2,
                                             StartPosition = 0,
                                             Count = 9,
-                                            BatchSize = 5,
+                                            BatchSize = 3,
                                             RequestOption = new RequestOption
                                             {
                                                 Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
