@@ -248,17 +248,17 @@ namespace WebServer
                 //ИНИЦИАЛИЦИЯ РЕПОЗИТОРИЕВ--------------------------------------------------------
                 try
                 {
-                    var serialPortOptionRepository = scope.Resolve<ISerialPortOptionRepository>();
-                    var tcpIpOptionRepository = scope.Resolve<ITcpIpOptionRepository>();
-                    var httpOptionRepository = scope.Resolve<IHttpOptionRepository>();
-                    var exchangeOptionRepository = scope.Resolve<IExchangeOptionRepository>();
-                    var deviceOptionRepository = scope.Resolve<IDeviceOptionRepository>();
+                    //var serialPortOptionRepository = scope.Resolve<ISerialPortOptionRepository>();
+                    //var tcpIpOptionRepository = scope.Resolve<ITcpIpOptionRepository>();
+                    //var httpOptionRepository = scope.Resolve<IHttpOptionRepository>();
+                    //var exchangeOptionRepository = scope.Resolve<IExchangeOptionRepository>();
+                    //var deviceOptionRepository = scope.Resolve<IDeviceOptionRepository>();
 
-                    await serialPortOptionRepository.InitializeAsync();
-                    await tcpIpOptionRepository.InitializeAsync();
-                    await httpOptionRepository.InitializeAsync();
-                    await exchangeOptionRepository.InitializeAsync();
-                    await deviceOptionRepository.InitializeAsync();
+                    //await serialPortOptionRepository.InitializeAsync();
+                    //await tcpIpOptionRepository.InitializeAsync();
+                    //await httpOptionRepository.InitializeAsync();
+                    //await exchangeOptionRepository.InitializeAsync();
+                    //await deviceOptionRepository.InitializeAsync();
 
                     //DEBUG CRUD----------------------------------------------------------------
                     //var singleElem = serialPortOptionRepository.GetSingle(option => option.Port == "COM1");

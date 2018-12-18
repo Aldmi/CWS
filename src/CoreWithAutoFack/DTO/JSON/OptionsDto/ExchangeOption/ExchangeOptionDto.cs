@@ -16,8 +16,8 @@ namespace WebServer.DTO.JSON.OptionsDto.ExchangeOption
         [Required(ErrorMessage = "Provider для Exchange не может быть NULL")]
         public ProviderOptionDto Provider { get; set; }
 
+        public int NumberErrorTrying { get; set; }
+        public int NumberTimeoutTrying { get; set; }
         public bool AutoStartCycleFunc { get; set; }
-        public int NumberErrorTrying { get; set; }   
-        public int NumberTimeoutTrying { get; set; } 
     }
 }

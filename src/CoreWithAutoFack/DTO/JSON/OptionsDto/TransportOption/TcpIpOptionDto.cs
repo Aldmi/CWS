@@ -11,15 +11,9 @@ namespace WebServer.DTO.JSON.OptionsDto.TransportOption
         [Required(ErrorMessage = "Имя TCP/IP  не может быть NULL")]
         public string Name { get; set; }
 
-        [RegularExpression(@"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.
-                             (25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.
-                             (25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.
-                             (25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)
-                             (\:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?$")]  //192.168.1.1:5000
+        [RegularExpression(@"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b")]  //192.168.1.1:5000
         public string IpAddress { get; set; }             //Ip
 
         public int IpPort { get; set; }                  //порт      
-
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,13 +64,13 @@ namespace BL.Services.Mediators
             return await _deviceOptionRep.ListAsync();
         }
 
-        
+
         /// <summary>
         /// Вернуть все опции устройств из репозитория.
         /// </summary>
         public async Task<IEnumerable<DeviceOption>> GetDeviceOptionsWithAutoBuildAsync()
-        {     
-            return await _deviceOptionRep.ListAsync(option=>option.AutoBuild);
+        {
+            return await _deviceOptionRep.ListAsync(option => option.AutoBuild);
         }
 
 
@@ -161,17 +162,17 @@ namespace BL.Services.Mediators
 
             if (deviceOption != null && exchangeOptions == null && transportOption == null)
             {
-               await AddDeviceOptionWithExiststExchangeOptionsAsync(deviceOption);
+                await AddDeviceOptionWithExiststExchangeOptionsAsync(deviceOption);
             }
             else
             if (deviceOption != null && exchangeOptions != null && transportOption == null)
             {
-               await AddDeviceOptionWithNewExchangeOptionsAsync(deviceOption, exchangeOptions);
+                await AddDeviceOptionWithNewExchangeOptionsAsync(deviceOption, exchangeOptions);
             }
             else
             if (deviceOption != null && exchangeOptions != null)
             {
-               await AddDeviceOptionWithNewExchangeOptionsAndNewTransportOptionsAsync(deviceOption, exchangeOptions, transportOption);
+                await AddDeviceOptionWithNewExchangeOptionsAndNewTransportOptionsAsync(deviceOption, exchangeOptions, transportOption);
             }
 
             return true;
@@ -184,8 +185,8 @@ namespace BL.Services.Mediators
         /// </summary>
         /// <returns>Возвращает все удаленные объекты (Device + Exchanges + Transport)</returns>
         public async Task<OptionAgregator> RemoveDeviceOptionAsync(DeviceOption deviceOption)
-        {  
-            var deletedOptions= new OptionAgregator
+        {
+            var deletedOptions = new OptionAgregator
             {
                 ExchangeOptions = new List<ExchangeOption>(),
                 DeviceOptions = new List<DeviceOption>(),
@@ -198,16 +199,16 @@ namespace BL.Services.Mediators
             };
 
             //ПРОВЕРКА УНИКАЛЬНОСТИ ОБМЕНОВ УДАЛЯЕМОГО УСТРОЙСТВА (ЕСЛИ УНИКАЛЬНО ТО УДАЛЯЕМ И ОБМЕН, ЕСЛИ ОБМЕН ИСПОЛЬУЕТ УНИКАЛЬНЫЙ ТРАНСПОРТ, ТО УДАЛЯЕМ И ТРАНСПОРТ)
-            var exchangeKeys= (await _deviceOptionRep.ListAsync()).SelectMany(option=> option.ExchangeKeys).ToList(); //ключи обменов со всех устройств.
+            var exchangeKeys = (await _deviceOptionRep.ListAsync()).SelectMany(option => option.ExchangeKeys).ToList(); //ключи обменов со всех устройств.
             foreach (var exchangeKey in deviceOption.ExchangeKeys)
-            {             
-                if (exchangeKeys.Count(key=> key == exchangeKey) == 1)                                                                          //найден обмен используемый только этим устройством
+            {
+                if (exchangeKeys.Count(key => key == exchangeKey) == 1)                                                                          //найден обмен используемый только этим устройством
                 {
-                   var singleExchOption= await _exchangeOptionRep.GetSingleAsync(exc=> exc.Key == exchangeKey);             
-                   if ((await _exchangeOptionRep.ListAsync()).Count(option => option.KeyTransport.Equals(singleExchOption.KeyTransport)) == 1)  //найденн транспорт используемый только этим (удаленным) обменом
-                   {
-                       await RemoveTransportAsync(singleExchOption.KeyTransport, deletedOptions.TransportOptions);                                                               //Удалить транспорт
-                   }
+                    var singleExchOption = await _exchangeOptionRep.GetSingleAsync(exc => exc.Key == exchangeKey);
+                    if ((await _exchangeOptionRep.ListAsync()).Count(option => option.KeyTransport.Equals(singleExchOption.KeyTransport)) == 1)  //найденн транспорт используемый только этим (удаленным) обменом
+                    {
+                        await RemoveTransportAsync(singleExchOption.KeyTransport, deletedOptions.TransportOptions);                                                               //Удалить транспорт
+                    }
                     deletedOptions.ExchangeOptions.Add(singleExchOption);
                     await _exchangeOptionRep.DeleteAsync(singleExchOption);                                                                      //Удалить обмен
                 }
@@ -230,11 +231,11 @@ namespace BL.Services.Mediators
             if (deviceOption == null)
                 throw new OptionHandlerException($"Устройство с таким именем Не найденно:  {deviceName}");
 
-            var exchangesOptions= deviceOption.ExchangeKeys.Select(exchangeKey => GetExchangeByKeyAsync(exchangeKey).GetAwaiter().GetResult()).ToList();
-            var transportOption= await GetTransportByKeysAsync(exchangesOptions.Select(option => option.KeyTransport).Distinct());
-            var optionAgregator = new OptionAgregator 
+            var exchangesOptions = deviceOption.ExchangeKeys.Select(exchangeKey => GetExchangeByKeyAsync(exchangeKey).GetAwaiter().GetResult()).ToList();
+            var transportOption = await GetTransportByKeysAsync(exchangesOptions.Select(option => option.KeyTransport).Distinct());
+            var optionAgregator = new OptionAgregator
             {
-                DeviceOptions = new List<DeviceOption>{deviceOption},
+                DeviceOptions = new List<DeviceOption> { deviceOption },
                 ExchangeOptions = exchangesOptions,
                 TransportOptions = transportOption
             };
@@ -258,7 +259,7 @@ namespace BL.Services.Mediators
             var exceptionStr = new StringBuilder();
             foreach (var exchangeKey in deviceOption.ExchangeKeys)
             {
-                if (! await _exchangeOptionRep.IsExistAsync(exchangeOption => exchangeOption.Key == exchangeKey))
+                if (!await _exchangeOptionRep.IsExistAsync(exchangeOption => exchangeOption.Key == exchangeKey))
                 {
                     exceptionStr.AppendFormat("{0}, ", exchangeKey);
                 }
@@ -287,7 +288,7 @@ namespace BL.Services.Mediators
             }
 
             var exceptionStr = new StringBuilder();
-            var exchangeExternalKeys = exchangeOptions.Select(exchangeOption=> exchangeOption.Key).ToList();
+            var exchangeExternalKeys = exchangeOptions.Select(exchangeOption => exchangeOption.Key).ToList();
 
             //ПРОВЕРКА СООТВЕТСТВИЯ exchangeKeys, УКАЗАННОЙ В deviceOption, КЛЮЧАМ ИЗ exchangeOptions
             var diff = exchangeExternalKeys.Except(deviceOption.ExchangeKeys).ToList();
@@ -299,8 +300,8 @@ namespace BL.Services.Mediators
             //ПРОВЕРКА НАЛИЧИЯ ОБМЕНОВ УКАЗАННЫХ ДЛЯ УС-ВА В СПИСКЕ НОВЫХ ОБМЕНОВ ИЛИ В СПИСКЕ СУЩЕСТВУЮЩИХ ОБМЕНОВ
             foreach (var exchKey in deviceOption.ExchangeKeys)
             {
-               if(exchangeExternalKeys.Contains(exchKey) || _exchangeOptionRep.IsExist(e=> e.Key == exchKey))
-                   continue;
+                if (exchangeExternalKeys.Contains(exchKey) || _exchangeOptionRep.IsExist(e => e.Key == exchKey))
+                    continue;
                 exceptionStr.AppendFormat("{0}, ", exchKey);
             }
             if (!string.IsNullOrEmpty(exceptionStr.ToString()))
@@ -311,7 +312,7 @@ namespace BL.Services.Mediators
             //ПРОВЕРКА НАЛИЧИЯ УЖЕ СОЗДАНННОГО ТРАНСПОРТА ДЛЯ КАЖДОГО ОБМЕНА
             foreach (var exchangeOption in exchangeOptions)
             {
-                if (! await IsExistTransportAsync(exchangeOption.KeyTransport))
+                if (!await IsExistTransportAsync(exchangeOption.KeyTransport))
                 {
                     exceptionStr.AppendFormat("{0}, ", exchangeOption.KeyTransport);
                 }
@@ -324,7 +325,7 @@ namespace BL.Services.Mediators
             //ДОБАВИМ ТОЛЬКО НОВЫЕ ОБМЕНЫ К РЕПОЗИТОРИЮ ОБМЕНОВ
             foreach (var exchangeOption in exchangeOptions)
             {
-                if (! await _exchangeOptionRep.IsExistAsync(exchOpt => exchOpt.Key == exchangeOption.Key))
+                if (!await _exchangeOptionRep.IsExistAsync(exchOpt => exchOpt.Key == exchangeOption.Key))
                 {
                     await _exchangeOptionRep.AddAsync(exchangeOption);
                 }
@@ -362,7 +363,7 @@ namespace BL.Services.Mediators
             //ПРОВЕРКА НАЛИЧИЯ ОБМЕНОВ УКАЗАННЫХ ДЛЯ УС-ВА В СПИСКЕ НОВЫХ ОБМЕНОВ ИЛИ В СПИСКЕ СУЩЕСТВУЮЩИХ ОБМЕНОВ
             foreach (var exchKey in deviceOption.ExchangeKeys)
             {
-                if(exchangeExternalKeys.Contains(exchKey) || _exchangeOptionRep.IsExist(e=> e.Key == exchKey))
+                if (exchangeExternalKeys.Contains(exchKey) || _exchangeOptionRep.IsExist(e => e.Key == exchKey))
                     continue;
                 exceptionStr.AppendFormat("{0}, ", exchKey);
             }
@@ -391,27 +392,53 @@ namespace BL.Services.Mediators
             }
 
             //ПРОВЕРКА ОТСУТСВИЯ ДОБАВЛЯЕМОГО ТРАНСПОРТА ДЛЯ КАЖДОГО ОБМЕНА (по ключу KeyTransport). Добавялем только уникальный обмен.
-            foreach (var exchangeOption in exchangeOptions)
+            //foreach (var exchangeOption in exchangeOptions)
+            //{
+            //    if (await IsExistTransportAsync(exchangeOption.KeyTransport))
+            //    {
+            //        exceptionStr.AppendFormat("{0}, ", exchangeOption.KeyTransport);
+            //    }
+            //}
+            //if (!string.IsNullOrEmpty(exceptionStr.ToString()))
+            //{
+            //    throw new OptionHandlerException($"Для ExchangeOption УЖЕ СУЩЕСТВУЕТ ТАКОЙ ТРАНСПОРТ:  {exceptionStr}");
+            //}
+
+            //ДОБАВИТЬ ДЕВАЙС
+            await _deviceOptionRep.AddAsync(deviceOption);
+            //ДОБАВИТЬ ОБМЕНЫ
+            await _exchangeOptionRep.AddRangeAsync(exchangeOptions);
+            //ДОБАВИТЬ ТРАНСПОРТЫ
+            if (transportOption.SerialOptions != null)
             {
-                if (await IsExistTransportAsync(exchangeOption.KeyTransport))
+                foreach (var option in transportOption.SerialOptions)
                 {
-                    exceptionStr.AppendFormat("{0}, ", exchangeOption.KeyTransport);
+                    if (await IsExistTransportAsync(new KeyTransport(option.Port, TransportType.SerialPort)))
+                        continue;
+
+                    await _serialPortOptionRep.AddAsync(option);
                 }
             }
-            if (!string.IsNullOrEmpty(exceptionStr.ToString()))
-            {
-                throw new OptionHandlerException($"Для ExchangeOption УЖЕ СУЩЕСТВУЕТ ТАКОЙ ТРАНСПОРТ:  {exceptionStr}");
-            }
-
-            //ДОБАВИТЬ ДЕВАЙС, ОБМЕНЫ, ТРАНСПОРТ
-           await _deviceOptionRep.AddAsync(deviceOption);
-           await _exchangeOptionRep.AddRangeAsync(exchangeOptions);
-            if (transportOption.SerialOptions != null)
-                await _serialPortOptionRep.AddRangeAsync(transportOption.SerialOptions);
             if (transportOption.TcpIpOptions != null)
-                await _tcpIpOptionRep.AddRangeAsync(transportOption.TcpIpOptions);
-            if (transportOption.HttpOptions != null)
-                await _httpOptionRep.AddRangeAsync(transportOption.HttpOptions);
+            {
+                foreach (var option in transportOption.TcpIpOptions)
+                {
+                    if (await IsExistTransportAsync(new KeyTransport(option.Name, TransportType.TcpIp)))
+                        continue;
+
+                    await _tcpIpOptionRep.AddAsync(option);
+                }
+            }
+            if (transportOption.TcpIpOptions != null)
+            {
+                foreach (var option in transportOption.HttpOptions)
+                {
+                    if (await IsExistTransportAsync(new KeyTransport(option.Name, TransportType.Http)))
+                        continue;
+
+                    await _httpOptionRep.AddAsync(option);
+                }
+            }
         }
 
 
@@ -463,18 +490,18 @@ namespace BL.Services.Mediators
             switch (keyTransport.TransportType)
             {
                 case TransportType.SerialPort:
-                    deletedTransport.SerialOptions.Add(await _serialPortOptionRep.GetSingleAsync(sp=> sp.Port == keyTransport.Key));
-                    await _serialPortOptionRep.DeleteAsync(sp=> sp.Port == keyTransport.Key);
+                    deletedTransport.SerialOptions.Add(await _serialPortOptionRep.GetSingleAsync(sp => sp.Port == keyTransport.Key));
+                    await _serialPortOptionRep.DeleteAsync(sp => sp.Port == keyTransport.Key);
                     break;
 
                 case TransportType.TcpIp:
                     deletedTransport.TcpIpOptions.Add(await _tcpIpOptionRep.GetSingleAsync(tcpip => tcpip.Name == keyTransport.Key));
-                    await _tcpIpOptionRep.DeleteAsync(tcpip=> tcpip.Name == keyTransport.Key);
+                    await _tcpIpOptionRep.DeleteAsync(tcpip => tcpip.Name == keyTransport.Key);
                     break;
 
                 case TransportType.Http:
                     deletedTransport.HttpOptions.Add(await _httpOptionRep.GetSingleAsync(http => http.Name == keyTransport.Key));
-                    await _httpOptionRep.DeleteAsync(http=> http.Name == keyTransport.Key);
+                    await _httpOptionRep.DeleteAsync(http => http.Name == keyTransport.Key);
                     break;
             }
         }

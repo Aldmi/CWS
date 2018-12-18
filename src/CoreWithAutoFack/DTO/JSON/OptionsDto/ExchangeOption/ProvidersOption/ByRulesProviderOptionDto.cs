@@ -5,32 +5,51 @@ namespace WebServer.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption
     public class ByRulesProviderOptionDto
     {
         public string RuleName4DefaultHandle { get; set; }
-        public List<RuleDto> RulesDto { get; set; }
+        public List<RuleOptionDto> Rules { get; set; }
     }
 
 
 
-    public class RuleDto
+    public class RuleOptionDto
     {
-        public string Name { get; set; }
+        public string Name { get; set; }                       
+        public string AddressDevice { get; set; }          
+        public string WhereFilter { get; set; }            
+        public string OrderBy { get; set; }                 
+        public int TakeItems { get; set; }                  
+        public string DefaultItemJson { get; set; }         
+        public List<ViewRuleOptionDto> ViewRules { get; set; }  
+    }
+
+
+    public class ViewRuleOptionDto
+    {
+        public int Id { get; set; }
+        public int StartPosition { get; set; }               
+        public int Count { get; set; }                      
+        public int BatchSize { get; set; }              
+        public RequestOptionDto RequestOption { get; set; }     
+        public ResponseOptionDto ResponseOption { get; set; }   
+    }
+
+
+
+    public class RequestOptionDto
+    {
         public string Format { get; set; }
-        public RequestDto Request { get; set; }
-        public ResponseDto Response { get; set; }
+        public int MaxBodyLenght { get; set; }              
+        public string Header { get; set; }                  
+        public string Body { get; set; }                    
+        public string Footer { get; set; }                  
     }
 
 
-    public class RequestDto
+    public class ResponseOptionDto
     {
-        public int MaxLenght { get; set; }
-        public string Body { get; set; }
-    }
-
-
-    public class ResponseDto
-    {
-        public int MaxLenght { get; set; }
+        public string Format { get; set; }
+        public int Lenght { get; set; }                     
         public int TimeRespone { get; set; }
-        public string Body { get; set; }
+        public string Body { get; set; }                     
     }
 
 }

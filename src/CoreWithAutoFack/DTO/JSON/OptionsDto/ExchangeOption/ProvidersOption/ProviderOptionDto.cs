@@ -6,7 +6,7 @@ namespace WebServer.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption
     {  
         [Required(ErrorMessage = "Name для Provider не может быть NULL")]
         public string Name { get; set; } 
-        public ByRulesProviderOptionDto ByRulesProviderOptionDto { get; set; }
-        public ManualProviderOptionDto ManualProviderOptionDto { get; set; }
+        public ByRulesProviderOptionDto ByRulesProviderOption { get; set; }
+        public ManualProviderOptionDto ManualProviderOption { get; set; }
     }
 }
