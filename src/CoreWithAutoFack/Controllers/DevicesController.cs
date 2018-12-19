@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using AutoMapper;
 using BL.Services.Actions;
@@ -8,6 +10,7 @@ using BL.Services.Mediators;
 using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using Shared.Types;
 using WebServer.DTO.JSON.DevicesStateDto;
 
 namespace WebServer.Controllers
@@ -106,16 +109,18 @@ namespace WebServer.Controllers
         /// <summary>
         /// Запустить обмен по ключу
         /// </summary>
-        /// <param name="exchnageKey">Список устройств которые используют данный обмен</param>
+        /// <param name="exchnageKeys">Установить функции цикл. обмена на БГ для этих обменов</param>
         /// <returns></returns>
-        [HttpPut("StartCycleExchange/{exchnageKey}")]
-        public IActionResult StartCycleExchange([FromRoute] string exchnageKey)
+        [HttpPut("StartCycleExchange")]
+        public IActionResult StartCycleExchange([FromBody] IEnumerable<string> exchnageKeys)
         {
             try
             {
-                 _deviceActionService.StartCycleExchange(exchnageKey);
-                var devicesUsingExchange=  _mediatorForStorages.GetDevicesUsingExchange(exchnageKey);
-                return Ok(devicesUsingExchange);
+                _deviceActionService.StartCycleExchanges(exchnageKeys);
+                var resp = (from exchangeKey in exchnageKeys
+                            let devices = _mediatorForStorages.GetDevicesUsingExchange(exchangeKey)
+                            select new { message = "ЗАПУЩЕННЫЙ ЦИКЛ. ОБМЕН", devices = devices, exchangeKey = exchangeKey }).Cast<dynamic>().ToList();
+                return Ok(resp);
             }
             catch (ActionHandlerException ex)
             {
@@ -131,24 +136,27 @@ namespace WebServer.Controllers
         }
 
 
+
         /// <summary>
         /// Остановить обмен по ключу
         /// </summary>
-        /// <param name="exchnageKey">Список устройств которые используют данный обмен</param>
+        /// <param name="exchnageKeys">Список устройств которые используют данный обмен</param>
         /// <returns></returns>
-        [HttpPut("StopCycleExchange/{exchnageKey}")]
-        public IActionResult StopCycleExchange([FromRoute] string exchnageKey)
+        [HttpPut("StopCycleExchange")]
+        public IActionResult StopCycleExchange([FromBody] IEnumerable<string> exchnageKeys)
         {
             try
             {
-                _deviceActionService.StopCycleExchange(exchnageKey);
-                var devicesUsingExchange=  _mediatorForStorages.GetDevicesUsingExchange(exchnageKey);
-                return Ok(devicesUsingExchange);
+                _deviceActionService.StopCycleExchanges(exchnageKeys);
+                var resp = (from exchangeKey in exchnageKeys
+                    let devices = _mediatorForStorages.GetDevicesUsingExchange(exchangeKey)
+                    select new { message = "ОСТАНОВЛЕННЫЙ ЦИКЛ. ОБМЕН", devices = devices, exchangeKey = exchangeKey }).Cast<dynamic>().ToList();
+                return Ok(resp);
             }
             catch (ActionHandlerException ex)
             {
                 _logger.Error(ex, "Ошибка в DevicesController/StopCycleExchange");
-                ModelState.AddModelError("StartCycleExchangeException", ex.Message);
+                ModelState.AddModelError("StopCycleExchangeException", ex.Message);
                 return BadRequest(ModelState);
             }
             catch (Exception ex)
@@ -157,6 +165,7 @@ namespace WebServer.Controllers
                 throw;
             }
         }
+
 
 
         // PUT api/Devices/StartCycleReOpenedConnection
@@ -182,6 +191,7 @@ namespace WebServer.Controllers
         }
 
 
+
         // PUT api/Devices/StartCycleReOpenedConnection
         [HttpPut("StopCycleReOpenedConnection")]
         public IActionResult StopCycleReOpenedConnection([FromBody] IEnumerable<string> exchnageKeys)
@@ -203,6 +213,75 @@ namespace WebServer.Controllers
                 throw;
             }
         }
+
+
+        /// <summary>
+        /// Запустить БГ транспорта по ключу
+        /// </summary>
+        /// <param name="keysTransport">Список ключей транспорта</param>
+        /// <returns></returns>
+        // PUT api/Devices/StartBackgrounds
+        [HttpPut("StartBackgrounds")]
+        public async Task<IActionResult> StartBackgrounds([FromBody] IReadOnlyList<KeyTransport> keysTransport)
+        {
+            try
+            {
+                foreach (var keyTransport in keysTransport)
+                {
+                  var bg= _mediatorForStorages.GetBackground(keyTransport);
+                  if (bg == null)
+                     return BadRequest($"keysTransport {keyTransport}");
+                }
+
+                await _deviceActionService.StartBackgrounds(keysTransport);
+                var resp = (from keyTransport in keysTransport
+                            let exchangesUsingTransport = _mediatorForStorages.GetExchangesUsingTransport(keyTransport).Select(e => e.KeyExchange)
+                            select new { message = "ЗАПУЩЕННЫЙ ТРАНСПОРТ", exc = exchangesUsingTransport, keyTranspor = keyTransport }).ToList();
+                return Ok(resp);
+            }
+            catch (ActionHandlerException ex)
+            {
+                _logger.Error(ex, "Ошибка в DevicesController/StartBackgrounds");
+                ModelState.AddModelError("StartBackgrounds", ex.Message);
+                return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Критическая Ошибка в DevicesController/StartBackgrounds");
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Остановить БГ транспорта по ключу
+        /// </summary>
+        /// <param name="keysTransport">Список ключей транспорта</param>
+        /// <returns></returns>
+        [HttpPut("StopBackgrounds")]
+        public async Task<IActionResult> StopBackgrounds([FromBody] IReadOnlyList<KeyTransport> keysTransport)
+        {
+            try
+            {
+                await _deviceActionService.StopBackgrounds(keysTransport);
+                var resp = (from keyTransport in keysTransport let exchangesUsingTransport = _mediatorForStorages.GetExchangesUsingTransport(keyTransport).Select(e=>e.KeyExchange)
+                            select new {message= "ОСТАНОВЛЕННЫЙ ТРАНСПОРТ", exc = exchangesUsingTransport, keyTranspor = keyTransport }).ToList();
+                return Ok(resp);
+            }
+            catch (ActionHandlerException ex)
+            {
+                _logger.Error(ex, "Ошибка в DevicesController/StartBackgrounds");
+                ModelState.AddModelError("StartBackgrounds", ex.Message);
+                return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Критическая Ошибка в DevicesController/StartBackgrounds");
+                throw;
+            }
+        }
+
+
 
         //TODO: добавить StartBackgrounds , StopBackgrounds
 

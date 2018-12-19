@@ -18,19 +18,16 @@ namespace Shared.Types
 
         #region prop
 
+        //private KeyTransport()
+        //{
+            
+        //}
+
+
         public KeyTransport(string key, TransportType transportType )
         {
             Key = key;
             TransportType = transportType;
-        }
-
-        public KeyTransport(Dictionary<string, string> dict)
-        {
-            if (!Enum.TryParse(dict["Type"], out TransportType trType))
-                return;
-
-            Key = dict["Key"];
-            TransportType = trType;
         }
 
         #endregion

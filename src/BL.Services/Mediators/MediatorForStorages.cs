@@ -113,6 +113,17 @@ namespace BL.Services.Mediators
         }
 
 
+        /// <summary>
+        /// Вернуть все обмены использующие данный транспорт
+        /// </summary>
+        /// <param name="keyTransport"></param>
+        /// <returns></returns>
+        public IEnumerable<IExchange<TIn>> GetExchangesUsingTransport(KeyTransport keyTransport)
+        {
+           return _exchangeStorageService.Values.Where(exch => exch.KeyTransport.Equals(keyTransport));
+        }
+
+
         public IExchange<TIn> GetExchange(string exchnageKey)
         {
             return _exchangeStorageService.Get(exchnageKey);

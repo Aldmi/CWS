@@ -255,8 +255,8 @@ namespace WebServer.Controllers
 
 
 
-        // POST api/devicesoption/BuildDevice/deviceName
-        [HttpPost("BuildDevice/{deviceName}")]
+        // PUT api/devicesoption/BuildDevice/deviceName
+        [HttpPut("BuildDevice/{deviceName}")]
         public async Task<IActionResult> BuildDevice([FromRoute] string deviceName)
         {
             try

@@ -28,7 +28,7 @@ namespace WebServer.Controllers
     {
         #region fields
 
-        private readonly ISimpleBackground _background;
+        private readonly ISimpleBackground _backgroundMessageBrokConsum;
         private readonly InputDataApplyService<AdInputType> _inputDataApplyService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
@@ -50,8 +50,8 @@ namespace WebServer.Controllers
             _inputDataApplyService = inputDataApplyService;
             _mapper = mapper;
             _logger = logger;
-            var backgroundName= config["MessageBrokerConsumer4InData:Name"];
-           _background = background[backgroundName];
+            var backgroundName= config["MessageBrokerConsumer4InData:Name"]; //TODO: работу с _backgroundMessageBrokConsum вынести в отдельный сервис
+            _backgroundMessageBrokConsum = background[backgroundName];
         }
 
         #endregion
@@ -61,34 +61,32 @@ namespace WebServer.Controllers
 
         #region Api
 
-        // GET api/InputData/GetBackgroundState
-        [HttpGet("GetBackgroundState")]
-        public async Task<IActionResult> GetBackgroundState()
+        // GET api/InputData/GetMessageBrokerConsumerBgState
+        [HttpGet("GetMessageBrokerConsumerBgState")]
+        public async Task<IActionResult> GetMessageBrokerConsumerBgState()
         {          
-            var bgState = _background.IsStarted ? "Started" : "Stoped";
+            var bgState = _backgroundMessageBrokConsum.IsStarted ? "Started" : "Stoped";
             await Task.CompletedTask;
             return new JsonResult(bgState);
         }
-
-        //TODO: добавить POST - "SendData4Devices", PUT - "StartBg", PUT - "StopBg".  
 
 
         /// <summary>
         /// Запустить бекграунд слушателя выходных сообшений от messageBroker
         /// </summary>
-        // GET api/InputData/StartListener
-        [HttpPut("StartListener")]
-        public async Task<IActionResult> StartListener()
+        // GET api/InputData/StartMessageBrokerConsumerBg
+        [HttpPut("StartMessageBrokerConsumerBg")]
+        public async Task<IActionResult> StartMessageBrokerConsumerBg()
         {
             try
             {
-                if (_background.IsStarted)
+                if (_backgroundMessageBrokConsum.IsStarted)
                 {
-                    ModelState.AddModelError("StartListener", "Listener already started !!!");
+                    ModelState.AddModelError("StartMessageBrokerConsumerBg", "Listener already started !!!");
                     return BadRequest(ModelState);
                 }
 
-                await _background.StartAsync(CancellationToken.None);
+                await _backgroundMessageBrokConsum.StartAsync(CancellationToken.None);
                 return Ok("Listener starting");
             }
             catch (Exception ex)
@@ -102,18 +100,18 @@ namespace WebServer.Controllers
         /// <summary>
         /// Запустить бекграунд слушателя выходных сообшений от messageBroker
         /// </summary>
-        [HttpPut("StopListener")]
-        public async Task<IActionResult> StopListener()
+        [HttpPut("StopMessageBrokerConsumerBg")]
+        public async Task<IActionResult> StopMessageBrokerConsumerBg()
         {
             try
             {
-                if (!_background.IsStarted)
+                if (!_backgroundMessageBrokConsum.IsStarted)
                 {
-                    ModelState.AddModelError("StartListener", "Listener already staopped !!!");
+                    ModelState.AddModelError("StopMessageBrokerConsumerBg", "Listener already staopped !!!");
                     return BadRequest(ModelState);
                 }
 
-                await _background.StopAsync(CancellationToken.None);
+                await _backgroundMessageBrokConsum.StopAsync(CancellationToken.None);
                 return Ok("Listener Stoping");
             }
             catch (Exception ex)
@@ -221,15 +219,6 @@ namespace WebServer.Controllers
                                                                       [FromHeader] string dataAction,
                                                                       [FromHeader] string command)
         {
-
-            //DEBUG---------------------------------------------------
-            //deviceName = "TestPeronn_45_55_9";
-            //exchangeName = "TcpIp_table_TestPeronn_9_Slim";
-            //directHandlerName = null;
-            //dataAction = "OneTimeAction";
-            //command = "None";
-            //DEBUG---------------------------------------------------
-
             var xmlFile = username;
             if (xmlFile == null)
             {
@@ -321,7 +310,6 @@ namespace WebServer.Controllers
             }
             return Ok();
         }
-
 
         #endregion
     }
