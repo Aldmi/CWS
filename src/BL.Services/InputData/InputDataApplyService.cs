@@ -3,20 +3,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using BL.Services.Mediators;
 using InputDataModel.Base;
+using Newtonsoft.Json;
+using Serilog;
 
 namespace BL.Services.InputData
 {
     public class InputDataApplyService<TIn>
     {
         private readonly MediatorForStorages<TIn> _mediatorForStorages;
-
+        private readonly ILogger _logger;
 
 
         #region ctor
 
-        public InputDataApplyService(MediatorForStorages<TIn> mediatorForStorages)
+        public InputDataApplyService(MediatorForStorages<TIn> mediatorForStorages, ILogger logger)
         {
             _mediatorForStorages = mediatorForStorages;
+            _logger = logger;
         }
 
         #endregion
@@ -50,6 +53,8 @@ namespace BL.Services.InputData
                   continue;
                 }
 
+                LogingInData(inData);
+
                 if (string.IsNullOrEmpty(inData.ExchangeName))
                 {
                     tasks.Add(device.Send2AllExchanges(inData.DataAction, inData.Data, inData.Command));
@@ -63,6 +68,34 @@ namespace BL.Services.InputData
             await Task.WhenAll(tasks);
             return errors;
         }
+
+
+        /// <summary>
+        /// Логирование входных данных, Прошедших валидацию
+        /// </summary>
+        /// <param name="inData"></param>
+        private void LogingInData(InputData<TIn> inData)
+        {
+            var settings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,             //Отступы дочерних элементов 
+                NullValueHandling = NullValueHandling.Ignore  //Игнорировать пустые теги
+            };
+            var infoObj = new
+            {
+                inData.DeviceName,
+                inData.ExchangeName,
+                inData.DataAction,
+                inData.Command,
+                inData.DirectHandlerName,
+                DataCount = inData.Data.Count
+            };
+            var infoObjsJson = JsonConvert.SerializeObject(infoObj, settings);
+            _logger.Information($"ПРИНЯТЫ ДАННЫЕ ДЛЯ: {infoObjsJson}");
+            var debugObjsJson = JsonConvert.SerializeObject(inData, settings);
+            _logger.Debug($"ПРИНЯТЫ ДАННЫЕ ПОДРОБНО: {debugObjsJson}");
+        }
+
 
         #endregion
     }
