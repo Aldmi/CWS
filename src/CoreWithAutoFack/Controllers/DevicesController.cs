@@ -72,17 +72,30 @@ namespace WebServer.Controllers
         [HttpGet("{exchnageKey}")]
         public async Task<IActionResult> GetDevicesUsingExchange([FromRoute] string exchnageKey)
         {
-            var devicesUsingExchange= _mediatorForStorages.GetDevicesUsingExchange(exchnageKey);
+            var devices= _mediatorForStorages.GetDevicesUsingExchange(exchnageKey);
+            var devicesStateDto = _mapper.Map<List<DeviceStateDto>>(devices);
             await Task.CompletedTask;
-            return new JsonResult(devicesUsingExchange);
+            return new JsonResult(devicesStateDto);
         }
 
 
-        //TODO: добавить GetDevicesUsingBackground
+        // GET api/Devices/GetExchangesState/{deviceName}
+        [HttpGet("GetExchangesState/{deviceName}")]
+        public async Task<IActionResult> GetExchangesState([FromRoute] string deviceName)
+        {
+            var device = _mediatorForStorages.GetDevice(deviceName);
+            if (device == null)
+            {
+                return NotFound(deviceName);
+            }
+            var exchangesStateDto = _mapper.Map<List<ExchangeStateDto>>(device.Exchanges);
+            await Task.CompletedTask;
+            return new JsonResult(exchangesStateDto);
+        }
 
-        //TODO: добавить GetExchangesState (string deviceName)
 
 
+        // DELETE api/Devices/{deviceName}
         [HttpDelete("{deviceName}")]
         public async Task<IActionResult> RemoveDevice([FromRoute] string deviceName)
         {
@@ -91,7 +104,6 @@ namespace WebServer.Controllers
             {
                 return NotFound(deviceName);
             }
-
             try
             {
                 await _mediatorForStorages.RemoveDevice(deviceName);
@@ -111,6 +123,7 @@ namespace WebServer.Controllers
         /// </summary>
         /// <param name="exchnageKeys">Установить функции цикл. обмена на БГ для этих обменов</param>
         /// <returns></returns>
+        // PUT api/Devices/StartCycleExchange
         [HttpPut("StartCycleExchange")]
         public IActionResult StartCycleExchange([FromBody] IEnumerable<string> exchnageKeys)
         {
@@ -119,7 +132,7 @@ namespace WebServer.Controllers
                 _deviceActionService.StartCycleExchanges(exchnageKeys);
                 var resp = (from exchangeKey in exchnageKeys
                             let devices = _mediatorForStorages.GetDevicesUsingExchange(exchangeKey)
-                            select new { message = "ЗАПУЩЕННЫЙ ЦИКЛ. ОБМЕН", devices = devices, exchangeKey = exchangeKey }).Cast<dynamic>().ToList();
+                            select new { message = "ЗАПУЩЕННЫЙ ЦИКЛ. ОБМЕН",  devices, exchangeKey }).ToList();
                 return Ok(resp);
             }
             catch (ActionHandlerException ex)
@@ -142,6 +155,7 @@ namespace WebServer.Controllers
         /// </summary>
         /// <param name="exchnageKeys">Список устройств которые используют данный обмен</param>
         /// <returns></returns>
+        // PUT api/Devices/StopCycleExchange
         [HttpPut("StopCycleExchange")]
         public IActionResult StopCycleExchange([FromBody] IEnumerable<string> exchnageKeys)
         {
@@ -150,7 +164,7 @@ namespace WebServer.Controllers
                 _deviceActionService.StopCycleExchanges(exchnageKeys);
                 var resp = (from exchangeKey in exchnageKeys
                     let devices = _mediatorForStorages.GetDevicesUsingExchange(exchangeKey)
-                    select new { message = "ОСТАНОВЛЕННЫЙ ЦИКЛ. ОБМЕН", devices = devices, exchangeKey = exchangeKey }).Cast<dynamic>().ToList();
+                    select new { message = "ОСТАНОВЛЕННЫЙ ЦИКЛ. ОБМЕН",  devices,  exchangeKey }).ToList();
                 return Ok(resp);
             }
             catch (ActionHandlerException ex)
@@ -168,6 +182,11 @@ namespace WebServer.Controllers
 
 
 
+        /// <summary>
+        /// Запустить ЦИКЛ. переоткрытие транспорта
+        /// </summary>
+        /// <param name="exchnageKeys"></param>
+        /// <returns></returns>
         // PUT api/Devices/StartCycleReOpenedConnection
         [HttpPut("StartCycleReOpenedConnection")]
         public async Task<IActionResult> StartCycleReOpenedConnection([FromBody] IEnumerable<string> exchnageKeys)
@@ -280,10 +299,6 @@ namespace WebServer.Controllers
                 throw;
             }
         }
-
-
-
-        //TODO: добавить StartBackgrounds , StopBackgrounds
 
         #endregion
     }
