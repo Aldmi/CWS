@@ -132,7 +132,10 @@ namespace Transport.TcpIp.Concrete
         public void CycleReOpenedCancelation()
         {
             if (IsCycleReopened)
+            {
                 _ctsCycleReOpened.Cancel();
+                _ctsCycleReOpened.Dispose();
+            }
         }
 
 
@@ -279,51 +282,42 @@ namespace Transport.TcpIp.Concrete
         {
             byte[] bDataTemp = new byte[256];
 
-            //timeOut = 150;//DEBUG
+            //timeOut = 15;//DEBUG
 
             //Ожидаем накопление данных в буффере
-            _netStream.ReadTimeout = timeOut;
-            _client.ReceiveTimeout = timeOut;
             await Task.Delay(timeOut, ct);
 
-            //Мгновенно с ожиданием в 100мс вычитываем поступивщий буффер
+            //DEBUG MEMLIK
+            // Console.WriteLine("TakeDataConstPeriodAsync >>>>>>>>>>>>>>>>>");
+            //return new byte[] { 0x02, 0x46, 0x46, 0x30, 0x38, 0x25, 0x41, 0x30, 0x37, 0x37, 0x41, 0x43, 0x4B, 0x45, 0x41, 0x03 };
+            //DEBUG MEMLIK
+
+            //Мгновенно с ожиданием в 50мс вычитываем поступивщий буффер
             var ctsTimeout = new CancellationTokenSource();//токен сработает по таймауту в функции WithTimeout
             var cts = CancellationTokenSource.CreateLinkedTokenSource(ctsTimeout.Token, ct); // Объединенный токен, сработает от выставленного ctsTimeout.Token или от ct
-            int nByteTake = await _netStream.ReadAsync(bDataTemp, 0, nbytes, cts.Token).WithTimeout2CanceledTask(50, ctsTimeout);
-            if (nByteTake == nbytes)
+            try
             {
-                var bData = new byte[nByteTake];
-                Array.Copy(bDataTemp, bData, nByteTake);
-                return bData;
+                int nByteTake = await _netStream.ReadAsync(bDataTemp, 0, nbytes, cts.Token).WithTimeout2CanceledTask(50, ctsTimeout);
+                if (nByteTake == nbytes)
+                {
+                    var bData = new byte[nByteTake];
+                    Array.Copy(bDataTemp, bData, nByteTake);
+                    // Console.WriteLine($"TcpIpTransport/TakeDataAsync {KeyTransport}.    Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");    //DEBUG MEMLIK
+                    return bData;
+                }
+                else
+                {
+                    _logger.Warning($"TcpIpTransport/TakeDataAsync {KeyTransport}.  Кол-во считанных БАЙТ не верное.  Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");
+                }
+            }
+            finally
+            {
+                ctsTimeout.Cancel();
+                cts.Cancel();
+                ctsTimeout.Dispose();
+                cts.Dispose();
             }
 
-
-            //DEBUG-----------------------
-            //for (int j = 0; j < 10; j++)
-            //{
-            //    var trash = new byte[4096];
-            //    var res = _netStream.DataAvailable;
-            //    if (res)
-            //    {
-            //        var n = _netStream.Read(trash, 0, trash.Length);
-            //        Debug.WriteLine("В буффере после чтения остались данные. Маленкьое время ожидания ответа.");
-            //        break;
-            //    }
-            //    await Task.Delay(200, ct);
-            //}
-            //DEBUG-----------------------
-
-            //Очистить остатки буфера от мусора
-            //using (_logger.TimeOperation("TimeOpertaion Clear In buffer"))
-            //{
-            //    var trash = new byte[4096];
-            //    while (_netStream.DataAvailable)
-            //    {
-            //        _netStream.Read(trash, 0, trash.Length);
-            //    }
-            //}
-
-            _logger.Warning($"TcpIpTransport/TakeDataAsync {KeyTransport}.  Кол-во считанных БАЙТ не верное.  Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");
             return null;
         }
 
@@ -340,6 +334,9 @@ namespace Transport.TcpIp.Concrete
                 _netStream.Close();
                 StatusString = "Сетевой поток закрыт ...";
             }
+
+            _ctsCycleReOpened.Cancel();
+            _ctsCycleReOpened.Dispose();
             _client?.Client?.Close();
             _client?.Client?.Dispose();
             _client?.Dispose();

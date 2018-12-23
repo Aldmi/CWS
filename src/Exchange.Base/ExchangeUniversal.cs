@@ -128,7 +128,6 @@ namespace Exchange.Base
         private CancellationTokenSource _cycleReOpenedCts;
         public async Task CycleReOpened()
         {
-            _logger.Debug($"KeyExchange {KeyExchange} START>>>>>>>");//DEBUG
             if (_transport != null)
             {
                 if (_transport.IsCycleReopened)
@@ -137,13 +136,13 @@ namespace Exchange.Base
                     return;
                 }
                 _cycleReOpenedCts?.Cancel();
+                _cycleReOpenedCts?.Dispose();
                 _cycleReOpenedCts = new CancellationTokenSource();
                 await Task.Factory.StartNew(async () =>
                 {
                     await _transport.CycleReOpened();
                 }, _cycleReOpenedCts.Token);
             }
-            _logger.Debug($"KeyExchange {KeyExchange} STOP<<<<<<<<");//DEBUG
         }
 
         /// <summary>

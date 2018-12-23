@@ -42,14 +42,16 @@ namespace Shared.Helpers
         /// <returns></returns>
         public static async Task<T> WithTimeout2CanceledTask<T>(this Task<T> task, int time, CancellationTokenSource ctsTimeout)
         {
-            Task delayTask = Task.Delay(time);
+            var ctsDelay = new CancellationTokenSource();
+            Task delayTask = Task.Delay(time, ctsDelay.Token);
             Task firstToFinish = await Task.WhenAny(task, delayTask);
             if (firstToFinish == delayTask)
             {
                 ctsTimeout.Cancel();
-                ctsTimeout.Dispose();
                 throw new TimeoutException();
             }
+            ctsDelay.Cancel();
+            ctsDelay.Dispose();
             return await task;
         }
 

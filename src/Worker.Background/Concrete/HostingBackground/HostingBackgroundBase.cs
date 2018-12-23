@@ -63,6 +63,7 @@ namespace Worker.Background.Concrete.HostingBackground
             {
                 // Signal cancellation to the executing method
                 _stoppingCts.Cancel();
+                _stoppingCts.Dispose();
             }
             finally
             {
@@ -93,6 +94,7 @@ namespace Worker.Background.Concrete.HostingBackground
         public virtual void Dispose()
         {
             _stoppingCts.Cancel();
+            _stoppingCts.Dispose();
         }
 
         #endregion

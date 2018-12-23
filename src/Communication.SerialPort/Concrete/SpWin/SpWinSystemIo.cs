@@ -137,7 +137,10 @@ namespace Transport.SerialPort.Concrete.SpWin
         public void CycleReOpenedCancelation()
         {
             if (IsCycleReopened)
-             _ctsCycleReOpened.Cancel();
+            {
+                _ctsCycleReOpened.Cancel();
+                _ctsCycleReOpened.Dispose();
+            }
         }
 
 

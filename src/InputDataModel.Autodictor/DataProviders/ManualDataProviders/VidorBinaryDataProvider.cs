@@ -97,6 +97,5 @@ namespace InputDataModel.Autodictor.DataProviders.ManualDataProviders
         public int TimeRespone { get; }
         public CancellationTokenSource Cts { get; set; }
 
-
     }
 }
