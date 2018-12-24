@@ -45,7 +45,7 @@ namespace BL.Services.Actions
         /// </summary>
         /// <returns>Спсисок созданных ус-в</returns>
         /// <exception cref="AggregateException"></exception>
-        public async Task<IEnumerable<Device<TIn>>> BuildAllDevices()
+        public async Task<IReadOnlyList<Device<TIn>>> BuildAllDevices()
         {
             var newDevices = new List<Device<TIn>>();
             var exceptions = new List<Exception>();

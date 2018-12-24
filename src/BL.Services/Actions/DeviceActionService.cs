@@ -80,7 +80,7 @@ namespace BL.Services.Actions
         /// Установить функции циклических обменов на бекгроунды
         /// </summary>
         /// <param name="exchnageKeys"></param>
-        public void StartCycleExchanges(IEnumerable<string> exchnageKeys)
+        public void StartCycleExchanges(IReadOnlyList<string> exchnageKeys)
         {
             foreach (var exchnageKey in exchnageKeys)
             {
@@ -93,7 +93,7 @@ namespace BL.Services.Actions
         /// Снять функции циклических обмена с бекгроундов
         /// </summary>
         /// <param name="exchnageKeys"></param>
-        public void StopCycleExchanges(IEnumerable<string> exchnageKeys)
+        public void StopCycleExchanges(IReadOnlyList<string> exchnageKeys)
         {
             foreach (var exchnageKey in exchnageKeys)
             {
@@ -137,7 +137,7 @@ namespace BL.Services.Actions
         /// </summary>
         /// <param name="keysTransport"></param>
         /// <returns></returns>
-        public async Task StartBackgrounds(IEnumerable<KeyTransport> keysTransport)
+        public async Task StartBackgrounds(IReadOnlyList<KeyTransport> keysTransport)
         {
             var tasks= keysTransport.Select(StartBackground).ToList();
             await Task.WhenAll(tasks);
@@ -149,7 +149,7 @@ namespace BL.Services.Actions
         /// </summary>
         /// <param name="keysTransport"></param>
         /// <returns></returns>
-        public async Task StopBackgrounds(IEnumerable<KeyTransport> keysTransport)
+        public async Task StopBackgrounds(IReadOnlyList<KeyTransport> keysTransport)
         {
             var tasks= keysTransport.Select(StopBackground).ToList();
             await Task.WhenAll(tasks);
@@ -181,7 +181,7 @@ namespace BL.Services.Actions
         /// Параллельный запуск открытия подключений на нескольких обменах
         /// </summary>
         /// <param name="exchnageKeys"></param>
-        public async Task StartCycleReOpenedConnections(IEnumerable<string> exchnageKeys)
+        public async Task StartCycleReOpenedConnections(IReadOnlyList<string> exchnageKeys)
         {
             await Task.WhenAll(exchnageKeys.Select(StartCycleReOpenedConnection).ToArray());
         }
@@ -207,7 +207,7 @@ namespace BL.Services.Actions
         /// Останов задач циклического открытия подключения для нескольких обменов
         /// </summary>
         /// <param name="exchnageKeys"></param>
-        public void  StopCycleReOpenedConnections(IEnumerable<string> exchnageKeys)
+        public void  StopCycleReOpenedConnections(IReadOnlyList<string> exchnageKeys)
         {
             foreach (var exchnageKey in exchnageKeys)
             {

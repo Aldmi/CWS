@@ -47,25 +47,25 @@ namespace DAL.EFCore.Repository
         }
 
 
-        public new IEnumerable<HttpOption> List()
+        public new IReadOnlyList<HttpOption> List()
         {
             return base.List();
         }
 
 
-        public new IEnumerable<HttpOption> List(Expression<Func<HttpOption, bool>> predicate)
+        public new IReadOnlyList<HttpOption> List(Expression<Func<HttpOption, bool>> predicate)
         {
             return base.List(predicate);
         }
 
 
-        public new async Task<IEnumerable<HttpOption>> ListAsync()
+        public new async Task<IReadOnlyList<HttpOption>> ListAsync()
         {
             return await base.ListAsync();
         }
 
 
-        public new async Task<IEnumerable<HttpOption>> ListAsync(Expression<Func<HttpOption, bool>> predicate)
+        public new async Task<IReadOnlyList<HttpOption>> ListAsync(Expression<Func<HttpOption, bool>> predicate)
         {
             return await base.ListAsync(predicate);
         }
@@ -95,13 +95,13 @@ namespace DAL.EFCore.Repository
         }
 
 
-        public new void AddRange(IEnumerable<HttpOption> entitys)
+        public new void AddRange(IReadOnlyList<HttpOption> entitys)
         {
             base.AddRange(entitys);
         }
 
 
-        public new async Task AddRangeAsync(IEnumerable<HttpOption> entitys)
+        public new async Task AddRangeAsync(IReadOnlyList<HttpOption> entitys)
         {
             await base.AddRangeAsync(entitys);
         }

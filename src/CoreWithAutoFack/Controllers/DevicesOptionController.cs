@@ -134,7 +134,7 @@ namespace WebServer.Controllers
                 var exchangeOptionDto = data.ExchangeOptions;
                 var transportOptionDto = data.TransportOptions;
                 var deviceOption = _mapper.Map<DeviceOption>(deviceOptionDto);
-                var exchangeOption = _mapper.Map<IEnumerable<ExchangeOption>>(exchangeOptionDto);
+                var exchangeOption = _mapper.Map<IReadOnlyList<ExchangeOption>>(exchangeOptionDto);
                 var transportOption = _mapper.Map<TransportOption>(transportOptionDto);
                 await _mediatorForOptionsRep.AddDeviceOptionAsync(deviceOption, exchangeOption, transportOption);
                 return CreatedAtAction("Get", new { deviceName = deviceOptionDto.Name }, data); //возвращает в ответе данные запроса. в Header пишет значение Location→ http://localhost:44138/api/DevicesOption/{deviceName}
@@ -151,85 +151,6 @@ namespace WebServer.Controllers
                 throw;
             }
         }
-
-
-        //DEBUG
-        //// POST api/devicesoption/AddAllOptionDevices
-        //[HttpPost("AddAllOptionDevices")]
-        //public async Task<IActionResult> AddAllOptionDevices([FromBody]OptionAgregatorDto data)
-        //{
-        //    if (data == null)
-        //    {
-        //        ModelState.AddModelError("AgregatorOptionDto", "POST body is null");
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-
-        //    try
-        //    {
-        //        var deviceOptionsDto = data.DeviceOptions;
-        //        var exchangeOptionDto = data.ExchangeOptions;
-        //        var transportOptionDto = data.TransportOptions;
-
-        //        var allTcpIpTransportOptions= new List<TcpIpOptionDto>();
-        //        var listResult= new List<IActionResult>();
-        //        foreach (var newDeviceOptionDto in deviceOptionsDto)
-        //        {
-        //            var newData = new OptionAgregatorDto()
-        //            {
-        //                DeviceOptions = new List<DeviceOptionDto>(),
-        //                TransportOptions = new TransportOptionsDto(),
-        //                ExchangeOptions = new List<ExchangeOptionDto>()
-        //            };
-        //            var newExchangeOptions= new List<ExchangeOptionDto>();
-        //            var newTcpIpOptionDtos = new List<TcpIpOptionDto>();
-        //            foreach (var exchangeKey in newDeviceOptionDto.ExchangeKeys)
-        //            {
-        //                var exch = exchangeOptionDto.FirstOrDefault(e => e.Key == exchangeKey);
-        //                if (exch != null)
-        //                {
-        //                    newExchangeOptions.Add(exch);
-        //                    var transport =transportOptionDto.TcpIpOptions.FirstOrDefault(t => t.Name == exch.KeyTransport.Key);
-        //                    if (transport != null && !allTcpIpTransportOptions.Contains(transport))
-        //                    {
-        //                        newTcpIpOptionDtos.Add(transport);
-        //                        allTcpIpTransportOptions.Add(transport);
-        //                    }
-        //                }
-        //            }
-        //            newData.DeviceOptions.Add(newDeviceOptionDto);
-        //            newData.ExchangeOptions.AddRange(newExchangeOptions);
-        //            if (newTcpIpOptionDtos.Any())
-        //            {
-        //                newData.TransportOptions.TcpIpOptions = newTcpIpOptionDtos;
-        //            }
-        //            else
-        //            {
-        //                newData.TransportOptions = null;
-        //            }
-        //            var res= await Post(newData);
-        //            listResult.Add(res);
-        //        }
-
-        //         //var hh= listResult.Select(r => r.).ToArray();
-
-        //         return Ok();
-        //    }
-        //    catch (OptionHandlerException ex)
-        //    {
-        //        _logger.Error(ex, "Ошибка в DevicesOptionController/Post");
-        //        ModelState.AddModelError("PostException", ex.Message);
-        //        return BadRequest(ModelState);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.Error(ex, "Критическая Ошибка в DevicesOptionController/Post");
-        //        throw;
-        //    }
-        //}
-
 
 
 

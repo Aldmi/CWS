@@ -58,32 +58,32 @@ namespace DAL.InMemory.Repository
             return GetSingle(predicate);
         }
 
-        public IEnumerable<SerialOption> GetWithInclude(params Expression<Func<SerialOption, object>>[] includeProperties)
+        public IReadOnlyList<SerialOption> GetWithInclude(params Expression<Func<SerialOption, object>>[] includeProperties)
         {
             throw new NotImplementedException();
         }
 
 
-        public IEnumerable<SerialOption> List()
+        public IReadOnlyList<SerialOption> List()
         {
             return SerialOptions;
         }
 
 
-        public IEnumerable<SerialOption> List(Expression<Func<SerialOption, bool>> predicate)
+        public IReadOnlyList<SerialOption> List(Expression<Func<SerialOption, bool>> predicate)
         {
-            return SerialOptions.Where(predicate.Compile());
+            return SerialOptions.Where(predicate.Compile()).ToList();
         }
 
 
-        public async Task<IEnumerable<SerialOption>> ListAsync()
+        public async Task<IReadOnlyList<SerialOption>> ListAsync()
         {
             await Task.CompletedTask;
             return List();
         }
 
 
-        public async Task<IEnumerable<SerialOption>> ListAsync(Expression<Func<SerialOption, bool>> predicate)
+        public async Task<IReadOnlyList<SerialOption>> ListAsync(Expression<Func<SerialOption, bool>> predicate)
         {
             await Task.CompletedTask;
             return List(predicate);
@@ -117,7 +117,7 @@ namespace DAL.InMemory.Repository
         }
 
 
-        public void AddRange(IEnumerable<SerialOption> entitys)
+        public void AddRange(IReadOnlyList<SerialOption> entitys)
         {
             var maxId = CalcMaxId();
             foreach (var entity in entitys)
@@ -128,7 +128,7 @@ namespace DAL.InMemory.Repository
         }
 
 
-        public async Task AddRangeAsync(IEnumerable<SerialOption> entitys)
+        public async Task AddRangeAsync(IReadOnlyList<SerialOption> entitys)
         {
             await Task.CompletedTask;
             AddRange(entitys);

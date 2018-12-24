@@ -13,12 +13,12 @@ namespace DAL.Abstract.Abstract
 
         T GetSingle(Expression<Func<T, bool>> predicate);
         Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate);
-        IEnumerable<T> GetWithInclude(params Expression<Func<T, object>>[] includeProperties); //?????
+        IReadOnlyList<T> GetWithInclude(params Expression<Func<T, object>>[] includeProperties); //?????
 
-        IEnumerable<T> List();
-        IEnumerable<T> List(Expression<Func<T, bool>> predicate);
-        Task<IEnumerable<T>> ListAsync();
-        Task<IEnumerable<T>> ListAsync(Expression<Func<T, bool>> predicate);
+        IReadOnlyList<T> List();
+        IReadOnlyList<T> List(Expression<Func<T, bool>> predicate);
+        Task<IReadOnlyList<T>> ListAsync();
+        Task<IReadOnlyList<T>> ListAsync(Expression<Func<T, bool>> predicate);
 
         int Count(Expression<Func<T, bool>> predicate);
         Task<int> CountAsync(Expression<Func<T, bool>> predicate);
@@ -26,8 +26,8 @@ namespace DAL.Abstract.Abstract
         void Add(T entity);
         Task AddAsync(T entity);
 
-        void AddRange(IEnumerable<T> entitys); 
-        Task AddRangeAsync(IEnumerable<T> entitys); 
+        void AddRange(IReadOnlyList<T> entitys); 
+        Task AddRangeAsync(IReadOnlyList<T> entitys); 
 
         void Delete(T entity);
         void Delete(Expression<Func<T, bool>> predicate);

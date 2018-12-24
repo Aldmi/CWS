@@ -59,7 +59,7 @@ namespace BL.Services.Mediators
         /// <summary>
         /// Вернуть все опции устройств из репозитория.
         /// </summary>
-        public async Task<IEnumerable<DeviceOption>> GetDeviceOptionsAsync()
+        public async Task<IReadOnlyList<DeviceOption>> GetDeviceOptionsAsync()
         {
             return await _deviceOptionRep.ListAsync();
         }
@@ -68,7 +68,7 @@ namespace BL.Services.Mediators
         /// <summary>
         /// Вернуть все опции устройств из репозитория.
         /// </summary>
-        public async Task<IEnumerable<DeviceOption>> GetDeviceOptionsWithAutoBuildAsync()
+        public async Task<IReadOnlyList<DeviceOption>> GetDeviceOptionsWithAutoBuildAsync()
         {
             return await _deviceOptionRep.ListAsync(option => option.AutoBuild);
         }
@@ -87,7 +87,7 @@ namespace BL.Services.Mediators
         /// <summary>
         /// Вернуть все опции обменов из репозитория.
         /// </summary>
-        public async Task<IEnumerable<ExchangeOption>> GetExchangeOptionsAsync()
+        public async Task<IReadOnlyList<ExchangeOption>> GetExchangeOptionsAsync()
         {
             return await _exchangeOptionRep.ListAsync();
         }
@@ -119,7 +119,7 @@ namespace BL.Services.Mediators
         /// <summary>
         /// Вернуть опции для списка транспортов, по списку ключей из репозитория.
         /// </summary>
-        public async Task<TransportOption> GetTransportByKeysAsync(IEnumerable<KeyTransport> keyTransports)
+        public async Task<TransportOption> GetTransportByKeysAsync(IReadOnlyList<KeyTransport> keyTransports)
         {
             var serialOptions = new List<SerialOption>();
             var tcpIpOptions = new List<TcpIpOption>();
@@ -155,7 +155,7 @@ namespace BL.Services.Mediators
         /// Если transportOption не указанн, то добавляетя устройство вместе со списом обменов, на уже существйющем транспорте.
         /// Если указанны все аргументы, то добавляется устройство со спсиком новых обменом и каждый обмен использует новый транспорт.
         /// </summary>
-        public async Task<bool> AddDeviceOptionAsync(DeviceOption deviceOption, IEnumerable<ExchangeOption> exchangeOptions = null, TransportOption transportOption = null)
+        public async Task<bool> AddDeviceOptionAsync(DeviceOption deviceOption, IReadOnlyList<ExchangeOption> exchangeOptions = null, TransportOption transportOption = null)
         {
             if (deviceOption == null && exchangeOptions == null && transportOption == null)
                 return false;
@@ -232,7 +232,7 @@ namespace BL.Services.Mediators
                 throw new OptionHandlerException($"Устройство с таким именем Не найденно:  {deviceName}");
 
             var exchangesOptions = deviceOption.ExchangeKeys.Select(exchangeKey => GetExchangeByKeyAsync(exchangeKey).GetAwaiter().GetResult()).ToList();
-            var transportOption = await GetTransportByKeysAsync(exchangesOptions.Select(option => option.KeyTransport).Distinct());
+            var transportOption = await GetTransportByKeysAsync(exchangesOptions.Select(option => option.KeyTransport).Distinct().ToList());
             var optionAgregator = new OptionAgregator
             {
                 DeviceOptions = new List<DeviceOption> { deviceOption },
@@ -279,7 +279,7 @@ namespace BL.Services.Mediators
         /// Если хотябы для 1 обмена из списка "exchangeOption", не найденн транспорт, то выкидываем Exception.
         /// Если обмен не существует, добавим его, если существует, то игнорируем добавление.
         /// </summary>
-        private async Task AddDeviceOptionWithNewExchangeOptionsAsync(DeviceOption deviceOption, IEnumerable<ExchangeOption> exchangeOptions)
+        private async Task AddDeviceOptionWithNewExchangeOptionsAsync(DeviceOption deviceOption, IReadOnlyList<ExchangeOption> exchangeOptions)
         {
             //ПРОВЕРКА ОТСУТСВИЯ УСТРОЙСТВА по имени
             if (await IsExistDeviceAsync(deviceOption.Name))
@@ -342,7 +342,7 @@ namespace BL.Services.Mediators
         /// Если для нового обменна не существует транспорт, то создадим транспорт.
         /// Если хотябы 1 транспорт в "transportOption" уже существует, то выкидываем Exception.
         /// </summary>
-        private async Task AddDeviceOptionWithNewExchangeOptionsAndNewTransportOptionsAsync(DeviceOption deviceOption, IEnumerable<ExchangeOption> exchangeOptions, TransportOption transportOption)
+        private async Task AddDeviceOptionWithNewExchangeOptionsAndNewTransportOptionsAsync(DeviceOption deviceOption, IReadOnlyList<ExchangeOption> exchangeOptions, TransportOption transportOption)
         {
             //ПРОВЕРКА ОТСУТСВИЯ УСТРОЙСТВА по имени
             if (await IsExistDeviceAsync(deviceOption.Name))

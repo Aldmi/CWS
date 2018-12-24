@@ -116,20 +116,6 @@ namespace Worker.Background.Concrete.HostingBackground
                             _enumeratorCycleTimeFuncDict.Dispose();
                             _enumeratorCycleTimeFuncDict = _cycleTimeFuncDict.GetEnumerator();
                         }
-                    
-
-                        //if (_cycleTimeFuncDict.ContainsKey(indexCycleFunc))
-                        //{
-                        //    if (_cycleTimeFuncDict.TryGetValue(indexCycleFunc, out var cycleFunc))
-                        //    {
-                        //       await cycleFunc(stoppingToken);
-                        //       indexCycleFunc++;
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    indexCycleFunc = _cycleTimeFuncDict.FirstOrDefault().Key; //TODO: не оптимальное перечисление элементов словаря 
-                        //}
                     }
                 }
                 catch (Exception ex)
@@ -137,7 +123,6 @@ namespace Worker.Background.Concrete.HostingBackground
                     _logger.Fatal($"HostingBackgroundTransport.ProcessAsync {ex}");
                 }
             }
-
             await Task.Delay(CheckUpdateTime, stoppingToken);
             //Console.WriteLine($"BackGroundMasterSp  {KeyTransport.Key}"); //DEBUG
         }

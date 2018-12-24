@@ -56,32 +56,32 @@ namespace DAL.InMemory.Repository
             return GetSingle(predicate);
         }
 
-        public IEnumerable<HttpOption> GetWithInclude(params Expression<Func<HttpOption, object>>[] includeProperties)
+        public IReadOnlyList<HttpOption> GetWithInclude(params Expression<Func<HttpOption, object>>[] includeProperties)
         {
             throw new NotImplementedException();
         }
 
 
-        public IEnumerable<HttpOption> List()
+        public IReadOnlyList<HttpOption> List()
         {
             return HttpOptions;
         }
 
 
-        public IEnumerable<HttpOption> List(Expression<Func<HttpOption, bool>> predicate)
+        public IReadOnlyList<HttpOption> List(Expression<Func<HttpOption, bool>> predicate)
         {
-            return HttpOptions.Where(predicate.Compile());
+            return HttpOptions.Where(predicate.Compile()).ToList();
         }
 
 
-        public async Task<IEnumerable<HttpOption>> ListAsync()
+        public async Task<IReadOnlyList<HttpOption>> ListAsync()
         {
            await Task.CompletedTask;
            return List();
         }
 
 
-        public async Task<IEnumerable<HttpOption>> ListAsync(Expression<Func<HttpOption, bool>> predicate)
+        public async Task<IReadOnlyList<HttpOption>> ListAsync(Expression<Func<HttpOption, bool>> predicate)
         {
             await Task.CompletedTask;
             return List(predicate);
@@ -115,7 +115,7 @@ namespace DAL.InMemory.Repository
         }
 
 
-        public void AddRange(IEnumerable<HttpOption> entitys)
+        public void AddRange(IReadOnlyList<HttpOption> entitys)
         {
             var maxId = CalcMaxId();
             foreach (var entity in entitys)
@@ -126,7 +126,7 @@ namespace DAL.InMemory.Repository
         }
 
 
-        public async Task AddRangeAsync(IEnumerable<HttpOption> entitys)
+        public async Task AddRangeAsync(IReadOnlyList<HttpOption> entitys)
         {
             await Task.CompletedTask;;
             AddRange(entitys);

@@ -33,7 +33,7 @@ namespace BL.Services.InputData
         /// </summary>
         /// <param name="inputDatas">Данные для нескольких ус-в</param>
         /// <returns>Список ОШИБОК</returns>
-        public async Task<IEnumerable<string>> ApplyInputData(IEnumerable<InputData<TIn>> inputDatas)
+        public async Task<IReadOnlyList<string>> ApplyInputData(IReadOnlyList<InputData<TIn>> inputDatas)
         {
             //найти Device по имени и передать ему данные 
             var errors= new List<string>();

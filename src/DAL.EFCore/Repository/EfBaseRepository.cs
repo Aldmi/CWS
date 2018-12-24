@@ -83,8 +83,8 @@ namespace DAL.EFCore.Repository
             return spOption;
         }
 
-        //TODO: Отладить!!!!  using: (IEnumerable<Phone> phones = phoneRepo.GetWithInclude(p=>p.Company);)
-        public IEnumerable<TMap> GetWithInclude(params Expression<Func<TMap, object>>[] includeProperties)
+        //TODO: Отладить!!!!  using: (IReadOnlyList<Phone> phones = phoneRepo.GetWithInclude(p=>p.Company);)
+        public IReadOnlyList<TMap> GetWithInclude(params Expression<Func<TMap, object>>[] includeProperties)
         {
             var list = new List<Expression<Func<TDb, object>>>();
             foreach (var includeProperty in includeProperties)
@@ -93,40 +93,40 @@ namespace DAL.EFCore.Repository
                 list.Add(efIncludeProperty);
             }
             var result = Include(list.ToArray()).ToList();
-            return AutoMapperConfig.Mapper.Map<IEnumerable<TMap>>(result);
+            return AutoMapperConfig.Mapper.Map<IReadOnlyList<TMap>>(result);
         }
 
 
-        protected IEnumerable<TMap> List()
+        protected IReadOnlyList<TMap> List()
         {
             var efOptions = DbSet.ToList();
-            var spOptions = AutoMapperConfig.Mapper.Map<IEnumerable<TMap>>(efOptions);
+            var spOptions = AutoMapperConfig.Mapper.Map<IReadOnlyList<TMap>>(efOptions);
             return spOptions;
         }
 
 
-        protected IEnumerable<TMap> List(Expression<Func<TMap, bool>> predicate)
+        protected IReadOnlyList<TMap> List(Expression<Func<TMap, bool>> predicate)
         {
             var efPredicate = AutoMapperConfig.Mapper.MapExpression<Expression<Func<TDb, bool>>>(predicate);
             var efOptions = DbSet.Where(efPredicate).ToList();
-            var spOptions = AutoMapperConfig.Mapper.Map<IEnumerable<TMap>>(efOptions);
+            var spOptions = AutoMapperConfig.Mapper.Map<IReadOnlyList<TMap>>(efOptions);
             return spOptions;
         }
 
 
-        protected async Task<IEnumerable<TMap>> ListAsync()
+        protected async Task<IReadOnlyList<TMap>> ListAsync()
         {
             var efOptions = await DbSet.ToListAsync();
-            var spOptions = AutoMapperConfig.Mapper.Map<IEnumerable<TMap>>(efOptions);
+            var spOptions = AutoMapperConfig.Mapper.Map<IReadOnlyList<TMap>>(efOptions);
             return spOptions;
         }
 
 
-        protected async Task<IEnumerable<TMap>> ListAsync(Expression<Func<TMap, bool>> predicate)
+        protected async Task<IReadOnlyList<TMap>> ListAsync(Expression<Func<TMap, bool>> predicate)
         {
             var efPredicate = AutoMapperConfig.Mapper.MapExpression<Expression<Func<TDb, bool>>>(predicate);
             var efOptions = await DbSet.Where(efPredicate).ToListAsync();
-            var spOptions = AutoMapperConfig.Mapper.Map<IEnumerable<TMap>>(efOptions);
+            var spOptions = AutoMapperConfig.Mapper.Map<IReadOnlyList<TMap>>(efOptions);
             return spOptions;
         }
 
@@ -161,19 +161,19 @@ namespace DAL.EFCore.Repository
         }
 
 
-        protected void AddRange(IEnumerable<TMap> entitys)
+        protected void AddRange(IReadOnlyList<TMap> entitys)
         {
-            var efOptions = AutoMapperConfig.Mapper.Map<IEnumerable<TDb>>(entitys);
+            var efOptions = AutoMapperConfig.Mapper.Map<IReadOnlyList<TDb>>(entitys);
             DbSet.AddRange(efOptions);
             Context.SaveChanges();
         }
 
 
-        protected async Task AddRangeAsync(IEnumerable<TMap> entitys)
+        protected async Task AddRangeAsync(IReadOnlyList<TMap> entitys)
         {
             try
             {
-                var efOptions = AutoMapperConfig.Mapper.Map<IEnumerable<TDb>>(entitys);
+                var efOptions = AutoMapperConfig.Mapper.Map<IReadOnlyList<TDb>>(entitys);
                 await DbSet.AddRangeAsync(efOptions);
             }
             catch (Exception e)

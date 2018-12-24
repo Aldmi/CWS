@@ -46,31 +46,31 @@ namespace DAL.EFCore.Repository
         }
 
 
-        public new IEnumerable<DeviceOption> GetWithInclude(params Expression<Func<DeviceOption, object>>[] includeProperties)
+        public new IReadOnlyList<DeviceOption> GetWithInclude(params Expression<Func<DeviceOption, object>>[] includeProperties)
         {
             return base.GetWithInclude(includeProperties);
         }
 
 
-        public new IEnumerable<DeviceOption> List()
+        public new IReadOnlyList<DeviceOption> List()
         {
             return base.List();
         }
 
 
-        public new IEnumerable<DeviceOption> List(Expression<Func<DeviceOption, bool>> predicate)
+        public new IReadOnlyList<DeviceOption> List(Expression<Func<DeviceOption, bool>> predicate)
         {
             return base.List(predicate);
         }
 
 
-        public new async Task<IEnumerable<DeviceOption>> ListAsync()
+        public new async Task<IReadOnlyList<DeviceOption>> ListAsync()
         {
             return await base.ListAsync();
         }
 
 
-        public new async Task<IEnumerable<DeviceOption>> ListAsync(Expression<Func<DeviceOption, bool>> predicate)
+        public new async Task<IReadOnlyList<DeviceOption>> ListAsync(Expression<Func<DeviceOption, bool>> predicate)
         {
             return await base.ListAsync(predicate);
         }
@@ -100,13 +100,13 @@ namespace DAL.EFCore.Repository
         }
 
 
-        public new void AddRange(IEnumerable<DeviceOption> entitys)
+        public new void AddRange(IReadOnlyList<DeviceOption> entitys)
         {
             base.AddRange(entitys);
         }
 
 
-        public new async Task AddRangeAsync(IEnumerable<DeviceOption> entitys)
+        public new async Task AddRangeAsync(IReadOnlyList<DeviceOption> entitys)
         {
             await base.AddRangeAsync(entitys);
         }

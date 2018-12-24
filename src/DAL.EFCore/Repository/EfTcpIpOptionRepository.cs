@@ -47,25 +47,25 @@ namespace DAL.EFCore.Repository
         }
 
 
-        public new IEnumerable<TcpIpOption> List()
+        public new IReadOnlyList<TcpIpOption> List()
         {
             return base.List();
         }
 
 
-        public new IEnumerable<TcpIpOption> List(Expression<Func<TcpIpOption, bool>> predicate)
+        public new IReadOnlyList<TcpIpOption> List(Expression<Func<TcpIpOption, bool>> predicate)
         {
             return base.List(predicate);
         }
 
 
-        public new async Task<IEnumerable<TcpIpOption>> ListAsync()
+        public new async Task<IReadOnlyList<TcpIpOption>> ListAsync()
         {
             return await base.ListAsync();
         }
 
 
-        public new async Task<IEnumerable<TcpIpOption>> ListAsync(Expression<Func<TcpIpOption, bool>> predicate)
+        public new async Task<IReadOnlyList<TcpIpOption>> ListAsync(Expression<Func<TcpIpOption, bool>> predicate)
         {
             return await base.ListAsync(predicate);
         }
@@ -95,13 +95,13 @@ namespace DAL.EFCore.Repository
         }
 
 
-        public new void AddRange(IEnumerable<TcpIpOption> entitys)
+        public new void AddRange(IReadOnlyList<TcpIpOption> entitys)
         {
             base.AddRange(entitys);
         }
 
 
-        public new async Task AddRangeAsync(IEnumerable<TcpIpOption> entitys)
+        public new async Task AddRangeAsync(IReadOnlyList<TcpIpOption> entitys)
         {
             await base.AddRangeAsync(entitys);
         }

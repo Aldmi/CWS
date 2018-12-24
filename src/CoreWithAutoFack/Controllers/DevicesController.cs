@@ -125,7 +125,7 @@ namespace WebServer.Controllers
         /// <returns></returns>
         // PUT api/Devices/StartCycleExchange
         [HttpPut("StartCycleExchange")]
-        public IActionResult StartCycleExchange([FromBody] IEnumerable<string> exchnageKeys)
+        public IActionResult StartCycleExchange([FromBody] IReadOnlyList<string> exchnageKeys)
         {
             try
             {
@@ -157,7 +157,7 @@ namespace WebServer.Controllers
         /// <returns></returns>
         // PUT api/Devices/StopCycleExchange
         [HttpPut("StopCycleExchange")]
-        public IActionResult StopCycleExchange([FromBody] IEnumerable<string> exchnageKeys)
+        public IActionResult StopCycleExchange([FromBody] IReadOnlyList<string> exchnageKeys)
         {
             try
             {
@@ -189,7 +189,7 @@ namespace WebServer.Controllers
         /// <returns></returns>
         // PUT api/Devices/StartCycleReOpenedConnection
         [HttpPut("StartCycleReOpenedConnection")]
-        public async Task<IActionResult> StartCycleReOpenedConnection([FromBody] IEnumerable<string> exchnageKeys)
+        public async Task<IActionResult> StartCycleReOpenedConnection([FromBody] IReadOnlyList<string> exchnageKeys)
         {
             try
             {
@@ -213,7 +213,7 @@ namespace WebServer.Controllers
 
         // PUT api/Devices/StartCycleReOpenedConnection
         [HttpPut("StopCycleReOpenedConnection")]
-        public IActionResult StopCycleReOpenedConnection([FromBody] IEnumerable<string> exchnageKeys)
+        public IActionResult StopCycleReOpenedConnection([FromBody] IReadOnlyList<string> exchnageKeys)
         {
             try
             {

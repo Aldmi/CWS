@@ -96,9 +96,9 @@ namespace BL.Services.Mediators
         }
 
 
-        public IEnumerable<Device<TIn>> GetDevices()
+        public IReadOnlyList<Device<TIn>> GetDevices()
         {
-            return _deviceStorageService.Values;
+            return _deviceStorageService.Values.ToList();
         }
 
 
@@ -107,9 +107,9 @@ namespace BL.Services.Mediators
         /// </summary>
         /// <param name="exchnageKey"></param>
         /// <returns></returns>
-        public IEnumerable<Device<TIn>> GetDevicesUsingExchange(string exchnageKey)
+        public IReadOnlyList<Device<TIn>> GetDevicesUsingExchange(string exchnageKey)
         {
-            return _deviceStorageService.Values.Where(dev=>dev.Option.ExchangeKeys.Contains(exchnageKey));
+            return _deviceStorageService.Values.Where(dev=>dev.Option.ExchangeKeys.Contains(exchnageKey)).ToList();
         }
 
 
@@ -118,9 +118,9 @@ namespace BL.Services.Mediators
         /// </summary>
         /// <param name="keyTransport"></param>
         /// <returns></returns>
-        public IEnumerable<IExchange<TIn>> GetExchangesUsingTransport(KeyTransport keyTransport)
+        public IReadOnlyList<IExchange<TIn>> GetExchangesUsingTransport(KeyTransport keyTransport)
         {
-           return _exchangeStorageService.Values.Where(exch => exch.KeyTransport.Equals(keyTransport));
+           return _exchangeStorageService.Values.Where(exch => exch.KeyTransport.Equals(keyTransport)).ToList();
         }
 
 

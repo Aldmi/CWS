@@ -124,7 +124,7 @@ namespace WebServer.Controllers
 
 
         [HttpPost("SendData4Devices")]
-        public async Task<IActionResult> SendData4Devices([FromBody] IEnumerable<InputData<AdInputType>> inputDatas)
+        public async Task<IActionResult> SendData4Devices([FromBody] IReadOnlyList<InputData<AdInputType>> inputDatas)
         {
             try
             {
@@ -295,7 +295,7 @@ namespace WebServer.Controllers
 
         #region Methods
 
-        private async Task<ActionResult> InputDataHandler(IEnumerable<InputData<AdInputType>> inputDatas)
+        private async Task<ActionResult> InputDataHandler(IReadOnlyList<InputData<AdInputType>> inputDatas)
         {
             var errors = await _inputDataApplyService.ApplyInputData(inputDatas);
             if (errors.Any())

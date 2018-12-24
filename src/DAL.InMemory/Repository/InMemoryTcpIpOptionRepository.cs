@@ -58,32 +58,32 @@ namespace DAL.InMemory.Repository
             return GetSingle(predicate);
         }
 
-        public IEnumerable<TcpIpOption> GetWithInclude(params Expression<Func<TcpIpOption, object>>[] includeProperties)
+        public IReadOnlyList<TcpIpOption> GetWithInclude(params Expression<Func<TcpIpOption, object>>[] includeProperties)
         {
             throw new NotImplementedException();
         }
 
 
-        public IEnumerable<TcpIpOption> List()
+        public IReadOnlyList<TcpIpOption> List()
         {
             return TcpIpOptions;
         }
 
 
-        public IEnumerable<TcpIpOption> List(Expression<Func<TcpIpOption, bool>> predicate)
+        public IReadOnlyList<TcpIpOption> List(Expression<Func<TcpIpOption, bool>> predicate)
         {
-            return TcpIpOptions.Where(predicate.Compile());
+            return TcpIpOptions.Where(predicate.Compile()).ToList();
         }
 
 
-        public async Task<IEnumerable<TcpIpOption>> ListAsync()
+        public async Task<IReadOnlyList<TcpIpOption>> ListAsync()
         {
             await Task.CompletedTask;
             return List();
         }
 
 
-        public async Task<IEnumerable<TcpIpOption>> ListAsync(Expression<Func<TcpIpOption, bool>> predicate)
+        public async Task<IReadOnlyList<TcpIpOption>> ListAsync(Expression<Func<TcpIpOption, bool>> predicate)
         {
             await Task.CompletedTask;
             return List(predicate);
@@ -117,7 +117,7 @@ namespace DAL.InMemory.Repository
         }
 
 
-        public void AddRange(IEnumerable<TcpIpOption> entitys)
+        public void AddRange(IReadOnlyList<TcpIpOption> entitys)
         {
             var maxId = CalcMaxId();
             foreach (var entity in entitys)
@@ -128,7 +128,7 @@ namespace DAL.InMemory.Repository
         }
 
 
-        public async Task AddRangeAsync(IEnumerable<TcpIpOption> entitys)
+        public async Task AddRangeAsync(IReadOnlyList<TcpIpOption> entitys)
         {
             await Task.CompletedTask;
             AddRange(entitys);

@@ -52,25 +52,25 @@ namespace DAL.EFCore.Repository
         }
 
 
-        public new IEnumerable<SerialOption> List()
+        public new IReadOnlyList<SerialOption> List()
         {
             return base.List();
         }
 
 
-        public new IEnumerable<SerialOption> List(Expression<Func<SerialOption, bool>> predicate)
+        public new IReadOnlyList<SerialOption> List(Expression<Func<SerialOption, bool>> predicate)
         {
             return base.List(predicate);
         }
 
 
-        public new async Task<IEnumerable<SerialOption>> ListAsync()
+        public new async Task<IReadOnlyList<SerialOption>> ListAsync()
         {
             return await base.ListAsync();
         }
 
 
-        public new async Task<IEnumerable<SerialOption>> ListAsync(Expression<Func<SerialOption, bool>> predicate)
+        public new async Task<IReadOnlyList<SerialOption>> ListAsync(Expression<Func<SerialOption, bool>> predicate)
         {
             return await base.ListAsync(predicate);
         }
@@ -100,13 +100,13 @@ namespace DAL.EFCore.Repository
         }
 
 
-        public new void AddRange(IEnumerable<SerialOption> entitys)
+        public new void AddRange(IReadOnlyList<SerialOption> entitys)
         {
             base.AddRange(entitys);
         }
 
 
-        public new async Task AddRangeAsync(IEnumerable<SerialOption> entitys)
+        public new async Task AddRangeAsync(IReadOnlyList<SerialOption> entitys)
         {
            await base.AddRangeAsync(entitys);
         }

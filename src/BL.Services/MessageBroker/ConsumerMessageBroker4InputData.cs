@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -66,7 +67,7 @@ namespace BL.Services.MessageBroker
                 .Buffer(_batchSize)
                 .Subscribe(async messages =>
                     {
-                      await MessageHandler(messages);
+                      await MessageHandler(messages.ToList());
                       _consumer.CommitAsync(messages[messages.Count - 1]).GetAwaiter().GetResult();  //ручной коммит офсета для этого консьюмера
                     });
 
@@ -87,7 +88,7 @@ namespace BL.Services.MessageBroker
 
         #region EventHandler
 
-        private async Task MessageHandler(IList<Message<Null, string>> messages)
+        private async Task MessageHandler(IReadOnlyList<Message<Null, string>> messages)
         {
             //Обработчик сообщений с kafka
             foreach (var message in messages)

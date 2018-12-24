@@ -48,25 +48,25 @@ namespace DAL.EFCore.Repository
         }
 
 
-        public new IEnumerable<ExchangeOption> List()
+        public new IReadOnlyList<ExchangeOption> List()
         {
             return base.List();
         }
 
 
-        public new IEnumerable<ExchangeOption> List(Expression<Func<ExchangeOption, bool>> predicate)
+        public new IReadOnlyList<ExchangeOption> List(Expression<Func<ExchangeOption, bool>> predicate)
         {
             return base.List(predicate);
         }
 
 
-        public new async Task<IEnumerable<ExchangeOption>> ListAsync()
+        public new async Task<IReadOnlyList<ExchangeOption>> ListAsync()
         {
             return await base.ListAsync();
         }
 
 
-        public new async Task<IEnumerable<ExchangeOption>> ListAsync(Expression<Func<ExchangeOption, bool>> predicate)
+        public new async Task<IReadOnlyList<ExchangeOption>> ListAsync(Expression<Func<ExchangeOption, bool>> predicate)
         {
             return await base.ListAsync(predicate);
         }
@@ -96,13 +96,13 @@ namespace DAL.EFCore.Repository
         }
 
 
-        public new void AddRange(IEnumerable<ExchangeOption> entitys)
+        public new void AddRange(IReadOnlyList<ExchangeOption> entitys)
         {
             base.AddRange(entitys);
         }
 
 
-        public new async Task AddRangeAsync(IEnumerable<ExchangeOption> entitys)
+        public new async Task AddRangeAsync(IReadOnlyList<ExchangeOption> entitys)
         {
             await base.AddRangeAsync(entitys);
         }

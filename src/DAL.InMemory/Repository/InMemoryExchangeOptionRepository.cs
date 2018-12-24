@@ -56,32 +56,32 @@ namespace DAL.InMemory.Repository
             return GetSingle(predicate);
         }
 
-        public IEnumerable<ExchangeOption> GetWithInclude(params Expression<Func<ExchangeOption, object>>[] includeProperties)
+        public IReadOnlyList<ExchangeOption> GetWithInclude(params Expression<Func<ExchangeOption, object>>[] includeProperties)
         {
             throw new NotImplementedException();
         }
 
 
-        public IEnumerable<ExchangeOption> List()
+        public IReadOnlyList<ExchangeOption> List()
         {
             return ExchangeOptions;
         }
 
 
-        public IEnumerable<ExchangeOption> List(Expression<Func<ExchangeOption, bool>> predicate)
+        public IReadOnlyList<ExchangeOption> List(Expression<Func<ExchangeOption, bool>> predicate)
         {
-            return ExchangeOptions.Where(predicate.Compile());
+            return ExchangeOptions.Where(predicate.Compile()).ToList();
         }
 
 
-        public async Task<IEnumerable<ExchangeOption>> ListAsync()
+        public async Task<IReadOnlyList<ExchangeOption>> ListAsync()
         {
             await Task.CompletedTask;
             return List();
         }
 
 
-        public async Task<IEnumerable<ExchangeOption>> ListAsync(Expression<Func<ExchangeOption, bool>> predicate)
+        public async Task<IReadOnlyList<ExchangeOption>> ListAsync(Expression<Func<ExchangeOption, bool>> predicate)
         {
             await Task.CompletedTask;
             return List(predicate);
@@ -115,7 +115,7 @@ namespace DAL.InMemory.Repository
         }
 
 
-        public void AddRange(IEnumerable<ExchangeOption> entitys)
+        public void AddRange(IReadOnlyList<ExchangeOption> entitys)
         {
             var maxId = CalcMaxId();
             foreach (var entity in entitys)
@@ -126,7 +126,7 @@ namespace DAL.InMemory.Repository
         }
 
 
-        public async Task AddRangeAsync(IEnumerable<ExchangeOption> entitys)
+        public async Task AddRangeAsync(IReadOnlyList<ExchangeOption> entitys)
         {
             await Task.CompletedTask;
             AddRange(entitys);
