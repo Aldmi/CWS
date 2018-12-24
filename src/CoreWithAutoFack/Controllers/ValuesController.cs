@@ -217,10 +217,7 @@ namespace WebServer.Controllers
                     SerilogExtensions.ChangeLogEventLevel(LogEventLevel.Error);
                     break;
             }
-     
-
-
-
+    
             return new List<string>{"str1", "str2"};
         }
 

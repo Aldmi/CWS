@@ -28,7 +28,7 @@ namespace Transport.TcpIp.Concrete
         private TcpClient _client;
         private NetworkStream _netStream;
 
-        private const int TimeCycleReOpened = 3000;
+        private const int TimeCycleReOpened = 2000;
         private CancellationTokenSource _ctsCycleReOpened;
         private readonly ILogger _logger;
 
@@ -335,8 +335,6 @@ namespace Transport.TcpIp.Concrete
                 StatusString = "Сетевой поток закрыт ...";
             }
 
-            _ctsCycleReOpened.Cancel();
-            _ctsCycleReOpened.Dispose();
             _client?.Client?.Close();
             _client?.Client?.Dispose();
             _client?.Dispose();

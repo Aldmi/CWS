@@ -10,11 +10,15 @@ namespace WebServer.Extensions
     public static class SerilogExtensions
     {
         private static LoggingLevelSwitch LevelSwitch { get; set; }
+        public static LogEventLevel GetMinimumLevel => LevelSwitch.MinimumLevel;
+
 
         public static void ChangeLogEventLevel(LogEventLevel minLevel)
         {
             LevelSwitch.MinimumLevel = minLevel;
         }
+
+
 
         public static IServiceCollection AddSerilogServices(this IServiceCollection services, LogEventLevel minLevel)
         {
@@ -25,8 +29,8 @@ namespace WebServer.Extensions
                 .Enrich.FromLogContext()
                 .WriteTo.Console(LogEventLevel.Information)
                 .WriteTo.File("logs/Main_Log.txt", LogEventLevel.Information, rollingInterval: RollingInterval.Day)
-                .WriteTo.File("logs/Error_Log.txt", LogEventLevel.Error, rollingInterval: RollingInterval.Day)
-                .WriteTo.Seq("http://localhost:5341", compact: true);
+                .WriteTo.File("logs/Error_Log.txt", LogEventLevel.Error, rollingInterval: RollingInterval.Day);
+                //.WriteTo.Seq("http://localhost:5341", compact: true);
 
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == EnvironmentName.Development)
             {
