@@ -18,12 +18,6 @@ namespace Shared.Types
 
         #region prop
 
-        //private KeyTransport()
-        //{
-            
-        //}
-
-
         public KeyTransport(string key, TransportType transportType )
         {
             Key = key;

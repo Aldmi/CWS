@@ -15,6 +15,7 @@ using InputDataModel.Base;
 using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
+using Shared.Collections;
 using Shared.Enums;
 using Shared.Types;
 using Transport.Base.Abstract;
@@ -27,15 +28,14 @@ namespace Exchange.Base
     public class ExchangeUniversal<TIn> : IExchange<TIn>
     {
         #region field
-
-        private const int MaxDataInQueue = 100;
+        private const int MaxDataInQueue = 5;
         protected readonly ExchangeOption ExchangeOption;
         private readonly ITransport _transport;
         private readonly ITransportBackground _transportBackground;
         private readonly IExchangeDataProvider<TIn, ResponseDataItem<TIn>> _dataProvider;                               //проавйдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
         private readonly ILogger _logger;
-        private readonly ConcurrentQueue<InDataWrapper<TIn>> _inDataQueue  = new ConcurrentQueue<InDataWrapper<TIn>>(); //Очередь данных для SendOneTimeData().
-        private InDataWrapper<TIn> _data4CycleFunc;                                                                     //Данные для Цикл. функции.
+        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(true, MaxDataInQueue);   //Очередь данных для SendOneTimeData().
+        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(false, MaxDataInQueue); //Очередь данных для SendCycleTimeData().
         #endregion
 
 
@@ -60,7 +60,7 @@ namespace Exchange.Base
             {
                 if (value == _isConnect) return;
                 _isConnect = value;
-                IsConnectChangeRx.OnNext(new ConnectChangeRxModel { IsConnect = _isConnect, KeyExchange = KeyExchange});
+                IsConnectChangeRx.OnNext(new ConnectChangeRxModel { IsConnect = _isConnect, KeyExchange = KeyExchange });
             }
         }
 
@@ -72,12 +72,12 @@ namespace Exchange.Base
             {
                 if (value == _lastSendData) return;
                 _lastSendData = value;
-                LastSendDataChangeRx.OnNext(new LastSendDataChangeRxModel<TIn> {KeyExchange = KeyExchange, LastSendData = LastSendData});
+                LastSendDataChangeRx.OnNext(new LastSendDataChangeRxModel<TIn> { KeyExchange = KeyExchange, LastSendData = LastSendData });
             }
         }
 
-        public bool IsFullOneTimeDataQueue => _inDataQueue.Count >= MaxDataInQueue; 
-        public bool IsFullCycleTimeDataQueue { get; } //TODO: создать очередь и для циклю данных
+        public bool IsFullOneTimeDataQueue => _oneTimeDataQueue.IsFullLimit;
+        public bool IsFullCycleTimeDataQueue => _cycleTimeDataQueue.IsFullLimit;
         #endregion
 
 
@@ -191,12 +191,15 @@ namespace Exchange.Base
         /// <param name="command"></param>
         public void SendCommand(Command4Device command)
         {
-            if (command != Command4Device.None)
-            {
-                var dataWrapper = new InDataWrapper<TIn> { Command = command};
-                _inDataQueue.Enqueue(dataWrapper);
-                _transportBackground.AddOneTimeAction(OneTimeActionAsync);
-            }
+            if (command == Command4Device.None)
+                return;
+
+            if (!_transport.IsOpen)
+                return;
+
+            var dataWrapper = new InDataWrapper<TIn> { Command = command };
+            _oneTimeDataQueue.Enqueue(dataWrapper);
+            _transportBackground.AddOneTimeAction(OneTimeActionAsync);
         }
 
 
@@ -206,11 +209,21 @@ namespace Exchange.Base
         /// </summary>
         public void SendOneTimeData(IEnumerable<TIn> inData, string directHandlerName)
         {
-            if (inData != null)
+            if (inData == null)
+                return;
+
+            if (!_transport.IsOpen)
+                return;
+
+            var dataWrapper = new InDataWrapper<TIn> { Datas = inData.ToList(), DirectHandlerName = directHandlerName };
+            var result = _oneTimeDataQueue.Enqueue(dataWrapper);
+            if (result.IsSuccess)
             {
-                var dataWrapper= new InDataWrapper<TIn>{Datas = inData.ToList(), DirectHandlerName = directHandlerName };
-                _inDataQueue.Enqueue(dataWrapper);
                 _transportBackground.AddOneTimeAction(OneTimeActionAsync);
+            }
+            else
+            {
+                //_logger.Debug($"SendOneTimeData in Queue Error: {result.Error}");
             }
         }
 
@@ -220,21 +233,14 @@ namespace Exchange.Base
         /// </summary>
         public void SendCycleTimeData(IEnumerable<TIn> inData, string directHandlerName)
         {
-            //TODO: В текущей реализации Цикл. Отправки данных, данные переданные в inData могут пропасть.
-            //TODO: Т.к. сохраняется только одно (последнее занчение) для отправки.
-            //TODO: Если на медленном трансопрте чато менять данные для цикл отпр, то будет потеря данных.
-            //TODO: Можно сделать Очередь отправки данных (только данных, не команд как в OneTimeActionAsync)
-            //TODO: В SendCycleTimeData данные не перезаписывают одну переменную _data4CycleFunc, а копяться в очереди.
-            //TODO: В CycleTimeActionAsync разматывается очередь по принципу 
-            //TODO: "если элементов > 1, то TryDequeue элемент из очереди и отправляем его"
-            //TODO: "если элементов == 1 элемента, то TryPeek элемент из очереди и отправляем его"
-            //TODO: В устоявщемся режиме работы должен быть всегда 1 элемент.
-            //TODO: Вести контроль переполнения очереди ("если элементов > 100, то элементы не добавлять и сообщть от этом в возвращаемом занчении SendCycleTimeData").
-            if (inData != null)
-            {
-                var dataWrapper = new InDataWrapper<TIn> { Datas = inData.ToList(), DirectHandlerName = directHandlerName};
-                _data4CycleFunc = dataWrapper;
-            }
+            if (inData == null)
+                return;
+
+            if (!_transport.IsOpen)
+                return;
+
+            var dataWrapper = new InDataWrapper<TIn> { Datas = inData.ToList(), DirectHandlerName = directHandlerName };
+            var result = _cycleTimeDataQueue.Enqueue(dataWrapper);
         }
 
         #endregion
@@ -247,8 +253,10 @@ namespace Exchange.Base
         /// </summary>
         protected async Task OneTimeActionAsync(CancellationToken ct)
         {
-            if (_inDataQueue.TryDequeue(out var inData))
+            var result = _oneTimeDataQueue.Dequeue();
+            if (result.IsSuccess)
             {
+                var inData = result.Value;
                 var transportResponseWrapper = await SendingPieceOfData(inData, ct);
                 transportResponseWrapper.KeyExchange = KeyExchange;
                 transportResponseWrapper.DataAction = (inData.Command == Command4Device.None) ? DataAction.OneTimeAction : DataAction.CommandAction;
@@ -256,19 +264,38 @@ namespace Exchange.Base
             }
         }
 
+
         /// <summary>
         /// Обработка отправки цикл. даных.
+        /// Если транспорт НЕ открыт, данные не отправляются
+        /// Если очередь ПУСТА, отправляется NULL.
+        /// Если ошибка извлечения из очереди, данные не отправляются
         /// </summary>
         protected async Task CycleTimeActionAsync(CancellationToken ct)
         {
-            var inData = _data4CycleFunc;
-            if (_transport.IsOpen)
+            if (!_transport.IsOpen)
+                return;
+
+            InDataWrapper<TIn> inData = null;
+            var result = _cycleTimeDataQueue.Dequeue();
+            if (result.IsSuccess)
             {
-                var transportResponseWrapper = await SendingPieceOfData(inData, ct);
-                transportResponseWrapper.KeyExchange = KeyExchange;
-                transportResponseWrapper.DataAction = DataAction.CycleAction;
-                ResponseChangeRx.OnNext(transportResponseWrapper);
+                inData = result.Value;
             }
+            else
+            {
+                var errorResult = result.Error.DequeueResultError;
+                if (errorResult == DequeueResultError.FailTryDequeue || errorResult == DequeueResultError.FailTryPeek)
+                {
+                  _logger.Error($"Ошибка извлечения данных из ЦИКЛ. очереди {errorResult.ToString()}");
+                  return;
+                }
+            }
+            var transportResponseWrapper = await SendingPieceOfData(inData, ct);
+            transportResponseWrapper.KeyExchange = KeyExchange;
+            transportResponseWrapper.DataAction = DataAction.CycleAction;
+            ResponseChangeRx.OnNext(transportResponseWrapper);
+            
             await Task.Delay(500, ct); //TODO: Продумать как задвать время цикл. обмена
         }
 
@@ -321,7 +348,7 @@ namespace Exchange.Base
                         //ОБМЕН ЗАВЕРЩЕН КРИТИЧЕСКИ НЕ ПРАВИЛЬНО. ПЕРЕОТКРЫТИЕ СОЕДИНЕНИЯ.
                         case StatusDataExchange.EndWithTimeoutCritical:
                         case StatusDataExchange.EndWithErrorCritical:
-                            CycleReOpened(); 
+                            CycleReOpened();
                             _logger.Error($"ОБМЕН ЗАВЕРЩЕН КРИТИЧЕСКИ НЕ ПРАВИЛЬНО. ПЕРЕОТКРЫТИЕ СОЕДИНЕНИЯ. KeyExchange {KeyExchange}");
                             break;
 
@@ -357,7 +384,7 @@ namespace Exchange.Base
             {   //ЗАПУСК КОНВЕЕРА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ
                 using (_logger.OperationAt(LogEventLevel.Information).Time("TimeOpertaion End Exchanage Pipeline"))
                 {
-                  await _dataProvider.StartExchangePipeline(inData);
+                    await _dataProvider.StartExchangePipeline(inData);
                 }
             }
             catch (Exception ex)
@@ -370,14 +397,14 @@ namespace Exchange.Base
             }
             finally
             {
-                subscription.Dispose();      
+                subscription.Dispose();
             }
 
             //ВЫВОД ОТЧЕТА ОБ ОТПРАВКИ ПОРЦИИ ДАННЫХ.
             var numberPreparedPackages = transportResponseWrapper.ResponsesItems.Count;//кол-во подготовленных к отправке пакетов
             var countIsValid = transportResponseWrapper.ResponsesItems.Count(resp => resp.IsOutDataValid);
             var countAll = transportResponseWrapper.ResponsesItems.Count(resp => resp.IsOutDataValid);
-            string errorStat= String.Empty;
+            string errorStat = String.Empty;
             if (countIsValid < numberPreparedPackages)
             {
                 errorStat = transportResponseWrapper.ResponsesItems.Select(r => r.Status.ToString()).Aggregate((i, j) => i + " | " + j);

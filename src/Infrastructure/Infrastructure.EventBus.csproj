@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CompareNETObjects" Version="4.57.0" />
+    <PackageReference Include="CSharpFunctionalExtensions" Version="1.14.0" />
     <PackageReference Include="MemBus" Version="4.0.1" />
     <PackageReference Include="morelinq" Version="3.1.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
