@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Autofac;
 using AutoMapper;
 using BL.Services.Mediators;
 using BL.Services.Storages;
 using Exchange.Base;
-using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
-using InputDataModel.Base;
 using Microsoft.AspNetCore.Mvc;
-using Serilog.Core;
 using Serilog.Events;
 using Transport.SerialPort.Abstract;
 using WebServer.DTO.JSON.OptionsDto.ExchangeOption;

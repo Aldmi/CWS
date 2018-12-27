@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using BL.Services.Config;
-using BL.Services.Storages;
 
 namespace WebServer.AutofacModules
 {

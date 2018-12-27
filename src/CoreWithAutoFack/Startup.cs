@@ -1,19 +1,13 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 using Autofac;
 using AutoMapper;
 using BL.Services.Actions;
 using BL.Services.MessageBroker;
 using BL.Services.Storages;
 using DAL.Abstract.Concrete;
-using DAL.Abstract.Extensions;
-using Exchange.Base;
-using Exchange.Base.Model;
 using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,11 +17,8 @@ using Microsoft.Extensions.HealthChecks;
 using MoreLinq;
 using Newtonsoft.Json;
 using Serilog;
-using Serilog.Core;
-using Serilog.Events;
 using Shared.Enums;
 using WebServer.AutofacModules;
-using WebServer.DTO.XML;
 using WebServer.Extensions;
 using Worker.Background.Abstarct;
 
@@ -54,7 +45,8 @@ namespace WebServer
                 checks.AddValueTaskCheck("HTTP Endpoint", () => new ValueTask<IHealthCheckResult>(HealthCheckResult.Healthy("Ok")));
             });
 
-            services.AddSerilogServices(LogEventLevel.Debug);
+            var minLogLevel=  AppConfiguration["Logger:MinLevel"];
+            services.AddSerilogServices(minLogLevel);
 
             services.AddTransient<IConfiguration>(provider => AppConfiguration);
 

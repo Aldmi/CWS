@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using Autofac;
-using Autofac.Core;
+﻿using Autofac;
 using BL.Services.Mediators;
-using Infrastructure.MessageBroker.Options;
-using Microsoft.Extensions.Configuration;
 using Module = Autofac.Module;
 
 namespace WebServer.AutofacModules

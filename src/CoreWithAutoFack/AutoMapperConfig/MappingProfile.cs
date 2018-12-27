@@ -7,7 +7,6 @@ using DeviceForExchange;
 using Exchange.Base;
 using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WebServer.DTO.JSON.DevicesStateDto;
 using WebServer.DTO.JSON.OptionsDto.DeviceOption;
 using WebServer.DTO.JSON.OptionsDto.ExchangeOption;

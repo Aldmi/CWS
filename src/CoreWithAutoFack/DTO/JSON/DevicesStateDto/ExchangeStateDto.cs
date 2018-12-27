@@ -1,9 +1,4 @@
-﻿using DAL.Abstract.Entities.Options.Exchange;
-using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using Exchange.Base.Model;
-using Shared.Types;
-
-namespace WebServer.DTO.JSON.DevicesStateDto
+﻿namespace WebServer.DTO.JSON.DevicesStateDto
 {
     public class ExchangeStateDto
     {
