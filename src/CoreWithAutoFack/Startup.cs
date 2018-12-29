@@ -144,33 +144,42 @@ namespace WebServer
 
             //ЗАПУСК БЕКГРАУНДА ОПРОСА УСТРОЙСТВ
             var backgroundServices = scope.Resolve<BackgroundStorageService>();
-            foreach (var back in backgroundServices.Values.Where(bg => bg.AutoStart))
-            {
-                lifetimeApp.ApplicationStarted.Register(() => back.StartAsync(CancellationToken.None));
-            }
+            lifetimeApp.ApplicationStarted.Register(() =>
+            {      
+                foreach (var back in backgroundServices.Values.Where(bg => bg.AutoStart))
+                {
+                   back.StartAsync(CancellationToken.None);
+                }
+            });
 
             //ЗАПУСК НА ОБМЕНЕ ОТКРЫТИЯ ПОДКЛЮЧЕНИЯ УСТРОЙСТВ (ТОЛЬКО С УНИКАЛЬНЫМ ТРАНСПОРТОМ)
             var exchangeServices = scope.Resolve<ExchangeStorageService<AdInputType>>();
-            foreach (var exchange in exchangeServices.Values.DistinctBy(exch => exch.KeyTransport))
+            lifetimeApp.ApplicationStarted.Register(async () =>
             {
-                lifetimeApp.ApplicationStarted.Register(async () => await exchange.CycleReOpened());
-            }
+                foreach (var exchange in exchangeServices.Values.DistinctBy(exch => exch.KeyTransport))
+                {
+                   await exchange.CycleReOpened();
+                }
+            });
 
             //ЗАПУСК НА ОБМЕНЕ ЦИКЛИЧЕСКОГО ОБМЕНА.
-            foreach (var exchange in exchangeServices.Values)
+            lifetimeApp.ApplicationStarted.Register(() =>
             {
-                if (exchange.AutoStartCycleFunc)
+                foreach (var exchange in exchangeServices.Values.Where(exch=> exch.AutoStartCycleFunc))
                 {
-                    lifetimeApp.ApplicationStarted.Register(() => exchange.StartCycleExchange());
+                   exchange.StartCycleExchange();
                 }
-            }
+            });
 
             //ПОДПИСКА ДЕВАЙСА НА СОБЫТИЯ ПУБЛИКУЕМЫЕ НА IProduser (kaffka).
             var deviceServices = scope.Resolve<DeviceStorageService<AdInputType>>();
-            foreach (var device in deviceServices.Values.Where(dev => !string.IsNullOrEmpty(dev.Option.TopicName4MessageBroker)))
+            lifetimeApp.ApplicationStarted.Register(() =>
             {
-                lifetimeApp.ApplicationStarted.Register(() => device.SubscrubeOnExchangesEvents());
-            }
+                foreach (var device in deviceServices.Values.Where(dev => !string.IsNullOrEmpty(dev.Option.TopicName4MessageBroker)))
+                {
+                    lifetimeApp.ApplicationStarted.Register(() => device.SubscrubeOnExchangesEvents());
+                }
+            });
         }
 
 
@@ -183,33 +192,42 @@ namespace WebServer
 
             //ОСТАНОВ ЗАПУЩЕННОГО БЕКГРАУНДА ОПРОСА УСТРОЙСТВ
             var backgroundServices = scope.Resolve<BackgroundStorageService>();
-            foreach (var back in backgroundServices.Values.Where(bg => bg.IsStarted))
+            lifetimeApp.ApplicationStopping.Register(() =>
             {
-                lifetimeApp.ApplicationStopping.Register(() => back.StopAsync(CancellationToken.None));
-            }
+                foreach (var back in backgroundServices.Values.Where(bg => bg.IsStarted))
+                {
+                    back.StopAsync(CancellationToken.None);
+                }
+            });
 
             //ОСТАНОВ КОННЕКТА УСТРОЙСТВ
             var exchangeServices = scope.Resolve<ExchangeStorageService<AdInputType>>();
-            foreach (var exchange in exchangeServices.Values.Where(exch => !exch.IsOpen))
+            lifetimeApp.ApplicationStopping.Register(() =>
             {
-                lifetimeApp.ApplicationStopping.Register(() => exchange.CycleReOpenedCancelation());
-            }
+                foreach (var exchange in exchangeServices.Values.Where(exch => !exch.IsOpen))
+                {
+                   exchange.CycleReOpenedCancelation();
+                }
+            });
 
             //ОСТАНОВ НА ОБМЕНЕ ЦИКЛИЧЕСКОГО ОБМЕНА.
-            foreach (var exchange in exchangeServices.Values)
+            lifetimeApp.ApplicationStopping.Register(() =>
             {
-                if (exchange.IsStartedCycleFunc)
+                foreach (var exchange in exchangeServices.Values.Where(exch => exch.IsStartedCycleFunc))
                 {
-                    lifetimeApp.ApplicationStopping.Register(() => exchange.StopCycleExchange());
+                     exchange.StopCycleExchange();
                 }
-            }
+            });
 
             //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ ПУБЛИКУЕМЫХ НА IProduser (kaffka).
             var deviceServices = scope.Resolve<DeviceStorageService<AdInputType>>();
-            foreach (var device in deviceServices.Values)
+            lifetimeApp.ApplicationStopping.Register(() =>
             {
-                lifetimeApp.ApplicationStopping.Register(() => device.UnsubscrubeOnExchangesEvents());
-            }
+                foreach (var device in deviceServices.Values)
+                {
+                     device.UnsubscrubeOnExchangesEvents();
+                }
+            });
         }
 
 
