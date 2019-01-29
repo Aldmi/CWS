@@ -306,7 +306,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             extraItemRounded = extraItemRounded == 0 ? 1 : extraItemRounded;       //Если небольшое превышение, то все равно нужно выставить 1 элемент на удаление
             bodyList.RemoveRange(extraItemRounded - 1, extraItemRounded);          //удалим лишние элементы.
             totalBodyCount = bodyList.Sum(s => s.Length);
-            _logger.Information($"Срока тела запроса была обрезанна на {extraLenght}. Удаленно {extraItem} элементов для ViewRuleId {Option.Id}. Текущая длинна обрезанной строки {totalBodyCount}");
+            _logger.Warning($"Срока тела запроса была обрезанна на {extraLenght}. Удаленно {extraItem} элементов для ViewRuleId {Option.Id}. Текущая длинна обрезанной строки {totalBodyCount}");
             return bodyList;
         }
 
