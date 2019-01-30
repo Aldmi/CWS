@@ -42,18 +42,20 @@ namespace WebServer.AutoMapperConfig
                 {
                     NameRu = src.TypeName,
                     NameAliasRu = src.TypeAlias,
-                    Num = ConvertString2Int(src.TrainType)
+                    Num = ConvertString2Int(src.TrainType) //TODO: игнор
                 }))
                 .ForMember(dest => dest.VagonDirection, opt => opt.MapFrom(src => new VagonDirection(src.VagonDirection)))
-                .ForMember(dest => dest.StationArrival, opt => opt.MapFrom(src => new Station
-                {
-                    NameRu = src.StartStation,
-                    NameEng = src.StartStationENG
-                }))
                 .ForMember(dest => dest.StationDeparture, opt => opt.MapFrom(src => new Station
                 {
+                    NameRu = src.StartStation,
+                    NameEng = src.StartStationENG,
+                    NameCh = src.StartStationCH,
+                }))
+                .ForMember(dest => dest.StationArrival, opt => opt.MapFrom(src => new Station
+                {
                     NameRu = src.EndStation,
-                    NameEng = src.EndStationENG
+                    NameEng = src.EndStationENG,
+                    NameCh = src.EndStationCH,
                 }))
                 .ForMember(dest => dest.StationWhereFrom, opt => opt.MapFrom(src => new Station
                 {

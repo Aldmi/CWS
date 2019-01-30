@@ -15,11 +15,16 @@
             switch (Num.Value)
             {
                 case 0:
+                    NameRu = " ";
+                    NameAliasRu = " ";
+                    break;
+
+                case 1:
                     NameRu = "С головы";
                     NameAliasRu = "гол.";
                     break;
 
-                case 1:
+                case 2:
                     NameRu = "С хвоста";
                     NameAliasRu = "хв.";
                     break;
@@ -33,11 +38,16 @@
             switch (Num.Value)
             {
                 case 0:
+                    NameRu = " ";
+                    NameAliasRu = " ";
+                    break;
+
+                case 1:
                     NameRu = "С головы";
                     NameAliasRu = "гол.";
                     break;
 
-                case 1:
+                case 2:
                     NameRu = "С хвоста";
                     NameAliasRu = "хв.";
                     break;

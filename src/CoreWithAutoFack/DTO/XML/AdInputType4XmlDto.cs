@@ -32,8 +32,8 @@ namespace WebServer.DTO.XML
         public string  WhereTo { get; set; }                             //ближайшая станция после текущей
         public string  RecDateTime { get; set; }                         //время прибытия (parse -> DateTime)
         public string  SndDateTime { get; set; }                         //время отправления (parse -> DateTime)
-        public string  EvRecTime { get; set; }                          //время прибытия (как RecDateTime) (parse -> DateTime)
-        public string  EvSndTime { get; set; }                        //время отправления (как SndDateTime) (parse -> DateTime)
+        public string  EvRecTime { get; set; }                          //факстическое время прибытия (как RecDateTime) (parse -> DateTime)
+        public string  EvSndTime { get; set; }                         //факстическое время отправления (как SndDateTime) (parse -> DateTime)
         public string LateTime { get; set; }                          //Время задержки в минутах  (parse -> int)
         public string HereDateTime { get; set; }                      //Время стоянки в минутах (parse -> TimeSpan)
         public string ExpectedTime { get; set; }                      //Ожидаемое время в минутах (parse -> int)
@@ -63,8 +63,8 @@ namespace WebServer.DTO.XML
         //<v/>
         //</Vagons>
         public int UslDlPerrona { get; set; }                      //длина поезда, по умолчанию 0
-        public string PlatWhereFrom { get; set; }
-        public string PlatWhereTo { get; set; }
+        public string PlatWhereFrom { get; set; }                  //
+        public string PlatWhereTo { get; set; }                    //
         //<Sectors>
         //<sector/>
         //</Sectors>
