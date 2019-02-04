@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Worker.Background.Abstarct;
 using Worker.Background.Concrete.HostingBackground;
 
-namespace WebServer.AutofacModules
+namespace WebApiSwc.AutofacModules
 {
     public class InputDataAutofacModule<TIn> : Module
     {

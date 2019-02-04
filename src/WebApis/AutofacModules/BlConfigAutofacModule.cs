@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using BL.Services.Config;
 
-namespace WebServer.AutofacModules
+namespace WebApiSwc.AutofacModules
 {
     /// <summary>
     /// Регистрируем сервисы хранения бизнесс логики. (оперативные данные, хранятся в памяти (CuncurrentDictionary))

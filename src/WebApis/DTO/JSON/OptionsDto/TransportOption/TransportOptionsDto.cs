@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebServer.DTO.JSON.OptionsDto.TransportOption
+namespace WebApiSwc.DTO.JSON.OptionsDto.TransportOption
 {
     /// <summary>
     /// Коллекции опций для транспортов.

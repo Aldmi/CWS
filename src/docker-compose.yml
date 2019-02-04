@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  webapiswc:
+    image: ${DOCKER_REGISTRY-}webapiswc
+    build:
+      context: .
+      dockerfile: WebApis/Dockerfile
+    ports:
+     - "44138:80"
+    environment:
+     - ASPNETCORE_ENVIRONMENT=Production
+     - DbConnection=User ID = postgres; Password = dmitr; Server = host.docker.internal; Port = 5432; Database = OptionDevice; Integrated Security = true; Pooling = true;
+     - HowCreateDb=Migrate
+    networks:
+      - aspnetcoreapp-network
+
+
+networks:
+  aspnetcoreapp-network:
+    driver: bridge

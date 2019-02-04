@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using WebServer.Extensions;
 using Serilog.Events;
+using WebApiSwc.Extensions;
 
-namespace WebServer.Controllers
+namespace WebApiSwc.Controllers
 {
     [Produces("application/json")]
     [Route("api/LoggerApp")]

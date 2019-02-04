@@ -1,4 +1,4 @@
-﻿namespace WebServer.DTO.JSON.DevicesStateDto
+﻿namespace WebApiSwc.DTO.JSON.DevicesStateDto
 {
     public class ExchangeStateDto
     {

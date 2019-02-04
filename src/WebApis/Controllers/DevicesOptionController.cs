@@ -12,12 +12,12 @@ using DAL.Abstract.Entities.Options.Transport;
 using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using WebServer.DTO.JSON.OptionsDto;
-using WebServer.DTO.JSON.OptionsDto.DeviceOption;
-using WebServer.DTO.JSON.OptionsDto.ExchangeOption;
-using WebServer.DTO.JSON.OptionsDto.TransportOption;
+using WebApiSwc.DTO.JSON.OptionsDto;
+using WebApiSwc.DTO.JSON.OptionsDto.DeviceOption;
+using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
+using WebApiSwc.DTO.JSON.OptionsDto.TransportOption;
 
-namespace WebServer.Controllers
+namespace WebApiSwc.Controllers
 {
     /// <summary>
     /// REST api доступа к опциям системы (Devices, Exchanges, Transports)

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using DAL.Abstract.Entities.Options.Transport;
 
-namespace WebServer.DTO.JSON.OptionsDto.TransportOption
+namespace WebApiSwc.DTO.JSON.OptionsDto.TransportOption
 {
     public class SerialOptionDto
     {

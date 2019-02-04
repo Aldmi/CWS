@@ -18,12 +18,12 @@ using MoreLinq;
 using Newtonsoft.Json;
 using Serilog;
 using Shared.Enums;
-using WebServer.AutofacModules;
-using WebServer.Extensions;
-using WebServer.Settings;
+using WebApiSwc.AutofacModules;
+using WebApiSwc.Extensions;
+using WebApiSwc.Settings;
 using Worker.Background.Abstarct;
 
-namespace WebServer
+namespace WebApiSwc
 {
     public class Startup
     {
@@ -244,13 +244,14 @@ namespace WebServer
         private async Task InitializeAsync(ILifetimeScope scope)
         {
             var logger = scope.Resolve<ILogger>();
-            var env = scope.Resolve<IHostingEnvironment>();      
-            if (env.IsDevelopment()) //TODO: добавить переменную окружения OS (win/linux)
-            {
+            var howCreateDb = InitSettings.GetHowCreateDb(Env, AppConfiguration);
+
+            //if (env.IsDevelopment()) //TODO: добавить переменную окружения OS (win/linux)
+            //{
                 //СОЗДАНИЕ БД (если не созданно)--------------------------------------------------
                 try
                 {
-                    await scope.Resolve<ISerialPortOptionRepository>().CreateDb(HowCreateDb.Migrate);
+                    await scope.Resolve<ISerialPortOptionRepository>().CreateDb(howCreateDb);
                 }
                 catch (Exception ex)
                 {
@@ -284,7 +285,7 @@ namespace WebServer
                     Console.WriteLine(e);
                     throw;
                 }
-            }
+          //  }
 
             //СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ--------------------------------------------------
             try

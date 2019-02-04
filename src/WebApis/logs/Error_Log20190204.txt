@@ -1,0 +1,164 @@
+2019-02-04 09:42:20.287 +00:00 [FTL] Ошибка создания БД на основе миграций System.Net.Sockets.SocketException (99): Cannot assign requested address
+   at System.Net.Sockets.Socket.BeginConnectEx(EndPoint remoteEP, Boolean flowContext, AsyncCallback callback, Object state)
+   at System.Net.Sockets.Socket.UnsafeBeginConnect(EndPoint remoteEP, AsyncCallback callback, Object state, Boolean flowContext)
+   at System.Net.Sockets.Socket.BeginConnect(EndPoint remoteEP, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1](Func`4 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, Object state, TaskCreationOptions creationOptions)
+   at Npgsql.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 770
+   at Npgsql.NpgsqlConnector.RawOpen(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 550
+   at Npgsql.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 414
+   at Npgsql.NpgsqlConnection.<>c__DisplayClass32_0.<<Open>g__OpenLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnection.cs:line 273
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlDatabaseCreator.ExistsAsync(CancellationToken cancellationToken) in C:\projects\npgsql-entityframeworkcore-postgresql\src\EFCore.PG\Storage\Internal\NpgsqlDatabaseCreator.cs:line 227
+   at Microsoft.EntityFrameworkCore.Migrations.HistoryRepository.ExistsAsync(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)
+   at DAL.EFCore.DbContext.Context.CreateDb(HowCreateDb howCreateDb) in D:\Git\CWS\src\DAL.EFCore\DbContext\Context.cs:line 69
+   at DAL.EFCore.Repository.EfBaseRepository`2.CreateDb(HowCreateDb howCreateDb) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 257
+   at WebApiSwc.Startup.InitializeAsync(ILifetimeScope scope) in D:\Git\CWS\src\WebApis\Startup.cs:line 253
+2019-02-04 09:42:58.470 +00:00 [FTL] Application startup exception
+System.AggregateException: One or more errors occurred. (Connection refused) ---> System.Net.Sockets.SocketException: Connection refused
+   at System.Net.Sockets.Socket.BeginConnectEx(EndPoint remoteEP, Boolean flowContext, AsyncCallback callback, Object state)
+   at System.Net.Sockets.Socket.UnsafeBeginConnect(EndPoint remoteEP, AsyncCallback callback, Object state, Boolean flowContext)
+   at System.Net.Sockets.Socket.BeginConnect(EndPoint remoteEP, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1](Func`4 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, Object state, TaskCreationOptions creationOptions)
+   at Npgsql.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 770
+   at Npgsql.NpgsqlConnector.RawOpen(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 550
+   at Npgsql.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 414
+   at Npgsql.ConnectorPool.AllocateLong(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\ConnectorPool.cs:line 246
+   at Npgsql.NpgsqlConnection.<>c__DisplayClass32_0.<<Open>g__OpenLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnection.cs:line 301
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Query.AsyncQueryMethodProvider.FastQueryAsyncEnumerable`1.FastQueryAsyncEnumerator.MoveNext(CancellationToken cancellationToken)
+   at System.Linq.AsyncEnumerable.Aggregate_[TSource,TAccumulate,TResult](IAsyncEnumerable`1 source, TAccumulate seed, Func`3 accumulator, Func`2 resultSelector, CancellationToken cancellationToken) in D:\a\1\s\Ix.NET\Source\System.Interactive.Async\Aggregate.cs:line 120
+   at DAL.EFCore.Repository.EfBaseRepository`2.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 128
+   at DAL.EFCore.Repository.EfDeviceOptionRepository.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfDeviceOptionRepository.cs:line 75
+   at BL.Services.Mediators.MediatorForOptions.GetDeviceOptionsWithAutoBuildAsync() in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 73
+   at BL.Services.Actions.BuildDeviceService`1.BuildAllDevices() in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 52
+   at WebApiSwc.Startup.InitializeAsync(ILifetimeScope scope) in D:\Git\CWS\src\WebApis\Startup.cs:line 293
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at System.Threading.Tasks.Task.Wait()
+   at WebApiSwc.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILifetimeScope scope, IConfiguration config, IMapper mapper) in D:\Git\CWS\src\WebApis\Startup.cs:line 113
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Mvc.Internal.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.HostFilteringStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
+---> (Inner Exception #0) System.Net.Sockets.SocketException (111): Connection refused
+   at System.Net.Sockets.Socket.BeginConnectEx(EndPoint remoteEP, Boolean flowContext, AsyncCallback callback, Object state)
+   at System.Net.Sockets.Socket.UnsafeBeginConnect(EndPoint remoteEP, AsyncCallback callback, Object state, Boolean flowContext)
+   at System.Net.Sockets.Socket.BeginConnect(EndPoint remoteEP, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1](Func`4 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, Object state, TaskCreationOptions creationOptions)
+   at Npgsql.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 770
+   at Npgsql.NpgsqlConnector.RawOpen(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 550
+   at Npgsql.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 414
+   at Npgsql.ConnectorPool.AllocateLong(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\ConnectorPool.cs:line 246
+   at Npgsql.NpgsqlConnection.<>c__DisplayClass32_0.<<Open>g__OpenLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnection.cs:line 301
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Query.AsyncQueryMethodProvider.FastQueryAsyncEnumerable`1.FastQueryAsyncEnumerator.MoveNext(CancellationToken cancellationToken)
+   at System.Linq.AsyncEnumerable.Aggregate_[TSource,TAccumulate,TResult](IAsyncEnumerable`1 source, TAccumulate seed, Func`3 accumulator, Func`2 resultSelector, CancellationToken cancellationToken) in D:\a\1\s\Ix.NET\Source\System.Interactive.Async\Aggregate.cs:line 120
+   at DAL.EFCore.Repository.EfBaseRepository`2.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 128
+   at DAL.EFCore.Repository.EfDeviceOptionRepository.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfDeviceOptionRepository.cs:line 75
+   at BL.Services.Mediators.MediatorForOptions.GetDeviceOptionsWithAutoBuildAsync() in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 73
+   at BL.Services.Actions.BuildDeviceService`1.BuildAllDevices() in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 52
+   at WebApiSwc.Startup.InitializeAsync(ILifetimeScope scope) in D:\Git\CWS\src\WebApis\Startup.cs:line 293<---
+
+2019-02-04 09:48:54.791 +00:00 [FTL] Application startup exception
+System.AggregateException: One or more errors occurred. (3D000: ���� ������ "Cws_OptionDevice" �� ����������) ---> Npgsql.PostgresException: 3D000: ���� ������ "Cws_OptionDevice" �� ����������
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1003
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1032
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 425
+   at Npgsql.ConnectorPool.AllocateLong(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\ConnectorPool.cs:line 246
+   at Npgsql.NpgsqlConnection.<>c__DisplayClass32_0.<<Open>g__OpenLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnection.cs:line 301
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Query.AsyncQueryMethodProvider.FastQueryAsyncEnumerable`1.FastQueryAsyncEnumerator.MoveNext(CancellationToken cancellationToken)
+   at System.Linq.AsyncEnumerable.Aggregate_[TSource,TAccumulate,TResult](IAsyncEnumerable`1 source, TAccumulate seed, Func`3 accumulator, Func`2 resultSelector, CancellationToken cancellationToken) in D:\a\1\s\Ix.NET\Source\System.Interactive.Async\Aggregate.cs:line 120
+   at DAL.EFCore.Repository.EfBaseRepository`2.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 128
+   at DAL.EFCore.Repository.EfDeviceOptionRepository.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfDeviceOptionRepository.cs:line 75
+   at BL.Services.Mediators.MediatorForOptions.GetDeviceOptionsWithAutoBuildAsync() in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 73
+   at BL.Services.Actions.BuildDeviceService`1.BuildAllDevices() in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 52
+   at WebApiSwc.Startup.InitializeAsync(ILifetimeScope scope) in D:\Git\CWS\src\WebApis\Startup.cs:line 293
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at System.Threading.Tasks.Task.Wait()
+   at WebApiSwc.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILifetimeScope scope, IConfiguration config, IMapper mapper) in D:\Git\CWS\src\WebApis\Startup.cs:line 113
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Mvc.Internal.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.HostFilteringStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
+---> (Inner Exception #0) Npgsql.PostgresException (0x80004005): 3D000: ���� ������ "Cws_OptionDevice" �� ����������
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1003
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1032
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 425
+   at Npgsql.ConnectorPool.AllocateLong(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\ConnectorPool.cs:line 246
+   at Npgsql.NpgsqlConnection.<>c__DisplayClass32_0.<<Open>g__OpenLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnection.cs:line 301
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Query.AsyncQueryMethodProvider.FastQueryAsyncEnumerable`1.FastQueryAsyncEnumerator.MoveNext(CancellationToken cancellationToken)
+   at System.Linq.AsyncEnumerable.Aggregate_[TSource,TAccumulate,TResult](IAsyncEnumerable`1 source, TAccumulate seed, Func`3 accumulator, Func`2 resultSelector, CancellationToken cancellationToken) in D:\a\1\s\Ix.NET\Source\System.Interactive.Async\Aggregate.cs:line 120
+   at DAL.EFCore.Repository.EfBaseRepository`2.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 128
+   at DAL.EFCore.Repository.EfDeviceOptionRepository.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfDeviceOptionRepository.cs:line 75
+   at BL.Services.Mediators.MediatorForOptions.GetDeviceOptionsWithAutoBuildAsync() in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 73
+   at BL.Services.Actions.BuildDeviceService`1.BuildAllDevices() in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 52
+   at WebApiSwc.Startup.InitializeAsync(ILifetimeScope scope) in D:\Git\CWS\src\WebApis\Startup.cs:line 293<---
+
+2019-02-04 09:50:13.559 +00:00 [FTL] Application startup exception
+System.AggregateException: One or more errors occurred. (3D000: ���� ������ "OptionDevice" �� ����������) ---> Npgsql.PostgresException: 3D000: ���� ������ "OptionDevice" �� ����������
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1003
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1032
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 425
+   at Npgsql.ConnectorPool.AllocateLong(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\ConnectorPool.cs:line 246
+   at Npgsql.NpgsqlConnection.<>c__DisplayClass32_0.<<Open>g__OpenLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnection.cs:line 301
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Query.AsyncQueryMethodProvider.FastQueryAsyncEnumerable`1.FastQueryAsyncEnumerator.MoveNext(CancellationToken cancellationToken)
+   at System.Linq.AsyncEnumerable.Aggregate_[TSource,TAccumulate,TResult](IAsyncEnumerable`1 source, TAccumulate seed, Func`3 accumulator, Func`2 resultSelector, CancellationToken cancellationToken) in D:\a\1\s\Ix.NET\Source\System.Interactive.Async\Aggregate.cs:line 120
+   at DAL.EFCore.Repository.EfBaseRepository`2.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 128
+   at DAL.EFCore.Repository.EfDeviceOptionRepository.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfDeviceOptionRepository.cs:line 75
+   at BL.Services.Mediators.MediatorForOptions.GetDeviceOptionsWithAutoBuildAsync() in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 73
+   at BL.Services.Actions.BuildDeviceService`1.BuildAllDevices() in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 52
+   at WebApiSwc.Startup.InitializeAsync(ILifetimeScope scope) in D:\Git\CWS\src\WebApis\Startup.cs:line 293
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at System.Threading.Tasks.Task.Wait()
+   at WebApiSwc.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILifetimeScope scope, IConfiguration config, IMapper mapper) in D:\Git\CWS\src\WebApis\Startup.cs:line 113
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Mvc.Internal.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.HostFilteringStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
+---> (Inner Exception #0) Npgsql.PostgresException (0x80004005): 3D000: ���� ������ "OptionDevice" �� ����������
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1003
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1032
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 425
+   at Npgsql.ConnectorPool.AllocateLong(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\ConnectorPool.cs:line 246
+   at Npgsql.NpgsqlConnection.<>c__DisplayClass32_0.<<Open>g__OpenLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnection.cs:line 301
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Query.AsyncQueryMethodProvider.FastQueryAsyncEnumerable`1.FastQueryAsyncEnumerator.MoveNext(CancellationToken cancellationToken)
+   at System.Linq.AsyncEnumerable.Aggregate_[TSource,TAccumulate,TResult](IAsyncEnumerable`1 source, TAccumulate seed, Func`3 accumulator, Func`2 resultSelector, CancellationToken cancellationToken) in D:\a\1\s\Ix.NET\Source\System.Interactive.Async\Aggregate.cs:line 120
+   at DAL.EFCore.Repository.EfBaseRepository`2.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 128
+   at DAL.EFCore.Repository.EfDeviceOptionRepository.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfDeviceOptionRepository.cs:line 75
+   at BL.Services.Mediators.MediatorForOptions.GetDeviceOptionsWithAutoBuildAsync() in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 73
+   at BL.Services.Actions.BuildDeviceService`1.BuildAllDevices() in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 52
+   at WebApiSwc.Startup.InitializeAsync(ILifetimeScope scope) in D:\Git\CWS\src\WebApis\Startup.cs:line 293<---
+

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DAL.Abstract.Entities.Options.Device;
 
-namespace WebServer.DTO.JSON.DevicesStateDto
+namespace WebApiSwc.DTO.JSON.DevicesStateDto
 {
     public class DeviceStateDto
     {

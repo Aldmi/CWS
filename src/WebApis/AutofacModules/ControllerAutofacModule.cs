@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace WebServer.AutofacModules
+namespace WebApiSwc.AutofacModules
 {
     public class ControllerAutofacModule : Module
     {

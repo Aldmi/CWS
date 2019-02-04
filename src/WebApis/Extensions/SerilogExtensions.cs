@@ -6,7 +6,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace WebServer.Extensions
+namespace WebApiSwc.Extensions
 {
     public static class SerilogExtensions
     {

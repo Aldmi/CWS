@@ -2,7 +2,7 @@
 using BL.Services.Mediators;
 using Module = Autofac.Module;
 
-namespace WebServer.AutofacModules
+namespace WebApiSwc.AutofacModules
 {
     public class MediatorsAutofacModule<TIn> : Module
     {

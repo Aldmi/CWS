@@ -2,8 +2,7 @@
 using Infrastructure.EventBus.Abstract;
 using Infrastructure.EventBus.Concrete;
 
-
-namespace WebServer.AutofacModules
+namespace WebApiSwc.AutofacModules
 {
     public class EventBusAutofacModule : Module
     {

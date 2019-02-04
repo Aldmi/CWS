@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using BL.Services.Actions;
 
-namespace WebServer.AutofacModules
+namespace WebApiSwc.AutofacModules
 {
     public class BlActionsAutofacModule<TIn> : Module
     {

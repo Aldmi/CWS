@@ -3,7 +3,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Serilog;
 
-namespace WebServer
+namespace WebApiSwc
 {
     public class Program
     {

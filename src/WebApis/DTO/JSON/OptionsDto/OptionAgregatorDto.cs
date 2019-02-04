@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using WebServer.DTO.JSON.OptionsDto.DeviceOption;
-using WebServer.DTO.JSON.OptionsDto.ExchangeOption;
-using WebServer.DTO.JSON.OptionsDto.TransportOption;
+using WebApiSwc.DTO.JSON.OptionsDto.DeviceOption;
+using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
+using WebApiSwc.DTO.JSON.OptionsDto.TransportOption;
 
-
-namespace WebServer.DTO.JSON.OptionsDto
+namespace WebApiSwc.DTO.JSON.OptionsDto
 {
     public class OptionAgregatorDto
     {

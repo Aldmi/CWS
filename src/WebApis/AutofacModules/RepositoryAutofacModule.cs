@@ -4,7 +4,7 @@ using Autofac.Core;
 using DAL.Abstract.Concrete;
 using DAL.EFCore.Repository;
 
-namespace WebServer.AutofacModules
+namespace WebApiSwc.AutofacModules
 {
     public class RepositoryAutofacModule : Module
     {

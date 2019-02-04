@@ -7,14 +7,13 @@ using DeviceForExchange;
 using Exchange.Base;
 using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
-using WebServer.DTO.JSON.DevicesStateDto;
-using WebServer.DTO.JSON.OptionsDto.DeviceOption;
-using WebServer.DTO.JSON.OptionsDto.ExchangeOption;
-using WebServer.DTO.JSON.OptionsDto.TransportOption;
-using WebServer.DTO.XML;
+using WebApiSwc.DTO.JSON.DevicesStateDto;
+using WebApiSwc.DTO.JSON.OptionsDto.DeviceOption;
+using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
+using WebApiSwc.DTO.JSON.OptionsDto.TransportOption;
+using WebApiSwc.DTO.XML;
 
-
-namespace WebServer.AutoMapperConfig
+namespace WebApiSwc.AutoMapperConfig
 {
     public class MappingProfile : Profile
     {

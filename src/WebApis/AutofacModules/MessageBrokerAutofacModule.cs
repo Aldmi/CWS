@@ -3,7 +3,7 @@ using Infrastructure.MessageBroker.Abstract;
 using Infrastructure.MessageBroker.Consumer;
 using Infrastructure.MessageBroker.Produser;
 
-namespace WebServer.AutofacModules
+namespace WebApiSwc.AutofacModules
 {
     public class MessageBrokerAutofacModule: Module
     {

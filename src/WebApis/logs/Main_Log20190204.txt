@@ -16,3 +16,327 @@
 2019-02-04 16:31:59.051 +07:00 [INF] Executing JsonResult, writing value of type 'WebServer.DTO.JSON.OptionsDto.OptionAgregatorDto'.
 2019-02-04 16:31:59.177 +07:00 [INF] Executed action WebServer.Controllers.DevicesOptionController.Get (WebApiSwc) in 320.9614ms
 2019-02-04 16:31:59.185 +07:00 [INF] Request finished in 464.0975ms 200 application/json; charset=utf-8
+2019-02-04 09:42:13.824 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 09:42:13.956 +00:00 [INF] Creating key "59ba516c-2673-45ec-8847-5c269bb10a7c" with creation date "2019-02-04T09:42:13.9449597+00:00", activation date "2019-02-04T09:42:13.9380308+00:00", and expiration date "2019-05-05T09:42:13.9380308+00:00".
+2019-02-04 09:42:14.013 +00:00 [WRN] No XML encryptor configured. Key "59ba516c-2673-45ec-8847-5c269bb10a7c" may be persisted to storage in unencrypted form.
+2019-02-04 09:42:14.017 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-59ba516c-2673-45ec-8847-5c269bb10a7c.xml'.
+2019-02-04 09:42:20.287 +00:00 [FTL] Ошибка создания БД на основе миграций System.Net.Sockets.SocketException (99): Cannot assign requested address
+   at System.Net.Sockets.Socket.BeginConnectEx(EndPoint remoteEP, Boolean flowContext, AsyncCallback callback, Object state)
+   at System.Net.Sockets.Socket.UnsafeBeginConnect(EndPoint remoteEP, AsyncCallback callback, Object state, Boolean flowContext)
+   at System.Net.Sockets.Socket.BeginConnect(EndPoint remoteEP, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1](Func`4 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, Object state, TaskCreationOptions creationOptions)
+   at Npgsql.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 770
+   at Npgsql.NpgsqlConnector.RawOpen(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 550
+   at Npgsql.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 414
+   at Npgsql.NpgsqlConnection.<>c__DisplayClass32_0.<<Open>g__OpenLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnection.cs:line 273
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlDatabaseCreator.ExistsAsync(CancellationToken cancellationToken) in C:\projects\npgsql-entityframeworkcore-postgresql\src\EFCore.PG\Storage\Internal\NpgsqlDatabaseCreator.cs:line 227
+   at Microsoft.EntityFrameworkCore.Migrations.HistoryRepository.ExistsAsync(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)
+   at DAL.EFCore.DbContext.Context.CreateDb(HowCreateDb howCreateDb) in D:\Git\CWS\src\DAL.EFCore\DbContext\Context.cs:line 69
+   at DAL.EFCore.Repository.EfBaseRepository`2.CreateDb(HowCreateDb howCreateDb) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 257
+   at WebApiSwc.Startup.InitializeAsync(ILifetimeScope scope) in D:\Git\CWS\src\WebApis\Startup.cs:line 253
+2019-02-04 09:42:58.470 +00:00 [FTL] Application startup exception
+System.AggregateException: One or more errors occurred. (Connection refused) ---> System.Net.Sockets.SocketException: Connection refused
+   at System.Net.Sockets.Socket.BeginConnectEx(EndPoint remoteEP, Boolean flowContext, AsyncCallback callback, Object state)
+   at System.Net.Sockets.Socket.UnsafeBeginConnect(EndPoint remoteEP, AsyncCallback callback, Object state, Boolean flowContext)
+   at System.Net.Sockets.Socket.BeginConnect(EndPoint remoteEP, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1](Func`4 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, Object state, TaskCreationOptions creationOptions)
+   at Npgsql.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 770
+   at Npgsql.NpgsqlConnector.RawOpen(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 550
+   at Npgsql.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 414
+   at Npgsql.ConnectorPool.AllocateLong(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\ConnectorPool.cs:line 246
+   at Npgsql.NpgsqlConnection.<>c__DisplayClass32_0.<<Open>g__OpenLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnection.cs:line 301
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Query.AsyncQueryMethodProvider.FastQueryAsyncEnumerable`1.FastQueryAsyncEnumerator.MoveNext(CancellationToken cancellationToken)
+   at System.Linq.AsyncEnumerable.Aggregate_[TSource,TAccumulate,TResult](IAsyncEnumerable`1 source, TAccumulate seed, Func`3 accumulator, Func`2 resultSelector, CancellationToken cancellationToken) in D:\a\1\s\Ix.NET\Source\System.Interactive.Async\Aggregate.cs:line 120
+   at DAL.EFCore.Repository.EfBaseRepository`2.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 128
+   at DAL.EFCore.Repository.EfDeviceOptionRepository.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfDeviceOptionRepository.cs:line 75
+   at BL.Services.Mediators.MediatorForOptions.GetDeviceOptionsWithAutoBuildAsync() in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 73
+   at BL.Services.Actions.BuildDeviceService`1.BuildAllDevices() in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 52
+   at WebApiSwc.Startup.InitializeAsync(ILifetimeScope scope) in D:\Git\CWS\src\WebApis\Startup.cs:line 293
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at System.Threading.Tasks.Task.Wait()
+   at WebApiSwc.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILifetimeScope scope, IConfiguration config, IMapper mapper) in D:\Git\CWS\src\WebApis\Startup.cs:line 113
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Mvc.Internal.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.HostFilteringStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
+---> (Inner Exception #0) System.Net.Sockets.SocketException (111): Connection refused
+   at System.Net.Sockets.Socket.BeginConnectEx(EndPoint remoteEP, Boolean flowContext, AsyncCallback callback, Object state)
+   at System.Net.Sockets.Socket.UnsafeBeginConnect(EndPoint remoteEP, AsyncCallback callback, Object state, Boolean flowContext)
+   at System.Net.Sockets.Socket.BeginConnect(EndPoint remoteEP, AsyncCallback callback, Object state)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1](Func`4 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, Object state, TaskCreationOptions creationOptions)
+   at Npgsql.NpgsqlConnector.ConnectAsync(NpgsqlTimeout timeout, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 770
+   at Npgsql.NpgsqlConnector.RawOpen(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 550
+   at Npgsql.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 414
+   at Npgsql.ConnectorPool.AllocateLong(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\ConnectorPool.cs:line 246
+   at Npgsql.NpgsqlConnection.<>c__DisplayClass32_0.<<Open>g__OpenLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnection.cs:line 301
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Query.AsyncQueryMethodProvider.FastQueryAsyncEnumerable`1.FastQueryAsyncEnumerator.MoveNext(CancellationToken cancellationToken)
+   at System.Linq.AsyncEnumerable.Aggregate_[TSource,TAccumulate,TResult](IAsyncEnumerable`1 source, TAccumulate seed, Func`3 accumulator, Func`2 resultSelector, CancellationToken cancellationToken) in D:\a\1\s\Ix.NET\Source\System.Interactive.Async\Aggregate.cs:line 120
+   at DAL.EFCore.Repository.EfBaseRepository`2.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 128
+   at DAL.EFCore.Repository.EfDeviceOptionRepository.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfDeviceOptionRepository.cs:line 75
+   at BL.Services.Mediators.MediatorForOptions.GetDeviceOptionsWithAutoBuildAsync() in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 73
+   at BL.Services.Actions.BuildDeviceService`1.BuildAllDevices() in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 52
+   at WebApiSwc.Startup.InitializeAsync(ILifetimeScope scope) in D:\Git\CWS\src\WebApis\Startup.cs:line 293<---
+
+2019-02-04 09:46:47.824 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 09:46:47.905 +00:00 [INF] Creating key "8bb9f7ba-1595-4872-8f3a-bed65226ce1d" with creation date "2019-02-04T09:46:47.9019882+00:00", activation date "2019-02-04T09:46:47.8959715+00:00", and expiration date "2019-05-05T09:46:47.8959715+00:00".
+2019-02-04 09:46:47.992 +00:00 [WRN] No XML encryptor configured. Key "8bb9f7ba-1595-4872-8f3a-bed65226ce1d" may be persisted to storage in unencrypted form.
+2019-02-04 09:46:47.999 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-8bb9f7ba-1595-4872-8f3a-bed65226ce1d.xml'.
+2019-02-04 09:48:37.751 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 09:48:37.855 +00:00 [INF] Creating key "99a4ed08-dbfe-425f-b9ee-cabcc40b71dc" with creation date "2019-02-04T09:48:37.8407115+00:00", activation date "2019-02-04T09:48:37.8156639+00:00", and expiration date "2019-05-05T09:48:37.8156639+00:00".
+2019-02-04 09:48:37.908 +00:00 [WRN] No XML encryptor configured. Key "99a4ed08-dbfe-425f-b9ee-cabcc40b71dc" may be persisted to storage in unencrypted form.
+2019-02-04 09:48:37.915 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-99a4ed08-dbfe-425f-b9ee-cabcc40b71dc.xml'.
+2019-02-04 09:48:54.791 +00:00 [FTL] Application startup exception
+System.AggregateException: One or more errors occurred. (3D000: ���� ������ "Cws_OptionDevice" �� ����������) ---> Npgsql.PostgresException: 3D000: ���� ������ "Cws_OptionDevice" �� ����������
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1003
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1032
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 425
+   at Npgsql.ConnectorPool.AllocateLong(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\ConnectorPool.cs:line 246
+   at Npgsql.NpgsqlConnection.<>c__DisplayClass32_0.<<Open>g__OpenLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnection.cs:line 301
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Query.AsyncQueryMethodProvider.FastQueryAsyncEnumerable`1.FastQueryAsyncEnumerator.MoveNext(CancellationToken cancellationToken)
+   at System.Linq.AsyncEnumerable.Aggregate_[TSource,TAccumulate,TResult](IAsyncEnumerable`1 source, TAccumulate seed, Func`3 accumulator, Func`2 resultSelector, CancellationToken cancellationToken) in D:\a\1\s\Ix.NET\Source\System.Interactive.Async\Aggregate.cs:line 120
+   at DAL.EFCore.Repository.EfBaseRepository`2.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 128
+   at DAL.EFCore.Repository.EfDeviceOptionRepository.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfDeviceOptionRepository.cs:line 75
+   at BL.Services.Mediators.MediatorForOptions.GetDeviceOptionsWithAutoBuildAsync() in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 73
+   at BL.Services.Actions.BuildDeviceService`1.BuildAllDevices() in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 52
+   at WebApiSwc.Startup.InitializeAsync(ILifetimeScope scope) in D:\Git\CWS\src\WebApis\Startup.cs:line 293
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at System.Threading.Tasks.Task.Wait()
+   at WebApiSwc.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILifetimeScope scope, IConfiguration config, IMapper mapper) in D:\Git\CWS\src\WebApis\Startup.cs:line 113
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Mvc.Internal.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.HostFilteringStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
+---> (Inner Exception #0) Npgsql.PostgresException (0x80004005): 3D000: ���� ������ "Cws_OptionDevice" �� ����������
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1003
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1032
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 425
+   at Npgsql.ConnectorPool.AllocateLong(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\ConnectorPool.cs:line 246
+   at Npgsql.NpgsqlConnection.<>c__DisplayClass32_0.<<Open>g__OpenLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnection.cs:line 301
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Query.AsyncQueryMethodProvider.FastQueryAsyncEnumerable`1.FastQueryAsyncEnumerator.MoveNext(CancellationToken cancellationToken)
+   at System.Linq.AsyncEnumerable.Aggregate_[TSource,TAccumulate,TResult](IAsyncEnumerable`1 source, TAccumulate seed, Func`3 accumulator, Func`2 resultSelector, CancellationToken cancellationToken) in D:\a\1\s\Ix.NET\Source\System.Interactive.Async\Aggregate.cs:line 120
+   at DAL.EFCore.Repository.EfBaseRepository`2.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 128
+   at DAL.EFCore.Repository.EfDeviceOptionRepository.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfDeviceOptionRepository.cs:line 75
+   at BL.Services.Mediators.MediatorForOptions.GetDeviceOptionsWithAutoBuildAsync() in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 73
+   at BL.Services.Actions.BuildDeviceService`1.BuildAllDevices() in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 52
+   at WebApiSwc.Startup.InitializeAsync(ILifetimeScope scope) in D:\Git\CWS\src\WebApis\Startup.cs:line 293<---
+
+2019-02-04 09:49:51.654 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 09:49:51.766 +00:00 [INF] Creating key "7f1d9633-b575-4794-9e3c-d4609b5bc3a7" with creation date "2019-02-04T09:49:51.7616355+00:00", activation date "2019-02-04T09:49:51.7440602+00:00", and expiration date "2019-05-05T09:49:51.7440602+00:00".
+2019-02-04 09:49:51.814 +00:00 [WRN] No XML encryptor configured. Key "7f1d9633-b575-4794-9e3c-d4609b5bc3a7" may be persisted to storage in unencrypted form.
+2019-02-04 09:49:51.822 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-7f1d9633-b575-4794-9e3c-d4609b5bc3a7.xml'.
+2019-02-04 09:50:13.559 +00:00 [FTL] Application startup exception
+System.AggregateException: One or more errors occurred. (3D000: ���� ������ "OptionDevice" �� ����������) ---> Npgsql.PostgresException: 3D000: ���� ������ "OptionDevice" �� ����������
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1003
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1032
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 425
+   at Npgsql.ConnectorPool.AllocateLong(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\ConnectorPool.cs:line 246
+   at Npgsql.NpgsqlConnection.<>c__DisplayClass32_0.<<Open>g__OpenLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnection.cs:line 301
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Query.AsyncQueryMethodProvider.FastQueryAsyncEnumerable`1.FastQueryAsyncEnumerator.MoveNext(CancellationToken cancellationToken)
+   at System.Linq.AsyncEnumerable.Aggregate_[TSource,TAccumulate,TResult](IAsyncEnumerable`1 source, TAccumulate seed, Func`3 accumulator, Func`2 resultSelector, CancellationToken cancellationToken) in D:\a\1\s\Ix.NET\Source\System.Interactive.Async\Aggregate.cs:line 120
+   at DAL.EFCore.Repository.EfBaseRepository`2.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 128
+   at DAL.EFCore.Repository.EfDeviceOptionRepository.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfDeviceOptionRepository.cs:line 75
+   at BL.Services.Mediators.MediatorForOptions.GetDeviceOptionsWithAutoBuildAsync() in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 73
+   at BL.Services.Actions.BuildDeviceService`1.BuildAllDevices() in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 52
+   at WebApiSwc.Startup.InitializeAsync(ILifetimeScope scope) in D:\Git\CWS\src\WebApis\Startup.cs:line 293
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at System.Threading.Tasks.Task.Wait()
+   at WebApiSwc.Startup.Configure(IApplicationBuilder app, IHostingEnvironment env, ILifetimeScope scope, IConfiguration config, IMapper mapper) in D:\Git\CWS\src\WebApis\Startup.cs:line 113
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.Configure(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Mvc.Internal.MiddlewareFilterBuilderStartupFilter.<>c__DisplayClass0_0.<Configure>g__MiddlewareFilterBuilder|0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.HostFilteringStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder app)
+   at Microsoft.AspNetCore.Hosting.Internal.AutoRequestServicesStartupFilter.<>c__DisplayClass0_0.<Configure>b__0(IApplicationBuilder builder)
+   at Microsoft.AspNetCore.Hosting.Internal.WebHost.BuildApplication()
+---> (Inner Exception #0) Npgsql.PostgresException (0x80004005): 3D000: ���� ������ "OptionDevice" �� ����������
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1003
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.<>c__DisplayClass161_0.<<ReadMessage>g__ReadMessageLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 1032
+--- End of stack trace from previous location where exception was thrown ---
+   at Npgsql.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\NpgsqlConnector.cs:line 425
+   at Npgsql.ConnectorPool.AllocateLong(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken) in C:\projects\npgsql\src\Npgsql\ConnectorPool.cs:line 246
+   at Npgsql.NpgsqlConnection.<>c__DisplayClass32_0.<<Open>g__OpenLong|0>d.MoveNext() in C:\projects\npgsql\src\Npgsql\NpgsqlConnection.cs:line 301
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenDbConnectionAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Query.AsyncQueryMethodProvider.FastQueryAsyncEnumerable`1.FastQueryAsyncEnumerator.MoveNext(CancellationToken cancellationToken)
+   at System.Linq.AsyncEnumerable.Aggregate_[TSource,TAccumulate,TResult](IAsyncEnumerable`1 source, TAccumulate seed, Func`3 accumulator, Func`2 resultSelector, CancellationToken cancellationToken) in D:\a\1\s\Ix.NET\Source\System.Interactive.Async\Aggregate.cs:line 120
+   at DAL.EFCore.Repository.EfBaseRepository`2.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 128
+   at DAL.EFCore.Repository.EfDeviceOptionRepository.ListAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfDeviceOptionRepository.cs:line 75
+   at BL.Services.Mediators.MediatorForOptions.GetDeviceOptionsWithAutoBuildAsync() in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 73
+   at BL.Services.Actions.BuildDeviceService`1.BuildAllDevices() in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 52
+   at WebApiSwc.Startup.InitializeAsync(ILifetimeScope scope) in D:\Git\CWS\src\WebApis\Startup.cs:line 293<---
+
+2019-02-04 09:54:04.468 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 09:54:04.551 +00:00 [INF] Creating key "83f60293-04da-4563-b28c-78280354699e" with creation date "2019-02-04T09:54:04.5411105+00:00", activation date "2019-02-04T09:54:04.5329627+00:00", and expiration date "2019-05-05T09:54:04.5329627+00:00".
+2019-02-04 09:54:04.592 +00:00 [WRN] No XML encryptor configured. Key "83f60293-04da-4563-b28c-78280354699e" may be persisted to storage in unencrypted form.
+2019-02-04 09:54:04.596 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-83f60293-04da-4563-b28c-78280354699e.xml'.
+2019-02-04 16:56:51.190 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-04 09:59:16.370 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 09:59:16.592 +00:00 [INF] Creating key "51ea68b5-d976-470c-979d-077504a9c9b3" with creation date "2019-02-04T09:59:16.5845667+00:00", activation date "2019-02-04T09:59:16.5665223+00:00", and expiration date "2019-05-05T09:59:16.5665223+00:00".
+2019-02-04 09:59:16.655 +00:00 [WRN] No XML encryptor configured. Key "51ea68b5-d976-470c-979d-077504a9c9b3" may be persisted to storage in unencrypted form.
+2019-02-04 09:59:16.662 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-51ea68b5-d976-470c-979d-077504a9c9b3.xml'.
+2019-02-04 10:43:45.564 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 10:43:45.684 +00:00 [INF] Creating key "93b33e7e-8fc7-4a78-8a87-1b0215c1f149" with creation date "2019-02-04T10:43:45.6754814+00:00", activation date "2019-02-04T10:43:45.6680229+00:00", and expiration date "2019-05-05T10:43:45.6680229+00:00".
+2019-02-04 10:43:45.719 +00:00 [WRN] No XML encryptor configured. Key "93b33e7e-8fc7-4a78-8a87-1b0215c1f149" may be persisted to storage in unencrypted form.
+2019-02-04 10:43:45.725 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-93b33e7e-8fc7-4a78-8a87-1b0215c1f149.xml'.
+2019-02-04 10:45:37.801 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 10:45:37.876 +00:00 [INF] Creating key "a0dc375d-01ad-4244-8da6-23599051e8db" with creation date "2019-02-04T10:45:37.8721696+00:00", activation date "2019-02-04T10:45:37.8661765+00:00", and expiration date "2019-05-05T10:45:37.8661765+00:00".
+2019-02-04 10:45:37.911 +00:00 [WRN] No XML encryptor configured. Key "a0dc375d-01ad-4244-8da6-23599051e8db" may be persisted to storage in unencrypted form.
+2019-02-04 10:45:37.916 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-a0dc375d-01ad-4244-8da6-23599051e8db.xml'.
+2019-02-04 10:45:46.916 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5555/  
+2019-02-04 10:45:47.187 +00:00 [INF] Request finished in 278.3053ms 200 application/json
+2019-02-04 10:45:47.449 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5555/favicon.ico  
+2019-02-04 10:45:47.689 +00:00 [INF] Request finished in 240.0925ms 404 
+2019-02-04 11:56:48.559 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 11:56:48.676 +00:00 [INF] Creating key "f7ce1fab-c408-44a9-b44e-4eef3b47d52c" with creation date "2019-02-04T11:56:48.6639620+00:00", activation date "2019-02-04T11:56:48.6564317+00:00", and expiration date "2019-05-05T11:56:48.6564317+00:00".
+2019-02-04 11:56:48.711 +00:00 [WRN] No XML encryptor configured. Key "f7ce1fab-c408-44a9-b44e-4eef3b47d52c" may be persisted to storage in unencrypted form.
+2019-02-04 11:56:48.716 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-f7ce1fab-c408-44a9-b44e-4eef3b47d52c.xml'.
+2019-02-04 11:57:09.185 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5555/  
+2019-02-04 11:57:09.589 +00:00 [INF] Request finished in 405.5491ms 200 application/json
+2019-02-04 11:58:08.367 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 11:58:08.437 +00:00 [INF] Creating key "3dcd649c-d9a3-45e6-8ae9-a6ef1a93a107" with creation date "2019-02-04T11:58:08.4314533+00:00", activation date "2019-02-04T11:58:08.4246081+00:00", and expiration date "2019-05-05T11:58:08.4246081+00:00".
+2019-02-04 11:58:08.472 +00:00 [WRN] No XML encryptor configured. Key "3dcd649c-d9a3-45e6-8ae9-a6ef1a93a107" may be persisted to storage in unencrypted form.
+2019-02-04 11:58:08.476 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-3dcd649c-d9a3-45e6-8ae9-a6ef1a93a107.xml'.
+2019-02-04 11:58:20.222 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5555/  
+2019-02-04 11:58:20.442 +00:00 [INF] Request finished in 221.3266ms 200 application/json
+2019-02-04 13:01:17.786 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 13:01:17.966 +00:00 [INF] Creating key "874993e6-7bba-4dbc-91c3-023ba1ab6b09" with creation date "2019-02-04T13:01:17.9587411+00:00", activation date "2019-02-04T13:01:17.9481024+00:00", and expiration date "2019-05-05T13:01:17.9481024+00:00".
+2019-02-04 13:01:18.117 +00:00 [WRN] No XML encryptor configured. Key "874993e6-7bba-4dbc-91c3-023ba1ab6b09" may be persisted to storage in unencrypted form.
+2019-02-04 13:01:18.141 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-874993e6-7bba-4dbc-91c3-023ba1ab6b09.xml'.
+2019-02-04 13:01:36.460 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5555/  
+2019-02-04 13:01:36.864 +00:00 [INF] Request finished in 411.557ms 200 application/json
+2019-02-04 13:02:35.023 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 13:02:35.121 +00:00 [INF] Creating key "ce89e8fa-7d32-4fa7-8be1-cd4673d494dc" with creation date "2019-02-04T13:02:35.1126347+00:00", activation date "2019-02-04T13:02:35.1061919+00:00", and expiration date "2019-05-05T13:02:35.1061919+00:00".
+2019-02-04 13:02:35.183 +00:00 [WRN] No XML encryptor configured. Key "ce89e8fa-7d32-4fa7-8be1-cd4673d494dc" may be persisted to storage in unencrypted form.
+2019-02-04 13:02:35.192 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-ce89e8fa-7d32-4fa7-8be1-cd4673d494dc.xml'.
+2019-02-04 13:02:40.532 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5555/  
+2019-02-04 13:02:40.867 +00:00 [INF] Request finished in 335.8999ms 200 application/json
+2019-02-04 13:09:12.416 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 13:09:12.546 +00:00 [INF] Creating key "2ea03331-b270-48ae-bf61-2092e0658377" with creation date "2019-02-04T13:09:12.5393064+00:00", activation date "2019-02-04T13:09:12.5277673+00:00", and expiration date "2019-05-05T13:09:12.5277673+00:00".
+2019-02-04 13:09:12.589 +00:00 [WRN] No XML encryptor configured. Key "2ea03331-b270-48ae-bf61-2092e0658377" may be persisted to storage in unencrypted form.
+2019-02-04 13:09:12.596 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-2ea03331-b270-48ae-bf61-2092e0658377.xml'.
+2019-02-04 13:09:17.846 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5555/  
+2019-02-04 13:09:18.285 +00:00 [INF] Request finished in 439.8708ms 200 application/json
+2019-02-04 13:15:19.627 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 13:15:19.735 +00:00 [INF] Creating key "b9bf9b7a-39ce-45fc-b5a5-2489d63c44c7" with creation date "2019-02-04T13:15:19.7323508+00:00", activation date "2019-02-04T13:15:19.7109133+00:00", and expiration date "2019-05-05T13:15:19.7109133+00:00".
+2019-02-04 13:15:19.775 +00:00 [WRN] No XML encryptor configured. Key "b9bf9b7a-39ce-45fc-b5a5-2489d63c44c7" may be persisted to storage in unencrypted form.
+2019-02-04 13:15:19.779 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-b9bf9b7a-39ce-45fc-b5a5-2489d63c44c7.xml'.
+2019-02-04 13:15:23.106 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5555/  
+2019-02-04 13:15:23.343 +00:00 [INF] Request finished in 238.0658ms 200 application/json
+2019-02-04 13:16:20.858 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 13:16:20.982 +00:00 [INF] Creating key "edf485ab-d2c2-4d6f-9d3e-05843156b007" with creation date "2019-02-04T13:16:20.9785154+00:00", activation date "2019-02-04T13:16:20.9725368+00:00", and expiration date "2019-05-05T13:16:20.9725368+00:00".
+2019-02-04 13:16:21.041 +00:00 [WRN] No XML encryptor configured. Key "edf485ab-d2c2-4d6f-9d3e-05843156b007" may be persisted to storage in unencrypted form.
+2019-02-04 13:16:21.044 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-edf485ab-d2c2-4d6f-9d3e-05843156b007.xml'.
+2019-02-04 13:16:25.557 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5555/  
+2019-02-04 13:16:25.876 +00:00 [INF] Request finished in 320.0168ms 200 application/json
+2019-02-04 13:17:26.193 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 13:17:26.263 +00:00 [INF] Creating key "0513ad71-2600-41ad-9da4-db3f8f2ebf4a" with creation date "2019-02-04T13:17:26.2596818+00:00", activation date "2019-02-04T13:17:26.2516377+00:00", and expiration date "2019-05-05T13:17:26.2516377+00:00".
+2019-02-04 13:17:26.291 +00:00 [WRN] No XML encryptor configured. Key "0513ad71-2600-41ad-9da4-db3f8f2ebf4a" may be persisted to storage in unencrypted form.
+2019-02-04 13:17:26.296 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-0513ad71-2600-41ad-9da4-db3f8f2ebf4a.xml'.
+2019-02-04 13:17:30.085 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5555/  
+2019-02-04 13:17:30.315 +00:00 [INF] Request finished in 230.7568ms 200 application/json
+2019-02-04 13:32:26.196 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 13:32:26.296 +00:00 [INF] Creating key "73933d2a-07e0-4130-9338-c61688b0c038" with creation date "2019-02-04T13:32:26.2876877+00:00", activation date "2019-02-04T13:32:26.2816901+00:00", and expiration date "2019-05-05T13:32:26.2816901+00:00".
+2019-02-04 13:32:26.349 +00:00 [WRN] No XML encryptor configured. Key "73933d2a-07e0-4130-9338-c61688b0c038" may be persisted to storage in unencrypted form.
+2019-02-04 13:32:26.366 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-73933d2a-07e0-4130-9338-c61688b0c038.xml'.
+2019-02-04 13:32:30.080 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5555/  
+2019-02-04 13:32:30.312 +00:00 [INF] Request finished in 232.4922ms 200 application/json
+2019-02-04 13:39:42.490 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 13:39:42.582 +00:00 [INF] Creating key "f23f9c1f-0c25-44dc-ba79-ca46cbd3929d" with creation date "2019-02-04T13:39:42.5728464+00:00", activation date "2019-02-04T13:39:42.5631269+00:00", and expiration date "2019-05-05T13:39:42.5631269+00:00".
+2019-02-04 13:39:42.635 +00:00 [WRN] No XML encryptor configured. Key "f23f9c1f-0c25-44dc-ba79-ca46cbd3929d" may be persisted to storage in unencrypted form.
+2019-02-04 13:39:42.646 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-f23f9c1f-0c25-44dc-ba79-ca46cbd3929d.xml'.
+2019-02-04 13:39:48.232 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5555/  
+2019-02-04 13:39:48.548 +00:00 [INF] Request finished in 317.8894ms 200 application/json
+2019-02-04 13:45:41.748 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 13:45:41.839 +00:00 [INF] Creating key "5b349a97-601c-42d1-b641-44e9e19bc73a" with creation date "2019-02-04T13:45:41.8306599+00:00", activation date "2019-02-04T13:45:41.8239587+00:00", and expiration date "2019-05-05T13:45:41.8239587+00:00".
+2019-02-04 13:45:41.889 +00:00 [WRN] No XML encryptor configured. Key "5b349a97-601c-42d1-b641-44e9e19bc73a" may be persisted to storage in unencrypted form.
+2019-02-04 13:45:41.892 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-5b349a97-601c-42d1-b641-44e9e19bc73a.xml'.
+2019-02-04 13:45:46.710 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5555/  
+2019-02-04 13:45:47.036 +00:00 [INF] Request finished in 328.8093ms 200 application/json
+2019-02-04 13:46:34.180 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 13:46:37.950 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:5555/  
+2019-02-04 13:46:38.157 +00:00 [INF] Request finished in 208.6738ms 200 application/json
+2019-02-04 13:47:11.009 +00:00 [INF] Request starting HTTP/1.1 GET http://192.168.100.3:5555/api/devicesoption  
+2019-02-04 13:47:11.170 +00:00 [INF] Route matched with {action = "Get", controller = "DevicesOption"}. Executing action WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc)
+2019-02-04 13:47:11.187 +00:00 [INF] Executing action method WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc) - Validation state: "Valid"
+2019-02-04 13:47:11.564 +00:00 [INF] Executed action method WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.JsonResult in 366.5658ms.
+2019-02-04 13:47:11.580 +00:00 [INF] Executing JsonResult, writing value of type 'WebApiSwc.DTO.JSON.OptionsDto.OptionAgregatorDto'.
+2019-02-04 13:47:11.619 +00:00 [INF] Executed action WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc) in 445.07480000000004ms
+2019-02-04 13:47:11.630 +00:00 [INF] Request finished in 620.3137ms 200 application/json; charset=utf-8
+2019-02-04 13:49:34.777 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 13:49:34.865 +00:00 [INF] Creating key "33e0fdfb-859e-478c-a7c0-40f11c4de586" with creation date "2019-02-04T13:49:34.8602060+00:00", activation date "2019-02-04T13:49:34.8492044+00:00", and expiration date "2019-05-05T13:49:34.8492044+00:00".
+2019-02-04 13:49:34.941 +00:00 [WRN] No XML encryptor configured. Key "33e0fdfb-859e-478c-a7c0-40f11c4de586" may be persisted to storage in unencrypted form.
+2019-02-04 13:49:34.947 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-33e0fdfb-859e-478c-a7c0-40f11c4de586.xml'.
+2019-02-04 13:49:39.492 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:44138/  
+2019-02-04 13:49:39.889 +00:00 [INF] Request finished in 397.9898ms 200 application/json
+2019-02-04 13:49:40.139 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:44138/favicon.ico  
+2019-02-04 13:49:40.398 +00:00 [INF] Request finished in 258.953ms 404 
+2019-02-04 13:49:43.348 +00:00 [INF] Request starting HTTP/1.1 GET http://192.168.100.3:44138/api/devicesoption  
+2019-02-04 13:49:43.381 +00:00 [INF] Route matched with {action = "Get", controller = "DevicesOption"}. Executing action WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc)
+2019-02-04 13:49:43.397 +00:00 [INF] Executing action method WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc) - Validation state: "Valid"
+2019-02-04 13:49:43.869 +00:00 [INF] Executed action method WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.JsonResult in 468.8523ms.
+2019-02-04 13:49:43.886 +00:00 [INF] Executing JsonResult, writing value of type 'WebApiSwc.DTO.JSON.OptionsDto.OptionAgregatorDto'.
+2019-02-04 13:49:43.926 +00:00 [INF] Executed action WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc) in 539.95720000000006ms
+2019-02-04 13:49:43.938 +00:00 [INF] Request finished in 583.7216ms 200 application/json; charset=utf-8
+2019-02-04 13:50:09.904 +00:00 [INF] Request starting HTTP/1.1 POST http://192.168.100.3:44138/api/devicesoption application/json 13858
+2019-02-04 13:50:09.931 +00:00 [INF] Route matched with {action = "Post", controller = "DevicesOption"}. Executing action WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc)
+2019-02-04 13:50:10.110 +00:00 [INF] Executing action method WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc) with arguments (["WebApiSwc.DTO.JSON.OptionsDto.OptionAgregatorDto"]) - Validation state: "Valid"
+2019-02-04 13:50:10.838 +00:00 [INF] Executed action method WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.CreatedAtActionResult in 718.2725ms.
+2019-02-04 13:50:10.848 +00:00 [INF] Executing ObjectResult, writing value of type 'WebApiSwc.DTO.JSON.OptionsDto.OptionAgregatorDto'.
+2019-02-04 13:50:10.868 +00:00 [INF] Executed action WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc) in 936.5696ms
+2019-02-04 13:50:10.869 +00:00 [INF] Request finished in 965.6452ms 201 application/json; charset=utf-8
+2019-02-04 13:50:14.750 +00:00 [INF] Request starting HTTP/1.1 GET http://192.168.100.3:44138/api/devicesoption  
+2019-02-04 13:50:14.751 +00:00 [INF] Route matched with {action = "Get", controller = "DevicesOption"}. Executing action WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc)
+2019-02-04 13:50:14.758 +00:00 [INF] Executing action method WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc) - Validation state: "Valid"
+2019-02-04 13:50:14.813 +00:00 [INF] Executed action method WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.JsonResult in 52.322500000000005ms.
+2019-02-04 13:50:14.815 +00:00 [INF] Executing JsonResult, writing value of type 'WebApiSwc.DTO.JSON.OptionsDto.OptionAgregatorDto'.
+2019-02-04 13:50:14.817 +00:00 [INF] Executed action WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc) in 65.758400000000009ms
+2019-02-04 13:50:14.821 +00:00 [INF] Request finished in 71.3592ms 200 application/json; charset=utf-8
+2019-02-04 13:53:53.199 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 13:53:53.304 +00:00 [INF] Creating key "dcb40163-681c-47a7-af9c-4d2493f98857" with creation date "2019-02-04T13:53:53.3005075+00:00", activation date "2019-02-04T13:53:53.2888050+00:00", and expiration date "2019-05-05T13:53:53.2888050+00:00".
+2019-02-04 13:53:53.367 +00:00 [WRN] No XML encryptor configured. Key "dcb40163-681c-47a7-af9c-4d2493f98857" may be persisted to storage in unencrypted form.
+2019-02-04 13:53:53.372 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-dcb40163-681c-47a7-af9c-4d2493f98857.xml'.
+2019-02-04 13:53:59.295 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:44138/  
+2019-02-04 13:53:59.478 +00:00 [INF] Request finished in 185.6252ms 200 application/json
+2019-02-04 14:37:00.296 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 14:37:00.435 +00:00 [INF] Creating key "f9f90d3d-880b-49ce-91aa-c0ae2de4d2e1" with creation date "2019-02-04T14:37:00.4314823+00:00", activation date "2019-02-04T14:37:00.4166224+00:00", and expiration date "2019-05-05T14:37:00.4166224+00:00".
+2019-02-04 14:37:00.525 +00:00 [WRN] No XML encryptor configured. Key "f9f90d3d-880b-49ce-91aa-c0ae2de4d2e1" may be persisted to storage in unencrypted form.
+2019-02-04 14:37:00.535 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-f9f90d3d-880b-49ce-91aa-c0ae2de4d2e1.xml'.
+2019-02-04 14:37:07.573 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:44138/  
+2019-02-04 14:37:07.789 +00:00 [INF] Request finished in 217.4317ms 200 application/json
+2019-02-04 14:38:37.493 +00:00 [INF] User profile is available. Using '/root/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2019-02-04 14:38:37.637 +00:00 [INF] Creating key "14d2f42c-a2e4-452f-9dc3-47117a017087" with creation date "2019-02-04T14:38:37.6327860+00:00", activation date "2019-02-04T14:38:37.6239707+00:00", and expiration date "2019-05-05T14:38:37.6239707+00:00".
+2019-02-04 14:38:37.683 +00:00 [WRN] No XML encryptor configured. Key "14d2f42c-a2e4-452f-9dc3-47117a017087" may be persisted to storage in unencrypted form.
+2019-02-04 14:38:37.687 +00:00 [INF] Writing data to file '/root/.aspnet/DataProtection-Keys/key-14d2f42c-a2e4-452f-9dc3-47117a017087.xml'.
+2019-02-04 14:38:43.872 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:44138/  
+2019-02-04 14:38:44.080 +00:00 [INF] Request finished in 216.3984ms 200 application/json

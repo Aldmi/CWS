@@ -8,11 +8,11 @@ using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Events;
 using Transport.SerialPort.Abstract;
-using WebServer.DTO.JSON.OptionsDto.ExchangeOption;
-using WebServer.Extensions;
+using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
+using WebApiSwc.Extensions;
 using Worker.Background.Abstarct;
 
-namespace WebServer.Controllers
+namespace WebApiSwc.Controllers
 {
     /// <summary>
     /// Все singleton сервисы передаваемые через DI, в контроллеры, должны быть ПОТОКОБЕЗОПАСНЫЕ.

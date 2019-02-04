@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using WebServer.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption;
+using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption;
 
-namespace WebServer.DTO.JSON.OptionsDto.ExchangeOption
+namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption
 {
     public class ExchangeOptionDto
     {

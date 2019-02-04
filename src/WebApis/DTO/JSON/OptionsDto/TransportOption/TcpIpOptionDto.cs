@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebServer.DTO.JSON.OptionsDto.TransportOption
+namespace WebApiSwc.DTO.JSON.OptionsDto.TransportOption
 {
     public class TcpIpOptionDto
     {

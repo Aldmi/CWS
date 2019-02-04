@@ -10,9 +10,9 @@ using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Shared.Types;
-using WebServer.DTO.JSON.DevicesStateDto;
+using WebApiSwc.DTO.JSON.DevicesStateDto;
 
-namespace WebServer.Controllers
+namespace WebApiSwc.Controllers
 {
     /// <summary>
     /// REST api доступа к оперативному хранилищу устройств (Devices, Exchanges, Transports).

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace WebServer.DTO.XML
+namespace WebApiSwc.DTO.XML
 {
 
     [Serializable]

@@ -15,10 +15,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Serilog;
-using WebServer.DTO.XML;
+using WebApiSwc.DTO.XML;
 using Worker.Background.Abstarct;
 
-namespace WebServer.Controllers
+namespace WebApiSwc.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]

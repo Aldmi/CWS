@@ -1,4 +1,4 @@
-﻿namespace WebServer.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption
+﻿namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption
 {
     /// <summary>
     /// Конкретный провайдер обмена, захардкоженный (указать имя)

@@ -5,7 +5,7 @@ using InputDataModel.Autodictor.DataProviders.ByRuleDataProviders;
 using InputDataModel.Autodictor.DataProviders.ManualDataProviders;
 using InputDataModel.Autodictor.Model;
 
-namespace WebServer.AutofacModules
+namespace WebApiSwc.AutofacModules
 {
     /// <summary>
     /// Регистрируем КОНКРЕТНЫЕ провайдеры по типу.
