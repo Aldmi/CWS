@@ -20,6 +20,7 @@ using Serilog;
 using Shared.Enums;
 using WebServer.AutofacModules;
 using WebServer.Extensions;
+using WebServer.Settings;
 using Worker.Background.Abstarct;
 
 namespace WebServer
@@ -28,6 +29,7 @@ namespace WebServer
     {
         public Startup(IHostingEnvironment env)
         {
+            Env = env;
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
@@ -36,6 +38,7 @@ namespace WebServer
 
 
         public IConfiguration AppConfiguration { get; }
+        public IHostingEnvironment Env { get; }
 
 
         public void ConfigureServices(IServiceCollection services)
@@ -66,9 +69,7 @@ namespace WebServer
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            //OptionDbConnectionUseSqlServer
-            //OptionDbConnectionUseNpgsql
-            var connectionString = AppConfiguration.GetConnectionString("OptionDbConnectionUseNpgsql");
+            var connectionString = InitSettings.GetDbConnectionString(Env, AppConfiguration);
             builder.RegisterModule(new RepositoryAutofacModule(connectionString));
             builder.RegisterModule(new EventBusAutofacModule());
             builder.RegisterModule(new ControllerAutofacModule());
