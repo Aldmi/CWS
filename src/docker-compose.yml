@@ -12,6 +12,7 @@ services:
      - ASPNETCORE_ENVIRONMENT=Production
      - DbConnection=User ID = postgres; Password = dmitr; Server = host.docker.internal; Port = 5432; Database = OptionDevice; Integrated Security = true; Pooling = true;
      - HowCreateDb=Migrate
+     - Logger_MinLevel=Information
     networks:
       - aspnetcoreapp-network
 

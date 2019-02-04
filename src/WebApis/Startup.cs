@@ -48,7 +48,7 @@ namespace WebApiSwc
                 checks.AddValueTaskCheck("HTTP Endpoint", () => new ValueTask<IHealthCheckResult>(HealthCheckResult.Healthy("Ok")));
             });
 
-            var minLogLevel=  AppConfiguration["Logger:MinLevel"];
+            var minLogLevel = InitSettings.GetLoggerMinlevel(Env, AppConfiguration);
             services.AddSerilogServices(minLogLevel);
 
             services.AddTransient<IConfiguration>(provider => AppConfiguration);
@@ -245,47 +245,44 @@ namespace WebApiSwc
         {
             var logger = scope.Resolve<ILogger>();
             var howCreateDb = InitSettings.GetHowCreateDb(Env, AppConfiguration);
+            //СОЗДАНИЕ БД--------------------------------------------------------------
+            try
+            {
+                await scope.Resolve<ISerialPortOptionRepository>().CreateDb(howCreateDb);
+            }
+            catch (Exception ex)
+            {
+              logger.Fatal($"Ошибка создания БД на основе миграций {ex}");
+            }
+            //ИНИЦИАЛИЦИЯ РЕПОЗИТОРИЕВ--------------------------------------------------------
+            try
+            {
+                //var serialPortOptionRepository = scope.Resolve<ISerialPortOptionRepository>();
+                //var tcpIpOptionRepository = scope.Resolve<ITcpIpOptionRepository>();
+                //var httpOptionRepository = scope.Resolve<IHttpOptionRepository>();
+                //var exchangeOptionRepository = scope.Resolve<IExchangeOptionRepository>();
+                //var deviceOptionRepository = scope.Resolve<IDeviceOptionRepository>();
 
-            //if (env.IsDevelopment()) //TODO: добавить переменную окружения OS (win/linux)
-            //{
-                //СОЗДАНИЕ БД (если не созданно)--------------------------------------------------
-                try
-                {
-                    await scope.Resolve<ISerialPortOptionRepository>().CreateDb(howCreateDb);
-                }
-                catch (Exception ex)
-                {
-                  logger.Fatal($"Ошибка создания БД на основе миграций {ex}");
-                }
-                //ИНИЦИАЛИЦИЯ РЕПОЗИТОРИЕВ--------------------------------------------------------
-                try
-                {
-                    //var serialPortOptionRepository = scope.Resolve<ISerialPortOptionRepository>();
-                    //var tcpIpOptionRepository = scope.Resolve<ITcpIpOptionRepository>();
-                    //var httpOptionRepository = scope.Resolve<IHttpOptionRepository>();
-                    //var exchangeOptionRepository = scope.Resolve<IExchangeOptionRepository>();
-                    //var deviceOptionRepository = scope.Resolve<IDeviceOptionRepository>();
+                //await serialPortOptionRepository.InitializeAsync();
+                //await tcpIpOptionRepository.InitializeAsync();
+                //await httpOptionRepository.InitializeAsync();
+                //await exchangeOptionRepository.InitializeAsync();
+                //await deviceOptionRepository.InitializeAsync();
 
-                    //await serialPortOptionRepository.InitializeAsync();
-                    //await tcpIpOptionRepository.InitializeAsync();
-                    //await httpOptionRepository.InitializeAsync();
-                    //await exchangeOptionRepository.InitializeAsync();
-                    //await deviceOptionRepository.InitializeAsync();
-
-                    //DEBUG CRUD----------------------------------------------------------------
-                    //var singleElem = serialPortOptionRepository.GetSingle(option => option.Port == "COM1");
-                    //var httpElem = httpOptionRepository.GetSingle(option => option.Name == "Http table 1");
-                    //var tcpIpElem = tcpIpOptionRepository.GetSingle(option => option.Name == "RemoteTcpIpTable 2");
-                    //var exchangeElem = exchangeOptionRepository.GetSingle(option => option.Key == "SP_COM2_Vidor2");
-                    //TODO: проверить остальные CRUD операции
-                    //-----------------------------------------------------------------------------
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-          //  }
+                //DEBUG CRUD----------------------------------------------------------------
+                //var singleElem = serialPortOptionRepository.GetSingle(option => option.Port == "COM1");
+                //var httpElem = httpOptionRepository.GetSingle(option => option.Name == "Http table 1");
+                //var tcpIpElem = tcpIpOptionRepository.GetSingle(option => option.Name == "RemoteTcpIpTable 2");
+                //var exchangeElem = exchangeOptionRepository.GetSingle(option => option.Key == "SP_COM2_Vidor2");
+                //TODO: проверить остальные CRUD операции
+                //-----------------------------------------------------------------------------
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+  
 
             //СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ--------------------------------------------------
             try
