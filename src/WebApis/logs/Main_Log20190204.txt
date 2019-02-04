@@ -1,0 +1,18 @@
+2019-02-04 16:27:09.880 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-04 16:27:16.948 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-04 16:27:19.170 +07:00 [INF] Request starting HTTP/1.1 DEBUG http://localhost:57373/  0
+2019-02-04 16:27:19.327 +07:00 [INF] Request finished in 157.9336ms 200 application/json
+2019-02-04 16:28:13.706 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-04 16:28:18.464 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57378/  
+2019-02-04 16:28:18.651 +07:00 [INF] Request finished in 188.3265ms 200 application/json
+2019-02-04 16:28:18.691 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:57378/favicon.ico  
+2019-02-04 16:28:18.813 +07:00 [INF] Request finished in 122.6609ms 404 
+2019-02-04 16:30:52.836 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-04 16:31:51.574 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-04 16:31:58.723 +07:00 [INF] Request starting HTTP/1.1 GET http://192.168.100.3:44138/api/devicesoption  
+2019-02-04 16:31:58.852 +07:00 [INF] Route matched with {action = "Get", controller = "DevicesOption"}. Executing action WebServer.Controllers.DevicesOptionController.Get (WebApiSwc)
+2019-02-04 16:31:58.868 +07:00 [INF] Executing action method WebServer.Controllers.DevicesOptionController.Get (WebApiSwc) - Validation state: "Valid"
+2019-02-04 16:31:59.037 +07:00 [INF] Executed action method WebServer.Controllers.DevicesOptionController.Get (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.JsonResult in 161.05780000000001ms.
+2019-02-04 16:31:59.051 +07:00 [INF] Executing JsonResult, writing value of type 'WebServer.DTO.JSON.OptionsDto.OptionAgregatorDto'.
+2019-02-04 16:31:59.177 +07:00 [INF] Executed action WebServer.Controllers.DevicesOptionController.Get (WebApiSwc) in 320.9614ms
+2019-02-04 16:31:59.185 +07:00 [INF] Request finished in 464.0975ms 200 application/json; charset=utf-8

@@ -42,7 +42,6 @@ namespace DAL.EFCore.DbContext
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer(_connStr);
             optionsBuilder.UseNpgsql(_connStr);
         }
 

@@ -12,11 +12,9 @@ namespace DAL.EFCore.DbContext
     {
         public Context CreateDbContext(string[] args)
         {
-            Console.WriteLine("Migration Started>>>>>>>>>>>>>>>>>>>>>>>>>");
-            var path = @"D:\\Git\\CWS\\src\\CoreWithAutoFack";
+            var path = @"D:\\Git\\CWS\\src\\WebApis";
             var config = JsonConfigLib.GetConfiguration(path);
             var connectionString = config.GetConnectionString("OptionDbConnectionUseNpgsql");
-            Console.WriteLine($"Connection string = {connectionString}");
             return new Context(connectionString);
         }
     }
