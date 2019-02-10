@@ -333,3 +333,5 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 src/CoreWithAutoFack/logs/
+src/WebApis/logs/Main_Log20190207.txt
+src/WebApis/logs/Error_Log20190207.txt
