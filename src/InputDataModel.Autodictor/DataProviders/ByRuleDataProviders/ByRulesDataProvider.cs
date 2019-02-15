@@ -84,7 +84,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         {
             var stringRequset = _currentRequest.StringRequest;
             var format = _currentRequest.RequestOption.Format;
-
+            
             StatusDict["GetDataByte.StringRequest"] = $"\"{stringRequset}\". Lenght= \"{stringRequset.Length}\"";
             //Преобразовываем КОНЕЧНУЮ строку в массив байт
             var resultBuffer = stringRequset.ConvertString2ByteArray(format);
@@ -120,6 +120,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 IsOutDataValid = IsOutDataValid
             };
             StatusDict["SetDataByte.StringResponse"] = $"\"{stringResponse}\" Length= \"{data.Length}\"";
+            StatusDict["SetDataByte.TimeResponse"] = $"\"{ _currentRequest.ResponseOption.TimeRespone}\"";
+           
             return IsOutDataValid;
         }
 

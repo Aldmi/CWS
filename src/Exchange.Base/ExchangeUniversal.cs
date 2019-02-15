@@ -12,6 +12,7 @@ using Exchange.Base.DataProviderAbstract;
 using Exchange.Base.Model;
 using Exchange.Base.RxModel;
 using InputDataModel.Base;
+using Newtonsoft.Json;
 using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
@@ -401,18 +402,42 @@ namespace Exchange.Base
             }
 
             //ВЫВОД ОТЧЕТА ОБ ОТПРАВКИ ПОРЦИИ ДАННЫХ.
-            var numberPreparedPackages = transportResponseWrapper.ResponsesItems.Count;//кол-во подготовленных к отправке пакетов
-            var countIsValid = transportResponseWrapper.ResponsesItems.Count(resp => resp.IsOutDataValid);
-            var countAll = transportResponseWrapper.ResponsesItems.Count(resp => resp.IsOutDataValid);
+            LogedResponseInformation(transportResponseWrapper);
+            return transportResponseWrapper;
+        }
+
+
+        private void LogedResponseInformation(ResponsePieceOfDataWrapper<TIn> response)
+        {
+            var numberPreparedPackages = response.ResponsesItems.Count;//кол-во подготовленных к отправке пакетов
+            var countIsValid = response.ResponsesItems.Count(resp => resp.IsOutDataValid);
+            var countAll = response.ResponsesItems.Count(resp => resp.IsOutDataValid);
             string errorStat = String.Empty;
             if (countIsValid < numberPreparedPackages)
             {
-                errorStat = transportResponseWrapper.ResponsesItems.Select(r => r.Status.ToString()).Aggregate((i, j) => i + " | " + j);
+                errorStat = response.ResponsesItems.Select(r => r.Status.ToString()).Aggregate((i, j) => i + " | " + j);
             }
 
+            var responseInfo = response.ResponsesItems.Select(item => new
+            {
+                viewRuleId = $"RuleName= {item.MessageDict["RuleName"]}  viewRule.Id= {item.MessageDict["viewRule.Id"]}",
+                StatusStr = item.StatusStr,
+                StringRequest = item.MessageDict["GetDataByte.StringRequest"],
+                LengthRequest = item.MessageDict["GetDataByte.StringRequest"].Length,
+                TimeResponse = item.MessageDict["SetDataByte.TimeResponse"]               
+            }).ToList();
+
+            var settings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,             //Отступы дочерних элементов 
+                NullValueHandling = NullValueHandling.Ignore  //Игнорировать пустые теги
+            };
+            var jsonRespInfo = JsonConvert.SerializeObject(responseInfo, settings);
+
+            _logger.Information($"ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= {KeyExchange}   jsonRespInfo= {jsonRespInfo}");
             _logger.Information($"ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= {KeyExchange} успех/ответов/запросов=  ({countIsValid} / {countAll} / {numberPreparedPackages})   [{errorStat}]");
-            return transportResponseWrapper;
         }
+
 
         #endregion
 
@@ -429,4 +454,15 @@ namespace Exchange.Base
 
         #endregion
     }
+
+
+    public class Cffgfg
+    {
+        public string StatusStr { get; set; }
+        public string StringRequest { get; set; }
+        public int LengthRequest { get; set; }
+        public string TimeResponse { get; set; }
+    }
+
+
 }
