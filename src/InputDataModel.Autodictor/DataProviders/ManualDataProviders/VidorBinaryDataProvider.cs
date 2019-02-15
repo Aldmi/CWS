@@ -94,6 +94,16 @@ namespace InputDataModel.Autodictor.DataProviders.ManualDataProviders
             throw new NotImplementedException();
         }
 
+        public ProviderOption GetCurrentOption()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SetCurrentOption(ProviderOption optionNew)
+        {
+            throw new NotImplementedException();
+        }
+
         public int TimeRespone { get; }
         public CancellationTokenSource Cts { get; set; }
 

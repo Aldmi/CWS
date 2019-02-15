@@ -15,6 +15,12 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         #endregion
 
 
+        #region prop
+
+        public IEnumerable<ViewRule> ViewRules { get; set; }
+
+        #endregion
+
 
 
         #region ctor
@@ -31,10 +37,20 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
 
 
-        #region prop
+        public RuleOption GetCurrentOption()
+        {
+            var ruleOption = Option;
+            var currentViewRuleOptions= ViewRules.Select(vr => vr.Option);
+            ruleOption.ViewRules = new List<ViewRuleOption>(currentViewRuleOptions);
+            return ruleOption;
+        }
 
-        public IEnumerable<ViewRule> ViewRules { get; set; }
 
-        #endregion
+        //public void ChangeOption(RuleOption op)
+        //{
+        //    Option = op;
+        //}
+
+
     }
 }
