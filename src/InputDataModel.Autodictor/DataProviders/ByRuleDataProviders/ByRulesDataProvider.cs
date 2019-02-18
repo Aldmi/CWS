@@ -42,7 +42,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             ProviderName = providerOption.Name;
             _rules = option.Rules.Select(opt => new Rule(opt, logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(option.RuleName4DefaultHandle)
-                ? _rules.First().Option.Name
+                ? "DefaultHandler"//_rules.First().Option.Name
                 : option.RuleName4DefaultHandle;
             _logger = logger;
         }

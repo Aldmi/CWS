@@ -490,3 +490,8 @@ BL.Services.Exceptions.OptionHandlerException: Устройство с таки�
 2019-02-18 23:01:51.507 +07:00 [FTL] HostingBackgroundTransport.ProcessAsync System.Threading.Tasks.TaskCanceledException: A task was canceled.
    at Exchange.Base.ExchangeUniversal`1.CycleTimeActionAsync(CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 300
    at Worker.Background.Concrete.HostingBackground.HostingBackgroundTransport.ProcessAsync(CancellationToken stoppingToken) in D:\Git\CWS\src\Worker.Background\Concrete\HostingBackground\HostingBackgroundTransport.cs:line 112
+2019-02-18 23:05:50.231 +07:00 [ERR] Ошибка в DevicesOptionController/Post
+BL.Services.Exceptions.OptionHandlerException: Устройство с таким именем уже существует:  TestTcpIp_Informsvyaz
+   at BL.Services.Mediators.MediatorForOptions.AddDeviceOptionWithNewExchangeOptionsAndNewTransportOptionsAsync(DeviceOption deviceOption, IReadOnlyList`1 exchangeOptions, TransportOption transportOption) in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 353
+   at BL.Services.Mediators.MediatorForOptions.AddDeviceOptionAsync(DeviceOption deviceOption, IReadOnlyList`1 exchangeOptions, TransportOption transportOption) in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 175
+   at WebApiSwc.Controllers.DevicesOptionController.Post(OptionAgregatorDto data) in D:\Git\CWS\src\WebApis\Controllers\DevicesOptionController.cs:line 139

@@ -68,7 +68,7 @@ namespace InputDataModel.Autodictor.DataProviders
 
             switch (command)
             {
-                case Command4Device.None when (handlerName.Equals(directHandlerName)):
+                case Command4Device.None when (handlerName.Equals(directHandlerName)) || (directHandlerName.Equals("DefaultHandler") && (!handlerName.Contains(commandPrefix))):
                     return RuleSwitcher4InData.InDataDirectHandler;
 
                 case Command4Device.None when (string.IsNullOrEmpty(directHandlerName)) && (!handlerName.Contains(commandPrefix)):

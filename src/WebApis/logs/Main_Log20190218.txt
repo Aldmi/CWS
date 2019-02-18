@@ -12119,3 +12119,2722 @@ BL.Services.Exceptions.OptionHandlerException: Устройство с таки�
   }
 ]
 2019-02-18 23:03:32.785 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:06.425 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-18 23:05:09.487 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-18 23:05:11.683 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2182.1107 ms
+2019-02-18 23:05:11.771 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:11.772 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:14.549 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2013.8703 ms
+2019-02-18 23:05:14.550 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:14.551 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:17.298 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2013.8467 ms
+2019-02-18 23:05:17.300 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:17.301 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:20.048 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2014.6907 ms
+2019-02-18 23:05:20.049 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:20.050 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:22.797 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2014.2617 ms
+2019-02-18 23:05:22.798 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:22.800 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:25.547 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2016.3463000000002 ms
+2019-02-18 23:05:25.549 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:25.552 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:28.296 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2016.9371 ms
+2019-02-18 23:05:28.297 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:28.299 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:31.034 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2016.3213 ms
+2019-02-18 23:05:31.035 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:31.036 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:33.782 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2013.7742 ms
+2019-02-18 23:05:33.786 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:33.791 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:36.532 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2019.2567000000001 ms
+2019-02-18 23:05:36.534 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:36.536 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:39.277 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2012.3756 ms
+2019-02-18 23:05:39.279 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:39.282 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:42.030 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2010.3933000000002 ms
+2019-02-18 23:05:42.033 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:42.036 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:44.778 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2013.2155 ms
+2019-02-18 23:05:44.779 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:44.781 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:47.535 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2015.7414 ms
+2019-02-18 23:05:47.537 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:47.544 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:49.736 +07:00 [INF] Request starting HTTP/1.1 POST http://localhost:44138/api/devicesoption application/json 7024
+2019-02-18 23:05:49.867 +07:00 [INF] Route matched with {action = "Post", controller = "DevicesOption"}. Executing action WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc)
+2019-02-18 23:05:49.992 +07:00 [INF] Executing action method WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc) with arguments (["WebApiSwc.DTO.JSON.OptionsDto.OptionAgregatorDto"]) - Validation state: "Valid"
+2019-02-18 23:05:50.231 +07:00 [ERR] Ошибка в DevicesOptionController/Post
+BL.Services.Exceptions.OptionHandlerException: Устройство с таким именем уже существует:  TestTcpIp_Informsvyaz
+   at BL.Services.Mediators.MediatorForOptions.AddDeviceOptionWithNewExchangeOptionsAndNewTransportOptionsAsync(DeviceOption deviceOption, IReadOnlyList`1 exchangeOptions, TransportOption transportOption) in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 353
+   at BL.Services.Mediators.MediatorForOptions.AddDeviceOptionAsync(DeviceOption deviceOption, IReadOnlyList`1 exchangeOptions, TransportOption transportOption) in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 175
+   at WebApiSwc.Controllers.DevicesOptionController.Post(OptionAgregatorDto data) in D:\Git\CWS\src\WebApis\Controllers\DevicesOptionController.cs:line 139
+2019-02-18 23:05:50.284 +07:00 [INF] Executed action method WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 280.3714ms.
+2019-02-18 23:05:50.299 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2015.1478000000002 ms
+2019-02-18 23:05:50.301 +07:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.SerializableError'.
+2019-02-18 23:05:50.301 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:50.304 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:50.319 +07:00 [INF] Executed action WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc) in 448.17490000000004ms
+2019-02-18 23:05:50.329 +07:00 [INF] Request finished in 594.106ms 400 application/json; charset=utf-8
+2019-02-18 23:05:53.049 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2016.3346000000001 ms
+2019-02-18 23:05:53.051 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:53.053 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:53.081 +07:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:44138/api/devicesoption/TestTcpIp_Informsvyaz  0
+2019-02-18 23:05:53.103 +07:00 [INF] Route matched with {action = "Delete", controller = "DevicesOption"}. Executing action WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc)
+2019-02-18 23:05:53.107 +07:00 [INF] Executing action method WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc) with arguments (["TestTcpIp_Informsvyaz"]) - Validation state: "Valid"
+2019-02-18 23:05:53.450 +07:00 [INF] Executed action method WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 340.0976ms.
+2019-02-18 23:05:53.452 +07:00 [INF] Executing ObjectResult, writing value of type 'DAL.Abstract.Entities.Options.OptionAgregator'.
+2019-02-18 23:05:53.478 +07:00 [INF] Executed action WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc) in 372.9887ms
+2019-02-18 23:05:53.479 +07:00 [INF] Request finished in 398.6035ms 200 application/json; charset=utf-8
+2019-02-18 23:05:54.834 +07:00 [INF] Request starting HTTP/1.1 POST http://localhost:44138/api/devicesoption application/json 7024
+2019-02-18 23:05:54.836 +07:00 [INF] Route matched with {action = "Post", controller = "DevicesOption"}. Executing action WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc)
+2019-02-18 23:05:54.839 +07:00 [INF] Executing action method WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc) with arguments (["WebApiSwc.DTO.JSON.OptionsDto.OptionAgregatorDto"]) - Validation state: "Valid"
+2019-02-18 23:05:54.931 +07:00 [INF] Executed action method WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.CreatedAtActionResult in 90.7921ms.
+2019-02-18 23:05:54.933 +07:00 [INF] Executing ObjectResult, writing value of type 'WebApiSwc.DTO.JSON.OptionsDto.OptionAgregatorDto'.
+2019-02-18 23:05:54.954 +07:00 [INF] Executed action WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc) in 116.8236ms
+2019-02-18 23:05:54.956 +07:00 [INF] Request finished in 122.0239ms 201 application/json; charset=utf-8
+2019-02-18 23:05:55.783 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.3521 ms
+2019-02-18 23:05:55.785 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:55.789 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:05:58.524 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2005.3083000000001 ms
+2019-02-18 23:05:58.526 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:05:58.529 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:04.200 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-18 23:06:06.689 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-18 23:06:09.031 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2121.2308000000003 ms
+2019-02-18 23:06:09.096 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:09.097 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:11.860 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2014.6753 ms
+2019-02-18 23:06:11.862 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:11.863 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:14.601 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2005.6118000000001 ms
+2019-02-18 23:06:14.603 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:14.604 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:17.343 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2012.1960000000001 ms
+2019-02-18 23:06:17.345 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:17.346 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:20.074 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2009.5377 ms
+2019-02-18 23:06:20.076 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:20.078 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:22.804 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2004.3915000000002 ms
+2019-02-18 23:06:22.805 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:22.807 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:25.536 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2005.1014 ms
+2019-02-18 23:06:25.539 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:25.541 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:28.252 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2000.9815 ms
+2019-02-18 23:06:28.253 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:28.255 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:30.988 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.0318000000002 ms
+2019-02-18 23:06:30.989 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:30.992 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:33.714 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.2248000000002 ms
+2019-02-18 23:06:33.715 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:33.717 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:33.996 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:44138/api/devicesoption  
+2019-02-18 23:06:34.129 +07:00 [INF] Route matched with {action = "Get", controller = "DevicesOption"}. Executing action WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc)
+2019-02-18 23:06:34.146 +07:00 [INF] Executing action method WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc) - Validation state: "Valid"
+2019-02-18 23:06:34.345 +07:00 [INF] Executed action method WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.JsonResult in 194.2568ms.
+2019-02-18 23:06:34.360 +07:00 [INF] Executing JsonResult, writing value of type 'WebApiSwc.DTO.JSON.OptionsDto.OptionAgregatorDto'.
+2019-02-18 23:06:34.405 +07:00 [INF] Executed action WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc) in 271.8022ms
+2019-02-18 23:06:34.417 +07:00 [INF] Request finished in 421.7167ms 200 application/json; charset=utf-8
+2019-02-18 23:06:36.446 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2005.3884 ms
+2019-02-18 23:06:36.448 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:36.451 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:39.180 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2004.8971000000001 ms
+2019-02-18 23:06:39.182 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:39.184 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:41.920 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2013.2093 ms
+2019-02-18 23:06:41.922 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:41.924 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:44.664 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2009.498 ms
+2019-02-18 23:06:44.666 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:44.669 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:47.407 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2012.6496000000002 ms
+2019-02-18 23:06:47.410 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:47.413 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:50.150 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2007.0966 ms
+2019-02-18 23:06:50.152 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:50.154 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:52.902 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2014.2692000000002 ms
+2019-02-18 23:06:52.903 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:52.906 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:55.627 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2003.9823000000001 ms
+2019-02-18 23:06:55.629 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:55.631 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:06:58.373 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2016.1225000000002 ms
+2019-02-18 23:06:58.375 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:06:58.380 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:01.112 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.0736000000002 ms
+2019-02-18 23:07:01.113 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:01.115 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:03.828 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.077 ms
+2019-02-18 23:07:03.830 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:03.832 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:06.576 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2010.1261000000002 ms
+2019-02-18 23:07:06.578 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:06.579 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:09.327 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2014.1594 ms
+2019-02-18 23:07:09.329 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:09.331 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:12.066 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.0722 ms
+2019-02-18 23:07:12.068 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:12.070 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:14.810 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2010.1244000000002 ms
+2019-02-18 23:07:14.812 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:14.813 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:17.552 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.0890000000002 ms
+2019-02-18 23:07:17.553 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:17.555 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:20.296 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2016.1301 ms
+2019-02-18 23:07:20.298 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:20.299 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:23.020 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.1304 ms
+2019-02-18 23:07:23.022 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:23.024 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:25.764 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2010.0762000000002 ms
+2019-02-18 23:07:25.766 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:25.767 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:28.534 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2032.941 ms
+2019-02-18 23:07:28.593 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:28.597 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:28.897 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:44138/api/devicesoption  
+2019-02-18 23:07:28.900 +07:00 [INF] Route matched with {action = "Get", controller = "DevicesOption"}. Executing action WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc)
+2019-02-18 23:07:28.902 +07:00 [INF] Executing action method WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc) - Validation state: "Valid"
+2019-02-18 23:07:28.926 +07:00 [INF] Executed action method WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.JsonResult in 22.3334ms.
+2019-02-18 23:07:28.928 +07:00 [INF] Executing JsonResult, writing value of type 'WebApiSwc.DTO.JSON.OptionsDto.OptionAgregatorDto'.
+2019-02-18 23:07:28.930 +07:00 [INF] Executed action WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc) in 28.523500000000002ms
+2019-02-18 23:07:28.931 +07:00 [INF] Request finished in 34.3759ms 200 application/json; charset=utf-8
+2019-02-18 23:07:31.328 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.0691000000002 ms
+2019-02-18 23:07:31.330 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:31.332 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:34.066 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.2214000000001 ms
+2019-02-18 23:07:34.068 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:34.070 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:36.795 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2014.2279 ms
+2019-02-18 23:07:36.797 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:36.799 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:39.546 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2011.4679 ms
+2019-02-18 23:07:39.548 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:39.549 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:42.283 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2003.1068 ms
+2019-02-18 23:07:42.284 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:42.286 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:45.031 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2011.2911000000001 ms
+2019-02-18 23:07:45.031 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:45.033 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:47.751 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.5125 ms
+2019-02-18 23:07:47.753 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:47.754 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:50.498 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2014.5854000000002 ms
+2019-02-18 23:07:50.500 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:50.501 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:53.234 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2015.2289 ms
+2019-02-18 23:07:53.236 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:53.238 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:55.958 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.8977 ms
+2019-02-18 23:07:55.959 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:55.960 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:07:58.685 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2008.1449 ms
+2019-02-18 23:07:58.687 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:07:58.688 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:01.426 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.2888 ms
+2019-02-18 23:08:01.428 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:01.429 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:04.172 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2013.313 ms
+2019-02-18 23:08:04.173 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:04.174 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:06.894 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.3644000000002 ms
+2019-02-18 23:08:06.895 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:06.896 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:09.639 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2011.7064 ms
+2019-02-18 23:08:09.641 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:09.643 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:12.390 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2014.116 ms
+2019-02-18 23:08:12.392 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:12.393 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:15.113 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.4492 ms
+2019-02-18 23:08:15.115 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:15.116 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:17.840 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2012.4728 ms
+2019-02-18 23:08:17.842 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:17.845 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:20.586 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2005.7774000000002 ms
+2019-02-18 23:08:20.588 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:20.590 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:23.317 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2001.5272 ms
+2019-02-18 23:08:23.319 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:23.320 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:26.036 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2005.9053000000001 ms
+2019-02-18 23:08:26.037 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:26.039 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:28.773 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2004.0835000000002 ms
+2019-02-18 23:08:28.777 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:28.790 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:31.527 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2014.1392 ms
+2019-02-18 23:08:31.529 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:31.531 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:34.256 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2003.1099000000002 ms
+2019-02-18 23:08:34.257 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:34.258 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:36.969 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2000.4173 ms
+2019-02-18 23:08:36.971 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:36.972 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:39.701 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2010.1398000000002 ms
+2019-02-18 23:08:39.703 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:39.705 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:42.446 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2005.4185 ms
+2019-02-18 23:08:42.448 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:42.450 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:45.178 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2003.4852 ms
+2019-02-18 23:08:45.179 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:45.181 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:47.907 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2001.7431000000001 ms
+2019-02-18 23:08:47.911 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:47.912 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:50.651 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2012.2186000000002 ms
+2019-02-18 23:08:50.653 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:50.655 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:53.375 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2001.5419000000002 ms
+2019-02-18 23:08:53.376 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:53.378 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:56.112 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.2306 ms
+2019-02-18 23:08:56.113 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:56.114 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:08:58.842 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2014.1006 ms
+2019-02-18 23:08:58.845 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:08:58.846 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:01.578 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2015.1201 ms
+2019-02-18 23:09:01.580 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:01.581 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:04.329 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2017.4209 ms
+2019-02-18 23:09:04.331 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:04.334 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:07.068 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.2166000000002 ms
+2019-02-18 23:09:07.070 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:07.071 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:09.796 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2001.9617 ms
+2019-02-18 23:09:09.798 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:09.800 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:12.539 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.1759000000002 ms
+2019-02-18 23:09:12.542 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:12.543 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:15.280 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2010.7628000000002 ms
+2019-02-18 23:09:15.282 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:15.283 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:18.002 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.7441000000001 ms
+2019-02-18 23:09:18.003 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:18.004 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:20.733 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2009.6834000000001 ms
+2019-02-18 23:09:20.736 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:20.738 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:23.483 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2012.3978000000002 ms
+2019-02-18 23:09:23.486 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:23.487 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:26.206 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.0866 ms
+2019-02-18 23:09:26.209 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:26.210 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:28.952 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2016.1277 ms
+2019-02-18 23:09:28.953 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:28.954 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:31.680 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2003.0804 ms
+2019-02-18 23:09:31.682 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:31.685 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:34.406 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.063 ms
+2019-02-18 23:09:34.408 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:34.409 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:37.128 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.2624 ms
+2019-02-18 23:09:37.129 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:37.130 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:39.861 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2001.3811 ms
+2019-02-18 23:09:39.863 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:39.864 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:42.598 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2001.6483 ms
+2019-02-18 23:09:42.600 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:42.601 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:45.341 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2010.5719000000001 ms
+2019-02-18 23:09:45.342 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:45.343 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:48.077 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2014.5635000000002 ms
+2019-02-18 23:09:48.079 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:48.080 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:50.827 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2013.8775 ms
+2019-02-18 23:09:50.829 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:50.831 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:53.576 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2009.3933000000002 ms
+2019-02-18 23:09:53.577 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:53.578 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:56.301 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2005.4965000000002 ms
+2019-02-18 23:09:56.303 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:56.304 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:09:59.025 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2008.8931 ms
+2019-02-18 23:09:59.027 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:09:59.028 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:01.758 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2004.1205 ms
+2019-02-18 23:10:01.760 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:01.761 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:04.496 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2012.469 ms
+2019-02-18 23:10:04.499 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:04.499 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:07.223 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2005.0186 ms
+2019-02-18 23:10:07.224 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:07.227 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:09.961 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2007.2167000000002 ms
+2019-02-18 23:10:09.962 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:09.963 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:12.703 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2014.8639 ms
+2019-02-18 23:10:12.705 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:12.706 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:15.449 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2013.3397 ms
+2019-02-18 23:10:15.451 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:15.452 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:18.198 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2012.6192 ms
+2019-02-18 23:10:18.199 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:18.200 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:20.937 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2013.8734000000002 ms
+2019-02-18 23:10:20.938 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:20.939 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:23.677 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2004.2546000000002 ms
+2019-02-18 23:10:23.678 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:23.680 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:26.420 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2010.0639 ms
+2019-02-18 23:10:26.421 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:26.422 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:29.171 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2016.1311 ms
+2019-02-18 23:10:29.173 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:29.174 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:31.900 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2007.1336000000001 ms
+2019-02-18 23:10:31.902 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:31.902 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:34.626 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.6032 ms
+2019-02-18 23:10:34.628 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:34.628 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:37.347 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.0322 ms
+2019-02-18 23:10:37.349 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:37.350 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:40.078 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.2087000000001 ms
+2019-02-18 23:10:40.080 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:40.082 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:10:42.796 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2001.3031 ms
+2019-02-18 23:10:42.798 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:10:42.799 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:11:42.571 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 59036.4676 ms
+2019-02-18 23:11:42.572 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:11:42.574 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:11:45.310 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2011.2839000000001 ms
+2019-02-18 23:11:45.313 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:11:45.314 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:11:48.037 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2005.2769 ms
+2019-02-18 23:11:48.039 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:11:48.040 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:11:50.783 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2002.2953 ms
+2019-02-18 23:11:50.784 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:11:50.785 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:11:53.531 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 2017.1749000000002 ms
+2019-02-18 23:11:53.533 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:11:53.534 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:11:59.091 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4827.5549 ms
+2019-02-18 23:11:59.094 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:11:59.095 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:14:14.291 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 134461.0873 ms
+2019-02-18 23:14:14.293 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:14:14.294 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:14:45.853 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 30839.6335 ms
+2019-02-18 23:14:45.855 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:14:45.855 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:15:29.844 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 43263.311700000006 ms
+2019-02-18 23:15:29.846 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:15:29.847 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:30:54.230 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-18 23:30:56.714 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-18 23:32:40.088 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:32:41.607 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:32:41.612 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 104882.7757 ms
+2019-02-18 23:32:41.679 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:32:41.680 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:32:55.487 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:32:55.506 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:32:55.508 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 13071.8449 ms
+2019-02-18 23:32:55.510 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:32:55.513 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:33:00.275 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:00.299 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:00.304 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4069.3214000000003 ms
+2019-02-18 23:33:00.305 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:33:00.308 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:33:05.085 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:05.106 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:05.112 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4077.7551000000003 ms
+2019-02-18 23:33:05.113 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:33:05.118 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:33:09.891 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:09.917 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:09.922 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4076.7345 ms
+2019-02-18 23:33:09.924 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:33:09.926 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:33:14.695 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:14.717 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:14.721 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4063.9904 ms
+2019-02-18 23:33:14.723 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:33:14.730 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:33:19.502 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:19.526 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:19.530 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4072.0102 ms
+2019-02-18 23:33:19.532 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:33:19.540 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:33:24.301 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:24.324 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:24.329 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4063.2118 ms
+2019-02-18 23:33:24.330 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:33:24.333 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:33:29.102 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:29.125 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:29.128 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4066.4459 ms
+2019-02-18 23:33:29.129 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:33:29.132 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:33:33.892 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:33.912 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:33.915 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4057.2858 ms
+2019-02-18 23:33:33.916 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:33:33.917 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:33:38.676 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:38.699 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:38.702 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4057.8893000000003 ms
+2019-02-18 23:33:38.702 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:33:38.704 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:33:43.485 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:43.505 +07:00 [WRN] Filter In Data Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: ordering
+   at System.Linq.Dynamic.Core.Validation.Check.NotEmpty(String value, String parameterName)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy(IQueryable source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, ParsingConfig config, String ordering, Object[] args)
+   at System.Linq.Dynamic.Core.DynamicQueryableExtensions.OrderBy[TSource](IQueryable`1 source, String ordering, Object[] args)
+   at InputDataModel.Autodictor.Extensions.AdInputTypeCollectionExtensions.Order(IEnumerable`1 inData, String orderBy, ILogger logger) in D:\Git\CWS\src\InputDataModel.Autodictor\Extensions\AdInputTypeCollectionExtensions.cs:line 76
+2019-02-18 23:33:43.508 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4066.6470000000004 ms
+2019-02-18 23:33:43.509 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:33:43.510 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:34:43.231 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-18 23:34:45.734 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-18 23:35:38.917 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 52960.7693 ms
+2019-02-18 23:35:38.978 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:35:38.980 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:35:58.847 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 19111.0263 ms
+2019-02-18 23:35:58.850 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:35:58.850 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:36:07.620 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 8040.6042000000007 ms
+2019-02-18 23:36:07.622 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:36:07.623 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (1 / 1 / 1)   []
+2019-02-18 23:39:55.000 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-18 23:39:57.426 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-18 23:40:16.772 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 19334.7242 ms
+2019-02-18 23:40:16.830 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:40:16.832 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:40:24.966 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 7386.1738000000005 ms
+2019-02-18 23:40:24.968 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:40:24.970 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:40:29.707 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4018.775 ms
+2019-02-18 23:40:29.709 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:40:29.712 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:40:34.467 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4028.5249000000003 ms
+2019-02-18 23:40:34.468 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:40:34.472 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:40:39.222 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4015.7301 ms
+2019-02-18 23:40:39.225 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:40:39.228 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:40:43.954 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4002.6127 ms
+2019-02-18 23:40:43.956 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:40:43.962 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:40:48.702 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4011.7054000000003 ms
+2019-02-18 23:40:48.705 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:40:48.707 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:40:53.453 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4029.4185 ms
+2019-02-18 23:40:53.455 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:40:53.458 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:40:56.735 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:44138/api/devicesoption  
+2019-02-18 23:40:56.888 +07:00 [INF] Route matched with {action = "Get", controller = "DevicesOption"}. Executing action WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc)
+2019-02-18 23:40:56.905 +07:00 [INF] Executing action method WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc) - Validation state: "Valid"
+2019-02-18 23:40:57.068 +07:00 [INF] Executed action method WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.JsonResult in 156.37820000000002ms.
+2019-02-18 23:40:57.083 +07:00 [INF] Executing JsonResult, writing value of type 'WebApiSwc.DTO.JSON.OptionsDto.OptionAgregatorDto'.
+2019-02-18 23:40:57.130 +07:00 [INF] Executed action WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc) in 236.54940000000002ms
+2019-02-18 23:40:57.141 +07:00 [INF] Request finished in 406.8018ms 200 application/json; charset=utf-8
+2019-02-18 23:40:58.216 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4025.2045000000003 ms
+2019-02-18 23:40:58.220 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:40:58.224 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:41:02.968 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4015.8978 ms
+2019-02-18 23:41:02.970 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:41:02.974 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:41:07.723 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4018.6488000000004 ms
+2019-02-18 23:41:07.726 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:41:07.729 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:41:12.457 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4004.8318000000004 ms
+2019-02-18 23:41:12.459 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:41:12.461 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:41:16.289 +07:00 [INF] Request starting HTTP/1.1 POST http://localhost:44138/api/InputData/SendData4Devices application/json 1729
+2019-02-18 23:41:16.307 +07:00 [INF] Route matched with {action = "SendData4Devices", controller = "InputData"}. Executing action WebApiSwc.Controllers.InputDataController.SendData4Devices (WebApiSwc)
+2019-02-18 23:41:16.417 +07:00 [INF] Executing action method WebApiSwc.Controllers.InputDataController.SendData4Devices (WebApiSwc) with arguments (["System.Collections.ObjectModel.ReadOnlyCollection`1[InputDataModel.Base.InputData`1[InputDataModel.Autodictor.Model.AdInputType]]"]) - Validation state: "Valid"
+2019-02-18 23:41:16.433 +07:00 [INF] ПРИНЯТЫ ДАННЫЕ ДЛЯ: {
+  "DeviceName": "TestTcpIp_Informsvyaz",
+  "ExchangeName": "",
+  "DataAction": 0,
+  "Command": 0,
+  "DirectHandlerName": "",
+  "DataCount": 1
+}
+2019-02-18 23:41:16.458 +07:00 [INF] Executed action method WebApiSwc.Controllers.InputDataController.SendData4Devices (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.OkResult in 34.6136ms.
+2019-02-18 23:41:16.463 +07:00 [INF] Executing HttpStatusCodeResult, setting HTTP status code 200
+2019-02-18 23:41:16.464 +07:00 [INF] Executed action WebApiSwc.Controllers.InputDataController.SendData4Devices (WebApiSwc) in 155.7781ms
+2019-02-18 23:41:16.466 +07:00 [INF] Request finished in 177.6279ms 200 
+2019-02-18 23:41:17.190 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4004.4058 ms
+2019-02-18 23:41:17.192 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:41:17.195 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:41:32.483 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 14667.0786 ms
+2019-02-18 23:41:32.485 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:41:32.490 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:41:36.736 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4029.9378 ms
+2019-02-18 23:41:36.738 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:41:36.741 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:41:41.497 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4029.9878000000003 ms
+2019-02-18 23:41:41.500 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:41:41.503 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:41:46.253 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4016.2313000000004 ms
+2019-02-18 23:41:46.255 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:41:46.260 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:41:51.013 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4028.5464 ms
+2019-02-18 23:41:51.015 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:41:51.020 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:41:55.783 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4031.1924000000004 ms
+2019-02-18 23:41:55.785 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:41:55.789 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:42:00.531 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4019.0809000000004 ms
+2019-02-18 23:42:00.533 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:42:00.537 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:42:05.297 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4032.3799000000004 ms
+2019-02-18 23:42:05.299 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:42:05.302 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:42:10.061 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4025.3356000000003 ms
+2019-02-18 23:42:10.063 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:42:10.069 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:42:14.830 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4031.2037 ms
+2019-02-18 23:42:14.832 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:42:14.836 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:42:19.578 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4004.7784 ms
+2019-02-18 23:42:19.580 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:42:19.583 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:42:24.344 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4027.6798000000003 ms
+2019-02-18 23:42:24.346 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:42:24.349 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:42:29.108 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4029.722 ms
+2019-02-18 23:42:29.110 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:42:29.114 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:42:33.844 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4017.3928 ms
+2019-02-18 23:42:33.846 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:42:33.850 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:42:38.594 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4013.3120000000004 ms
+2019-02-18 23:42:38.596 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:42:38.600 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:42:43.344 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4015.9443 ms
+2019-02-18 23:42:43.346 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:42:43.351 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:42:48.093 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4014.8608000000004 ms
+2019-02-18 23:42:48.095 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:42:48.099 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:42:52.858 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4024.5206000000003 ms
+2019-02-18 23:42:52.860 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:42:52.863 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:42:57.623 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4028.6169 ms
+2019-02-18 23:42:57.626 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:42:57.627 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:43:02.374 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4013.0903000000003 ms
+2019-02-18 23:43:02.375 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:43:02.378 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:43:07.130 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4017.5995000000003 ms
+2019-02-18 23:43:07.131 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:43:07.134 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:43:11.890 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4032.3929000000003 ms
+2019-02-18 23:43:11.892 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:43:11.895 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:43:18.885 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 6256.9137 ms
+2019-02-18 23:43:18.886 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:43:18.890 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:43:43.670 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 24062.1522 ms
+2019-02-18 23:43:43.676 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:43:43.680 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:43:46.471 +07:00 [INF] Request starting HTTP/1.1 POST http://localhost:44138/api/InputData/SendData4Devices application/json 1729
+2019-02-18 23:43:46.475 +07:00 [INF] Route matched with {action = "SendData4Devices", controller = "InputData"}. Executing action WebApiSwc.Controllers.InputDataController.SendData4Devices (WebApiSwc)
+2019-02-18 23:43:46.485 +07:00 [INF] Executing action method WebApiSwc.Controllers.InputDataController.SendData4Devices (WebApiSwc) with arguments (["System.Collections.ObjectModel.ReadOnlyCollection`1[InputDataModel.Base.InputData`1[InputDataModel.Autodictor.Model.AdInputType]]"]) - Validation state: "Valid"
+2019-02-18 23:43:46.490 +07:00 [INF] ПРИНЯТЫ ДАННЫЕ ДЛЯ: {
+  "DeviceName": "TestTcpIp_Informsvyaz",
+  "ExchangeName": "",
+  "DataAction": 0,
+  "Command": 0,
+  "DirectHandlerName": "",
+  "DataCount": 1
+}
+2019-02-18 23:43:46.508 +07:00 [INF] Executed action method WebApiSwc.Controllers.InputDataController.SendData4Devices (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.OkResult in 17.699ms.
+2019-02-18 23:43:46.514 +07:00 [INF] Executing HttpStatusCodeResult, setting HTTP status code 200
+2019-02-18 23:43:46.517 +07:00 [INF] Executed action WebApiSwc.Controllers.InputDataController.SendData4Devices (WebApiSwc) in 37.4067ms
+2019-02-18 23:43:46.519 +07:00 [INF] Request finished in 47.8798ms 200 
+2019-02-18 23:43:48.435 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4026.4300000000003 ms
+2019-02-18 23:43:48.436 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:43:48.440 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:43:54.216 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 5152.6696 ms
+2019-02-18 23:43:54.221 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:43:54.225 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:43:58.468 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4016.2464 ms
+2019-02-18 23:43:58.470 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:43:58.472 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:43:58.925 +07:00 [INF] Request starting HTTP/1.1 POST http://localhost:44138/api/InputData/SendData4Devices application/json 1729
+2019-02-18 23:43:58.927 +07:00 [INF] Route matched with {action = "SendData4Devices", controller = "InputData"}. Executing action WebApiSwc.Controllers.InputDataController.SendData4Devices (WebApiSwc)
+2019-02-18 23:43:58.933 +07:00 [INF] Executing action method WebApiSwc.Controllers.InputDataController.SendData4Devices (WebApiSwc) with arguments (["System.Collections.ObjectModel.ReadOnlyCollection`1[InputDataModel.Base.InputData`1[InputDataModel.Autodictor.Model.AdInputType]]"]) - Validation state: "Valid"
+2019-02-18 23:43:58.940 +07:00 [INF] ПРИНЯТЫ ДАННЫЕ ДЛЯ: {
+  "DeviceName": "TestTcpIp_Informsvyaz",
+  "ExchangeName": "",
+  "DataAction": 1,
+  "Command": 0,
+  "DirectHandlerName": "",
+  "DataCount": 1
+}
+2019-02-18 23:43:58.955 +07:00 [INF] Executed action method WebApiSwc.Controllers.InputDataController.SendData4Devices (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.OkResult in 15.467ms.
+2019-02-18 23:43:58.959 +07:00 [INF] Executing HttpStatusCodeResult, setting HTTP status code 200
+2019-02-18 23:43:58.962 +07:00 [INF] Executed action WebApiSwc.Controllers.InputDataController.SendData4Devices (WebApiSwc) in 31.717200000000002ms
+2019-02-18 23:43:58.971 +07:00 [INF] Request finished in 46.7895ms 200 
+2019-02-18 23:44:07.955 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 8752.2569 ms
+2019-02-18 23:44:07.956 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:44:07.958 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:44:19.214 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 10523.143100000001 ms
+2019-02-18 23:44:19.217 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:44:19.219 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:44:31.455 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 11517.038900000001 ms
+2019-02-18 23:44:31.456 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:44:31.457 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
+2019-02-18 23:44:41.686 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 9494.697900000001 ms
+2019-02-18 23:44:41.688 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x080x0F!! 0x03230x3A0xC4] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "End",
+    "StringRequest": "[0x090x0F!! 0x03230x3A0xC5] Lenght= 25",
+    "LengthRequest": 38,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-18 23:44:41.689 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (2 / 2 / 2)   []
