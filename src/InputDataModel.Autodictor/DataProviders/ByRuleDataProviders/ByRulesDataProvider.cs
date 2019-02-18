@@ -149,10 +149,11 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             var stringRequset = _currentRequest.StringRequest;
             var format = _currentRequest.RequestOption.Format;
             
-            StatusDict["GetDataByte.StringRequest"] = $"\"{stringRequset}\". Lenght= \"{stringRequset.Length}\"";
+            StatusDict["GetDataByte.StringRequest"] = $"[{stringRequset}] Lenght= {stringRequset.Length}";
             //Преобразовываем КОНЕЧНУЮ строку в массив байт
             var resultBuffer = stringRequset.ConvertString2ByteArray(format);
-            StatusDict["GetDataByte.ByteRequest"] = $"\"{ resultBuffer.ArrayByteToString("X2")}\" Lenght= \"{resultBuffer.Length}\"";
+            StatusDict["GetDataByte.ByteRequest"] = $"{ resultBuffer.ArrayByteToString("X2")} Lenght= {resultBuffer.Length}";
+            StatusDict["TimeResponse"] = $"{ _currentRequest.ResponseOption.TimeRespone}";
             return resultBuffer;
         }
 
@@ -183,8 +184,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 Encoding = format,
                 IsOutDataValid = IsOutDataValid
             };
-            StatusDict["SetDataByte.StringResponse"] = $"\"{stringResponse}\" Length= \"{data.Length}\"";
-            StatusDict["SetDataByte.TimeResponse"] = $"\"{ _currentRequest.ResponseOption.TimeRespone}\"";
+            StatusDict["SetDataByte.StringResponse"] = $"{stringResponse} Length= {data.Length}";
+         
            
             return IsOutDataValid;
         }

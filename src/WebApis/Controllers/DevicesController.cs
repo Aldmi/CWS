@@ -299,6 +299,23 @@ namespace WebApiSwc.Controllers
             }
         }
 
+
+
+        // GET api/Devices/GetExchangesState/{deviceName}
+        [HttpGet("GetProviderOption/{deviceName}/{exchName}")]
+        public async Task<IActionResult> GetProviderOption([FromRoute] string deviceName, [FromRoute] string exchName)
+        {
+            var device = _mediatorForStorages.GetDevice(deviceName);
+            if (device == null)
+            {
+                return NotFound(deviceName);
+            }
+            var exchangesStateDto = _mapper.Map<List<ExchangeStateDto>>(device.Exchanges);
+            await Task.CompletedTask;
+            return new JsonResult(exchangesStateDto);
+        }
+
+
         #endregion
     }
 }

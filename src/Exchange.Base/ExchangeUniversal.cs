@@ -424,7 +424,7 @@ namespace Exchange.Base
                 StatusStr = item.StatusStr,
                 StringRequest = item.MessageDict["GetDataByte.StringRequest"],
                 LengthRequest = item.MessageDict["GetDataByte.StringRequest"].Length,
-                TimeResponse = item.MessageDict["SetDataByte.TimeResponse"]               
+                TimeResponse = item.MessageDict["TimeResponse"]            
             }).ToList();
 
             var settings = new JsonSerializerSettings

@@ -1,6 +1,0 @@
-2019-02-15 12:19:53.790 +07:00 [FTL] HostingBackgroundTransport.ProcessAsync System.Threading.Tasks.TaskCanceledException: A task was canceled.
-   at Exchange.Base.ExchangeUniversal`1.CycleTimeActionAsync(CancellationToken ct) in C:\Git\Cws\src\Exchange.Base\ExchangeUniversal.cs:line 299
-   at Worker.Background.Concrete.HostingBackground.HostingBackgroundTransport.ProcessAsync(CancellationToken stoppingToken) in C:\Git\Cws\src\Worker.Background\Concrete\HostingBackground\HostingBackgroundTransport.cs:line 112
-2019-02-15 12:33:56.889 +07:00 [FTL] HostingBackgroundTransport.ProcessAsync System.Threading.Tasks.TaskCanceledException: A task was canceled.
-   at Exchange.Base.ExchangeUniversal`1.CycleTimeActionAsync(CancellationToken ct) in C:\Git\Cws\src\Exchange.Base\ExchangeUniversal.cs:line 300
-   at Worker.Background.Concrete.HostingBackground.HostingBackgroundTransport.ProcessAsync(CancellationToken stoppingToken) in C:\Git\Cws\src\Worker.Background\Concrete\HostingBackground\HostingBackgroundTransport.cs:line 112

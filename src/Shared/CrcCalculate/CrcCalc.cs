@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Shared.CrcCalculate
 {
@@ -14,6 +15,13 @@ namespace Shared.CrcCalculate
             xor ^= 0xFF;
 
             return xor;
+        }
+
+
+        public static byte CalcMod256(IReadOnlyList<byte> arr)
+        {
+            var sum = arr.Aggregate(0, (current, a) => current + a);
+            return (byte)(sum % 256);
         }
     }
 }

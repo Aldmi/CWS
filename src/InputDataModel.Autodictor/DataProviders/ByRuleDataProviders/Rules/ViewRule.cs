@@ -132,9 +132,11 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         private string CreateStringRequest(IEnumerable<AdInputType> batch, int startItemIndex)
         {
             var items = batch.ToList();
+            var header = Option.RequestOption.Header;
+            var body = Option.RequestOption.Body;
+            var footer = Option.RequestOption.Footer;//" {CRCXor:X2}\u0003";
 
             //DEBUG----------------------------------------------------
-            var header = Option.RequestOption.Header;
 
             //var body = "%StationArr= {NumberOfCharacters:X2} \\\"{StationArrival}\\\"" +
             //           "%TypeName= {TypeName}" +
@@ -158,8 +160,6 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             //           "%StationDep= {NumberOfCharacters:X2} \\\"{StationDeparture}\\\"" +
             //           "%StatC= {NumberOfCharacters:X2} \\\"{StationsCut}\\\"";
 
-            var body = Option.RequestOption.Body;
-            var footer = Option.RequestOption.Footer;//" {CRCXor:X2}\u0003";
             //DEBUG----------------------------------------------------
 
             //ЗАПОЛНИТЬ ТЕЛО ЗАПРОСА (вставить НЕЗАВИСИМЫЕ данные)-------------------------------------------------------------------------         
@@ -451,6 +451,13 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 byte xor = CrcCalc.CalcXor(xorBytes);
                 str = string.Format(str.Replace("CRCXor", "0"), xor);
             }
+            else
+            if (str.Contains("CRCMod256"))
+            {
+                byte xor = CrcCalc.CalcMod256(xorBytes);
+                str = string.Format(str.Replace("CRCMod256", "0"), xor);
+            }
+      
             return str;
         }
 
