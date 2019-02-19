@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.EFCore.Entities.Exchange.ProvidersOption
 {
@@ -34,7 +35,7 @@ namespace DAL.EFCore.Entities.Exchange.ProvidersOption
 
     public class EfRequestOption
     {
-        public string Format { get; set; }
+        public string Format { get; set; } //TODO: убрать
         public int MaxBodyLenght { get; set; }
         public string Header { get; set; }                   // НАЧАЛО запроса (ТОЛЬКО ЗАВИСИМЫЕ ДАННЫЕ).
         public string Body { get; set; }                     // ТЕЛО запроса (ТОЛЬКО НЕЗАВИСИМЫЕ ДАННЫЕ). Каждый элемент батча подставляет свои данные в Body, затем все элементы Конкатенируются.

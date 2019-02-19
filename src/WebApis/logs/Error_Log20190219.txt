@@ -1,0 +1,1105 @@
+2019-02-19 13:53:04.916 +07:00 [ERR] TcpIpTransport/SendDataToServer TransportType= TcpIp  Key=TcpIp=47:50000
+System.IO.IOException: Unable to read data from the transport connection: Удаленный хост принудительно разорвал существующее подключение. ---> System.Net.Sockets.SocketException: Удаленный хост принудительно разорвал существующее подключение
+   --- End of inner exception stack trace ---
+   at Transport.TcpIp.Concrete.TcpIpTransport.SendDataAsync(ITransportDataProvider dataProvider, CancellationToken ct) in D:\Git\CWS\src\Communication.TcpIp\Concrete\TcpIpTransport.cs:line 225
+2019-02-19 13:53:28.045 +07:00 [ERR] Ошибка в DevicesOptionController/Post
+BL.Services.Exceptions.OptionHandlerException: Устройство с таким именем уже существует:  TestTcpIp_Informsvyaz
+   at BL.Services.Mediators.MediatorForOptions.AddDeviceOptionWithNewExchangeOptionsAndNewTransportOptionsAsync(DeviceOption deviceOption, IReadOnlyList`1 exchangeOptions, TransportOption transportOption) in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 353
+   at BL.Services.Mediators.MediatorForOptions.AddDeviceOptionAsync(DeviceOption deviceOption, IReadOnlyList`1 exchangeOptions, TransportOption transportOption) in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 175
+   at WebApiSwc.Controllers.DevicesOptionController.Post(OptionAgregatorDto data) in D:\Git\CWS\src\WebApis\Controllers\DevicesOptionController.cs:line 139
+2019-02-19 18:04:58.950 +07:00 [ERR] ОШИБКА СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+EfExchangeOption -> ExchangeOption
+DAL.EFCore.Entities.Exchange.EfExchangeOption -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Type Map configuration:
+EfExchangeOption -> ExchangeOption
+DAL.EFCore.Entities.Exchange.EfExchangeOption -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Destination Member:
+Provider
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+EfProviderOption -> ProviderOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfProviderOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Type Map configuration:
+EfProviderOption -> ProviderOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfProviderOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Destination Member:
+ByRulesProviderOption
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+EfByRulesProviderOption -> ByRulesProviderOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfByRulesProviderOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Type Map configuration:
+EfByRulesProviderOption -> ByRulesProviderOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfByRulesProviderOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Destination Member:
+Rules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+EfRuleOption -> RuleOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfRuleOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Type Map configuration:
+EfRuleOption -> RuleOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfRuleOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Destination Member:
+ViewRules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+EfViewRuleOption -> ViewRuleOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfViewRuleOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Type Map configuration:
+EfViewRuleOption -> ViewRuleOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfViewRuleOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Destination Member:
+RequestOption
+ ---> AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+=====================================================================================================================================
+AutoMapper created this type map for you, but your types cannot be mapped using the current configuration.
+EfRequestOption -> RequestOption (Destination member list)
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfRequestOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RequestOption (Destination member list)
+
+Unmapped properties:
+DymamicFormat
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   at lambda_method(Closure , Object , Object , ResolutionContext )
+   at AutoMapper.Mapper.AutoMapper.IMapper.Map[TDestination](Object source) in C:\projects\automapper\src\AutoMapper\Mapper.cs:line 211
+   at DAL.EFCore.Repository.EfBaseRepository`2.GetSingleAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 82
+   at DAL.EFCore.Repository.EfExchangeOptionRepository.GetSingleAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfExchangeOptionRepository.cs:line 47
+   at BL.Services.Mediators.MediatorForOptions.GetExchangeByKeyAsync(String exchangeKey) in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 101
+   at BL.Services.Mediators.MediatorForOptions.<GetOptionAgregatorForDeviceAsync>b__15_0(String exchangeKey) in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 234
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at BL.Services.Mediators.MediatorForOptions.GetOptionAgregatorForDeviceAsync(String deviceName) in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 234
+   at BL.Services.Actions.BuildDeviceService`1.BuildDevice(String deviceName) in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 87
+   at BL.Services.Actions.BuildDeviceService`1.BuildAllDevices() in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 57
+2019-02-19 18:07:58.954 +07:00 [ERR] ОШИБКА СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+EfExchangeOption -> ExchangeOption
+DAL.EFCore.Entities.Exchange.EfExchangeOption -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Type Map configuration:
+EfExchangeOption -> ExchangeOption
+DAL.EFCore.Entities.Exchange.EfExchangeOption -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Destination Member:
+Provider
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+EfProviderOption -> ProviderOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfProviderOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Type Map configuration:
+EfProviderOption -> ProviderOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfProviderOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Destination Member:
+ByRulesProviderOption
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+EfByRulesProviderOption -> ByRulesProviderOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfByRulesProviderOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Type Map configuration:
+EfByRulesProviderOption -> ByRulesProviderOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfByRulesProviderOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Destination Member:
+Rules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+EfRuleOption -> RuleOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfRuleOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Type Map configuration:
+EfRuleOption -> RuleOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfRuleOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Destination Member:
+ViewRules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+EfViewRuleOption -> ViewRuleOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfViewRuleOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Type Map configuration:
+EfViewRuleOption -> ViewRuleOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfViewRuleOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Destination Member:
+RequestOption
+ ---> AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+=====================================================================================================================================
+AutoMapper created this type map for you, but your types cannot be mapped using the current configuration.
+EfRequestOption -> RequestOption (Destination member list)
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfRequestOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RequestOption (Destination member list)
+
+Unmapped properties:
+DymamicFormat
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   at lambda_method(Closure , Object , Object , ResolutionContext )
+   at AutoMapper.Mapper.AutoMapper.IMapper.Map[TDestination](Object source) in C:\projects\automapper\src\AutoMapper\Mapper.cs:line 211
+   at DAL.EFCore.Repository.EfBaseRepository`2.GetSingleAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 82
+   at DAL.EFCore.Repository.EfExchangeOptionRepository.GetSingleAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfExchangeOptionRepository.cs:line 47
+   at BL.Services.Mediators.MediatorForOptions.GetExchangeByKeyAsync(String exchangeKey) in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 101
+   at BL.Services.Mediators.MediatorForOptions.<GetOptionAgregatorForDeviceAsync>b__15_0(String exchangeKey) in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 234
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at BL.Services.Mediators.MediatorForOptions.GetOptionAgregatorForDeviceAsync(String deviceName) in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 234
+   at BL.Services.Actions.BuildDeviceService`1.BuildDevice(String deviceName) in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 87
+   at BL.Services.Actions.BuildDeviceService`1.BuildAllDevices() in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 57
+2019-02-19 18:12:24.481 +07:00 [ERR] Критическая Ошибка в DevicesOptionController/Post
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+List`1 -> IReadOnlyList`1
+System.Collections.Generic.List`1[[WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto, WebApiSwc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] -> System.Collections.Generic.IReadOnlyList`1[[DAL.Abstract.Entities.Options.Exchange.ExchangeOption, DAL.Abstract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Type Map configuration:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Destination Member:
+Provider
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Type Map configuration:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Destination Member:
+ByRulesProviderOption
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Type Map configuration:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Destination Member:
+Rules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Type Map configuration:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Destination Member:
+ViewRules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Type Map configuration:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Destination Member:
+RequestOption
+ ---> AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+======================================================================================================================================================
+AutoMapper created this type map for you, but your types cannot be mapped using the current configuration.
+RequestOptionDto -> RequestOption (Destination member list)
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RequestOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RequestOption (Destination member list)
+
+Unmapped properties:
+DymamicFormat
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   at lambda_method(Closure , Object , Object , ResolutionContext )
+   at AutoMapper.Mapper.AutoMapper.IMapper.Map[TDestination](Object source) in C:\projects\automapper\src\AutoMapper\Mapper.cs:line 211
+   at WebApiSwc.Controllers.DevicesOptionController.Post(OptionAgregatorDto data) in D:\Git\CWS\src\WebApis\Controllers\DevicesOptionController.cs:line 137
+2019-02-19 18:12:24.620 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+List`1 -> IReadOnlyList`1
+System.Collections.Generic.List`1[[WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto, WebApiSwc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] -> System.Collections.Generic.IReadOnlyList`1[[DAL.Abstract.Entities.Options.Exchange.ExchangeOption, DAL.Abstract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Type Map configuration:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Destination Member:
+Provider
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Type Map configuration:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Destination Member:
+ByRulesProviderOption
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Type Map configuration:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Destination Member:
+Rules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Type Map configuration:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Destination Member:
+ViewRules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Type Map configuration:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Destination Member:
+RequestOption
+ ---> AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+======================================================================================================================================================
+AutoMapper created this type map for you, but your types cannot be mapped using the current configuration.
+RequestOptionDto -> RequestOption (Destination member list)
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RequestOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RequestOption (Destination member list)
+
+Unmapped properties:
+DymamicFormat
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   at lambda_method(Closure , Object , Object , ResolutionContext )
+   at AutoMapper.Mapper.AutoMapper.IMapper.Map[TDestination](Object source) in C:\projects\automapper\src\AutoMapper\Mapper.cs:line 211
+   at WebApiSwc.Controllers.DevicesOptionController.Post(OptionAgregatorDto data) in D:\Git\CWS\src\WebApis\Controllers\DevicesOptionController.cs:line 137
+   at Microsoft.AspNetCore.Mvc.Internal.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at System.Threading.Tasks.ValueTask`1.get_Result()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeNextActionFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeNextResourceFilter()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Rethrow(ResourceExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeFilterPipelineAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeAsync()
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2019-02-19 18:12:32.226 +07:00 [ERR] Критическая Ошибка в DevicesOptionController/Post
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+List`1 -> IReadOnlyList`1
+System.Collections.Generic.List`1[[WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto, WebApiSwc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] -> System.Collections.Generic.IReadOnlyList`1[[DAL.Abstract.Entities.Options.Exchange.ExchangeOption, DAL.Abstract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Type Map configuration:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Destination Member:
+Provider
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Type Map configuration:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Destination Member:
+ByRulesProviderOption
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Type Map configuration:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Destination Member:
+Rules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Type Map configuration:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Destination Member:
+ViewRules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Type Map configuration:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Destination Member:
+RequestOption
+ ---> AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+======================================================================================================================================================
+AutoMapper created this type map for you, but your types cannot be mapped using the current configuration.
+RequestOptionDto -> RequestOption (Destination member list)
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RequestOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RequestOption (Destination member list)
+
+Unmapped properties:
+DymamicFormat
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   at lambda_method(Closure , Object , Object , ResolutionContext )
+   at AutoMapper.Mapper.AutoMapper.IMapper.Map[TDestination](Object source) in C:\projects\automapper\src\AutoMapper\Mapper.cs:line 211
+   at WebApiSwc.Controllers.DevicesOptionController.Post(OptionAgregatorDto data) in D:\Git\CWS\src\WebApis\Controllers\DevicesOptionController.cs:line 137
+2019-02-19 18:12:32.351 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+List`1 -> IReadOnlyList`1
+System.Collections.Generic.List`1[[WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto, WebApiSwc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] -> System.Collections.Generic.IReadOnlyList`1[[DAL.Abstract.Entities.Options.Exchange.ExchangeOption, DAL.Abstract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Type Map configuration:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Destination Member:
+Provider
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Type Map configuration:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Destination Member:
+ByRulesProviderOption
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Type Map configuration:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Destination Member:
+Rules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Type Map configuration:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Destination Member:
+ViewRules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Type Map configuration:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Destination Member:
+RequestOption
+ ---> AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+======================================================================================================================================================
+AutoMapper created this type map for you, but your types cannot be mapped using the current configuration.
+RequestOptionDto -> RequestOption (Destination member list)
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RequestOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RequestOption (Destination member list)
+
+Unmapped properties:
+DymamicFormat
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   at lambda_method(Closure , Object , Object , ResolutionContext )
+   at AutoMapper.Mapper.AutoMapper.IMapper.Map[TDestination](Object source) in C:\projects\automapper\src\AutoMapper\Mapper.cs:line 211
+   at WebApiSwc.Controllers.DevicesOptionController.Post(OptionAgregatorDto data) in D:\Git\CWS\src\WebApis\Controllers\DevicesOptionController.cs:line 137
+   at Microsoft.AspNetCore.Mvc.Internal.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at System.Threading.Tasks.ValueTask`1.get_Result()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeNextActionFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeNextResourceFilter()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Rethrow(ResourceExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeFilterPipelineAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeAsync()
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2019-02-19 18:13:50.379 +07:00 [ERR] Критическая Ошибка в DevicesOptionController/Post
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+List`1 -> IReadOnlyList`1
+System.Collections.Generic.List`1[[WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto, WebApiSwc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] -> System.Collections.Generic.IReadOnlyList`1[[DAL.Abstract.Entities.Options.Exchange.ExchangeOption, DAL.Abstract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Type Map configuration:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Destination Member:
+Provider
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Type Map configuration:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Destination Member:
+ByRulesProviderOption
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Type Map configuration:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Destination Member:
+Rules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Type Map configuration:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Destination Member:
+ViewRules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Type Map configuration:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Destination Member:
+RequestOption
+ ---> AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+======================================================================================================================================================
+AutoMapper created this type map for you, but your types cannot be mapped using the current configuration.
+RequestOptionDto -> RequestOption (Destination member list)
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RequestOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RequestOption (Destination member list)
+
+Unmapped properties:
+DymamicFormat
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   at lambda_method(Closure , Object , Object , ResolutionContext )
+   at AutoMapper.Mapper.AutoMapper.IMapper.Map[TDestination](Object source) in C:\projects\automapper\src\AutoMapper\Mapper.cs:line 211
+   at WebApiSwc.Controllers.DevicesOptionController.Post(OptionAgregatorDto data) in D:\Git\CWS\src\WebApis\Controllers\DevicesOptionController.cs:line 137
+2019-02-19 18:13:50.470 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+List`1 -> IReadOnlyList`1
+System.Collections.Generic.List`1[[WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto, WebApiSwc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] -> System.Collections.Generic.IReadOnlyList`1[[DAL.Abstract.Entities.Options.Exchange.ExchangeOption, DAL.Abstract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Type Map configuration:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Destination Member:
+Provider
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Type Map configuration:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Destination Member:
+ByRulesProviderOption
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Type Map configuration:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Destination Member:
+Rules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Type Map configuration:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Destination Member:
+ViewRules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Type Map configuration:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Destination Member:
+RequestOption
+ ---> AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+======================================================================================================================================================
+AutoMapper created this type map for you, but your types cannot be mapped using the current configuration.
+RequestOptionDto -> RequestOption (Destination member list)
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RequestOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RequestOption (Destination member list)
+
+Unmapped properties:
+DymamicFormat
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   at lambda_method(Closure , Object , Object , ResolutionContext )
+   at AutoMapper.Mapper.AutoMapper.IMapper.Map[TDestination](Object source) in C:\projects\automapper\src\AutoMapper\Mapper.cs:line 211
+   at WebApiSwc.Controllers.DevicesOptionController.Post(OptionAgregatorDto data) in D:\Git\CWS\src\WebApis\Controllers\DevicesOptionController.cs:line 137
+   at Microsoft.AspNetCore.Mvc.Internal.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at System.Threading.Tasks.ValueTask`1.get_Result()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeNextActionFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeNextResourceFilter()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Rethrow(ResourceExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeFilterPipelineAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeAsync()
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2019-02-19 18:16:51.885 +07:00 [ERR] ОШИБКА СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+EfExchangeOption -> ExchangeOption
+DAL.EFCore.Entities.Exchange.EfExchangeOption -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Type Map configuration:
+EfExchangeOption -> ExchangeOption
+DAL.EFCore.Entities.Exchange.EfExchangeOption -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Destination Member:
+Provider
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+EfProviderOption -> ProviderOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfProviderOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Type Map configuration:
+EfProviderOption -> ProviderOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfProviderOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Destination Member:
+ByRulesProviderOption
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+EfByRulesProviderOption -> ByRulesProviderOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfByRulesProviderOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Type Map configuration:
+EfByRulesProviderOption -> ByRulesProviderOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfByRulesProviderOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Destination Member:
+Rules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+EfRuleOption -> RuleOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfRuleOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Type Map configuration:
+EfRuleOption -> RuleOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfRuleOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Destination Member:
+ViewRules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+EfViewRuleOption -> ViewRuleOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfViewRuleOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Type Map configuration:
+EfViewRuleOption -> ViewRuleOption
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfViewRuleOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Destination Member:
+RequestOption
+ ---> AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+=====================================================================================================================================
+AutoMapper created this type map for you, but your types cannot be mapped using the current configuration.
+EfRequestOption -> RequestOption (Destination member list)
+DAL.EFCore.Entities.Exchange.ProvidersOption.EfRequestOption -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RequestOption (Destination member list)
+
+Unmapped properties:
+DymamicFormat
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , EfExchangeOption , ExchangeOption , ResolutionContext )
+   at lambda_method(Closure , Object , Object , ResolutionContext )
+   at AutoMapper.Mapper.AutoMapper.IMapper.Map[TDestination](Object source) in C:\projects\automapper\src\AutoMapper\Mapper.cs:line 211
+   at DAL.EFCore.Repository.EfBaseRepository`2.GetSingleAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfBaseRepository.cs:line 82
+   at DAL.EFCore.Repository.EfExchangeOptionRepository.GetSingleAsync(Expression`1 predicate) in D:\Git\CWS\src\DAL.EFCore\Repository\EfExchangeOptionRepository.cs:line 47
+   at BL.Services.Mediators.MediatorForOptions.GetExchangeByKeyAsync(String exchangeKey) in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 101
+   at BL.Services.Mediators.MediatorForOptions.<GetOptionAgregatorForDeviceAsync>b__15_0(String exchangeKey) in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 234
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at BL.Services.Mediators.MediatorForOptions.GetOptionAgregatorForDeviceAsync(String deviceName) in D:\Git\CWS\src\BL.Services\Mediators\MediatorForOptions.cs:line 234
+   at BL.Services.Actions.BuildDeviceService`1.BuildDevice(String deviceName) in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 87
+   at BL.Services.Actions.BuildDeviceService`1.BuildAllDevices() in D:\Git\CWS\src\BL.Services\Actions\BuildDeviceService.cs:line 57
+2019-02-19 19:43:26.841 +07:00 [ERR] Критическая Ошибка в DevicesOptionController/Post
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+List`1 -> IReadOnlyList`1
+System.Collections.Generic.List`1[[WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto, WebApiSwc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] -> System.Collections.Generic.IReadOnlyList`1[[DAL.Abstract.Entities.Options.Exchange.ExchangeOption, DAL.Abstract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Type Map configuration:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Destination Member:
+Provider
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Type Map configuration:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Destination Member:
+ByRulesProviderOption
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Type Map configuration:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Destination Member:
+Rules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Type Map configuration:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Destination Member:
+ViewRules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Type Map configuration:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Destination Member:
+RequestOption
+ ---> AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+======================================================================================================================================================
+AutoMapper created this type map for you, but your types cannot be mapped using the current configuration.
+RequestOptionDto -> RequestOption (Destination member list)
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RequestOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RequestOption (Destination member list)
+
+Unmapped properties:
+GetDymamicFormat
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   at lambda_method(Closure , Object , Object , ResolutionContext )
+   at AutoMapper.Mapper.AutoMapper.IMapper.Map[TDestination](Object source) in C:\projects\automapper\src\AutoMapper\Mapper.cs:line 211
+   at WebApiSwc.Controllers.DevicesOptionController.Post(OptionAgregatorDto data) in D:\Git\CWS\src\WebApis\Controllers\DevicesOptionController.cs:line 137
+2019-02-19 19:43:26.976 +07:00 [ERR] An unhandled exception has occurred while executing the request.
+AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+List`1 -> IReadOnlyList`1
+System.Collections.Generic.List`1[[WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto, WebApiSwc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] -> System.Collections.Generic.IReadOnlyList`1[[DAL.Abstract.Entities.Options.Exchange.ExchangeOption, DAL.Abstract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Type Map configuration:
+ExchangeOptionDto -> ExchangeOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ExchangeOptionDto -> DAL.Abstract.Entities.Options.Exchange.ExchangeOption
+
+Destination Member:
+Provider
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Type Map configuration:
+ProviderOptionDto -> ProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ProviderOption
+
+Destination Member:
+ByRulesProviderOption
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Type Map configuration:
+ByRulesProviderOptionDto -> ByRulesProviderOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ByRulesProviderOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ByRulesProviderOption
+
+Destination Member:
+Rules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Type Map configuration:
+RuleOptionDto -> RuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RuleOption
+
+Destination Member:
+ViewRules
+ ---> AutoMapper.AutoMapperMappingException: Error mapping types.
+
+Mapping types:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Type Map configuration:
+ViewRuleOptionDto -> ViewRuleOption
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.ViewRuleOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.ViewRuleOption
+
+Destination Member:
+RequestOption
+ ---> AutoMapper.AutoMapperConfigurationException: 
+Unmapped members were found. Review the types and members below.
+Add a custom mapping expression, ignore, add a custom resolver, or modify the source/destination type
+For no matching constructor, add a no-arg ctor, add optional arguments, or map all of the constructor parameters
+======================================================================================================================================================
+AutoMapper created this type map for you, but your types cannot be mapped using the current configuration.
+RequestOptionDto -> RequestOption (Destination member list)
+WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption.RequestOptionDto -> DAL.Abstract.Entities.Options.Exchange.ProvidersOption.RequestOption (Destination member list)
+
+Unmapped properties:
+GetDymamicFormat
+
+   at AutoMapper.ConfigurationValidator.AssertConfigurationIsValid(IEnumerable`1 typeMaps) in C:\projects\automapper\src\AutoMapper\ConfigurationValidator.cs:line 48
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , List`1 , IReadOnlyList`1 , ResolutionContext )
+   at lambda_method(Closure , Object , Object , ResolutionContext )
+   at AutoMapper.Mapper.AutoMapper.IMapper.Map[TDestination](Object source) in C:\projects\automapper\src\AutoMapper\Mapper.cs:line 211
+   at WebApiSwc.Controllers.DevicesOptionController.Post(OptionAgregatorDto data) in D:\Git\CWS\src\WebApis\Controllers\DevicesOptionController.cs:line 137
+   at Microsoft.AspNetCore.Mvc.Internal.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at System.Threading.Tasks.ValueTask`1.get_Result()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeActionMethodAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeNextActionFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.InvokeInnerFilterAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeNextResourceFilter()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Rethrow(ResourceExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeFilterPipelineAsync()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeAsync()
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)

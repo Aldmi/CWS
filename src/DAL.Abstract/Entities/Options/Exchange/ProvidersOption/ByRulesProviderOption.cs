@@ -38,11 +38,27 @@ namespace DAL.Abstract.Entities.Options.Exchange.ProvidersOption
 
     public class RequestOption
     {
-        public string Format { get; set; }
+        private string _dymamicFormat;
+        /// <summary>
+        /// Формат представления конечной строки запроса может поменять провайдер (например сформировать в HEX используя базовый Format и симолы Escape последовательности)
+        /// Если провайдер не меняет формат преобразования, то DymamicFormat = null.
+        /// </summary>
+        public string GetDymamicFormat => _dymamicFormat;
+        public string Format { get; set; }         
         public int MaxBodyLenght { get; set; }               // Максимальная длина тела запроса
         public string Header { get; set; }                   // НАЧАЛО запроса (ТОЛЬКО ЗАВИСИМЫЕ ДАННЫЕ).
         public string Body { get; set; }                     // ТЕЛО запроса (ТОЛЬКО НЕЗАВИСИМЫЕ ДАННЫЕ). Каждый элемент батча подставляет свои данные в Body, затем все элементы Конкатенируются.
         public string Footer { get; set; }                   // КОНЕЦ ЗАПРОСА (ТОЛЬКО ЗАВИСИМЫЕ ДАННЫЕ).
+
+
+        #region Methode
+
+        public void SwitchFormat(string newFormat)
+        {
+            _dymamicFormat = newFormat;
+        }
+
+        #endregion
     }
 
 

@@ -7,9 +7,12 @@
 
         #region ctor
 
-        public EventTrain(int num)
+        public EventTrain(int? num)
         {
             Num = num;
+            if(!Num.HasValue)
+                return;
+
             switch (Num.Value)
             {
                 case 0:
@@ -30,7 +33,7 @@
         }
 
         public EventTrain()
-        {  
+        {
         }
 
         #endregion
