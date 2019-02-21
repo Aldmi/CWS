@@ -1,0 +1,198 @@
+2019-02-20 13:17:29.014 +07:00 [ERR] ОШИБКА ТРАНСПОРТА. KeyExchange TcpIp=47:50000 Addr=9
+System.ArgumentException: 'X2' is not a supported encoding name. For information on defining a custom encoding, see the documentation for the Encoding.RegisterProvider method.
+Parameter name: name
+   at System.Text.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Text.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at Shared.Helpers.HelpersByteArray.ConvertString2ByteArray(String str, String format) in D:\Git\CWS\src\Shared\Helpers\HelpersByteArray.cs:line 31
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.GetDataByte() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 154
+   at Transport.TcpIp.Concrete.TcpIpTransport.SendDataAsync(ITransportDataProvider dataProvider, CancellationToken ct) in D:\Git\CWS\src\Communication.TcpIp\Concrete\TcpIpTransport.cs:line 220
+   at Transport.TcpIp.Concrete.TcpIpTransport.DataExchangeAsync(Int32 timeRespoune, ITransportDataProvider dataProvider, CancellationToken ct) in D:\Git\CWS\src\Communication.TcpIp\Concrete\TcpIpTransport.cs:line 174
+   at Exchange.Base.ExchangeUniversal`1.<>c__DisplayClass70_0.<SendingPieceOfData>b__0(IExchangeDataProvider`2 provider) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 319
+2019-02-20 14:02:03.824 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:04.704 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:05.474 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:06.250 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:07.027 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:07.813 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:08.582 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:09.348 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:10.136 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:03:48.218 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 398
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:03:57.889 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 398
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:16:13.627 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 437
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:17:26.285 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 437
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:17:35.435 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 437
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:18:21.633 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 437
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388

@@ -1,0 +1,710 @@
+2019-02-20 01:13:54.918 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 01:13:59.017 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 01:23:01.059 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 01:23:03.754 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 01:26:03.131 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 01:26:05.839 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 01:30:28.569 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 01:30:31.185 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 01:35:55.222 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 01:35:57.902 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 01:36:43.413 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 01:36:46.148 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 01:38:02.793 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 01:38:05.466 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 01:41:27.764 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 01:41:30.373 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 12:04:41.125 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 12:04:44.640 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 12:18:45.435 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 12:18:48.070 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 12:45:23.682 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 12:45:26.242 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 12:47:27.507 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 12:47:30.119 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 13:14:19.261 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 13:14:22.836 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 13:17:02.756 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 13:17:05.410 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 13:17:29.014 +07:00 [ERR] ОШИБКА ТРАНСПОРТА. KeyExchange TcpIp=47:50000 Addr=9
+System.ArgumentException: 'X2' is not a supported encoding name. For information on defining a custom encoding, see the documentation for the Encoding.RegisterProvider method.
+Parameter name: name
+   at System.Text.EncodingTable.internalGetCodePageFromName(String name)
+   at System.Text.EncodingTable.GetCodePageFromName(String name)
+   at System.Text.Encoding.GetEncoding(String name)
+   at Shared.Helpers.HelpersByteArray.ConvertString2ByteArray(String str, String format) in D:\Git\CWS\src\Shared\Helpers\HelpersByteArray.cs:line 31
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.GetDataByte() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 154
+   at Transport.TcpIp.Concrete.TcpIpTransport.SendDataAsync(ITransportDataProvider dataProvider, CancellationToken ct) in D:\Git\CWS\src\Communication.TcpIp\Concrete\TcpIpTransport.cs:line 220
+   at Transport.TcpIp.Concrete.TcpIpTransport.DataExchangeAsync(Int32 timeRespoune, ITransportDataProvider dataProvider, CancellationToken ct) in D:\Git\CWS\src\Communication.TcpIp\Concrete\TcpIpTransport.cs:line 174
+   at Exchange.Base.ExchangeUniversal`1.<>c__DisplayClass70_0.<SendingPieceOfData>b__0(IExchangeDataProvider`2 provider) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 319
+2019-02-20 13:18:40.661 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 13:18:43.148 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 13:19:31.938 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 13:19:34.358 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 13:21:18.969 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 104374.0237 ms
+2019-02-20 13:21:19.035 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08122020200331333A313985] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[09142020032020202020202040] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 13:21:19.037 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 13:21:24.023 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4229.0087 ms
+2019-02-20 13:21:24.025 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08122020200331333A32317E] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[09142020032020202020202040] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 13:21:24.026 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 13:21:28.974 +07:00 [WRN] ТАЙМАУТ ОТВЕТА. KeyExchange TcpIp=47:50000 Addr=9
+2019-02-20 13:21:28.975 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4230.6307000000006 ms
+2019-02-20 13:21:28.976 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08122020200331333A32317E] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[09142020032020202020202040] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 13:21:28.978 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 13:21:33.930 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4233.3684 ms
+2019-02-20 13:21:33.934 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08122020200331333A32317E] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[09142020032020202020202040] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 13:21:33.937 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 13:21:38.878 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4228.7196 ms
+2019-02-20 13:21:38.880 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08122020200331333A32317E] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[09142020032020202020202040] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 13:21:38.883 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 13:21:43.820 +07:00 [WRN] ТАЙМАУТ ОТВЕТА. KeyExchange TcpIp=47:50000 Addr=9
+2019-02-20 13:21:43.821 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4218.3296 ms
+2019-02-20 13:21:43.823 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08122020200331333A32317E] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[09142020032020202020202040] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 13:21:43.826 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 13:21:48.759 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4214.7599 ms
+2019-02-20 13:21:48.762 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08122020200331333A32317E] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[09142020032020202020202040] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 13:21:48.766 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 13:21:53.696 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4218.615 ms
+2019-02-20 13:21:53.698 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08122020200331333A32317E] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[09142020032020202020202040] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 13:21:53.701 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 13:21:58.647 +07:00 [WRN] ТАЙМАУТ ОТВЕТА. KeyExchange TcpIp=47:50000 Addr=9
+2019-02-20 13:21:58.649 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4230.2581 ms
+2019-02-20 13:21:58.650 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08122020200331333A32317E] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[09142020032020202020202040] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 13:21:58.654 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 13:22:03.615 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4225.7838 ms
+2019-02-20 13:22:03.616 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08122020200331333A32317E] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[09142020032020202020202040] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 13:22:03.619 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 13:22:08.582 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4224.0790000000006 ms
+2019-02-20 13:22:08.584 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08122020200331333A32327F] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[09142020032020202020202040] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 13:22:08.587 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 13:22:13.520 +07:00 [WRN] ТАЙМАУТ ОТВЕТА. KeyExchange TcpIp=47:50000 Addr=9
+2019-02-20 13:22:13.522 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4216.8411000000006 ms
+2019-02-20 13:22:13.523 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08122020200331333A32327F] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[09142020032020202020202040] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 13:22:13.527 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 13:22:18.476 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4229.7737000000006 ms
+2019-02-20 13:22:18.478 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08122020200331333A32327F] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[09142020032020202020202040] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 13:22:18.482 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 13:22:23.428 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4225.7849000000006 ms
+2019-02-20 13:22:23.430 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08122020200331333A32327F] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[09142020032020202020202040] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 13:22:23.433 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 14:01:05.058 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 14:01:09.258 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 14:01:15.765 +07:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:44138/api/devicesoption/TestTcpIp_Informsvyaz  0
+2019-02-20 14:01:15.893 +07:00 [INF] Route matched with {action = "Delete", controller = "DevicesOption"}. Executing action WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc)
+2019-02-20 14:01:15.931 +07:00 [INF] Executing action method WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc) with arguments (["TestTcpIp_Informsvyaz"]) - Validation state: "Valid"
+2019-02-20 14:01:16.253 +07:00 [INF] Executed action method WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 305.6923ms.
+2019-02-20 14:01:16.270 +07:00 [INF] Executing ObjectResult, writing value of type 'DAL.Abstract.Entities.Options.OptionAgregator'.
+2019-02-20 14:01:16.332 +07:00 [INF] Executed action WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc) in 434.3517ms
+2019-02-20 14:01:16.341 +07:00 [INF] Request finished in 578.0249ms 200 application/json; charset=utf-8
+2019-02-20 14:01:19.940 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 10462.3997 ms
+2019-02-20 14:01:19.952 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08112020200331343A30317C] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[090F202003202020202020203B] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 14:01:19.953 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 14:01:24.492 +07:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:44138/api/devicesoption/TestTcpIp_Informsvyaz  0
+2019-02-20 14:01:24.495 +07:00 [INF] Route matched with {action = "Delete", controller = "DevicesOption"}. Executing action WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc)
+2019-02-20 14:01:24.504 +07:00 [INF] Executing action method WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc) with arguments (["TestTcpIp_Informsvyaz"]) - Validation state: "Valid"
+2019-02-20 14:01:24.513 +07:00 [INF] Executed action method WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.NotFoundObjectResult in 8.2848ms.
+2019-02-20 14:01:24.515 +07:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-02-20 14:01:24.516 +07:00 [INF] Executed action WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc) in 19.864ms
+2019-02-20 14:01:24.518 +07:00 [INF] Request finished in 25.1084ms 404 application/json; charset=utf-8
+2019-02-20 14:01:24.932 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4229.1455000000005 ms
+2019-02-20 14:01:24.935 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08112020200331343A30317C] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[090F202003202020202020203B] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 14:01:24.936 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 14:01:26.755 +07:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:44138/api/devicesoption/TestTcpIp_Informsvyaz  0
+2019-02-20 14:01:26.760 +07:00 [INF] Route matched with {action = "Delete", controller = "DevicesOption"}. Executing action WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc)
+2019-02-20 14:01:26.763 +07:00 [INF] Executing action method WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc) with arguments (["TestTcpIp_Informsvyaz"]) - Validation state: "Valid"
+2019-02-20 14:01:26.770 +07:00 [INF] Executed action method WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.NotFoundObjectResult in 4.4164ms.
+2019-02-20 14:01:26.772 +07:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-02-20 14:01:26.773 +07:00 [INF] Executed action WebApiSwc.Controllers.DevicesOptionController.Delete (WebApiSwc) in 11.1197ms
+2019-02-20 14:01:26.774 +07:00 [INF] Request finished in 19.1644ms 404 application/json; charset=utf-8
+2019-02-20 14:01:28.747 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:44138/api/devicesoption  
+2019-02-20 14:01:28.762 +07:00 [INF] Route matched with {action = "Get", controller = "DevicesOption"}. Executing action WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc)
+2019-02-20 14:01:28.770 +07:00 [INF] Executing action method WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc) - Validation state: "Valid"
+2019-02-20 14:01:28.885 +07:00 [INF] Executed action method WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.JsonResult in 113.61550000000001ms.
+2019-02-20 14:01:28.891 +07:00 [INF] Executing JsonResult, writing value of type 'WebApiSwc.DTO.JSON.OptionsDto.OptionAgregatorDto'.
+2019-02-20 14:01:28.905 +07:00 [INF] Executed action WebApiSwc.Controllers.DevicesOptionController.Get (WebApiSwc) in 140.2614ms
+2019-02-20 14:01:28.907 +07:00 [INF] Request finished in 159.7724ms 200 application/json; charset=utf-8
+2019-02-20 14:01:29.881 +07:00 [WRN] ТАЙМАУТ ОТВЕТА. KeyExchange TcpIp=47:50000 Addr=9
+2019-02-20 14:01:29.882 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4226.9317 ms
+2019-02-20 14:01:29.883 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08112020200331343A30317C] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[090F202003202020202020203B] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 14:01:29.886 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 14:01:32.444 +07:00 [INF] Request starting HTTP/1.1 POST http://localhost:44138/api/devicesoption application/json 4369
+2019-02-20 14:01:32.452 +07:00 [INF] Route matched with {action = "Post", controller = "DevicesOption"}. Executing action WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc)
+2019-02-20 14:01:32.571 +07:00 [INF] Executing action method WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc) with arguments (["WebApiSwc.DTO.JSON.OptionsDto.OptionAgregatorDto"]) - Validation state: "Valid"
+2019-02-20 14:01:32.777 +07:00 [INF] Executed action method WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc), returned result Microsoft.AspNetCore.Mvc.CreatedAtActionResult in 203.84210000000002ms.
+2019-02-20 14:01:32.779 +07:00 [INF] Executing ObjectResult, writing value of type 'WebApiSwc.DTO.JSON.OptionsDto.OptionAgregatorDto'.
+2019-02-20 14:01:32.796 +07:00 [INF] Executed action WebApiSwc.Controllers.DevicesOptionController.Post (WebApiSwc) in 332.6161ms
+2019-02-20 14:01:32.798 +07:00 [INF] Request finished in 354.1083ms 201 application/json; charset=utf-8
+2019-02-20 14:01:34.835 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4232.5531 ms
+2019-02-20 14:01:34.837 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08112020200331343A30317C] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[090F202003202020202020203B] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 14:01:34.839 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 14:01:39.791 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4233.3622000000005 ms
+2019-02-20 14:01:39.793 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08112020200331343A30317C] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[090F202003202020202020203B] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 14:01:39.795 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 14:01:44.797 +07:00 [WRN] ТАЙМАУТ ОТВЕТА. KeyExchange TcpIp=47:50000 Addr=9
+2019-02-20 14:01:44.798 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4284.1696 ms
+2019-02-20 14:01:44.799 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08112020200331343A30317C] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[090F202003202020202020203B] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 14:01:44.800 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 14:01:49.743 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 4227.9296 ms
+2019-02-20 14:01:49.745 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= [
+  {
+    "viewRuleId": "RuleName= Data1  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[08112020200331343A30317C] Lenght= 24  Format=HEX",
+    "LengthRequest": 49,
+    "TimeResponse": "2000"
+  },
+  {
+    "viewRuleId": "RuleName= Data2  viewRule.Id= 1",
+    "StatusStr": "EndWithTimeout",
+    "StringRequest": "[090F202003202020202020203B] Lenght= 26  Format=HEX",
+    "LengthRequest": 51,
+    "TimeResponse": "2000"
+  }
+]
+2019-02-20 14:01:49.746 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 2)   [EndWithTimeout | EndWithTimeout]
+2019-02-20 14:02:00.814 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 14:02:03.460 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 14:02:03.816 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 136.53810000000001 ms
+2019-02-20 14:02:03.824 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:03.893 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= []
+2019-02-20 14:02:03.894 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 0)   []
+2019-02-20 14:02:04.702 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 36.210300000000004 ms
+2019-02-20 14:02:04.704 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:04.707 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= []
+2019-02-20 14:02:04.708 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 0)   []
+2019-02-20 14:02:05.473 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 37.3356 ms
+2019-02-20 14:02:05.474 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:05.483 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= []
+2019-02-20 14:02:05.487 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 0)   []
+2019-02-20 14:02:06.249 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 36.0478 ms
+2019-02-20 14:02:06.250 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:06.262 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= []
+2019-02-20 14:02:06.265 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 0)   []
+2019-02-20 14:02:07.026 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 33.3847 ms
+2019-02-20 14:02:07.027 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:07.044 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= []
+2019-02-20 14:02:07.046 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 0)   []
+2019-02-20 14:02:07.811 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 37.222300000000004 ms
+2019-02-20 14:02:07.813 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:07.826 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= []
+2019-02-20 14:02:07.827 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 0)   []
+2019-02-20 14:02:08.580 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 35.9592 ms
+2019-02-20 14:02:08.582 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:08.597 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= []
+2019-02-20 14:02:08.599 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 0)   []
+2019-02-20 14:02:09.347 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 36.464200000000005 ms
+2019-02-20 14:02:09.348 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:09.365 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= []
+2019-02-20 14:02:09.366 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 0)   []
+2019-02-20 14:02:10.133 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 40.6398 ms
+2019-02-20 14:02:10.136 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 426
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:02:10.150 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= []
+2019-02-20 14:02:10.152 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 0)   []
+2019-02-20 14:03:26.184 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 14:03:28.667 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 14:03:38.934 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 10046.4805 ms
+2019-02-20 14:03:48.218 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 398
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:03:48.256 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= []
+2019-02-20 14:03:48.257 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 0)   []
+2019-02-20 14:03:57.888 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 8877.2264 ms
+2019-02-20 14:03:57.889 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 398
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:03:57.892 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= []
+2019-02-20 14:03:57.892 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 0)   []
+2019-02-20 14:04:42.691 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 14:04:45.308 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 14:15:21.852 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 14:15:24.863 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 14:16:13.617 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 48528.6191 ms
+2019-02-20 14:16:13.627 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 437
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:16:13.689 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= []
+2019-02-20 14:16:13.690 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 0)   []
+2019-02-20 14:17:09.583 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 14:17:12.105 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 14:17:26.276 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 13949.5442 ms
+2019-02-20 14:17:26.285 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 437
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:17:26.346 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= []
+2019-02-20 14:17:26.347 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 0)   []
+2019-02-20 14:17:35.433 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 8327.3357 ms
+2019-02-20 14:17:35.435 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 437
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:17:35.438 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= []
+2019-02-20 14:17:35.439 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 0)   []
+2019-02-20 14:18:21.630 +07:00 [INF] TimeOpertaion End Exchanage Pipeline completed in 45465.584500000004 ms
+2019-02-20 14:18:21.633 +07:00 [ERR] ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange TcpIp=47:50000 Addr=9
+System.FormatException: Input string was not in a correct format.
+   at System.Text.StringBuilder.FormatError()
+   at System.Text.StringBuilder.AppendFormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.FormatHelper(IFormatProvider provider, String format, ParamsArray args)
+   at System.String.Format(String format, Object arg0)
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeNByte(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 437
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.MakeDependentInserts(String str) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 326
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.CreateStringRequest(IEnumerable`1 batch, Int32 startItemIndex) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 189
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules.ViewRule.GetDataRequestString(List`1 items)+MoveNext() in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\Rules\ViewRule.cs:line 68
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.ViewRuleSendData(Rule rule, List`1 takesItems) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 269
+   at InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.ByRulesDataProvider.StartExchangePipeline(InDataWrapper`1 inData) in D:\Git\CWS\src\InputDataModel.Autodictor\DataProviders\ByRuleDataProviders\ByRulesDataProvider.cs:line 233
+   at Exchange.Base.ExchangeUniversal`1.SendingPieceOfData(InDataWrapper`1 inData, CancellationToken ct) in D:\Git\CWS\src\Exchange.Base\ExchangeUniversal.cs:line 388
+2019-02-20 14:18:21.650 +07:00 [INF] ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= TcpIp=47:50000 Addr=9   jsonRespInfo= []
+2019-02-20 14:18:21.650 +07:00 [INF] ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= TcpIp=47:50000 Addr=9 успех/ответов/запросов=  (0 / 0 / 0)   []
+2019-02-20 14:19:48.387 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 14:19:50.905 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000
+2019-02-20 14:38:05.777 +07:00 [INF] User profile is available. Using 'C:\Users\Aldmi\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-02-20 14:38:08.398 +07:00 [INF] коннект для транспорта ОТКРЫТ: TransportType= TcpIp  Key=TcpIp=47:50000

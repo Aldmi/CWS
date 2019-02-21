@@ -325,6 +325,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             str = MakeAddressDevice(str);
             str = MakeNByte(str);
             str = MakeCrc(str);
+            str = SwitchFormatCheck(str);
             return str;
         }
 
@@ -368,24 +369,6 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
 
         /// <summary>
-        /// Математическое вычисление формулы с участием переменной rowNumber
-        /// </summary>
-        private string CalculateMathematicFormat(string str, int row)
-        {
-            var matchString = Regex.Match(str, "\\{\\((.*)\\)\\:(.*)\\}").Groups[1].Value;
-            var expr = new Expression(matchString)
-            {
-                Parameters = { ["rowNumber"] = row }
-            };
-            var func = expr.ToLambda<int>();
-            var arithmeticResult = func();
-            var reultStr = str.Replace("(" + matchString + ")", "0");
-            reultStr = string.Format(reultStr, arithmeticResult);
-            return reultStr;
-        }
-
-
-        /// <summary>
         /// Заменить все переменные NumberOfCharacters.
         /// Вычислить N символов след. за NumberOfCharacters в кавычках
         /// </summary>
@@ -408,6 +391,26 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             //ВЫЧИСЛЯЕМ NByte---------------------------------------------------------------------------
             int lenght = 0;
             string matchString = null;
+
+            if(Regex.Match(requestFillBodyWithoutConstantCharacters, "{NbyteFull(.*)}(.*){CRC(.*)}").Success)
+            {
+                matchString = Regex.Match(requestFillBodyWithoutConstantCharacters, "{Nbyte(.*)}(.*){CRC(.*)}").Groups[2].Value;          
+                if (HelpersBool.ContainsHexSubStr(matchString))
+                {
+                    var format = Option.RequestOption.Format;
+                    var buf = matchString.ConvertStringWithHexEscapeChars2ByteArray(format);
+                    var lenghtBody = buf.Count;            
+                    var lenghtAddress= 1;
+                    var lenghtNByte = 1;
+                    var lenghtCrc = 1;
+                    lenght = lenghtBody + lenghtAddress + lenghtNByte + lenghtCrc;
+                }
+                else
+                {
+                    lenght = matchString.Length;
+                }
+            }
+            else
             if (Regex.Match(requestFillBodyWithoutConstantCharacters, "{Nbyte(.*)}(.*){CRC(.*)}").Success) //вычислили длинну строки между Nbyte и CRC
             {
                 matchString = Regex.Match(requestFillBodyWithoutConstantCharacters, "{Nbyte(.*)}(.*){CRC(.*)}").Groups[2].Value;
@@ -419,12 +422,19 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 lenght = matchString.Length;
             }
 
+
             //ЗАПОНЯЕМ ВСЕ СЕКЦИИ ДО CRC
             var subStr = requestFillBodyWithoutConstantCharacters.Split('}');
             StringBuilder resStr = new StringBuilder();
             foreach (var s in subStr)
             {
                 var replaseStr = (s.Contains("{")) ? (s + "}") : s;
+                if (replaseStr.Contains("NbyteFull"))
+                {
+                    var formatStr = string.Format(replaseStr.Replace("NbyteFull", "0"), lenght);
+                    resStr.Append(formatStr);
+                }
+                else
                 if (replaseStr.Contains("Nbyte"))
                 {
                     var formatStr = string.Format(replaseStr.Replace("Nbyte", "0"), lenght);
@@ -444,20 +454,38 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var format = Option.RequestOption.Format;
             var matchString = Regex.Match(str, "(.*){CRC(.*)}").Groups[1].Value;
             matchString = matchString.Replace("\u0002", string.Empty).Replace("\u0003", string.Empty);
-            var xorBytes = matchString.ConvertString2ByteArray(format);
+            var crcBytes = HelpersBool.ContainsHexSubStr(matchString) ?
+                matchString.ConvertStringWithHexEscapeChars2ByteArray(format).ToArray() :
+                matchString.ConvertString2ByteArray(format);
+      
             //вычислить CRC по правилам XOR
             if (str.Contains("CRCXor"))
             {
-                byte xor = CrcCalc.CalcXor(xorBytes);
-                str = string.Format(str.Replace("CRCXor", "0"), xor);
+                byte crc = CrcCalc.CalcXor(crcBytes);
+                str = string.Format(str.Replace("CRCXor", "0"), crc);
             }
             else
             if (str.Contains("CRCMod256"))
             {
-                byte xor = CrcCalc.CalcMod256(xorBytes);
-                str = string.Format(str.Replace("CRCMod256", "0"), xor);
+                byte crc = CrcCalc.CalcMod256(crcBytes);
+                str = string.Format(str.Replace("CRCMod256", "0"), crc);
             }
       
+            return str;
+        }
+
+
+        private string SwitchFormatCheck(string str)
+        {
+            if (str.Contains("0x"))
+            {
+                var format = Option.RequestOption.Format;
+                var buf = str.ConvertStringWithHexEscapeChars2ByteArray(format);
+                var res = buf.ArrayByteToString("X2");
+                Option.RequestOption.SwitchFormat("HEX");
+                return res;
+            }
+
             return str;
         }
 

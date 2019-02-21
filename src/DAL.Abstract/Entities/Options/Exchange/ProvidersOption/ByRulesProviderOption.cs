@@ -58,6 +58,11 @@ namespace DAL.Abstract.Entities.Options.Exchange.ProvidersOption
             _dymamicFormat = newFormat;
         }
 
+        public string GetCurrentFormat()
+        {
+            return string.IsNullOrEmpty(_dymamicFormat) ? Format : _dymamicFormat;
+        }
+
         #endregion
     }
 

@@ -147,9 +147,9 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         public byte[] GetDataByte()
         {
             var stringRequset = _currentRequest.StringRequest;
-            var format = _currentRequest.RequestOption.Format;
+            var format = _currentRequest.RequestOption.GetCurrentFormat();
             
-            StatusDict["GetDataByte.StringRequest"] = $"[{stringRequset}] Lenght= {stringRequset.Length}";
+            StatusDict["GetDataByte.StringRequest"] = $"[{stringRequset}] Lenght= {stringRequset.Length}  Format={format}";
             //Преобразовываем КОНЕЧНУЮ строку в массив байт
             var resultBuffer = stringRequset.ConvertString2ByteArray(format);
             StatusDict["GetDataByte.ByteRequest"] = $"{ resultBuffer.ArrayByteToString("X2")} Lenght= {resultBuffer.Length}";
