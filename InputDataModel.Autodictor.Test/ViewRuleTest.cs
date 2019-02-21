@@ -108,16 +108,17 @@ namespace InputDataModel.Autodictor.Test
                         PathNumber = "5",
                         NumberOfTrain = "245",
                         ArrivalTime = DateTime.Parse("10:20"),
-                        DepartureTime = DateTime.Parse("11:52")
+                        DepartureTime = DateTime.Parse("11:52"),
+                        Addition = new Addition {NameRu = "Дополнение"},
                     }
                 },
                 new RequestOption
                 {
                     Format = "cp866",
                     MaxBodyLenght = 245,
-                    Header = "0x{AddressDevice:X2}0x{NbyteFull:X2} ",
+                    Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
                     Body = "  0x03{NumberOfTrain}0x3A{PathNumber}",
-                    Footer = "0x{CRCMod256:X2}"
+                    Footer = "{CRCXor:X2}\u0003"
                 },
                 "HEX",
                 "090C202020033234353A3582"

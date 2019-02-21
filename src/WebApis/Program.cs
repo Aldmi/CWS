@@ -1,4 +1,5 @@
-﻿using Autofac.Extensions.DependencyInjection;
+﻿using System;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Serilog;
@@ -9,8 +10,17 @@ namespace WebApiSwc
     {
         public static void Main(string[] args)
         {
+            ViewVersionOnConsole();
             BuildWebHost(args).Run();
         }
+
+        public static void ViewVersionOnConsole()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Title = "CWS";
+            Console.WriteLine("CWS Ver1.0  [21.02.2019]  [Add \"0x\" handler in ViewRule]");
+        }
+
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
@@ -19,5 +29,8 @@ namespace WebApiSwc
                 .UseSerilog()
                 .UseStartup<Startup>()
                 .Build();
+
+
+       
     }
 }
