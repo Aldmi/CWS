@@ -71,6 +71,7 @@ namespace BL.Services.Actions
 
 
         /// <summary>
+        /// Сделать БИЛД конкретного ус-ва.
         /// ПОЗАБОТИТСЯ ОБ ОБРАБОТКЕ ИСКЛЮЧЕНИЙ. (StorageHandlerException, OptionHandlerException, Exception)
         /// </summary>
         /// <param name="deviceName"></param>

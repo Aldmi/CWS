@@ -9,6 +9,8 @@ using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
 using Moq;
 using Serilog;
+using Shared.Extensions;
+using Shared.Helpers;
 using Xunit;
 using Xunit.Priority;
 
@@ -36,16 +38,16 @@ namespace InputDataModel.Autodictor.Test
     //}
     public class ViewRuleTest
     {
-        private readonly AdInputType _inTypeBase =
-           new AdInputType
-           {
-               Id = 1,
-               Lang = Lang.Ru,
-               PathNumber = "5",
-               NumberOfTrain = "245",
-               ArrivalTime = DateTime.Parse("10:20"),
-               DepartureTime = DateTime.Parse("11:52")
-           };
+        //private static AdInputType _inTypeBase =
+        //   new AdInputType
+        //   {
+        //       Id = 1,
+        //       Lang = Lang.Ru,
+        //       PathNumber = "5",
+        //       NumberOfTrain = "245",
+        //       ArrivalTime = DateTime.Parse("10:20"),
+        //       DepartureTime = DateTime.Parse("11:52")
+        //   };
 
         private readonly ILogger _logger;
 
@@ -114,14 +116,14 @@ namespace InputDataModel.Autodictor.Test
                 },
                 new RequestOption
                 {
-                    Format = "cp866",
+                    Format = "Windows-1251",
                     MaxBodyLenght = 245,
                     Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
-                    Body = "  0x03{NumberOfTrain}0x3A{PathNumber}",
+                    Body = "%010C60EF03B0470000001E%110406NNNNN%010000f001101f0024001E%10{NumberOfCharacters:X2}05\\\"{Addition} {Stations}\\\"%0100002300000f0000001E%10{NumberOfCharacters:X2}05\\\"{NumberOfTrain}\\\"",
                     Footer = "{CRCXor:X2}\u0003"
                 },
-                "HEX",
-                "090C202020033234353A3582"
+                "Windows-1251",
+                "\u0002096E%010C60EF03B0470000001E%110406NNNNN%010000f001101f0024001E%100C05Дополнение  %0100002300000f0000001E%10030524583\u0003"
             }
 
         };
@@ -158,13 +160,13 @@ namespace InputDataModel.Autodictor.Test
             var requests = viewRule.GetDataRequestString(inTypes).ToList();
             var firstRequest = requests.FirstOrDefault();
             var requestString = firstRequest?.StringRequest;
-            var currentFormat = firstRequest.RequestOption.GetCurrentFormat();
+            var currentFormat = firstRequest?.RequestOption.GetCurrentFormat();
+            var resultBuffer = requestString.ConvertString2ByteArray(currentFormat);
 
             //Asssert
             firstRequest.Should().NotBeNull();
             requestString.Should().NotBeNull();
             requestString.Should().Contain(requestStringExcpected);
-
             currentFormat.Should().Be(formatExcpected);
         }
     }

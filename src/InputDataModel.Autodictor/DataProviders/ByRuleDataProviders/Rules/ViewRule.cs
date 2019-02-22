@@ -325,11 +325,14 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             str = MakeAddressDevice(str);
             str = MakeNByte(str);
             str = MakeCrc(str);
-            str = SwitchFormatCheck(str);
+            str = SwitchFormatCheck2Hex(str, "HEX");
             return str;
         }
 
 
+        /// <summary>
+        /// Вернуть станции в зависимости от События поезда("ПРИБ"/"ОТПР"/"СТОЯНКА").
+        /// </summary>
         private string CreateStationsCutStr(AdInputType uit, Lang lang)
         {
             var eventNum = uit.Event?.Num;
@@ -355,6 +358,9 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         }
 
 
+        /// <summary>
+        /// Вернуть станции {stArrival}-{stDepart}, если обе не NULL
+        /// </summary>
         private string CreateStationsStr(AdInputType uit, Lang lang)
         {
             var stArrival = uit.StationArrival?.GetName(lang);
@@ -475,14 +481,14 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         }
 
 
-        private string SwitchFormatCheck(string str)
+        private string SwitchFormatCheck2Hex(string str, string newFormat)
         {
             if (str.Contains("0x"))
             {
                 var format = Option.RequestOption.Format;
                 var buf = str.ConvertStringWithHexEscapeChars2ByteArray(format);
                 var res = buf.ArrayByteToString("X2");
-                Option.RequestOption.SwitchFormat("HEX");
+                Option.RequestOption.SwitchFormat(newFormat);
                 return res;
             }
 

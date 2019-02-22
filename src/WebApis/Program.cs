@@ -18,7 +18,7 @@ namespace WebApiSwc
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Title = "CWS";
-            Console.WriteLine("CWS Ver1.0  [21.02.2019]  [Add \"0x\" handler in ViewRule]");
+            Console.WriteLine("CWS Ver1.1  [22.02.2019]  [Add InfoLog for Request TcpIpData]");
         }
 
 

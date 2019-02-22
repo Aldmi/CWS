@@ -94,12 +94,12 @@ namespace InputDataModel.Autodictor.DataProviders.ManualDataProviders
             throw new NotImplementedException();
         }
 
-        public ProviderOption GetCurrentOption()
+        public ProviderOption GetCurrentOptionRt()
         {
             throw new NotImplementedException();
         }
 
-        public bool SetCurrentOption(ProviderOption optionNew)
+        public bool SetCurrentOptionRt(ProviderOption optionNew)
         {
             throw new NotImplementedException();
         }

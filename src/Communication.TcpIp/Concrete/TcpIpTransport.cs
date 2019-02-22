@@ -13,6 +13,7 @@ using DAL.Abstract.Entities.Options.Transport;
 using Serilog;
 using SerilogTimings.Extensions;
 using Shared.Enums;
+using Shared.Extensions;
 using Shared.Helpers;
 using Shared.Types;
 using Transport.Base.DataProvidert;
@@ -298,11 +299,12 @@ namespace Transport.TcpIp.Concrete
             try
             {
                 int nByteTake = await _netStream.ReadAsync(bDataTemp, 0, nbytes, cts.Token).WithTimeout2CanceledTask(50, ctsTimeout);
+                var readedBuffer=  bDataTemp.ArrayByteToString("X2");//DEBUG
+                _logger.Information($"TcpIpTransport/TakeDataAsync {KeyTransport}. считанно БАЙТ  Принято/Ожидаем= \"{nByteTake} / {nbytes}\" readedBuffer={readedBuffer} ");//DEBUG
                 if (nByteTake == nbytes)
                 {
                     var bData = new byte[nByteTake];
                     Array.Copy(bDataTemp, bData, nByteTake);
-                    // Console.WriteLine($"TcpIpTransport/TakeDataAsync {KeyTransport}.    Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");    //DEBUG MEMLIK
                     return bData;
                 }
                 else
@@ -310,8 +312,14 @@ namespace Transport.TcpIp.Concrete
                     _logger.Warning($"TcpIpTransport/TakeDataAsync {KeyTransport}.  Кол-во считанных БАЙТ не верное.  Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");
                 }
             }
+            catch (Exception ex)//DEBUG
+            {
+                _logger.Error(ex, "Exception TakeDataConstPeriodAsync");
+                throw;
+            }           
             finally
             {
+            
                 ctsTimeout.Cancel();
                 cts.Cancel();
                 ctsTimeout.Dispose();

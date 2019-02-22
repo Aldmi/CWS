@@ -8,6 +8,7 @@ using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange;
+using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Exchange.Base.DataProviderAbstract;
 using Exchange.Base.Model;
 using Exchange.Base.RxModel;
@@ -79,6 +80,12 @@ namespace Exchange.Base
 
         public bool IsFullOneTimeDataQueue => _oneTimeDataQueue.IsFullLimit;
         public bool IsFullCycleTimeDataQueue => _cycleTimeDataQueue.IsFullLimit;
+
+        public ProviderOption ProviderOptionRt
+        {
+            get => _dataProvider.GetCurrentOptionRt();
+            set => _dataProvider.SetCurrentOptionRt(value);
+        }    
         #endregion
 
 
@@ -97,6 +104,8 @@ namespace Exchange.Base
             _transportBackground = transportBackground;
             _dataProvider = dataProvider;
             _logger = logger;
+
+            
         }
 
         #endregion

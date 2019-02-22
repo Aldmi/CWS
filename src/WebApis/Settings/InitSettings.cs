@@ -9,8 +9,6 @@ namespace WebApiSwc.Settings
     {
         public static string GetDbConnectionString(IHostingEnvironment env, IConfiguration conf)
         {
-            var gg = env.IsDevelopment(); //debug
-
             var connectionStr= env.IsDevelopment() ? conf.GetConnectionString("OptionDbConnectionUseNpgsql")
                                                    : Environment.GetEnvironmentVariable("DbConnection");
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +17,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.HealthChecks;
 using MoreLinq;
 using Newtonsoft.Json;
+using Npgsql;
 using Serilog;
+using Serilog.Core;
 using Shared.Enums;
 using WebApiSwc.AutofacModules;
 using WebApiSwc.Extensions;
@@ -69,26 +72,34 @@ namespace WebApiSwc
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            var connectionString = InitSettings.GetDbConnectionString(Env, AppConfiguration);
-            builder.RegisterModule(new RepositoryAutofacModule(connectionString));
-            builder.RegisterModule(new EventBusAutofacModule());
-            builder.RegisterModule(new ControllerAutofacModule());
-            builder.RegisterModule(new MessageBrokerAutofacModule());
-            builder.RegisterModule(new BlConfigAutofacModule());
-
-            var inputDataName = AppConfiguration["InputDataModel"];
-            switch (inputDataName)
+            try
             {
-                case "AdInputType":
-                    builder.RegisterModule(new DataProviderExchangeAutofacModule<AdInputType>());
-                    builder.RegisterModule(new BlStorageAutofacModule<AdInputType>());
-                    builder.RegisterModule(new BlActionsAutofacModule<AdInputType>());
-                    builder.RegisterModule(new MediatorsAutofacModule<AdInputType>());
-                    builder.RegisterModule(new InputDataAutofacModule<AdInputType>(AppConfiguration.GetSection("MessageBrokerConsumer4InData")));
-                    break;
+                var connectionString = InitSettings.GetDbConnectionString(Env, AppConfiguration);
+                builder.RegisterModule(new RepositoryAutofacModule(connectionString));
+                builder.RegisterModule(new EventBusAutofacModule());
+                builder.RegisterModule(new ControllerAutofacModule());
+                builder.RegisterModule(new MessageBrokerAutofacModule());
+                builder.RegisterModule(new BlConfigAutofacModule());
 
-                case "OtherInputType":
-                    throw new NotImplementedException();
+                var inputDataName = AppConfiguration["InputDataModel"];
+                switch (inputDataName)
+                {
+                    case "AdInputType":
+                        builder.RegisterModule(new DataProviderExchangeAutofacModule<AdInputType>());
+                        builder.RegisterModule(new BlStorageAutofacModule<AdInputType>());
+                        builder.RegisterModule(new BlActionsAutofacModule<AdInputType>());
+                        builder.RegisterModule(new MediatorsAutofacModule<AdInputType>());
+                        builder.RegisterModule(new InputDataAutofacModule<AdInputType>(AppConfiguration.GetSection("MessageBrokerConsumer4InData")));
+                        break;
+
+                    case "OtherInputType":
+                        throw new NotImplementedException();
+                }
+            }
+            catch (Exception ex)
+            {       
+                Console.WriteLine($"Ошибка Регистрации зависимостей в DI контейнере {ex}");
+                throw;
             }
         }
 
@@ -250,9 +261,15 @@ namespace WebApiSwc
             {
                 await scope.Resolve<ISerialPortOptionRepository>().CreateDb(howCreateDb);
             }
+            catch (PostgresException ex)
+            {
+                var connectionString = InitSettings.GetDbConnectionString(Env, AppConfiguration);
+                logger.Fatal($"Ошибка создания БД на основе миграций. howCreateDb= {howCreateDb}  connectionString={connectionString}  Routine={ex.Routine}   SqlState= {ex.SqlState}   Exception= {ex}");
+            }
             catch (Exception ex)
             {
-              logger.Fatal($"Ошибка создания БД на основе миграций {ex}");
+                var connectionString = InitSettings.GetDbConnectionString(Env, AppConfiguration);
+              logger.Fatal($"НЕ ИЗВЕСТНАЯ Ошибка создания БД на основе миграций. howCreateDb= {howCreateDb}  connectionString={connectionString}   Exception= {ex} ");
             }
             //ИНИЦИАЛИЦИЯ РЕПОЗИТОРИЕВ--------------------------------------------------------
             try

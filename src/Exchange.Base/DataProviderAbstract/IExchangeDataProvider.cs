@@ -21,7 +21,7 @@ namespace Exchange.Base.DataProviderAbstract
         Task StartExchangePipeline(InDataWrapper<TInput> inData);                     //Запустить конвеер обмена. После окончания подготовки порции данных конвеером, срабатывает RaiseSendDataRx.
         Subject<IExchangeDataProvider<TInput, TOutput>> RaiseSendDataRx { get; }     //Событие отправки данных, в процессе обработки их конвеером.
 
-        ProviderOption GetCurrentOption();                                          //Вернуть спсиок текущих опций (опции могут быть поменены и отличатсч от опций из БД)
-        bool SetCurrentOption(ProviderOption optionNew);                                      //Установить новые настройки для провайдера. (конкретный провайдер сам возьмет нужные ему настройки)
+        ProviderOption GetCurrentOptionRt();                                          //Вернуть спсиок текущих опций (опции могут быть поменены и отличатсч от опций из БД)
+        bool SetCurrentOptionRt(ProviderOption optionNew);                                      //Установить новые настройки для провайдера. (конкретный провайдер сам возьмет нужные ему настройки)
     }
 }

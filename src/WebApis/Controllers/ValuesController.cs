@@ -4,6 +4,7 @@ using AutoMapper;
 using BL.Services.Mediators;
 using BL.Services.Storages;
 using Exchange.Base;
+using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Events;
@@ -77,7 +78,10 @@ namespace WebApiSwc.Controllers
             var adInputType= new AdInputType
             {
                 PathNumber = "5",
+                Note = new Note { NameRu = "Примечание" }
             };
+
+      
 
             return adInputType;
 

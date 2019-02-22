@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Shared.Types;
 using WebApiSwc.DTO.JSON.DevicesStateDto;
+using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption;
 
 namespace WebApiSwc.Controllers
 {
@@ -301,7 +302,7 @@ namespace WebApiSwc.Controllers
 
 
 
-        // GET api/Devices/GetExchangesState/{deviceName}
+        // GET api/Devices/GetProviderOption/{deviceName}/{exchName}
         [HttpGet("GetProviderOption/{deviceName}/{exchName}")]
         public async Task<IActionResult> GetProviderOption([FromRoute] string deviceName, [FromRoute] string exchName)
         {
@@ -310,9 +311,16 @@ namespace WebApiSwc.Controllers
             {
                 return NotFound(deviceName);
             }
-            var exchangesStateDto = _mapper.Map<List<ExchangeStateDto>>(device.Exchanges);
+            var exchange = device.Exchanges.FirstOrDefault(e => e.KeyExchange == exchName);
+            if (exchange == null)
+            {
+                return NotFound(exchName);
+            }
+            var providerOption = exchange.ProviderOptionRt;
+            var providerOptionDto = _mapper.Map<ProviderOptionDto>(providerOption);
+
             await Task.CompletedTask;
-            return new JsonResult(exchangesStateDto);
+            return new JsonResult(providerOptionDto);
         }
 
 

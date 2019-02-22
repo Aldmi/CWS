@@ -50,70 +50,6 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         #endregion
 
 
-        //DEBUG----------------
-
-        public ProviderOption GetCurrentOption()
-        {
-            var provideroption = new ProviderOption
-            {
-                Name = ProviderName,
-                ByRulesProviderOption = new ByRulesProviderOption
-                {
-                    RuleName4DefaultHandle = RuleName4DefaultHandle,
-                    Rules = _rules.Select(r => r.GetCurrentOption()).ToList()
-                }
-            };
-            return provideroption;
-        }
-
-
-        #region MutableOptionsMethods
-
-        /// <summary>
-        /// Меняются все опции провайдера на optionNew.
-        /// </summary>
-        public bool SetCurrentOption(ProviderOption optionNew)
-        {
-            var option = optionNew.ByRulesProviderOption;
-            if (option == null)
-                throw new ArgumentNullException(optionNew.Name);
-
-            //TODO: ВЫСТАВИТЬ ВРУЧНУЮ ВСЕ ОПЦИИ НА 
-
-
-            return true;
-        }
-
-
-        public void ChangeWhereFilter(string key, string filter)
-        {
-            var rule = GetRuleByKey(key);
-            rule.Option.WhereFilter = filter;
-        }
-
-
-        public void ChangeOrderBy(string key, string ordreby)
-        {
-            var rule = GetRuleByKey(key);
-            rule.Option.OrderBy = ordreby;
-        }
-
-
-
-
-
-        private Rule GetRuleByKey(string key)
-        {
-            var rule = _rules.FirstOrDefault(r => r.Option.Name == key);
-            HelpersException.ThrowIfNotFind(rule, $"объект не найден по Key {key}");
-            return rule;
-        }
-
-        #endregion
-
-
-
-
 
 
         #region prop
@@ -141,7 +77,6 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
 
 
-
         #region IExchangeDataProviderImplementation
 
         public byte[] GetDataByte()
@@ -156,6 +91,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             StatusDict["TimeResponse"] = $"{ _currentRequest.ResponseOption.TimeRespone}";
             return resultBuffer;
         }
+
 
         /// <summary>
         /// Проверить ответ, Присвоить выходные данные.
@@ -185,12 +121,76 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 IsOutDataValid = IsOutDataValid
             };
             StatusDict["SetDataByte.StringResponse"] = $"{stringResponse} Length= {data.Length}";
-         
-           
+                   
             return IsOutDataValid;
         }
 
         #endregion
+
+
+
+        #region RtOptionsMethods
+
+        /// <summary>
+        /// Вернуть опции провайдера
+        /// </summary>
+        public ProviderOption GetCurrentOptionRt()
+        {
+            var provideroption = new ProviderOption
+            {
+                Name = ProviderName,
+                ByRulesProviderOption = new ByRulesProviderOption
+                {
+                    RuleName4DefaultHandle = RuleName4DefaultHandle,
+                    Rules = _rules.Select(r => r.GetCurrentOption()).ToList()
+                }
+            };
+            return provideroption;
+        }
+
+
+        /// <summary>
+        /// Меняются все опции провайдера на optionNew.
+        /// </summary>
+        public bool SetCurrentOptionRt(ProviderOption optionNew)
+        {
+            var option = optionNew.ByRulesProviderOption;
+            if (option == null)
+                throw new ArgumentNullException(optionNew.Name);
+
+            //TODO: ВЫСТАВИТЬ ВРУЧНУЮ ВСЕ ОПЦИИ НА 
+
+
+            return true;
+        }
+
+
+        public void ChangeWhereFilter(string key, string filter)
+        {
+            var rule = GetRuleByKey(key);
+            rule.Option.WhereFilter = filter;
+        }
+
+
+        public void ChangeOrderBy(string key, string ordreby)
+        {
+            var rule = GetRuleByKey(key);
+            rule.Option.OrderBy = ordreby;
+        }
+
+
+
+        private Rule GetRuleByKey(string key)
+        {
+            var rule = _rules.FirstOrDefault(r => r.Option.Name == key);
+            HelpersException.ThrowIfNotFind(rule, $"объект не найден по Key {key}");
+            return rule;
+        }
+
+        #endregion
+
+
+
 
 
 

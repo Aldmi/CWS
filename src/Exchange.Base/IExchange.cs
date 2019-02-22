@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Exchange.Base.Model;
 using Exchange.Base.RxModel;
 using InputDataModel.Base;
@@ -21,6 +22,7 @@ namespace Exchange.Base
         string ProviderName { get; }
         int NumberErrorTrying { get;}                                           // Кол-во ошибочных запросов до переоткрытия соединения. IsConnect=false. ReOpenTransport()
         int NumberTimeoutTrying { get;}
+        ProviderOption ProviderOptionRt { get; set; }
         #endregion
 
 
