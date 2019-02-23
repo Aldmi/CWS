@@ -120,7 +120,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 Encoding = format,
                 IsOutDataValid = IsOutDataValid
             };
-            StatusDict["SetDataByte.StringResponse"] = $"{stringResponse} Length= {data.Length}";
+            var diffResp = (!IsOutDataValid) ? $"ПринятоБайт/ОжидаемБайт= {data.Length}/{_currentRequest.ResponseOption.Lenght}   Принято/Ожидаем= {stringResponse}/{_currentRequest.ResponseOption.Body}" : string.Empty;
+            StatusDict["SetDataByte.StringResponse"] = $"{stringResponse}  {diffResp}";
                    
             return IsOutDataValid;
         }

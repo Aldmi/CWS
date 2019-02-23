@@ -432,7 +432,6 @@ namespace Exchange.Base
                 viewRuleId = $"RuleName= {item.MessageDict["RuleName"]}  viewRule.Id= {item.MessageDict["viewRule.Id"]}",
                 StatusStr = item.StatusStr,
                 StringRequest = item.MessageDict["GetDataByte.StringRequest"],
-                LengthRequest = item.MessageDict["GetDataByte.StringRequest"].Length,
                 TimeResponse = item.MessageDict["TimeResponse"]            
             }).ToList();
 

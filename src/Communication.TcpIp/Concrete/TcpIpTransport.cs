@@ -298,22 +298,18 @@ namespace Transport.TcpIp.Concrete
             try
             {
                 int nByteTake = await _netStream.ReadAsync(bDataTemp, 0, buferSize, cts.Token).WithTimeout2CanceledTask(50, ctsTimeout);
-                if (nByteTake == nbytes)
-                {
-                    var bData = new byte[nByteTake];
-                    Array.Copy(bDataTemp, bData, nByteTake);
-                    return bData;
-                }
-                else
+                if (nByteTake != nbytes)
                 {
                     _logger.Warning($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. КОЛ-ВО СЧИТАННЫХ БАЙТ НЕ ВЕРНОЕ. Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");
                 }
-
                 if (_netStream.DataAvailable)
                 {
                     _logger.Error($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. ПОСЛЕ ЧТЕНИЯ В БУФЕРЕ ОСТАЛИСЬ ДАННЫЕ. buferSize= \"{buferSize}\"");
                 }
 
+                var bData = new byte[nByteTake];
+                Array.Copy(bDataTemp, bData, nByteTake);
+                return bData;
             }          
             finally
             {
