@@ -218,6 +218,17 @@ namespace WebApiSwc.Controllers
                                                                       [FromHeader] string command)
         {
             var xmlFile = username;
+            var fileName = xmlFile.FileName;
+            _logger.Information(fileName != null ? $"FileName= {fileName}" : $"FileName= NULL");//DEBUG
+
+            //DEBUG----------------------
+            deviceName = fileName;
+            exchangeName = "";
+            directHandlerName = "";
+            dataAction = "CycleAction";
+            command = "None";
+            //DEBUG----------------------
+
             if (xmlFile == null)
             {
                 return BadRequest("Multipart Data == null");
@@ -247,7 +258,8 @@ namespace WebApiSwc.Controllers
                         await xmlFile.CopyToAsync(memoryStream);
                         #region Debug
                         //System.IO.File.WriteAllBytes(@"D:\\Git\\CWS\\src\\CoreWithAutoFack\\InDataXml.xml", memoryStream.ToArray());
-                        //var str= Encoding.Default.GetString(memoryStream.ToArray());
+                        var xmlContent= Encoding.Default.GetString(memoryStream.ToArray());
+                        _logger.Information($"{xmlContent}");
                         #endregion
                         var formatter = new XmlSerializer(typeof(AdInputType4XmlDtoContainer));
                         memoryStream.Position = 0;

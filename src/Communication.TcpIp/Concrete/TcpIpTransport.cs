@@ -281,9 +281,8 @@ namespace Transport.TcpIp.Concrete
         /// </summary>
         public async Task<byte[]> TakeDataConstPeriodAsync(int nbytes, int timeOut, CancellationToken ct)
         {
-            byte[] bDataTemp = new byte[256];
-
-            //timeOut = 15;//DEBUG
+            int buferSize = 256;// читаем всегда весь буффер
+            byte[] bDataTemp = new byte[buferSize];
 
             //Ожидаем накопление данных в буффере
             await Task.Delay(timeOut, ct);
@@ -298,9 +297,7 @@ namespace Transport.TcpIp.Concrete
             var cts = CancellationTokenSource.CreateLinkedTokenSource(ctsTimeout.Token, ct); // Объединенный токен, сработает от выставленного ctsTimeout.Token или от ct
             try
             {
-                int nByteTake = await _netStream.ReadAsync(bDataTemp, 0, nbytes, cts.Token).WithTimeout2CanceledTask(50, ctsTimeout);
-                var readedBuffer=  bDataTemp.ArrayByteToString("X2");//DEBUG
-                _logger.Information($"TcpIpTransport/TakeDataAsync {KeyTransport}. считанно БАЙТ  Принято/Ожидаем= \"{nByteTake} / {nbytes}\" readedBuffer={readedBuffer} ");//DEBUG
+                int nByteTake = await _netStream.ReadAsync(bDataTemp, 0, buferSize, cts.Token).WithTimeout2CanceledTask(50, ctsTimeout);
                 if (nByteTake == nbytes)
                 {
                     var bData = new byte[nByteTake];
@@ -309,14 +306,15 @@ namespace Transport.TcpIp.Concrete
                 }
                 else
                 {
-                    _logger.Warning($"TcpIpTransport/TakeDataAsync {KeyTransport}.  Кол-во считанных БАЙТ не верное.  Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");
+                    _logger.Warning($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. КОЛ-ВО СЧИТАННЫХ БАЙТ НЕ ВЕРНОЕ. Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");
                 }
-            }
-            catch (Exception ex)//DEBUG
-            {
-                _logger.Error(ex, "Exception TakeDataConstPeriodAsync");
-                throw;
-            }           
+
+                if (_netStream.DataAvailable)
+                {
+                    _logger.Error($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. ПОСЛЕ ЧТЕНИЯ В БУФЕРЕ ОСТАЛИСЬ ДАННЫЕ. buferSize= \"{buferSize}\"");
+                }
+
+            }          
             finally
             {
             
