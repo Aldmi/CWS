@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +11,7 @@ namespace WebApiSwc
     {
         public static void Main(string[] args)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             ViewVersionOnConsole();
             BuildWebHost(args).Run();
         }

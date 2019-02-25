@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 using Autofac.Features.Indexed;
 using AutoMapper;
@@ -212,70 +213,72 @@ namespace WebApiSwc.Controllers
         [HttpPost("SendDataXmlMultipart4Devices")]
         public async Task<IActionResult> SendDataXmlMultipart4Devices([FromForm] IFormFile username,
                                                                       [FromHeader] string deviceName,
-                                                                      [FromHeader] string exchangeName,
-                                                                      [FromHeader] string directHandlerName,
-                                                                      [FromHeader] string dataAction,
-                                                                      [FromHeader] string command)
+                                                                      [FromHeader] string exchangeName = "",
+                                                                      [FromHeader] string directHandlerName = "",
+                                                                      [FromHeader] string dataAction = "CycleAction",
+                                                                      [FromHeader] string command = "None")
         {
             var xmlFile = username;
-            var fileName = xmlFile.FileName;
-            _logger.Information(fileName != null ? $"FileName= {fileName}" : $"FileName= NULL");//DEBUG
-
-            //DEBUG----------------------
-            deviceName = fileName;
-            exchangeName = "";
-            directHandlerName = "";
-            dataAction = "CycleAction";
-            command = "None";
-            //DEBUG----------------------
-
             if (xmlFile == null)
             {
-                return BadRequest("Multipart Data == null");
+                _logger.Warning($"SendDataXmlMultipart4Devices. deviceName == null");
+                return BadRequest("SendDataXmlMultipart4Devices. xmlFile == null");
             }
+            var fileName = xmlFile.FileName;
+            deviceName = deviceName ?? fileName;//Если deviceName не переданн в заголовке 
+            _logger.Information(fileName != null ? $"FileName= {fileName}" : "FileName= NULL");//DEBUG
+
             if (string.IsNullOrEmpty(deviceName))
             {
-                ModelState.AddModelError("SendDataXml4Devices", "deviceName == null");
+                ModelState.AddModelError("SendDataXmlMultipart4Devices", "deviceName == null");
+                _logger.Warning($"SendDataXmlMultipart4Devices. deviceName == null");
                 return BadRequest(ModelState);
             }
             if (!Enum.TryParse(dataAction, out DataAction dataActionParsed))
             {
-                ModelState.AddModelError("SendDataXml4Devices", "DataAction Error Parse");
+                ModelState.AddModelError("SendDataXmlMultipart4Devices", "DataAction Error Parse");
+                _logger.Warning($"SendDataXmlMultipart4Devices. DataAction Error Parse");
                 return BadRequest(ModelState);
             }
             if (!Enum.TryParse(command, out Command4Device commandParse))
             {
-                ModelState.AddModelError("SendDataXml4Devices", "Command4Device Error Parse");
+                ModelState.AddModelError("SendDataXmlMultipart4Devices", "Command4Device Error Parse");
+                _logger.Warning($"SendDataXmlMultipart4Devices. Command4Device Error Parse");
                 return BadRequest(ModelState);
             }
 
             try
             {
-                if (username.Length > 0)
+                if (xmlFile.Length > 0)
                 {
                     using (var memoryStream = new MemoryStream())
-                    {
+                    {    
                         await xmlFile.CopyToAsync(memoryStream);
+                        memoryStream.Position = 0;
+
                         #region Debug
-                        //System.IO.File.WriteAllBytes(@"D:\\Git\\CWS\\src\\CoreWithAutoFack\\InDataXml.xml", memoryStream.ToArray());
-                        var xmlContent= Encoding.Default.GetString(memoryStream.ToArray());
+                        //System.IO.File.WriteAllBytes(@"D:\\InDataXml.xml", memoryStream.ToArray());
+                        var xmlContent = Encoding.GetEncoding("Windows-1251").GetString(memoryStream.ToArray());
                         _logger.Information($"{xmlContent}");
                         #endregion
-                        var formatter = new XmlSerializer(typeof(AdInputType4XmlDtoContainer));
-                        memoryStream.Position = 0;
-                        var adInputType4XmlList = (AdInputType4XmlDtoContainer)formatter.Deserialize(memoryStream);
-                        var data = _mapper.Map<List<AdInputType>>(adInputType4XmlList.Trains);
-                        var inputData = new InputData<AdInputType>
+
+                        using (var reader = new StreamReader(memoryStream, Encoding.GetEncoding("Windows-1251"), true))
                         {
-                            DeviceName = deviceName,
-                            ExchangeName = exchangeName,
-                            DirectHandlerName = directHandlerName,
-                            DataAction = dataActionParsed,
-                            Command = commandParse,
-                            Data = data
-                        };
-                        var res = await InputDataHandler(new List<InputData<AdInputType>> { inputData });
-                        return res;
+                            var serializer = new XmlSerializer(typeof(AdInputType4XmlDtoContainer));
+                            var adInputType4XmlList = (AdInputType4XmlDtoContainer)serializer.Deserialize(reader);
+                            var data = _mapper.Map<List<AdInputType>>(adInputType4XmlList.Trains);
+                            var inputData = new InputData<AdInputType>
+                            {
+                                DeviceName = deviceName,
+                                ExchangeName = exchangeName,
+                                DirectHandlerName = directHandlerName,
+                                DataAction = dataActionParsed,
+                                Command = commandParse,
+                                Data = data
+                            };
+                            var res = await InputDataHandler(new List<InputData<AdInputType>> { inputData });
+                            return res;
+                        }
                     }
                 }
                 return BadRequest("Размер XML файла равен 0");

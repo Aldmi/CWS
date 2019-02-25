@@ -76,18 +76,18 @@ namespace WebApiSwc.AutoMapperConfig
                 .ForMember(dest => dest.Addition, opt => opt.MapFrom(src => new Addition
                 {
                     NameRu = src.Addition,
-                    NameEng = src.AdditionEng
+                    NameEng = src.AdditionENG
                 }))
                 .ForMember(dest => dest.Note, opt => opt.MapFrom(src => new Note
                 {
                     NameRu = src.Note,
-                    NameEng = src.NoteEng
+                    NameEng = src.NoteENG
                 }))
                 .ForMember(dest => dest.DaysFollowing, opt => opt.MapFrom(src => new DaysFollowing
                 {
                     NameRu = src.DaysOfGoing,
                     NameAliasRu = src.DaysOfGoingAlias,
-                    NameAliasEng = src.DaysOfGoingAliasEng
+                    NameAliasEng = src.DaysOfGoingAliasENG
                 }));
             #endregion
 

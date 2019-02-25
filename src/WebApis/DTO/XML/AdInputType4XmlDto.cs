@@ -40,7 +40,7 @@ namespace WebApiSwc.DTO.XML
         public string ExpectedDateTime { get; set; }                  //Ожидаемое время (Время + Время задержки) (parse -> DateTime)
         public string DaysOfGoing  { get; set; }                       //Дни следования
         public string DaysOfGoingAlias  { get; set; }                  //Дни следования алиас
-        public string DaysOfGoingAliasEng  { get; set; }               //Дни следования алиас
+        public string DaysOfGoingAliasENG  { get; set; }               //Дни следования алиас
         public string TrackNumber { get; set; }                        //Путь   
         public string TrackNumberWithoutAutoReset { get; set; }        //Путь до автосброса
         public string Platform { get; set; }                           //платформа
@@ -53,9 +53,9 @@ namespace WebApiSwc.DTO.XML
         public string TypeName { get; set; }                          //Тип поезда СТРОКА
         public string TypeAlias { get; set; }                         //Тип поезда СТРОКА алиас
         public string Addition { get; set; }                         //Дополнение
-        public string AdditionEng { get; set; }                      //Дополнение ENG
+        public string AdditionENG { get; set; }                      //Дополнение ENG
         public string Note { get; set; }                            //Остановки
-        public string NoteEng { get; set; }                         //Остановки ENG
+        public string NoteENG { get; set; }                         //Остановки ENG
         public int KolVag { get; set; }                             //количество вагонов в повагонке, по умолчанию 0
         public int KolLok { get; set; }                             //кол-во локомотивов, по умолчанию 0
         public int UslDlPoezd { get; set; }                         //длина поезда, по умолчанию 0
