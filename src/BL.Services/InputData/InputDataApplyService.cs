@@ -93,7 +93,7 @@ namespace BL.Services.InputData
             var infoObjsJson = JsonConvert.SerializeObject(infoObj, settings);
             _logger.Information($"ПРИНЯТЫ ДАННЫЕ ДЛЯ: {infoObjsJson}");
             var debugObjsJson = JsonConvert.SerializeObject(inData, settings);
-            _logger.Debug($"ПРИНЯТЫ ДАННЫЕ ПОДРОБНО: {debugObjsJson}");
+            _logger.Information($"ПРИНЯТЫ ДАННЫЕ ПОДРОБНО: {debugObjsJson}");  //TODO: поменять на DEBUG
         }
 
 

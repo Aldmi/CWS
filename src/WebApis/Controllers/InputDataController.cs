@@ -215,7 +215,7 @@ namespace WebApiSwc.Controllers
                                                                       [FromHeader] string deviceName,
                                                                       [FromHeader] string exchangeName = "",
                                                                       [FromHeader] string directHandlerName = "",
-                                                                      [FromHeader] string dataAction = "CycleAction",
+                                                                      [FromHeader] string dataAction = "",
                                                                       [FromHeader] string command = "None")
         {
             var xmlFile = username;
@@ -224,10 +224,14 @@ namespace WebApiSwc.Controllers
                 _logger.Warning($"SendDataXmlMultipart4Devices. deviceName == null");
                 return BadRequest("SendDataXmlMultipart4Devices. xmlFile == null");
             }
-            var fileName = xmlFile.FileName;
-            deviceName = deviceName ?? fileName;//Если deviceName не переданн в заголовке 
-            _logger.Information(fileName != null ? $"FileName= {fileName}" : "FileName= NULL");//DEBUG
-
+            var values = xmlFile.FileName.Split('|');
+            if (values.Length == 2)
+            {
+                var fileName = values[0];
+                dataAction = values[1];
+                deviceName = deviceName ?? fileName;//Если deviceName не переданн в заголовке 
+                _logger.Information(fileName != null ? $"FileName= {fileName}" : "FileName= NULL");//DEBUG
+            }
             if (string.IsNullOrEmpty(deviceName))
             {
                 ModelState.AddModelError("SendDataXmlMultipart4Devices", "deviceName == null");

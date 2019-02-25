@@ -157,13 +157,13 @@ namespace DeviceForExchange
         {
             if (!exchange.IsStartedTransportBg)
             {
-                _logger.Information($"Отправка данных НЕ удачна, Бекграунд обмена {exchange.KeyExchange} НЕ ЗАПЦУЩЕН");
+                _logger.Warning($"Отправка данных НЕ удачна, Бекграунд обмена {exchange.KeyExchange} НЕ ЗАПЦУЩЕН");
                 //await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, Бекграунд обмена {exchange.KeyExchange} НЕ ЗАПЦУЩЕН");
                 return;
             }
             if (!exchange.IsOpen)
             {
-                _logger.Information($"Отправка данных НЕ удачна, соединение транспорта для обмена {exchange.KeyExchange} НЕ ОТКРЫТО");
+                _logger.Warning($"Отправка данных НЕ удачна, соединение транспорта для обмена {exchange.KeyExchange} НЕ ОТКРЫТО");
                 //await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, соединение транспорта для обмена {exchange.KeyExchange} НЕ ОТКРЫТО");
                 return;
             }
@@ -172,7 +172,7 @@ namespace DeviceForExchange
                 case DataAction.OneTimeAction:
                     if (exchange.IsFullOneTimeDataQueue)
                     {
-                        _logger.Warning($"Отправка данных НЕ удачна, очередь однократных данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}");
+                        _logger.Error($"Отправка данных НЕ удачна, очередь однократных данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}");
                         //await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН");
                         return;
                     }
@@ -188,7 +188,7 @@ namespace DeviceForExchange
                     }
                     if (exchange.IsFullCycleTimeDataQueue)
                     {
-                        _logger.Warning($"Отправка данных НЕ удачна, очередь цикличеких данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}");
+                        _logger.Error($"Отправка данных НЕ удачна, очередь цикличеких данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}");
                         //await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН");
                         return;
                     }
@@ -198,7 +198,7 @@ namespace DeviceForExchange
                 case DataAction.CommandAction:
                     if (exchange.IsFullOneTimeDataQueue)
                     {
-                        _logger.Warning($"Отправка команды НЕ удачна, очередь однократных данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}");
+                        _logger.Error($"Отправка команды НЕ удачна, очередь однократных данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}");
                         //await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН");
                         return;
                     }
