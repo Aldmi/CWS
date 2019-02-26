@@ -6,6 +6,7 @@ using AutoMapper;
 using BL.Services.Actions;
 using BL.Services.Exceptions;
 using BL.Services.Mediators;
+using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -321,6 +322,41 @@ namespace WebApiSwc.Controllers
 
             await Task.CompletedTask;
             return new JsonResult(providerOptionDto);
+        }
+
+
+        // POST api/Devices/SetProviderOption/{deviceName}/{exchName}
+        //[HttpPost("SetProviderOption/{deviceName}/{exchName}")]
+        [HttpPost("SetProviderOption/{deviceName}/{exchName}")]
+        //[FromRoute] string deviceName, [FromRoute] string exchName
+        public async Task<IActionResult> SetProviderOption(
+            [FromRoute] string deviceName,
+            [FromRoute] string exchName,
+            [FromBody] ProviderOptionDto providerOptionDto)
+        {
+            var device = _mediatorForStorages.GetDevice(deviceName);
+            if (device == null)
+            {
+                return NotFound(deviceName);
+            }
+            var exchange = device.Exchanges.FirstOrDefault(e => e.KeyExchange == exchName);
+            if (exchange == null)
+            {
+                return NotFound(exchName);
+            }
+
+            var providerOption = _mapper.Map<ProviderOption>(providerOptionDto);
+            try
+            {
+                exchange.ProviderOptionRt = providerOption;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Исключение при установке ProviderOptionRt {ex}");
+            }
+   
+            await Task.CompletedTask;
+            return  Ok("Опции успешно приняты");
         }
 
 

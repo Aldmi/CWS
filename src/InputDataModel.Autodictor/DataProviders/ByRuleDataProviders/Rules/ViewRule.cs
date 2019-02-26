@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
-using NCalc;
 using Serilog;
 using Shared.CrcCalculate;
 using Shared.Extensions;
@@ -24,7 +23,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         #region fields
 
         private readonly string _addressDevice;
-        public readonly ViewRuleOption Option;
+        private ViewRuleOption _option;
         private readonly ILogger _logger;
 
         #endregion
@@ -36,12 +35,28 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         public ViewRule(string addressDevice, ViewRuleOption option, ILogger logger)
         {
             _addressDevice = addressDevice;
-            Option = option;
+            _option = option;
             _logger = logger;
         }
 
         #endregion
 
+
+
+        #region MutabeleOptions
+
+        public ViewRuleOption GetCurrentOption()
+        {
+            return _option;
+        }
+
+
+        public void SetCurrentOption(ViewRuleOption viewRuleOption)
+        {
+            _option = viewRuleOption;
+        }
+
+        #endregion
 
 
 
@@ -62,18 +77,18 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             else
             {
                 int numberOfBatch = 0;
-                foreach (var batch in viewedItems.Batch(Option.BatchSize))
+                foreach (var batch in viewedItems.Batch(_option.BatchSize))
                 {
-                    var startItemIndex = Option.StartPosition + (numberOfBatch++ * Option.BatchSize);
+                    var startItemIndex = _option.StartPosition + (numberOfBatch++ * _option.BatchSize);
                     var stringRequest = CreateStringRequest(batch, startItemIndex);
                     yield return new ViewRuleRequestModelWrapper
                     {
                         StartItemIndex = startItemIndex,
-                        BatchSize = Option.BatchSize,
+                        BatchSize = _option.BatchSize,
                         BatchedData = batch,
                         StringRequest = stringRequest,
-                        RequestOption = Option.RequestOption,
-                        ResponseOption = Option.ResponseOption
+                        RequestOption = _option.RequestOption,
+                        ResponseOption = _option.ResponseOption
                     };
                 }
             }
@@ -87,9 +102,9 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         /// <returns></returns>
         public ViewRuleRequestModelWrapper GetCommandRequestString()
         {
-            var header = Option.RequestOption.Header;
-            var body = Option.RequestOption.Body;
-            var footer = Option.RequestOption.Footer;
+            var header = _option.RequestOption.Header;
+            var body = _option.RequestOption.Body;
+            var footer = _option.RequestOption.Footer;
 
             //КОНКАТЕНИРОВАТЬ СТРОКИ В СУММАРНУЮ СТРОКУ-------------------------------------------------------------------------------------
             //resSumStr содержит только ЗАВИСИМЫЕ данные: {AddressDevice} {NByte} {CRC}}
@@ -102,8 +117,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             {
                 BatchedData = null,
                 StringRequest = resDependencyStr,
-                RequestOption = Option.RequestOption,
-                ResponseOption = Option.ResponseOption
+                RequestOption = _option.RequestOption,
+                ResponseOption = _option.ResponseOption
             };
         }
 
@@ -116,7 +131,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         {
             try
             {
-                return items.GetRange(Option.StartPosition, Option.Count);
+                return items.GetRange(_option.StartPosition, _option.Count);
             }
             catch (Exception)
             {
@@ -132,9 +147,9 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         private string CreateStringRequest(IEnumerable<AdInputType> batch, int startItemIndex)
         {
             var items = batch.ToList();
-            var header = Option.RequestOption.Header;
-            var body = Option.RequestOption.Body;
-            var footer = Option.RequestOption.Footer;//" {CRCXor:X2}\u0003";
+            var header = _option.RequestOption.Header;
+            var body = _option.RequestOption.Body;
+            var footer = _option.RequestOption.Footer;//" {CRCXor:X2}\u0003";
 
             //DEBUG----------------------------------------------------
 
@@ -296,17 +311,17 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         private List<string> LimitBodySectionLenght(List<string> bodyList)
         {
             double totalBodyCount= bodyList.Sum(s => s.Length);
-            if (totalBodyCount < Option.RequestOption.MaxBodyLenght)
+            if (totalBodyCount < _option.RequestOption.MaxBodyLenght)
                return bodyList;
 
-            double extraLenght= totalBodyCount - Option.RequestOption.MaxBodyLenght;
+            double extraLenght= totalBodyCount - _option.RequestOption.MaxBodyLenght;
             double averageLenght = (totalBodyCount / bodyList.Count);              //Средний размер одного элемента
             double extraItem = extraLenght / averageLenght;                        //Кол-во лишних элементов.
             var extraItemRounded= (int)Math.Ceiling(extraItem);                    //Кол-во лишних элементов округленное в большую сторону
             extraItemRounded = extraItemRounded == 0 ? 1 : extraItemRounded;       //Если небольшое превышение, то все равно нужно выставить 1 элемент на удаление
             bodyList.RemoveRange(extraItemRounded - 1, extraItemRounded);          //удалим лишние элементы.
             totalBodyCount = bodyList.Sum(s => s.Length);
-            _logger.Warning($"Срока тела запроса была обрезанна на {extraLenght}. Удаленно {extraItem} элементов для ViewRuleId {Option.Id}. Текущая длинна обрезанной строки {totalBodyCount}");
+            _logger.Warning($"Срока тела запроса была обрезанна на {extraLenght}. Удаленно {extraItem} элементов для ViewRuleId {_option.Id}. Текущая длинна обрезанной строки {totalBodyCount}");
             return bodyList;
         }
 
@@ -403,7 +418,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 matchString = Regex.Match(requestFillBodyWithoutConstantCharacters, "{Nbyte(.*)}(.*){CRC(.*)}").Groups[2].Value;          
                 if (HelpersBool.ContainsHexSubStr(matchString))
                 {
-                    var format = Option.RequestOption.Format;
+                    var format = _option.RequestOption.Format;
                     var buf = matchString.ConvertStringWithHexEscapeChars2ByteArray(format);
                     var lenghtBody = buf.Count;            
                     var lenghtAddress= 1;
@@ -457,7 +472,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
         private string MakeCrc(string str)
         {
-            var format = Option.RequestOption.Format;
+            var format = _option.RequestOption.Format;
             var matchString = Regex.Match(str, "(.*){CRC(.*)}").Groups[1].Value;
             matchString = matchString.Replace("\u0002", string.Empty).Replace("\u0003", string.Empty);
             var crcBytes = HelpersBool.ContainsHexSubStr(matchString) ?
@@ -485,10 +500,10 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         {
             if (str.Contains("0x"))
             {
-                var format = Option.RequestOption.Format;
+                var format = _option.RequestOption.Format;
                 var buf = str.ConvertStringWithHexEscapeChars2ByteArray(format);
                 var res = buf.ArrayByteToString("X2");
-                Option.RequestOption.SwitchFormat(newFormat);
+                _option.RequestOption.SwitchFormat(newFormat);
                 return res;
             }
 

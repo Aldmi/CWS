@@ -9,7 +9,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
     {
         #region fields
 
-        public readonly RuleOption Option;
+        protected RuleOption Option;
         private readonly ILogger _logger;
 
         #endregion
@@ -37,20 +37,34 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
 
 
+        #region MutabeleOptions
+
         public RuleOption GetCurrentOption()
         {
             var ruleOption = Option;
-            var currentViewRuleOptions= ViewRules.Select(vr => vr.Option);
+            var currentViewRuleOptions= ViewRules.Select(vr => vr.GetCurrentOption());
             ruleOption.ViewRules = new List<ViewRuleOption>(currentViewRuleOptions);
             return ruleOption;
         }
 
+         
+        public void SetCurrentOption(RuleOption ruleOption)
+        {
+            Option = ruleOption;
+            foreach (var viewRuleOption in Option.ViewRules)
+            {
+                var viewRule = ViewRules.FirstOrDefault(vr => vr.GetCurrentOption().Id == viewRuleOption.Id);
+                if (viewRule == null)
+                {
+                    //TODO: Копить в коллекцию ошибок
+                    continue;
+                }
 
-        //public void ChangeOption(RuleOption op)
-        //{
-        //    Option = op;
-        //}
+                viewRule.SetCurrentOption(viewRuleOption);      
+            }
+        }
 
+        #endregion
 
     }
 }
