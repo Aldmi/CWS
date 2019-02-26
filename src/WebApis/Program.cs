@@ -19,8 +19,9 @@ namespace WebApiSwc
         public static void ViewVersionOnConsole()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Title = "CWS Ver1.1";
-            Console.WriteLine($"{Console.Title}  [{DateTime.Today:U}]  [Add InfoLog for Request TcpIpData]");
+            const string version = "CWS Ver1.2";
+            Console.Title = version;
+            Console.WriteLine($"{version}  [{DateTime.Today:U}]  [Add Dynamic change provider options]");
         }
 
 
