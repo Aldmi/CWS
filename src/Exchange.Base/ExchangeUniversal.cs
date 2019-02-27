@@ -306,7 +306,7 @@ namespace Exchange.Base
             transportResponseWrapper.DataAction = DataAction.CycleAction;
             ResponseChangeRx.OnNext(transportResponseWrapper);
             
-            await Task.Delay(500, ct); //TODO: Продумать как задвать время цикл. обмена
+            await Task.Delay(100, ct); //TODO: Продумать как задвать скважность между выполнением цикл. функции на обмене.
         }
 
         /// <summary>
@@ -462,15 +462,4 @@ namespace Exchange.Base
 
         #endregion
     }
-
-
-    public class Cffgfg
-    {
-        public string StatusStr { get; set; }
-        public string StringRequest { get; set; }
-        public int LengthRequest { get; set; }
-        public string TimeResponse { get; set; }
-    }
-
-
 }

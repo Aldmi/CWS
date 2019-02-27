@@ -22,5 +22,7 @@ namespace DAL.EFCore.Entities.Transport
         public int IpPort { get; set; }                 
 
         public bool AutoStartBg { get; set; }
+
+        public bool DutyCycleTimeBg { get; set; } 
     }
 }

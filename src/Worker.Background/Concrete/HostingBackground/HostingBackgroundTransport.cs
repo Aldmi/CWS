@@ -21,6 +21,8 @@ namespace Worker.Background.Concrete.HostingBackground
         private readonly ConcurrentQueue<Func<CancellationToken, Task>> _oneTimeFuncQueue = new ConcurrentQueue<Func<CancellationToken, Task>>();
         private readonly ILogger _logger;
 
+        private int _dutyCycleCounter;
+
         #endregion
 
 
@@ -28,6 +30,7 @@ namespace Worker.Background.Concrete.HostingBackground
         #region prop
 
         public KeyTransport KeyTransport { get; }
+        public int DutyCycleTime { get; set; }       //Скважность (определяет время ожидания внутри одного периода циклического обмена)
 
         #endregion
 
@@ -88,21 +91,21 @@ namespace Worker.Background.Concrete.HostingBackground
         /// </summary>
         /// <param name="stoppingToken"></param>
         /// <returns></returns>
-        //private int indexCycleFunc = 0;
+     
         protected override async Task ProcessAsync(CancellationToken stoppingToken)
         {
             //вызов одиночной функции запроса---------------------------------------------------------------
             if (_oneTimeFuncQueue != null && _oneTimeFuncQueue.Count > 0)
             {
-                while (_oneTimeFuncQueue.TryDequeue(out var oneTimeaction))
+                while (_oneTimeFuncQueue.TryDequeue(out var oneTimeAction))
                 {
-                    await oneTimeaction(stoppingToken);
+                    await oneTimeAction(stoppingToken);
                 }
             }
             else
             {
                 //вызов циклических функций--------------------------------------------------------------------
-                try//DEBUG
+                try
                 {
                     if (_cycleTimeFuncDict != null && !_cycleTimeFuncDict.IsEmpty)
                     {
@@ -110,6 +113,11 @@ namespace Worker.Background.Concrete.HostingBackground
                         {
                             var cycleFunc = _enumeratorCycleTimeFuncDict.Current.Value;
                             await cycleFunc(stoppingToken);
+                            if (++_dutyCycleCounter == _cycleTimeFuncDict.Count)// DEBUG
+                            {
+                                _dutyCycleCounter = 0;
+                                await Task.Delay(DutyCycleTime, stoppingToken);
+                            }
                         }
                         else
                         {
