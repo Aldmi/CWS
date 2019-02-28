@@ -113,22 +113,50 @@ namespace Transport.SerialPort.Concrete.SpWin
 
 
         #region Methode
-
+        
         public async Task<bool> CycleReOpened()
         {
+            //IsCycleReopened = true;
+            //_ctsCycleReOpened = new CancellationTokenSource();
+            //bool res = false;
+            //while (!_ctsCycleReOpened.IsCancellationRequested && !res)
+            //{
+            //    res = ReOpenWithDispose();
+            //    if (!res)
+            //    {
+            //        Console.WriteLine($"коннект для транспорта НЕ ОТКРЫТ: {KeyTransport}");
+            //        await Task.Delay(TimeCycleReOpened, _ctsCycleReOpened.Token);
+            //    }
+            //}
+            //Console.WriteLine($"Коннект ОТКРЫТ: {KeyTransport}");
+            //IsCycleReopened = false;
+            //return true;
+
+
             IsCycleReopened = true;
             _ctsCycleReOpened = new CancellationTokenSource();
             bool res = false;
-            while (!_ctsCycleReOpened.IsCancellationRequested && !res)
+            try
             {
-                res = ReOpenWithDispose();
-                if (!res)
+                while (!_ctsCycleReOpened.IsCancellationRequested && !res)
                 {
-                    Console.WriteLine($"коннект для транспорта НЕ ОТКРЫТ: {KeyTransport}");
-                    await Task.Delay(TimeCycleReOpened, _ctsCycleReOpened.Token);
+                    res = ReOpenWithDispose();
+                    if (!res)
+                    {
+                        //_logger.Warning($"коннект для транспорта НЕ ОТКРЫТ: {KeyTransport}  {StatusString}");
+                        await Task.Delay(TimeCycleReOpened, _ctsCycleReOpened.Token);
+                    }
                 }
             }
-            Console.WriteLine($"Коннект ОТКРЫТ: {KeyTransport}");
+            catch (OperationCanceledException)
+            {
+                //_logger.Information($"ОТМЕНА ПЕРЕОТКРЫТИЯ СОЕДИНЕНИЯ ДЛЯ ТРАНСПОРТА: {KeyTransport}");
+                IsCycleReopened = false;
+                _ctsCycleReOpened.Dispose();
+                return false;
+            }
+
+            //_logger.Information($"коннект для транспорта ОТКРЫТ: {KeyTransport}");
             IsCycleReopened = false;
             return true;
         }
@@ -139,7 +167,6 @@ namespace Transport.SerialPort.Concrete.SpWin
             if (IsCycleReopened)
             {
                 _ctsCycleReOpened.Cancel();
-                _ctsCycleReOpened.Dispose();
             }
         }
 

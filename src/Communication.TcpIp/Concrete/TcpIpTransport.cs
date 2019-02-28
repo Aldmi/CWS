@@ -29,7 +29,7 @@ namespace Transport.TcpIp.Concrete
         private TcpClient _client;
         private NetworkStream _netStream;
 
-        private const int TimeCycleReOpened = 2000;
+        private const int TimeCycleReOpened = 500; //2000
         private CancellationTokenSource _ctsCycleReOpened;
         private readonly ILogger _logger;
 
@@ -115,15 +115,26 @@ namespace Transport.TcpIp.Concrete
             IsCycleReopened = true;
             _ctsCycleReOpened = new CancellationTokenSource();
             bool res = false;
-            while (!_ctsCycleReOpened.IsCancellationRequested && !res)
+            try
             {
-                res = await ReOpen();
-                if (!res)
+                while (!_ctsCycleReOpened.IsCancellationRequested && !res)
                 {
-                    _logger.Warning($"коннект для транспорта НЕ ОТКРЫТ: {KeyTransport}  {StatusString}");
-                    await Task.Delay(TimeCycleReOpened, _ctsCycleReOpened.Token);
+                    res = await ReOpen();
+                    if (!res)
+                    {
+                        _logger.Warning($"коннект для транспорта НЕ ОТКРЫТ: {KeyTransport}  {StatusString}");
+                        await Task.Delay(TimeCycleReOpened, _ctsCycleReOpened.Token);
+                    }
                 }
             }
+            catch (OperationCanceledException)
+            {
+                _logger.Information($"ОТМЕНА ПЕРЕОТКРЫТИЯ СОЕДИНЕНИЯ ДЛЯ ТРАНСПОРТА: {KeyTransport}");
+                IsCycleReopened = false;
+                _ctsCycleReOpened.Dispose();
+                return false;
+            }
+    
             _logger.Information($"коннект для транспорта ОТКРЫТ: {KeyTransport}");
             IsCycleReopened = false;
             return true;
@@ -135,7 +146,6 @@ namespace Transport.TcpIp.Concrete
             if (IsCycleReopened)
             {
                 _ctsCycleReOpened.Cancel();
-                _ctsCycleReOpened.Dispose();
             }
         }
 

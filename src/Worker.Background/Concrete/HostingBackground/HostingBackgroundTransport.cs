@@ -38,11 +38,12 @@ namespace Worker.Background.Concrete.HostingBackground
 
         #region ctor
 
-        public HostingBackgroundTransport(KeyTransport keyTransport, bool autoStart, ILogger logger) : base(autoStart)
+        public HostingBackgroundTransport(KeyTransport keyTransport, bool autoStart, int dutyCycleTime, ILogger logger) : base(autoStart)
         {
-            _logger = logger;
             KeyTransport = keyTransport;
-           _enumeratorCycleTimeFuncDict = _cycleTimeFuncDict.GetEnumerator();
+            DutyCycleTime = dutyCycleTime;
+            _logger = logger; 
+            _enumeratorCycleTimeFuncDict = _cycleTimeFuncDict.GetEnumerator();       
         }
 
         #endregion
@@ -113,10 +114,10 @@ namespace Worker.Background.Concrete.HostingBackground
                         {
                             var cycleFunc = _enumeratorCycleTimeFuncDict.Current.Value;
                             await cycleFunc(stoppingToken);
-                            if (++_dutyCycleCounter == _cycleTimeFuncDict.Count)// DEBUG
+                            if (++_dutyCycleCounter >= _cycleTimeFuncDict.Count)
                             {
                                 _dutyCycleCounter = 0;
-                                await Task.Delay(DutyCycleTime, stoppingToken);
+                                await Task.Delay(DutyCycleTime, stoppingToken);   //TODO: На время ожидангия блокируется разматывание _oneTimeFuncQueue (можно переделать на использовангие таймера, пока таймер считает цикл функции не разматываем, а однокртаные можно )
                             }
                         }
                         else

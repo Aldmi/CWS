@@ -170,7 +170,7 @@ namespace BL.Services.Actions
             if (exchange == null)
                 throw new KeyNotFoundException();
 
-            if (exchange.IsOpen)
+            if (exchange.IsCycleReopened)
                 throw new ActionHandlerException($"Соединение уже ОТКРЫТО для этого обмена: {exchnageKey}");
 
             await exchange.CycleReOpened();
@@ -197,7 +197,7 @@ namespace BL.Services.Actions
             if (exchange == null)
                 throw new KeyNotFoundException();
 
-            if (!exchange.IsOpen)
+            if (!exchange.IsCycleReopened)
                 throw new ActionHandlerException($"Соединение уже ЗАКРЫТО для этого обмена: {exchnageKey}");
 
             exchange.CycleReOpenedCancelation();

@@ -23,6 +23,6 @@ namespace DAL.EFCore.Entities.Transport
 
         public bool AutoStartBg { get; set; }
 
-        public bool DutyCycleTimeBg { get; set; } 
+        public int DutyCycleTimeBg { get; set; } 
     }
 }
