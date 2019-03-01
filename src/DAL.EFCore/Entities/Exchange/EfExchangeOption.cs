@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using DAL.EFCore.Entities.Exchange.ProvidersOption;
 using Newtonsoft.Json;
+using Shared.Collections;
 using Shared.Enums;
 
 namespace DAL.EFCore.Entities.Exchange
@@ -16,6 +17,7 @@ namespace DAL.EFCore.Entities.Exchange
         public string Key { get; set; }
 
         public bool AutoStartCycleFunc { get; set; }
+        public QueueOption CycleQueueOption { get; set; }
 
         public int NumberErrorTrying { get; set; }
         public int NumberTimeoutTrying { get; set; }

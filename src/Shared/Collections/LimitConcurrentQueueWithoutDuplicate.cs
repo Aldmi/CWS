@@ -1,21 +1,23 @@
 ﻿using System.Collections.Concurrent;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using CSharpFunctionalExtensions;
 using KellermanSoftware.CompareNetObjects;
 
 namespace Shared.Collections
 {
     /// <summary>
-    /// Потокобезопасная очередь уникальных элементов (без дупликатов) с ограничением по размеру.
+    /// Потокобезопасная очередь уникальных элементов (без дубликатов) с ограничением по размеру.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class LimitConcurrentQueueWithoutDuplicate<T>
     {
         #region field
 
-        private readonly bool _extractLastItem;
-        private readonly int _limitItems;
         private readonly ConcurrentQueue<T> _queue = new ConcurrentQueue<T>();
+        private readonly QueueOption _queueOption;
+        private readonly int _limitItems;
+        private T _oneItem;
 
         #endregion
 
@@ -23,10 +25,22 @@ namespace Shared.Collections
 
         #region prop
 
-        public int Count => _queue.Count;
-        public bool IsEmpty => _queue.IsEmpty;
-        public bool IsOneItem => (_queue.Count == 1);
-        public  bool IsFullLimit => (_queue.Count >= _limitItems);
+        public int Count
+        {
+            get
+            {
+                if (_queueOption == QueueOption.OneItem)
+                {
+                    return (_oneItem == null) ? 0 : 1;
+                }
+                return _queue.Count;
+            }
+        }
+
+
+        public bool IsEmpty => (Count == 0 );
+        public bool IsOneItem => (Count == 1);
+        public bool IsFullLimit => (Count >= _limitItems);
 
         #endregion
 
@@ -37,11 +51,11 @@ namespace Shared.Collections
         /// <summary>
         /// конструктор
         /// </summary>
-        /// <param name="extractLastItem">Извлекать или нет последний элемент из очереди. Если не извлекать то по команде Dequeue всегда показывается последний элемент</param>
+        /// <param name="queueOption">Один элемент, всегда перезаписывается / Извлекать последний элемент из очереди / Не извлекать последний элемент из очереди. Если не извлекать то по команде Dequeue всегда показывается последний элемент</param>
         /// <param name="limitItems">Ограничение по размеру очереди</param>
-        public LimitConcurrentQueueWithoutDuplicate(bool extractLastItem, int limitItems)
+        public LimitConcurrentQueueWithoutDuplicate(QueueOption queueOption, int limitItems)
         {
-            _extractLastItem = extractLastItem;
+            _queueOption = queueOption;
             _limitItems = limitItems;
         }
 
@@ -60,6 +74,12 @@ namespace Shared.Collections
         /// <returns></returns>
         public Result<T> Enqueue(T item)
         {
+            if (_queueOption == QueueOption.OneItem)
+            {
+                _oneItem = item;
+                return Result.Ok(item);
+            }
+
             if (IsFullLimit)
                 return Result.Fail<T>("Max Limit fail");
 
@@ -83,10 +103,16 @@ namespace Shared.Collections
             {
                 return Result.Fail<T, DequeueResultErrorWrapper>(new DequeueResultErrorWrapper(DequeueResultError.Empty));
             }
+
+            if (_queueOption == QueueOption.OneItem)
+            {
+                return Result.Ok<T, DequeueResultErrorWrapper>(_oneItem);
+            }
+
             T res;
             if (IsOneItem)
             {
-                if (_extractLastItem)
+                if (_queueOption == QueueOption.QueueExtractLastItem)
                 {
                     return _queue.TryDequeue(out res) ?
                         Result.Ok<T, DequeueResultErrorWrapper>(res) :
@@ -128,6 +154,15 @@ namespace Shared.Collections
     }
 
 
+    /// <summary>
+    /// Опции Очереди
+    /// </summary>
+    public enum QueueOption
+    {
+        OneItem,
+        QueueExtractLastItem,
+        QueueNotExtractLastItem,
+    }
 
 
 

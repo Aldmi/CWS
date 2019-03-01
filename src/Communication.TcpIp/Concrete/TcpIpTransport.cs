@@ -29,7 +29,7 @@ namespace Transport.TcpIp.Concrete
         private TcpClient _client;
         private NetworkStream _netStream;
 
-        private const int TimeCycleReOpened = 500; //2000
+        private const int TimeCycleReOpened = 500; //Большее время занимает ожидание ответа от ConnectAsync()
         private CancellationTokenSource _ctsCycleReOpened;
         private readonly ILogger _logger;
 

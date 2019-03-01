@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Shared.Collections;
 using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption
@@ -19,5 +20,6 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption
         public int NumberErrorTrying { get; set; }
         public int NumberTimeoutTrying { get; set; }
         public bool AutoStartCycleFunc { get; set; }
+        public QueueOption CycleQueueOption { get; set; }
     }
 }

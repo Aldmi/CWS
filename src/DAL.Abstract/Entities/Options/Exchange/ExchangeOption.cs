@@ -1,4 +1,5 @@
 ﻿using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
+using Shared.Collections;
 using Shared.Types;
 
 namespace DAL.Abstract.Entities.Options.Exchange
@@ -17,5 +18,10 @@ namespace DAL.Abstract.Entities.Options.Exchange
         /// Флаг учитывается, только при старте сервис.
         /// </summary>
         public bool AutoStartCycleFunc { get; set; }
+
+        /// <summary>
+        /// Опции очереди данных для цикл. обмена
+        /// </summary>
+        public QueueOption CycleQueueOption { get; set; }
     }
 }

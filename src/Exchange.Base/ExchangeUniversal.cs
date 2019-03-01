@@ -36,8 +36,8 @@ namespace Exchange.Base
         private readonly ITransportBackground _transportBackground;
         private readonly IExchangeDataProvider<TIn, ResponseDataItem<TIn>> _dataProvider;                               //проавйдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
         private readonly ILogger _logger;
-        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(true, MaxDataInQueue);   //Очередь данных для SendOneTimeData().
-        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(false, MaxDataInQueue); //Очередь данных для SendCycleTimeData().
+        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(QueueOption.QueueNotExtractLastItem, MaxDataInQueue);   //Очередь данных для SendOneTimeData().
+        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue; //Очередь данных для SendCycleTimeData().
         #endregion
 
 
@@ -85,7 +85,7 @@ namespace Exchange.Base
         {
             get => _dataProvider.GetCurrentOptionRt();
             set => _dataProvider.SetCurrentOptionRt(value);
-        }    
+        }
         #endregion
 
 
@@ -105,7 +105,7 @@ namespace Exchange.Base
             _dataProvider = dataProvider;
             _logger = logger;
 
-            
+            _cycleTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(exchangeOption.CycleQueueOption, MaxDataInQueue);
         }
 
         #endregion
@@ -297,15 +297,15 @@ namespace Exchange.Base
                 var errorResult = result.Error.DequeueResultError;
                 if (errorResult == DequeueResultError.FailTryDequeue || errorResult == DequeueResultError.FailTryPeek)
                 {
-                  _logger.Error($"Ошибка извлечения данных из ЦИКЛ. очереди {errorResult.ToString()}");
-                  return;
+                    _logger.Error($"Ошибка извлечения данных из ЦИКЛ. очереди {errorResult.ToString()}");
+                    return;
                 }
             }
             var transportResponseWrapper = await SendingPieceOfData(inData, ct);
             transportResponseWrapper.KeyExchange = KeyExchange;
             transportResponseWrapper.DataAction = DataAction.CycleAction;
             ResponseChangeRx.OnNext(transportResponseWrapper);
-            
+
             await Task.Delay(100, ct); //TODO: Продумать как задвать скважность между выполнением цикл. функции на обмене.
         }
 
@@ -432,7 +432,7 @@ namespace Exchange.Base
                 viewRuleId = $"RuleName= {item.MessageDict["RuleName"]}  viewRule.Id= {item.MessageDict["viewRule.Id"]}",
                 StatusStr = item.StatusStr,
                 StringRequest = item.MessageDict["GetDataByte.StringRequest"],
-                TimeResponse = item.MessageDict["TimeResponse"]            
+                TimeResponse = item.MessageDict["TimeResponse"]
             }).ToList();
 
             var settings = new JsonSerializerSettings
