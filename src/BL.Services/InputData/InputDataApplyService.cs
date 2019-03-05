@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using BL.Services.Mediators;
 using InputDataModel.Base;
@@ -81,21 +80,23 @@ namespace BL.Services.InputData
                 Formatting = Formatting.Indented,             //Отступы дочерних элементов 
                 NullValueHandling = NullValueHandling.Ignore  //Игнорировать пустые теги
             };
-
-        
+   
             var infoObj = new
             {
                 inData.DeviceName,
                 inData.ExchangeName,
-                inData.DataAction,                        //TODO: сделать ToString()
-                inData.Command,                           //TODO: сделать ToString()
+                DataAction= inData.DataAction.ToString(),
+                Command = inData.Command.ToString(),
                 inData.DirectHandlerName,   
                 DataCount = inData.Data?.Count ?? 0
             };
             var infoObjsJson = JsonConvert.SerializeObject(infoObj, settings);
             _logger.Information($"ПРИНЯТЫ ДАННЫЕ ДЛЯ: {infoObjsJson}");
-            var debugObjsJson = JsonConvert.SerializeObject(inData, settings);
-            _logger.Information($"ПРИНЯТЫ ДАННЫЕ ПОДРОБНО: {debugObjsJson}");  //TODO: поменять на DEBUG
+            if (inData.Command != Command4Device.None)
+            {
+                var debugObjsJson = JsonConvert.SerializeObject(inData, settings);
+                _logger.Information($"ПРИНЯТЫ ДАННЫЕ ПОДРОБНО: {debugObjsJson}"); //TODO: поменять на DEBUG
+            }
         }
 
 
