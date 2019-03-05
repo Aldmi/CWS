@@ -226,12 +226,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 {
                     //КОМАНДА-------------------------------------------------------------
                     case RuleSwitcher4InData.CommandHanler:
-                        StatusDict["Command"] = $"{inData.Command}";
-                        //_logger.Information($"Отправка КОМАНДЫ: {inData.Command}");
-                        var commandViewRule = rule.ViewRules.FirstOrDefault();
-                        _currentRequest = commandViewRule?.GetCommandRequestString();
-                        InputData = new InDataWrapper<AdInputType> { Command = inData.Command };
-                        RaiseSendDataRx.OnNext(this);
+                        ViewRuleSendCommand(rule, inData.Command);
                         continue;
 
                     //ДАННЫЕ ДЛЯ УКАЗАНОГО RULE--------------------------------------------------------------  
@@ -288,6 +283,23 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 }
             }
         }
+
+
+
+        /// <summary>
+        /// Отправить команду через первое ViewRule.
+        /// </summary>
+        private void ViewRuleSendCommand(Rule rule, Command4Device command)
+        {
+            var commandViewRule = rule.ViewRules.FirstOrDefault();
+            _currentRequest = commandViewRule?.GetCommandRequestString();
+            InputData = new InDataWrapper<AdInputType> { Command = command };
+            StatusDict["Command"] = $"{command}";
+            StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
+            StatusDict["viewRule.Id"] = $"{commandViewRule.GetCurrentOption().Id}";
+            RaiseSendDataRx.OnNext(this);
+        }
+
 
         #endregion
 

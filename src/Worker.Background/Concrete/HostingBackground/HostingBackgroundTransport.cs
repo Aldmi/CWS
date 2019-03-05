@@ -98,9 +98,16 @@ namespace Worker.Background.Concrete.HostingBackground
             //вызов одиночной функции запроса---------------------------------------------------------------
             if (_oneTimeFuncQueue != null && _oneTimeFuncQueue.Count > 0)
             {
-                while (_oneTimeFuncQueue.TryDequeue(out var oneTimeAction))
+                try
                 {
-                    await oneTimeAction(stoppingToken);
+                    while (_oneTimeFuncQueue.TryDequeue(out var oneTimeAction))
+                    {
+                        await oneTimeAction(stoppingToken);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    _logger.Fatal($"HostingBackgroundTransport.ProcessAsync Однократные функции {ex}");
                 }
             }
             else
@@ -129,7 +136,7 @@ namespace Worker.Background.Concrete.HostingBackground
                 }
                 catch (Exception ex)
                 {
-                    _logger.Fatal($"HostingBackgroundTransport.ProcessAsync {ex}");
+                    _logger.Fatal($"HostingBackgroundTransport.ProcessAsync Циклические функции {ex}");
                 }
             }
             await Task.Delay(CheckUpdateTime, stoppingToken);

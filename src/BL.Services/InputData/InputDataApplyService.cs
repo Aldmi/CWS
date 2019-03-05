@@ -81,14 +81,16 @@ namespace BL.Services.InputData
                 Formatting = Formatting.Indented,             //Отступы дочерних элементов 
                 NullValueHandling = NullValueHandling.Ignore  //Игнорировать пустые теги
             };
+
+        
             var infoObj = new
             {
                 inData.DeviceName,
                 inData.ExchangeName,
-                inData.DataAction,
-                inData.Command,
-                inData.DirectHandlerName,
-                DataCount = inData.Data.Count
+                inData.DataAction,                        //TODO: сделать ToString()
+                inData.Command,                           //TODO: сделать ToString()
+                inData.DirectHandlerName,   
+                DataCount = inData.Data?.Count ?? 0
             };
             var infoObjsJson = JsonConvert.SerializeObject(infoObj, settings);
             _logger.Information($"ПРИНЯТЫ ДАННЫЕ ДЛЯ: {infoObjsJson}");

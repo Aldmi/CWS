@@ -110,8 +110,11 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             //resSumStr содержит только ЗАВИСИМЫЕ данные: {AddressDevice} {NByte} {CRC}}
             var resSumStr = header + body + footer;
 
-            //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})-------------------------------------------------
-            var resDependencyStr = MakeDependentInserts(resSumStr);
+            //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ В ТЕЛО ЗАПРОСА--------------------------------------------------------------------------------------
+            var resBodyDependentStr = MakeBodyDependentInserts(resSumStr);
+
+            //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})---------------------------------------------------------------------
+            var resDependencyStr = MakeDependentInserts(resBodyDependentStr);
 
             return new ViewRuleRequestModelWrapper
             {

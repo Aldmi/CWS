@@ -139,7 +139,7 @@ namespace DeviceForExchange
             var exchange = Exchanges.FirstOrDefault(exch=> exch.KeyExchange == keyExchange);
             if (exchange == null)
             {
-                await Send2Produder(Option.TopicName4MessageBroker, $"Обмен не найденн для этого ус-ва {keyExchange}");
+                //await Send2Produder(Option.TopicName4MessageBroker, $"Обмен не найденн для этого ус-ва {keyExchange}");
                 return;
             }
             await SendDataOrCommand(exchange, dataAction, inData, command4Device, directHandlerName);  

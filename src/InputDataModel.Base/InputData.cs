@@ -36,5 +36,5 @@ namespace InputDataModel.Base
     }
 
     public enum DataAction {OneTimeAction, CycleAction, CommandAction}
-    public enum Command4Device { None, On, Off, Restart, Clear}
+    public enum Command4Device { None, On, Off, Restart, Clear, InfoEmergency }
 }

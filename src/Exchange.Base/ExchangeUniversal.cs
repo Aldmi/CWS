@@ -36,7 +36,7 @@ namespace Exchange.Base
         private readonly ITransportBackground _transportBackground;
         private readonly IExchangeDataProvider<TIn, ResponseDataItem<TIn>> _dataProvider;                               //проавйдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
         private readonly ILogger _logger;
-        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(QueueOption.QueueNotExtractLastItem, MaxDataInQueue);   //Очередь данных для SendOneTimeData().
+        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(QueueOption.QueueExtractLastItem, MaxDataInQueue);   //Очередь данных для SendOneTimeData().
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue; //Очередь данных для SendCycleTimeData().
         #endregion
 
