@@ -349,6 +349,26 @@ namespace BL.Services.Mediators
             {
                 throw new OptionHandlerException($"Устройство с таким именем уже существует:  {deviceOption.Name}");
             }
+            //ПРОВЕРКА ОТСУТСВИЯ УСТРОЙСТВА по Id
+            if (await IsExistDeviceAsync(deviceOption.Id))
+            {
+                throw new OptionHandlerException($"Устройство с таким Id уже существует:  {deviceOption.Id}");
+            }
+            //ПРОВЕРКА ОТСУТСВИЯ ОБМЕНОВ по Id
+            var exchangeExternalIds = exchangeOptions.Select(exchangeOption => exchangeOption.Id).ToList();
+            foreach (var exchangeId in exchangeExternalIds)
+            {
+                if (await IsExistExchangeAsync(exchangeId))
+                {
+                    throw new OptionHandlerException($"Обмен с таким Id уже существует: {exchangeId}");
+                }
+            }
+            //ПРОЛВЕРКА УНИКАЛЬНОСТИ ДОБАВЛЯЕМОГО ТРАНСПОРТА (ЕСЛИ СОВПАДАЕТ ID ИЛИ KEY ТО ЭТЬО ОШИБКА, ДОЛЖНО СОВПАДАТЬ И ТО И ТО ИЛИ БЫТЬ ПОЛНОСТЬЮ НОВЫМ)
+            var errorStr = await CheckUniqeAllTransportAsync(transportOption);
+            if (!string.IsNullOrEmpty(errorStr))
+            {
+                throw new OptionHandlerException($"TransportOptions :  {errorStr}");
+            }
 
             var exceptionStr = new StringBuilder();
             var exchangeExternalKeys = exchangeOptions.Select(exchangeOption => exchangeOption.Key).ToList();
@@ -391,24 +411,11 @@ namespace BL.Services.Mediators
                 throw new OptionHandlerException($"Найденно несоответсвие ключей указанных для Обмненов, ключам указанным для транспорта {exceptionStr}");
             }
 
-            //ПРОВЕРКА ОТСУТСВИЯ ДОБАВЛЯЕМОГО ТРАНСПОРТА ДЛЯ КАЖДОГО ОБМЕНА (по ключу KeyTransport). Добавялем только уникальный обмен.
-            //foreach (var exchangeOption in exchangeOptions)
-            //{
-            //    if (await IsExistTransportAsync(exchangeOption.KeyTransport))
-            //    {
-            //        exceptionStr.AppendFormat("{0}, ", exchangeOption.KeyTransport);
-            //    }
-            //}
-            //if (!string.IsNullOrEmpty(exceptionStr.ToString()))
-            //{
-            //    throw new OptionHandlerException($"Для ExchangeOption УЖЕ СУЩЕСТВУЕТ ТАКОЙ ТРАНСПОРТ:  {exceptionStr}");
-            //}
-
             //ДОБАВИТЬ ДЕВАЙС
             await _deviceOptionRep.AddAsync(deviceOption);
             //ДОБАВИТЬ ОБМЕНЫ
             await _exchangeOptionRep.AddRangeAsync(exchangeOptions);
-            //ДОБАВИТЬ ТРАНСПОРТЫ
+            //ДОБАВИТЬ ТРАНСПОРТЫ (ТОЛЬКО НОВЫЕ)
             if (transportOption.SerialOptions != null)
             {
                 foreach (var option in transportOption.SerialOptions)
@@ -450,13 +457,28 @@ namespace BL.Services.Mediators
             return await _deviceOptionRep.IsExistAsync(dev => dev.Name == deviceName);
         }
 
+        /// <summary>
+        /// Проверка наличия устройтсва по Id
+        /// </summary>
+        public async Task<bool> IsExistDeviceAsync(int deviceId)
+        {
+            return await _deviceOptionRep.IsExistAsync(dev => dev.Id == deviceId);
+        }
 
         /// <summary>
         /// Проверка наличия транспорта по ключу
         /// </summary>
-        public async Task<bool> IsExistExRRchangeAsync(string keyExchange)
+        public async Task<bool> IsExistExchangeAsync(string keyExchange)
         {
             return await _exchangeOptionRep.IsExistAsync(exc => exc.Key == keyExchange);
+        }
+
+        /// <summary>
+        /// Проверка наличия транспорта по Id
+        /// </summary>
+        public async Task<bool> IsExistExchangeAsync(int id)
+        {
+            return await _exchangeOptionRep.IsExistAsync(exc => exc.Id == id);
         }
 
 
@@ -476,9 +498,78 @@ namespace BL.Services.Mediators
                 case TransportType.Http:
                     return await _httpOptionRep.IsExistAsync(http => http.Name == keyTransport.Key);
             }
-
             return false;
         }
+
+
+        /// <summary>
+        /// Проверка наличия транспорта по Id
+        /// </summary>
+        public async Task<bool> IsExistTransportAsync(TransportType transportType, int id)
+        {
+            switch (transportType)
+            {
+                case TransportType.SerialPort:
+                    return await _serialPortOptionRep.IsExistAsync(sp => sp.Id == id);
+
+                case TransportType.TcpIp:
+                    return await _tcpIpOptionRep.IsExistAsync(tcpip => tcpip.Id == id);
+
+                case TransportType.Http:
+                    return await _httpOptionRep.IsExistAsync(http => http.Id == id);
+            }
+            return false;
+        }
+
+
+        /// <summary>
+        /// Проверка наличия УНИКАЛЬНОСТИ ДОБАВЛЯЕМОГО ТРАНСПОРТА.
+        /// Если транспорт опознанн по Id и Key, то такой транспорт уже существует.
+        /// Если у транспорта не совпадвет Id и Key, то это НОВЫЙ транспорт.
+        /// </summary>
+        public async Task<string> CheckUniqeAllTransportAsync(TransportOption transportOption)
+        {
+            var errorStr = new StringBuilder();
+            bool existId;
+            bool existKey;
+            if (transportOption.SerialOptions != null)
+            {
+                foreach (var option in transportOption.SerialOptions)
+                {
+                    existId = await IsExistTransportAsync(TransportType.SerialPort, option.Id);
+                    existKey = await IsExistTransportAsync(new KeyTransport(option.Port, TransportType.SerialPort));
+                    var res = existId ^ existKey;
+                    if (res)
+                        errorStr.AppendFormat("SerialPort имеет такой ключ {0}, ", option.Id);
+                }
+            }
+            if (transportOption.TcpIpOptions != null)
+            {
+                foreach (var option in transportOption.TcpIpOptions)
+                {
+                    existId = await IsExistTransportAsync(TransportType.TcpIp, option.Id);
+                    existKey = await IsExistTransportAsync(new KeyTransport(option.Name, TransportType.TcpIp));
+                    var res = existId ^ existKey;
+                    if (res)
+                        errorStr.AppendFormat("TcpIp имеет такой ключ {0}, ", option.Id);                   
+                }
+            }
+            if (transportOption.TcpIpOptions != null)
+            {
+                foreach (var option in transportOption.HttpOptions)
+                {
+                    existId = await IsExistTransportAsync(TransportType.Http, option.Id);
+                    existKey = await IsExistTransportAsync(new KeyTransport(option.Name, TransportType.Http));
+                    var res = existId ^ existKey;
+                    if (res)
+                        errorStr.AppendFormat("Http имеет такой ключ {0}, ", option.Id);
+                }
+            }
+            return errorStr.ToString();
+        }
+
+
+
 
 
         /// <summary>

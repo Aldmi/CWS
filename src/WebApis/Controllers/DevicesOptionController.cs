@@ -148,7 +148,7 @@ namespace WebApiSwc.Controllers
             catch (Exception ex)
             {
                 _logger.Error(ex, "Критическая Ошибка в DevicesOptionController/Post");
-                throw;
+                return BadRequest(ex);
             }
         }
 
