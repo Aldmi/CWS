@@ -15,18 +15,14 @@ namespace WebApiSwc.Extensions
 
 
 
-        #region ctor
+
+        #region Methode
 
         public static void ChangeLogEventLevel(LogEventLevel minLevel)
         {
             LevelSwitch.MinimumLevel = minLevel;
         }
 
-        #endregion
-
-
-
-        #region Methode
 
         public static IServiceCollection AddSerilogServices(this IServiceCollection services, string minLevel)
         {

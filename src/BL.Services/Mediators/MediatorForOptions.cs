@@ -354,8 +354,18 @@ namespace BL.Services.Mediators
             {
                 throw new OptionHandlerException($"Устройство с таким Id уже существует:  {deviceOption.Id}");
             }
-            //ПРОВЕРКА ОТСУТСВИЯ ОБМЕНОВ по Id
+         
             var exchangeExternalIds = exchangeOptions.Select(exchangeOption => exchangeOption.Id).ToList();
+            //ПРОВЕРКА ПОВТОРЯЮЩИХСЯ Id В СПИСКЕ НОВЫХ ОБМЕНОВ
+            var repeatItems = exchangeExternalIds.GroupBy(x => x)
+                .Where(g => g.Count() > 1)
+                .Select(y => y.Key)
+                .ToList();
+            if (repeatItems.Any())
+            {
+                throw new OptionHandlerException($"В обмене повторяющийся ID: {repeatItems[0]}");
+            }
+            //ПРОВЕРКА ОТСУТСВИЯ ОБМЕНОВ по Id
             foreach (var exchangeId in exchangeExternalIds)
             {
                 if (await IsExistExchangeAsync(exchangeId))
@@ -363,7 +373,7 @@ namespace BL.Services.Mediators
                     throw new OptionHandlerException($"Обмен с таким Id уже существует: {exchangeId}");
                 }
             }
-            //ПРОЛВЕРКА УНИКАЛЬНОСТИ ДОБАВЛЯЕМОГО ТРАНСПОРТА (ЕСЛИ СОВПАДАЕТ ID ИЛИ KEY ТО ЭТЬО ОШИБКА, ДОЛЖНО СОВПАДАТЬ И ТО И ТО ИЛИ БЫТЬ ПОЛНОСТЬЮ НОВЫМ)
+            //ПРОВЕРКА УНИКАЛЬНОСТИ ДОБАВЛЯЕМОГО ТРАНСПОРТА (ЕСЛИ СОВПАДАЕТ ID ИЛИ KEY ТО ЭТО ОШИБКА, ДОЛЖНО СОВПАДАТЬ И ТО И ТО ИЛИ БЫТЬ ПОЛНОСТЬЮ НОВЫМ)
             var errorStr = await CheckUniqeAllTransportAsync(transportOption);
             if (!string.IsNullOrEmpty(errorStr))
             {
