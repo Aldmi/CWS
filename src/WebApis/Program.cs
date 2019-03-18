@@ -19,9 +19,9 @@ namespace WebApiSwc
         public static void ViewVersionOnConsole()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            const string version = "CWS Ver1.2";
+            const string version = "CWS Ver1.3";
             Console.Title = version;
-            Console.WriteLine($"{version}  [{DateTime.Today:U}]  [Add Dynamic change provider options]");
+            Console.WriteLine($"{version}  [{DateTime.Today:U}]  [Check repeted items in ExchnageOptionsCollection]");
         }
 
 

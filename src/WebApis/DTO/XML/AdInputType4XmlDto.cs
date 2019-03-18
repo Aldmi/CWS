@@ -17,8 +17,8 @@ namespace WebApiSwc.DTO.XML
     public class AdInputType4XmlDto
     {
         public int Id { get; set; }
-        public int  ScheduleId { get; set; }                             //ID поезда в годовом расписании (из ЦИС)
-        public int TrnId { get; set; }                                   //уникальный ID отправления поезда из ЦИС
+        public string ScheduleId { get; set; }                           //ID поезда в годовом расписании (из ЦИС)
+        public string TrnId { get; set; }                                //уникальный ID отправления поезда из ЦИС
         public string TrainNumber { get; set; }                          //номер поезда в формате Num1/Num2 если 2 номера и Num1 если 1 номер
         public string TrainType { get; set; }                            //Тип поезда в цифровом виде
         public string DirectionStation  { get; set; }                    // направление движения (Тверское, Ленинградское и т.д.)
@@ -44,7 +44,7 @@ namespace WebApiSwc.DTO.XML
         public string TrackNumber { get; set; }                        //Путь   
         public string TrackNumberWithoutAutoReset { get; set; }        //Путь до автосброса
         public string Platform { get; set; }                           //платформа
-        public int Direction  { get; set; }                           //0,1 - прибытие, отправление
+        public string Direction  { get; set; }                         //0,1 - прибытие, отправление
         public string EvTrackNumber { get; set; }                     //Путь (как TrackNumber)
         //<State>0</State>
         public string VagonDirection { get; set; }                    //Нумерация вагонов в поезде. 0,1,2 - не задано, нумерация с головы, с хвоста
@@ -56,13 +56,13 @@ namespace WebApiSwc.DTO.XML
         public string AdditionENG { get; set; }                      //Дополнение ENG
         public string Note { get; set; }                            //Остановки
         public string NoteENG { get; set; }                         //Остановки ENG
-        public int KolVag { get; set; }                             //количество вагонов в повагонке, по умолчанию 0
-        public int KolLok { get; set; }                             //кол-во локомотивов, по умолчанию 0
-        public int UslDlPoezd { get; set; }                         //длина поезда, по умолчанию 0
+        public string KolVag { get; set; }                             //количество вагонов в повагонке, по умолчанию 0
+        public string KolLok { get; set; }                             //кол-во локомотивов, по умолчанию 0
+        public string UslDlPoezd { get; set; }                         //длина поезда, по умолчанию 0
         //<Vagons>
         //<v/>
         //</Vagons>
-        public int UslDlPerrona { get; set; }                      //длина поезда, по умолчанию 0
+        public string UslDlPerrona { get; set; }                      //длина поезда, по умолчанию 0
         public string PlatWhereFrom { get; set; }                  //
         public string PlatWhereTo { get; set; }                    //
         //<Sectors>

@@ -31,17 +31,18 @@ namespace WebApiSwc.AutoMapperConfig
 
             #region AdInputType xml in Data mapping
             CreateMap<AdInputType4XmlDto, AdInputType>()
-                .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => src.ScheduleId))
+                .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => ConvertString2Int(src.ScheduleId)))
+                .ForMember(dest => dest.TrnId, opt => opt.MapFrom(src => ConvertString2Int(src.TrnId)))
                 .ForMember(dest => dest.Lang, opt => opt.MapFrom(src => Lang.Ru))
                 .ForMember(dest => dest.NumberOfTrain, opt => opt.MapFrom(src => src.TrainNumber))
                 .ForMember(dest => dest.PathNumber, opt => opt.MapFrom(src => src.TrackNumber))
                 .ForMember(dest => dest.Platform, opt => opt.MapFrom(src => src.Platform))
-                .ForMember(dest => dest.Event, opt => opt.MapFrom(src => new EventTrain(src.Direction)))
+                .ForMember(dest => dest.Event, opt => opt.MapFrom(src => new EventTrain(ConvertString2NullableInt(src.Direction))))
                 .ForMember(dest => dest.TrainType, opt => opt.MapFrom(src => new TypeTrain
                 {
                     NameRu = src.TypeName,
                     NameAliasRu = src.TypeAlias,
-                    Num = ConvertString2Int(src.TrainType) //TODO: игнор
+                    Num = ConvertString2NullableInt(src.TrainType) //TODO: игнор
                 }))
                 .ForMember(dest => dest.VagonDirection, opt => opt.MapFrom(src => new VagonDirection(src.VagonDirection)))
                 .ForMember(dest => dest.StationDeparture, opt => opt.MapFrom(src => new Station
@@ -103,13 +104,22 @@ namespace WebApiSwc.AutoMapperConfig
         }
 
 
-        private int? ConvertString2Int(string str)
+        private int? ConvertString2NullableInt(string str)
         {
             if (int.TryParse(str, out var r))
                 return r;
                     
             return null;
         }
+
+        private int ConvertString2Int(string str)
+        {
+            if (int.TryParse(str, out var r))
+                return r;
+
+            return 0;
+        }
+
 
 
         private DateTime? ConvertString2DataTime(string str)

@@ -216,15 +216,15 @@ namespace WebApiSwc.Controllers
                                                                       [FromHeader] string exchangeName = "",
                                                                       [FromHeader] string directHandlerName = "",
                                                                       [FromHeader] string dataAction = "",
-                                                                      [FromHeader] string command = "None")
+                                                                      [FromHeader] string command = "None") // [FromHeader] string fileEncoding = "Windows-1251"
         {
             var xmlFile = username;
             if (xmlFile == null)
             {
-                _logger.Warning($"SendDataXmlMultipart4Devices. deviceName == null");
+                _logger.Warning("SendDataXmlMultipart4Devices. deviceName == null");
                 return BadRequest("SendDataXmlMultipart4Devices. xmlFile == null");
             }
-            var values = xmlFile.FileName.Split('|');
+            var values = xmlFile.FileName.Split('+');
             if (values.Length == 2)
             {
                 var fileName = values[0];
@@ -253,20 +253,20 @@ namespace WebApiSwc.Controllers
 
             try
             {
+                
                 if (xmlFile.Length > 0)
                 {
                     using (var memoryStream = new MemoryStream())
                     {    
                         await xmlFile.CopyToAsync(memoryStream);
                         memoryStream.Position = 0;
-
+                        var encoding = "utf-8"; //"Windows-1251" - для новго АД  "utf-8" - для старого
                         #region Debug
-                        //System.IO.File.WriteAllBytes(@"D:\\InDataXml.xml", memoryStream.ToArray());
-                        var xmlContent = Encoding.GetEncoding("Windows-1251").GetString(memoryStream.ToArray());
+                        //System.IO.File.WriteAllBytes(@"D:\\InDataXml_NewAd.xml", memoryStream.ToArray());
+                        var xmlContent = Encoding.GetEncoding(encoding).GetString(memoryStream.ToArray()); //utf-8   "Windows-1251"
                         _logger.Information($"{xmlContent}");
                         #endregion
-
-                        using (var reader = new StreamReader(memoryStream, Encoding.GetEncoding("Windows-1251"), true))
+                        using (var reader = new StreamReader(memoryStream, Encoding.GetEncoding(encoding), true))
                         {
                             var serializer = new XmlSerializer(typeof(AdInputType4XmlDtoContainer));
                             var adInputType4XmlList = (AdInputType4XmlDtoContainer)serializer.Deserialize(reader);
