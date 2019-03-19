@@ -260,7 +260,7 @@ namespace WebApiSwc.Controllers
                     {    
                         await xmlFile.CopyToAsync(memoryStream);
                         memoryStream.Position = 0;
-                        var encoding = "utf-8"; //"Windows-1251" - для новго АД  "utf-8" - для старого
+                        const string encoding = "utf-8"; //"Windows-1251" - для новго АД  "utf-8" - для старого
                         #region Debug
                         //System.IO.File.WriteAllBytes(@"D:\\InDataXml_NewAd.xml", memoryStream.ToArray());
                         var xmlContent = Encoding.GetEncoding(encoding).GetString(memoryStream.ToArray()); //utf-8   "Windows-1251"
@@ -285,6 +285,7 @@ namespace WebApiSwc.Controllers
                         }
                     }
                 }
+                _logger.Warning($"SendDataXmlMultipart4Devices. Размер XML файла равен 0");
                 return BadRequest("Размер XML файла равен 0");
             }
             catch (Exception ex)
