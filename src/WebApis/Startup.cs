@@ -9,6 +9,7 @@ using BL.Services.Actions;
 using BL.Services.MessageBroker;
 using BL.Services.Storages;
 using DAL.Abstract.Concrete;
+using Exchange.Base;
 using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -183,13 +184,19 @@ namespace WebApiSwc
                 }
             });
 
-            //ПОДПИСКА ДЕВАЙСА НА СОБЫТИЯ ПУБЛИКУЕМЫЕ НА IProduser (kaffka).
+            //ПОДПИСКА ДЕВАЙСА.
             var deviceServices = scope.Resolve<DeviceStorageService<AdInputType>>();
             lifetimeApp.ApplicationStarted.Register(() =>
             {
+                // СОБЫТИЯ ПУБЛИКУЕМЫЕ НА IProduser (kaffka).
                 foreach (var device in deviceServices.Values.Where(dev => !string.IsNullOrEmpty(dev.Option.TopicName4MessageBroker)))
                 {
-                    lifetimeApp.ApplicationStarted.Register(() => device.SubscrubeOnExchangesEvents());
+                    device.SubscrubeOnExchangesEvents();
+                }
+                //СОБЫТИЯ СМЕНЫ СОСТОЯНИЯ ПОСТУПЛЕНИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ. ОБМЕНА.
+                foreach (var device in deviceServices.Values)
+                {
+                    device.SubscrubeOnExchangesCycleDataEntryStateEvents();
                 }
             });
         }
@@ -225,19 +232,25 @@ namespace WebApiSwc
             //ОСТАНОВ НА ОБМЕНЕ ЦИКЛИЧЕСКОГО ОБМЕНА.
             lifetimeApp.ApplicationStopping.Register(() =>
             {
-                foreach (var exchange in exchangeServices.Values.Where(exch => exch.IsStartedCycleFunc))
+                foreach (var exchange in exchangeServices.Values.Where(exch => exch.CycleExchnageStatus != CycleExchnageStatus.Off))
                 {
                      exchange.StopCycleExchange();
                 }
             });
 
-            //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ ПУБЛИКУЕМЫХ НА IProduser (kaffka).
+            //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ
             var deviceServices = scope.Resolve<DeviceStorageService<AdInputType>>();
             lifetimeApp.ApplicationStopping.Register(() =>
             {
+                //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ ПУБЛИКУЕМЫХ НА IProduser (kaffka).
                 foreach (var device in deviceServices.Values)
                 {
                      device.UnsubscrubeOnExchangesEvents();
+                }
+                //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ СМЕНЫ СОСТОЯНИЯ ПОСТУПЛЕНИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ. ОБМЕНА.
+                foreach (var device in deviceServices.Values)
+                {
+                    device.UnsubscrubeOnExchangesCycleDataEntryStateEvents();
                 }
             });
         }

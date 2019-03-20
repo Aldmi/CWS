@@ -8,6 +8,7 @@ using DAL.Abstract.Entities.Options.Device;
 using Exchange.Base;
 using Exchange.Base.Model;
 using Exchange.Base.RxModel;
+using Exchange.Base.Services;
 using Infrastructure.EventBus.Abstract;
 using Infrastructure.MessageBroker.Abstract;
 using Infrastructure.MessageBroker.Options;
@@ -32,6 +33,7 @@ namespace DeviceForExchange
         private readonly IProduser _produser;
         private readonly Owned<IProduser> _produserOwner;
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
+        private readonly List<IDisposable> _disposeExchangesCycleDataEntryStateEventHandlers = new List<IDisposable>();
 
         #endregion
 
@@ -101,13 +103,29 @@ namespace DeviceForExchange
         }
 
  
-
-
         public void UnsubscrubeOnExchangesEvents()
         {
             TopicName4MessageBroker = null;
             _disposeExchangesEventHandlers.ForEach(d=>d.Dispose());
         }
+
+
+        public bool SubscrubeOnExchangesCycleDataEntryStateEvents()
+        {
+            Exchanges.ForEach(exch =>
+            {
+                _disposeExchangesCycleDataEntryStateEventHandlers.Add(exch.CycleDataEntryStateChangeRx.Subscribe(CycleDataEntryStateChangeRxEventHandler));
+            });
+            return true;
+        }
+
+
+        public void UnsubscrubeOnExchangesCycleDataEntryStateEvents()
+        {
+            _disposeExchangesCycleDataEntryStateEventHandlers.ForEach(d => d.Dispose());
+        }
+
+
 
 
         /// <summary>
@@ -180,7 +198,7 @@ namespace DeviceForExchange
                     break;
 
                 case DataAction.CycleAction:
-                    if (!exchange.IsStartedCycleFunc)
+                    if (exchange.CycleExchnageStatus == CycleExchnageStatus.Off)
                     {
                         _logger.Warning($"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН");
                         //await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН");
@@ -260,6 +278,25 @@ namespace DeviceForExchange
             _logger.Debug($"TransportResponseChangeRxEventHandler.  jsonResp = {jsonResp} ");
         }
 
+        /// <summary>
+        /// Обработчик события смены режима поступления входных данных
+        /// </summary>
+        private void CycleDataEntryStateChangeRxEventHandler(InputDataStateRxModel dataState)
+        {
+            //Debug.WriteLine($"{dataState.KeyExchange}   {dataState.InputDataState}");//DEBUG
+            _logger.Information($"NormalFrequencyCycleDataEntryChangeRxEventHandler.  {dataState.KeyExchange}  InputDataState= {dataState.InputDataState}");
+            var exch= Exchanges.FirstOrDefault(e => e.KeyExchange.Equals(dataState.KeyExchange));
+            switch (dataState.InputDataState)
+            {
+                case InputDataState.NormalEntry:
+                    exch.Switch2NormalCycleExchange();
+                    break;
+                case InputDataState.ToLongNoEntry:
+                    exch.Switch2CycleCommandEmergency();
+                    break;
+            }
+        }
+
         #endregion
 
 
@@ -270,6 +307,7 @@ namespace DeviceForExchange
         public void Dispose()
         {
             UnsubscrubeOnExchangesEvents();
+            UnsubscrubeOnExchangesCycleDataEntryStateEvents();
             _produserOwner.Dispose();
         }
 

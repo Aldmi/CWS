@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using DAL.Abstract.Entities.Options.Exchange;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Exchange.Base.DataProviderAbstract;
 using Exchange.Base.Model;
 using Exchange.Base.RxModel;
+using Exchange.Base.Services;
 using InputDataModel.Base;
 using Newtonsoft.Json;
 using Serilog;
@@ -23,7 +23,7 @@ using Shared.Types;
 using Transport.Base.Abstract;
 using Transport.Base.RxModel;
 using Worker.Background.Abstarct;
-
+using Timer = System.Timers.Timer;
 
 namespace Exchange.Base
 {
@@ -34,10 +34,11 @@ namespace Exchange.Base
         protected readonly ExchangeOption ExchangeOption;
         private readonly ITransport _transport;
         private readonly ITransportBackground _transportBackground;
-        private readonly IExchangeDataProvider<TIn, ResponseDataItem<TIn>> _dataProvider;                               //проавйдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
+        private readonly IExchangeDataProvider<TIn, ResponseDataItem<TIn>> _dataProvider;         //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
         private readonly ILogger _logger;
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(QueueOption.QueueExtractLastItem, MaxDataInQueue);   //Очередь данных для SendOneTimeData().
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue; //Очередь данных для SendCycleTimeData().
+        private readonly InputCycleDataEntryCheker _inputCycleDataEntryCheker;      //таймер отсчитывает период от получения входных данных для цикл. обмена.
         #endregion
 
 
@@ -52,7 +53,7 @@ namespace Exchange.Base
         public bool IsOpen => _transport.IsOpen;
         public bool IsCycleReopened => _transport.IsCycleReopened;
         public bool IsStartedTransportBg => _transportBackground.IsStarted;
-        public bool IsStartedCycleFunc { get; private set; }
+        public CycleExchnageStatus CycleExchnageStatus { get; private set; }
 
         private bool _isConnect;
         public bool IsConnect
@@ -80,6 +81,7 @@ namespace Exchange.Base
 
         public bool IsFullOneTimeDataQueue => _oneTimeDataQueue.IsFullLimit;
         public bool IsFullCycleTimeDataQueue => _cycleTimeDataQueue.IsFullLimit;
+        public bool IsNormalFrequencyCycleDataEntry { get; private set; } = true;
 
         public ProviderOption ProviderOptionRt
         {
@@ -104,12 +106,22 @@ namespace Exchange.Base
             _transportBackground = transportBackground;
             _dataProvider = dataProvider;
             _logger = logger;
-
             _cycleTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(exchangeOption.CycleQueueOption, MaxDataInQueue);
+            _inputCycleDataEntryCheker= new InputCycleDataEntryCheker(KeyExchange, ExchangeOption.NormalFrequencyCycleDataEntry);
         }
 
         #endregion
 
+
+
+        #region EventHandler
+        #endregion
+
+
+
+        #region InputDataChangeRx
+        public ISubject<InputDataStateRxModel> CycleDataEntryStateChangeRx =>_inputCycleDataEntryCheker.CycleDataEntryStateChangeRx;
+        #endregion
 
 
         #region ExchangeRx
@@ -117,7 +129,6 @@ namespace Exchange.Base
         public ISubject<LastSendDataChangeRxModel<TIn>> LastSendDataChangeRx { get; } = new Subject<LastSendDataChangeRxModel<TIn>>();
         public ISubject<ResponsePieceOfDataWrapper<TIn>> ResponseChangeRx { get; } = new Subject<ResponsePieceOfDataWrapper<TIn>>();
         #endregion
-
 
 
         #region TransportRx
@@ -177,8 +188,8 @@ namespace Exchange.Base
         /// </summary>
         public void StartCycleExchange()
         {
-            _transportBackground.AddCycleAction(CycleTimeActionAsync);
-            IsStartedCycleFunc = true;
+            Switch2NormalCycleExchange();
+            _inputCycleDataEntryCheker.StartChecking();
         }
 
         /// <summary>
@@ -187,7 +198,29 @@ namespace Exchange.Base
         public void StopCycleExchange()
         {
             _transportBackground.RemoveCycleFunc(CycleTimeActionAsync);
-            IsStartedCycleFunc = false;
+            _transportBackground.RemoveCycleFunc(CycleCommandEmergencyActionAsync);
+            CycleExchnageStatus = CycleExchnageStatus.Off;
+            _inputCycleDataEntryCheker.StopChecking();
+        }
+
+        /// <summary>
+        /// перевести в режим НОРМАЛЬНЫЙ цикл. обмен на БГ
+        /// </summary>
+        public void Switch2NormalCycleExchange()
+        {
+            _transportBackground.RemoveCycleFunc(CycleCommandEmergencyActionAsync);
+            _transportBackground.AddCycleAction(CycleTimeActionAsync);
+            CycleExchnageStatus = CycleExchnageStatus.Normal;
+        }
+
+        /// <summary>
+        /// перевести в режим АВАРИЙНЫЙ цикл. обмен на БГ
+        /// </summary>
+        public void Switch2CycleCommandEmergency()
+        {
+            _transportBackground.RemoveCycleFunc(CycleTimeActionAsync);
+            _transportBackground.AddCycleAction(CycleCommandEmergencyActionAsync);
+            CycleExchnageStatus = CycleExchnageStatus.Emergency;
         }
 
         #endregion
@@ -249,6 +282,8 @@ namespace Exchange.Base
             if (!_transport.IsOpen)
                 return;
 
+            _inputCycleDataEntryCheker.InputDataEntry();
+
             var dataWrapper = new InDataWrapper<TIn> { Datas = inData.ToList(), DirectHandlerName = directHandlerName };
             var result = _cycleTimeDataQueue.Enqueue(dataWrapper);
         }
@@ -308,6 +343,26 @@ namespace Exchange.Base
 
             await Task.Delay(100, ct); //TODO: Продумать как задвать скважность между выполнением цикл. функции на обмене.
         }
+
+
+
+        /// <summary>
+        /// </summary>
+        protected async Task CycleCommandEmergencyActionAsync(CancellationToken ct)
+        {
+            if (!_transport.IsOpen)
+                return;
+
+            InDataWrapper<TIn> inData = new InDataWrapper<TIn> {Command = Command4Device.InfoEmergency};        
+            var transportResponseWrapper = await SendingPieceOfData(inData, ct);
+            transportResponseWrapper.KeyExchange = KeyExchange;
+            transportResponseWrapper.DataAction = DataAction.CycleAction;
+            ResponseChangeRx.OnNext(transportResponseWrapper);
+
+            await Task.Delay(100, ct); //TODO: Продумать как задвать скважность между выполнением цикл. функции на обмене.
+        }
+
+
 
         /// <summary>
         /// Отправка порции данных.
@@ -416,6 +471,9 @@ namespace Exchange.Base
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void LogedResponseInformation(ResponsePieceOfDataWrapper<TIn> response)
         {
             var numberPreparedPackages = response.ResponsesItems.Count;//кол-во подготовленных к отправке пакетов
@@ -446,7 +504,6 @@ namespace Exchange.Base
             _logger.Information($"ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= {KeyExchange} успех/ответов/запросов=  ({countIsValid} / {countAll} / {numberPreparedPackages})   [{errorStat}]");
         }
 
-
         #endregion
 
         #endregion
@@ -457,9 +514,11 @@ namespace Exchange.Base
 
         public void Dispose()
         {
-
+            _inputCycleDataEntryCheker.Dispose();
         }
 
         #endregion
     }
+
+    public enum CycleExchnageStatus{Off, Normal, Emergency}
 }

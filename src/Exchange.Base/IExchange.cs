@@ -18,10 +18,10 @@ namespace Exchange.Base
     {
         #region ByOption
         string KeyExchange { get; }
-        bool AutoStartCycleFunc { get; }
+        bool AutoStartCycleFunc { get; }                                        //Авто Запуск циклического обмена при старте сервиса
         string ProviderName { get; }
-        int NumberErrorTrying { get;}                                           // Кол-во ошибочных запросов до переоткрытия соединения. IsConnect=false. ReOpenTransport()
-        int NumberTimeoutTrying { get;}
+        int NumberErrorTrying { get;}                                           //Кол-во ошибочных запросов до переоткрытия соединения. IsConnect=false. ReOpenTransport()
+        int NumberTimeoutTrying { get; }                                        //Кол-во запросов без ответов (таймаут ответа).IsConnect=false. ПЕРЕОТКРЫТИЕ НЕ ПРОИСХОДИТ.
         ProviderOption ProviderOptionRt { get; set; }
         #endregion
 
@@ -31,32 +31,42 @@ namespace Exchange.Base
         bool IsCycleReopened { get; }                                             //Соединение НЕ открыто, находится в состоянии цикличесих попыток ОТКРЫТИЯ (флаг нужен т.к. цикл переоткрытия можно отменить и тогда будет IsOpen= false, IsCycleReopened = false )
         bool IsConnect { get; }                                                   //Устройсвто на связи по открытому соединению (определяется по правильным ответам от ус-ва)
         bool IsStartedTransportBg { get; }                                        //Запущен бекграунд на транспорте
-        bool IsStartedCycleFunc { get; }                                          //Флаг цикл. обмена
+        CycleExchnageStatus CycleExchnageStatus { get; }                          //Статус цикл. обмена
         InDataWrapper<T> LastSendData { get; }                                    //Последние отосланные данные 
         bool IsFullOneTimeDataQueue { get; }                                      //Очередь однокртаных данных переполненна
         bool IsFullCycleTimeDataQueue { get; }                                    //Очередь циклических данных переполненна
+        bool IsNormalFrequencyCycleDataEntry { get; }                             //Долго непоступают данные для циклического обмена 
         #endregion
 
 
         #region StartStop
-        Task CycleReOpened();
-        void CycleReOpenedCancelation();
-        void StartCycleExchange();                                                             //Запустить цикл. обмен (ДОБАВИТЬ функцию цикл обмена на бекграунд)
-        void StopCycleExchange();                                                              //Остановить цикл. обмен (УДАЛИТЬ функцию цикл обмена из бекграунд)
+        Task CycleReOpened();                                                      //Запуск задачи циклического переоткрытия.
+        void CycleReOpenedCancelation();                                           //Останов задачи циклического переоткрытия.
+        void StartCycleExchange();                                                 //Запустить цикл. обмен (ДОБАВИТЬ функцию цикл обмена на бекграунд)
+        void StopCycleExchange();                                                  //Остановить цикл. обмен (УДАЛИТЬ функцию цикл обмена из бекграунд)
         #endregion
 
 
         #region SendData
-        void SendCommand(Command4Device command);                                        //однократно выполняемая команда
-        void SendOneTimeData(IEnumerable<T> inData, string directHandlerName);    //однократно отсылаемые данные (если указанны правила, то только для этих правил)
-        void SendCycleTimeData(IEnumerable<T> inData, string directHandlerName);  //циклически отсылаемые данные
+        void SendCommand(Command4Device command);                                  //однократно выполняемая команда
+        void SendOneTimeData(IEnumerable<T> inData, string directHandlerName);     //однократно отсылаемые данные (если указанны правила, то только для этих правил)
+        void SendCycleTimeData(IEnumerable<T> inData, string directHandlerName);   //циклически отсылаемые данные
+        #endregion
+
+
+        void Switch2NormalCycleExchange();
+        void Switch2CycleCommandEmergency();
+
+
+        #region InputDataRx
+        ISubject<InputDataStateRxModel> CycleDataEntryStateChangeRx { get; } //СОБЫТИЕ СМЕНЫ ДОЛГОГО ОТСУТСВИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ ОБМЕНА. Передает ИМЯ обмена.
         #endregion
 
 
         #region ExchangeRx
-        ISubject<ConnectChangeRxModel> IsConnectChangeRx { get; }                                       //СОБЫТИЕ СМЕНЫ КОННЕКТА IsConnect. МЕНЯЕТСЯ В ПРОЦЕССЕ ОБМЕНА.
-        ISubject<LastSendDataChangeRxModel<T>> LastSendDataChangeRx { get; }                            //СОБЫТИЕ ИЗМЕНЕНИЯ ПОСЛЕД ОТПРАВЕЛННЫХ ДАННЫХ LastSendData.
-        ISubject<ResponsePieceOfDataWrapper<T>> ResponseChangeRx { get; }                                   //СОБЫТИЕ ОТВЕТА НА ПЕРЕДАННЫЮ ПОРЦИЮ ДАННЫХ. 
+        ISubject<ConnectChangeRxModel> IsConnectChangeRx { get; }                   //СОБЫТИЕ СМЕНЫ КОННЕКТА IsConnect. МЕНЯЕТСЯ В ПРОЦЕССЕ ОБМЕНА.
+        ISubject<LastSendDataChangeRxModel<T>> LastSendDataChangeRx { get; }        //СОБЫТИЕ ИЗМЕНЕНИЯ ПОСЛЕД ОТПРАВЕЛННЫХ ДАННЫХ LastSendData.
+        ISubject<ResponsePieceOfDataWrapper<T>> ResponseChangeRx { get; }           //СОБЫТИЕ ОТВЕТА НА ПЕРЕДАННЫЮ ПОРЦИЮ ДАННЫХ. 
         #endregion
 
 

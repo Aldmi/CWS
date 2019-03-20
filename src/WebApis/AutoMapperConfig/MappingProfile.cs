@@ -99,7 +99,8 @@ namespace WebApiSwc.AutoMapperConfig
                 .ForMember(dest => dest.Exchanges, opt => opt.MapFrom(src => src.Exchanges));
 
             CreateMap<IExchange<AdInputType>, ExchangeStateDto>()
-                .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.KeyExchange));
+                .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.KeyExchange))
+                .ForMember(dest => dest.CycleExchnageStatus, opt => opt.MapFrom(src => src.CycleExchnageStatus.ToString()));
             #endregion
         }
 

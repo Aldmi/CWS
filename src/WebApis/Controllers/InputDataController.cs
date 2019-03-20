@@ -260,7 +260,7 @@ namespace WebApiSwc.Controllers
                     {    
                         await xmlFile.CopyToAsync(memoryStream);
                         memoryStream.Position = 0;
-                        const string encoding = "utf-8"; //"Windows-1251" - для новго АД  "utf-8" - для старого
+                        const string encoding = "utf-8";
                         #region Debug
                         //System.IO.File.WriteAllBytes(@"D:\\InDataXml_NewAd.xml", memoryStream.ToArray());
                         var xmlContent = Encoding.GetEncoding(encoding).GetString(memoryStream.ToArray()); //utf-8   "Windows-1251"

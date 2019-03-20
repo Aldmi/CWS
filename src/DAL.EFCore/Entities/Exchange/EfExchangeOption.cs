@@ -21,6 +21,7 @@ namespace DAL.EFCore.Entities.Exchange
 
         public int NumberErrorTrying { get; set; }
         public int NumberTimeoutTrying { get; set; }
+        public int NormalFrequencyCycleDataEntry { get; set; }
 
         private string _keyTransportMetaData;
         [NotMapped]

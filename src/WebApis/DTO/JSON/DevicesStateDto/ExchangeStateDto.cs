@@ -1,4 +1,6 @@
-﻿namespace WebApiSwc.DTO.JSON.DevicesStateDto
+﻿using Exchange.Base;
+
+namespace WebApiSwc.DTO.JSON.DevicesStateDto
 {
     public class ExchangeStateDto
     {
@@ -15,6 +17,6 @@
         public bool IsCycleReopened { get; set; }                                //Соединение в процессе открытия
         public bool IsConnect { get; set; }                                      //Устройсвто на связи по открытому соединению (определяется по правильным ответам от ус-ва)
         public bool IsStartedTransportBg { get; set; }                           //Запущен бекграунд на транспорте
-        public bool IsStartedCycleFunc { get; set; }                             //Флаг цикл. обмена
+        public string CycleExchnageStatus { get; set; }                          //Статус цикл. обмена
     }
 }

@@ -10,8 +10,9 @@ namespace DAL.Abstract.Entities.Options.Exchange
         public KeyTransport KeyTransport { get; set; }
         public ProviderOption Provider { get; set; }
 
-        public int NumberErrorTrying { get; set; }         // Кол-во ошибочных запросов до переоткрытия соединения. IsConnect=false. ReOpenTransport()
-        public int NumberTimeoutTrying { get; set; }       // Кол-во запросов не получивщих ответ за заданное время. IsConnect=false.
+        public int NumberErrorTrying { get; set; }                // Кол-во ошибочных запросов до переоткрытия соединения. IsConnect=false. ReOpenTransport()
+        public int NumberTimeoutTrying { get; set; }              // Кол-во запросов не получивщих ответ за заданное время. IsConnect=false.
+        public int NormalFrequencyCycleDataEntry { get; set; }    // Допустимое время обновления цикл. данных
 
         /// <summary>
         /// Добавление функции циклического обмена на бекгроунд
