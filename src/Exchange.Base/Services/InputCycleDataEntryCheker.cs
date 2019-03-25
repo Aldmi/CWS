@@ -9,7 +9,9 @@ namespace Exchange.Base.Services
     public enum InputDataState { NormalEntry, ToLongNoEntry };
 
     /// <summary>
-    /// Сервис проверки входных данных
+    /// Сервис проверки входных данных.
+    /// Если за время checkInterval не будет вызванн метод InputDataEntry(), то InputDataState = ToLongNoEntry.
+    /// Вызов метода InputDataEntry() сбрасывает таймер.
     /// </summary>
     public class InputCycleDataEntryCheker : IDisposable
     {

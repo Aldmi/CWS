@@ -57,14 +57,24 @@ namespace WebApiSwc.Extensions
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.Console(LogEventLevel.Information)
-                .WriteTo.File("logs/Main_Log.txt", LogEventLevel.Information, rollingInterval: RollingInterval.Day)
-                .WriteTo.File("logs/Error_Log.txt", LogEventLevel.Error, rollingInterval: RollingInterval.Day);
+                .WriteTo.File("logs/Main_Log.txt",
+                    LogEventLevel.Information,
+                    rollingInterval: RollingInterval.Day,            //за 10 последних дней хранится Information лог
+                    retainedFileCountLimit:10)
+                .WriteTo.File("logs/Error_Log.txt",                  //за 10 последних дней хранится Error лог
+                    LogEventLevel.Error,
+                    rollingInterval: RollingInterval.Day,
+                    retainedFileCountLimit: 10);
               //.WriteTo.Seq("http://localhost:5341", compact: true);
 
             //TODO: уровень логирования задается отдельно, и на production можеть быть выставленн в Debug или Info
             //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == EnvironmentName.Development)
             //{
-                loggerConf.WriteTo.File("logs/Debug/Debug_Log.txt", LogEventLevel.Debug, rollingInterval: RollingInterval.Hour);
+                loggerConf.WriteTo.File("logs/Debug/Debug_Log.txt",
+                    LogEventLevel.Debug,
+                    rollingInterval: RollingInterval.Hour,
+                    retainedFileCountLimit:5,                        //За 5 последних часов переписывается Debug лог.
+                    shared:true);
             //}
             return loggerConf;
         }
