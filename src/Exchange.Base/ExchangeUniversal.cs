@@ -36,7 +36,7 @@ namespace Exchange.Base
         private readonly ITransportBackground _transportBackground;
         private readonly IExchangeDataProvider<TIn, ResponseDataItem<TIn>> _dataProvider;         //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
         private readonly ILogger _logger;
-        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(QueueOption.QueueExtractLastItem, MaxDataInQueue);   //Очередь данных для SendOneTimeData().
+        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(QueueMode.QueueExtractLastItem, MaxDataInQueue);   //Очередь данных для SendOneTimeData().
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue; //Очередь данных для SendCycleTimeData().
         private readonly InputCycleDataEntryCheker _inputCycleDataEntryCheker;      //таймер отсчитывает период от получения входных данных для цикл. обмена.
         #endregion
@@ -106,7 +106,7 @@ namespace Exchange.Base
             _transportBackground = transportBackground;
             _dataProvider = dataProvider;
             _logger = logger;
-            _cycleTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(exchangeOption.CycleQueueOption, MaxDataInQueue);
+            _cycleTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(exchangeOption.CycleQueueMode, MaxDataInQueue);
             _inputCycleDataEntryCheker= new InputCycleDataEntryCheker(KeyExchange, ExchangeOption.NormalFrequencyCycleDataEntry);
         }
 

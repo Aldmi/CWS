@@ -23,6 +23,6 @@ namespace DAL.Abstract.Entities.Options.Exchange
         /// <summary>
         /// Опции очереди данных для цикл. обмена
         /// </summary>
-        public QueueOption CycleQueueOption { get; set; }
+        public QueueMode CycleQueueMode { get; set; }
     }
 }

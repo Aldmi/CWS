@@ -15,7 +15,7 @@ namespace Shared.Collections
         #region field
 
         private readonly ConcurrentQueue<T> _queue = new ConcurrentQueue<T>();
-        private readonly QueueOption _queueOption;
+        private readonly QueueMode _queueMode;
         private readonly int _limitItems;
         private T _oneItem;
 
@@ -29,7 +29,7 @@ namespace Shared.Collections
         {
             get
             {
-                if (_queueOption == QueueOption.OneItem)
+                if (_queueMode == QueueMode.OneItem)
                 {
                     return (_oneItem == null) ? 0 : 1;
                 }
@@ -51,11 +51,11 @@ namespace Shared.Collections
         /// <summary>
         /// конструктор
         /// </summary>
-        /// <param name="queueOption">Один элемент, всегда перезаписывается / Извлекать последний элемент из очереди / Не извлекать последний элемент из очереди. Если не извлекать то по команде Dequeue всегда показывается последний элемент</param>
+        /// <param name="queueMode">Один элемент, всегда перезаписывается / Извлекать последний элемент из очереди / Не извлекать последний элемент из очереди. Если не извлекать то по команде Dequeue всегда показывается последний элемент</param>
         /// <param name="limitItems">Ограничение по размеру очереди</param>
-        public LimitConcurrentQueueWithoutDuplicate(QueueOption queueOption, int limitItems)
+        public LimitConcurrentQueueWithoutDuplicate(QueueMode queueMode, int limitItems)
         {
-            _queueOption = queueOption;
+            _queueMode = queueMode;
             _limitItems = limitItems;
         }
 
@@ -74,7 +74,7 @@ namespace Shared.Collections
         /// <returns></returns>
         public Result<T> Enqueue(T item)
         {
-            if (_queueOption == QueueOption.OneItem)
+            if (_queueMode == QueueMode.OneItem)
             {
                 _oneItem = item;
                 return Result.Ok(item);
@@ -104,7 +104,7 @@ namespace Shared.Collections
                 return Result.Fail<T, DequeueResultErrorWrapper>(new DequeueResultErrorWrapper(DequeueResultError.Empty));
             }
 
-            if (_queueOption == QueueOption.OneItem)
+            if (_queueMode == QueueMode.OneItem)
             {
                 return Result.Ok<T, DequeueResultErrorWrapper>(_oneItem);
             }
@@ -112,7 +112,7 @@ namespace Shared.Collections
             T res;
             if (IsOneItem)
             {
-                if (_queueOption == QueueOption.QueueExtractLastItem)
+                if (_queueMode == QueueMode.QueueExtractLastItem)
                 {
                     return _queue.TryDequeue(out res) ?
                         Result.Ok<T, DequeueResultErrorWrapper>(res) :
@@ -157,10 +157,27 @@ namespace Shared.Collections
     /// <summary>
     /// Опции Очереди
     /// </summary>
-    public enum QueueOption
+    public enum QueueMode
     {
+        /// <summary>
+        /// ConcurrentQueue не используется. Значение хранится в одной переменной.
+        /// Enqueue - перезаписывает значение
+        /// Dequeue - извлекает текушее значение
+        /// </summary>
         OneItem,
+
+        /// <summary>
+        /// Значения хранятся в ConcurrentQueue.
+        /// Enqueue - добавлет в конец очереди элемент
+        /// Dequeue - извлекает элементы до конца очереди, пока не опустошит ее.
+        /// </summary>
         QueueExtractLastItem,
+
+        /// <summary>
+        /// Значения хранятся в ConcurrentQueue.
+        /// Enqueue - добавлет в конец очереди элемент
+        /// Dequeue - извлекает элементы пока не останется 1 элемент. Если остался 1 элемент он возвращается при вызове Dequeue и никогда не удаляется
+        /// </summary>
         QueueNotExtractLastItem,
     }
 

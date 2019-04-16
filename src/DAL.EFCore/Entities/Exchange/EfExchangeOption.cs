@@ -17,7 +17,7 @@ namespace DAL.EFCore.Entities.Exchange
         public string Key { get; set; }
 
         public bool AutoStartCycleFunc { get; set; }
-        public QueueOption CycleQueueOption { get; set; }
+        public QueueMode CycleQueueMode { get; set; }
 
         public int NumberErrorTrying { get; set; }
         public int NumberTimeoutTrying { get; set; }
