@@ -63,6 +63,7 @@ namespace WebApiSwc
                 .AddJsonOptions(o =>
                 {
                     o.SerializerSettings.Formatting = Formatting.Indented;
+                    o.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                     o.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 });
 
