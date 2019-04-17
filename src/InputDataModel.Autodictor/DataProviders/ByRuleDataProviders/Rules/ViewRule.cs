@@ -249,6 +249,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 ["Hour"] = DateTime.Now.Hour,
                 ["Minute"] = DateTime.Now.Minute,
                 ["Second"] = DateTime.Now.Second,
+                ["Time"] = (uit.Event.Num == 0) ? uit.ArrivalTime : uit.DepartureTime,
                 ["SyncTInSec"] = DateTime.Now.Hour * 3600 + DateTime.Now.Minute * 60 + DateTime.Now.Second,
                 ["rowNumber"] = currentRow
             };

@@ -13,7 +13,7 @@ COPY InputDataModel.Autodictor/InputDataModel.Autodictor.csproj InputDataModel.A
 COPY Exchange.Base/Exchange.Base.csproj Exchange.Base/
 COPY InputDataModel.Base/InputDataModel.Base.csproj InputDataModel.Base/
 COPY Worker.Background/Worker.Background.csproj Worker.Background/
-COPY Infrastructure.MessageBroker1/Infrastructure.MessageBroker.csproj Infrastructure.MessageBroker1/
+COPY Infrastructure.MessageBroker/Infrastructure.MessageBroker.csproj Infrastructure.MessageBroker/
 COPY DAL.EFCore/DAL.EFCore.csproj DAL.EFCore/
 COPY BL.Services/BL.Services.csproj BL.Services/
 COPY Transport.Http/Transport.Http.csproj Transport.Http/
