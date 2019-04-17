@@ -81,11 +81,14 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 {
                     var startItemIndex = _option.StartPosition + (numberOfBatch++ * _option.BatchSize);
                     var stringRequest = CreateStringRequest(batch, startItemIndex);
+                    if(stringRequest == null)
+                        continue;
+
                     yield return new ViewRuleRequestModelWrapper
                     {
                         StartItemIndex = startItemIndex,
                         BatchSize = _option.BatchSize,
-                        BatchedData = batch,
+                        BatchedData = batch,              
                         StringRequest = stringRequest,
                         RequestOption = _option.RequestOption,
                         ResponseOption = _option.ResponseOption
@@ -226,6 +229,9 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var note = uit.Note?.GetName(lang);
             var daysFollowing = uit.DaysFollowing?.GetName(lang);
             var daysFollowingAlias = uit.DaysFollowing?.GetNameAlias(lang);
+            var arrivalTime = uit.ArrivalTime ?? DateTime.MinValue;
+            var departureTime = uit.DepartureTime ?? DateTime.MinValue;
+            var time = (uit.Event?.Num != null && uit.Event.Num == 0) ? arrivalTime : departureTime;
             var dict = new Dictionary<string, object>
             {
                 ["TypeName"] = string.IsNullOrEmpty(typeTrain) ? " " : typeTrain,
@@ -244,12 +250,12 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 ["DaysFollowingAlias"] = string.IsNullOrEmpty(daysFollowingAlias) ? " " : daysFollowingAlias,
                 [nameof(uit.DelayTime)] = uit.DelayTime ?? DateTime.MinValue,
                 [nameof(uit.ExpectedTime)] = uit.ExpectedTime,
-                ["TArrival"] = uit.ArrivalTime ?? DateTime.MinValue,
-                ["TDepart"] = uit.DepartureTime ?? DateTime.MinValue,
+                ["TArrival"] = arrivalTime,
+                ["TDepart"] = departureTime,
                 ["Hour"] = DateTime.Now.Hour,
                 ["Minute"] = DateTime.Now.Minute,
                 ["Second"] = DateTime.Now.Second,
-                ["Time"] = (uit.Event.Num == 0) ? uit.ArrivalTime : uit.DepartureTime,
+                ["Time"] = time,
                 ["SyncTInSec"] = DateTime.Now.Hour * 3600 + DateTime.Now.Minute * 60 + DateTime.Now.Second,
                 ["rowNumber"] = currentRow
             };
@@ -325,7 +331,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             extraItemRounded = extraItemRounded == 0 ? 1 : extraItemRounded;       //Если небольшое превышение, то все равно нужно выставить 1 элемент на удаление
             bodyList.RemoveRange(extraItemRounded - 1, extraItemRounded);          //удалим лишние элементы.
             totalBodyCount = bodyList.Sum(s => s.Length);
-            _logger.Warning($"Срока тела запроса была обрезанна на {extraLenght}. Удаленно {extraItem} элементов для ViewRuleId {_option.Id}. Текущая длинна обрезанной строки {totalBodyCount}");
+            _logger.Warning($"Строка тела запроса была ОБРЕЗАНА на {extraLenght}. Удаленно {extraItem} элементов для ViewRuleId {_option.Id}. Текущая длинна обрезанной строки {totalBodyCount}");
             return bodyList;
         }
 
@@ -528,6 +534,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         public int BatchSize { get; set; }                          //Размер батча.
         public IEnumerable<AdInputType> BatchedData { get; set; }   //Набор входных данных на базе которых созданна StringRequest.
         public string StringRequest { get; set; }                   //Строка запроса, созданная по правилам RequestOption.
+        public int BodyLenght { get; set; }                         //Размер тела запроса todo: НЕ ИСПОЛЬЗУЕТСЯ
         public RequestOption RequestOption { get; set; }            //Запрос.
         public ResponseOption ResponseOption { get; set; }          //Ответ.
     }

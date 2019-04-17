@@ -278,6 +278,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                         _currentRequest = request;
                         InputData = new InDataWrapper<AdInputType> { Datas = _currentRequest.BatchedData.ToList() };
                         StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption().Id}";
+                        StatusDict["BodyLenght"] = $"{_currentRequest.BodyLenght}";
                         RaiseSendDataRx.OnNext(this);
                     }
                 }
