@@ -155,33 +155,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var items = batch.ToList();
             var header = _option.RequestOption.Header;
             var body = _option.RequestOption.Body;
-            var footer = _option.RequestOption.Footer;//" {CRCXor:X2}\u0003";
-
-            //DEBUG----------------------------------------------------
-
-            //var body = "%StationArr= {NumberOfCharacters:X2} \\\"{StationArrival}\\\"" +
-            //           "%TypeName= {TypeName}" +
-            //           "%NumberOfTrain= {NumberOfTrain}" +
-            //           "%PathNumber= {NumberOfCharacters:X2} \\\"{PathNumber:D5}\\\"" +
-            //           "%Stations= {Stations} " +
-            //           "%TArrival= {TArrival:t}" +
-            //           "%rowNumb= {(rowNumber*11-11):X3}" +
-            //           "%StationDep= {NumberOfCharacters:X2} \\\"{StationDeparture}\\\"" +
-            //           "%StatC= {NumberOfCharacters:X2} \\\"{StationsCut}\\\"" +
-            //           "%DelayT= {DelayTime}" +
-            //           "%ExpectedT= {ExpectedTime:t}";
-
-            //var body = "%StationArr= {NumberOfCharacters:X2} \\\"{StationArrival}\\\"" +
-            //           "%TypeName= {TypeName}" +
-            //           "%NumberOfTrain= {NumberOfTrain}" +
-            //           "%PathNumber= {PathNumber:D5}" +
-            //           "%Stations= {Stations} " +
-            //           "%TArrival= {TArrival:t}" +
-            //           "%rowNumb= {((rowNumber*11-11)+5):X3}" +
-            //           "%StationDep= {NumberOfCharacters:X2} \\\"{StationDeparture}\\\"" +
-            //           "%StatC= {NumberOfCharacters:X2} \\\"{StationsCut}\\\"";
-
-            //DEBUG----------------------------------------------------
+            var footer = _option.RequestOption.Footer;
 
             //ЗАПОЛНИТЬ ТЕЛО ЗАПРОСА (вставить НЕЗАВИСИМЫЕ данные)-------------------------------------------------------------------------         
             var listBodyStr= new List<string>();
@@ -196,9 +170,9 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 listBodyStr.Add(resBodyDependentStr);
             }
 
-            //ОГРАНИЧИТЬ ДЛИННУ ТЕЛА ЗАПРОСА----------------------------------------------------------------------------------------------------
-            var listLimitBodyStr= LimitBodySectionLenght(listBodyStr);
-            if(listLimitBodyStr.Count == 0)
+            //ПРОВЕРИТЬ ДЛИНУ ТЕЛА ЗАПРОСА (если превышение, то строка запроса не формируется)---------------------------------------------------------------------------------------------
+            var listLimitBodyStr= CheckLimitBodySectionLenght(listBodyStr);
+            if(listLimitBodyStr == null)
                return null;
 
             //КОНКАТЕНИРОВАТЬ СТРОКИ В СУММАРНУЮ СТРОКУ-----------------------------------------------------------------------------------------
@@ -318,21 +292,17 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         /// <summary>
         /// Ограничить длинну строки
         /// </summary>
-        private List<string> LimitBodySectionLenght(List<string> bodyList)
+        private List<string> CheckLimitBodySectionLenght(List<string> bodyList)
         {
             double totalBodyCount= bodyList.Sum(s => s.Length);
-            if (totalBodyCount < _option.RequestOption.MaxBodyLenght)
+            var maxBodyLenght = _option.RequestOption.MaxBodyLenght;
+            if (totalBodyCount < maxBodyLenght)
                return bodyList;
-
-            double extraLenght= totalBodyCount - _option.RequestOption.MaxBodyLenght;
-            double averageLenght = (totalBodyCount / bodyList.Count);              //Средний размер одного элемента
-            double extraItem = extraLenght / averageLenght;                        //Кол-во лишних элементов.
-            var extraItemRounded= (int)Math.Ceiling(extraItem);                    //Кол-во лишних элементов округленное в большую сторону
-            extraItemRounded = extraItemRounded == 0 ? 1 : extraItemRounded;       //Если небольшое превышение, то все равно нужно выставить 1 элемент на удаление
-            bodyList.RemoveRange(extraItemRounded - 1, extraItemRounded);          //удалим лишние элементы.
-            totalBodyCount = bodyList.Sum(s => s.Length);
-            _logger.Warning($"Строка тела запроса была ОБРЕЗАНА на {extraLenght}. Удаленно {extraItem} элементов для ViewRuleId {_option.Id}. Текущая длинна обрезанной строки {totalBodyCount}");
-            return bodyList;
+            else
+            {
+                _logger.Warning($"Строка тела запроса СЛИШКОМ БОЛЬШАЯ {totalBodyCount} > {maxBodyLenght}. Превышение на  {totalBodyCount - maxBodyLenght}");
+                return null;
+            }
         }
 
 
