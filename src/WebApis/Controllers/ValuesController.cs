@@ -78,7 +78,8 @@ namespace WebApiSwc.Controllers
             var adInputType= new AdInputType
             {
                 PathNumber = "5",
-                Note = new Note { NameRu = "Примечание" }
+                Note = new Note { NameRu = "Примечание" },
+                Event = new EventTrain() {NameRu = "Прибытие", Num = 0}
             };
 
       

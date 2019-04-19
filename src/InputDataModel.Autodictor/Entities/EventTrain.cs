@@ -32,6 +32,7 @@
             }
         }
 
+        //TODO: зачем нужен public конструктор
         public EventTrain()
         {
         }

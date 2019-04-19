@@ -104,6 +104,9 @@ namespace Exchange.Base.Services
         /// </summary>
         public void InputDataEntry()
         {
+            if (_checkInterval <= 0)
+               return;
+
             _timerInputCycleDataCheck.Interval = _checkInterval;
             if (InputDataState == InputDataState.ToLongNoEntry)
             {
