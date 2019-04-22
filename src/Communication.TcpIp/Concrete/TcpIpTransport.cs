@@ -291,23 +291,23 @@ namespace Transport.TcpIp.Concrete
         /// </summary>
         public async Task<byte[]> TakeDataConstPeriodAsync(int nbytes, int timeOut, CancellationToken ct)
         {
-            int buferSize = 256;// читаем всегда весь буффер
+            int buferSize = 256;// читаем всегда весь буфер
             byte[] bDataTemp = new byte[buferSize];
 
             //Ожидаем накопление данных в буффере
             await Task.Delay(timeOut, ct);
 
-            //DEBUG MEMLIK
+            #region DebugMEMLIK
             // Console.WriteLine("TakeDataConstPeriodAsync >>>>>>>>>>>>>>>>>");
             //return new byte[] { 0x02, 0x46, 0x46, 0x30, 0x38, 0x25, 0x41, 0x30, 0x37, 0x37, 0x41, 0x43, 0x4B, 0x45, 0x41, 0x03 };
-            //DEBUG MEMLIK
-
-            //Мгновенно с ожиданием в 50мс вычитываем поступивщий буффер
-            var ctsTimeout = new CancellationTokenSource();//токен сработает по таймауту в функции WithTimeout
-            var cts = CancellationTokenSource.CreateLinkedTokenSource(ctsTimeout.Token, ct); // Объединенный токен, сработает от выставленного ctsTimeout.Token или от ct
+           #endregion
             try
             {
-                int nByteTake = await _netStream.ReadAsync(bDataTemp, 0, buferSize, cts.Token).WithTimeout2CanceledTask(50, ctsTimeout);
+                if (!_netStream.DataAvailable)
+                {
+                    throw new TimeoutException();
+                }
+                int nByteTake =  _netStream.Read(bDataTemp, 0, buferSize);
                 if (nByteTake != nbytes)
                 {
                     _logger.Warning($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. КОЛ-ВО СЧИТАННЫХ БАЙТ НЕ ВЕРНОЕ. Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");
@@ -323,15 +323,56 @@ namespace Transport.TcpIp.Concrete
             }          
             finally
             {
-            
-                ctsTimeout.Cancel();
-                cts.Cancel();
-                ctsTimeout.Dispose();
-                cts.Dispose();
+                await _netStream.FlushAsync(ct);
             }
-
-            return null;
         }
+
+
+        //public async Task<byte[]> TakeDataConstPeriodAsync(int nbytes, int timeOut, CancellationToken ct)
+        //{
+        //    int buferSize = 256;// читаем всегда весь буффер
+        //    byte[] bDataTemp = new byte[buferSize];
+
+        //    //Ожидаем накопление данных в буффере
+        //    await Task.Delay(timeOut, ct);
+
+        //    //DEBUG MEMLIK
+        //    // Console.WriteLine("TakeDataConstPeriodAsync >>>>>>>>>>>>>>>>>");
+        //    //return new byte[] { 0x02, 0x46, 0x46, 0x30, 0x38, 0x25, 0x41, 0x30, 0x37, 0x37, 0x41, 0x43, 0x4B, 0x45, 0x41, 0x03 };
+        //    //DEBUG MEMLIK
+
+        //    //Мгновенно с ожиданием в 50мс вычитываем поступивщий буффер
+        //    var ctsTimeout = new CancellationTokenSource();//токен сработает по таймауту в функции WithTimeout
+        //    var cts = CancellationTokenSource.CreateLinkedTokenSource(ctsTimeout.Token, ct); // Объединенный токен, сработает от выставленного ctsTimeout.Token или от ct
+        //    try
+        //    {
+        //        //int nByteTake = await _netStream.ReadAsync(bDataTemp, 0, buferSize, cts.Token).WithTimeout2CanceledTask(50, ctsTimeout);
+        //        //DEBUG
+        //        int nByteTake = _netStream.Read(bDataTemp, 0, buferSize);
+        //        if (nByteTake != nbytes)
+        //        {
+        //            _logger.Warning($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. КОЛ-ВО СЧИТАННЫХ БАЙТ НЕ ВЕРНОЕ. Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");
+        //        }
+        //        if (_netStream.DataAvailable)
+        //        {
+        //            _logger.Error($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. ПОСЛЕ ЧТЕНИЯ В БУФЕРЕ ОСТАЛИСЬ ДАННЫЕ. buferSize= \"{buferSize}\"");
+        //        }
+
+        //        var bData = new byte[nByteTake];
+        //        Array.Copy(bDataTemp, bData, nByteTake);
+        //        return bData;
+        //    }
+        //    finally
+        //    {
+        //        await _netStream.FlushAsync(cts.Token);//DEBUG
+
+
+        //        ctsTimeout.Cancel();
+        //        cts.Cancel();
+        //        ctsTimeout.Dispose();
+        //        cts.Dispose();
+        //    }
+        //}
 
         #endregion
 

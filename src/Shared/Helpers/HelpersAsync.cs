@@ -38,7 +38,6 @@ namespace Shared.Helpers
         /// Если задача выполнилась быстрее, вернуть результат 
         /// </summary>
         /// <param name="ctsTimeout">источник токена для отмены основной задачи task</param>
-        /// <param name="ct">Отмена ожидания</param>
         /// <returns></returns>
         public static async Task<T> WithTimeout2CanceledTask<T>(this Task<T> task, int time, CancellationTokenSource ctsTimeout)
         {
@@ -47,7 +46,8 @@ namespace Shared.Helpers
             Task firstToFinish = await Task.WhenAny(task, delayTask);
             if (firstToFinish == delayTask)
             {
-                ctsTimeout.Cancel();
+                ctsDelay.Dispose();
+                ctsTimeout.Cancel();         
                 throw new TimeoutException();
             }
             ctsDelay.Cancel();

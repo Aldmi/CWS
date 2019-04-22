@@ -278,12 +278,12 @@ namespace WebApiSwc
             catch (PostgresException ex)
             {
                 var connectionString = InitSettings.GetDbConnectionString(Env, AppConfiguration);
-                logger.Fatal($"Ошибка создания БД на основе миграций. howCreateDb= {howCreateDb}  connectionString={connectionString}  Routine={ex.Routine}   SqlState= {ex.SqlState}   Exception= {ex}");
+                logger.Fatal($"Ошибка создания БД. howCreateDb= {howCreateDb}  connectionString={connectionString}  Routine={ex.Routine}   SqlState= {ex.SqlState}   Exception= {ex}");
             }
             catch (Exception ex)
             {
                 var connectionString = InitSettings.GetDbConnectionString(Env, AppConfiguration);
-              logger.Fatal($"НЕ ИЗВЕСТНАЯ Ошибка создания БД на основе миграций. howCreateDb= {howCreateDb}  connectionString={connectionString}   Exception= {ex} ");
+              logger.Fatal($"НЕ ИЗВЕСТНАЯ Ошибка создания БД. howCreateDb= {howCreateDb}  connectionString={connectionString}   Exception= {ex} ");
             }
             //ИНИЦИАЛИЦИЯ РЕПОЗИТОРИЕВ--------------------------------------------------------
             try

@@ -264,7 +264,7 @@ namespace WebApiSwc.Controllers
                         #region Debug
                         //System.IO.File.WriteAllBytes(@"D:\\InDataXml_NewAd.xml", memoryStream.ToArray());
                         var xmlContent = Encoding.GetEncoding(encoding).GetString(memoryStream.ToArray()); //utf-8   "Windows-1251"
-                        _logger.Information($"{xmlContent}");
+                        _logger.Debug($"{xmlContent}");
                         #endregion
                         using (var reader = new StreamReader(memoryStream, Encoding.GetEncoding(encoding), true))
                         {
