@@ -134,7 +134,7 @@ namespace Transport.TcpIp.Concrete
                 _ctsCycleReOpened.Dispose();
                 return false;
             }
-    
+
             _logger.Information($"коннект для транспорта ОТКРЫТ: {KeyTransport}");
             IsCycleReopened = false;
             return true;
@@ -186,8 +186,9 @@ namespace Transport.TcpIp.Concrete
             {
                 try
                 {
-                    //var data = await TakeDataInstantlyAsync(dataProvider.CountSetDataByte, timeRespoune, ct);
-                    var data = await TakeDataConstPeriodAsync(dataProvider.CountSetDataByte, timeRespoune, ct);
+
+                    //var data = await TakeDataConstPeriodAsync(dataProvider.CountSetDataByte, timeRespoune, ct);
+                    var data = await TakeDataInstantlyAsync(dataProvider.CountSetDataByte, timeRespoune, ct);
                     var res = dataProvider.SetDataByte(data);
                     if (!res)
                     {
@@ -246,44 +247,67 @@ namespace Transport.TcpIp.Concrete
         }
 
 
+
         /// <summary>
         /// Прием данных с пеерменным периодом.
         /// Прием заканчивается когда нужное кол-во данных поступит в входной буффер порта.
         /// </summary>
         public async Task<byte[]> TakeDataInstantlyAsync(int nbytes, int timeOut, CancellationToken ct)
         {
-            using (_logger.TimeOperation("TimeOpertaion TakeDataAsync"))
+            var ctsTimeout = new CancellationTokenSource();
+            ctsTimeout.CancelAfter(timeOut);
+            var cts = CancellationTokenSource.CreateLinkedTokenSource(ctsTimeout.Token, ct); // Объединенный токен, сработает от выставленного ctsTimeout.Token или от ct
+            try
             {
-                var ctsTimeout = new CancellationTokenSource();//токен сработает по таймауту в функции WithTimeout
-                var cts = CancellationTokenSource.CreateLinkedTokenSource(ctsTimeout.Token, ct); // Объединенный токен, сработает от выставленного ctsTimeout.Token или от ct
-                //await Task.Delay(timeOut, ct);//DEBUG
-                var task = Task<List<byte>>.Factory.StartNew(() =>
-                 {
-                     var sumBuffer = new List<byte>();
-                     byte[] data = new byte[1024];
-                     do
-                     {
-                         //var nByteTake = _netStream.ReadAsync(data, 0, data.Length, cts.Token).GetAwaiter().GetResult();
-                         var nByteTake = _netStream.Read(data, 0, data.Length);
-                         sumBuffer.AddRange(data.Take(nByteTake));
-                     }
-                     while (_netStream.DataAvailable); // пока данные есть в потоке
-                     return sumBuffer;
-                 }, cts.Token);
-
-                var buffer = await task.WithTimeout2CanceledTask(timeOut, ctsTimeout);
-                var resBuffer = buffer.Take(nbytes).Where(val => val != 0x00).ToArray();
-                if (resBuffer.Length == nbytes)
+                var task = Task.Run(async () =>
                 {
-                    var bData = new byte[nbytes];
-                    Array.Copy(buffer.ToArray(), bData, nbytes);
-                    return bData;
-                }
+                    const int polingTime = 100;
+                    var sumBuffer = new List<byte>();
+                    byte[] data = new byte[256];
+                    while (true)
+                    {
+                        cts.Token.ThrowIfCancellationRequested();
+                        if (_netStream.DataAvailable)
+                        {
+                            var nByteTake = _netStream.Read(data, 0, data.Length);
+                            sumBuffer.AddRange(data.Take(nByteTake));
+                            if (sumBuffer.Count >= nbytes)
+                                return sumBuffer;
+                        }
+                        await Task.Delay(polingTime, cts.Token);
+                    }
+                }, cts.Token);
 
-                _logger.Warning($"TcpIpTransport/TakeDataAsync {KeyTransport}.  Кол-во считанных данных не верное  Принято= {resBuffer.Length}  Ожидаем= {nbytes}");
-                return null;
+                try
+                {
+                    var buffer = await task;
+                    var receivedBytes = buffer.Count;
+                    if (receivedBytes != nbytes)
+                    {
+                        _logger.Warning($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. КОЛ-ВО СЧИТАННЫХ БАЙТ НЕ ВЕРНОЕ. Принято/Ожидаем= \"{receivedBytes} / {nbytes}\"");
+                    }
+                    if (_netStream.DataAvailable)
+                    {
+                        _logger.Error($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. ПОСЛЕ ЧТЕНИЯ В БУФЕРЕ ОСТАЛИСЬ ДАННЫЕ. buferSize= \"{receivedBytes}\"");
+                    }
+                    var resBuffer = buffer.Take(nbytes).ToArray();
+                    return resBuffer;
+                }
+                catch (OperationCanceledException)
+                {
+                    throw new TimeoutException();
+                }
+            }
+            finally
+            {
+                await _netStream.FlushAsync(cts.Token);
+                ctsTimeout.Cancel();
+                cts.Cancel();
+                ctsTimeout.Dispose();
+                cts.Dispose();
             }
         }
+
 
 
         /// <summary>
@@ -300,14 +324,14 @@ namespace Transport.TcpIp.Concrete
             #region DebugMEMLIK
             // Console.WriteLine("TakeDataConstPeriodAsync >>>>>>>>>>>>>>>>>");
             //return new byte[] { 0x02, 0x46, 0x46, 0x30, 0x38, 0x25, 0x41, 0x30, 0x37, 0x37, 0x41, 0x43, 0x4B, 0x45, 0x41, 0x03 };
-           #endregion
+            #endregion
             try
             {
                 if (!_netStream.DataAvailable)
                 {
                     throw new TimeoutException();
                 }
-                int nByteTake =  _netStream.Read(bDataTemp, 0, buferSize);
+                int nByteTake = _netStream.Read(bDataTemp, 0, buferSize);
                 if (nByteTake != nbytes)
                 {
                     _logger.Warning($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. КОЛ-ВО СЧИТАННЫХ БАЙТ НЕ ВЕРНОЕ. Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");
@@ -320,7 +344,7 @@ namespace Transport.TcpIp.Concrete
                 var bData = new byte[nByteTake];
                 Array.Copy(bDataTemp, bData, nByteTake);
                 return bData;
-            }          
+            }
             finally
             {
                 await _netStream.FlushAsync(ct);
