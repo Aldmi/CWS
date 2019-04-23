@@ -100,7 +100,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         /// <returns></returns>
         public bool SetDataByte(byte[] data)
         {
-            var format = _currentRequest.ResponseOption.Format;
+            var format = _currentRequest.ResponseOption.GetCurrentFormat();
+            var stringResponseRef = _currentRequest.StringResponse;
             if (data == null)
             {
                 IsOutDataValid = false;
@@ -113,16 +114,15 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 return false;
             }
             var stringResponse = data.ArrayByteToString(format);
-            IsOutDataValid = (stringResponse == _currentRequest.ResponseOption.Body);
+            IsOutDataValid = (stringResponse == stringResponseRef); //TODO: как лутчше сравнивать строки
             OutputData = new ResponseDataItem<AdInputType>
             {
                 ResponseData = stringResponse,
                 Encoding = format,
                 IsOutDataValid = IsOutDataValid
             };
-            var diffResp = (!IsOutDataValid) ? $"ПринятоБайт/ОжидаемБайт= {data.Length}/{_currentRequest.ResponseOption.Lenght}   Принято/Ожидаем= {stringResponse}/{_currentRequest.ResponseOption.Body}" : string.Empty;
-            StatusDict["SetDataByte.StringResponse"] = $"{stringResponse}  {diffResp}";
-                   
+            var diffResp = (!IsOutDataValid) ? $"ПринятоБайт/ОжидаемБайт= {data.Length}/{_currentRequest.ResponseOption.Lenght}" : string.Empty;
+            StatusDict["SetDataByte.StringResponse"] = $"{stringResponseRef} ?? {stringResponse}   diffResp=  {diffResp}";
             return IsOutDataValid;
         }
 

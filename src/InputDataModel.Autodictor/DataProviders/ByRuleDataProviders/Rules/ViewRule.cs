@@ -81,7 +81,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 {
                     var startItemIndex = _option.StartPosition + (numberOfBatch++ * _option.BatchSize);
                     var stringRequest = CreateStringRequest(batch, startItemIndex);
-                    if(stringRequest == null)
+                    var stringResponse = CreateStringResponse();
+                    if (stringRequest == null)
                         continue;
 
                     yield return new ViewRuleRequestModelWrapper
@@ -90,12 +91,14 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                         BatchSize = _option.BatchSize,
                         BatchedData = batch,              
                         StringRequest = stringRequest,
+                        StringResponse = stringResponse,
                         RequestOption = _option.RequestOption,
                         ResponseOption = _option.ResponseOption
                     };
                 }
             }
         }
+
 
 
         /// <summary>
@@ -108,6 +111,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var header = _option.RequestOption.Header;
             var body = _option.RequestOption.Body;
             var footer = _option.RequestOption.Footer;
+            var requestCommandOption = _option.RequestOption;
 
             //КОНКАТЕНИРОВАТЬ СТРОКИ В СУММАРНУЮ СТРОКУ-------------------------------------------------------------------------------------
             //resSumStr содержит только ЗАВИСИМЫЕ данные: {AddressDevice} {NByte} {CRC}}
@@ -117,7 +121,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var resBodyDependentStr = MakeBodyDependentInserts(resSumStr);
 
             //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})---------------------------------------------------------------------
-            var resDependencyStr = MakeDependentInserts(resBodyDependentStr);
+            var resDependencyStr = MakeDependentInserts(resBodyDependentStr, requestCommandOption);
 
             return new ViewRuleRequestModelWrapper
             {
@@ -147,15 +151,15 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
 
         /// <summary>
-        /// Создать строку Запроса (используя форматную строку) из одного батча данных.
+        /// Создать строку Запроса (используя форматную строку RequestOption) из одного батча данных.
         /// </summary>
-        /// <returns></returns>
         private string CreateStringRequest(IEnumerable<AdInputType> batch, int startItemIndex)
         {
             var items = batch.ToList();
             var header = _option.RequestOption.Header;
             var body = _option.RequestOption.Body;
             var footer = _option.RequestOption.Footer;
+            var requestOption = _option.RequestOption;
 
             //ЗАПОЛНИТЬ ТЕЛО ЗАПРОСА (вставить НЕЗАВИСИМЫЕ данные)-------------------------------------------------------------------------         
             var listBodyStr= new List<string>();
@@ -181,8 +185,21 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var resSumStr = header + limitBodyStr + footer;
 
             //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})-------------------------------------------------------------------------
-            var resDependencyStr = MakeDependentInserts(resSumStr);
+            var resDependencyStr = MakeDependentInserts(resSumStr, requestOption);
 
+            return resDependencyStr;
+        }
+
+
+        /// <summary>
+        /// Создать строку Ответа (используя форматную строку ResponseOption).
+        /// </summary>
+        private string CreateStringResponse()
+        {
+            var str = _option.ResponseOption.Body;
+            var responseOption = _option.ResponseOption;
+            //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})-------------------------------------------------------------------------
+            var resDependencyStr = MakeDependentInserts(str, responseOption);
             return resDependencyStr;
         }
 
@@ -310,7 +327,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         /// Первоначальная вставка ЗАВИСИМЫХ переменных
         ///  {AddressDevice} {NByte} {NumberOfCharacters} {CRC}
         /// </summary>
-        private string MakeDependentInserts(string str)
+        private string MakeDependentInserts(string str, RequestResonseOption option)
         {
             /*
               1. Вставит AddressDevice и Вычислить NumberOfCharacters и вставить.
@@ -319,8 +336,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             */
             str = MakeAddressDevice(str);
             str = MakeNByte(str);
-            str = MakeCrc(str);
-            str = SwitchFormatCheck2Hex(str, "HEX");
+            str = MakeCrc(str, option.Format);
+            str = SwitchFormatCheck2Hex(str, option);
             return str;
         }
 
@@ -450,9 +467,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         }
 
 
-        private string MakeCrc(string str)
+        private string MakeCrc(string str, string format)
         {
-            var format = _option.RequestOption.Format;
             var matchString = Regex.Match(str, "(.*){CRC(.*)}").Groups[1].Value;
             matchString = matchString.Replace("\u0002", string.Empty).Replace("\u0003", string.Empty);
             var crcBytes = HelpersBool.ContainsHexSubStr(matchString) ?
@@ -476,14 +492,14 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         }
 
 
-        private string SwitchFormatCheck2Hex(string str, string newFormat)
+        private string SwitchFormatCheck2Hex(string str, RequestResonseOption option)
         {
+            var format = option.Format;
             if (str.Contains("0x"))
             {
-                var format = _option.RequestOption.Format;
                 var buf = str.ConvertStringWithHexEscapeChars2ByteArray(format);
                 var res = buf.ArrayByteToString("X2");
-                _option.RequestOption.SwitchFormat(newFormat);
+                option.SwitchFormat("HEX");
                 return res;
             }
 
@@ -504,6 +520,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         public int BatchSize { get; set; }                          //Размер батча.
         public IEnumerable<AdInputType> BatchedData { get; set; }   //Набор входных данных на базе которых созданна StringRequest.
         public string StringRequest { get; set; }                   //Строка запроса, созданная по правилам RequestOption.
+        public string StringResponse { get; set; }                  //Строка ответа, созданная по правилам ResponseOption.
         public int BodyLenght { get; set; }                         //Размер тела запроса todo: НЕ ИСПОЛЬЗУЕТСЯ
         public RequestOption RequestOption { get; set; }            //Запрос.
         public ResponseOption ResponseOption { get; set; }          //Ответ.

@@ -34,6 +34,7 @@ namespace Shared.Extensions
 
         public static string ArrayByteToString(this IEnumerable<byte> source, string format)
         {
+            format = (format == "HEX") ? "X2" : format;
             var stringBuilder = new StringBuilder();
             foreach (var item in source)
             {

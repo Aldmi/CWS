@@ -187,8 +187,8 @@ namespace Transport.TcpIp.Concrete
                 try
                 {
 
-                    //var data = await TakeDataConstPeriodAsync(dataProvider.CountSetDataByte, timeRespoune, ct);
-                    var data = await TakeDataInstantlyAsync(dataProvider.CountSetDataByte, timeRespoune, ct);
+                    var data = await TakeDataConstPeriodAsync(dataProvider.CountSetDataByte, timeRespoune, ct);
+                    //var data = await TakeDataInstantlyAsync(dataProvider.CountSetDataByte, timeRespoune, ct);
                     var res = dataProvider.SetDataByte(data);
                     if (!res)
                     {
@@ -259,7 +259,7 @@ namespace Transport.TcpIp.Concrete
             var cts = CancellationTokenSource.CreateLinkedTokenSource(ctsTimeout.Token, ct); // Объединенный токен, сработает от выставленного ctsTimeout.Token или от ct
             try
             {
-                var task = Task.Run(async () =>
+                var dataReadTask = Task.Run(async() =>
                 {
                     const int polingTime = 100;
                     var sumBuffer = new List<byte>();
@@ -280,7 +280,7 @@ namespace Transport.TcpIp.Concrete
 
                 try
                 {
-                    var buffer = await task;
+                    var buffer = await dataReadTask;
                     var receivedBytes = buffer.Count;
                     if (receivedBytes != nbytes)
                     {

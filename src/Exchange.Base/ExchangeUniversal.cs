@@ -490,6 +490,7 @@ namespace Exchange.Base
                 viewRuleId = $"RuleName= {item.MessageDict["RuleName"]}  viewRule.Id= {item.MessageDict["viewRule.Id"]}",
                 StatusStr = item.StatusStr,
                 StringRequest = item.MessageDict["GetDataByte.StringRequest"],
+                StringResponseRef = item.MessageDict.ContainsKey("SetDataByte.StringResponse") ? item.MessageDict["SetDataByte.StringResponse"] : null,
                 TimeResponse = item.MessageDict["TimeResponse"]
             }).ToList();
 
