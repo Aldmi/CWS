@@ -55,6 +55,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         #region prop
 
+        private IEnumerable<Rule> GetRules => _rules.ToList();
         public string RuleName4DefaultHandle { get; }
         public string ProviderName { get; }
         public Dictionary<string, string> StatusDict { get; } = new Dictionary<string, string>();
@@ -147,7 +148,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 ByRulesProviderOption = new ByRulesProviderOption
                 {
                     RuleName4DefaultHandle = RuleName4DefaultHandle,
-                    Rules = _rules.Select(r => r.GetCurrentOption()).ToList()
+                    Rules = GetRules.Select(r => r.GetCurrentOption()).ToList()
                 }
             };
             return provideroption;
@@ -163,45 +164,15 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             if (option == null)
                 throw new ArgumentNullException(optionNew.Name);
 
-            foreach (var ruleOption in option.Rules)
-            {
-               var rule= _rules.FirstOrDefault(r => r.GetCurrentOption().Name == ruleOption.Name);
-               if (rule == null)
-               {
-                   //TODO: Копить в коллекцию ошибок
-                   continue;
-               }
-               rule.SetCurrentOption(ruleOption);        
-            }
+            //TODO: валидация optionNew ???
+            _rules.Clear();
+            var newRules = option.Rules.Select(opt => new Rule(opt, _logger)).ToList();
+            _rules.AddRange(newRules);
+       
             return true;
         }
 
-
-        //public void ChangeWhereFilter(string key, string filter)
-        //{
-        //    var rule = GetRuleByKey(key);
-        //    rule.GetCurrentOption().WhereFilter = filter;
-        //}
-
-
-        //public void ChangeOrderBy(string key, string ordreby)
-        //{
-        //    var rule = GetRuleByKey(key);
-        //    rule.GetCurrentOption().OrderBy = ordreby;
-        //}
-
-
-
-        //private Rule GetRuleByKey(string key)
-        //{
-        //    var rule = _rules.FirstOrDefault(r => r.Option.Name == key);
-        //    HelpersException.ThrowIfNotFind(rule, $"объект не найден по Key {key}");
-        //    return rule;
-        //}
-
         #endregion
-
-
 
 
 
@@ -220,43 +191,51 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                     DirectHandlerName = RuleName4DefaultHandle
                 };
             }
-        
 
-            foreach (var rule in _rules)
+            try //DEBUG
             {
-                StatusDict.Clear();
-                var ruleOption = rule.GetCurrentOption();
-                switch (SwitchInDataHandler(inData, ruleOption.Name))
+                foreach (var rule in GetRules)
                 {
-                    //КОМАНДА-------------------------------------------------------------
-                    case RuleSwitcher4InData.CommandHanler:
-                        ViewRuleSendCommand(rule, inData.Command);
-                        continue;
-
-                    //ДАННЫЕ ДЛЯ УКАЗАНОГО RULE--------------------------------------------------------------  
-                    case RuleSwitcher4InData.InDataDirectHandler:
-                        var takesItems = inData.Datas?.Order(ruleOption.OrderBy, _logger)
-                                                     ?.TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
-                                                     ?.ToList();
-                        ViewRuleSendData(rule, takesItems);
-                        continue;
-
-                    //ДАННЫЕ--------------------------------------------------------------  
-                    case RuleSwitcher4InData.InDataHandler:
-                        var filtredItems = inData.Datas?.Filter(ruleOption.WhereFilter, _logger);
-                        if (filtredItems == null || !filtredItems.Any())
+                    StatusDict.Clear();
+                    var ruleOption = rule.GetCurrentOption();
+                    switch (SwitchInDataHandler(inData, ruleOption.Name))
+                    {
+                        //КОМАНДА-------------------------------------------------------------
+                        case RuleSwitcher4InData.CommandHanler:
+                            ViewRuleSendCommand(rule, inData.Command);
                             continue;
 
-                        takesItems = filtredItems.Order(ruleOption.OrderBy, _logger)
-                                                 .TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
-                                                 .ToList();
-                        ViewRuleSendData(rule, takesItems);
-                        continue;
+                        //ДАННЫЕ ДЛЯ УКАЗАНОГО RULE--------------------------------------------------------------  
+                        case RuleSwitcher4InData.InDataDirectHandler:
+                            var takesItems = inData.Datas?.Order(ruleOption.OrderBy, _logger)
+                                ?.TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
+                                ?.ToList();
+                            ViewRuleSendData(rule, takesItems);
+                            continue;
 
-                    default:
-                        continue;
+                        //ДАННЫЕ--------------------------------------------------------------  
+                        case RuleSwitcher4InData.InDataHandler:
+                            var filtredItems = inData.Datas?.Filter(ruleOption.WhereFilter, _logger);
+                            if (filtredItems == null || !filtredItems.Any())
+                                continue;
+
+                            takesItems = filtredItems.Order(ruleOption.OrderBy, _logger)
+                                .TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
+                                .ToList();
+                            ViewRuleSendData(rule, takesItems);
+                            continue;
+
+                        default:
+                            continue;
+                    }
                 }
             }
+            catch (Exception e)//DEBUG (УБРАТЬ!!!!)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
             //Конвеер обработки входных данных завершен    
             StatusDict.Clear();
             await Task.CompletedTask;
@@ -272,19 +251,28 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             {
                 StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
                 //_logger.Information($"Отправка ДАННЫХ через {rule.Option.Name}. Кол-во данных:{takesItems.Count}");
-                foreach (var viewRule in rule.ViewRules)
-                {
-                    foreach (var request in viewRule.GetDataRequestString(takesItems))
-                    {
-                        if (request == null) //правило отображения не подходит под ДАННЫЕ
-                            continue;
 
-                        _currentRequest = request;
-                        InputData = new InDataWrapper<AdInputType> { Datas = _currentRequest.BatchedData.ToList() };
-                        StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption().Id}";
-                        StatusDict["BodyLenght"] = $"{_currentRequest.BodyLenght}";
-                        RaiseSendDataRx.OnNext(this);
+                try //DEBUG
+                {
+                    foreach (var viewRule in rule.GetViewRules)
+                    {
+                        foreach (var request in viewRule.GetDataRequestString(takesItems))
+                        {
+                            if (request == null) //правило отображения не подходит под ДАННЫЕ
+                                continue;
+
+                            _currentRequest = request;
+                            InputData = new InDataWrapper<AdInputType> { Datas = _currentRequest.BatchedData.ToList() };
+                            StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption().Id}";
+                            StatusDict["BodyLenght"] = $"{_currentRequest.BodyLenght}";
+                            RaiseSendDataRx.OnNext(this);
+                        }
                     }
+                }
+                catch (Exception e) // DEBUG (УБРАТЬ!!!!) отлавливаем ошибку измения rule.ViewRules коллекции
+                {
+                    Console.WriteLine(e); 
+                    throw;
                 }
             }
         }
@@ -296,7 +284,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         /// </summary>
         private void ViewRuleSendCommand(Rule rule, Command4Device command)
         {
-            var commandViewRule = rule.ViewRules.FirstOrDefault();
+            var commandViewRule = rule.GetViewRules.FirstOrDefault();
             _currentRequest = commandViewRule?.GetCommandRequestString();
             InputData = new InDataWrapper<AdInputType> { Command = command };
             StatusDict["Command"] = $"{command}";
