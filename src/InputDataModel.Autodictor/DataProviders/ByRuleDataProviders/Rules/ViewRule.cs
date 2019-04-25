@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
+using KellermanSoftware.CompareNetObjects;
 using Serilog;
 using Shared.CrcCalculate;
 using Shared.Extensions;
@@ -53,6 +54,18 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
         public void SetCurrentOption(ViewRuleOption viewRuleOption)
         {
+            //Копирование мутабельных параметров (DymamicFormat - выставляемый )
+            //var requestDymamicFormat = _option.RequestOption.GetDymamicFormat;
+            //var responseDymamicFormat = _option.ResponseOption.GetDymamicFormat;
+            //if (requestDymamicFormat != null)
+            //{
+            //    viewRuleOption.RequestOption.SwitchFormat(requestDymamicFormat);
+            //}
+            //if (responseDymamicFormat != null)
+            //{
+            //    viewRuleOption.ResponseOption.SwitchFormat(responseDymamicFormat);
+            //}
+
             _option = viewRuleOption;
         }
 
@@ -196,8 +209,11 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         /// </summary>
         private string CreateStringResponse()
         {
-            var str = _option.ResponseOption.Body;
             var responseOption = _option.ResponseOption;
+            if(responseOption == null)
+                return String.Empty;
+
+            var str = responseOption.Body;
             //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})-------------------------------------------------------------------------
             var resDependencyStr = MakeDependentInserts(str, responseOption);
             return resDependencyStr;
@@ -469,27 +485,77 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
         private string MakeCrc(string str, string format)
         {
-            var matchString = Regex.Match(str, "(.*){CRC(.*)}").Groups[1].Value;
+            var crcType = Regex.Match(str, "{CRC(.*):(.*)}").Groups[1].Value;
+            var crcOption= Regex.Match(crcType, "\\[(.*)\\]").Groups[1].Value;  //Xor[0x02-0x03]
+            var startEndChars = crcOption.Split('-');
+            var startChar = (startEndChars.Length >= 1) ? startEndChars[0] : String.Empty;
+            var endChar = (startEndChars.Length >= 2) ? startEndChars[1] : String.Empty;
+
+            string matchString;
+            if (string.IsNullOrEmpty(startChar) && string.IsNullOrEmpty(endChar))
+            {
+                //Не заданны симолы начала и конца подсчета строки CRC. Берем от начала строки до CRC.
+                matchString = Regex.Match(str, "(.*){CRC(.*)}").Groups[1].Value;
+            }
+            else
+            {
+                // Оба заданы.
+                var strTmp = str.Replace(crcOption, String.Empty);
+                var pattern = $"{startChar}(.*){endChar}";
+                matchString = Regex.Match(strTmp, pattern).Groups[1].Value;
+            }
+
+            //УБРАТЬ МАРКЕРНЫЕ СИМОЛЫ ИЗ ПОДСЧЕТА CRC
             matchString = matchString.Replace("\u0002", string.Empty).Replace("\u0003", string.Empty);
+
+            //ВЫЧИСЛИТЬ МАССИВ БАЙТ ДЛЯ ПОДСЧЕТА CRC
             var crcBytes = HelpersBool.ContainsHexSubStr(matchString) ?
                 matchString.ConvertStringWithHexEscapeChars2ByteArray(format).ToArray() :
                 matchString.ConvertString2ByteArray(format);
-      
-            //вычислить CRC по правилам XOR
-            if (str.Contains("CRCXor"))
+
+            var replacement = $"CRC{crcType}";
+            byte crc = 0x00;
+            switch (crcType)
             {
-                byte crc = CrcCalc.CalcXor(crcBytes);
-                str = string.Format(str.Replace("CRCXor", "0"), crc);
+                case string s when s.Contains("Xor"):
+                    crc = CrcCalc.CalcXor(crcBytes);
+                    break;
+
+                case string s when s.Contains("Mod256"):
+                    crc = CrcCalc.CalcMod256(crcBytes);
+                    break;
             }
-            else
-            if (str.Contains("CRCMod256"))
-            {
-                byte crc = CrcCalc.CalcMod256(crcBytes);
-                str = string.Format(str.Replace("CRCMod256", "0"), crc);
-            }
-      
+            str = string.Format(str.Replace(replacement, "0"), crc);
             return str;
         }
+
+
+        //OLD VERSION
+        //private string MakeCrc(string str, string format)
+        //{
+        //    var matchString = Regex.Match(str, "(.*){CRC(.*)}").Groups[1].Value;
+        //    matchString = matchString.Replace("\u0002", string.Empty).Replace("\u0003", string.Empty);
+        //    var crcBytes = HelpersBool.ContainsHexSubStr(matchString) ?
+        //        matchString.ConvertStringWithHexEscapeChars2ByteArray(format).ToArray() :
+        //        matchString.ConvertString2ByteArray(format);
+
+        //    //вычислить CRC по правилам XOR
+        //    if (str.Contains("CRCXor"))
+        //    {
+        //        byte crc = CrcCalc.CalcXor(crcBytes);
+        //        str = string.Format(str.Replace("CRCXor", "0"), crc);
+        //    }
+        //    else
+        //    if (str.Contains("CRCMod256"))
+        //    {
+        //        byte crc = CrcCalc.CalcMod256(crcBytes);
+        //        str = string.Format(str.Replace("CRCMod256", "0"), crc);
+        //    }
+
+        //    return str;
+        //}
+
+
 
 
         private string SwitchFormatCheck2Hex(string str, RequestResonseOption option)

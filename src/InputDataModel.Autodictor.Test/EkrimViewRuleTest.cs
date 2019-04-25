@@ -9,6 +9,7 @@ using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
 using Moq;
 using Serilog;
+using Shared.CrcCalculate;
 using Shared.Extensions;
 using Shared.Helpers;
 using Xunit;
@@ -36,7 +37,7 @@ namespace InputDataModel.Autodictor.Test
     //        "body": "0246463038254130373741434B454103"
     //    }
     //}
-    public class ViewRuleTest
+    public class EkrimViewRuleTest
     {
         //private static AdInputType _inTypeBase =
         //   new AdInputType
@@ -55,7 +56,7 @@ namespace InputDataModel.Autodictor.Test
 
         #region ctor
 
-        public ViewRuleTest()
+        public EkrimViewRuleTest()
         {
             var mock = new Mock<ILogger>();
             mock.Setup(loger => loger.Debug(""));
@@ -74,31 +75,30 @@ namespace InputDataModel.Autodictor.Test
         //List<AdInputType> inTypes, RequestOption requestOption, string formatExcpected, string requestStringExcpected
         public static IEnumerable<object[]> GetDataRequestStringTestInputDatas => new[]
         {
-            new object[]
-            {
-               new List<AdInputType>
-               {
-                    new AdInputType
-                    {
-                        Id = 1,
-                        Lang = Lang.Ru,
-                        PathNumber = "5",
-                        NumberOfTrain = "245",
-                        ArrivalTime = DateTime.Parse("10:20"),
-                        DepartureTime = DateTime.Parse("11:52")
-                    }
-                },
-                new RequestOption
-                {
-                    Format = "cp866",
-                    MaxBodyLenght = 245,
-                    Header = "0x{AddressDevice:X2}0x{NbyteFull:X2} ",
-                    Body = "  0x03{NumberOfTrain}0x3A{PathNumber}",
-                    Footer = "0x{CRCMod256:X2}"
-                },
-                "HEX",
-                "090C202020033234353A3582"
-            },
+            //new object[] 
+            //{
+            //   new List<AdInputType>
+            //   {
+            //        new AdInputType
+            //        {
+            //            Id = 1,
+            //            Lang = Lang.Ru,
+            //            NumberOfTrain = "245",
+            //            StationArrival = new Station{NameRu = "КАЗАНЬ"},
+            //            ArrivalTime = DateTime.Parse("20:50"),
+            //        }
+            //    },
+            //    new RequestOption
+            //    {
+            //        Format = "Windows-1251",
+            //        MaxBodyLenght = 245,
+            //        Header = "0xFF0xFF0x020x1B0x57",
+            //        Body = "{StationArrival}0x09{NumberOfTrain}0x09{TArrival:t}0x09",
+            //        Footer = "0x03{CRCXor:X2}0x1F"  //[0x02-0x03]
+            //    },
+            //    "HEX",
+            //    "090C202020033234353A3582"
+            //},
             new object[]
             {
                 new List<AdInputType>
@@ -107,23 +107,21 @@ namespace InputDataModel.Autodictor.Test
                     {
                         Id = 1,
                         Lang = Lang.Ru,
-                        PathNumber = "5",
-                        NumberOfTrain = "245",
-                        ArrivalTime = DateTime.Parse("10:20"),
-                        DepartureTime = DateTime.Parse("11:52"),
-                        Addition = new Addition {NameRu = "Дополнение"},
+                        NumberOfTrain = "2",
+                        StationArrival = new Station{NameRu = "КАЗАНЬ"},
+                        ArrivalTime = DateTime.Parse("20:50"),
                     }
                 },
                 new RequestOption
                 {
                     Format = "Windows-1251",
                     MaxBodyLenght = 245,
-                    Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
-                    Body = "%010C60EF03B0470000001E%110406NNNNN%010000f001101f0024001E%10{NumberOfCharacters:X2}05\\\"{Addition} {Stations}\\\"%0100002300000f0000001E%10{NumberOfCharacters:X2}05\\\"{NumberOfTrain}\\\"",
-                    Footer = "{CRCXor:X2}\u0003"
+                    Header = "0xFF0xFF0x020x1B0x57",
+                    Body = "{StationArrival}0x09{NumberOfTrain}0x09{TArrival:t}0x09",
+                    Footer = "0x030x{CRCXor[0x02-0x03]:X2}0x1F"
                 },
-                "Windows-1251",
-                "\u0002096E%010C60EF03B0470000001E%110406NNNNN%010000f001101f0024001E%100C05Дополнение  %0100002300000f0000001E%10030524583\u0003"
+                "HEX",
+                "090C202020033234353A3582"
             }
 
         };
@@ -143,6 +141,12 @@ namespace InputDataModel.Autodictor.Test
             string formatExcpected,
             string requestStringExcpected)
         {
+
+            //DEBUG
+            //1B 57 41 46 32 36 09 F1 EA EE F0 09 C8 C6 C5 C2 D1 CA 09 31 37 3A 33 38 09 36 09 - XOR = 50
+            var crcBytes = new byte[] { 0x1B, 0x57, 0x41, 0x46, 0x32, 0x36, 0x09, 0xF1, 0xEA, 0xEE, 0xF0, 0x09, 0xC8, 0xC6, 0xC5, 0xC2, 0xD1, 0xCA, 0x09, 0x31, 0x37, 0x3A, 0x33, 0x38, 0x09, 0x36, 0x09 };
+            var crc = CrcCalc.CalcXor(crcBytes);
+
             // Arrange
             var address = "9";
             var option = new ViewRuleOption()

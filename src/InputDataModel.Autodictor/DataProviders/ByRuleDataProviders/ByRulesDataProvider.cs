@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Subjects;
@@ -79,11 +80,14 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         #region IExchangeDataProviderImplementation
 
+        /// <summary>
+        /// Сформировать буффер ЗАПРОСА
+        /// </summary>
+        /// <returns></returns>
         public byte[] GetDataByte()
         {
             var stringRequset = _currentRequest.StringRequest;
             var format = _currentRequest.RequestOption.GetCurrentFormat();
-            
             StatusDict["GetDataByte.StringRequest"] = $"[{stringRequset}] Lenght= {stringRequset.Length}  Format={format}";
             //Преобразовываем КОНЕЧНУЮ строку в массив байт
             var resultBuffer = stringRequset.ConvertString2ByteArray(format);

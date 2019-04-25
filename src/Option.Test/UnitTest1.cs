@@ -1,5 +1,6 @@
 using DAL.Abstract.Entities.Options.Device;
 using FluentAssertions;
+using Shared.Helpers;
 using Xunit;
 
 namespace Option.Test
@@ -9,9 +10,10 @@ namespace Option.Test
         [Fact]
         public void Test1()
         {
-            var gg = new DeviceOption(){Id = 10};
+            var stringRequset = "скор.";
+            var format = "Windows-1251";
+            var resultBuffer = stringRequset.ConvertString2ByteArray(format);
 
-            gg.Id.Should().Be(10);
         }
     }
 }
