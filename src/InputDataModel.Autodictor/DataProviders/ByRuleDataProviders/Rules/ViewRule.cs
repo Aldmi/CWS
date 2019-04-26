@@ -517,11 +517,15 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             byte crc = 0x00;
             switch (crcType)
             {
-                case string s when s.Contains("Xor"):
-                    crc = CrcCalc.CalcXor(crcBytes);
+                case string s when s.Contains("XorInverse"):
+                    crc = CrcCalc.CalcXorInverse(crcBytes);
                     break;
 
-                case string s when s.Contains("Mod256"):
+                case string s when s.Contains("Xor"):
+                    crc = CrcCalc.CalcXorInverse(crcBytes);
+                    break;
+
+                case string s when s.Contains("XorInverse"):
                     crc = CrcCalc.CalcMod256(crcBytes);
                     break;
             }

@@ -118,17 +118,15 @@ namespace InputDataModel.Autodictor.Test
                     MaxBodyLenght = 245,
                     Header = "0xFF0xFF0x020x1B0x57",
                     Body = "{StationArrival}0x09{NumberOfTrain}0x09{TArrival:t}0x09",
-                    Footer = "0x030x{CRCXor[0x02-0x03]:X2}0x1F"
+                    Footer = "0x030x{CRCXorInverse[0x02-0x03]:X2}0x1F"
                 },
                 "HEX",
-                "090C202020033234353A3582"
+                "FFFF021B57CAC0C7C0CDDC09320932303A35300903561F"
             }
 
         };
 
         #endregion
-
-
 
 
 
@@ -141,12 +139,6 @@ namespace InputDataModel.Autodictor.Test
             string formatExcpected,
             string requestStringExcpected)
         {
-
-            //DEBUG
-            //1B 57 41 46 32 36 09 F1 EA EE F0 09 C8 C6 C5 C2 D1 CA 09 31 37 3A 33 38 09 36 09 - XOR = 50
-            var crcBytes = new byte[] { 0x1B, 0x57, 0x41, 0x46, 0x32, 0x36, 0x09, 0xF1, 0xEA, 0xEE, 0xF0, 0x09, 0xC8, 0xC6, 0xC5, 0xC2, 0xD1, 0xCA, 0x09, 0x31, 0x37, 0x3A, 0x33, 0x38, 0x09, 0x36, 0x09 };
-            var crc = CrcCalc.CalcXor(crcBytes);
-
             // Arrange
             var address = "9";
             var option = new ViewRuleOption()

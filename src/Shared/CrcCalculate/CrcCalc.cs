@@ -12,8 +12,17 @@ namespace Shared.CrcCalculate
             {
                 xor ^= arr[i];
             }
-            xor ^= 0xFF;
+            return xor;
+        }
 
+
+        public static byte CalcXorInverse(IReadOnlyList<byte> arr)
+        {
+            var xor = arr[0];
+            for (var i = 1; i < arr.Count; i++)
+            {
+                xor ^= arr[i];
+            }
             return xor;
         }
 

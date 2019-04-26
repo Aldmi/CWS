@@ -31,7 +31,6 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
 
 
-
         #region ctor
 
         public ByRulesDataProvider(ProviderOption providerOption, ILogger logger) : base(logger)
@@ -39,7 +38,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             var option = providerOption.ByRulesProviderOption;
             if (option == null)
                 throw new ArgumentNullException(providerOption.Name);
-      
+
             ProviderName = providerOption.Name;
             _rules = option.Rules.Select(opt => new Rule(opt, logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(option.RuleName4DefaultHandle)
@@ -52,22 +51,19 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
 
 
-
         #region prop
 
-        private IEnumerable<Rule> GetRules => _rules.ToList();
+        private IEnumerable<Rule> GetRules => _rules.ToList();                     //Копия списка Rules, чтобы  избежать Exception при перечислении (т.к. Rules - мутабельна).
         public string RuleName4DefaultHandle { get; }
         public string ProviderName { get; }
         public Dictionary<string, string> StatusDict { get; } = new Dictionary<string, string>();
         public InDataWrapper<AdInputType> InputData { get; set; }
         public ResponseDataItem<AdInputType> OutputData { get; set; }
         public bool IsOutDataValid { get; set; }
-
         public int TimeRespone => _currentRequest.ResponseOption.TimeRespone;        //Время на ответ
-        public int CountSetDataByte => _currentRequest.ResponseOption.Lenght;
+        public int CountSetDataByte => _currentRequest.ResponseOption.Lenght;        //Кол-во принимаемых байт в ответе
 
         #endregion
-
 
 
 
@@ -164,11 +160,10 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             if (option == null)
                 throw new ArgumentNullException(optionNew.Name);
 
-            //TODO: валидация optionNew ???
             _rules.Clear();
-            var newRules = option.Rules.Select(opt => new Rule(opt, _logger)).ToList();
+            var newRules = option.Rules.Select(opt => new Rule(opt, _logger)).ToList();//TODO: валидация проводить в самом dto объекте Rule и ViewRule
             _rules.AddRange(newRules);
-       
+
             return true;
         }
 
@@ -179,6 +174,9 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         #region Methode
 
+        /// <summary>
+        /// Запуск конвеера обработки запрос-ответ для обмена
+        /// </summary>
         public async Task StartExchangePipeline(InDataWrapper<AdInputType> inData)
         {
             //ЕСЛИ ДАННЫХ ДЛЯ ОТПРАВКИ НЕТ (например для Цикл. обмена при старте)
@@ -192,48 +190,40 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 };
             }
 
-            try //DEBUG
+            foreach (var rule in GetRules)
             {
-                foreach (var rule in GetRules)
+                StatusDict.Clear();
+                var ruleOption = rule.GetCurrentOption();
+                switch (SwitchInDataHandler(inData, ruleOption.Name))
                 {
-                    StatusDict.Clear();
-                    var ruleOption = rule.GetCurrentOption();
-                    switch (SwitchInDataHandler(inData, ruleOption.Name))
-                    {
-                        //КОМАНДА-------------------------------------------------------------
-                        case RuleSwitcher4InData.CommandHanler:
-                            ViewRuleSendCommand(rule, inData.Command);
+                    //КОМАНДА-------------------------------------------------------------
+                    case RuleSwitcher4InData.CommandHanler:
+                        ViewRuleSendCommand(rule, inData.Command);
+                        continue;
+
+                    //ДАННЫЕ ДЛЯ УКАЗАНОГО RULE--------------------------------------------
+                    case RuleSwitcher4InData.InDataDirectHandler:
+                        var takesItems = inData.Datas?.Order(ruleOption.OrderBy, _logger)
+                            ?.TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
+                            ?.ToList();
+                        ViewRuleSendData(rule, takesItems);
+                        continue;
+
+                    //ДАННЫЕ--------------------------------------------------------------  
+                    case RuleSwitcher4InData.InDataHandler:
+                        var filtredItems = inData.Datas?.Filter(ruleOption.WhereFilter, _logger);
+                        if (filtredItems == null || !filtredItems.Any())
                             continue;
 
-                        //ДАННЫЕ ДЛЯ УКАЗАНОГО RULE--------------------------------------------------------------  
-                        case RuleSwitcher4InData.InDataDirectHandler:
-                            var takesItems = inData.Datas?.Order(ruleOption.OrderBy, _logger)
-                                ?.TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
-                                ?.ToList();
-                            ViewRuleSendData(rule, takesItems);
-                            continue;
+                        takesItems = filtredItems.Order(ruleOption.OrderBy, _logger)
+                            .TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
+                            .ToList();
+                        ViewRuleSendData(rule, takesItems);
+                        continue;
 
-                        //ДАННЫЕ--------------------------------------------------------------  
-                        case RuleSwitcher4InData.InDataHandler:
-                            var filtredItems = inData.Datas?.Filter(ruleOption.WhereFilter, _logger);
-                            if (filtredItems == null || !filtredItems.Any())
-                                continue;
-
-                            takesItems = filtredItems.Order(ruleOption.OrderBy, _logger)
-                                .TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
-                                .ToList();
-                            ViewRuleSendData(rule, takesItems);
-                            continue;
-
-                        default:
-                            continue;
-                    }
+                    default:
+                        continue;
                 }
-            }
-            catch (Exception e)//DEBUG (УБРАТЬ!!!!)
-            {
-                Console.WriteLine(e);
-                throw;
             }
 
             //Конвеер обработки входных данных завершен    
@@ -252,31 +242,23 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
                 //_logger.Information($"Отправка ДАННЫХ через {rule.Option.Name}. Кол-во данных:{takesItems.Count}");
 
-                try //DEBUG
-                {
-                    foreach (var viewRule in rule.GetViewRules)
-                    {
-                        foreach (var request in viewRule.GetDataRequestString(takesItems))
-                        {
-                            if (request == null) //правило отображения не подходит под ДАННЫЕ
-                                continue;
 
-                            _currentRequest = request;
-                            InputData = new InDataWrapper<AdInputType> { Datas = _currentRequest.BatchedData.ToList() };
-                            StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption().Id}";
-                            StatusDict["BodyLenght"] = $"{_currentRequest.BodyLenght}";
-                            RaiseSendDataRx.OnNext(this);
-                        }
-                    }
-                }
-                catch (Exception e) // DEBUG (УБРАТЬ!!!!) отлавливаем ошибку измения rule.ViewRules коллекции
+                foreach (var viewRule in rule.GetViewRules)
                 {
-                    Console.WriteLine(e); 
-                    throw;
+                    foreach (var request in viewRule.GetDataRequestString(takesItems))
+                    {
+                        if (request == null) //правило отображения не подходит под ДАННЫЕ
+                            continue;
+
+                        _currentRequest = request;
+                        InputData = new InDataWrapper<AdInputType> { Datas = _currentRequest.BatchedData.ToList() };
+                        StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption().Id}";
+                        StatusDict["BodyLenght"] = $"{_currentRequest.BodyLenght}";
+                        RaiseSendDataRx.OnNext(this);
+                    }
                 }
             }
         }
-
 
 
         /// <summary>
@@ -292,7 +274,6 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             StatusDict["viewRule.Id"] = $"{commandViewRule.GetCurrentOption().Id}";
             RaiseSendDataRx.OnNext(this);
         }
-
 
         #endregion
 
@@ -318,7 +299,6 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         {
             throw new NotImplementedException();
         }
-
         #endregion
     }
 }
