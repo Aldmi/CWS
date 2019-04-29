@@ -23,6 +23,7 @@ namespace Shared.CrcCalculate
             {
                 xor ^= arr[i];
             }
+            xor ^= 0xFF;
             return xor;
         }
 

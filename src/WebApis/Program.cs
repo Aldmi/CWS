@@ -21,7 +21,7 @@ namespace WebApiSwc
             Console.ForegroundColor = ConsoleColor.Red;
             const string version = "CWS Ver1.5";
             Console.Title = version;
-            Console.WriteLine($"{version}  [{DateTime.Today:U}]  [Change int->string in  AdInputType4XmlDtoContainer Dto type. And change mapping option CreateMap<AdInputType4XmlDto, AdInputType>()]");
+            Console.WriteLine($"{version}  [{DateTime.Today:U}]  [StationCut Change StArrival <->StDeparture]");
         }
 
 

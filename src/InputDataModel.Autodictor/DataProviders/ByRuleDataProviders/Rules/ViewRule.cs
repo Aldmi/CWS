@@ -522,10 +522,10 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                     break;
 
                 case string s when s.Contains("Xor"):
-                    crc = CrcCalc.CalcXorInverse(crcBytes);
+                    crc = CrcCalc.CalcXor(crcBytes);
                     break;
 
-                case string s when s.Contains("XorInverse"):
+                case string s when s.Contains("Mod256"):
                     crc = CrcCalc.CalcMod256(crcBytes);
                     break;
             }
