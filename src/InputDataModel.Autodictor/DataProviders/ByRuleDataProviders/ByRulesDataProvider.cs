@@ -78,7 +78,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         #region IExchangeDataProviderImplementation
 
         /// <summary>
-        /// Сформировать буффер ЗАПРОСА
+        /// Сформировать буфер ЗАПРОСА
         /// </summary>
         /// <returns></returns>
         public byte[] GetDataByte()

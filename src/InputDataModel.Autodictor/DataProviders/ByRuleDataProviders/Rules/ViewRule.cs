@@ -373,13 +373,13 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             switch (eventNum.Value)
             {
                 case 0: //"ПРИБ"
-                    stations = stArrival;
-                    break;
-                case 1:  //"ОТПР"
                     stations = stDepart;
                     break;
+                case 1:  //"ОТПР"
+                    stations = stArrival;
+                    break;
                 case 2:   //"СТОЯНКА"
-                    stations = $"{stArrival}-{stDepart}";
+                    stations = $"{stDepart}-{stArrival}";
                     break;
             }
             return stations;
