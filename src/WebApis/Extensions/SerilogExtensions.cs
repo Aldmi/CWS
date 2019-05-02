@@ -54,28 +54,35 @@ namespace WebApiSwc.Extensions
         {
             var loggerConf = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy(LevelSwitch)
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Error) 
+                .MinimumLevel.Override("System", LogEventLevel.Error)
                 .Enrich.FromLogContext()
                 .WriteTo.Console(LogEventLevel.Information)
+
                 .WriteTo.File("logs/Main_Log.txt",
                     LogEventLevel.Information,
-                    rollingInterval: RollingInterval.Day,            //за 10 последних дней хранится Information лог
-                    retainedFileCountLimit:10)
-                .WriteTo.File("logs/Error_Log.txt",                  //за 10 последних дней хранится Error лог
+                    rollingInterval: RollingInterval.Day,             //за 10 последних дней хранится Information лог (100МБ лимит размера файла)
+                    retainedFileCountLimit: 10,
+                    fileSizeLimitBytes: 100000000,                   
+                    rollOnFileSizeLimit: true)
+
+                .WriteTo.File("logs/Error_Log.txt",                  //за 10 последних дней хранится Error лог (100МБ лимит размера файла)
                     LogEventLevel.Error,
                     rollingInterval: RollingInterval.Day,
-                    retainedFileCountLimit: 10);
-              //.WriteTo.Seq("http://localhost:5341", compact: true);
+                    retainedFileCountLimit: 10,
+                    fileSizeLimitBytes: 100000000, //100МБ
+                    rollOnFileSizeLimit: true)
 
-            //TODO: уровень логирования задается отдельно, и на production можеть быть выставленн в Debug или Info
-            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == EnvironmentName.Development)
-            //{
-                loggerConf.WriteTo.File("logs/Debug/Debug_Log.txt",
+                .WriteTo.File("logs/Debug/Debug_Log.txt",          //За 5 последних часов переписывается Debug лог (100МБ лимит размера файла).
                     LogEventLevel.Debug,
                     rollingInterval: RollingInterval.Hour,
-                    retainedFileCountLimit:5,                        //За 5 последних часов переписывается Debug лог.
-                    shared:true);
-            //}
+                    retainedFileCountLimit: 5,
+                    fileSizeLimitBytes: 100000000,
+                    rollOnFileSizeLimit: true,                      
+                    shared: true);
+
+            //.WriteTo.Seq("http://localhost:5341", compact: true);
+
             return loggerConf;
         }
     }

@@ -15,7 +15,7 @@ namespace InputDataModel.Base
         public string ExchangeName { get; set; }
 
         /// <summary>
-        /// Обмен
+        /// Непосредственное имя обработчика
         /// </summary>
         public string DirectHandlerName { get; set; }
 

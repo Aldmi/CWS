@@ -3,6 +3,7 @@ using System.Text;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 
 namespace WebApiSwc
@@ -19,9 +20,9 @@ namespace WebApiSwc
         public static void ViewVersionOnConsole()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            const string version = "CWS Ver1.5";
+            const string version = "CWS Ver1.6";
             Console.Title = version;
-            Console.WriteLine($"{version}  [{DateTime.Today:U}]  [StationCut Change StArrival <->StDeparture]");
+            Console.WriteLine($"{version}  [{DateTime.Today:U}]  [Fix bug in CRC calculate]");
         }
 
 
