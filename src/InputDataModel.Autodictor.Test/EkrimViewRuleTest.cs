@@ -24,31 +24,20 @@ namespace InputDataModel.Autodictor.Test
     //    "count": 1,
     //    "batchSize": 1000,
     //    "requestOption": {
-    //        "format": "cp866",
+    //        "format": "Windows-1251",
     //        "maxBodyLenght": 245,
-    //        "header": "0x{AddressDevice:X2}0x{NbyteFull:X2} ",
-    //        "body": "  0x03{Hour:D2}0x3A{Minute:D2}",
-    //        "footer": "0x{CRCMod256:X2}"
-    //    },
+    //        "header": "0xFF0xFF0x020x1B0x57",
+    //        "body": "{StationArrival}0x09{NumberOfTrain}0x09{TArrival:t}0x09",
+    //        "footer": "0x030x{CRCXor[0x02-0x03]:X2}0x1F
     //    "responseOption": {
-    //        "format": "X2",
-    //        "lenght": 16,
+    //        "format": "HEX",
+    //        "lenght": 2,
     //        "timeRespone": 2000,
-    //        "body": "0246463038254130373741434B454103"
+    //        "body": "061F"
     //    }
     //}
     public class EkrimViewRuleTest
     {
-        //private static AdInputType _inTypeBase =
-        //   new AdInputType
-        //   {
-        //       Id = 1,
-        //       Lang = Lang.Ru,
-        //       PathNumber = "5",
-        //       NumberOfTrain = "245",
-        //       ArrivalTime = DateTime.Parse("10:20"),
-        //       DepartureTime = DateTime.Parse("11:52")
-        //   };
 
         private readonly ILogger _logger;
 
@@ -75,30 +64,6 @@ namespace InputDataModel.Autodictor.Test
         //List<AdInputType> inTypes, RequestOption requestOption, string formatExcpected, string requestStringExcpected
         public static IEnumerable<object[]> GetDataRequestStringTestInputDatas => new[]
         {
-            //new object[] 
-            //{
-            //   new List<AdInputType>
-            //   {
-            //        new AdInputType
-            //        {
-            //            Id = 1,
-            //            Lang = Lang.Ru,
-            //            NumberOfTrain = "245",
-            //            StationArrival = new Station{NameRu = "КАЗАНЬ"},
-            //            ArrivalTime = DateTime.Parse("20:50"),
-            //        }
-            //    },
-            //    new RequestOption
-            //    {
-            //        Format = "Windows-1251",
-            //        MaxBodyLenght = 245,
-            //        Header = "0xFF0xFF0x020x1B0x57",
-            //        Body = "{StationArrival}0x09{NumberOfTrain}0x09{TArrival:t}0x09",
-            //        Footer = "0x03{CRCXor:X2}0x1F"  //[0x02-0x03]
-            //    },
-            //    "HEX",
-            //    "090C202020033234353A3582"
-            //},
             new object[]
             {
                 new List<AdInputType>
@@ -118,7 +83,7 @@ namespace InputDataModel.Autodictor.Test
                     MaxBodyLenght = 245,
                     Header = "0xFF0xFF0x020x1B0x57",
                     Body = "{StationArrival}0x09{NumberOfTrain}0x09{TArrival:t}0x09",
-                    Footer = "0x030x{CRCXorInverse[0x02-0x03]:X2}0x1F"
+                    Footer = "0x030x{CRCXor[0x02-0x03]:X2}0x1F"
                 },
                 "HEX",
                 "FFFF021B57CAC0C7C0CDDC09320932303A35300903561F"

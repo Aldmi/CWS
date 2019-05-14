@@ -2,6 +2,13 @@ FROM microsoft/dotnet:2.2-aspnetcore-runtime AS base
 WORKDIR /app
 EXPOSE 80
 
+# Set the locale
+RUN apt-get update && apt-get install -y locales
+RUN sed -i -e 's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen && dpkg-reconfigure --frontend=noninteractive locales && update-locale LANG=ru_RU.UTF-8
+ENV LANG ru_RU.UTF-8
+ENV LANGUAGE ru_RU:ru
+ENV LC_ALL ru_RU.UTF-8
+
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
 COPY WebApis/WebApiSwc.csproj WebApis/
