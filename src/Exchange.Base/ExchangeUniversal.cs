@@ -477,9 +477,9 @@ namespace Exchange.Base
         /// </summary>
         private void LogedResponseInformation(ResponsePieceOfDataWrapper<TIn> response)
         {
-            var numberPreparedPackages = response.ResponsesItems.Count;//кол-во подготовленных к отправке пакетов
-            var countIsValid = response.ResponsesItems.Count(resp => resp.IsOutDataValid);
-            var countAll = response.ResponsesItems.Count(resp => resp.IsOutDataValid);
+            var numberPreparedPackages = response.ResponsesItems.Count;                                              //кол-во подготовленных к отправке пакетов        
+            var countAll = response.ResponsesItems.Count(resp => resp.Status != StatusDataExchange.EndWithTimeout);  //кол-во ВСЕХ полученных ответов
+            var countIsValid = response.ResponsesItems.Count(resp => resp.IsOutDataValid);                           //кол-во ВАЛИДНЫХ ответов
             string errorStat = String.Empty;
             if (countIsValid < numberPreparedPackages)
             {

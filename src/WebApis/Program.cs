@@ -22,7 +22,7 @@ namespace WebApiSwc
             Console.ForegroundColor = ConsoleColor.Red;
             const string version = "CWS Ver1.8";
             Console.Title = version;
-            Console.WriteLine($"{version}  [{DateTime.Today:U}]  []");
+            Console.WriteLine($"{version}  [{DateTime.Today:U}]  [Change DockerFile (set Locale ru-RU.UTF-8)]");
         }
 
 

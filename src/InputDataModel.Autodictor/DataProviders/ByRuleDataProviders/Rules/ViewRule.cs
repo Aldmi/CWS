@@ -93,6 +93,32 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 foreach (var batch in viewedItems.Batch(_option.BatchSize))
                 {
                     var startItemIndex = _option.StartPosition + (numberOfBatch++ * _option.BatchSize);
+
+                    //TODO: РЕАЛИЗАЦИЯ СПИСКА ЗАПРОС/ОТВЕТ ДЛЯ КАЖДОГО ViewRule (SendingUnitList)
+                    //1. requestOption и responseOption обернуть в тип SendingUnit
+                    //2. ViewRule хранит List<SendingUnit> SendingUnitList
+                    //foreach (var sendingUnit in _option.SendingUnitList)
+                    //{
+                    //    var requestOption = sendingUnit.RequestOption;
+                    //    var responseOption = sendingUnit.ResponseOption;
+
+                    //    var stringRequest = CreateStringRequest(batch, requestOption, startItemIndex); //requestOption передаем
+                    //    var stringResponse = CreateStringResponse(responseOption);//responseOption передаем
+                    //    if (stringRequest == null)
+                    //        continue;
+
+                    //    yield return new ViewRuleRequestModelWrapper
+                    //    {
+                    //        StartItemIndex = startItemIndex,
+                    //        BatchSize = _option.BatchSize,
+                    //        BatchedData = batch,
+                    //        StringRequest = stringRequest,
+                    //        StringResponse = stringResponse,
+                    //        RequestOption = _option.RequestOption,
+                    //        ResponseOption = _option.ResponseOption
+                    //    };
+                    //}
+
                     var stringRequest = CreateStringRequest(batch, startItemIndex);
                     var stringResponse = CreateStringResponse();
                     if (stringRequest == null)
@@ -188,8 +214,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             }
 
             //ПРОВЕРИТЬ ДЛИНУ ТЕЛА ЗАПРОСА (если превышение, то строка запроса не формируется)---------------------------------------------------------------------------------------------
-            var listLimitBodyStr= CheckLimitBodySectionLenght(listBodyStr);
-            if(listLimitBodyStr == null)
+            var listLimitBodyStr= CheckLimitBodySectionLenght(listBodyStr, _option.RequestOption.MaxBodyLenght);
+            if (listLimitBodyStr == null)
                return null;
 
             //КОНКАТЕНИРОВАТЬ СТРОКИ В СУММАРНУЮ СТРОКУ-----------------------------------------------------------------------------------------
@@ -325,10 +351,9 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         /// <summary>
         /// Ограничить длинну строки
         /// </summary>
-        private List<string> CheckLimitBodySectionLenght(List<string> bodyList)
+        private List<string> CheckLimitBodySectionLenght(List<string> bodyList, int maxBodyLenght)
         {
             double totalBodyCount= bodyList.Sum(s => s.Length);
-            var maxBodyLenght = _option.RequestOption.MaxBodyLenght;
             if (totalBodyCount < maxBodyLenght)
                return bodyList;
             else
@@ -351,7 +376,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
               3. Вычислить CRC и вставить
             */
             str = MakeAddressDevice(str);
-            str = MakeNByte(str);
+            str = MakeNByte(str, option.Format);
             str = MakeCrc(str, option.Format);
             str = SwitchFormatCheck2Hex(str, option);
             return str;
@@ -418,7 +443,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         }
 
 
-        private string MakeNByte(string str)
+        private string MakeNByte(string str, string format)
         {
             var requestFillBodyWithoutConstantCharacters = str.Replace("STX", string.Empty).Replace("ETX", string.Empty);
 
@@ -431,7 +456,6 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 matchString = Regex.Match(requestFillBodyWithoutConstantCharacters, "{Nbyte(.*)}(.*){CRC(.*)}").Groups[2].Value;          
                 if (HelpersBool.ContainsHexSubStr(matchString))
                 {
-                    var format = _option.RequestOption.Format;
                     var buf = matchString.ConvertStringWithHexEscapeChars2ByteArray(format);
                     var lenghtBody = buf.Count;            
                     var lenghtAddress= 1;
