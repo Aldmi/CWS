@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using NCalc;
 
@@ -24,14 +25,20 @@ namespace Shared.Helpers
                 {
                     var replacement = dict[key];
                     var formatValue = match.Groups[2].Value;
-                    if (replacement is DateTime time)
+                    switch (replacement)
                     {
-                        res = DateTimeStrHandler(time, formatValue);
-                    }
-                    else
-                    {
-                        var format = "{0" + formatValue + "}";
-                        res = string.Format(format, replacement);
+                        case DateTime time:
+                            res = DateTimeStrHandler(time, formatValue);
+                            break;
+
+                        case string str:
+                            res = StringIndexInseartByFormat(str, formatValue);
+                            break;
+
+                        default:
+                            var format = "{0" + formatValue + "}";
+                            res = string.Format(format, replacement);
+                            break;
                     }
                 }
                 else
@@ -53,6 +60,47 @@ namespace Shared.Helpers
             var result = Regex.Replace(template, pattern, Evaluator);
             return result;
         }
+
+
+        /// <summary>
+        /// Вставка данных в строку по индексу.
+        /// Формат вставки задается строкой.
+        /// </summary>
+        /// <param name="str">Строка</param>
+        /// <param name="inseartFormat">Формат вставки [index^value][...]  index- ползиция для вставки. value- значение для вставки</param>
+        /// <returns>Конечная строка со всеми вставками</returns>
+        private static string StringIndexInseartByFormat(string str, string inseartFormat)
+        {
+            try
+            {
+                var pattern = "\\[(.*?)\\]";//выделяет данные в [...]
+                var matches = Regex.Matches(inseartFormat, pattern);
+                var results = matches.Cast<Match>().Select(m => m.Groups[1].Value).Distinct().ToList();
+                foreach (var result in results)
+                {
+                    var val = result.Split('^');
+                    if (val.Length != 2)
+                        throw new FormatException($"Неверный формат Note {val}");
+
+                    if (!int.TryParse(val[0], out var tempResult))
+                        throw new FormatException($"Неверный формат Note {val}");
+
+                    var indexRepalcement = tempResult;
+                    var string2Insert = val[1];
+
+                    str = str.Insert(indexRepalcement, string2Insert);
+                }
+            }
+            catch (Exception ex)
+            {
+                //_loger.Warning(ex)
+                str = String.Empty;
+            }
+
+            return str;
+        }
+
+
 
 
         /// <summary>

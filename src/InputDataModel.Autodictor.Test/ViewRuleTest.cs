@@ -120,10 +120,37 @@ namespace InputDataModel.Autodictor.Test
                     MaxBodyLenght = 245,
                     Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
                     Body = "%010C60EF03B0470000001E%110406NNNNN%010000f001101f0024001E%10{NumberOfCharacters:X2}05\\\"{Addition} {Stations}\\\"%0100002300000f0000001E%10{NumberOfCharacters:X2}05\\\"{NumberOfTrain}\\\"",
-                    Footer = "{CRCXor:X2}\u0003"
+                    Footer = "{CRCXorInverse:X2}\u0003"
                 },
                 "Windows-1251",
                 "\u0002096E%010C60EF03B0470000001E%110406NNNNN%010000f001101f0024001E%100C05Дополнение  %0100002300000f0000001E%10030524583\u0003"
+            },
+            new object[]
+            {
+                new List<AdInputType>
+                {
+                    new AdInputType
+                    {
+                        Id = 1,
+                        Lang = Lang.Ru,
+                        PathNumber = "5",
+                        NumberOfTrain = "245",
+                        ArrivalTime = DateTime.Parse("10:20"),
+                        DepartureTime = DateTime.Parse("11:52"),
+                        Addition = new Addition {NameRu = "Дополнение"},
+                        Note = new Note{NameRu = "Со всеми остановками кроме: Узуново, Ожерелье"}
+                    }
+                },
+                new RequestOption
+                {
+                    Format = "Windows-1251",
+                    MaxBodyLenght = 245,
+                    Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                    Body = "010C60EF03B0470000001E%110406NNNNN{Note:[3^100][10^25]}%10{Addition:[0^GGG][5^FFF]}{TDepart:t}",  //[3^0x09][10^0x09]
+                    Footer = "{CRCXorInverse:X2}\u0003"
+                },
+                "Windows-1251",
+                "\u0002096C010C60EF03B0470000001E%110406NNNNNСо 100всем25и остановками кроме: Узуново, Ожерелье%10GGGДоFFFполнение11:529B\u0003"
             }
 
         };
@@ -161,7 +188,7 @@ namespace InputDataModel.Autodictor.Test
             var firstRequest = requests.FirstOrDefault();
             var requestString = firstRequest?.StringRequest;
             var currentFormat = firstRequest?.RequestOption.GetCurrentFormat();
-            var resultBuffer = requestString.ConvertString2ByteArray(currentFormat);
+
 
             //Asssert
             firstRequest.Should().NotBeNull();
