@@ -80,7 +80,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         /// </summary>
         /// <param name="items">элементы прошедшие фильтрацию для правила</param>
         /// <returns>строку запроса и батч данных в обертке </returns>
-        public IEnumerable<ViewRuleRequestModelWrapper> GetDataRequestString(List<AdInputType> items)
+        public IEnumerable<ViewRuleTransferWrapper> GetDataRequestString(List<AdInputType> items)
         {
             var viewedItems = GetViewedItems(items);
             if (viewedItems == null)
@@ -124,7 +124,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                     if (stringRequest == null)
                         continue;
 
-                    yield return new ViewRuleRequestModelWrapper
+                    yield return new ViewRuleTransferWrapper
                     {
                         StartItemIndex = startItemIndex,
                         BatchSize = _option.BatchSize,
@@ -145,7 +145,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         /// Body содержит готовый запрос для команды.
         /// </summary>
         /// <returns></returns>
-        public ViewRuleRequestModelWrapper GetCommandRequestString()
+        public ViewRuleTransferWrapper GetCommandRequestString()
         {
             var header = _option.RequestOption.Header;
             var body = _option.RequestOption.Body;
@@ -162,7 +162,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})---------------------------------------------------------------------
             var resDependencyStr = MakeDependentInserts(resBodyDependentStr, requestCommandOption);
 
-            return new ViewRuleRequestModelWrapper
+            return new ViewRuleTransferWrapper
             {
                 BatchedData = null,
                 StringRequest = resDependencyStr,
@@ -558,34 +558,6 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         }
 
 
-        //OLD VERSION
-        //private string MakeCrc(string str, string format)
-        //{
-        //    var matchString = Regex.Match(str, "(.*){CRC(.*)}").Groups[1].Value;
-        //    matchString = matchString.Replace("\u0002", string.Empty).Replace("\u0003", string.Empty);
-        //    var crcBytes = HelpersBool.ContainsHexSubStr(matchString) ?
-        //        matchString.ConvertStringWithHexEscapeChars2ByteArray(format).ToArray() :
-        //        matchString.ConvertString2ByteArray(format);
-
-        //    //вычислить CRC по правилам XOR
-        //    if (str.Contains("CRCXor"))
-        //    {
-        //        byte crc = CrcCalc.CalcXor(crcBytes);
-        //        str = string.Format(str.Replace("CRCXor", "0"), crc);
-        //    }
-        //    else
-        //    if (str.Contains("CRCMod256"))
-        //    {
-        //        byte crc = CrcCalc.CalcMod256(crcBytes);
-        //        str = string.Format(str.Replace("CRCMod256", "0"), crc);
-        //    }
-
-        //    return str;
-        //}
-
-
-
-
         private string SwitchFormatCheck2Hex(string str, RequestResonseOption option)
         {
             var format = option.Format;
@@ -604,19 +576,6 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
     }
 
 
-    /// <summary>
-    /// Единица запроса обработанная ViewRule.
-    /// 
-    /// </summary>
-    public class ViewRuleRequestModelWrapper
-    {
-        public int StartItemIndex { get; set; }                     //Начальный индекс (в базовом массиве, после TakeItems) элемента после разбиения на батчи.
-        public int BatchSize { get; set; }                          //Размер батча.
-        public IEnumerable<AdInputType> BatchedData { get; set; }   //Набор входных данных на базе которых созданна StringRequest.
-        public string StringRequest { get; set; }                   //Строка запроса, созданная по правилам RequestOption.
-        public string StringResponse { get; set; }                  //Строка ответа, созданная по правилам ResponseOption.
-        public int BodyLenght { get; set; }                         //Размер тела запроса todo: НЕ ИСПОЛЬЗУЕТСЯ
-        public RequestOption RequestOption { get; set; }            //Запрос.
-        public ResponseOption ResponseOption { get; set; }          //Ответ.
-    }
+
+
 }

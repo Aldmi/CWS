@@ -24,7 +24,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         #region field
 
         private readonly List<Rule> _rules;                   // Набор правил, для обработки данных.
-        private ViewRuleRequestModelWrapper _currentRequest;  // Созданный запрос, после подготовки данных. 
+        private ViewRuleTransferWrapper _current;  // Созданный запрос, после подготовки данных. 
         private readonly ILogger _logger;
 
         #endregion
@@ -60,8 +60,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         public InDataWrapper<AdInputType> InputData { get; set; }
         public ResponseDataItem<AdInputType> OutputData { get; set; }
         public bool IsOutDataValid { get; set; }
-        public int TimeRespone => _currentRequest.ResponseOption.TimeRespone;        //Время на ответ
-        public int CountSetDataByte => _currentRequest.ResponseOption.Lenght;        //Кол-во принимаемых байт в ответе
+        public int TimeRespone => _current.ResponseOption.TimeRespone;        //Время на ответ
+        public int CountSetDataByte => _current.ResponseOption.Lenght;        //Кол-во принимаемых байт в ответе
 
         #endregion
 
@@ -83,13 +83,13 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         /// <returns></returns>
         public byte[] GetDataByte()
         {
-            var stringRequset = _currentRequest.StringRequest;
-            var format = _currentRequest.RequestOption.GetCurrentFormat();
+            var stringRequset = _current.StringRequest;
+            var format = _current.RequestOption.GetCurrentFormat();
             StatusDict["GetDataByte.StringRequest"] = $"[{stringRequset}] Lenght= {stringRequset.Length}  Format={format}";
             //Преобразовываем КОНЕЧНУЮ строку в массив байт
             var resultBuffer = stringRequset.ConvertString2ByteArray(format);
             StatusDict["GetDataByte.ByteRequest"] = $"{ resultBuffer.ArrayByteToString("X2")} Lenght= {resultBuffer.Length}";
-            StatusDict["TimeResponse"] = $"{ _currentRequest.ResponseOption.TimeRespone}";
+            StatusDict["TimeResponse"] = $"{ _current.ResponseOption.TimeRespone}";
             return resultBuffer;
         }
 
@@ -101,8 +101,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         /// <returns></returns>
         public bool SetDataByte(byte[] data)
         {
-            var format = _currentRequest.ResponseOption.GetCurrentFormat();
-            var stringResponseRef = _currentRequest.StringResponse;
+            var format = _current.ResponseOption.GetCurrentFormat();
+            var stringResponseRef = _current.StringResponse;
             if (data == null)
             {
                 IsOutDataValid = false;
@@ -122,7 +122,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 Encoding = format,
                 IsOutDataValid = IsOutDataValid
             };
-            var diffResp = (!IsOutDataValid) ? $"ПринятоБайт/ОжидаемБайт= {data.Length}/{_currentRequest.ResponseOption.Lenght}" : string.Empty;
+            var diffResp = (!IsOutDataValid) ? $"ПринятоБайт/ОжидаемБайт= {data.Length}/{_current.ResponseOption.Lenght}" : string.Empty;
             StatusDict["SetDataByte.StringResponse"] = $"{stringResponseRef} ?? {stringResponse}   diffResp=  {diffResp}";
             return IsOutDataValid;
         }
@@ -250,10 +250,10 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                         if (request == null) //правило отображения не подходит под ДАННЫЕ
                             continue;
 
-                        _currentRequest = request;
-                        InputData = new InDataWrapper<AdInputType> { Datas = _currentRequest.BatchedData.ToList() };
+                        _current = request;
+                        InputData = new InDataWrapper<AdInputType> { Datas = _current.BatchedData.ToList() };
                         StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption().Id}";
-                        StatusDict["BodyLenght"] = $"{_currentRequest.BodyLenght}";
+                        StatusDict["BodyLenght"] = $"{_current.BodyLenght}";
                         RaiseSendDataRx.OnNext(this);
                     }
                 }
@@ -267,7 +267,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         private void ViewRuleSendCommand(Rule rule, Command4Device command)
         {
             var commandViewRule = rule.GetViewRules.FirstOrDefault();
-            _currentRequest = commandViewRule?.GetCommandRequestString();
+            _current = commandViewRule?.GetCommandRequestString();
             InputData = new InDataWrapper<AdInputType> { Command = command };
             StatusDict["Command"] = $"{command}";
             StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
@@ -292,7 +292,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         public string GetString()
         {
-            return _currentRequest.StringRequest;
+            return _current.StringRequest;
         }
 
         public bool SetString(Stream stream)
