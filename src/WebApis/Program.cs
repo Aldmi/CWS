@@ -20,9 +20,9 @@ namespace WebApiSwc
         public static void ViewVersionOnConsole()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            const string version = "CWS Ver1.8";
+            const string version = "CWS Ver1.9";
             Console.Title = version;
-            Console.WriteLine($"{version}  [{DateTime.Today:U}]  [Change DockerFile (set Locale ru-RU.UTF-8)]");
+            Console.WriteLine($"{version}  [{DateTime.Today:U}]  [Add StringIndexInseartByFormat methode in helperString. for calculate index insearted by all strings]");
         }
 
 
