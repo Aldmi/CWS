@@ -37,29 +37,8 @@ namespace DAL.Abstract.Entities.Options.Exchange.ProvidersOption
 
     public abstract class RequestResonseOption
     {
-        private string _dymamicFormat;
-        /// <summary>
-        /// Формат представления конечной строки запроса/ответа может поменять провайдер (например сформировать в HEX используя базовый Format и симолы Escape последовательности)
-        /// Если провайдер не меняет формат преобразования, то DymamicFormat = null.
-        /// </summary>
-        public string GetDymamicFormat => _dymamicFormat;
         public string Format { get; set; }
         public string Body { get; set; }                     // ТЕЛО (ТОЛЬКО НЕЗАВИСИМЫЕ ДАННЫЕ). Каждый элемент батча подставляет свои данные в Body, затем все элементы Конкатенируются.
-
-
-        #region Methode
-
-        public void SwitchFormat(string newFormat)
-        {
-            _dymamicFormat = newFormat;
-        }
-
-        public string GetCurrentFormat()
-        {
-            return string.IsNullOrEmpty(_dymamicFormat) ? Format : _dymamicFormat;
-        }
-
-        #endregion
     }
 
 

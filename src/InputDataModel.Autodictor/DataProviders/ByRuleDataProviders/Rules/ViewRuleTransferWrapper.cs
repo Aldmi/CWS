@@ -14,43 +14,39 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         public IEnumerable<AdInputType> BatchedData { get; set; }   //Набор входных данных на базе которых созданна StringRequest.
 
         //TODO: все что ниже заменить на RequestTransfer и ResponseTransfer. (RequestOption, ResponseOption - оставить имутабельными)
-        public string StringRequest { get; set; }                   //Строка запроса, созданная по правилам RequestOption.
-        public string StringResponse { get; set; }                  //Строка ответа, созданная по правилам ResponseOption.
-        public int BodyLenght { get; set; }                         //Размер тела запроса todo: НЕ ИСПОЛЬЗУЕТСЯ ???
-        public RequestOption RequestOption { get; set; }            //Запрос.
-        public ResponseOption ResponseOption { get; set; }          //Ответ.
+        public RequestTransfer Request { get; set; }                //Строка запроса, созданная по правилам RequestOption.
+        public ResponseTransfer Response { get; set; }              //Строка ответа, созданная по правилам ResponseOption.
+
+
+        //public string StringRequest { get; set; }                   //Строка запроса, созданная по правилам RequestOption.
+        //public string StringResponse { get; set; }                  //Строка ответа, созданная по правилам ResponseOption.
+        //public int BodyLenght { get; set; }                         //Размер тела запроса todo: НЕ ИСПОЛЬЗУЕТСЯ ???
+        //public RequestOption RequestOption { get; set; }            //Запрос.
+        //public ResponseOption ResponseOption { get; set; }          //Ответ.
+
     }
 
 
 
-    public class BaseTransfer
+    public abstract class BaseTransfer
     {
+        private readonly RequestResonseOption _option;               //Base опции.
+
+
         #region prop
 
-        public string StringRequestBase { get; set; }               //Строка запроса, созданная по правилам RequestOption (В ФОРМАТЕ ИЗ RequestOption).
-        public string StringRequest { get; set; }                   //Строка запроса, созданная по правилам RequestOption. (ВОЗМОЖНО В ИЗМЕНЕННОМ ФОРМАТЕ)
-        public RequestResonseOption Option { get; set; }            //Base опции запроса
+        public StringRepresentation StrRepresentBase { get; set; }             //Строковое представление данных, созданная по правилам Option (В ФОРМАТЕ ИЗ Option).
+        public StringRepresentation StrRepresent { get; set; }                 //Строковое представление данных, созданная по правилам Option (ВОЗМОЖНО В ИЗМЕНЕННОМ ФОРМАТЕ)
 
+        public bool EqualStrRepresent => StrRepresent.Equals(StrRepresentBase); //TODO: StringRepresentation реализовать IEquable
         #endregion
 
 
         #region ctor
 
-        public BaseTransfer(RequestResonseOption option)
+        protected BaseTransfer(RequestResonseOption option)
         {
-            Option = option;
-        }
-
-        #endregion
-
-
-        #region DynamicProp
-
-        private string _dymamicFormat;
-        public string Format
-        {
-            get => string.IsNullOrEmpty(_dymamicFormat) ? Option.Format : _dymamicFormat;
-            set => _dymamicFormat = value;
+            _option = option;
         }
 
         #endregion
@@ -62,7 +58,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
     {
         #region prop
 
-        public RequestOption RequestOption { get; }
+        public RequestOption Option { get; }
+        public int BodyLenght { get; set; }                   //Размер тела запроса todo: НЕ ИСПОЛЬЗУЕТСЯ ???
 
         #endregion
 
@@ -70,9 +67,9 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
         #region ctor
 
-        public RequestTransfer(RequestOption requestOption) : base(requestOption)
+        public RequestTransfer(RequestOption option) : base(option)
         {
-            RequestOption = requestOption;
+            Option = option;
         }
 
         #endregion
@@ -83,7 +80,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
     {
         #region prop
 
-        public ResponseOption RequestOption { get; }
+        public ResponseOption Option { get; }
 
         #endregion
 
@@ -91,11 +88,24 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
         #region ctor
 
-        public ResponseTransfer(ResponseOption requestOption) : base(requestOption)
+        public ResponseTransfer(ResponseOption option) : base(option)
         {
-            RequestOption = requestOption;
+            Option = option;
         }
 
         #endregion
+    }
+
+
+    public class StringRepresentation
+    {
+        public string Str { get;  }
+        public string Format { get;  }
+
+        public StringRepresentation(string str, string format)
+        {
+            Str = str;
+            Format = format;
+        }
     }
 }

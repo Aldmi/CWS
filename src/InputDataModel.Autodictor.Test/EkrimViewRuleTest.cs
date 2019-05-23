@@ -165,8 +165,8 @@ namespace InputDataModel.Autodictor.Test
                 var requestStringExcpected= requestsStringExcpected[i];
                 var formatExcpected = formatsExcpected[i];
 
-                var requestString = request?.StringRequest;
-                var currentFormat = request?.RequestOption.GetCurrentFormat();
+                var requestString = request?.Request.StrRepresent.Str;
+                var currentFormat = request?.Request.StrRepresent.Format;
 
                 //Asssert
                 request.Should().NotBeNull();

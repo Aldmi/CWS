@@ -186,8 +186,8 @@ namespace InputDataModel.Autodictor.Test
             //Act
             var requests = viewRule.GetDataRequestString(inTypes).ToList();
             var firstRequest = requests.FirstOrDefault();
-            var requestString = firstRequest?.StringRequest;
-            var currentFormat = firstRequest?.RequestOption.GetCurrentFormat();
+            var requestString = firstRequest?.Request.StrRepresent.Str;
+            var currentFormat = firstRequest?.Request.StrRepresent.Format;
 
 
             //Asssert

@@ -381,7 +381,7 @@ namespace Exchange.Base
                 var status = StatusDataExchange.None;
                 try
                 {
-                    status = _transport.DataExchangeAsync(_dataProvider.TimeRespone, provider, ct).GetAwaiter().GetResult();
+                    status = _transport.DataExchangeAsync(provider.TimeRespone, provider, ct).GetAwaiter().GetResult();
                     switch (status)
                     {
                         //ОБМЕН ЗАВЕРШЕН ПРАВИЛЬНО.

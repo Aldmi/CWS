@@ -60,8 +60,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         public InDataWrapper<AdInputType> InputData { get; set; }
         public ResponseDataItem<AdInputType> OutputData { get; set; }
         public bool IsOutDataValid { get; set; }
-        public int TimeRespone => _current.ResponseOption.TimeRespone;        //Время на ответ
-        public int CountSetDataByte => _current.ResponseOption.Lenght;        //Кол-во принимаемых байт в ответе
+        public int TimeRespone => _current.Response.Option.TimeRespone;        //Время на ответ
+        public int CountSetDataByte => _current.Response.Option.Lenght;        //Кол-во принимаемых байт в ответе
 
         #endregion
 
@@ -83,13 +83,13 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         /// <returns></returns>
         public byte[] GetDataByte()
         {
-            var stringRequset = _current.StringRequest;
-            var format = _current.RequestOption.GetCurrentFormat();
+            var stringRequset = _current.Request.StrRepresent.Str; 
+            var format = _current.Request.StrRepresent.Format;
             StatusDict["GetDataByte.StringRequest"] = $"[{stringRequset}] Lenght= {stringRequset.Length}  Format={format}";
             //Преобразовываем КОНЕЧНУЮ строку в массив байт
             var resultBuffer = stringRequset.ConvertString2ByteArray(format);
             StatusDict["GetDataByte.ByteRequest"] = $"{ resultBuffer.ArrayByteToString("X2")} Lenght= {resultBuffer.Length}";
-            StatusDict["TimeResponse"] = $"{ _current.ResponseOption.TimeRespone}";
+            StatusDict["TimeResponse"] = $"{TimeRespone}";
             return resultBuffer;
         }
 
@@ -101,8 +101,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         /// <returns></returns>
         public bool SetDataByte(byte[] data)
         {
-            var format = _current.ResponseOption.GetCurrentFormat();
-            var stringResponseRef = _current.StringResponse;
+            var stringResponseRef = _current.Response.StrRepresent.Str;
+            var format = _current.Response.StrRepresent.Format;           
             if (data == null)
             {
                 IsOutDataValid = false;
@@ -115,14 +115,14 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 return false;
             }
             var stringResponse = data.ArrayByteToString(format);
-            IsOutDataValid = (stringResponse == stringResponseRef); //TODO: как лутчше сравнивать строки
+            IsOutDataValid = (stringResponse == stringResponseRef); //TODO: как лутчше сравнивать строки???
             OutputData = new ResponseDataItem<AdInputType>
             {
                 ResponseData = stringResponse,
                 Encoding = format,
                 IsOutDataValid = IsOutDataValid
             };
-            var diffResp = (!IsOutDataValid) ? $"ПринятоБайт/ОжидаемБайт= {data.Length}/{_current.ResponseOption.Lenght}" : string.Empty;
+            var diffResp = (!IsOutDataValid) ? $"ПринятоБайт/ОжидаемБайт= {data.Length}/{_current.Response.Option.Lenght}" : string.Empty;
             StatusDict["SetDataByte.StringResponse"] = $"{stringResponseRef} ?? {stringResponse}   diffResp=  {diffResp}";
             return IsOutDataValid;
         }
@@ -253,7 +253,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                         _current = request;
                         InputData = new InDataWrapper<AdInputType> { Datas = _current.BatchedData.ToList() };
                         StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption().Id}";
-                        StatusDict["BodyLenght"] = $"{_current.BodyLenght}";
+                        StatusDict["Request.BodyLenght"] = $"{_current.Request.BodyLenght}";
                         RaiseSendDataRx.OnNext(this);
                     }
                 }
@@ -292,7 +292,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         public string GetString()
         {
-            return _current.StringRequest;
+            throw new NotImplementedException();
         }
 
         public bool SetString(Stream stream)
