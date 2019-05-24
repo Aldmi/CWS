@@ -160,7 +160,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var resBodyDependentStr = MakeBodyDependentInserts(resSumStr);
 
             //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})-------------------------------------------------------------------------
-            var resDependencyStr = MakeDependentInserts(resSumStr, format);
+            var resDependencyStr = MakeDependentInserts(resBodyDependentStr, format);
 
             //ПРОВЕРКА НЕОБХОДИМОСТИ СМЕНЫ ФОРМАТА СТРОКИ.-----------------------------------------------------------------------------------------
             SwitchFormatCheck2Hex(resDependencyStr, format, out var newStr, out var newFormat);
