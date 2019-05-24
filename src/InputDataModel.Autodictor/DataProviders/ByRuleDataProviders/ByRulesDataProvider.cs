@@ -84,8 +84,9 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         public byte[] GetDataByte()
         {
             var stringRequset = _current.Request.StrRepresent.Str; 
-            var format = _current.Request.StrRepresent.Format;
-            StatusDict["GetDataByte.StringRequest"] = $"[{stringRequset}] Lenght= {stringRequset.Length}  Format={format}";
+            var format = _current.Request.StrRepresent.Format; 
+            StatusDict["GetDataByte.Request"] = $"[{stringRequset}] Lenght= {stringRequset.Length}  Format={format}";
+            StatusDict["GetDataByte.RequestBase"] = _current.Request.EqualStrRepresent ? null : $"[{_current.Request.StrRepresentBase.Str}]  Lenght= {_current.Request.StrRepresentBase.Str.Length}   Format= {_current.Request.StrRepresentBase.Format}";
             //Преобразовываем КОНЕЧНУЮ строку в массив байт
             var resultBuffer = stringRequset.ConvertString2ByteArray(format);
             StatusDict["GetDataByte.ByteRequest"] = $"{ resultBuffer.ArrayByteToString("X2")} Lenght= {resultBuffer.Length}";

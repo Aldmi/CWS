@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using InputDataModel.Autodictor.Model;
+using KellermanSoftware.CompareNetObjects;
 
 namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 {
@@ -12,18 +13,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         public int StartItemIndex { get; set; }                     //Начальный индекс (в базовом массиве, после TakeItems) элемента после разбиения на батчи.
         public int BatchSize { get; set; }                          //Размер батча.
         public IEnumerable<AdInputType> BatchedData { get; set; }   //Набор входных данных на базе которых созданна StringRequest.
-
-        //TODO: все что ниже заменить на RequestTransfer и ResponseTransfer. (RequestOption, ResponseOption - оставить имутабельными)
         public RequestTransfer Request { get; set; }                //Строка запроса, созданная по правилам RequestOption.
         public ResponseTransfer Response { get; set; }              //Строка ответа, созданная по правилам ResponseOption.
-
-
-        //public string StringRequest { get; set; }                   //Строка запроса, созданная по правилам RequestOption.
-        //public string StringResponse { get; set; }                  //Строка ответа, созданная по правилам ResponseOption.
-        //public int BodyLenght { get; set; }                         //Размер тела запроса todo: НЕ ИСПОЛЬЗУЕТСЯ ???
-        //public RequestOption RequestOption { get; set; }            //Запрос.
-        //public ResponseOption ResponseOption { get; set; }          //Ответ.
-
     }
 
 
@@ -38,7 +29,16 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         public StringRepresentation StrRepresentBase { get; set; }             //Строковое представление данных, созданная по правилам Option (В ФОРМАТЕ ИЗ Option).
         public StringRepresentation StrRepresent { get; set; }                 //Строковое представление данных, созданная по правилам Option (ВОЗМОЖНО В ИЗМЕНЕННОМ ФОРМАТЕ)
 
-        public bool EqualStrRepresent => StrRepresent.Equals(StrRepresentBase); //TODO: StringRepresentation реализовать IEquable
+        public bool EqualStrRepresent
+        {
+            get
+            {
+                var compareLogic = new CompareLogic();
+                var result = compareLogic.Compare(StrRepresentBase, StrRepresent);
+                return result.AreEqual;
+            }
+        }
+
         #endregion
 
 
@@ -97,6 +97,9 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
     }
 
 
+    /// <summary>
+    /// Строка в формате представления
+    /// </summary>
     public class StringRepresentation
     {
         public string Str { get;  }

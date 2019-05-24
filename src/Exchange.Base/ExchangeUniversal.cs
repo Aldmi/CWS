@@ -488,9 +488,10 @@ namespace Exchange.Base
 
             var responseInfo = response.ResponsesItems.Select(item => new
             {
-                viewRuleId = $"RuleName= {item.MessageDict["RuleName"]}  viewRule.Id= {item.MessageDict["viewRule.Id"]}",
+                Rule = $"RuleName= {item.MessageDict["RuleName"]}  viewRule.Id= {item.MessageDict["viewRule.Id"]}",
                 StatusStr = item.StatusStr,
-                StringRequest = item.MessageDict["GetDataByte.StringRequest"],
+                Request = item.MessageDict["GetDataByte.Request"],
+                RequestBase = item.MessageDict["GetDataByte.RequestBase"],
                 StringResponseRef = item.MessageDict.ContainsKey("SetDataByte.StringResponse") ? item.MessageDict["SetDataByte.StringResponse"] : null,
                 TimeResponse = item.MessageDict["TimeResponse"]
             }).ToList();
