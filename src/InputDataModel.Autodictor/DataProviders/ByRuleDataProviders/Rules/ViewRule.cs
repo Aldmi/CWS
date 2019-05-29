@@ -173,7 +173,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             };
 
             //ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.-------------------------------------------------------------------------------
-            var response = CreateStringResponse(); //TODO: ОТЛАВДИТЬ
+            var response = CreateStringResponse();
 
             return new ViewRuleTransferWrapper
             {
@@ -325,7 +325,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 ["rowNumber"] = currentRow
             };
             //ВСТАВИТЬ ПЕРЕМЕННЫЕ ИЗ СЛОВАРЯ В body
-            var resStr = HelpersString.StringTemplateInsert(body, dict);
+            var resStr = HelperString.StringTemplateInsert(body, dict);
             return resStr;
         }
 
@@ -467,7 +467,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 ["AddressDevice"] =  int.TryParse(_addressDevice, out var address) ? address : 0
             };
             //ВСТАВИТЬ ПЕРЕМЕННЫЕ ИЗ СЛОВАРЯ В body
-            var resStr = HelpersString.StringTemplateInsert(str, dict);
+            var resStr = HelperString.StringTemplateInsert(str, dict);
             return resStr;
         }
 

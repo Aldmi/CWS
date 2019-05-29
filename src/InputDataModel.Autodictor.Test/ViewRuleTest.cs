@@ -113,7 +113,7 @@ namespace InputDataModel.Autodictor.Test
                 "HEX",
                 "0246463038254130373741434B454103"
             },
-            //Тест вставки в строковые переменные [3^100][10^25]
+            //Тест вставки в строковые переменные ArrayCharInseart [3^100][10^25]
             new object[]
             {
                 new List<AdInputType>
@@ -135,7 +135,7 @@ namespace InputDataModel.Autodictor.Test
                     Format = "Windows-1251",
                     MaxBodyLenght = 245,
                     Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
-                    Body = "010C60EF03B0470000001E%110406NNNNN{Note:[3^100][10^25]}%10{Addition:[0^GGG][5^FFF]}{TDepart:t}",  //[3^0x09][10^0x09]
+                    Body = "010C60EF03B0470000001E%110406NNNNN{Note: ArrayCharInseart [3^100][10^25]}%10{Addition: ArrayCharInseart [0^GGG][5^FFF]}{TDepart:t}",  //[3^0x09][10^0x09]
                     Footer = "{CRCXorInverse:X2}\u0003"
                 },
                 new ResponseOption
@@ -146,6 +146,42 @@ namespace InputDataModel.Autodictor.Test
                 },
                 "Windows-1251",
                 "\u0002096C010C60EF03B0470000001E%110406NNNNNСо 100всем25и остановками кроме: Узуново, Ожерелье%10GGGДоFFFполнение11:529B\u0003",
+                "HEX",
+                "0246463038254130373741434B454103"
+            },
+            //Тест вставки в строковые переменные EndLineCharInseart [3^100][10^25]
+            new object[]
+            {
+                new List<AdInputType>
+                {
+                    new AdInputType
+                    {
+                        Id = 1,
+                        Lang = Lang.Ru,
+                        PathNumber = "5",
+                        NumberOfTrain = "245",
+                        ArrivalTime = DateTime.Parse("10:20"),
+                        DepartureTime = DateTime.Parse("11:52"),
+                        Addition = new Addition {NameRu = "Дополнение"},
+                        Note = new Note{NameRu = "Со всеми остановками кроме: Узуново, Ожерелье"}
+                    }
+                },
+                new RequestOption
+                {
+                    Format = "Windows-1251",
+                    MaxBodyLenght = 245,
+                    Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                    Body = "010C60EF03B0470000001E%110406NNNNN{Note: EndLineCharInseart [15^HHH]}%10{Addition}{TDepart:t}",
+                    Footer = "{CRCXorInverse:X2}\u0003"
+                },
+                new ResponseOption
+                {
+                    Format = "HEX",
+                    Lenght = 16,
+                    Body = "0246463038254130373741434B454103",
+                },
+                "Windows-1251",
+                "\u0002096A010C60EF03B0470000001E%110406NNNNNСо всемиHHHостановкамиHHHкроме:HHHУзуново,HHHОжерелье %10Дополнение11:528E\u0003",
                 "HEX",
                 "0246463038254130373741434B454103"
             }
