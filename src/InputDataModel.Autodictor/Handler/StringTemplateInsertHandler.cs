@@ -157,9 +157,8 @@ namespace InputDataModel.Autodictor.Handler
         }
 
 
-        private  string EndLineCharInseartCalc(string str, int lenghtLine, string endLineChar)
+        private static string EndLineCharInseartCalc(string str, int lenghtLine, string endLineChar)
         {
-
             List<string> resultList = new List<string>();
             var wordChanks = str.Split(' ');
             var sumWord = new StringBuilder();
@@ -172,6 +171,7 @@ namespace InputDataModel.Autodictor.Handler
                     string endedLine;
                     if (sumWord.Length == 0)                               //Единичное слово слишком длинное, endLineChar вставляется в него
                     {
+                        word = word.Insert(word.Length, " ");              //Вставить пробел после длинного слова
                         endedLine = word.Insert(lenghtLine, endLineChar);
                     }
                     else
@@ -184,17 +184,17 @@ namespace InputDataModel.Autodictor.Handler
                 }
                 else
                 {
-                    sumWord.Append(word).Append(" ");                      //Сумировать строку                 
+                    sumWord.Append(word).Append(" ");                      //Сумировать слова в строку через пробел                 
                 }
             }
 
-            if (sumWord.Length != 0)                                  //Последняя накопленная строка добавляется как есть (без endLineChar в конце)
+            if (sumWord.Length != 0)                                       //Последняя накопленная строка добавляется как есть (без endLineChar в конце)
             {
                 resultList.Add(sumWord.ToString());
             }
 
             var res = resultList.Aggregate((a, b) => a + b);
-            return res;
+            return res.TrimEnd(' ');                                      //Убрать пробелы в конце строки результата
         }
 
 

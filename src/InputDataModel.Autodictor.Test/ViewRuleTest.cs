@@ -214,7 +214,7 @@ namespace InputDataModel.Autodictor.Test
             }
         };
 
-    #endregion
+        #endregion
 
 
 
@@ -253,10 +253,10 @@ namespace InputDataModel.Autodictor.Test
             var requestString = firstTransfer?.Request.StrRepresent.Str;
             var requestFormat = firstTransfer?.Request.StrRepresent.Format;
 
-            var responseString= firstTransfer?.Response.StrRepresent.Str;
+            var responseString = firstTransfer?.Response.StrRepresent.Str;
             var responseFormat = firstTransfer?.Response.StrRepresent.Format;
-            var responseLenght = (responseFormat  == "HEX") ? (firstTransfer?.Response.Option.Lenght * 2) : firstTransfer?.Response.Option.Lenght; 
-         
+            var responseLenght = (responseFormat == "HEX") ? (firstTransfer?.Response.Option.Lenght * 2) : firstTransfer?.Response.Option.Lenght;
+
 
             //Asssert
             firstTransfer.Should().NotBeNull();
