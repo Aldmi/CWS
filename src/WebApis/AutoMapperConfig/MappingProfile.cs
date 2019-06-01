@@ -71,8 +71,8 @@ namespace WebApiSwc.AutoMapperConfig
                 }))
                 .ForMember(dest => dest.ArrivalTime, opt => opt.MapFrom(src => ConvertString2DataTime(src.RecDateTime)))
                 .ForMember(dest => dest.DepartureTime, opt => opt.MapFrom(src => ConvertString2DataTime(src.SndDateTime)))
-                .ForMember(dest => dest.DelayTime, opt => opt.MapFrom(src => ConvertString2DataTimeMinute(src.LateTime)))
-                .ForMember(dest => dest.ExpectedTime, opt => opt.MapFrom(src => ConvertString2DataTimeMinute(src.ExpectedTime) ?? DateTime.MinValue))
+                .ForMember(dest => dest.DelayTime, opt => opt.MapFrom(src => ConvertString2DataTime(src.LateTime)))
+                .ForMember(dest => dest.ExpectedTime, opt => opt.MapFrom(src => ConvertString2DataTime(src.ExpectedTime) ?? DateTime.MinValue))
                 .ForMember(dest => dest.StopTime, opt => opt.MapFrom(src => ConvertString2TimeSpan(src.HereDateTime)))
                 .ForMember(dest => dest.Addition, opt => opt.MapFrom(src => new Addition
                 {

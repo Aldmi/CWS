@@ -159,6 +159,15 @@ namespace InputDataModel.Autodictor.Handler
 
         private static string EndLineCharInseartCalc(string str, int lenghtLine, string endLineChar)
         {
+            //DEBUG--ХАРДКОРНО ОГРАНИЧИМ ДЛИННУ СТРОКИ----------------------------------
+            //var maxStrLenght = 150;
+            //if (str.Length > maxStrLenght)
+            //{
+            //    var removeLenght = str.Length - maxStrLenght;
+            //    str = str.Substring(0, str.Length - removeLenght);
+            //}
+            //DEBUG----------------------------------------
+
             List<string> resultList = new List<string>();
             var wordChanks = str.Split(' ');
             var sumWord = new StringBuilder();

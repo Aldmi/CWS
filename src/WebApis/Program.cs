@@ -20,9 +20,9 @@ namespace WebApiSwc
         public static void ViewVersionOnConsole()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            const string version = "CWS Ver2.0";
+            const string version = "CWS Ver2.2";
             Console.Title = version;
-            Console.WriteLine($"{version}  [{DateTime.Today:U}]  [Add ArrayCharInseart and EndLineCharInseart by string inseart value handler]");
+            Console.WriteLine($"{version}  [{DateTime.Today:U}]  [Add new Rule variables ExpectedTime, DelayTime]");
         }
 
 
