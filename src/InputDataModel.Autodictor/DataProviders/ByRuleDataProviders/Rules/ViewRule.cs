@@ -292,6 +292,15 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var stations = CreateStationsStr(uit, lang);
             var stationsCut = CreateStationsCutStr(uit, lang);
             var note = uit.Note?.GetName(lang);
+            //DEBUG------Костыль по ограничению------
+            var noteStr = string.IsNullOrEmpty(note) ? " " : note;
+            if (noteStr.Length > 100)
+            {
+                noteStr = "Информация об остановках передается по громкоговорящей связи";
+            }
+            var stationsCutStr = string.IsNullOrEmpty(stationsCut) ? "ПОСАДКИ НЕТ" : stationsCut;
+            //DEBUG------
+
             var daysFollowing = uit.DaysFollowing?.GetName(lang);
             var daysFollowingAlias = uit.DaysFollowing?.GetNameAlias(lang);
             var arrivalTime = uit.ArrivalTime ?? DateTime.MinValue;
@@ -309,10 +318,10 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 [nameof(uit.Event)] = string.IsNullOrEmpty(eventTrain) ? " " : eventTrain,
                 [nameof(uit.Addition)] = string.IsNullOrEmpty(addition) ? " " : addition,
                 ["Stations"] = string.IsNullOrEmpty(stations) ? " " : stations,
-                ["StationsCut"] = string.IsNullOrEmpty(stationsCut) ? " " : stationsCut,
+                ["StationsCut"] = stationsCutStr,//string.IsNullOrEmpty(stationsCut) ? " " : stationsCut,
                 [nameof(uit.StationArrival)] = uit.StationArrival?.GetName(lang) ?? " ",
                 [nameof(uit.StationDeparture)] = uit.StationDeparture?.GetName(lang) ?? " ",
-                [nameof(uit.Note)] = string.IsNullOrEmpty(note) ? " " : note,
+                [nameof(uit.Note)] = noteStr,//string.IsNullOrEmpty(note) ? " " : note,
                 ["DaysFollowing"] = string.IsNullOrEmpty(daysFollowing) ? " " : daysFollowing,
                 ["DaysFollowingAlias"] = string.IsNullOrEmpty(daysFollowingAlias) ? " " : daysFollowingAlias,
                 [nameof(uit.DelayTime)] = uit.DelayTime ?? DateTime.MinValue,
