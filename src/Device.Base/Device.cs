@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Autofac.Features.OwnedInstances;
 using Confluent.Kafka;
 using DAL.Abstract.Entities.Options.Device;
+using DeviceForExchange.MiddleWares;
 using Exchange.Base;
 using Exchange.Base.Model;
 using Exchange.Base.RxModel;
@@ -43,6 +45,7 @@ namespace DeviceForExchange
 
         public DeviceOption Option { get;  }
         public List<IExchange<TIn>> Exchanges { get; }
+        public MiddleWareInData<TIn> MiddleWareInData { get; }
         public string TopicName4MessageBroker { get; set; }
 
         #endregion
@@ -57,11 +60,14 @@ namespace DeviceForExchange
                       IEventBus eventBus,
                       Func<ProduserOption, Owned<IProduser>> produser4DeviceRespFactory,
                       ProduserOption produser4DeviceOption,
+                      MiddleWareInData<TIn> middleWareInData,
                       ILogger logger)
         {
             Option = option;
             Exchanges = exchanges.ToList();
             _eventBus = eventBus;
+            MiddleWareInData = middleWareInData;
+            MiddleWareInData?.OutputReadyRx.Subscribe(OutputReadyRxEventHandler);
             _logger = logger;
 
             var produserOwner = produser4DeviceRespFactory(produser4DeviceOption);
@@ -125,6 +131,46 @@ namespace DeviceForExchange
             _disposeExchangesCycleDataEntryStateEventHandlers.ForEach(d => d.Dispose());
         }
 
+
+
+
+        //DEBUG ФУНКЦИЯ ДЛЯ МИДЛЕВАРЕ---------------------------------------------------
+        /// <summary>
+        /// Принять данные для УСТРОЙСТВА.
+        /// Данные будут переданны напрямую на обмены или в конвеер MiddleWare 
+        /// </summary>
+        /// <param name="inData">входные данные в обертке</param>
+        public async Task Resive(InputData<TIn> inData)
+        {
+            if (MiddleWareInData != null)
+            {
+                await MiddleWareInData.InputSet(inData);
+            }
+            else
+            {
+               await ResiveInExchange(inData);
+            }
+        }
+
+
+        private async Task ResiveInExchange(InputData<TIn> inData)
+        {
+            if (string.IsNullOrEmpty(inData.ExchangeName))
+            {
+                await Send2AllExchanges(inData.DataAction, inData.Data, inData.Command);
+            }
+            else
+            {
+                await Send2ConcreteExchanges(inData.ExchangeName, inData.DataAction, inData.Data, inData.Command, inData.DirectHandlerName);
+            }
+        }
+
+
+        private async void OutputReadyRxEventHandler(InputData<TIn> inData)
+        {
+            await ResiveInExchange(inData);
+        }
+        //---------------------------------------------------
 
 
 

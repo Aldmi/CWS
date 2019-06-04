@@ -463,7 +463,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var stations = string.Empty;
             if (!string.IsNullOrEmpty(stArrival) && !string.IsNullOrEmpty(stDepart))
             {
-                stations = $"{stArrival}-{stDepart}";
+                stations = $"{stDepart}-{stArrival}";
             }
             return stations;
         }

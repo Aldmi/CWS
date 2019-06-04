@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DAL.Abstract.Entities.Options.MiddleWare;
 
 namespace DAL.Abstract.Entities.Options.Device
 {
@@ -10,5 +11,6 @@ namespace DAL.Abstract.Entities.Options.Device
         public bool AutoBuild { get; set; }                         //Автоматичекое создание Deivice на базе DeviceOption, при запуске сервиса.
         //public bool AutoStart{ get; set; }                       //Автоматичекий запук Deivice в работу (после AutoBuild), при запуске сервиса.
         public List<string> ExchangeKeys { get; set; }
+        public MiddleWareInDataOption MiddleWareInDataOption { get; set; }
     }
 }
