@@ -215,7 +215,7 @@ namespace BL.Services.Mediators
 
             //ДОБАВИТЬ УСТРОЙСТВО--------------------------------------------------------------------------
             var excanges = _exchangeStorageService.GetMany(deviceOption.ExchangeKeys).ToList();
-            var middleWareInData = new MiddleWareInData<TIn>(deviceOption.MiddleWareInDataOption, _logger);
+            var middleWareInData = deviceOption.MiddleWareInDataOption == null ? null : new MiddleWareInData<TIn>(deviceOption.MiddleWareInDataOption, _logger);
             var device = new Device<TIn>(deviceOption, excanges, _eventBus, _produser4DeviceRespFactory, _appConfigWrapper.GetProduser4DeviceOption, middleWareInData, _logger);
             _deviceStorageService.AddNew(device.Option.Name, device);
 

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Subjects;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using DAL.Abstract.Entities.Options.MiddleWare;
-using DeviceForExchange.MiddleWares.Handlers;
+using DeviceForExchnage.Benchmark.Shared.Handlers;
 using InputDataModel.Base;
 using Serilog;
+using Timer = System.Timers.Timer;
 
-namespace DeviceForExchange.MiddleWares
+namespace DeviceForExchnage.Benchmark.ParallelHandlers
 {
     /// <summary>
     /// Промежуточный обработчик входных данных.
@@ -67,7 +68,7 @@ namespace DeviceForExchange.MiddleWares
                 case InvokerOutputMode.Instantly:
                     //Обработка в конвеере данных.
                     HandleInvoke(inData.Data);
-                    InvokeReadyRx.OnNext(_buferInData);
+          
                     break;
             }
             
@@ -93,6 +94,7 @@ namespace DeviceForExchange.MiddleWares
                     var res = stringHandler.Convert(str);
                     str = res; //перезаписали занчение свойства
                     note = str;
+                    Thread.Sleep(1); //DEBUG эмуляция проц
                 });
                 
 
@@ -119,14 +121,7 @@ namespace DeviceForExchange.MiddleWares
 
 
 
-        #region RxEvent
 
-        /// <summary>
-        /// Выходные данные функции
-        /// </summary>
-        public ISubject<InputData<TIn>> InvokeReadyRx { get; } = new Subject<InputData<TIn>>();    //СОБЫТИЕ Готовности выходных данных после обработки
-
-        #endregion
 
 
 
@@ -136,7 +131,7 @@ namespace DeviceForExchange.MiddleWares
         {
             //Обработка в конвеере данных.
             HandleInvoke(_buferInData.Data);
-            InvokeReadyRx.OnNext(_buferInData);
+
         }
 
         #endregion

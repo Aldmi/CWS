@@ -3,9 +3,14 @@ using Autofac;
 using AutoMapper;
 using BL.Services.Mediators;
 using BL.Services.Storages;
+using DAL.Abstract.Entities.Options.MiddleWare;
+using DAL.Abstract.Entities.Options.MiddleWare.Hadlers;
+using DAL.Abstract.Entities.Options.MiddleWare.Hadlers.StringConvertersOption;
+using DeviceForExchange.MiddleWares;
 using Exchange.Base;
 using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
+using InputDataModel.Base;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Events;
 using Transport.SerialPort.Abstract;
@@ -73,18 +78,86 @@ namespace WebApiSwc.Controllers
         [HttpGet]
         
         // public IEnumerable<InputData<AdInputType>> Get()
-        public AdInputType Get()
+        public MiddleWareInDataOption Get()
         {
-            var adInputType= new AdInputType
+            MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
             {
-                PathNumber = "5",
-                Note = new Note { NameRu = "Примечание" },
-                Event = new EventTrain() {NameRu = "Прибытие", Num = 0}
+                Id = 1,
+                Description = "Преобразование Note",
+                StringHandlers = new List<StringHandlerMiddleWareOption>
+                {
+                    new StringHandlerMiddleWareOption
+                    {
+                        PropName = "Note",
+                        LimitStringConverterOption = new LimitStringConverterOption
+                        {
+                            Limit = 10
+                        },
+                        InseartStringConverterOption = new InseartStringConverterOption
+                        {
+                            InseartDict = new Dictionary<int, string>
+                            {
+                                {5, "0x09" },
+                                {10, "0x09" },
+                            }
+                        }
+                    },
+                    new StringHandlerMiddleWareOption
+                    {
+                        PropName = "StationDeparture",
+                        ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOption
+                        {
+                            ReplacementString = "Посадки нет"
+                        }
+                    }
+                },
+                InvokerOutput = new InvokerOutput
+                {
+                    Mode = InvokerOutputMode.Instantly
+                }
             };
+
+
+            var middleWareinData = new MiddleWareInData<AdInputType>(middleWareInDataOption, null);
+
+
+
+            //Эмуляция передачи входнвх данных---------------------------------
+            var inData = new InputData<AdInputType>()
+            {
+                Command = Command4Device.None,
+                DataAction = DataAction.CycleAction,
+                DeviceName = "Peron.P1",
+                DirectHandlerName = null,
+                ExchangeName = "Exch Peron.P1",
+                Data = new List<AdInputType>
+                {
+                    new AdInputType
+                    {
+                        Id =1,
+                        Note = new Note
+                        {
+                            NameRu = "Со всеми станциями кроие: Волочаевская, Климская"
+                        }
+                    }
+                }
+
+            };
+            middleWareinData.InputSet(inData).Wait();
+
+            return middleWareInDataOption;
+
+
+            //var adInputType= new AdInputType
+            //{
+            //    PathNumber = "5",
+            //    Note = new Note { NameRu = "Примечание" },
+            //    Event = new EventTrain() {NameRu = "Прибытие", Num = 0}
+            //};
 
       
 
-            return adInputType;
+            //return adInputType;
 
 
             //var user = new User() {Name = "dsfdsdfsfsdgdfgh"};

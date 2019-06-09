@@ -1,22 +1,17 @@
 ﻿using System.Collections.Generic;
 using DAL.Abstract.Entities.Options.MiddleWare.Hadlers;
-using SerilogTimings;
 
 namespace DAL.Abstract.Entities.Options.MiddleWare
 {
     public class MiddleWareInDataOption : EntityBase
     {
-        public string Name { get; set; }
+        public string Description { get; set; }
 
-        List<StringHandlerMiddleWareOption> StringHandlers { get; set; }
-        List<DateTimeHandlerMiddleWareOption> DateTimeHandlers { get; set; }
+        public List<StringHandlerMiddleWareOption> StringHandlers { get; set; }
+        public List<DateTimeHandlerMiddleWareOption> DateTimeHandlers { get; set; }
 
         public InvokerOutput InvokerOutput { get; set; }
     }
-
-
-
-
 
 
 

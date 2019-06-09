@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Autofac.Features.OwnedInstances;
 using Confluent.Kafka;
@@ -67,7 +66,7 @@ namespace DeviceForExchange
             Exchanges = exchanges.ToList();
             _eventBus = eventBus;
             MiddleWareInData = middleWareInData;
-            MiddleWareInData?.OutputReadyRx.Subscribe(OutputReadyRxEventHandler);
+            MiddleWareInData?.InvokeReadyRx.Subscribe(OutputReadyRxEventHandler);
             _logger = logger;
 
             var produserOwner = produser4DeviceRespFactory(produser4DeviceOption);

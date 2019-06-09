@@ -1,27 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Subjects;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using DAL.Abstract.Entities.Options.MiddleWare;
-using DeviceForExchange.MiddleWares.Handlers;
+using DeviceForExchnage.Benchmark.Shared.Handlers;
 using InputDataModel.Base;
 using Serilog;
 
-namespace DeviceForExchange.MiddleWares
+namespace DeviceForExchnage.Benchmark.NotParallel
 {
     /// <summary>
     /// Промежуточный обработчик входных данных.
     /// Сервис является иммутабельным. Он создается на базе MiddleWareInDataOption и его State не меняется
     /// </summary>
     /// <typeparam name="TIn">Входные данные для обработки</typeparam>
-    public class MiddleWareInData<TIn> : IDisposable
+    public class MiddleWareInData<TIn> 
     {
         private readonly MiddleWareInDataOption _option;
         private readonly ILogger _logger;
         private InputData<TIn> _buferInData;
-        private readonly Timer _timerHandleInvoke;
+    
 
 
 
@@ -44,8 +43,7 @@ namespace DeviceForExchange.MiddleWares
             StringHandlers= option.StringHandlers?.Select(handler => new StringHandlerMiddleWare(handler)).ToList();
             DateTimeHandlers = option.DateTimeHandlers?.Select(handler => new DateTimeHandlerMiddleWare(handler)).ToList();
 
-            _timerHandleInvoke = new Timer();
-            _timerHandleInvoke.Elapsed += TimerElapsed;
+
             StartTimer();
         }
 
@@ -67,7 +65,7 @@ namespace DeviceForExchange.MiddleWares
                 case InvokerOutputMode.Instantly:
                     //Обработка в конвеере данных.
                     HandleInvoke(inData.Data);
-                    InvokeReadyRx.OnNext(_buferInData);
+          
                     break;
             }
             
@@ -80,21 +78,21 @@ namespace DeviceForExchange.MiddleWares
         /// <param name="datas"></param>
         private void HandleInvoke(IEnumerable<TIn> datas)
         {
-            //TODO: продумать паралельную обработку
             foreach (var data in datas)
             {
                 //ОБРАБОТЧИКИ String
-
                 string note = null;//DEBUG
-                Parallel.ForEach(StringHandlers, (stringHandler) =>
+
+                foreach (var stringHandler in StringHandlers)
                 {
                     var propName = stringHandler.PropName;
                     var str = "Начальная строка"; //Найденное свойство
                     var res = stringHandler.Convert(str);
                     str = res; //перезаписали занчение свойства
                     note = str;
-                });
-                
+                    Thread.Sleep(1); //DEBUG эмуляция процесса преобразования
+                }
+
 
                 //ОБРАБОТЧИКИ DateTime
                 //foreach (var dateTimeHandler in DateTimeHandlers)
@@ -109,8 +107,7 @@ namespace DeviceForExchange.MiddleWares
         {
             if (_option.InvokerOutput.Mode == InvokerOutputMode.ByTimer)
             {
-                _timerHandleInvoke.Interval = _option.InvokerOutput.Time;
-                _timerHandleInvoke.Start();
+               
             }
         }
 
@@ -119,14 +116,7 @@ namespace DeviceForExchange.MiddleWares
 
 
 
-        #region RxEvent
 
-        /// <summary>
-        /// Выходные данные функции
-        /// </summary>
-        public ISubject<InputData<TIn>> InvokeReadyRx { get; } = new Subject<InputData<TIn>>();    //СОБЫТИЕ Готовности выходных данных после обработки
-
-        #endregion
 
 
 
@@ -136,7 +126,7 @@ namespace DeviceForExchange.MiddleWares
         {
             //Обработка в конвеере данных.
             HandleInvoke(_buferInData.Data);
-            InvokeReadyRx.OnNext(_buferInData);
+
         }
 
         #endregion
@@ -144,13 +134,6 @@ namespace DeviceForExchange.MiddleWares
 
 
 
-        #region Disposable
 
-        public void Dispose()
-        {
-            _timerHandleInvoke?.Dispose();
-        }
-
-        #endregion
     }
 }
