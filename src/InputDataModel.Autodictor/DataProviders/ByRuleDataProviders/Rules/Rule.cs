@@ -38,18 +38,16 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
 
 
-
         #region Methods
 
         public RuleOption GetCurrentOption()
         {
             var ruleOption = Option;
-            var currentViewRuleOptions= _viewRules.Select(vr => vr.GetCurrentOption());
+            var currentViewRuleOptions= _viewRules.Select(vr => vr.GetCurrentOption);
             ruleOption.ViewRules = new List<ViewRuleOption>(currentViewRuleOptions);
             return ruleOption;
         }
 
         #endregion
-
     }
 }

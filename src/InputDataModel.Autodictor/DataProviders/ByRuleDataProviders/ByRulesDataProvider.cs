@@ -253,7 +253,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
                         _current = request;
                         InputData = new InDataWrapper<AdInputType> { Datas = _current.BatchedData.ToList() };
-                        StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption().Id}";
+                        StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption.Id}";
                         StatusDict["Request.BodyLenght"] = $"{_current.Request.BodyLenght}";
                         RaiseSendDataRx.OnNext(this);
                     }
@@ -272,7 +272,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             InputData = new InDataWrapper<AdInputType> { Command = command };
             StatusDict["Command"] = $"{command}";
             StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
-            StatusDict["viewRule.Id"] = $"{commandViewRule.GetCurrentOption().Id}";
+            StatusDict["viewRule.Id"] = $"{commandViewRule.GetCurrentOption.Id}";
             RaiseSendDataRx.OnNext(this);
         }
 

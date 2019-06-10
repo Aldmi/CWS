@@ -24,8 +24,9 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
         #region fields
 
         private readonly string _addressDevice;
-        private ViewRuleOption _option;
+        private readonly ViewRuleOption _option;
         private readonly ILogger _logger;
+        private readonly HelperStringTemplateInsert _helperStringTemplateInsert;
 
         #endregion
 
@@ -38,38 +39,20 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             _addressDevice = addressDevice;
             _option = option;
             _logger = logger;
+            _helperStringTemplateInsert= new HelperStringTemplateInsert();
         }
 
         #endregion
 
 
 
-        #region MutabeleOptions
 
-        public ViewRuleOption GetCurrentOption()
-        {
-            return _option;
-        }
+        #region prop
 
-
-        public void SetCurrentOption(ViewRuleOption viewRuleOption)
-        {
-            //Копирование мутабельных параметров (DymamicFormat - выставляемый )
-            //var requestDymamicFormat = _option.RequestOption.GetDymamicFormat;
-            //var responseDymamicFormat = _option.ResponseOption.GetDymamicFormat;
-            //if (requestDymamicFormat != null)
-            //{
-            //    viewRuleOption.RequestOption.SwitchFormat(requestDymamicFormat);
-            //}
-            //if (responseDymamicFormat != null)
-            //{
-            //    viewRuleOption.ResponseOption.SwitchFormat(responseDymamicFormat);
-            //}
-
-            _option = viewRuleOption;
-        }
+        public ViewRuleOption GetCurrentOption => _option;
 
         #endregion
+
 
 
 
@@ -94,7 +77,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 {
                     var startItemIndex = _option.StartPosition + (numberOfBatch++ * _option.BatchSize);
 
-                    //TODO: РЕАЛИЗАЦИЯ СПИСКА ЗАПРОС/ОТВЕТ ДЛЯ КАЖДОГО ViewRule (SendingUnitList)
+                    #region РЕАЛИЗАЦИЯ СПИСКА ЗАПРОС/ОТВЕТ ДЛЯ КАЖДОГО ViewRule (SendingUnitList)
+
                     //1. requestOption и responseOption обернуть в тип SendingUnit
                     //2. ViewRule хранит List<SendingUnit> SendingUnitList
                     //foreach (var sendingUnit in _option.SendingUnitList)
@@ -118,11 +102,22 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                     //        ResponseOption = _option.ResponseOption
                     //    };
                     //}
+                    #endregion
 
-                    var request = CreateStringRequest(batch, startItemIndex);
-                    var response = CreateStringResponse();
-                    if (request == null)
+                    RequestTransfer request;
+                    ResponseTransfer response;
+                    try
+                    {
+                        request = CreateStringRequest(batch, startItemIndex);
+                        if (request == null)
+                            continue;
+                        response = CreateStringResponse();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Error($"Ошибка формирования запроса или ответа ViewRuleId= {_option.Id}    {ex}");
                         continue;
+                    }
 
                     yield return new ViewRuleTransferWrapper
                     {
@@ -338,7 +333,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 ["rowNumber"] = currentRow
             };
             //ВСТАВИТЬ ПЕРЕМЕННЫЕ ИЗ СЛОВАРЯ В body
-            var resStr = HelperString.StringTemplateInsert(body, dict);
+            var resStr = _helperStringTemplateInsert.StringTemplateInsert(body, dict);
             return resStr;
         }
 
@@ -480,7 +475,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
                 ["AddressDevice"] =  int.TryParse(_addressDevice, out var address) ? address : 0
             };
             //ВСТАВИТЬ ПЕРЕМЕННЫЕ ИЗ СЛОВАРЯ В body
-            var resStr = HelperString.StringTemplateInsert(str, dict);
+            var resStr = _helperStringTemplateInsert.StringTemplateInsert(str, dict);
             return resStr;
         }
 

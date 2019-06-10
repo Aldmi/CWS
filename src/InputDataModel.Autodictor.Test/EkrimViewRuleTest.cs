@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using FluentAssertions;
 using InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules;
@@ -9,11 +8,7 @@ using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
 using Moq;
 using Serilog;
-using Shared.CrcCalculate;
-using Shared.Extensions;
-using Shared.Helpers;
 using Xunit;
-using Xunit.Priority;
 
 namespace InputDataModel.Autodictor.Test
 {

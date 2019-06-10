@@ -5,22 +5,18 @@ using System.Text;
 using System.Text.RegularExpressions;
 using NCalc;
 
-namespace InputDataModel.Autodictor.Handler
+namespace Shared.Helpers
 {
-    /// <summary>
-    /// Севрис предоставляет функции работы со строковым ШАБЛОНОМ.
-    /// ШАБЛОН используется в ByRuleProvider
-    /// </summary>
-    public class StringTemplateInsertHandler
+    public class HelperStringTemplateInsert
     {
         /// <summary>
         /// Вставка переменных (по формату) в строку по шаблону. 
         /// </summary>
         /// <param name="template">базовая строка с местозаполнителем</param>
         /// <param name="dict">словарь переменных key= название переменной val= значение</param>
-        /// <param name="pattern">Как выделить переменную и ее формат, по умолчанию {val:format}</param>
+        /// <param name="pattern">Как выдедить переменную и ее формат, по умолчанию {val:format}</param>
         /// <returns></returns>
-        public string StringTemplateInsert(string template, Dictionary<string, object> dict, string pattern = @"\{(.*?)(:.+?)?\}")
+        public  string StringTemplateInsert(string template, Dictionary<string, object> dict, string pattern = @"\{(.*?)(:.+?)?\}")
         {
             string Evaluator(Match match)
             {
@@ -49,7 +45,6 @@ namespace InputDataModel.Autodictor.Handler
                 else
                 if (key.Contains("rowNumber"))
                 {
-                    //TODO: использовать подставновску RowNumber
                     var replacement = dict["rowNumber"];
                     var calcVal = CalculateMathematicFormat(key, (int)replacement);
                     var formatValue = match.Groups[2].Value;
@@ -106,7 +101,7 @@ namespace InputDataModel.Autodictor.Handler
         }
 
 
-        private  string ArrayCharInseart(string str, IEnumerable<string> options)
+        private string ArrayCharInseart(string str, IEnumerable<string> options)
         {
             try
             {
@@ -134,7 +129,7 @@ namespace InputDataModel.Autodictor.Handler
         }
 
 
-        private  string EndLineCharInseart(string str, string option)
+        private string EndLineCharInseart(string str, string option)
         {
             try
             {
@@ -157,17 +152,8 @@ namespace InputDataModel.Autodictor.Handler
         }
 
 
-        private static string EndLineCharInseartCalc(string str, int lenghtLine, string endLineChar)
+        private string EndLineCharInseartCalc(string str, int lenghtLine, string endLineChar)
         {
-            //DEBUG--ХАРДКОРНО ОГРАНИЧИМ ДЛИННУ СТРОКИ----------------------------------
-            var maxStrLenght = 110;
-            if (str.Length > maxStrLenght)
-            {
-                str = "";
-                var removeLenght = str.Length - maxStrLenght;
-                str = str.Substring(0, str.Length - removeLenght);
-            }
-            //DEBUG----------------------------------------
 
             List<string> resultList = new List<string>();
             var wordChanks = str.Split(' ');
@@ -181,7 +167,6 @@ namespace InputDataModel.Autodictor.Handler
                     string endedLine;
                     if (sumWord.Length == 0)                               //Единичное слово слишком длинное, endLineChar вставляется в него
                     {
-                        word = word.Insert(word.Length, " ");              //Вставить пробел после длинного слова
                         endedLine = word.Insert(lenghtLine, endLineChar);
                     }
                     else
@@ -194,24 +179,25 @@ namespace InputDataModel.Autodictor.Handler
                 }
                 else
                 {
-                    sumWord.Append(word).Append(" ");                      //Сумировать слова в строку через пробел                 
+                    sumWord.Append(word).Append(" ");                      //Сумировать строку                 
                 }
             }
 
-            if (sumWord.Length != 0)                                       //Последняя накопленная строка добавляется как есть (без endLineChar в конце)
+            if (sumWord.Length != 0)                                  //Последняя накопленная строка добавляется как есть (без endLineChar в конце)
             {
                 resultList.Add(sumWord.ToString());
             }
 
             var res = resultList.Aggregate((a, b) => a + b);
-            return res.TrimEnd(' ');                                      //Убрать пробелы в конце строки результата
+            return res;
         }
+
 
 
         /// <summary>
         /// Обработчик времени по формату
         /// </summary>
-        private  string DateTimeStrHandler(DateTime val, string formatValue)
+        private string DateTimeStrHandler(DateTime val, string formatValue)
         {
             const string defaultStr = " ";
             if (val == DateTime.MinValue)
@@ -238,23 +224,9 @@ namespace InputDataModel.Autodictor.Handler
         }
 
 
-
-        //TODO: вынести подставновску RowNumber
-        //private string RowNumberHandler(string replacement, string formatValue)
-        //{
-        //    var replacement = dict["rowNumber"];
-        //    var calcVal = CalculateMathematicFormat(key, (int)replacement);
-        //    var formatValue = match.Groups[2].Value;
-        //    var format = "{0" + formatValue + "}";
-        //    var res = string.Format(format, calcVal);
-
-        //    return res;
-        //}
-
-
-
         /// <summary>
         /// Математическое вычисление формулы с участием переменной rowNumber
+        /// Возможно CuncurrencyException при многопоточной работе с Expression.
         /// </summary>
         private int CalculateMathematicFormat(string str, int row)
         {

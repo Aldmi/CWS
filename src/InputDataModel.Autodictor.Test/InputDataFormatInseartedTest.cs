@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using InputDataModel.Autodictor.Entities;
-using InputDataModel.Autodictor.Model;
+﻿using System.Collections.Generic;
 using Xunit;
 
 namespace InputDataModel.Autodictor.Test
