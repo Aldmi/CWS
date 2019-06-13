@@ -7,11 +7,11 @@ using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
 using InputDataModel.Base;
 
-namespace DeviceForExchnage.Benchmark.Datas
+namespace DeviceForExchnage.Test.Datas
 {
     public static class InDataSourse
     {
-        public static MiddleWareInDataOption GetmiddleWareInDataOption()
+        public static MiddleWareInDataOption GetMiddleWareInDataOption()
         {
             MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
             {
@@ -21,7 +21,7 @@ namespace DeviceForExchnage.Benchmark.Datas
                 {
                     new StringHandlerMiddleWareOption
                     {
-                        PropName = "Note",
+                        PropName = "Note.NameRu",
                         LimitStringConverterOption = new LimitStringConverterOption
                         {
                             Limit = 10
@@ -35,14 +35,14 @@ namespace DeviceForExchnage.Benchmark.Datas
                             }
                         }
                     },
-                    new StringHandlerMiddleWareOption
-                    {
-                        PropName = "StationDeparture",
-                        ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOption
-                        {
-                            ReplacementString = "Посадки нет"
-                        }
-                    }
+                    //new StringHandlerMiddleWareOption
+                    //{
+                    //    PropName = "StationDeparture",
+                    //    ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOption
+                    //    {
+                    //        ReplacementString = "Посадки нет"
+                    //    }
+                    //}
                 },
                 InvokerOutput = new InvokerOutput
                 {
@@ -50,15 +50,14 @@ namespace DeviceForExchnage.Benchmark.Datas
                 }
             };
 
-
             return middleWareInDataOption;
         }
 
 
 
-        public static InputData<AdInputType> GetData()
+        public static InputData<AdInputType> GetData(int countData)
         {
-           var datas= Enumerable.Range(0, 100).Select(i => new AdInputType
+           var datas= Enumerable.Range(0, countData).Select(i => new AdInputType
             {
                 Id = i,
                 Note = new Note

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using System.Timers;
+using CSharpFunctionalExtensions;
 using DAL.Abstract.Entities.Options.MiddleWare;
 using DeviceForExchange.MiddleWares.Handlers;
 using InputDataModel.Base;
 using Serilog;
+using Shared.ReflectionServices;
 
 namespace DeviceForExchange.MiddleWares
 {
@@ -18,10 +20,17 @@ namespace DeviceForExchange.MiddleWares
     /// <typeparam name="TIn">Входные данные для обработки</typeparam>
     public class MiddleWareInData<TIn> : IDisposable
     {
+        #region fields
+
         private readonly MiddleWareInDataOption _option;
         private readonly ILogger _logger;
         private InputData<TIn> _buferInData;
         private readonly Timer _timerHandleInvoke;
+
+        private readonly PropertyMutationsServise<string> _mutationsServiseStr = new PropertyMutationsServise<string>();    //Сервис изменения совойства типа string, по имени, через рефлексию.
+        private readonly PropertyMutationsServise<DateTime> _mutationsServiseDt = new PropertyMutationsServise<DateTime>(); //Сервис изменения совойства типа DateTime, по имени, через рефлексию.
+
+        #endregion
 
 
 
@@ -46,7 +55,7 @@ namespace DeviceForExchange.MiddleWares
 
             _timerHandleInvoke = new Timer();
             _timerHandleInvoke.Elapsed += TimerElapsed;
-            StartTimer();
+            CheckStartTimer();
         }
 
         #endregion
@@ -66,52 +75,83 @@ namespace DeviceForExchange.MiddleWares
             {
                 case InvokerOutputMode.Instantly:
                     //Обработка в конвеере данных.
-                    HandleInvoke(inData.Data);
-                    InvokeReadyRx.OnNext(_buferInData);
+                    var res=  HandleInvoke(_buferInData);
+                    InvokeReadyRx.OnNext(res);
                     break;
             }
             
             await Task.CompletedTask;
         }
 
+
         /// <summary>
         /// Вызов обработчиков для преобразования данных
         /// </summary>
-        /// <param name="datas"></param>
-        private void HandleInvoke(IEnumerable<TIn> datas)
+        private Result<InputData<TIn>> HandleInvoke(InputData<TIn> inData)
         {
-            //TODO: продумать паралельную обработку
-            foreach (var data in datas)
+            string error;
+            var errors = new List<string>();
+            Parallel.ForEach(inData.Data, (data) =>
             {
-                //ОБРАБОТЧИКИ String
-
-                string note = null;//DEBUG
                 Parallel.ForEach(StringHandlers, (stringHandler) =>
                 {
                     var propName = stringHandler.PropName;
-                    var str = "Начальная строка"; //Найденное свойство
-                    var res = stringHandler.Convert(str);
-                    str = res; //перезаписали занчение свойства
-                    note = str;
+                    var resultGet = _mutationsServiseStr.GetPropValue(data, propName);
+                    if (resultGet.IsSuccess)
+                    {
+                        var tuple = resultGet.Value;
+                        try
+                        {
+                            var newValue = stringHandler.Convert(tuple.val); //TODO: Создать новый тип искобчений для конверторов.
+                            tuple.val = newValue;
+                            var resultSet = _mutationsServiseStr.SetPropValue(tuple);
+                            if (resultSet.IsFailure)
+                            {
+                                error =$"MiddleWareInData.HandleInvoke Ошибка установки стркового свойства.  {resultSet.Error}";
+                                errors.Add(error);
+                                //_logger.Error(error);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            error = $"MiddleWareInData.HandleInvoke Ошибка в String конверторе. {e}";
+                            errors.Add(error);
+                            //_logger.Error(error);
+                        }
+                    }
+                    else
+                    {
+                        error = $"MiddleWareInData.HandleInvoke Ошибка получения стркового свойства.  {resultGet.Error}";
+                        errors.Add(error);
+                        //_logger.Error(error);
+                    }
                 });
-                
+
 
                 //ОБРАБОТЧИКИ DateTime
                 //foreach (var dateTimeHandler in DateTimeHandlers)
                 //{
-                    
+
                 //}
+            });
+
+            return errors.Count == 0 ? Result.Ok(_buferInData) : Result.Fail<InputData<TIn>, List<string>>(errors);
+        }
+
+
+        private void CheckStartTimer()
+        {
+            if (_option.InvokerOutput.Mode == InvokerOutputMode.ByTimer)
+            {
+                StartTimer();
             }
         }
 
 
         private void StartTimer()
         {
-            if (_option.InvokerOutput.Mode == InvokerOutputMode.ByTimer)
-            {
-                _timerHandleInvoke.Interval = _option.InvokerOutput.Time;
-                _timerHandleInvoke.Start();
-            }
+            _timerHandleInvoke.Interval = _option.InvokerOutput.Time;
+            _timerHandleInvoke.Start();
         }
 
 
@@ -124,7 +164,7 @@ namespace DeviceForExchange.MiddleWares
         /// <summary>
         /// Выходные данные функции
         /// </summary>
-        public ISubject<InputData<TIn>> InvokeReadyRx { get; } = new Subject<InputData<TIn>>();    //СОБЫТИЕ Готовности выходных данных после обработки
+        public ISubject<Result<InputData<TIn>>> InvokeReadyRx { get; } = new Subject<Result<InputData<TIn>>>();    //СОБЫТИЕ Готовности выходных данных после обработки
 
         #endregion
 
@@ -135,8 +175,8 @@ namespace DeviceForExchange.MiddleWares
         private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
             //Обработка в конвеере данных.
-            HandleInvoke(_buferInData.Data);
-            InvokeReadyRx.OnNext(_buferInData);
+            var res = HandleInvoke(_buferInData);
+            InvokeReadyRx.OnNext(res);
         }
 
         #endregion

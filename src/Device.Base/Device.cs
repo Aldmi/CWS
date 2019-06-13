@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.OwnedInstances;
 using Confluent.Kafka;
+using CSharpFunctionalExtensions;
 using DAL.Abstract.Entities.Options.Device;
 using DeviceForExchange.MiddleWares;
 using Exchange.Base;
@@ -165,9 +166,14 @@ namespace DeviceForExchange
         }
 
 
-        private async void OutputReadyRxEventHandler(InputData<TIn> inData)
+        private async void OutputReadyRxEventHandler(Result<InputData<TIn>> result)
         {
-            await ResiveInExchange(inData);
+            if (result.IsSuccess)
+            {
+                var inData = result.Value; 
+                await ResiveInExchange(inData);
+            }
+            //TODO: что делать когда неудачное преобразование?
         }
         //---------------------------------------------------
 

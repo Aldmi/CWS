@@ -97,8 +97,7 @@ namespace Exchange.Base
         public ExchangeUniversal(ExchangeOption exchangeOption,
                                  ITransport transport,
                                  ITransportBackground transportBackground,
-                                 IExchangeDataProvider<TIn,
-                                 ResponseDataItem<TIn>> dataProvider,
+                                 IExchangeDataProvider<TIn, ResponseDataItem<TIn>> dataProvider,
                                  ILogger logger)
         {
             ExchangeOption = exchangeOption;

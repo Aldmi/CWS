@@ -12,7 +12,6 @@ using Xunit;
 
 namespace InputDataModel.Autodictor.Test
 {
-
     public class ViewRuleTest
     {
         private readonly ILogger _logger;

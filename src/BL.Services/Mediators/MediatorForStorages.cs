@@ -62,7 +62,7 @@ namespace BL.Services.Mediators
             BackgroundStorageService backgroundStorageService,
             TransportStorageService transportStorageService,
             IEventBus eventBus,     
-            IIndex<string, Func<ProviderOption,IExchangeDataProvider<TIn,ResponseDataItem<TIn>>>> dataProviderFactory,
+            IIndex<string, Func<ProviderOption, IExchangeDataProvider<TIn,ResponseDataItem<TIn>>>> dataProviderFactory,
             Func<ProduserOption, Owned<IProduser>> produser4DeviceRespFactory,
             AppConfigWrapper appConfigWrapper,
             ILogger logger)
