@@ -143,7 +143,7 @@ namespace WebApiSwc.Controllers
                 }
 
             };
-            middleWareinData.InputSet(inData).Wait();
+           var res= middleWareinData.HandleInvoke(inData);
 
             return middleWareInDataOption;
 

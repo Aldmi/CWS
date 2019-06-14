@@ -12,6 +12,7 @@ using DAL.Abstract.Entities.Options;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using DeviceForExchange;
 using DeviceForExchange.MiddleWares;
+using DeviceForExchange.MiddleWares.Invokes;
 using Exchange.Base;
 using Exchange.Base.DataProviderAbstract;
 using Exchange.Base.Model;
@@ -215,8 +216,14 @@ namespace BL.Services.Mediators
 
             //ДОБАВИТЬ УСТРОЙСТВО--------------------------------------------------------------------------
             var excanges = _exchangeStorageService.GetMany(deviceOption.ExchangeKeys).ToList();
-            var middleWareInData = deviceOption.MiddleWareInDataOption == null ? null : new MiddleWareInData<TIn>(deviceOption.MiddleWareInDataOption, _logger);
-            var device = new Device<TIn>(deviceOption, excanges, _eventBus, _produser4DeviceRespFactory, _appConfigWrapper.GetProduser4DeviceOption, middleWareInData, _logger);
+
+            MiddlewareInvokeService<TIn> middlewareInvokeService = null;
+            if (deviceOption.MiddleWareInDataOption != null)
+            {
+                var middleWareInData = new MiddleWareInData<TIn>(deviceOption.MiddleWareInDataOption, _logger);
+                middlewareInvokeService = new MiddlewareInvokeService<TIn>(deviceOption.MiddleWareInDataOption.InvokerOutput, middleWareInData, _logger);
+            }
+            var device = new Device<TIn>(deviceOption, excanges, _eventBus, _produser4DeviceRespFactory, _appConfigWrapper.GetProduser4DeviceOption, middlewareInvokeService, _logger);
             _deviceStorageService.AddNew(device.Option.Name, device);
 
             return device;

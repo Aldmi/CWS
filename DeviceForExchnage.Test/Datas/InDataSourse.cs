@@ -11,7 +11,7 @@ namespace DeviceForExchnage.Test.Datas
 {
     public static class InDataSourse
     {
-        public static MiddleWareInDataOption GetMiddleWareInDataOption()
+        public static MiddleWareInDataOption GetMiddleWareInDataOption_OneStringHandler()
         {
             MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
             {
@@ -54,6 +54,50 @@ namespace DeviceForExchnage.Test.Datas
         }
 
 
+        public static MiddleWareInDataOption GetMiddleWareInDataOption_TwoStringHandlers()
+        {
+            MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
+            {
+                Id = 1,
+                Description = "Преобразование Note",
+                StringHandlers = new List<StringHandlerMiddleWareOption>
+                {
+                    new StringHandlerMiddleWareOption
+                    {
+                        PropName = "Note.NameRu",
+                        LimitStringConverterOption = new LimitStringConverterOption
+                        {
+                            Limit = 10
+                        },
+                        InseartStringConverterOption = new InseartStringConverterOption
+                        {
+                            InseartDict = new Dictionary<int, string>
+                            {
+                                {5, "0x09" },
+                                {10, "0x09" },
+                            }
+                        }
+                    },
+                    new StringHandlerMiddleWareOption
+                    {
+                        PropName = "StationDeparture.NameRu",
+                        ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOption
+                        {
+                            ReplacementString = "Посадки нет"
+                        }
+                    }
+                },
+                InvokerOutput = new InvokerOutput
+                {
+                    Mode = InvokerOutputMode.Instantly
+                }
+            };
+
+            return middleWareInDataOption;
+        }
+
+
+
 
         public static InputData<AdInputType> GetData(int countData)
         {
@@ -62,11 +106,11 @@ namespace DeviceForExchnage.Test.Datas
                 Id = i,
                 Note = new Note
                 {
-                    NameRu = $"{i} Со всеми станциями кроие: Волочаевская, Климская",
+                    NameRu = $"Index= {i}   Со всеми станциями кроие: Волочаевская, Климская",
                 },
                 StationDeparture = new Station
                 {
-                    NameRu = $"{i} Станция Отпр 1"
+                    NameRu = $"Index= {i}    Станция Отпр 1"
                 }
 
             }).ToList();

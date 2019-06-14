@@ -7,6 +7,7 @@ using Confluent.Kafka;
 using CSharpFunctionalExtensions;
 using DAL.Abstract.Entities.Options.Device;
 using DeviceForExchange.MiddleWares;
+using DeviceForExchange.MiddleWares.Invokes;
 using Exchange.Base;
 using Exchange.Base.Model;
 using Exchange.Base.RxModel;
@@ -45,7 +46,7 @@ namespace DeviceForExchange
 
         public DeviceOption Option { get;  }
         public List<IExchange<TIn>> Exchanges { get; }
-        public MiddleWareInData<TIn> MiddleWareInData { get; }
+        public MiddlewareInvokeService<TIn> MiddlewareInvokeService { get; }
         public string TopicName4MessageBroker { get; set; }
 
         #endregion
@@ -60,14 +61,14 @@ namespace DeviceForExchange
                       IEventBus eventBus,
                       Func<ProduserOption, Owned<IProduser>> produser4DeviceRespFactory,
                       ProduserOption produser4DeviceOption,
-                      MiddleWareInData<TIn> middleWareInData,
+                      MiddlewareInvokeService<TIn> middlewareInvokeService,
                       ILogger logger)
         {
             Option = option;
             Exchanges = exchanges.ToList();
             _eventBus = eventBus;
-            MiddleWareInData = middleWareInData;
-            MiddleWareInData?.InvokeReadyRx.Subscribe(OutputReadyRxEventHandler);
+            MiddlewareInvokeService = middlewareInvokeService;
+            MiddlewareInvokeService?.InvokeIsCompleteRx.Subscribe(OutputReadyRxEventHandler);
             _logger = logger;
 
             var produserOwner = produser4DeviceRespFactory(produser4DeviceOption);
@@ -142,9 +143,9 @@ namespace DeviceForExchange
         /// <param name="inData">входные данные в обертке</param>
         public async Task Resive(InputData<TIn> inData)
         {
-            if (MiddleWareInData != null)
+            if (MiddlewareInvokeService != null)
             {
-                await MiddleWareInData.InputSet(inData);
+                await MiddlewareInvokeService.InputSet(inData);
             }
             else
             {
@@ -166,7 +167,7 @@ namespace DeviceForExchange
         }
 
 
-        private async void OutputReadyRxEventHandler(Result<InputData<TIn>> result)
+        private async void OutputReadyRxEventHandler(Result<InputData<TIn>, ErrorMiddleWareInDataWrapper> result)
         {
             if (result.IsSuccess)
             {
