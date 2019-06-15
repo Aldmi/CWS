@@ -92,7 +92,7 @@ namespace DeviceForExchange.MiddleWares
                         }
                         catch (Exception e)
                         {
-                            error = $"MiddlewareInvokeService.HandleInvoke Ошибка в String конверторе. {e}";
+                            error = $"MiddlewareInvokeService.HandleInvoke Exception в String конверторе. {e}";
                             errorHandlerWrapper.AddError(error);
                             //_logger.Error(error);
                         }
