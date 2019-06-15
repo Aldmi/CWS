@@ -70,7 +70,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Option.Test", "Option.Test\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InputDataModel.Autodictor.Test", "InputDataModel.Autodictor.Test\InputDataModel.Autodictor.Test.csproj", "{C7379C85-506F-4AF3-BFA8-6BDF298F7418}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeviceForExchnage.Test", "..\DeviceForExchnage.Test\DeviceForExchnage.Test.csproj", "{EE9C60F5-BB51-4679-9653-7CBC0FBB861A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeviceForExchnage.Test", "DeviceForExchnage.Test\DeviceForExchnage.Test.csproj", "{EE9C60F5-BB51-4679-9653-7CBC0FBB861A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeviceForExchnage.Benchmark", "DeviceForExchnage.Benchmarkl\DeviceForExchnage.Benchmark.csproj", "{597CB922-8E1B-433A-A9EC-1A23936DE5A4}"
 EndProject

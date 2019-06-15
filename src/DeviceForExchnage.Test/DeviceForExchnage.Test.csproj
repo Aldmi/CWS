@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -17,10 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\DAL.Abstract\DAL.Abstract.csproj" />
-    <ProjectReference Include="..\src\Device.Base\DeviceForExchange.csproj" />
-    <ProjectReference Include="..\src\InputDataModel.Autodictor\InputDataModel.Autodictor.csproj" />
-    <ProjectReference Include="..\src\InputDataModel.Base\InputDataModel.Base.csproj" />
+    <ProjectReference Include="..\DAL.Abstract\DAL.Abstract.csproj" />
+    <ProjectReference Include="..\Device.Base\DeviceForExchange.csproj" />
+    <ProjectReference Include="..\InputDataModel.Autodictor\InputDataModel.Autodictor.csproj" />
+    <ProjectReference Include="..\InputDataModel.Base\InputDataModel.Base.csproj" />
   </ItemGroup>
 
 </Project>
