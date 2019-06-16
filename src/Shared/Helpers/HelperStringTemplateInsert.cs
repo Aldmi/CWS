@@ -4,11 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using NCalc;
+using Serilog;
 
 namespace Shared.Helpers
 {
     public class HelperStringTemplateInsert
     {
+        private readonly ILogger _logger;
+
+
+
+        #region ctor
+
+        public HelperStringTemplateInsert(ILogger _logger)
+        {
+            this._logger = _logger;
+        }
+
+        #endregion
+
+
         /// <summary>
         /// Вставка переменных (по формату) в строку по шаблону. 
         /// </summary>
@@ -230,13 +245,21 @@ namespace Shared.Helpers
         /// </summary>
         private int CalculateMathematicFormat(string str, int row)
         {
-            var expr = new Expression(str)
+            try  //DEBUG (Отлов ошибки в Ncalc - многопоточный ошибка работы со словарем)
             {
-                Parameters = { ["rowNumber"] = row }
-            };
-            var func = expr.ToLambda<int>();
-            var arithmeticResult = func();
-            return arithmeticResult;
+                var expr = new Expression(str)
+                {
+                    Parameters = { ["rowNumber"] = row }
+                };
+                var func = expr.ToLambda<int>();
+                var arithmeticResult = func();
+                return arithmeticResult;
+            }
+            catch (Exception e)
+            {
+                _logger.Fatal($"ОШИБКА В CalculateMathematicFormat:   {e.Message}     {e.StackTrace} ");
+                throw;
+            }
         }
     }
 }

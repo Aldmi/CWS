@@ -39,7 +39,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             _addressDevice = addressDevice;
             _option = option;
             _logger = logger;
-            _helperStringTemplateInsert= new HelperStringTemplateInsert();
+            _helperStringTemplateInsert= new HelperStringTemplateInsert(_logger);
         }
 
         #endregion
