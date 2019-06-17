@@ -20,9 +20,9 @@ namespace WebApiSwc
         public static void ViewVersionOnConsole()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            const string version = "CWS Ver2.3";
+            const string version = "CWS Ver2.4";
             Console.Title = version;
-            Console.WriteLine($"{version}  [{DateTime.Today:U}]  [Crutch!!!! Hardcode Limit 100 chars Note var]");
+            Console.WriteLine($"{version}  [17.06.2019]  [Add methode device.Resive(...) instead Send2ConcreteEcxhange and Send2AllExchanges + Crutch!!!! Hardcode Limit 100 chars Note var]");
         }
 
 

@@ -53,15 +53,7 @@ namespace BL.Services.InputData
                 }
 
                 LogingInData(inData);
-
-                if (string.IsNullOrEmpty(inData.ExchangeName))
-                {
-                    tasks.Add(device.Send2AllExchanges(inData.DataAction, inData.Data, inData.Command));
-                }
-                else
-                {
-                    tasks.Add(device.Send2ConcreteExchanges(inData.ExchangeName, inData.DataAction, inData.Data, inData.Command, inData.DirectHandlerName));
-                }
+                tasks.Add(device.Resive(inData));
             }
 
             await Task.WhenAll(tasks);
