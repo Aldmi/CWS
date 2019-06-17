@@ -1,4 +1,4 @@
-﻿namespace DAL.Abstract.Entities.Options.MiddleWare.Hadlers.DateTimeConverterOption
+﻿namespace DAL.Abstract.Entities.Options.MiddleWare.Converters.DateTimeConverterOption
 {
     /// <summary>
     /// корректировка DateTime по часовому поясу TimeZone

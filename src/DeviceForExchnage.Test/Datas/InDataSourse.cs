@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DAL.Abstract.Entities.Options.MiddleWare;
-using DAL.Abstract.Entities.Options.MiddleWare.Hadlers;
-using DAL.Abstract.Entities.Options.MiddleWare.Hadlers.StringConvertersOption;
+using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
+using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
 using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
 using InputDataModel.Base;

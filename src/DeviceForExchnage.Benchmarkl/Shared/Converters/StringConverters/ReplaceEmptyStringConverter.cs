@@ -1,5 +1,5 @@
 ﻿
-using DAL.Abstract.Entities.Options.MiddleWare.Hadlers.StringConvertersOption;
+using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
 
 namespace DeviceForExchnage.Benchmark.Shared.Converters.StringConverters
 {

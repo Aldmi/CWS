@@ -1,6 +1,6 @@
-﻿using DAL.Abstract.Entities.Options.MiddleWare.Hadlers.DateTimeConverterOption;
+﻿using DAL.Abstract.Entities.Options.MiddleWare.Converters.DateTimeConverterOption;
 
-namespace DAL.Abstract.Entities.Options.MiddleWare.Hadlers
+namespace DAL.Abstract.Entities.Options.MiddleWare.Handlers
 {
     public class DateTimeHandlerMiddleWareOption
     {

@@ -28,13 +28,14 @@ COPY Communication.SerialPort/Transport.SerialPort.csproj Communication.SerialPo
 COPY Infrastructure/Infrastructure.EventBus.csproj Infrastructure/
 COPY Device.Base/DeviceForExchange.csproj Device.Base/
 COPY DAL.InMemory/DAL.InMemory.csproj DAL.InMemory/
-COPY Option.Test/Option.Test.csproj Option.Test/
+#COPY Option.Test/Option.Test.csproj Option.Test/
+
 RUN dotnet restore WebApis/WebApiSwc.csproj
-RUN dotnet restore Option.Test/Option.Test.csproj
+#RUN dotnet restore Option.Test/Option.Test.csproj
 COPY . .
 
-WORKDIR /src/Option.Test
-RUN dotnet test Option.Test.csproj
+#WORKDIR /src/Option.Test
+#RUN dotnet test Option.Test.csproj
 
 WORKDIR /src/WebApis
 RUN dotnet build WebApiSwc.csproj -c Release -o /app

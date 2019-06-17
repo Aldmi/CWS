@@ -4,8 +4,8 @@ using AutoMapper;
 using BL.Services.Mediators;
 using BL.Services.Storages;
 using DAL.Abstract.Entities.Options.MiddleWare;
-using DAL.Abstract.Entities.Options.MiddleWare.Hadlers;
-using DAL.Abstract.Entities.Options.MiddleWare.Hadlers.StringConvertersOption;
+using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
+using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
 using DeviceForExchange.MiddleWares;
 using Exchange.Base;
 using InputDataModel.Autodictor.Entities;
@@ -15,8 +15,12 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog.Events;
 using Transport.SerialPort.Abstract;
 using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
+using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption;
+using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConvertersOption;
+using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers;
 using WebApiSwc.Extensions;
 using Worker.Background.Abstarct;
+
 
 namespace WebApiSwc.Controllers
 {
@@ -78,22 +82,22 @@ namespace WebApiSwc.Controllers
         [HttpGet]
         
         // public IEnumerable<InputData<AdInputType>> Get()
-        public MiddleWareInDataOption Get()
+        public MiddleWareInDataOptionDto Get()
         {
-            MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
+            var middleWareInDataOptionDto = new MiddleWareInDataOptionDto
             {
                 Id = 1,
-                Description = "Преобразование Note",
-                StringHandlers = new List<StringHandlerMiddleWareOption>
+                Description = "Преобразование Note и StationDeparture",
+                StringHandlers = new List<StringHandlerMiddleWareOptionDto>
                 {
-                    new StringHandlerMiddleWareOption
+                    new StringHandlerMiddleWareOptionDto
                     {
                         PropName = "Note",
-                        LimitStringConverterOption = new LimitStringConverterOption
+                        LimitStringConverterOption = new LimitStringConverterOptionDto
                         {
                             Limit = 10
                         },
-                        InseartStringConverterOption = new InseartStringConverterOption
+                        InseartStringConverterOption = new InseartStringConverterOptionDto
                         {
                             InseartDict = new Dictionary<int, string>
                             {
@@ -102,50 +106,22 @@ namespace WebApiSwc.Controllers
                             }
                         }
                     },
-                    new StringHandlerMiddleWareOption
+                    new StringHandlerMiddleWareOptionDto
                     {
                         PropName = "StationDeparture",
-                        ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOption
+                        ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOptionDto
                         {
                             ReplacementString = "Посадки нет"
                         }
                     }
                 },
-                InvokerOutput = new InvokerOutput
+                InvokerOutput = new InvokerOutputDto
                 {
                     Mode = InvokerOutputMode.Instantly
                 }
             };
 
-
-            var middleWareinData = new MiddleWareInData<AdInputType>(middleWareInDataOption, null);
-
-
-
-            //Эмуляция передачи входнвх данных---------------------------------
-            var inData = new InputData<AdInputType>()
-            {
-                Command = Command4Device.None,
-                DataAction = DataAction.CycleAction,
-                DeviceName = "Peron.P1",
-                DirectHandlerName = null,
-                ExchangeName = "Exch Peron.P1",
-                Data = new List<AdInputType>
-                {
-                    new AdInputType
-                    {
-                        Id =1,
-                        Note = new Note
-                        {
-                            NameRu = "Со всеми станциями кроие: Волочаевская, Климская"
-                        }
-                    }
-                }
-
-            };
-           var res= middleWareinData.HandleInvoke(inData);
-
-            return middleWareInDataOption;
+            return middleWareInDataOptionDto;
 
 
             //var adInputType= new AdInputType

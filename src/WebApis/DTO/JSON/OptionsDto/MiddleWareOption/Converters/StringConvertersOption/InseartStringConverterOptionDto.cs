@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace DAL.Abstract.Entities.Options.MiddleWare.Hadlers.StringConvertersOption
+namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConvertersOption
 {
     /// <summary>
     /// Вставка подстрок по указаныым индексам в строку.
     /// </summary>
-    public class InseartStringConverterOption
+    public class InseartStringConverterOptionDto
     {
         public Dictionary<int, string> InseartDict { get; set; }
     }

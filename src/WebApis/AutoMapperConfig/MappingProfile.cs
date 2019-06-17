@@ -2,6 +2,7 @@
 using AutoMapper;
 using DAL.Abstract.Entities.Options.Device;
 using DAL.Abstract.Entities.Options.Exchange;
+using DAL.Abstract.Entities.Options.MiddleWare;
 using DAL.Abstract.Entities.Options.Transport;
 using DeviceForExchange;
 using Exchange.Base;
@@ -10,6 +11,7 @@ using InputDataModel.Autodictor.Model;
 using WebApiSwc.DTO.JSON.DevicesStateDto;
 using WebApiSwc.DTO.JSON.OptionsDto.DeviceOption;
 using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
+using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption;
 using WebApiSwc.DTO.JSON.OptionsDto.TransportOption;
 using WebApiSwc.DTO.XML;
 
@@ -26,6 +28,7 @@ namespace WebApiSwc.AutoMapperConfig
             CreateMap<TcpIpOption, TcpIpOptionDto>().ReverseMap();
             CreateMap<HttpOption, HttpOptionDto>().ReverseMap();
             CreateMap<TransportOption, TransportOptionsDto>().ReverseMap();
+            CreateMap<MiddleWareInDataOption, MiddleWareInDataOptionDto>().ReverseMap();
             #endregion
 
 

@@ -1,4 +1,4 @@
-﻿namespace DAL.Abstract.Entities.Options.MiddleWare.Hadlers.StringConvertersOption
+﻿namespace DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption
 {
     /// <summary>
     /// Обрезка строки, если превышает Limit

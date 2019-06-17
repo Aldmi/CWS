@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.DeviceOption
 {
@@ -17,5 +18,6 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.DeviceOption
 
         [Required(ErrorMessage = "Список ключей ExchangeKeys не может быть пуст")]
         public List<string> ExchangeKeys { get; set; }
+        public MiddleWareInDataOptionDto MiddleWareInData { get; set; }
     }
 }

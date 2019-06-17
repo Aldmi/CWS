@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using DAL.Abstract.Entities.Options.MiddleWare.Hadlers.StringConvertersOption;
-using SerilogTimings;
+﻿using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
 
-namespace DAL.Abstract.Entities.Options.MiddleWare.Hadlers
+namespace DAL.Abstract.Entities.Options.MiddleWare.Handlers
 {
     public class StringHandlerMiddleWareOption //TODO: вынести функционал в базовый класс
     {

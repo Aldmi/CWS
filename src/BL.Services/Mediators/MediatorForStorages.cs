@@ -218,10 +218,10 @@ namespace BL.Services.Mediators
             var excanges = _exchangeStorageService.GetMany(deviceOption.ExchangeKeys).ToList();
 
             MiddlewareInvokeService<TIn> middlewareInvokeService = null;
-            if (deviceOption.MiddleWareInDataOption != null)
+            if (deviceOption.MiddleWareInData != null)
             {
-                var middleWareInData = new MiddleWareInData<TIn>(deviceOption.MiddleWareInDataOption, _logger);
-                middlewareInvokeService = new MiddlewareInvokeService<TIn>(deviceOption.MiddleWareInDataOption.InvokerOutput, middleWareInData, _logger);
+                var middleWareInData = new MiddleWareInData<TIn>(deviceOption.MiddleWareInData, _logger);
+                middlewareInvokeService = new MiddlewareInvokeService<TIn>(deviceOption.MiddleWareInData.InvokerOutput, middleWareInData, _logger);
             }
             var device = new Device<TIn>(deviceOption, excanges, _eventBus, _produser4DeviceRespFactory, _appConfigWrapper.GetProduser4DeviceOption, middlewareInvokeService, _logger);
             _deviceStorageService.AddNew(device.Option.Name, device);

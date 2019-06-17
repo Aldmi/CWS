@@ -1,4 +1,4 @@
-﻿using DAL.Abstract.Entities.Options.MiddleWare.Hadlers;
+﻿using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
 using DeviceForExchange.MiddleWares.Converters.StringConverters;
 
 namespace DeviceForExchange.MiddleWares.Handlers

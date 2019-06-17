@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using DAL.Abstract.Entities.Options.MiddleWare.Hadlers;
+using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
 
 namespace DAL.Abstract.Entities.Options.MiddleWare
 {

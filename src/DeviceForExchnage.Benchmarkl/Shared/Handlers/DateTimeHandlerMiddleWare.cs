@@ -1,5 +1,5 @@
 ﻿using System;
-using DAL.Abstract.Entities.Options.MiddleWare.Hadlers;
+using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
 using DeviceForExchnage.Benchmark.Shared.Converters.DateTimeConverters;
 
 namespace DeviceForExchnage.Benchmark.Shared.Handlers
