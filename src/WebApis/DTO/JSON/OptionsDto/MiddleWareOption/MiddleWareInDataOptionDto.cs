@@ -7,8 +7,6 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption
 {
     public class MiddleWareInDataOptionDto
     {
-        public int Id { get; set; }
-
         public string Description { get; set; }
 
         public List<StringHandlerMiddleWareOptionDto> StringHandlers { get; set; }

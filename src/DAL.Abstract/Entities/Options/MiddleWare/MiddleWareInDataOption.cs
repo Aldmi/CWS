@@ -3,7 +3,7 @@ using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
 
 namespace DAL.Abstract.Entities.Options.MiddleWare
 {
-    public class MiddleWareInDataOption : EntityBase
+    public class MiddleWareInDataOption
     {
         public string Description { get; set; }
 
@@ -12,7 +12,6 @@ namespace DAL.Abstract.Entities.Options.MiddleWare
 
         public InvokerOutput InvokerOutput { get; set; }
     }
-
 
 
     public class InvokerOutput

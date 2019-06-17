@@ -86,7 +86,6 @@ namespace WebApiSwc.Controllers
         {
             var middleWareInDataOptionDto = new MiddleWareInDataOptionDto
             {
-                Id = 1,
                 Description = "Преобразование Note и StationDeparture",
                 StringHandlers = new List<StringHandlerMiddleWareOptionDto>
                 {
