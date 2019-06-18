@@ -2,9 +2,10 @@
 
 namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 {
-    public class InseartStringConverter : IConverterMiddleWare<string>
+    public class InseartStringConverter : BaseStringConverter
     {
         private readonly InseartStringConverterOption _option;
+
 
         public InseartStringConverter(InseartStringConverterOption option)
         {
@@ -12,7 +13,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
         }
 
 
-        public string Convert(string inProp)
+        protected override string ConvertChild(string inProp)
         {
             //DEBUG
             return inProp + "After InseartStringConverter";

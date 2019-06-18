@@ -21,5 +21,18 @@ namespace Shared.Helpers
             for (var i = 0; i < text.Length; i += size)
                 yield return text.Substring(i, Math.Min(size, text.Length - i));
         }
+
+
+        /// <summary>
+        /// Возвращает подстроку из базовой строки. Подстрока включает только целые слова.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="startIndex"></param>
+        /// <param name="lenght"></param>
+        /// <returns></returns>
+        public static string SubstringWithWholeWords(string str, int startIndex, int lenght)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

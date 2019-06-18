@@ -27,8 +27,8 @@ namespace DeviceForExchnage.Test
 
         public MiddleWareInDataTest()
         {
-             _middleWareInDataOption_OneStringHandler = InDataSourse.GetMiddleWareInDataOption_OneStringHandler();
-             _middleWareInDataOption_TwoStringHandler = InDataSourse.GetMiddleWareInDataOption_TwoStringHandlers();
+             _middleWareInDataOption_OneStringHandler = InDataSourse.GetMiddleWareInDataOption_OneStringHandler("Note.NameRu");
+             _middleWareInDataOption_TwoStringHandler = InDataSourse.GetMiddleWareInDataOption_TwoStringHandlers("Note.NameRu", "StationDeparture.NameRu");
 
             //Loger Moq-----------------------------------------------
             var mock = new Mock<ILogger>();
@@ -74,7 +74,26 @@ namespace DeviceForExchnage.Test
             result.Error.IsEmpty.Should().BeFalse();
             errors.Count.Should().Be(1);
             errors.FirstOrDefault().Should().Be("MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  метаданные для xxxx не найдены");
+        }
 
+
+        [Fact]
+        public void OnePropertyByStringType_ErrorPropName2_Test()
+        {
+            //Arrage
+            var inData = InDataSourse.GetData(1);
+            _middleWareInDataOption_OneStringHandler.StringHandlers[0].PropName = "ZZZ.xxxx";
+            var middleWareinData = new MiddleWareInData<AdInputType>(_middleWareInDataOption_OneStringHandler, _logger);
+
+            //Act
+            var result = middleWareinData.HandleInvoke(inData);
+            var errors = result.Error.GetErrors;
+
+            //Asert
+            result.IsSuccess.Should().BeFalse();
+            result.Error.IsEmpty.Should().BeFalse();
+            errors.Count.Should().Be(1);
+            errors.FirstOrDefault().Should().Be("MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  метаданные для ZZZ не найдены");
         }
 
 
@@ -150,6 +169,85 @@ namespace DeviceForExchnage.Test
         }
 
 
+
+        [Fact]
+        public void PropertyNoteEqualNull_Test()
+        {
+            //Arrage
+            var inData = InDataSourse.GetData(1);
+            inData.Data.First().Note = null;
+            var middleWareinData = new MiddleWareInData<AdInputType>(_middleWareInDataOption_OneStringHandler, _logger);
+
+            //Act
+            var result = middleWareinData.HandleInvoke(inData);
+            var errors = result.Error.GetErrors;
+            var error = errors.First();
+
+            //Asert
+            result.IsSuccess.Should().BeFalse();
+            errors.Count.Should().Be(1);
+            error.Should().Be("MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  Родительский объект == Null. Note.NameRu. Невозможно обратится к свойству NameRu");
+        }
+
+
+        [Fact]
+        public void PropertyNoteEqualNull_OptionErrorPropName_Test()
+        {
+            //Arrage
+            var inData = InDataSourse.GetData(1);
+            inData.Data.First().Note = null;
+            var option = InDataSourse.GetMiddleWareInDataOption_OneStringHandler("Note");
+            var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
+
+            //Act
+            var result = middleWareinData.HandleInvoke(inData);
+            var errors = result.Error.GetErrors;
+            var error = errors.First();
+
+            //Asert
+            result.IsSuccess.Should().BeFalse();
+            errors.Count.Should().Be(1);
+            error.Should().Be("MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  Тип свойства Note не соответвует типу обработчика handler System.String");
+        }
+
+
+        [Fact]
+        public void PropertyNumberOfTrain_Test()
+        {
+            //Arrage
+            var inData = InDataSourse.GetData(1);
+            var option = InDataSourse.GetMiddleWareInDataOption_OneStringHandler("NumberOfTrain");
+            var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
+
+            //Act
+            var result = middleWareinData.HandleInvoke(inData);
+            var data = result.Value?.Data.FirstOrDefault();
+
+            //Asert
+            result.IsSuccess.Should().BeTrue();
+            data.NumberOfTrain.Should().Be("956After InseartStringConverterAfter LimitStringComverter");
+        }
+
+
+
+        [Fact]
+        public void PropertyNumberOfTrain_Null_Test()
+        {
+            //Arrage
+            var inData = InDataSourse.GetData(1);
+            inData.Data.First().NumberOfTrain = null;
+            var option = InDataSourse.GetMiddleWareInDataOption_OneStringHandler("NumberOfTrain");
+            var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
+
+            //Act
+            var result = middleWareinData.HandleInvoke(inData);
+            var data = result.Value?.Data.FirstOrDefault();
+
+            //Asert
+            result.IsSuccess.Should().BeTrue();
+            data.Should().NotBeNull();
+            data.NumberOfTrain.Should().BeNull();
+        }
     }
 
 }

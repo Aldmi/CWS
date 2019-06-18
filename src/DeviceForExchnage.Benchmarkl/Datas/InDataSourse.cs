@@ -15,7 +15,6 @@ namespace DeviceForExchnage.Benchmark.Datas
         {
             MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
             {
-                Id = 1,
                 Description = "Преобразование Note",
                 StringHandlers = new List<StringHandlerMiddleWareOption>
                 {

@@ -9,5 +9,6 @@ namespace DAL.Abstract.Entities.Options.MiddleWare.Handlers
         public InseartStringConverterOption InseartStringConverterOption { get; set; }
         public LimitStringConverterOption LimitStringConverterOption { get; set; }
         public ReplaceEmptyStringConverterOption ReplaceEmptyStringConverterOption { get; set; }
+        public SubStringMemConverterOption SubStringMemConverterOption { get; set; }
     }
 }

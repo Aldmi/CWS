@@ -2,7 +2,7 @@
 
 namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 {
-    public class ReplaceEmptyStringConverter : IConverterMiddleWare<string>
+    public class ReplaceEmptyStringConverter : BaseStringConverter
     {
 
         private readonly ReplaceEmptyStringConverterOption _option;
@@ -13,7 +13,8 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
         }
 
 
-        public string Convert(string inProp)
+
+        protected override string ConvertChild(string inProp)
         {
             //DEBUG
             return inProp + "After ReplaceEmptyStringConverter";

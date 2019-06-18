@@ -2,7 +2,7 @@
 
 namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 {
-    public class LimitStringComverter : IConverterMiddleWare<string>
+    public class LimitStringComverter : BaseStringConverter
     {
         private readonly LimitStringConverterOption _option;
 
@@ -12,7 +12,8 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
         }
 
 
-        public string Convert(string inProp)
+
+        protected override string ConvertChild(string inProp)
         {
             //DEBUG
             return inProp + "After LimitStringComverter";

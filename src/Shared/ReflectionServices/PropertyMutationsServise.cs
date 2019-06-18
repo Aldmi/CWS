@@ -24,6 +24,10 @@ namespace Shared.ReflectionServices
             for (var i = 0; i < props.Length; i++)
             {
                 var prop = props[i];
+                if (obj == null)
+                {
+                    return Result.Fail<(PropertyInfo, object, T)>($"Родительский объект == Null. {propName}. Невозможно обратится к свойству {prop}");
+                }
                 propInfo = GetPropertyInfo(obj, prop);
                 if (propInfo == null)
                 {
@@ -38,10 +42,14 @@ namespace Shared.ReflectionServices
             }
 
             //Валидация--------------------------------------------------------------------------------
-            if (!(obj is T))
+            if (propInfo.PropertyType != typeof(T))
             {
                 return Result.Fail<(PropertyInfo, object, T)>($"Тип свойства {propName} не соответвует типу обработчика handler {typeof(T)}");
             }
+            //if ((obj != null) && !(obj is T))
+            //{
+            //    return Result.Fail<(PropertyInfo, object, T)>($"Тип свойства {propName} не соответвует типу обработчика handler {typeof(T)}");
+            //}
 
             //Возврат значениtе в кортеже----------------------------------------------------------------
             var value = (T)obj;

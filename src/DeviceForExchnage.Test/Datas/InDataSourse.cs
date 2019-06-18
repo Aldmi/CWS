@@ -11,17 +11,16 @@ namespace DeviceForExchnage.Test.Datas
 {
     public static class InDataSourse
     {
-        public static MiddleWareInDataOption GetMiddleWareInDataOption_OneStringHandler()
+        public static MiddleWareInDataOption GetMiddleWareInDataOption_OneStringHandler(string propName)
         {
             MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
             {
-                Id = 1,
                 Description = "Преобразование Note",
                 StringHandlers = new List<StringHandlerMiddleWareOption>
                 {
                     new StringHandlerMiddleWareOption
                     {
-                        PropName = "Note.NameRu",
+                        PropName = propName,
                         LimitStringConverterOption = new LimitStringConverterOption
                         {
                             Limit = 10
@@ -34,15 +33,7 @@ namespace DeviceForExchnage.Test.Datas
                                 {10, "0x09" },
                             }
                         }
-                    },
-                    //new StringHandlerMiddleWareOption
-                    //{
-                    //    PropName = "StationDeparture",
-                    //    ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOption
-                    //    {
-                    //        ReplacementString = "Посадки нет"
-                    //    }
-                    //}
+                    }
                 },
                 InvokerOutput = new InvokerOutput
                 {
@@ -54,17 +45,16 @@ namespace DeviceForExchnage.Test.Datas
         }
 
 
-        public static MiddleWareInDataOption GetMiddleWareInDataOption_TwoStringHandlers()
+        public static MiddleWareInDataOption GetMiddleWareInDataOption_TwoStringHandlers(params string[] propNames)
         {
             MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
             {
-                Id = 1,
                 Description = "Преобразование Note",
                 StringHandlers = new List<StringHandlerMiddleWareOption>
                 {
                     new StringHandlerMiddleWareOption
                     {
-                        PropName = "Note.NameRu",
+                        PropName = propNames[0],
                         LimitStringConverterOption = new LimitStringConverterOption
                         {
                             Limit = 10
@@ -80,7 +70,7 @@ namespace DeviceForExchnage.Test.Datas
                     },
                     new StringHandlerMiddleWareOption
                     {
-                        PropName = "StationDeparture.NameRu",
+                        PropName = propNames[1],
                         ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOption
                         {
                             ReplacementString = "Посадки нет"
@@ -99,6 +89,11 @@ namespace DeviceForExchnage.Test.Datas
 
 
 
+
+
+
+
+
         public static InputData<AdInputType> GetData(int countData)
         {
            var datas= Enumerable.Range(0, countData).Select(i => new AdInputType
@@ -111,8 +106,8 @@ namespace DeviceForExchnage.Test.Datas
                 StationDeparture = new Station
                 {
                     NameRu = $"Index= {i}    Станция Отпр 1"
-                }
-
+                },
+                NumberOfTrain = "956"
             }).ToList();
 
 
@@ -128,9 +123,6 @@ namespace DeviceForExchnage.Test.Datas
 
             return inData;
         }
-
-
-
 
 
     }
