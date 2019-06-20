@@ -19,6 +19,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 
 
         public SubStringMemConverter(SubStringMemConverterOption option)
+            : base(null)
         {
             _option = option;
         }

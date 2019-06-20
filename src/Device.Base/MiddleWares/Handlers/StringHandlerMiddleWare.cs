@@ -1,4 +1,5 @@
-﻿using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
+﻿using System.Linq;
+using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
 using DeviceForExchange.MiddleWares.Converters.StringConverters;
 
 namespace DeviceForExchange.MiddleWares.Handlers
@@ -35,6 +36,10 @@ namespace DeviceForExchange.MiddleWares.Handlers
             {
                 Converters.Add(new SubStringMemConverter(option.SubStringMemConverterOption));
             }
+
+            var orderedConverters = Converters.OrderBy(c => c.Priority);
+            Converters.Clear();
+            Converters.AddRange(orderedConverters);
         }
 
         #endregion

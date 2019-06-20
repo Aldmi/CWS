@@ -13,6 +13,8 @@ namespace DeviceForExchange.MiddleWares.Converters.DateTimeConverters
         }
 
 
+        public int Priority { get; }
+
         public DateTime Convert(DateTime inProp)
         {
             //DEBUG

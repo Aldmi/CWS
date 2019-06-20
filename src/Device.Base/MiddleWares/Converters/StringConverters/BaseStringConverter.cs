@@ -1,7 +1,17 @@
-﻿namespace DeviceForExchange.MiddleWares.Converters.StringConverters
+﻿using DAL.Abstract.Entities.Options.MiddleWare.Converters;
+
+namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 {
     public abstract class BaseStringConverter : IConverterMiddleWare<string>
     {
+        public int Priority { get; }
+
+
+        protected BaseStringConverter(BaseConverterOption baseOption)
+        {
+            Priority = baseOption.Priority;
+        }
+
         public string Convert(string inProp)
         {
             if (inProp == null)

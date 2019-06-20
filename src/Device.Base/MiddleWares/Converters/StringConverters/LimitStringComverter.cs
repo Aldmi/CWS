@@ -7,6 +7,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
         private readonly LimitStringConverterOption _option;
 
         public LimitStringComverter(LimitStringConverterOption option)
+            : base(null)
         {
             _option = option;
         }

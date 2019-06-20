@@ -8,6 +8,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
         private readonly ReplaceEmptyStringConverterOption _option;
 
         public ReplaceEmptyStringConverter(ReplaceEmptyStringConverterOption option)
+            : base(null)
         {
             _option = option;
         }

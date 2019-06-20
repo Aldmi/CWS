@@ -3,7 +3,7 @@
     /// <summary>
     /// Обрезка строки, если превышает Limit
     /// </summary>
-    public class LimitStringConverterOptionDto
+    public class LimitStringConverterOptionDto : BaseConverterOptionDto
     {
         public int Limit { get; set; }
     }

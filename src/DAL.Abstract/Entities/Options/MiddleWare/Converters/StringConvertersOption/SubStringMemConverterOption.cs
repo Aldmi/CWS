@@ -1,6 +1,6 @@
 ﻿namespace DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption
 {
-    public class SubStringMemConverterOption
+    public class SubStringMemConverterOption : BaseConverterOption
     {
         public int Lenght { get; set; }   // Длинна подстроки которую нужно вернуть
     }

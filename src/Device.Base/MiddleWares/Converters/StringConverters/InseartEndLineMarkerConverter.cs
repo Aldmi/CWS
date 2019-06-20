@@ -10,7 +10,8 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
         private readonly InseartEndLineMarkerConverterOption _option;
 
 
-        public InseartEndLineMarkerConverter(InseartEndLineMarkerConverterOption option)
+        public InseartEndLineMarkerConverter(InseartEndLineMarkerConverterOption option) 
+            : base(null)
         {
             _option = option;
         }
