@@ -80,6 +80,57 @@ namespace Shared.Helpers
         }
 
 
+
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="str"></param>
+        ///// <param name="lenghtLine"></param>
+        ///// <param name="endLineChar"></param>
+        ///// <returns></returns>
+        //public static string InseartEndLineMarker(this string str, int lenghtLine, string endLineChar)
+        //{
+        //    List<string> resultList = new List<string>();
+        //    var wordChanks = str.Split(' ');
+        //    var sumWord = new StringBuilder();
+        //    for (var i = 0; i < wordChanks.Length; i++)
+        //    {
+        //        var word = wordChanks[i];
+        //        var checkStr = sumWord + word;
+        //        if (checkStr.Length >= lenghtLine)                         //Вставить симол конца строки (endLineChar)
+        //        {
+        //            string endedLine;
+        //            if (sumWord.Length == 0)                               //Единичное слово слишком длинное, endLineChar вставляется в него
+        //            {
+        //                endedLine = word.Insert(lenghtLine, endLineChar);
+        //            }
+        //            else
+        //            {                                                       //Накопивашаяся строка завершается символом endLineChar
+        //                endedLine = sumWord.ToString().TrimEnd(' ') + endLineChar;
+        //                sumWord.Clear();
+        //                i--;                                                // Вернуться к строке которая не влезла
+        //            }
+        //            resultList.Add(endedLine);
+        //        }
+        //        else
+        //        {
+        //            sumWord.Append(word).Append(" ");                      //Сумировать строку                 
+        //        }
+        //    }
+
+        //    if (sumWord.Length != 0)                                  //Последняя накопленная строка добавляется как есть (без endLineChar в конце)
+        //    {
+        //        resultList.Add(sumWord.ToString());
+        //    }
+
+        //    var res = resultList.Aggregate((a, b) => a + b);
+        //    return res;
+        //}
+
+
+
+
+
         private static IEnumerable<string> BreakWordIntoLines(string word, int lenght)
         {
             if (word.Length <= lenght)

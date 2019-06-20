@@ -10,5 +10,6 @@ namespace DAL.Abstract.Entities.Options.MiddleWare.Handlers
         public LimitStringConverterOption LimitStringConverterOption { get; set; }
         public ReplaceEmptyStringConverterOption ReplaceEmptyStringConverterOption { get; set; }
         public SubStringMemConverterOption SubStringMemConverterOption { get; set; }
+        public InseartEndLineMarkerConverterOption InseartEndLineMarkerConverterOption { get; set; }
     }
 }
