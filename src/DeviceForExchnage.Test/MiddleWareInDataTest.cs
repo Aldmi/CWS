@@ -20,15 +20,17 @@ namespace DeviceForExchnage.Test
 {
     public class MiddleWareInDataTest
     {
-        private readonly MiddleWareInDataOption _middleWareInDataOption_OneStringHandler;
-        private readonly MiddleWareInDataOption _middleWareInDataOption_TwoStringHandler;
+        private readonly MiddleWareInDataOption option_OneStringHandler;
+        private readonly MiddleWareInDataOption option_TwoStringHandler;
+        private readonly MiddleWareInDataOption option_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter;
         private readonly ILogger _logger;
 
 
         public MiddleWareInDataTest()
         {
-             _middleWareInDataOption_OneStringHandler = InDataSourse.GetMiddleWareInDataOption_OneStringHandler("Note.NameRu");
-             _middleWareInDataOption_TwoStringHandler = InDataSourse.GetMiddleWareInDataOption_TwoStringHandlers("Note.NameRu", "StationDeparture.NameRu");
+             option_OneStringHandler = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("Note.NameRu");
+             option_TwoStringHandler = GetMiddleWareInDataOption.GetMiddleWareInDataOption_TwoStringHandlers("Note.NameRu", "StationDeparture.NameRu");
+             option_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu");
 
             //Loger Moq-----------------------------------------------
             var mock = new Mock<ILogger>();
@@ -39,12 +41,35 @@ namespace DeviceForExchnage.Test
         }
 
 
+
+        [Fact]
+        public void NormalUse_Test()
+        {
+            //Arrage
+            var inData = InDataSourse.GetData_Note(1);
+            var middleWareinData = new MiddleWareInData<AdInputType>(option_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter, _logger);
+
+            //Act
+            var result = middleWareinData.HandleInvoke(inData);
+            var val = result.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+
+            //Asert
+            result.IsSuccess.Should().BeTrue();
+            val.Should().NotBeNull();
+            val.Should().Be("Index= 0   Со всеми станциями кроие: Волочаевская, КлимскаяAfter InseartStringConverterAfter LimitStringComverter");
+        }
+
+
+
+
+
+
         [Fact]
         public void  OnePropertyByStringType_Test()
         {
             //Arrage
             var inData = InDataSourse.GetData(1);
-            var middleWareinData = new MiddleWareInData<AdInputType>(_middleWareInDataOption_OneStringHandler, _logger);
+            var middleWareinData = new MiddleWareInData<AdInputType>(option_OneStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -62,8 +87,8 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1);
-            _middleWareInDataOption_OneStringHandler.StringHandlers[0].PropName = "Note.xxxx";
-            var middleWareinData = new MiddleWareInData<AdInputType>(_middleWareInDataOption_OneStringHandler, _logger);
+            option_OneStringHandler.StringHandlers[0].PropName = "Note.xxxx";
+            var middleWareinData = new MiddleWareInData<AdInputType>(option_OneStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -82,8 +107,8 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1);
-            _middleWareInDataOption_OneStringHandler.StringHandlers[0].PropName = "ZZZ.xxxx";
-            var middleWareinData = new MiddleWareInData<AdInputType>(_middleWareInDataOption_OneStringHandler, _logger);
+            option_OneStringHandler.StringHandlers[0].PropName = "ZZZ.xxxx";
+            var middleWareinData = new MiddleWareInData<AdInputType>(option_OneStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -102,7 +127,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1000);
-            var middleWareinData = new MiddleWareInData<AdInputType>(_middleWareInDataOption_OneStringHandler, _logger);
+            var middleWareinData = new MiddleWareInData<AdInputType>(option_OneStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -126,8 +151,8 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1000);
-            _middleWareInDataOption_OneStringHandler.StringHandlers[0].PropName = "Note.xxxx";
-            var middleWareinData = new MiddleWareInData<AdInputType>(_middleWareInDataOption_OneStringHandler, _logger);
+            option_OneStringHandler.StringHandlers[0].PropName = "Note.xxxx";
+            var middleWareinData = new MiddleWareInData<AdInputType>(option_OneStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -150,7 +175,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1000);
-            var middleWareinData = new MiddleWareInData<AdInputType>(_middleWareInDataOption_TwoStringHandler, _logger);
+            var middleWareinData = new MiddleWareInData<AdInputType>(option_TwoStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -176,7 +201,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var inData = InDataSourse.GetData(1);
             inData.Data.First().Note = null;
-            var middleWareinData = new MiddleWareInData<AdInputType>(_middleWareInDataOption_OneStringHandler, _logger);
+            var middleWareinData = new MiddleWareInData<AdInputType>(option_OneStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -196,7 +221,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var inData = InDataSourse.GetData(1);
             inData.Data.First().Note = null;
-            var option = InDataSourse.GetMiddleWareInDataOption_OneStringHandler("Note");
+            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("Note");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 
             //Act
@@ -216,7 +241,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1);
-            var option = InDataSourse.GetMiddleWareInDataOption_OneStringHandler("NumberOfTrain");
+            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("NumberOfTrain");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 
             //Act
@@ -236,7 +261,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var inData = InDataSourse.GetData(1);
             inData.Data.First().NumberOfTrain = null;
-            var option = InDataSourse.GetMiddleWareInDataOption_OneStringHandler("NumberOfTrain");
+            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("NumberOfTrain");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 
             //Act

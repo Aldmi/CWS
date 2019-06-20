@@ -27,6 +27,14 @@ namespace DeviceForExchange.MiddleWares.Handlers
             {
                 Converters.Add(new ReplaceEmptyStringConverter(option.ReplaceEmptyStringConverterOption));
             }
+            if (option.InseartEndLineMarkerConverterOption != null)
+            {
+                Converters.Add(new InseartEndLineMarkerConverter(option.InseartEndLineMarkerConverterOption));
+            }
+            if (option.SubStringMemConverterOption != null)
+            {
+                Converters.Add(new SubStringMemConverter(option.SubStringMemConverterOption));
+            }
         }
 
         #endregion
