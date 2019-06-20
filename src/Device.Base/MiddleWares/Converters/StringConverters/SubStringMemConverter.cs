@@ -1,4 +1,6 @@
-﻿using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
+﻿using System.Collections.Generic;
+using System.Linq;
+using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
 using Shared.Helpers;
 
 namespace DeviceForExchange.MiddleWares.Converters.StringConverters
@@ -9,9 +11,10 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
     /// </summary>
     public class SubStringMemConverter : BaseStringConverter
     {
-        private readonly SubStringMemConverterOption _option; //Хранит длинну подстроки
-        private int _startIndex; //Индекс начального симовола в строке 
-        private string _str;     //строка
+        private readonly SubStringMemConverterOption _option;     //Хранит длину подстроки
+        private int _index;                                       //Индекс подстроки для вывода
+        private string _str;                                      //Строка
+        private IList<string> _subStrings;                        //Список подстрок индексируемых _index
 
 
 
@@ -29,19 +32,20 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
         /// <returns></returns>
         protected override string ConvertChild(string inProp)
         {
-            if (!_str.Equals(inProp))
+            //СБРОС
+            if (_str == null || !_str.Equals(inProp))
             {
                 _str = inProp;
-                _startIndex = 0;
+                _index = -1;
+                _subStrings = _str.SubstringWithWholeWords(_index, _option.Lenght).ToList();
             }
 
-            if (_startIndex >= _str.Length)
+            if (++_index >= _subStrings.Count)
             {
-                _startIndex = 0;
+                _index = 0;
             }
 
-            var subStr = HelperString.SubstringWithWholeWords(_str, _startIndex, _option.Lenght);
-            _startIndex+= subStr.Length;
+            var subStr = _subStrings[_index];
             return subStr;
         }
     }

@@ -30,9 +30,70 @@ namespace Shared.Helpers
         /// <param name="startIndex"></param>
         /// <param name="lenght"></param>
         /// <returns></returns>
-        public static string SubstringWithWholeWords(string str, int startIndex, int lenght)
+        public static IEnumerable<string> SubstringWithWholeWords(this string str, int startIndex, int lenght)
         {
-            throw new System.NotImplementedException();
+            if(string.IsNullOrEmpty(str))
+                return new List<string> {string.Empty};
+
+            List<string> resultList = new List<string>();
+            var wordChanks = str.Split(' ');
+            var sumWord = new StringBuilder();
+            for (var i = 0; i < wordChanks.Length; i++)
+            {
+                var word = wordChanks[i];
+                var checkStr = sumWord + word;
+                if (checkStr.Length >= lenght)                              //Сохранить накопленную в sumWord подстроку
+                {
+                    if (sumWord.Length == 0)                                //Единичное слово слишком длинное, разобъем его на подстроки
+                    {
+                        var words = BreakWordIntoLines(word, lenght);
+                        resultList.AddRange(words);
+                    }
+                    else
+                    {
+                        var line = sumWord.ToString().TrimEnd(' ');
+                        resultList.Add(line);
+                        sumWord.Clear();
+                        i--;                                                // Вернуться к строке которая не влезла
+                    }
+                }
+                else
+                {
+                    //Сумировать строку   
+                    if (i == wordChanks.Length - 1)                         //Последняя подстрока добавляется без пробела
+                    {
+                        sumWord.Append(word);
+                    }
+                    else
+                    {
+                        sumWord.Append(word).Append(" ");                       
+                    }
+                }
+            }
+
+            if (sumWord.Length != 0)                                      //Последняя накопленная строка добавляется как есть
+            {
+                resultList.Add(sumWord.ToString());
+            }
+
+            return resultList;
+        }
+
+
+        private static IEnumerable<string> BreakWordIntoLines(string word, int lenght)
+        {
+            if (word.Length <= lenght)
+                return new List<string> { word };
+
+            var words = new List<string>();
+            for (int i = 0; i < word.Length; i += lenght)
+            {
+                string subStr = null;
+                subStr = ((i + lenght) > word.Length) ? word.Substring(i) : word.Substring(i, lenght);
+                words.Add(subStr);
+            }
+
+            return words;
         }
     }
 }

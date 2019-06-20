@@ -169,7 +169,6 @@ namespace Shared.Helpers
 
         private string EndLineCharInseartCalc(string str, int lenghtLine, string endLineChar)
         {
-
             List<string> resultList = new List<string>();
             var wordChanks = str.Split(' ');
             var sumWord = new StringBuilder();

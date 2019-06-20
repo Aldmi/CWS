@@ -22,7 +22,7 @@ namespace DeviceForExchnage.Test
     {
         private readonly MiddleWareInDataOption _middleWareInDataOption_OneStringHandler;
         private readonly MiddleWareInDataOption _middleWareInDataOption_TwoStringHandler;
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
 
         public MiddleWareInDataTest()
