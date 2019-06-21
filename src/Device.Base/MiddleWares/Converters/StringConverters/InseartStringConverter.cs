@@ -8,7 +8,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 
 
         public InseartStringConverter(InseartStringConverterOption option)
-            : base(null)
+            : base(option)
         {
             _option = option;
         }

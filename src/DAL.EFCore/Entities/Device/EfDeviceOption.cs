@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DAL.Abstract.Entities.Options.MiddleWare;
 using DAL.EFCore.Entities.Exchange.ProvidersOption;
-using DAL.EFCore.Entities.MiddleWare;
 using Newtonsoft.Json;
 
 namespace DAL.EFCore.Entities.Device
@@ -37,9 +37,9 @@ namespace DAL.EFCore.Entities.Device
 
         private string _middleWareInDataMetaData;
         [NotMapped]
-        public EfMiddleWareInDataOption MiddleWareInData
+        public MiddleWareInDataOption MiddleWareInData
         {
-            get => string.IsNullOrEmpty(_middleWareInDataMetaData) ? null : JsonConvert.DeserializeObject<EfMiddleWareInDataOption>(_middleWareInDataMetaData);
+            get => string.IsNullOrEmpty(_middleWareInDataMetaData) ? null : JsonConvert.DeserializeObject<MiddleWareInDataOption>(_middleWareInDataMetaData);
             set => _middleWareInDataMetaData = (value == null) ? null : JsonConvert.SerializeObject(value);
         }
     }

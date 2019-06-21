@@ -37,7 +37,7 @@ namespace DeviceForExchange.MiddleWares.Handlers
                 Converters.Add(new SubStringMemConverter(option.SubStringMemConverterOption));
             }
 
-            var orderedConverters = Converters.OrderBy(c => c.Priority);
+            var orderedConverters = Converters.OrderBy(c => c.Priority).ToList();
             Converters.Clear();
             Converters.AddRange(orderedConverters);
         }

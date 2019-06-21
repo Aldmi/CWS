@@ -11,7 +11,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 
 
         public InseartEndLineMarkerConverter(InseartEndLineMarkerConverterOption option) 
-            : base(null)
+            : base(option)
         {
             _option = option;
         }
