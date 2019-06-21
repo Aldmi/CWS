@@ -73,5 +73,63 @@ namespace DeviceForExchnage.Test.Datas
         }
 
 
+        public static InputData<AdInputType> GetData_WithoutNote(int countData)
+        {
+            var datas = Enumerable.Range(0, countData).Select(i => new AdInputType
+            {
+                Id = i,
+                StationDeparture = new Station
+                {
+                    NameRu = $"Index= {i}    Станция Отпр 1"
+                },
+                NumberOfTrain = "956"
+            }).ToList();
+
+
+            var inData = new InputData<AdInputType>()
+            {
+                Command = Command4Device.None,
+                DataAction = DataAction.CycleAction,
+                DeviceName = "Peron.P1",
+                DirectHandlerName = null,
+                ExchangeName = "Exch Peron.P1",
+                Data = datas
+            };
+
+            return inData;
+        }
+
+
+        public static InputData<AdInputType> GetData_NewNote(int countData)
+        {
+            var datas = Enumerable.Range(0, countData).Select(i => new AdInputType
+            {
+                Id = i,
+                Note = new Note
+                {
+                    NameRu = $"Index= {i} Поезд Следует без остановок",
+                },
+                StationDeparture = new Station
+                {
+                    NameRu = $"Index= {i}    Станция Отпр 1"
+                },
+                NumberOfTrain = "956"
+            }).ToList();
+
+
+            var inData = new InputData<AdInputType>()
+            {
+                Command = Command4Device.None,
+                DataAction = DataAction.CycleAction,
+                DeviceName = "Peron.P1",
+                DirectHandlerName = null,
+                ExchangeName = "Exch Peron.P1",
+                Data = datas
+            };
+
+            return inData;
+        }
+
+
     }
 }

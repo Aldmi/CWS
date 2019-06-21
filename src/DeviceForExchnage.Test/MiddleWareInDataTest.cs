@@ -20,17 +20,17 @@ namespace DeviceForExchnage.Test
 {
     public class MiddleWareInDataTest
     {
-        private readonly MiddleWareInDataOption option_OneStringHandler;
-        private readonly MiddleWareInDataOption option_TwoStringHandler;
-        private readonly MiddleWareInDataOption option_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter;
+        private readonly MiddleWareInDataOption _optionOneStringHandler;
+        private readonly MiddleWareInDataOption _optionTwoStringHandler;
+        private readonly MiddleWareInDataOption _optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter;
         private readonly ILogger _logger;
 
 
         public MiddleWareInDataTest()
         {
-             option_OneStringHandler = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("Note.NameRu");
-             option_TwoStringHandler = GetMiddleWareInDataOption.GetMiddleWareInDataOption_TwoStringHandlers("Note.NameRu", "StationDeparture.NameRu");
-             option_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu");
+             _optionOneStringHandler = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("Note.NameRu");
+             _optionTwoStringHandler = GetMiddleWareInDataOption.GetMiddleWareInDataOption_TwoStringHandlers("Note.NameRu", "StationDeparture.NameRu");
+             _optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu");
 
             //Loger Moq-----------------------------------------------
             var mock = new Mock<ILogger>();
@@ -43,21 +43,280 @@ namespace DeviceForExchnage.Test
 
 
         [Fact]
-        public void NormalUse_Test()
+        public void NormalUse_Note_Convert_6Step()
         {
             //Arrage
             var inData = InDataSourse.GetData_Note(1);
-            var middleWareinData = new MiddleWareInData<AdInputType>(option_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter, _logger);
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
 
             //Act
-            var result = middleWareinData.HandleInvoke(inData);
-            var val = result.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep1 = middleWareinData.HandleInvoke(inData);
+            var valStep1 = resStep1.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep2 = middleWareinData.HandleInvoke(inData);
+            var valStep2 = resStep2.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep3 = middleWareinData.HandleInvoke(inData);
+            var valStep3 = resStep3.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep4 = middleWareinData.HandleInvoke(inData);
+            var valStep4 = resStep4.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep5 = middleWareinData.HandleInvoke(inData);
+            var valStep5 = resStep5.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep6 = middleWareinData.HandleInvoke(inData);
+            var valStep6 = resStep6.Value?.Data?.FirstOrDefault()?.Note.NameRu;
 
             //Asert
-            result.IsSuccess.Should().BeTrue();
-            val.Should().NotBeNull();
-            val.Should().Be("Index= 0   Со всеми станциями кроие: Волочаевская, КлимскаяAfter InseartStringConverterAfter LimitStringComverter");
+            resStep1.IsSuccess.Should().BeTrue();
+            valStep1.Should().NotBeNull();
+            valStep1.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
+
+            resStep2.IsSuccess.Should().BeTrue();
+            valStep2.Should().NotBeNull();
+            valStep2.Should().Be("Красноярская, Куйбышевская,0x09Казахстанская, Свердлолвская,0x09Московская, Горьковская");
+
+            resStep3.IsSuccess.Should().BeTrue();
+            valStep3.Should().NotBeNull();
+            valStep3.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
+
+            resStep4.IsSuccess.Should().BeTrue();
+            valStep4.Should().NotBeNull();
+            valStep4.Should().Be("Красноярская, Куйбышевская,0x09Казахстанская, Свердлолвская,0x09Московская, Горьковская");
+
+            resStep5.IsSuccess.Should().BeTrue();
+            valStep5.Should().NotBeNull();
+            valStep5.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
+
+            resStep6.IsSuccess.Should().BeTrue();
+            valStep6.Should().NotBeNull();
+            valStep6.Should().Be("Красноярская, Куйбышевская,0x09Казахстанская, Свердлолвская,0x09Московская, Горьковская");
         }
+
+
+        [Fact]
+        public void NormalUse_Note_StationDeparture_Convert_6Step()
+        {
+            //Arrage
+            var inData = InDataSourse.GetData_Note(1);
+            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_TwoStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu", "StationDeparture.NameRu");
+            var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
+
+            //Act
+            var resStep1 = middleWareinData.HandleInvoke(inData);
+            var valNoteStep1 = resStep1.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var valStationDepartureStep1 = resStep1.Value?.Data?.FirstOrDefault()?.StationDeparture.NameRu;
+
+            var resStep2 = middleWareinData.HandleInvoke(inData);
+            var valNoteStep2 = resStep2.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var valStationDepartureStep2 = resStep2.Value?.Data?.FirstOrDefault()?.StationDeparture.NameRu;
+
+            var resStep3 = middleWareinData.HandleInvoke(inData);
+            var valNoteStep3 = resStep3.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var valStationDepartureStep3 = resStep3.Value?.Data?.FirstOrDefault()?.StationDeparture.NameRu;
+
+            var resStep4 = middleWareinData.HandleInvoke(inData);
+            var valNoteStep4 = resStep4.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var valStationDepartureStep4 = resStep4.Value?.Data?.FirstOrDefault()?.StationDeparture.NameRu;
+
+            var resStep5 = middleWareinData.HandleInvoke(inData);
+            var valNoteStep5 = resStep5.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var valStationDepartureStep5 = resStep5.Value?.Data?.FirstOrDefault()?.StationDeparture.NameRu;
+
+            var resStep6 = middleWareinData.HandleInvoke(inData);
+            var valNoteStep6 = resStep6.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var valStationDepartureStep6 = resStep6.Value?.Data?.FirstOrDefault()?.StationDeparture.NameRu;
+
+            //Asert
+            resStep1.IsSuccess.Should().BeTrue();
+            valNoteStep1.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
+            valStationDepartureStep1.Should().Be("Index= 0"); 
+
+            resStep2.IsSuccess.Should().BeTrue();
+            valNoteStep2.Should().Be("Красноярская, Куйбышевская,0x09Казахстанская, Свердлолвская,0x09Московская, Горьковская");
+            valStationDepartureStep2.Should().Be("  Станция");
+
+            resStep3.IsSuccess.Should().BeTrue();
+            valNoteStep3.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
+            valStationDepartureStep3.Should().Be("Отпр 1");
+
+            resStep4.IsSuccess.Should().BeTrue();
+            valNoteStep4.Should().Be("Красноярская, Куйбышевская,0x09Казахстанская, Свердлолвская,0x09Московская, Горьковская");
+            valStationDepartureStep4.Should().Be("Index= 0");
+
+            resStep5.IsSuccess.Should().BeTrue();
+            valNoteStep5.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
+            valStationDepartureStep5.Should().Be("  Станция");
+
+            resStep6.IsSuccess.Should().BeTrue();
+            valNoteStep6.Should().Be("Красноярская, Куйбышевская,0x09Казахстанская, Свердлолвская,0x09Московская, Горьковская");
+            valStationDepartureStep6.Should().Be("Отпр 1");
+        }
+
+
+        [Fact]
+        public void SubStringLenghtHightStringLenght_3Step()
+        {
+            //Arrage
+            //Arrage
+            var inData = InDataSourse.GetData_Note(1);
+            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu");
+            option.StringHandlers[0].SubStringMemConverterOption.Lenght = 300;
+            var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
+
+            //Act
+            var resStep1 = middleWareinData.HandleInvoke(inData);
+            var valStep1 = resStep1.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep2 = middleWareinData.HandleInvoke(inData);
+            var valStep2 = resStep2.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep3 = middleWareinData.HandleInvoke(inData);
+            var valStep3 = resStep3.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep4 = middleWareinData.HandleInvoke(inData);
+            var valStep4 = resStep4.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep5 = middleWareinData.HandleInvoke(inData);
+            var valStep5 = resStep5.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep6 = middleWareinData.HandleInvoke(inData);
+            var valStep6 = resStep6.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+
+            //Asert
+            var assertStr ="Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская, Красноярская,0x09Куйбышевская, Казахстанская,0x09Свердлолвская, Московская, Горьковская";
+
+            resStep1.IsSuccess.Should().BeTrue();
+            valStep1.Should().NotBeNull();
+            valStep1.Should().Be(assertStr);
+
+            resStep2.IsSuccess.Should().BeTrue();
+            valStep2.Should().NotBeNull();
+            valStep1.Should().Be(assertStr);
+
+            resStep3.IsSuccess.Should().BeTrue();
+            valStep3.Should().NotBeNull();
+            valStep1.Should().Be(assertStr);
+
+            resStep4.IsSuccess.Should().BeTrue();
+            valStep4.Should().NotBeNull();
+            valStep1.Should().Be(assertStr);
+
+            resStep5.IsSuccess.Should().BeTrue();
+            valStep5.Should().NotBeNull();
+            valStep1.Should().Be(assertStr);
+
+            resStep6.IsSuccess.Should().BeTrue();
+            valStep6.Should().NotBeNull();
+            valStep1.Should().Be(assertStr);
+        }
+
+
+        [Fact]
+        public void NewInDataAfter2StepAnd5Step_6Step()
+        {
+            //Arrage
+            var inData = InDataSourse.GetData_Note(1);
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
+
+            //Act
+            var resStep1 = middleWareinData.HandleInvoke(inData);
+            var valStep1 = resStep1.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep2 = middleWareinData.HandleInvoke(inData);
+            var valStep2 = resStep2.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            inData = InDataSourse.GetData_NewNote(1);
+            var resStep3 = middleWareinData.HandleInvoke(inData);
+            var valStep3 = resStep3.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep4 = middleWareinData.HandleInvoke(inData);
+            var valStep4 = resStep4.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep5 = middleWareinData.HandleInvoke(inData);
+            var valStep5 = resStep5.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            inData = InDataSourse.GetData_Note(1);
+            var resStep6 = middleWareinData.HandleInvoke(inData);
+            var valStep6 = resStep6.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+
+            //Asert
+            resStep1.IsSuccess.Should().BeTrue();
+            valStep1.Should().NotBeNull();
+            valStep1.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
+
+            resStep2.IsSuccess.Should().BeTrue();
+            valStep2.Should().NotBeNull();
+            valStep2.Should().Be("Красноярская, Куйбышевская,0x09Казахстанская, Свердлолвская,0x09Московская, Горьковская");
+
+            resStep3.IsSuccess.Should().BeTrue();
+            valStep3.Should().NotBeNull();
+            valStep3.Should().Be("Index= 0 Поезд Следует без остановок");
+
+            resStep4.IsSuccess.Should().BeTrue();
+            valStep4.Should().NotBeNull();
+            valStep4.Should().Be("Index= 0 Поезд Следует без остановок");
+
+            resStep5.IsSuccess.Should().BeTrue();
+            valStep5.Should().NotBeNull();
+            valStep5.Should().Be("Index= 0 Поезд Следует без остановок");
+
+            resStep6.IsSuccess.Should().BeTrue();
+            valStep6.Should().NotBeNull();
+            valStep6.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
+        }
+
+
+        [Fact]
+        public void EmptyNote_3Step()
+        {
+            //Arrage
+            var inData = InDataSourse.GetData_Note(1);
+            inData.Data[0].Note.NameRu = string.Empty;
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
+
+            //Act
+            var resStep1 = middleWareinData.HandleInvoke(inData);
+            var valStep1 = resStep1.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep2 = middleWareinData.HandleInvoke(inData);
+            var valStep2 = resStep2.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep3 = middleWareinData.HandleInvoke(inData);
+            var valStep3 = resStep3.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+
+            //Asert
+            resStep1.IsSuccess.Should().BeTrue();
+            valStep1.Should().NotBeNull();
+            valStep1.Should().Be(string.Empty);
+
+            resStep2.IsSuccess.Should().BeTrue();
+            valStep2.Should().NotBeNull();
+            valStep2.Should().Be(string.Empty);
+
+            resStep3.IsSuccess.Should().BeTrue();
+            valStep3.Should().NotBeNull();
+            valStep3.Should().Be(string.Empty);
+        }
+
+
+        [Fact]
+        public void NullNote_Error_3Step()
+        {
+            //Arrage
+            var inData = InDataSourse.GetData_WithoutNote(1);
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
+
+            //Act
+            var resStep1 = middleWareinData.HandleInvoke(inData);
+            var errorStep1 = resStep1.Error.GetErrors.FirstOrDefault();
+            var resStep2 = middleWareinData.HandleInvoke(inData);
+            var errorStep2 = resStep2.Error.GetErrors.FirstOrDefault();
+            var resStep3 = middleWareinData.HandleInvoke(inData);
+            var errorStep3 = resStep3.Error.GetErrors.FirstOrDefault();
+
+            //Asert
+            resStep1.IsSuccess.Should().BeFalse();
+            errorStep1.Should().NotBeNull();
+            errorStep1.Should().Be("MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  Родительский объект == Null. Note.NameRu. Невозможно обратится к свойству NameRu");
+
+            resStep2.IsSuccess.Should().BeFalse();
+            errorStep2.Should().NotBeNull();
+            errorStep2.Should().Be("MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  Родительский объект == Null. Note.NameRu. Невозможно обратится к свойству NameRu");
+
+            resStep3.IsSuccess.Should().BeFalse();
+            errorStep3.Should().NotBeNull();
+            errorStep3.Should().Be("MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  Родительский объект == Null. Note.NameRu. Невозможно обратится к свойству NameRu");
+        }
+
+
+
+        //-------------------------------------------------------------------------------
+
 
 
 
@@ -69,7 +328,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1);
-            var middleWareinData = new MiddleWareInData<AdInputType>(option_OneStringHandler, _logger);
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -87,8 +346,8 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1);
-            option_OneStringHandler.StringHandlers[0].PropName = "Note.xxxx";
-            var middleWareinData = new MiddleWareInData<AdInputType>(option_OneStringHandler, _logger);
+            _optionOneStringHandler.StringHandlers[0].PropName = "Note.xxxx";
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -107,8 +366,8 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1);
-            option_OneStringHandler.StringHandlers[0].PropName = "ZZZ.xxxx";
-            var middleWareinData = new MiddleWareInData<AdInputType>(option_OneStringHandler, _logger);
+            _optionOneStringHandler.StringHandlers[0].PropName = "ZZZ.xxxx";
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -127,7 +386,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1000);
-            var middleWareinData = new MiddleWareInData<AdInputType>(option_OneStringHandler, _logger);
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -151,8 +410,8 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1000);
-            option_OneStringHandler.StringHandlers[0].PropName = "Note.xxxx";
-            var middleWareinData = new MiddleWareInData<AdInputType>(option_OneStringHandler, _logger);
+            _optionOneStringHandler.StringHandlers[0].PropName = "Note.xxxx";
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -175,7 +434,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1000);
-            var middleWareinData = new MiddleWareInData<AdInputType>(option_TwoStringHandler, _logger);
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionTwoStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -191,27 +450,6 @@ namespace DeviceForExchnage.Test
                 data.Note.NameRu.Should().Be($"Index= {i}   Со всеми станциями кроие: Волочаевская, КлимскаяAfter InseartStringConverterAfter LimitStringComverter");
                 data.StationDeparture.NameRu.Should().Be($"Index= {i}    Станция Отпр 1After ReplaceEmptyStringConverter");
             }
-        }
-
-
-
-        [Fact]
-        public void PropertyNoteEqualNull_Test()
-        {
-            //Arrage
-            var inData = InDataSourse.GetData(1);
-            inData.Data.First().Note = null;
-            var middleWareinData = new MiddleWareInData<AdInputType>(option_OneStringHandler, _logger);
-
-            //Act
-            var result = middleWareinData.HandleInvoke(inData);
-            var errors = result.Error.GetErrors;
-            var error = errors.First();
-
-            //Asert
-            result.IsSuccess.Should().BeFalse();
-            errors.Count.Should().Be(1);
-            error.Should().Be("MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  Родительский объект == Null. Note.NameRu. Невозможно обратится к свойству NameRu");
         }
 
 

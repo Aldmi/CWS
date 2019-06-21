@@ -95,13 +95,59 @@ namespace DeviceForExchnage.Test.Datas
                         PropName = propName,
                         SubStringMemConverterOption = new SubStringMemConverterOption
                         {
+                            Priority = 1,
                             Lenght = 100
                         },
                         InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
                         {
-                            LenghtLine = 25,
+                            Priority = 2,
+                            LenghtLine = 40,
                             Marker = "0x09"
                         }
+                    }
+                },
+                InvokerOutput = new InvokerOutput
+                {
+                    Mode = InvokerOutputMode.Instantly
+                }
+            };
+
+            return middleWareInDataOption;
+        }
+
+
+
+
+        public static MiddleWareInDataOption GetMiddleWareInDataOption_TwoStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter(params string[] propNames)
+        {
+            MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
+            {
+                Description = "Преобразование Note",
+                StringHandlers = new List<StringHandlerMiddleWareOption>
+                {
+                    new StringHandlerMiddleWareOption
+                    {
+                        PropName = propNames[0],
+                        SubStringMemConverterOption = new SubStringMemConverterOption
+                        {
+                            Priority = 1,
+                            Lenght = 100
+                        },
+                        InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
+                        {
+                            Priority = 2,
+                            LenghtLine = 40,
+                            Marker = "0x09"
+                        }
+                    },
+                    new StringHandlerMiddleWareOption
+                    {
+                        PropName = propNames[1],
+                        SubStringMemConverterOption = new SubStringMemConverterOption
+                        {
+                            Priority = 1,
+                            Lenght = 10
+                        },
                     }
                 },
                 InvokerOutput = new InvokerOutput

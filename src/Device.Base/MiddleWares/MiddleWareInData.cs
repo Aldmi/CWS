@@ -67,9 +67,11 @@ namespace DeviceForExchange.MiddleWares
         /// </summary>
         public Result<InputData<TIn>, ErrorMiddleWareInDataWrapper> HandleInvoke(InputData<TIn> inData)
         {
+            var inDataClone = FastDeepCloner.DeepCloner.Clone(inData);
+
             string error;
             var errorHandlerWrapper= new ErrorMiddleWareInDataWrapper();
-            Parallel.ForEach(inData.Data, (data) =>
+            Parallel.ForEach(inDataClone.Data, (data) =>
             {
                 Parallel.ForEach(_stringHandlers, (stringHandler) =>
                 {
@@ -107,7 +109,7 @@ namespace DeviceForExchange.MiddleWares
             });
 
             var res = errorHandlerWrapper.IsEmpty ?
-                Result.Ok<InputData<TIn>, ErrorMiddleWareInDataWrapper>(inData) :
+                Result.Ok<InputData<TIn>, ErrorMiddleWareInDataWrapper>(inDataClone) :
                 Result.Fail<InputData<TIn>, ErrorMiddleWareInDataWrapper>(errorHandlerWrapper);
 
             return res;
