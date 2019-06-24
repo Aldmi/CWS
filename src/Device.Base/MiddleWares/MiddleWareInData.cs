@@ -82,7 +82,7 @@ namespace DeviceForExchange.MiddleWares
                         var tuple = resultGet.Value;
                         try
                         {
-                            var newValue= stringHandler.Convert(tuple.val); //TODO: Создать новый тип искобчений для конверторов.
+                            var newValue= stringHandler.Convert(tuple.val, 1); //TODO: Создать новый тип искобчений для конверторов.
                             tuple.val = newValue;
                             var resultSet = _mutationsServiseStr.SetPropValue(tuple);
                             if (resultSet.IsFailure)

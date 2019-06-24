@@ -18,7 +18,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 
 
 
-        protected override string ConvertChild(string inProp)
+        protected override string ConvertChild(string inProp, int dataId)
         {
             var subStrings = inProp.SubstringWithWholeWords(0, _option.LenghtLine).ToList();
 

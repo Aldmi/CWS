@@ -20,11 +20,11 @@ namespace DeviceForExchnage.Test.ConverterTests
             var str = "Со всеми остановками кроме: серпухово, балаково, Свободное";
 
             //Act
-            var resStep1 = converer.Convert(str);
-            var resStep2 = converer.Convert(str);
-            var resStep3 = converer.Convert(str);
-            var resStep4 = converer.Convert(str);
-            var resStep5 = converer.Convert(str);
+            var resStep1 = converer.Convert(str,1);
+            var resStep2 = converer.Convert(str,1);
+            var resStep3 = converer.Convert(str,1);
+            var resStep4 = converer.Convert(str,1);
+            var resStep5 = converer.Convert(str,1);
 
             //Asert
             resStep1.Should().Be("Со всеми остановками");
@@ -48,9 +48,9 @@ namespace DeviceForExchnage.Test.ConverterTests
             var str = "Со всеми остановками кроме: серпухово, балаково, Свободное";
 
             //Act
-            var resStep1 = converer.Convert(str);
-            var resStep2 = converer.Convert(str);
-            var resStep3 = converer.Convert(str);
+            var resStep1 = converer.Convert(str,1);
+            var resStep2 = converer.Convert(str,1);
+            var resStep3 = converer.Convert(str,1);
 
             //Asert
             resStep1.Should().Be(str);
@@ -71,12 +71,12 @@ namespace DeviceForExchnage.Test.ConverterTests
             var str = "Со всеми остановками кроме: серпухово, балаково, Свободное";
 
             //Act
-            var resStep1 = converer.Convert(str);
-            var resStep2 = converer.Convert(str);
+            var resStep1 = converer.Convert(str,1);
+            var resStep2 = converer.Convert(str,1);
             str = "Новая строка 11 22 33 44 55 66 7777777 8888888";
-            var resStep3 = converer.Convert(str);
-            var resStep4 = converer.Convert(str);
-            var resStep5 = converer.Convert(str);
+            var resStep3 = converer.Convert(str,1);
+            var resStep4 = converer.Convert(str,1);
+            var resStep5 = converer.Convert(str,1);
 
             //Asert
             resStep1.Should().Be("Со всеми остановками");
@@ -100,16 +100,16 @@ namespace DeviceForExchnage.Test.ConverterTests
             var str = "Со всеми остановками кроме: серпухово, балаково, Свободное";
 
             //Act
-            var resStep1 = converer.Convert(str);
+            var resStep1 = converer.Convert(str,1);
             str = "Новая строка После 1 шага";
-            var resStep2 = converer.Convert(str);
+            var resStep2 = converer.Convert(str,1);
             str = "Новая строка После 2 шага";
-            var resStep3 = converer.Convert(str);
+            var resStep3 = converer.Convert(str,1);
             str = "Новая строка После 3 шага. Эта строка будет обрабатываться долго";
-            var resStep4 = converer.Convert(str);
-            var resStep5 = converer.Convert(str);
-            var resStep6 = converer.Convert(str);
-            var resStep7 = converer.Convert(str);
+            var resStep4 = converer.Convert(str,1);
+            var resStep5 = converer.Convert(str,1);
+            var resStep6 = converer.Convert(str,1);
+            var resStep7 = converer.Convert(str,1);
 
             //Asert
             resStep1.Should().Be("Со всеми остановками");
@@ -134,9 +134,9 @@ namespace DeviceForExchnage.Test.ConverterTests
             var str = String.Empty;
 
             //Act
-            var resStep1 = converer.Convert(str);
-            var resStep2 = converer.Convert(str);
-            var resStep3 = converer.Convert(str);
+            var resStep1 = converer.Convert(str,1);
+            var resStep2 = converer.Convert(str,1);
+            var resStep3 = converer.Convert(str,1);
 
             //Asert
             resStep1.Should().Be(expected: string.Empty);
@@ -157,9 +157,9 @@ namespace DeviceForExchnage.Test.ConverterTests
             string str = null;
 
             //Act
-            var resStep1 = converer.Convert(str);
-            var resStep2 = converer.Convert(str);
-            var resStep3 = converer.Convert(str);
+            var resStep1 = converer.Convert(str,1);
+            var resStep2 = converer.Convert(str,1);
+            var resStep3 = converer.Convert(str,1);
 
             //Asert
             resStep1.Should().Be(expected:null);

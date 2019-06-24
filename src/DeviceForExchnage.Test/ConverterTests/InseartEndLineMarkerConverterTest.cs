@@ -22,7 +22,7 @@ namespace DeviceForExchnage.Test.ConverterTests
             var str = "Со всеми остановками кроме: серпухово, балаково, Свободное";
 
             //Act
-            var res = converer.Convert(str);
+            var res = converer.Convert(str,1);
 
             //Asert
             res.Should().Be("Со всеми остановками кроме:0x09серпухово, балаково,0x09Свободное");
@@ -43,7 +43,7 @@ namespace DeviceForExchnage.Test.ConverterTests
             var str = "Со всеми остановками кроме: серпухово, балаково, Свободное";
 
             //Act
-            var res = converer.Convert(str);
+            var res = converer.Convert(str, 1);
 
             //Asert
             res.Should().Be(str);
@@ -64,7 +64,7 @@ namespace DeviceForExchnage.Test.ConverterTests
             var str = "Строка1 Строка2 Строка3";
 
             //Act
-            var res = converer.Convert(str);
+            var res = converer.Convert(str,1);
 
             //Asert
             res.Should().Be("Стр0x09ока0x0910x09Стр0x09ока0x0920x09Стр0x09ока0x093"); 
@@ -85,7 +85,7 @@ namespace DeviceForExchnage.Test.ConverterTests
             var str = String.Empty;
 
             //Act
-            var res = converer.Convert(str);
+            var res = converer.Convert(str,1);
 
             //Asert
             res.Should().Be(str);
@@ -106,7 +106,7 @@ namespace DeviceForExchnage.Test.ConverterTests
             string str = null;
 
             //Act
-            var res = converer.Convert(str);
+            var res = converer.Convert(str,1);
 
             //Asert
             res.Should().Be(str);

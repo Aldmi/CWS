@@ -13,12 +13,12 @@ namespace DeviceForExchange.MiddleWares.Handlers
 
         #region Methode
 
-        public virtual T Convert(T inProp)
+        public virtual T Convert(T inProp, int dataId)
         {
             //Вызываемый код по имени PropName находит свойство во входном типе и передает его сюда
             foreach (var converter in Converters)
             {
-                inProp = converter.Convert(inProp);
+                inProp = converter.Convert(inProp, dataId);
             }
             return inProp;
         }

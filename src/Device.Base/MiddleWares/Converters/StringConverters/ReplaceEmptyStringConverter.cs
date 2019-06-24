@@ -15,7 +15,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 
 
 
-        protected override string ConvertChild(string inProp)
+        protected override string ConvertChild(string inProp, int dataId)
         {
             //DEBUG
             return inProp + "After ReplaceEmptyStringConverter";

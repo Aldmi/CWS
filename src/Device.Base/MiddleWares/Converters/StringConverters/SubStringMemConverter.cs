@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
 using Shared.Helpers;
@@ -12,9 +14,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
     public class SubStringMemConverter : BaseStringConverter
     {
         private readonly SubStringMemConverterOption _option;     //Хранит длину подстроки
-        private int _index;                                       //Индекс подстроки для вывода
-        private string _str;                                      //Строка
-        private IList<string> _subStrings;                        //Список подстрок индексируемых _index
+        private readonly ConcurrentDictionary<int, SubStringState> _subStringDict= new ConcurrentDictionary<int, SubStringState>();
 
 
 
@@ -25,29 +25,96 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
         }
 
 
-
         /// <summary>
         /// Перезаписывает строку и сбрасывает _startIndex когда приходит новая строка 
         /// </summary>
         /// <param name="inProp"></param>
+        /// <param name="dataId"></param>
         /// <returns></returns>
-        protected override string ConvertChild(string inProp)
+        protected override string ConvertChild(string inProp, int dataId)
         {
-            //СБРОС
-            if (_str == null || !_str.Equals(inProp))
+            SubStringState GetResetState()
             {
-                _str = inProp;
-                _index = -1;
-                _subStrings = _str.SubstringWithWholeWords(_index, _option.Lenght).ToList();
+                return new SubStringState(inProp, _option.Lenght);
+            }
+          
+            //Если данных нет в словаре. Добавить в словарь новые данные.
+            if (!_subStringDict.ContainsKey(dataId))
+            {
+                _subStringDict.TryAdd(dataId, GetResetState());
             }
 
-            if (++_index >= _subStrings.Count)
+            //Если Строка по заданному индексу поменялась, сбросим состояние.
+            if (_subStringDict.TryGetValue(dataId, out var value))
             {
-                _index = 0;
+                if (!value.EqualStr(inProp))        
+                {
+                    _subStringDict[dataId] = GetResetState();
+                }
             }
 
-            var subStr = _subStrings[_index];
-            return subStr;
+            //Вернуть следующую подстроку
+            if (_subStringDict.TryGetValue(dataId, out var resultValue))
+            {
+                var subStr = resultValue.GetNextSubString();
+                return subStr;
+            }
+
+            throw new Exception($"SubStringMemConverter НЕ СМОГ ИЗВЛЕЧЬ РЕЗУЛЬТАТ ОБРАБОТКИ ИЗ СЛОВАРЯ {inProp}");
         }
     }
+
+
+    /// <summary>
+    /// Разбивает строку на подстроки при создании объекта.
+    /// Каждый вызов метода GetNextSubString - циклически перебирает подстроки
+    /// </summary>
+    public class SubStringState
+    {
+        public int Ingex { get; private set; }                           //Индекс подстроки для вывода
+        public readonly string BaseStr;                                  //Строка
+        public readonly IList<string> SubStrings;                        //Список подстрок индексируемых _index
+
+
+
+        #region ctor
+
+        public SubStringState(string baseStr, int subStrLenght)
+        {
+            Ingex = -1;
+            BaseStr = baseStr;
+            SubStrings = BaseStr.SubstringWithWholeWords(Ingex, subStrLenght).ToList();
+        }
+
+        #endregion
+
+
+
+        #region Methode
+
+        public bool EqualStr(string str)
+        {
+            return BaseStr.Equals(str);
+        }
+
+
+        private void IncrementIndex()
+        {
+            if (++Ingex >= SubStrings.Count)
+            {
+                Ingex = 0;
+            }
+        }
+
+
+        public string GetNextSubString()
+        {
+            IncrementIndex();
+            return SubStrings[Ingex];
+        }
+
+        #endregion
+    }
+
+
 }

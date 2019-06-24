@@ -12,15 +12,15 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
             Priority = baseOption.Priority;
         }
 
-        public string Convert(string inProp)
+        public string Convert(string inProp, int dataId)
         {
             if (inProp == null)
                 return null;
 
-            return ConvertChild(inProp);
+            return ConvertChild(inProp, dataId);
         }
 
 
-        protected abstract string ConvertChild(string inProp);
+        protected abstract string ConvertChild(string inProp, int dataId);
     }
 }

@@ -15,7 +15,7 @@ namespace DeviceForExchange.MiddleWares.Converters.DateTimeConverters
 
         public int Priority { get; }
 
-        public DateTime Convert(DateTime inProp)
+        public DateTime Convert(DateTime inProp, int dataId)
         {
             //DEBUG
             return inProp.AddHours(10);
