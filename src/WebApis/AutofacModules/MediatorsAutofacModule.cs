@@ -1,10 +1,11 @@
 ﻿using Autofac;
 using BL.Services.Mediators;
+using InputDataModel.Base;
 using Module = Autofac.Module;
 
 namespace WebApiSwc.AutofacModules
 {
-    public class MediatorsAutofacModule<TIn> : Module
+    public class MediatorsAutofacModule<TIn> : Module where TIn : InputTypeBase
     {
         protected override void Load(ContainerBuilder builder)
         {

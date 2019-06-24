@@ -1,11 +1,11 @@
 ﻿using System;
 using InputDataModel.Autodictor.Entities;
+using InputDataModel.Base;
 
 namespace InputDataModel.Autodictor.Model
 {
-    public class AdInputType
+    public class AdInputType : InputTypeBase
     {
-        public int Id { get; set; }
         public int  ScheduleId { get; set; }                         //ID поезда в годовом расписании (из ЦИС)
         public int TrnId { get; set; }                               //уникальный ID отправления поезда из ЦИС
 

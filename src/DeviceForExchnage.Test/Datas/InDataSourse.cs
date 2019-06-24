@@ -73,6 +73,37 @@ namespace DeviceForExchnage.Test.Datas
         }
 
 
+        public static InputData<AdInputType> GetData_Note_Index(int countData)
+        {
+            var datas = Enumerable.Range(0, countData).Select(i => new AdInputType
+            {
+                Id = i,
+                Note = new Note
+                {
+                    NameRu = $"Со всеми станциями кроме: Волочаевская{i}, Климская{i}, Октябрьская{i}, Новосибирская{i}, Красноярская{i}, Куйбышевская{i}, Казахстанская{i}, Свердлолвская{i}, Московская{i}, Горьковская{i}, Сочинская{i}, Маковая{i}, Красносельская{i}, Уютная{i}, Петушки{i}",
+                },
+                StationDeparture = new Station
+                {
+                    NameRu = $"Станция Отпр {i}"
+                },
+                NumberOfTrain = "956"
+            }).ToList();
+
+
+            var inData = new InputData<AdInputType>()
+            {
+                Command = Command4Device.None,
+                DataAction = DataAction.CycleAction,
+                DeviceName = "Peron.P1",
+                DirectHandlerName = null,
+                ExchangeName = "Exch Peron.P1",
+                Data = datas
+            };
+
+            return inData;
+        }
+
+
         public static InputData<AdInputType> GetData_WithoutNote(int countData)
         {
             var datas = Enumerable.Range(0, countData).Select(i => new AdInputType

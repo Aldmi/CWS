@@ -20,7 +20,7 @@ namespace BL.Services.MessageBroker
     /// СТАРТ/СТОП сервиса происходит через background.
     /// </summary>
     /// <typeparam name="TIn">Тип обрабатываемых входных данных</typeparam>
-    public class ConsumerMessageBroker4InputData<TIn> : IDisposable
+    public class ConsumerMessageBroker4InputData<TIn> : IDisposable where TIn : InputTypeBase
     {
         #region field
 

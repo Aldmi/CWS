@@ -19,6 +19,7 @@ using Exchange.Base.Model;
 using Infrastructure.EventBus.Abstract;
 using Infrastructure.MessageBroker.Abstract;
 using Infrastructure.MessageBroker.Options;
+using InputDataModel.Base;
 using Serilog;
 using Shared.Enums;
 using Shared.Types;
@@ -35,7 +36,7 @@ namespace BL.Services.Mediators
     /// Сервис объединяет работу со всеми Storage,
     /// и предоставляет интерфейс для Добавления/Удаления элементов в Storage
     /// </summary>
-    public class MediatorForStorages<TIn>
+    public class MediatorForStorages<TIn> where TIn : InputTypeBase
     {
         #region fields
 

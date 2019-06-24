@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BL.Services.Exceptions;
 using BL.Services.Mediators;
 using DeviceForExchange;
+using InputDataModel.Base;
 
 namespace BL.Services.Actions
 {
@@ -13,7 +14,7 @@ namespace BL.Services.Actions
     /// После успешного билда ус-ва, Обмены, транспорт попадают в Storages
     /// </summary>
     /// <typeparam name="TIn"></typeparam>
-    public class BuildDeviceService<TIn>
+    public class BuildDeviceService<TIn> where TIn : InputTypeBase
     {
         #region field
 

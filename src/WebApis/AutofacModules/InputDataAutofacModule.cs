@@ -6,13 +6,14 @@ using BL.Services.InputData;
 using BL.Services.MessageBroker;
 using Infrastructure.MessageBroker.Abstract;
 using Infrastructure.MessageBroker.Options;
+using InputDataModel.Base;
 using Microsoft.Extensions.Configuration;
 using Worker.Background.Abstarct;
 using Worker.Background.Concrete.HostingBackground;
 
 namespace WebApiSwc.AutofacModules
 {
-    public class InputDataAutofacModule<TIn> : Module
+    public class InputDataAutofacModule<TIn> : Module where TIn : InputTypeBase
     {
         public string BackgroundName { get;  }
         public bool AutoStartBg { get;  }

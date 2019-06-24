@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BL.Services.Exceptions;
 using BL.Services.Mediators;
 using Exchange.Base;
+using InputDataModel.Base;
 using Shared.Types;
 
 
@@ -18,7 +19,7 @@ namespace BL.Services.Actions
     /// * Послать вручную данные на обмен ус-ва.
     /// 
     /// </summary>
-    public class DeviceActionService<TIn>
+    public class DeviceActionService<TIn>where TIn : InputTypeBase
     {
         #region fields
 

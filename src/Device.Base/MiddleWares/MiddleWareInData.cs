@@ -20,7 +20,7 @@ namespace DeviceForExchange.MiddleWares
     /// Сервис является иммутабельным. Он создается на базе MiddleWareInDataOption и его State не меняется
     /// </summary>
     /// <typeparam name="TIn">Входные данные для обработки</typeparam>
-    public class MiddleWareInData<TIn> : ISupportMiddlewareInvoke<TIn>
+    public class MiddleWareInData<TIn> : ISupportMiddlewareInvoke<TIn> where TIn : InputTypeBase
     {
         #region fields
 
@@ -82,7 +82,7 @@ namespace DeviceForExchange.MiddleWares
                         var tuple = resultGet.Value;
                         try
                         {
-                            var newValue= stringHandler.Convert(tuple.val, 1); //TODO: Создать новый тип искобчений для конверторов.
+                            var newValue= stringHandler.Convert(tuple.val, data.Id); //TODO: Создать новый тип исключений для конверторов.
                             tuple.val = newValue;
                             var resultSet = _mutationsServiseStr.SetPropValue(tuple);
                             if (resultSet.IsFailure)

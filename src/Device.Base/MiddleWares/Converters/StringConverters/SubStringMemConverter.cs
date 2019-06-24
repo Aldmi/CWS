@@ -69,7 +69,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
     /// Разбивает строку на подстроки при создании объекта.
     /// Каждый вызов метода GetNextSubString - циклически перебирает подстроки
     /// </summary>
-    public class SubStringState
+    public class SubStringState  //TODO: попробовать поменять на структуру
     {
         public int Ingex { get; private set; }                           //Индекс подстроки для вывода
         public readonly string BaseStr;                                  //Строка

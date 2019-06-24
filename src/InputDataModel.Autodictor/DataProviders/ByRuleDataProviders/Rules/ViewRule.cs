@@ -289,10 +289,10 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var note = uit.Note?.GetName(lang);
             //DEBUG------Костыль по ограничению------
             var noteStr = string.IsNullOrEmpty(note) ? " " : note;
-            if (noteStr.Length > 100)
-            {
-                noteStr = "Информация об остановках передается по громкоговорящей связи";
-            }
+            //if (noteStr.Length > 100)
+            //{
+            //    noteStr = "Информация об остановках передается по громкоговорящей связи";
+            //}
             var stationsCutStr = string.IsNullOrEmpty(stationsCut) ? "ПОСАДКИ НЕТ" : stationsCut;
             //DEBUG------
 

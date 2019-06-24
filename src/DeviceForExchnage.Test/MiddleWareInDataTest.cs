@@ -91,6 +91,78 @@ namespace DeviceForExchnage.Test
 
 
         [Fact]
+        public void NormalUse_Note_2Data_Convert_6Step()
+        {
+            //Arrage
+            var inData = InDataSourse.GetData_Note_Index(2);
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
+
+            //Act
+            var resStep1 = middleWareinData.HandleInvoke(inData);
+            var valStep1Data1 = resStep1.Value?.Data[0].Note.NameRu;
+            var valStep1Data2 = resStep1.Value?.Data[1].Note.NameRu;
+
+            var resStep2 = middleWareinData.HandleInvoke(inData);
+            var valStep2Data1 = resStep2.Value?.Data[0].Note.NameRu;
+            var valStep2Data2 = resStep2.Value?.Data[1].Note.NameRu;
+
+            var resStep3 = middleWareinData.HandleInvoke(inData);
+            var valStep3Data1 = resStep3.Value?.Data[0].Note.NameRu;
+            var valStep3Data2 = resStep3.Value?.Data[1].Note.NameRu;
+
+            var resStep4 = middleWareinData.HandleInvoke(inData);
+            var valStep4Data1 = resStep4.Value?.Data[0].Note.NameRu;
+            var valStep4Data2 = resStep4.Value?.Data[1].Note.NameRu;
+
+            var resStep5 = middleWareinData.HandleInvoke(inData);
+            var valStep5Data1 = resStep5.Value?.Data[0].Note.NameRu;
+            var valStep5Data2 = resStep5.Value?.Data[1].Note.NameRu;
+
+            var resStep6 = middleWareinData.HandleInvoke(inData);
+            var valStep6Data1 = resStep6.Value?.Data[0].Note.NameRu;
+            var valStep6Data2 = resStep6.Value?.Data[1].Note.NameRu;
+
+            //Asert
+            resStep1.IsSuccess.Should().BeTrue();
+            valStep1Data1.Should().NotBeNull();
+            valStep1Data2.Should().NotBeNull();
+            valStep1Data1.Should().Be("Со всеми станциями кроме:0x09Волочаевская0, Климская0, Октябрьская0,0x09Новосибирская0, Красноярская0,");
+            valStep1Data2.Should().Be("Со всеми станциями кроме:0x09Волочаевская1, Климская1, Октябрьская1,0x09Новосибирская1, Красноярская1,"); 
+
+            resStep2.IsSuccess.Should().BeTrue();
+            valStep2Data1.Should().NotBeNull();
+            valStep2Data2.Should().NotBeNull();
+            valStep2Data1.Should().Be("Куйбышевская0, Казахстанская0,0x09Свердлолвская0, Московская0,0x09Горьковская0, Сочинская0, Маковая0,"); 
+            valStep2Data2.Should().Be("Куйбышевская1, Казахстанская1,0x09Свердлолвская1, Московская1,0x09Горьковская1, Сочинская1, Маковая1,"); 
+
+            resStep3.IsSuccess.Should().BeTrue();
+            valStep3Data1.Should().NotBeNull();
+            valStep3Data2.Should().NotBeNull();
+            valStep3Data1.Should().Be("Красносельская0, Уютная0, Петушки0"); 
+            valStep3Data2.Should().Be("Красносельская1, Уютная1, Петушки1");
+
+            valStep4Data1.Should().NotBeNull();
+            valStep4Data2.Should().NotBeNull();
+            valStep4Data1.Should().Be("Со всеми станциями кроме:0x09Волочаевская0, Климская0, Октябрьская0,0x09Новосибирская0, Красноярская0,");
+            valStep4Data2.Should().Be("Со всеми станциями кроме:0x09Волочаевская1, Климская1, Октябрьская1,0x09Новосибирская1, Красноярская1,");
+
+            resStep5.IsSuccess.Should().BeTrue();
+            valStep5Data1.Should().NotBeNull();
+            valStep5Data2.Should().NotBeNull();
+            valStep5Data1.Should().Be("Куйбышевская0, Казахстанская0,0x09Свердлолвская0, Московская0,0x09Горьковская0, Сочинская0, Маковая0,");
+            valStep5Data2.Should().Be("Куйбышевская1, Казахстанская1,0x09Свердлолвская1, Московская1,0x09Горьковская1, Сочинская1, Маковая1,");
+
+            resStep6.IsSuccess.Should().BeTrue();
+            valStep6Data1.Should().NotBeNull();
+            valStep6Data2.Should().NotBeNull();
+            valStep6Data1.Should().Be("Красносельская0, Уютная0, Петушки0");
+            valStep6Data2.Should().Be("Красносельская1, Уютная1, Петушки1");
+        }
+
+
+
+
+        [Fact]
         public void NormalUse_Note_StationDeparture_Convert_6Step()
         {
             //Arrage

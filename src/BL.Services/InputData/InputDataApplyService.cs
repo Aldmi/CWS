@@ -7,7 +7,7 @@ using Serilog;
 
 namespace BL.Services.InputData
 {
-    public class InputDataApplyService<TIn>
+    public class InputDataApplyService<TIn> where TIn : InputTypeBase
     {
         private readonly MediatorForStorages<TIn> _mediatorForStorages;
         private readonly ILogger _logger;
