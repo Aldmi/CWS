@@ -52,9 +52,9 @@ namespace DeviceForExchange.MiddleWares.Invokes
         #region Methods
 
         /// <summary>
-        /// Прием входных данных.
+        /// Прием входных данных. InvokerOutputMode определяется опциями.
         /// </summary>
-        public async Task InputSet(InputData<TIn> inData)
+        public async Task InputSetByOptionMode(InputData<TIn> inData)
         {
             switch (_option.Mode)
             {
@@ -66,6 +66,16 @@ namespace DeviceForExchange.MiddleWares.Invokes
                     _buferInData = inData;
                     break;
             }
+            await Task.CompletedTask;
+        }
+
+
+        /// <summary>
+        /// Прием входных данных, сразу с вызовом обработчика.
+        /// </summary>
+        public async Task InputSetInstantly(InputData<TIn> inData)
+        {
+            HandleInvoke(inData);
             await Task.CompletedTask;
         }
 
