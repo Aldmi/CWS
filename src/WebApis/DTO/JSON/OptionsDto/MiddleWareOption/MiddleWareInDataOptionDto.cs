@@ -20,6 +20,8 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption
     public class InvokerOutputDto
     {
         public InvokerOutputMode Mode { get; set; }
+
+        [Range(1000, 3600000, ErrorMessage = "Time не попал в диапазон 1000...3600000 мсек")]
         public int Time { get; set; }      
     }
 }

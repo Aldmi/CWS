@@ -91,6 +91,57 @@ namespace DeviceForExchnage.Test
 
 
         [Fact]
+        public void NormalUse_Note_Convert_WithPhrases_6Step()
+        {
+            //Arrage
+            var inData = InDataSourse.GetData_Note(1);
+            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu");
+            option.StringHandlers[0].SubStringMemConverterOption.InitPharases= new List<string> { "Со всеми станциями кроие:", "По станциям из списка:" };
+            var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
+
+            //Act
+            var resStep1 = middleWareinData.HandleInvoke(inData);
+            var valStep1 = resStep1.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep2 = middleWareinData.HandleInvoke(inData);
+            var valStep2 = resStep2.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep3 = middleWareinData.HandleInvoke(inData);
+            var valStep3 = resStep3.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep4 = middleWareinData.HandleInvoke(inData);
+            var valStep4 = resStep4.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep5 = middleWareinData.HandleInvoke(inData);
+            var valStep5 = resStep5.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+            var resStep6 = middleWareinData.HandleInvoke(inData);
+            var valStep6 = resStep6.Value?.Data?.FirstOrDefault()?.Note.NameRu;
+
+            //Asert
+            resStep1.IsSuccess.Should().BeTrue();
+            valStep1.Should().NotBeNull();
+            valStep1.Should().Be("Со всеми станциями кроие:Index= 00x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,"); 
+
+            resStep2.IsSuccess.Should().BeTrue();
+            valStep2.Should().NotBeNull();
+            valStep2.Should().Be("Со всеми станциями кроие:Красноярская,0x09Куйбышевская, Казахстанская,0x09Свердлолвская, Московская,"); 
+
+            resStep3.IsSuccess.Should().BeTrue();
+            valStep3.Should().NotBeNull();
+            valStep3.Should().Be("Со всеми станциями кроие:Горьковская"); 
+
+            resStep4.IsSuccess.Should().BeTrue();
+            valStep4.Should().NotBeNull();
+            valStep4.Should().Be("Со всеми станциями кроие:Index= 00x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,"); 
+
+            resStep5.IsSuccess.Should().BeTrue();
+            valStep5.Should().NotBeNull();
+            valStep5.Should().Be("Со всеми станциями кроие:Красноярская,0x09Куйбышевская, Казахстанская,0x09Свердлолвская, Московская,"); 
+
+            resStep6.IsSuccess.Should().BeTrue();
+            valStep6.Should().NotBeNull();
+            valStep6.Should().Be("Со всеми станциями кроие:Горьковская"); 
+        }
+
+
+
+        [Fact]
         public void NormalUse_Note_2Data_Convert_6Step()
         {
             //Arrage

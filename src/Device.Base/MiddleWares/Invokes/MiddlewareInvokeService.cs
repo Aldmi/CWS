@@ -5,6 +5,7 @@ using System.Timers;
 using CSharpFunctionalExtensions;
 using DAL.Abstract.Entities.Options.MiddleWare;
 using InputDataModel.Base;
+using KellermanSoftware.CompareNetObjects;
 using Serilog;
 
 namespace DeviceForExchange.MiddleWares.Invokes
@@ -14,10 +15,26 @@ namespace DeviceForExchange.MiddleWares.Invokes
         private readonly InvokerOutput _option;
         private readonly ISupportMiddlewareInvoke<TIn> _invoker;
         private readonly ILogger _logger;
-        private InputData<TIn> _buferInData;
+  
         private readonly Timer _timerInvoke;
 
-
+        private InputData<TIn> _buferInData;
+        private InputData<TIn> BuferInData
+        {
+            get => _buferInData;
+            set
+            {
+                var compareRes = Comparer(_buferInData, value);
+                if (compareRes.IsFailure)
+                {
+                    _timerInvoke.Stop();
+                    _buferInData = value;
+                    HandleInvoke(_buferInData);
+                    _timerInvoke.Interval = _option.Time;
+                    _timerInvoke.Start();
+                }
+            }
+        }
 
 
         #region ctor
@@ -63,7 +80,7 @@ namespace DeviceForExchange.MiddleWares.Invokes
                     break;
 
                 case InvokerOutputMode.ByTimer:
-                    _buferInData = inData;
+                    BuferInData = inData;
                     break;
             }
             await Task.CompletedTask;
@@ -104,6 +121,16 @@ namespace DeviceForExchange.MiddleWares.Invokes
             _timerInvoke.Start();
         }
 
+        /// <summary>
+        /// Сравнить 2 элемента.
+        /// </summary>
+        private Result<bool> Comparer(InputData<TIn> obj1, InputData<TIn> obj2)
+        {
+            var compareLogic = new CompareLogic { Config = { MaxMillisecondsDateDifference = 1000 } };
+            ComparisonResult result = compareLogic.Compare(obj1, obj2);
+            return result.AreEqual ? Result.Ok(true) : Result.Fail<bool>(result.DifferencesString);
+        }
+
 
         #endregion
 
@@ -114,7 +141,10 @@ namespace DeviceForExchange.MiddleWares.Invokes
 
         private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
-            HandleInvoke(_buferInData);
+            if(BuferInData?.Data == null)
+                return;
+
+            HandleInvoke(BuferInData);
         }
 
         #endregion

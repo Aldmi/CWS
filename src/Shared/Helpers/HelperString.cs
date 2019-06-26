@@ -26,16 +26,21 @@ namespace Shared.Helpers
         /// <summary>
         /// Возвращает подстроку из базовой строки. Подстрока включает только целые слова.
         /// </summary>
-        /// <param name="str"></param>
-        /// <param name="startIndex"></param>
-        /// <param name="lenght"></param>
+        /// <param name="str">Строка для разбиения на подстроки</param>
+        /// <param name="lenght">длинна подстроки</param>
+        /// <param name="initPhrase">строка которая добавляется в начало каждой новой подстроки</param>
         /// <returns></returns>
-        public static IEnumerable<string> SubstringWithWholeWords(this string str, int startIndex, int lenght)
+        public static IEnumerable<string> SubstringWithWholeWords(this string str, int lenght, string initPhrase = null)
         {
-            if(string.IsNullOrEmpty(str))
-                return new List<string> {string.Empty};
+            if (string.IsNullOrEmpty(str))
+                return new List<string> { string.Empty };
 
-            List<string> resultList = new List<string>();
+            if (lenght <= 0)
+                throw new Exception($"При разбиении строки на подстроки {str} lenght= {lenght} не может быть <= 0 ");
+
+            initPhrase = initPhrase ?? string.Empty;
+
+            var resultList = new List<string>();
             var wordChanks = str.Split(' ');
             var sumWord = new StringBuilder();
             for (var i = 0; i < wordChanks.Length; i++)
@@ -51,6 +56,7 @@ namespace Shared.Helpers
                     }
                     else
                     {
+                        sumWord.Insert(0, initPhrase);
                         var line = sumWord.ToString().TrimEnd(' ');
                         resultList.Add(line);
                         sumWord.Clear();
@@ -66,13 +72,14 @@ namespace Shared.Helpers
                     }
                     else
                     {
-                        sumWord.Append(word).Append(" ");                       
+                        sumWord.Append(word).Append(" ");
                     }
                 }
             }
 
             if (sumWord.Length != 0)                                      //Последняя накопленная строка добавляется как есть
             {
+                sumWord.Insert(0, initPhrase);
                 resultList.Add(sumWord.ToString());
             }
 
@@ -80,55 +87,22 @@ namespace Shared.Helpers
         }
 
 
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="str"></param>
-        ///// <param name="lenghtLine"></param>
-        ///// <param name="endLineChar"></param>
-        ///// <returns></returns>
-        //public static string InseartEndLineMarker(this string str, int lenghtLine, string endLineChar)
-        //{
-        //    List<string> resultList = new List<string>();
-        //    var wordChanks = str.Split(' ');
-        //    var sumWord = new StringBuilder();
-        //    for (var i = 0; i < wordChanks.Length; i++)
-        //    {
-        //        var word = wordChanks[i];
-        //        var checkStr = sumWord + word;
-        //        if (checkStr.Length >= lenghtLine)                         //Вставить симол конца строки (endLineChar)
-        //        {
-        //            string endedLine;
-        //            if (sumWord.Length == 0)                               //Единичное слово слишком длинное, endLineChar вставляется в него
-        //            {
-        //                endedLine = word.Insert(lenghtLine, endLineChar);
-        //            }
-        //            else
-        //            {                                                       //Накопивашаяся строка завершается символом endLineChar
-        //                endedLine = sumWord.ToString().TrimEnd(' ') + endLineChar;
-        //                sumWord.Clear();
-        //                i--;                                                // Вернуться к строке которая не влезла
-        //            }
-        //            resultList.Add(endedLine);
-        //        }
-        //        else
-        //        {
-        //            sumWord.Append(word).Append(" ");                      //Сумировать строку                 
-        //        }
-        //    }
-
-        //    if (sumWord.Length != 0)                                  //Последняя накопленная строка добавляется как есть (без endLineChar в конце)
-        //    {
-        //        resultList.Add(sumWord.ToString());
-        //    }
-
-        //    var res = resultList.Aggregate((a, b) => a + b);
-        //    return res;
-        //}
-
-
-
+        public static (string pharse, string resStr) SearchPhrase(string str, IEnumerable<string> phrases)
+        {
+            var tuple = (pharse: string.Empty, resStr: str);
+            if (phrases == null)
+                return tuple;
+            foreach (var phrase in phrases)
+            {
+                if (str.Contains(phrase))
+                {
+                    var resStr = str.Replace(phrase, string.Empty);
+                    tuple.pharse = phrase;
+                    tuple.resStr = resStr;
+                }
+            }
+            return tuple;
+        }
 
 
         private static IEnumerable<string> BreakWordIntoLines(string word, int lenght)

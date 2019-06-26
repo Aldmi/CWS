@@ -20,7 +20,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 
         protected override string ConvertChild(string inProp, int dataId)
         {
-            var subStrings = inProp.SubstringWithWholeWords(0, _option.LenghtLine).ToList();
+            var subStrings = inProp.SubstringWithWholeWords( _option.LenghtLine).ToList();
 
             var sumStr= new StringBuilder();
             for (var i = 0; i < subStrings.Count; i++)

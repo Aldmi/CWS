@@ -151,14 +151,12 @@ namespace DeviceForExchange
                         await MiddlewareInvokeService.InputSetInstantly(inData);
                         break;
                     case DataAction.CycleAction: //однократные данные обрабатываем сразу.
-                        await MiddlewareInvokeService.InputSetByOptionMode(inData);
+                         await MiddlewareInvokeService.InputSetByOptionMode(inData);
                         break;
                     case DataAction.CommandAction://Команды не проходят обработку через MiddlewareInvokeService
                         await ResiveInExchange(inData);
                         break;
                 }
-
-                await MiddlewareInvokeService.InputSetByOptionMode(inData);
             }
             else
             {

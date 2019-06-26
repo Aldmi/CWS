@@ -271,6 +271,7 @@ namespace WebApiSwc.Controllers
                             var serializer = new XmlSerializer(typeof(AdInputType4XmlDtoContainer));
                             var adInputType4XmlList = (AdInputType4XmlDtoContainer)serializer.Deserialize(reader);
                             var data = _mapper.Map<List<AdInputType>>(adInputType4XmlList.Trains); //TODO: выставить язык из запроса для всех данных AdInputType
+                            InitDataId(data);
                             var inputData = new InputData<AdInputType>
                             {
                                 DeviceName = deviceName,
@@ -312,6 +313,20 @@ namespace WebApiSwc.Controllers
 
 
         #region Methods
+
+        /// <summary>
+        /// Присвоить Id, если он не установлен
+        /// </summary>
+        private void InitDataId(IList<AdInputType> datas)
+        {
+            for (var i = 0; i < datas.Count; i++)
+            {
+                var data = datas[0];
+                if (data.Id == 0)
+                    data.Id = i + 1;
+            }
+        }
+
 
         private async Task<ActionResult> InputDataHandler(IReadOnlyList<InputData<AdInputType>> inputDatas)
         {
