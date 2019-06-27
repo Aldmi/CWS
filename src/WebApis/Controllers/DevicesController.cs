@@ -7,12 +7,14 @@ using BL.Services.Actions;
 using BL.Services.Exceptions;
 using BL.Services.Mediators;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
+using DAL.Abstract.Entities.Options.MiddleWare;
 using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Shared.Types;
 using WebApiSwc.DTO.JSON.DevicesStateDto;
 using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption;
+using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption;
 
 namespace WebApiSwc.Controllers
 {
@@ -326,9 +328,7 @@ namespace WebApiSwc.Controllers
 
 
         // POST api/Devices/SetProviderOption/{deviceName}/{exchName}
-        //[HttpPost("SetProviderOption/{deviceName}/{exchName}")]
         [HttpPost("SetProviderOption/{deviceName}/{exchName}")]
-        //[FromRoute] string deviceName, [FromRoute] string exchName
         public async Task<IActionResult> SetProviderOption(
             [FromRoute] string deviceName,
             [FromRoute] string exchName,
@@ -357,6 +357,49 @@ namespace WebApiSwc.Controllers
    
             await Task.CompletedTask;
             return  Ok("Опции успешно приняты");
+        }
+
+
+        // GET api/Devices/GetMiddleWareInDataOption/{deviceName}
+        [HttpGet("GetMiddleWareInDataOption/{deviceName}")]
+        public async Task<IActionResult> GetMiddleWareInDataOption([FromRoute] string deviceName)
+        {
+            var device = _mediatorForStorages.GetDevice(deviceName);
+            if (device == null)
+            {
+                return NotFound(deviceName);
+            }
+
+            var middleWareInDataOption = device.GetMiddleWareInDataOption();
+            var middleWareInDataOptionDto = _mapper.Map<MiddleWareInDataOptionDto>(middleWareInDataOption);
+
+            await Task.CompletedTask;
+            return new JsonResult(middleWareInDataOptionDto);
+        }
+
+
+        // POST api/Devices/SetMiddleWareInDataOption/{deviceName}
+        [HttpPost("SetMiddleWareInDataOption/{deviceName}")]
+        public async Task<IActionResult> SetMiddleWareInDataOption([FromRoute] string deviceName, [FromBody] MiddleWareInDataOptionDto middleWareInDataOptionDto)
+        {
+            var device = _mediatorForStorages.GetDevice(deviceName);
+            if (device == null)
+            {
+                return NotFound(deviceName);
+            }
+
+            var middleWareInDataOption = _mapper.Map<MiddleWareInDataOption>(middleWareInDataOptionDto);
+            try
+            {
+                device.SetMiddleWareInDataOptionAndCreateNewMiddleWareInData(middleWareInDataOption);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Исключение при установке middleWareInDataOption {ex}");
+            }
+
+            await Task.CompletedTask;
+            return Ok("Опции успешно приняты");
         }
 
 

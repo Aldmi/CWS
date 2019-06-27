@@ -6,6 +6,7 @@ using Autofac.Features.OwnedInstances;
 using Confluent.Kafka;
 using CSharpFunctionalExtensions;
 using DAL.Abstract.Entities.Options.Device;
+using DAL.Abstract.Entities.Options.MiddleWare;
 using DeviceForExchange.MiddleWares;
 using DeviceForExchange.MiddleWares.Invokes;
 using Exchange.Base;
@@ -27,7 +28,7 @@ namespace DeviceForExchange
     /// Содержит список обменов.
     /// Ответы о своей работе каждое ус-во выставляет самостоятельно на шину данных
     /// </summary>
-    public class Device<TIn> : IDisposable
+    public class Device<TIn> : IDisposable where TIn : InputTypeBase
     {
         #region field
 
@@ -37,6 +38,7 @@ namespace DeviceForExchange
         private readonly Owned<IProduser> _produserOwner;
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
         private readonly List<IDisposable> _disposeExchangesCycleDataEntryStateEventHandlers = new List<IDisposable>();
+        private IDisposable _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler;
 
         #endregion
 
@@ -46,7 +48,7 @@ namespace DeviceForExchange
 
         public DeviceOption Option { get;  }
         public List<IExchange<TIn>> Exchanges { get; }
-        public MiddlewareInvokeService<TIn> MiddlewareInvokeService { get; }
+        public MiddlewareInvokeService<TIn> MiddlewareInvokeService { get; private set; }
         public string TopicName4MessageBroker { get; set; }
 
         #endregion
@@ -61,20 +63,18 @@ namespace DeviceForExchange
                       IEventBus eventBus,
                       Func<ProduserOption, Owned<IProduser>> produser4DeviceRespFactory,
                       ProduserOption produser4DeviceOption,
-                      MiddlewareInvokeService<TIn> middlewareInvokeService,
                       ILogger logger)
         {
             Option = option;
             Exchanges = exchanges.ToList();
             _eventBus = eventBus;
-            MiddlewareInvokeService = middlewareInvokeService;
-            MiddlewareInvokeService?.InvokeIsCompleteRx.Subscribe(OutputReadyRxEventHandler);
             _logger = logger;
 
             var produserOwner = produser4DeviceRespFactory(produser4DeviceOption);
             _produserOwner = produserOwner;                  //можно создать/удалить produser в любое время используя фабрику и Owner 
             _produser = produserOwner.Value;
             TopicName4MessageBroker = null;
+            CreateMiddleWareInDataByOption();
         }
 
         #endregion
@@ -83,6 +83,34 @@ namespace DeviceForExchange
 
 
         #region Methode
+
+        public MiddleWareInDataOption GetMiddleWareInDataOption()
+        {
+            return Option.MiddleWareInData;
+        }
+
+
+        public void SetMiddleWareInDataOptionAndCreateNewMiddleWareInData(MiddleWareInDataOption option)
+        {
+            Option.MiddleWareInData = option;
+            CreateMiddleWareInDataByOption();
+        }
+
+
+        private void CreateMiddleWareInDataByOption()
+        {
+            _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler?.Dispose();
+            MiddlewareInvokeService?.Dispose();
+            MiddlewareInvokeService = null;
+            if (Option.MiddleWareInData != null)
+            {
+                var middleWareInData = new MiddleWareInData<TIn>(Option.MiddleWareInData, _logger);
+                MiddlewareInvokeService = new MiddlewareInvokeService<TIn>(Option.MiddleWareInData.InvokerOutput, middleWareInData, _logger);
+                _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler= MiddlewareInvokeService?.InvokeIsCompleteRx.Subscribe(OutputReadyRxEventHandler);
+            }
+        }
+
+
 
         /// <summary>
         /// Подписка на публикацию событий устройства на ВНЕШНЮЮ ШИНУ ДАННЫХ
@@ -133,9 +161,6 @@ namespace DeviceForExchange
         }
 
 
-
-
-        //DEBUG ФУНКЦИЯ ДЛЯ МИДЛЕВАРЕ---------------------------------------------------
         /// <summary>
         /// Принять данные для УСТРОЙСТВА.
         /// Данные будут переданны напрямую на обмены или в конвеер MiddleWare 
@@ -187,7 +212,6 @@ namespace DeviceForExchange
             }
             //TODO: что делать когда неудачное преобразование?
         }
-        //---------------------------------------------------
 
 
 
@@ -372,6 +396,7 @@ namespace DeviceForExchange
             UnsubscrubeOnExchangesEvents();
             UnsubscrubeOnExchangesCycleDataEntryStateEvents();
             _produserOwner.Dispose();
+            _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler.Dispose();
         }
 
         #endregion
