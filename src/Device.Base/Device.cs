@@ -203,14 +203,17 @@ namespace DeviceForExchange
         }
 
 
-        private async void OutputReadyRxEventHandler(Result<InputData<TIn>, ErrorMiddleWareInDataWrapper> result)
+        private async void OutputReadyRxEventHandler(Result<InputData<TIn>, ErrorResultMiddleWareInData> result)
         {
             if (result.IsSuccess)
             {
                 var inData = result.Value; 
                 await ResiveInExchange(inData);
             }
-            //TODO: что делать когда неудачное преобразование?
+            else
+            {
+                _logger.Error($"ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ ДЛЯ: {Option.Name} Errors= {result.Error.GetErrorsArgegator}"); //ВСЕ ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ.
+            }
         }
 
 
@@ -397,6 +400,7 @@ namespace DeviceForExchange
             UnsubscrubeOnExchangesCycleDataEntryStateEvents();
             _produserOwner.Dispose();
             _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler.Dispose();
+            MiddlewareInvokeService.Dispose();
         }
 
         #endregion

@@ -59,10 +59,9 @@ namespace DeviceForExchange.MiddleWares.Invokes
         /// <summary>
         /// СОБЫТИЕ Завершения вобработки данных
         /// </summary>
-        public ISubject<Result<InputData<TIn>, ErrorMiddleWareInDataWrapper>> InvokeIsCompleteRx { get; } = new Subject<Result<InputData<TIn>, ErrorMiddleWareInDataWrapper>>();
+        public ISubject<Result<InputData<TIn>, ErrorResultMiddleWareInData>> InvokeIsCompleteRx { get; } = new Subject<Result<InputData<TIn>, ErrorResultMiddleWareInData>>();
 
         #endregion
-
 
 
 
@@ -97,14 +96,12 @@ namespace DeviceForExchange.MiddleWares.Invokes
         }
 
 
-
         private void HandleInvoke(InputData<TIn> inData)
         {
             var res = _invoker.HandleInvoke(inData);
             InvokeIsCompleteRx.OnNext(res);
         }
         
-
 
         private void CheckStartTimer()
         {
@@ -131,9 +128,7 @@ namespace DeviceForExchange.MiddleWares.Invokes
             return result.AreEqual ? Result.Ok(true) : Result.Fail<bool>(result.DifferencesString);
         }
 
-
         #endregion
-
 
 
 
@@ -148,7 +143,6 @@ namespace DeviceForExchange.MiddleWares.Invokes
         }
 
         #endregion
-
 
 
 

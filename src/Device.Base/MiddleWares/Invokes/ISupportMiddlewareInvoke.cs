@@ -6,6 +6,6 @@ namespace DeviceForExchange.MiddleWares.Invokes
 {
     public interface ISupportMiddlewareInvoke<TIn>
     {
-        Result<InputData<TIn>, ErrorMiddleWareInDataWrapper> HandleInvoke(InputData<TIn> inData);
+        Result<InputData<TIn>, ErrorResultMiddleWareInData> HandleInvoke(InputData<TIn> inData);
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using CSharpFunctionalExtensions;
 using DAL.Abstract.Entities.Options.MiddleWare;
+using DeviceForExchange.MiddleWares.Converters.Exceptions;
 using DeviceForExchange.MiddleWares.Handlers;
 using DeviceForExchange.MiddleWares.Invokes;
 using InputDataModel.Base;
@@ -65,11 +66,11 @@ namespace DeviceForExchange.MiddleWares
         /// <summary>
         /// Вызов обработчиков для преобразования данных.
         /// </summary>
-        public Result<InputData<TIn>, ErrorMiddleWareInDataWrapper> HandleInvoke(InputData<TIn> inData)
+        public Result<InputData<TIn>, ErrorResultMiddleWareInData> HandleInvoke(InputData<TIn> inData)
         {
             var inDataClone = FastDeepCloner.DeepCloner.Clone(inData);
             string error;
-            var errorHandlerWrapper= new ErrorMiddleWareInDataWrapper();
+            var errorHandlerWrapper= new ErrorResultMiddleWareInData();
             Parallel.ForEach(inDataClone.Data, (data) =>
             {
                 Parallel.ForEach(_stringHandlers, (stringHandler) =>
@@ -81,35 +82,37 @@ namespace DeviceForExchange.MiddleWares
                         var tuple = resultGet.Value;
                         try
                         {
-                            var newValue= stringHandler.Convert(tuple.val, data.Id); //TODO: Создать новый тип исключений для конверторов.
+                            var newValue= stringHandler.Convert(tuple.val, data.Id);
                             tuple.val = newValue;
                             var resultSet = _mutationsServiseStr.SetPropValue(tuple);
                             if (resultSet.IsFailure)
                             {
-                                error =$"MiddlewareInvokeService.HandleInvoke Ошибка установки стркового свойства.  {resultSet.Error}";
+                                error =$"MiddlewareInvokeService.HandleInvoke.StringConvert. Ошибка установки свойства:  {resultSet.Error}";
                                 errorHandlerWrapper.AddError(error);
-                                //_logger.Error(error);
                             }
+                        }
+                        catch (StringConverterException ex)
+                        {
+                            error = $"MiddlewareInvokeService.HandleInvoke.StringConvert.  Exception в конверторе:  {ex}";
+                            errorHandlerWrapper.AddError(error);
                         }
                         catch (Exception e)
                         {
-                            error = $"MiddlewareInvokeService.HandleInvoke Exception в String конверторе. {e}";
+                            error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
                             errorHandlerWrapper.AddError(error);
-                            //_logger.Error(error);
                         }
                     }
                     else
                     {
-                        error =$"MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  {resultGet.Error}";
+                        error =$"MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  {resultGet.Error}";
                         errorHandlerWrapper.AddError(error);
-                        //_logger.Error(error);
                     }
                 });
             });
 
             var res = errorHandlerWrapper.IsEmpty ?
-                Result.Ok<InputData<TIn>, ErrorMiddleWareInDataWrapper>(inDataClone) :
-                Result.Fail<InputData<TIn>, ErrorMiddleWareInDataWrapper>(errorHandlerWrapper);
+                Result.Ok<InputData<TIn>, ErrorResultMiddleWareInData>(inDataClone) :
+                Result.Fail<InputData<TIn>, ErrorResultMiddleWareInData>(errorHandlerWrapper);
 
             return res;
         }
@@ -118,30 +121,13 @@ namespace DeviceForExchange.MiddleWares
     }
 
 
-    //public class ErrorMiddleWareInDataWrapper
-    //{
-    //    private readonly ConcurrentDictionary<int, string> _errorsDict = new ConcurrentDictionary<int, string>();
-
-    //    public List<string> GetErrors => _errorsDict.Select(pair => pair.Value).ToList();
-    //    public bool IsEmpty => _errorsDict.IsEmpty;
-
-
-    //    public void AddError(string error)
-    //    {
-
-    //        var key = _errorsDict.Count;
-    //        _errorsDict.TryAdd(key, error);
-    //    }
-    //}
-
-
-
-    public class ErrorMiddleWareInDataWrapper
+    public class ErrorResultMiddleWareInData
     {
         private readonly ConcurrentDictionary<Guid, string> _errorsDict = new ConcurrentDictionary<Guid, string>();
 
         public List<string> GetErrors => _errorsDict.Select(pair => pair.Value).ToList();
         public bool IsEmpty => _errorsDict.IsEmpty;
+        public string GetErrorsArgegator => GetErrors.Aggregate((s, s1) => s + "  " + s1);
 
 
         public void AddError(string error)

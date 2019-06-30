@@ -5,6 +5,9 @@ using Shared.Helpers;
 
 namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 {
+    /// <summary>
+    /// Разбивает строку, вставкой символа переноса строки Marker.
+    /// </summary>
     public class InseartEndLineMarkerConverter : BaseStringConverter
     {
         private readonly InseartEndLineMarkerConverterOption _option;
@@ -15,7 +18,6 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
         {
             _option = option;
         }
-
 
 
         protected override string ConvertChild(string inProp, int dataId)

@@ -10,12 +10,12 @@ namespace DeviceForExchange.MiddleWares.Handlers
         protected readonly List<IConverterMiddleWare<T>> Converters = new List<IConverterMiddleWare<T>>();
 
 
-
         #region Methode
-
+        /// <summary>
+        /// Вызываемый код по имени PropName находит свойство во входном типе и передает его сюда
+        /// </summary>
         public virtual T Convert(T inProp, int dataId)
         {
-            //Вызываемый код по имени PropName находит свойство во входном типе и передает его сюда
             foreach (var converter in Converters)
             {
                 inProp = converter.Convert(inProp, dataId);

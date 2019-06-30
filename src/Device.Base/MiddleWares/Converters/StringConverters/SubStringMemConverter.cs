@@ -3,13 +3,14 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
+using DeviceForExchange.MiddleWares.Converters.Exceptions;
 using Shared.Helpers;
 
 namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 {
-
     /// <summary>
-    /// 
+    /// Выделяет подстроку из строки.
+    /// StateFull - хранит начало подстроки между вызовами.
     /// </summary>
     public class SubStringMemConverter : BaseStringConverter
     {
@@ -60,7 +61,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
                 return subStr;
             }
 
-            throw new Exception($"SubStringMemConverter НЕ СМОГ ИЗВЛЕЧЬ РЕЗУЛЬТАТ ОБРАБОТКИ ИЗ СЛОВАРЯ {inProp}");
+            throw new StringConverterException($"SubStringMemConverter НЕ СМОГ ИЗВЛЕЧЬ РЕЗУЛЬТАТ ОБРАБОТКИ ИЗ СЛОВАРЯ {inProp}");
         }
     }
 
@@ -71,9 +72,9 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
     /// </summary>
     public class SubStringState  //TODO: попробовать поменять на структуру
     {
-        public int Ingex { get; private set; }                           //Индекс подстроки для вывода
-        public readonly string BaseStr;                                  //Строка
-        public readonly IList<string> SubStrings;                        //Список подстрок индексируемых _index
+        private int _ingex;                             //Индекс подстроки для вывода
+        private readonly string _baseStr;               //Строка
+        private readonly IList<string> _subStrings;     //Список подстрок индексируемых _index
 
 
 
@@ -81,43 +82,40 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 
         public SubStringState(string baseStr, int subStrLenght, IEnumerable<string> phrases)
         {
-            Ingex = -1;
-            BaseStr = baseStr;
+            _ingex = -1;
+            _baseStr = baseStr;
 
             var (initPhrase, resStr) = HelperString.SearchPhrase(baseStr, phrases);
             subStrLenght = subStrLenght - initPhrase.Length;
-            SubStrings = resStr.SubstringWithWholeWords(subStrLenght, initPhrase).ToList();
+            _subStrings = resStr.SubstringWithWholeWords(subStrLenght, initPhrase).ToList();
         }
 
         #endregion
-
 
 
         #region Methode
 
         public bool EqualStr(string str)
         {
-            return BaseStr.Equals(str);
-        }
-
-
-        private void IncrementIndex()
-        {
-            if (++Ingex >= SubStrings.Count)
-            {
-                Ingex = 0;
-            }
+            return _baseStr.Equals(str);
         }
 
 
         public string GetNextSubString()
         {
             IncrementIndex();
-            return SubStrings[Ingex];
+            return _subStrings[_ingex];
+        }
+
+
+        private void IncrementIndex()
+        {
+            if (++_ingex >= _subStrings.Count)
+            {
+                _ingex = 0;
+            }
         }
 
         #endregion
     }
-
-
 }

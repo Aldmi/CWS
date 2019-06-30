@@ -425,17 +425,16 @@ namespace DeviceForExchnage.Test
             //Asert
             resStep1.IsSuccess.Should().BeFalse();
             errorStep1.Should().NotBeNull();
-            errorStep1.Should().Be("MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  Родительский объект == Null. Note.NameRu. Невозможно обратится к свойству NameRu");
+            errorStep1.Should().Be("MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  Родительский объект == Null. Note.NameRu. Невозможно обратится к свойству NameRu");
 
             resStep2.IsSuccess.Should().BeFalse();
             errorStep2.Should().NotBeNull();
-            errorStep2.Should().Be("MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  Родительский объект == Null. Note.NameRu. Невозможно обратится к свойству NameRu");
+            errorStep2.Should().Be("MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  Родительский объект == Null. Note.NameRu. Невозможно обратится к свойству NameRu");
 
             resStep3.IsSuccess.Should().BeFalse();
             errorStep3.Should().NotBeNull();
-            errorStep3.Should().Be("MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  Родительский объект == Null. Note.NameRu. Невозможно обратится к свойству NameRu");
+            errorStep3.Should().Be("MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  Родительский объект == Null. Note.NameRu. Невозможно обратится к свойству NameRu");
         }
-
 
 
         //-------------------------------------------------------------------------------
@@ -480,7 +479,7 @@ namespace DeviceForExchnage.Test
             result.IsSuccess.Should().BeFalse();
             result.Error.IsEmpty.Should().BeFalse();
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().Should().Be("MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  метаданные для xxxx не найдены");
+            errors.FirstOrDefault().Should().Be("MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  метаданные для xxxx не найдены");
         }
 
 
@@ -500,7 +499,7 @@ namespace DeviceForExchnage.Test
             result.IsSuccess.Should().BeFalse();
             result.Error.IsEmpty.Should().BeFalse();
             errors.Count.Should().Be(1);
-            errors.FirstOrDefault().Should().Be("MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  метаданные для ZZZ не найдены");
+            errors.FirstOrDefault().Should().Be("MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  метаданные для ZZZ не найдены");
         }
 
 
@@ -544,9 +543,9 @@ namespace DeviceForExchnage.Test
             result.IsSuccess.Should().BeFalse();
             result.Error.IsEmpty.Should().BeFalse();
             errors.Count.Should().Be(1000);
-            foreach (var error in errors)
+            foreach (var error in errors)  //"MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  метаданные для xxxx не найдены"
             {
-                error.Should().Be($"MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  метаданные для xxxx не найдены");
+                error.Should().Be($"MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  метаданные для xxxx не найдены");
             }
         }
 
@@ -593,7 +592,7 @@ namespace DeviceForExchnage.Test
             //Asert
             result.IsSuccess.Should().BeFalse();
             errors.Count.Should().Be(1);
-            error.Should().Be("MiddlewareInvokeService.HandleInvoke Ошибка получения стркового свойства.  Тип свойства Note не соответвует типу обработчика handler System.String");
+            error.Should().Be("MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  Тип свойства Note не соответвует типу обработчика handler System.String");
         }
 
 
