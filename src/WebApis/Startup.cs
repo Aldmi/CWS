@@ -10,6 +10,7 @@ using BL.Services.MessageBroker;
 using BL.Services.Storages;
 using DAL.Abstract.Concrete;
 using Exchange.Base;
+using Firewall;
 using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -131,6 +132,19 @@ namespace WebApiSwc
                 app.UseDeveloperExceptionPage();
             }
 
+            //ПОДКЛЮЧИТЬ ФАЕРВОЛ (ФИЛЬТРАЦИЮ ПО IP)
+            var firewallConfig = InitSettings.GetFirewallConfig(Env, AppConfiguration);
+            if (firewallConfig != null)
+            {
+                app.UseFirewall(
+                    FirewallRulesEngine
+                        .DenyAllAccess()
+                        .ExceptFromIPAddressRanges(firewallConfig.AllowedCidRs)
+                        .ExceptFromIPAddresses(firewallConfig.AllowedIPs)
+                    //.ExceptFromLocalhost()
+                );
+            }
+            
             app.UseMvc();
         }
 

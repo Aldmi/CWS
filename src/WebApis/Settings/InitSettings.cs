@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Shared.Enums;
 
 namespace WebApiSwc.Settings
@@ -31,6 +33,7 @@ namespace WebApiSwc.Settings
             return Enum.TryParse<HowCreateDb>(howCreateDbStr, out var howCreateDb) ? howCreateDb : HowCreateDb.None;
         }
 
+
         public static string GetLoggerMinlevel(IHostingEnvironment env, IConfiguration conf)
         {
             var minLevelStr= env.IsDevelopment()
@@ -42,5 +45,57 @@ namespace WebApiSwc.Settings
 
             return minLevelStr;
         }
+
+
+        public static FirewallSettings GetFirewallConfig(IHostingEnvironment env, IConfiguration conf)
+        {
+            FirewallSettings firewallSettings;
+
+            if (env.IsDevelopment())
+            {
+                var conIpAddress = conf.GetSection("Firewall:IPAddress");
+                var conCidrNotation = conf.GetSection("Firewall:CIDRNotation");
+                var iPAddress = conIpAddress.GetChildren().Select(section => section.Value).ToList();
+                var cidrNotation = conCidrNotation.GetChildren().Select(section => section.Value).ToList();
+
+                if (!iPAddress.Any() && !cidrNotation.Any())
+                    return null;
+
+                firewallSettings= new FirewallSettings(iPAddress, cidrNotation);
+            }
+            else
+            {
+                var firewallSett = Environment.GetEnvironmentVariable("Firewall");
+                if (string.IsNullOrEmpty(firewallSett))
+                    return null;
+
+                try
+                {
+                    firewallSettings = JsonConvert.DeserializeObject<FirewallSettings>(firewallSett);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Исключение при дессериализации настроек фаерволла {ex}");
+                }
+            }
+
+            return firewallSettings;
+
+
+            //DEBUG-----------------
+            //var firewallSett1 = Environment.GetEnvironmentVariable("Firewall");
+
+            //try
+            //{
+            //    var jsonResp = JsonConvert.DeserializeObject<FirewallSettings>(firewallSett1);
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //    throw;
+            //}
+            //DEBUG----------------
+        }
+
     }
 }
