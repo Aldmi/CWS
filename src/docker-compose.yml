@@ -11,13 +11,13 @@ services:
     environment:
      - ASPNETCORE_ENVIRONMENT=Production
      - DbConnection=User ID = postgres; Password = dmitr; Server = host.docker.internal; Port = 5432; Database = OptionDevice_Prod; Integrated Security = true; Pooling = true;
-     - HowCreateDb=Migrate
+     - HowCreateDb=EnsureCreated
      - Logger_MinLevel=Information
+     - 'Firewall= { "IPAddress": ["192.168.100.33", "192.168.100.42" ], "CIDRNotation":["110.40.88.12/28" ]}'
     networks:
       - aspnetcoreapp-network
     volumes:
       - //d/data:/app/logs
-
 
 networks:
   aspnetcoreapp-network:
