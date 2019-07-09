@@ -321,7 +321,7 @@ namespace WebApiSwc.Controllers
         {
             for (var i = 0; i < datas.Count; i++)
             {
-                var data = datas[0];
+                var data = datas[i];
                 if (data.Id == 0)
                     data.Id = i + 1;
             }

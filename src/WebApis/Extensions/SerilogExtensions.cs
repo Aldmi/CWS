@@ -61,22 +61,22 @@ namespace WebApiSwc.Extensions
 
                 .WriteTo.File("logs/Main_Log.txt",
                     LogEventLevel.Information,
-                    rollingInterval: RollingInterval.Day,             //за 10 последних дней хранится Information лог (100МБ лимит размера файла)
-                    retainedFileCountLimit: 10,
+                    rollingInterval: RollingInterval.Day,                 //за 20 последних дней хранится Information лог (100МБ лимит размера файла)
+                    retainedFileCountLimit: 20,
                     fileSizeLimitBytes: 100000000,                   
                     rollOnFileSizeLimit: true)
 
-                .WriteTo.File("logs/Error_Log.txt",                  //за 10 последних дней хранится Error лог (100МБ лимит размера файла)
+                .WriteTo.File("logs/Error_Log.txt",                  //за 20 последних дней хранится Error лог (100МБ лимит размера файла)
                     LogEventLevel.Error,
                     rollingInterval: RollingInterval.Day,
-                    retainedFileCountLimit: 10,
-                    fileSizeLimitBytes: 100000000, //100МБ
+                    retainedFileCountLimit: 20,
+                    fileSizeLimitBytes: 100000000,
                     rollOnFileSizeLimit: true)
 
-                .WriteTo.File("logs/Debug/Debug_Log.txt",          //За 5 последних часов переписывается Debug лог (100МБ лимит размера файла).
+                .WriteTo.File("logs/Debug/Debug_Log.txt",           //За 24 последних часов переписывается Debug лог (100МБ лимит размера файла).
                     LogEventLevel.Debug,
                     rollingInterval: RollingInterval.Hour,
-                    retainedFileCountLimit: 5,
+                    retainedFileCountLimit: 24,
                     fileSizeLimitBytes: 100000000,
                     rollOnFileSizeLimit: true,                      
                     shared: true);

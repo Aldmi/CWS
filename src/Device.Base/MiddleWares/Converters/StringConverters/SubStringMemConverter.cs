@@ -11,6 +11,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
     /// <summary>
     /// Выделяет подстроку из строки.
     /// StateFull - хранит начало подстроки между вызовами.
+    /// Длинна подстроки вычисляется с учетом константной фразы.
     /// </summary>
     public class SubStringMemConverter : BaseStringConverter
     {

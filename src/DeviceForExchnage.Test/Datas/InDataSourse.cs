@@ -162,5 +162,36 @@ namespace DeviceForExchnage.Test.Datas
         }
 
 
+
+        public static InputData<AdInputType> GetData_Note_LongWord(int countData)
+        {
+            var datas = Enumerable.Range(0, countData).Select(i => new AdInputType
+            {
+                Id = i,
+                Note = new Note
+                {
+                    NameRu = $"Без остановок: Трофимово, Воскресенск, Шиферная, Москворецкая, Цемгигант, Пески, Конев Бор, Хорошово, Платформа 113 км, Коломна",
+                },
+                StationDeparture = new Station
+                {
+                    NameRu = $"Станция Отпр {i}"
+                },
+                NumberOfTrain = "956"
+            }).ToList();
+
+
+            var inData = new InputData<AdInputType>()
+            {
+                Command = Command4Device.None,
+                DataAction = DataAction.CycleAction,
+                DeviceName = "Peron.P1",
+                DirectHandlerName = null,
+                ExchangeName = "Exch Peron.P1",
+                Data = datas
+            };
+
+            return inData;
+        }
+
     }
 }

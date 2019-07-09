@@ -80,21 +80,6 @@ namespace WebApiSwc.Settings
             }
 
             return firewallSettings;
-
-
-            //DEBUG-----------------
-            //var firewallSett1 = Environment.GetEnvironmentVariable("Firewall");
-
-            //try
-            //{
-            //    var jsonResp = JsonConvert.DeserializeObject<FirewallSettings>(firewallSett1);
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e);
-            //    throw;
-            //}
-            //DEBUG----------------
         }
 
     }

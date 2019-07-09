@@ -180,6 +180,7 @@ namespace Exchange.Base
         #endregion
 
 
+
         #region CycleExchange
 
         /// <summary>
@@ -298,6 +299,9 @@ namespace Exchange.Base
         /// </summary>
         protected async Task OneTimeActionAsync(CancellationToken ct)
         {
+            if (!_transport.IsOpen)
+                return;
+
             var result = _oneTimeDataQueue.Dequeue();
             if (result.IsSuccess)
             {
@@ -318,7 +322,17 @@ namespace Exchange.Base
         /// </summary>
         protected async Task CycleTimeActionAsync(CancellationToken ct)
         {
-            if (!_transport.IsOpen)
+            //TODO: IsOpen на транспорте заменить на StatusConnect(Open, Reconnect, StopedReconnect)
+            //TODO: 
+
+
+            //if (!_transport.StatusConnecttus != Open)
+            //{
+            //    _logger.Warning($"Exchange/CycleTimeActionAsync Попытка отправить данные на не открытый тарнспорт {_transport.Status}");
+            //    return;
+            //}
+
+            if (!_transport.IsOpen) 
                 return;
 
             InDataWrapper<TIn> inData = null;

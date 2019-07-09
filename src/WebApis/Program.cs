@@ -17,12 +17,13 @@ namespace WebApiSwc
             BuildWebHost(args).Run();
         }
 
+
         public static void ViewVersionOnConsole()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            const string version = "CWS Ver2.4";
+            const string version = "CWS Ver2.5";
             Console.Title = version;
-            Console.WriteLine($"{version}  [17.06.2019]  [Add methode device.Resive(...) instead Send2ConcreteEcxhange and Send2AllExchanges + Crutch!!!! Hardcode Limit 100 chars Note var]   [330ff2f]");
+            Console.WriteLine($"{version}  [08.07.2019]  [Test middlewareInData on Production]");
         }
 
 

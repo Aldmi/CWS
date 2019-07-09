@@ -154,6 +154,7 @@ namespace Transport.TcpIp.Concrete
         {
             try
             {
+                IsOpen = false;
                 _client = new TcpClient { NoDelay = false };  //true - пакет будет отправлен мгновенно (при NetworkStream.Write). false - пока не собранно значительное кол-во данных отправки не будет.
                 var ipAddress = IPAddress.Parse(Option.IpAddress);
                 StatusString = $"Conect to {ipAddress} : {Option.IpPort} ...";

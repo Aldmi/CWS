@@ -106,7 +106,7 @@ namespace DeviceForExchange
             {
                 var middleWareInData = new MiddleWareInData<TIn>(Option.MiddleWareInData, _logger);
                 MiddlewareInvokeService = new MiddlewareInvokeService<TIn>(Option.MiddleWareInData.InvokerOutput, middleWareInData, _logger);
-                _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler= MiddlewareInvokeService?.InvokeIsCompleteRx.Subscribe(OutputReadyRxEventHandler);
+                _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler= MiddlewareInvokeService?.InvokeIsCompleteRx.Subscribe(MiddlewareInvokeIsCompleteRxEventHandler);
             }
         }
 
@@ -203,16 +203,17 @@ namespace DeviceForExchange
         }
 
 
-        private async void OutputReadyRxEventHandler(Result<InputData<TIn>, ErrorResultMiddleWareInData> result)
+        private async void MiddlewareInvokeIsCompleteRxEventHandler(Result<InputData<TIn>, ErrorResultMiddleWareInData> result)
         {
             if (result.IsSuccess)
             {
                 var inData = result.Value; 
                 await ResiveInExchange(inData);
+                _logger.Information($"Данные УСПЕШНО подготовленны MiddlewareInData для устройства: {Option.Name}");
             }
             else
             {
-                _logger.Error($"ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ ДЛЯ: {Option.Name} Errors= {result.Error.GetErrorsArgegator}"); //ВСЕ ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ.
+                _logger.Error($"ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ MiddlewareInData ДЛЯ: {Option.Name} Errors= {result.Error.GetErrorsArgegator}"); //ВСЕ ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ.
             }
         }
 
