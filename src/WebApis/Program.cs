@@ -21,9 +21,9 @@ namespace WebApiSwc
         public static void ViewVersionOnConsole()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            const string version = "CWS Ver2.5";
+            const string version = "CWS Ver2.7";
             Console.Title = version;
-            Console.WriteLine($"{version}  [08.07.2019]  [Test middlewareInData on Production]");
+            Console.WriteLine($"{version}  [09.07.2019]  [Add carry by phrases for SubStringMemConverter]");
         }
 
 

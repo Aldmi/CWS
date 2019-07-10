@@ -60,6 +60,8 @@ namespace WebApiSwc.AutoMapperConfig
                     NameEng = src.EndStationENG,
                     NameCh = src.EndStationCH,
                 }))
+                .ForMember(dest => dest.Stations, opt => opt.MapFrom(src => CreateStations(src)))
+                .ForMember(dest => dest.StationsСut, opt => opt.MapFrom(src => CreateStationsCut(src)))
                 .ForMember(dest => dest.StationWhereFrom, opt => opt.MapFrom(src => new Station
                 {
                     NameRu = src.WhereFrom
@@ -108,7 +110,7 @@ namespace WebApiSwc.AutoMapperConfig
         }
 
 
-        private int? ConvertString2NullableInt(string str)
+        private static int? ConvertString2NullableInt(string str)
         {
             if (int.TryParse(str, out var r))
                 return r;
@@ -116,7 +118,7 @@ namespace WebApiSwc.AutoMapperConfig
             return null;
         }
 
-        private int ConvertString2Int(string str)
+        private static int ConvertString2Int(string str)
         {
             if (int.TryParse(str, out var r))
                 return r;
@@ -125,8 +127,7 @@ namespace WebApiSwc.AutoMapperConfig
         }
 
 
-
-        private DateTime? ConvertString2DataTime(string str)
+        private static DateTime? ConvertString2DataTime(string str)
         {
             if (DateTime.TryParse(str, out DateTime val))
             {
@@ -147,7 +148,7 @@ namespace WebApiSwc.AutoMapperConfig
         }
 
 
-        private TimeSpan? ConvertString2TimeSpan(string str)
+        private static TimeSpan? ConvertString2TimeSpan(string str)
         {
             if (TimeSpan.TryParse(str, out var val))
             {
@@ -155,6 +156,68 @@ namespace WebApiSwc.AutoMapperConfig
             }
             return null;
         }
+
+
+        private static Station CreateStations(AdInputType4XmlDto dto)
+        {
+            string CreateStationName(string stArrivalName, string stDepartName)
+            {
+                stArrivalName = stArrivalName ?? string.Empty;
+                stDepartName = stDepartName ?? string.Empty;
+
+                var stations = string.Empty;
+                if (!string.IsNullOrEmpty(stArrivalName) && !string.IsNullOrEmpty(stDepartName))
+                {
+                    stations = $"{stDepartName}-{stArrivalName}";
+                }
+                return stations;
+            }
+            var newStation = new Station
+            {
+                NameRu = CreateStationName(dto.EndStation, dto.StartStation),
+                NameEng = CreateStationName(dto.EndStationENG, dto.StartStationENG),
+                NameCh = CreateStationName(dto.EndStationCH, dto.StartStationCH)
+            };
+            return newStation;
+        }
+
+
+        private static Station CreateStationsCut(AdInputType4XmlDto dto)
+        {
+            string CreateStationCutName(string stArrivalName, string stDepartName)
+            {
+                stArrivalName = stArrivalName ?? string.Empty;
+                stDepartName = stDepartName ?? string.Empty;
+
+                var eventNum = ConvertString2NullableInt(dto.Direction);
+                if (!eventNum.HasValue)
+                    return string.Empty;
+
+                var stations = string.Empty;
+                switch (eventNum.Value)
+                {
+                    case 0: //"ПРИБ"
+                        stations = stDepartName;
+                        break;
+                    case 1:  //"ОТПР"
+                        stations = stArrivalName;
+                        break;
+                    case 2:   //"СТОЯНКА"
+                        stations = $"{stDepartName}-{stArrivalName}";
+                        break;
+                }
+                return stations;
+            }
+
+            var newStation = new Station
+            {
+                NameRu = CreateStationCutName(dto.EndStation, dto.StartStation),
+                NameEng = CreateStationCutName(dto.EndStationENG, dto.StartStationENG),
+                NameCh = CreateStationCutName(dto.EndStationCH, dto.StartStationCH)
+            };
+            return newStation;
+        }
+
     }
 
 

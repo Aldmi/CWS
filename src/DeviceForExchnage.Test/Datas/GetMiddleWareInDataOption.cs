@@ -117,6 +117,41 @@ namespace DeviceForExchnage.Test.Datas
 
 
 
+        public static MiddleWareInDataOption GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter_Khazanskiy(string propName)
+        {
+            MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
+            {
+                Description = "Преобразование Note",
+                StringHandlers = new List<StringHandlerMiddleWareOption>
+                {
+                    new StringHandlerMiddleWareOption
+                    {
+                        PropName = propName,
+                        SubStringMemConverterOption = new SubStringMemConverterOption
+                        {
+                            Priority = 1,
+                            Lenght = 90,
+                            InitPharases = new List<string> { "Без остановок: ", "С остановками: " }
+                        },
+                        InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
+                        {
+                            Priority = 2,
+                            LenghtLine = 25,
+                            Marker = "0x09"
+                        }
+                    }
+                },
+                InvokerOutput = new InvokerOutput
+                {
+                    Mode = InvokerOutputMode.Instantly
+                }
+            };
+
+            return middleWareInDataOption;
+        }
+
+
+
 
         public static MiddleWareInDataOption GetMiddleWareInDataOption_TwoStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter(params string[] propNames)
         {

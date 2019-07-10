@@ -2,7 +2,7 @@
 
 namespace DAL.Abstract.Entities.Options.MiddleWare.Handlers
 {
-    public class StringHandlerMiddleWareOption //TODO: вынести функционал в базовый класс
+    public class StringHandlerMiddleWareOption
     {
         public string PropName { get; set; }                       //Имя свойства для обработки
 
@@ -11,8 +11,5 @@ namespace DAL.Abstract.Entities.Options.MiddleWare.Handlers
         public ReplaceEmptyStringConverterOption ReplaceEmptyStringConverterOption { get; set; }
         public SubStringMemConverterOption SubStringMemConverterOption { get; set; }
         public InseartEndLineMarkerConverterOption InseartEndLineMarkerConverterOption { get; set; }
-
-
-
     }
 }

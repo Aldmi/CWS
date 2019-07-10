@@ -15,15 +15,16 @@ namespace InputDataModel.Autodictor.Model
         public string PathNumber { get; set; }                       //Номер пути
         public string Platform { get; set; }                         //Номер Платформы
         
-
         public EventTrain Event { get; set; }                        //Событие (ОТПР./ПРИБ./СТОЯНКА)
         public TypeTrain TrainType { get; set; }                     //тип поезда
         public VagonDirection VagonDirection { get; set; }           //Нумерация вагона (с головы, с хвоста)
 
         public Station StationDeparture { get; set; }
         public Station StationArrival { get; set; }
-        public Station  StationWhereFrom { get; set; }                //ближайшая станция после текущей
-        public Station  StationWhereTo { get; set; }                  //ближайшая станция после текущей
+        public Station Stations { get; set; }                        //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
+        public Station StationsСut { get; set; }                     //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
+        public Station  StationWhereFrom { get; set; }               //ближайшая станция после текущей
+        public Station  StationWhereTo { get; set; }                 //ближайшая станция после текущей
         public DirectionStation DirectionStation { get; set; }       //Направление.
 
         public DateTime? ArrivalTime { get; set; }                   //Время прибытия

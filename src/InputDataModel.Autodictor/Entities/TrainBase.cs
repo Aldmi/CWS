@@ -16,8 +16,6 @@
         #endregion
 
 
-
-
         #region Methode
 
         public string GetName(Lang lang)

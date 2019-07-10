@@ -633,6 +633,61 @@ namespace DeviceForExchnage.Test
             data.Should().NotBeNull();
             data.NumberOfTrain.Should().BeNull();
         }
+
+
+        [Fact]
+        public void PropertyNote_LongWord_Test()
+        {
+            //Arrage
+            var inData = InDataSourse.GetData_Note_LongWord(1); //3
+            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter_Khazanskiy("Note.NameRu");
+            var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
+
+            //Act
+            var resStep1 = middleWareinData.HandleInvoke(inData);
+            var valStep1Data1 = resStep1.Value?.Data[0].Note.NameRu;
+            //var valStep1Data2 = resStep1.Value?.Data[1].Note.NameRu;
+            //var valStep1Data3 = resStep1.Value?.Data[2].Note.NameRu;
+
+            //var resStep2 = middleWareinData.HandleInvoke(inData);
+            //var valStep2Data1 = resStep2.Value?.Data[0].Note.NameRu;
+            //var valStep2Data2 = resStep2.Value?.Data[1].Note.NameRu;
+            //var valStep2Data3 = resStep2.Value?.Data[2].Note.NameRu;
+
+            //var resStep3 = middleWareinData.HandleInvoke(inData);
+            //var valStep3Data1 = resStep3.Value?.Data[0].Note.NameRu;
+            //var valStep3Data2 = resStep3.Value?.Data[1].Note.NameRu;
+            //var valStep3Data3 = resStep3.Value?.Data[2].Note.NameRu;
+
+            
+            
+            
+
+            
+            //"Без остановок:0x09Золотая1, Конев Бор1,0x09Хорошово1,  Весенняя1,0x09Сказочная1,"
+            //"Без остановок:0x09Золотая2, Конев Бор2,0x09Хорошово2,  Весенняя2,0x09Сказочная2,"
+
+            //"Без остановок:0x09Платформа 113 км0,0x09Коломна0"
+            //"Без остановок:0x09Платформа 113 км1,0x09Коломна1"
+            //"Без остановок:0x09Платформа 113 км2,0x09Коломна2"
+
+            //Asert
+            resStep1.IsSuccess.Should().BeTrue();
+            valStep1Data1.Should().Be("Без остановок:0x09Трофимово0,0x09Воскресенск0, Шиферная0,0x09Москворецкая0,0x09Цемгигант0, Пески0,");
+            //valStep1Data2.Should().Be("Без остановок:0x09Трофимово1,0x09Воскресенск1, Шиферная1,0x09Москворецкая1,0x09Цемгигант1, Пески1,");
+            //valStep1Data3.Should().Be("Без остановок:0x09Трофимово2,0x09Воскресенск2, Шиферная2,0x09Москворецкая2,0x09Цемгигант2, Пески2,");
+
+            //resStep2.IsSuccess.Should().BeTrue();
+            //valStep2Data1.Should().Be("Без остановок:0x09Золотая0, Конев Бор0,0x09Хорошово0,  Весенняя0,0x09Сказочная0,");
+            //valStep2Data2.Should().Be("Без остановок:0x09Золотая1, Конев Бор1,0x09Хорошово1,  Весенняя1,0x09Сказочная1,");
+            //valStep2Data3.Should().Be();
+            
+            //resStep3.IsSuccess.Should().BeTrue();
+            //valStep3Data1.Should().Be();
+            //valStep3Data2.Should().Be();
+            //valStep3Data3.Should().Be();
+        }
+
     }
 
 }

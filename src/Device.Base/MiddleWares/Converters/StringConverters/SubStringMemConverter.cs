@@ -88,7 +88,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 
             var (initPhrase, resStr) = HelperString.SearchPhrase(baseStr, phrases);
             subStrLenght = subStrLenght - initPhrase.Length;
-            _subStrings = resStr.SubstringWithWholeWords(subStrLenght, initPhrase).ToList();
+            _subStrings = resStr.SubstringWithWholeWords(subStrLenght, initPhrase, ',').ToList();
         }
 
         #endregion

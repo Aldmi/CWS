@@ -284,8 +284,8 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var typeAlias = uit.TrainType?.GetNameAlias(lang);
             var eventTrain = uit.Event?.GetName(lang);
             var addition = uit.Addition?.GetName(lang);
-            var stations = CreateStationsStr(uit, lang);
-            var stationsCut = CreateStationsCutStr(uit, lang);
+            var stations = uit.Stations?.GetName(lang);  //CreateStationsStr(uit, lang);
+            var stationsCut = uit.StationsСut?.GetName(lang);//CreateStationsCutStr(uit, lang);
             var note = uit.Note?.GetName(lang);
             //DEBUG------Костыль по ограничению------
             var noteStr = string.IsNullOrEmpty(note) ? " " : note;

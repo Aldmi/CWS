@@ -24,13 +24,14 @@ namespace Shared.Helpers
 
 
         /// <summary>
-        /// Возвращает подстроку из базовой строки. Подстрока включает только целые слова.
+        /// Возвращает подстроку из базовой строки. Подстрока включает только целые слова или целые фразы отделяемые wordSeparator
         /// </summary>
         /// <param name="str">Строка для разбиения на подстроки</param>
         /// <param name="lenght">длинна подстроки</param>
         /// <param name="initPhrase">строка которая добавляется в начало каждой новой подстроки</param>
+        /// <param name="wordSeparator">Разделитель на слова (по умолчанию) или на фразы (например по ',')</param>
         /// <returns></returns>
-        public static IEnumerable<string> SubstringWithWholeWords(this string str, int lenght, string initPhrase = null)
+        public static IEnumerable<string> SubstringWithWholeWords(this string str, int lenght, string initPhrase = null, char wordSeparator = ' ')
         {
             if (string.IsNullOrEmpty(str))
                 return new List<string> { string.Empty };
@@ -41,7 +42,7 @@ namespace Shared.Helpers
             initPhrase = initPhrase ?? string.Empty;
 
             var resultList = new List<string>();
-            var wordChanks = str.Split(' ');
+            var wordChanks = str.Split(wordSeparator);
             var sumWord = new StringBuilder();
             for (var i = 0; i < wordChanks.Length; i++)
             {
@@ -58,6 +59,7 @@ namespace Shared.Helpers
                     {
                         sumWord.Insert(0, initPhrase);
                         var line = sumWord.ToString().TrimEnd(' ');
+                        //TODO: Удалять повторяющиеся пробелы
                         resultList.Add(line);
                         sumWord.Clear();
                         i--;                                                // Вернуться к строке которая не влезла
@@ -72,7 +74,7 @@ namespace Shared.Helpers
                     }
                     else
                     {
-                        sumWord.Append(word).Append(" ");
+                        sumWord.Append(word).Append(wordSeparator);
                     }
                 }
             }

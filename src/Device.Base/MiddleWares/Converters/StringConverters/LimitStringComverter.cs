@@ -2,6 +2,9 @@
 
 namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 {
+    /// <summary>
+    /// Обрезает строку
+    /// </summary>
     public class LimitStringComverter : BaseStringConverter
     {
         private readonly LimitStringConverterOption _option;
@@ -13,11 +16,9 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
         }
 
 
-
         protected override string ConvertChild(string inProp, int dataId)
         {
-            //DEBUG
-            return inProp + "After LimitStringComverter";
+            return (inProp.Length < _option.Limit) ? inProp : inProp.Remove(_option.Limit);
         }
     }
 }
