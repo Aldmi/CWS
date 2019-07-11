@@ -52,14 +52,13 @@ namespace Shared.Helpers
                 {
                     if (sumWord.Length == 0)                                //Единичное слово слишком длинное, разобъем его на подстроки
                     {
-                        var words = BreakWordIntoLines(word, lenght);
-                        resultList.AddRange(words);
+                        var firstWord = BreakWordIntoLines(word, lenght).FirstOrDefault().RemovingExtraSpaces();
+                        resultList.Add(firstWord);
                     }
                     else
                     {
                         sumWord.Insert(0, initPhrase);
-                        var line = sumWord.ToString().TrimEnd(' ');
-                        //TODO: Удалять повторяющиеся пробелы
+                        var line = sumWord.ToString().RemovingExtraSpaces();//Удалять повторяющиеся пробелы
                         resultList.Add(line);
                         sumWord.Clear();
                         i--;                                                // Вернуться к строке которая не влезла
@@ -82,7 +81,7 @@ namespace Shared.Helpers
             if (sumWord.Length != 0)                                      //Последняя накопленная строка добавляется как есть
             {
                 sumWord.Insert(0, initPhrase);
-                resultList.Add(sumWord.ToString());
+                resultList.Add(sumWord.ToString().RemovingExtraSpaces());
             }
 
             return resultList;
@@ -121,6 +120,16 @@ namespace Shared.Helpers
             }
 
             return words;
+        }
+
+
+        /// <summary>
+        /// Удаление лишних пробелов из строки.
+        /// В начале и конце строки, также повторяющииеся пробелы в самой строке
+        /// </summary>
+        public static string RemovingExtraSpaces(this string str)
+        {
+            return string.IsNullOrEmpty(str) ? str : Regex.Replace(str, @"\s+", " ").Trim();
         }
     }
 }

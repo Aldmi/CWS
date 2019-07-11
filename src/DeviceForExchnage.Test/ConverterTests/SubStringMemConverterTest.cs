@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
 using DeviceForExchange.MiddleWares.Converters.StringConverters;
 using FluentAssertions;
@@ -8,31 +9,46 @@ namespace DeviceForExchnage.Test.ConverterTests
 {
     public class SubStringMemConverterTest
     {
+        private SubStringMemConverterOption Option { get; }
+        public string InStr => "С остановками: Волочаевская, Климская, Октябрьская, Новосибирская, Красноярская, 25 Километр, Волховские холмы, Ленинско кузнецкие золотые сопки верхней пыжмы, Куйбышевская, Казахстанская, Свердлолвская, Московская, Горьковская";
+
+
+        public SubStringMemConverterTest()
+        {
+            Option = new SubStringMemConverterOption()
+            {
+                Lenght = 60,
+                InitPharases = new List<string> { "Без остановок: ", "С остановками: " }
+            };
+        }
+
+
+
         [Fact]
-        public void NormalUse_5Step()
+        public void NormalUse_8Step()
         {
             //Arrage
-            var option = new SubStringMemConverterOption
-            {
-                Lenght = 25
-            };
-            var converer = new SubStringMemConverter(option);
-            var str = "Со всеми остановками кроме: серпухово, балаково, Свободное";
+            var converer = new SubStringMemConverter(Option);
 
             //Act
-            var resStep1 = converer.Convert(str,1);
-            var resStep2 = converer.Convert(str,1);
-            var resStep3 = converer.Convert(str,1);
-            var resStep4 = converer.Convert(str,1);
-            var resStep5 = converer.Convert(str,1);
+            var resStep1 = converer.Convert(InStr, 1);
+            var resStep2 = converer.Convert(InStr, 1);
+            var resStep3 = converer.Convert(InStr, 1);
+            var resStep4 = converer.Convert(InStr, 1);
+            var resStep5 = converer.Convert(InStr, 1);
+            var resStep6 = converer.Convert(InStr, 1);
+            var resStep7 = converer.Convert(InStr, 1);
+            var resStep8 = converer.Convert(InStr, 1);
 
             //Asert
-            resStep1.Should().Be("Со всеми остановками");
-            resStep2.Should().Be("кроме: серпухово,");
-            resStep3.Should().Be("балаково, Свободное");
-
-            resStep4.Should().Be("Со всеми остановками");
-            resStep5.Should().Be("кроме: серпухово,");
+            resStep1.Should().Be("С остановками: Волочаевская, Климская, Октябрьская,"); 
+            resStep2.Should().Be("С остановками:  Новосибирская, Красноярская, 25 Километр,");
+            resStep3.Should().Be("С остановками:  Волховские холмы,"); 
+            resStep4.Should().Be(" Ленинско кузнецкие золотые сопки верхней пыж");
+            resStep5.Should().Be("С остановками:  Куйбышевская, Казахстанская, Свердлолвская,");
+            resStep6.Should().Be("С остановками:  Московская, Горьковская"); 
+            resStep7.Should().Be("С остановками: Волочаевская, Климская, Октябрьская,");
+            resStep8.Should().Be("С остановками:  Новосибирская, Красноярская, 25 Километр,");
         }
 
 
@@ -42,20 +58,21 @@ namespace DeviceForExchnage.Test.ConverterTests
             //Arrage
             var option = new SubStringMemConverterOption
             {
-                Lenght = 150
+                Lenght = 500,
+                InitPharases = new List<string> { "Без остановок: ", "С остановками: " }
             };
             var converer = new SubStringMemConverter(option);
-            var str = "Со всеми остановками кроме: серпухово, балаково, Свободное";
+
 
             //Act
-            var resStep1 = converer.Convert(str,1);
-            var resStep2 = converer.Convert(str,1);
-            var resStep3 = converer.Convert(str,1);
+            var resStep1 = converer.Convert(InStr,1);
+            var resStep2 = converer.Convert(InStr, 1);
+            var resStep3 = converer.Convert(InStr, 1);
 
             //Asert
-            resStep1.Should().Be(str);
-            resStep2.Should().Be(str);
-            resStep3.Should().Be(str);
+            resStep1.Should().Be(InStr);
+            resStep2.Should().Be(InStr);
+            resStep3.Should().Be(InStr);
         }
 
 
