@@ -54,7 +54,7 @@ namespace WebApiSwc
             });
 
             var minLogLevel = InitSettings.GetLoggerMinlevel(Env, AppConfiguration);
-            services.AddSerilogServices(minLogLevel);
+            services.AddSerilogServices(minLogLevel, Env.ApplicationName);
 
             services.AddTransient<IConfiguration>(provider => AppConfiguration);
 

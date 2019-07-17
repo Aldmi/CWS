@@ -46,10 +46,6 @@ namespace Shared.ReflectionServices
             {
                 return Result.Fail<(PropertyInfo, object, T)>($"Тип свойства {propName} не соответвует типу обработчика handler {typeof(T)}");
             }
-            //if ((obj != null) && !(obj is T))
-            //{
-            //    return Result.Fail<(PropertyInfo, object, T)>($"Тип свойства {propName} не соответвует типу обработчика handler {typeof(T)}");
-            //}
 
             //Возврат значениtе в кортеже----------------------------------------------------------------
             var value = (T)obj;

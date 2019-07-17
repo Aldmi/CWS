@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Globalization;
 using System.Spatial;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+using Serilog.Formatting.Elasticsearch;
+using Serilog.Formatting.Json;
+using Serilog.Sinks.Elasticsearch;
+using Serilog.Sinks.File;
 
 namespace WebApiSwc.Extensions
 {
@@ -24,12 +29,12 @@ namespace WebApiSwc.Extensions
         }
 
 
-        public static IServiceCollection AddSerilogServices(this IServiceCollection services, string minLevel)
+        public static IServiceCollection AddSerilogServices(this IServiceCollection services, string minLevel, string appName)
         {
             if (Enum.TryParse<LogEventLevel>(minLevel, out var result))
             {
                 LevelSwitch = new LoggingLevelSwitch(result);
-                var loggerConf = ConfigLogger();
+                var loggerConf = ConfigLogger(appName);
                 Log.Logger = loggerConf.CreateLogger();
                 AppDomain.CurrentDomain.ProcessExit += (s, e) => Log.CloseAndFlush();
                 return services.AddSingleton(Log.Logger);
@@ -38,10 +43,10 @@ namespace WebApiSwc.Extensions
         }
 
 
-        public static IServiceCollection AddSerilogServices(this IServiceCollection services, LogEventLevel minLevel)
+        public static IServiceCollection AddSerilogServices(this IServiceCollection services, LogEventLevel minLevel, string appName)
         {  
                 LevelSwitch = new LoggingLevelSwitch(minLevel);
-                var loggerConf = ConfigLogger();
+                var loggerConf = ConfigLogger(appName);
                 Log.Logger = loggerConf.CreateLogger();
                 AppDomain.CurrentDomain.ProcessExit += (s, e) => Log.CloseAndFlush();
                 return services.AddSingleton(Log.Logger);          
@@ -50,8 +55,9 @@ namespace WebApiSwc.Extensions
         #endregion
 
 
-        private static LoggerConfiguration ConfigLogger()
+        private static LoggerConfiguration ConfigLogger(string appName)
         {
+            var newIndexPerDay = 3;     //Количество дней для новго индекса.
             var loggerConf = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy(LevelSwitch)
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Error) 
@@ -79,7 +85,34 @@ namespace WebApiSwc.Extensions
                     retainedFileCountLimit: 24,
                     fileSizeLimitBytes: 100000000,
                     rollOnFileSizeLimit: true,                      
-                    shared: true);
+                    shared: true)
+
+                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200"))
+                {
+                    MinimumLogEventLevel = LogEventLevel.Information,
+                    AutoRegisterTemplate = true,
+                    AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
+                    CustomFormatter = new ExceptionAsObjectJsonFormatter(renderMessage: true),
+
+                    //Правило формирования индекса
+                    IndexDecider = (@event, offset) =>
+                    {
+                        var indexNumber = Math.Ceiling((double)offset.Day / newIndexPerDay);
+                        var indexName = $"{appName.ToLower(CultureInfo.InvariantCulture)}-{offset:yyyy.MM}-{indexNumber}";
+                        return indexName;
+                    },
+
+                    //Обработка ошибок записи в ES
+                    FailureCallback = e =>
+                    {
+                        Console.WriteLine("ES недоступно" + e.MessageTemplate);
+                    },
+                    EmitEventFailure = EmitEventFailureHandling.WriteToSelfLog |
+                                       EmitEventFailureHandling.WriteToFailureSink |
+                                       EmitEventFailureHandling.RaiseCallback,
+                    FailureSink = new FileSink("./failures.txt", new JsonFormatter(), null),
+
+                });
 
             //.WriteTo.Seq("http://localhost:5341", compact: true);
 

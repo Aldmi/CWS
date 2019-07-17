@@ -93,7 +93,7 @@ namespace DeviceForExchange.MiddleWares
                         }
                         catch (StringConverterException ex)
                         {
-                            error = $"MiddlewareInvokeService.HandleInvoke.StringConvert.  Exception в конверторе:  {ex}";
+                            error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. Exception в конверторе:  {ex}";
                             errorHandlerWrapper.AddError(error);
                         }
                         catch (Exception e)
