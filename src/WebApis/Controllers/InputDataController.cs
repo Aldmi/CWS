@@ -90,7 +90,7 @@ namespace WebApiSwc.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Ошибка в InputDataController/StartListener");
+                _logger.Error(ex, "{Type}", "Ошибка в InputDataController/StartMessageBrokerConsumerBg");
                 throw;
             }
         }
@@ -115,7 +115,7 @@ namespace WebApiSwc.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Ошибка в InputDataController/StopListener");
+                _logger.Error(ex, "{Type}", "Ошибка в InputDataController/StopMessageBrokerConsumerBg");
                 throw;
             }
         }
@@ -132,7 +132,7 @@ namespace WebApiSwc.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Ошибка в InputDataController/SendData4Devices");
+                _logger.Error(ex, "{Type}", "Ошибка в InputDataController/SendData4Devices");
                 throw;
             }
         }
@@ -192,7 +192,7 @@ namespace WebApiSwc.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Ошибка в InputDataController/SendDataXml4Devices");
+                _logger.Error(ex, "{Type}", "InputDataController/SendDataXml4Devices");
                 throw;
             }
         }
@@ -221,7 +221,7 @@ namespace WebApiSwc.Controllers
             var xmlFile = username;
             if (xmlFile == null)
             {
-                _logger.Warning("SendDataXmlMultipart4Devices. deviceName == null");
+                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", "xmlFile == null");
                 return BadRequest("SendDataXmlMultipart4Devices. xmlFile == null");
             }
             var values = xmlFile.FileName.Split('+');
@@ -230,24 +230,25 @@ namespace WebApiSwc.Controllers
                 var fileName = values[0];
                 dataAction = values[1];
                 deviceName = deviceName ?? fileName;//Если deviceName не переданн в заголовке 
-                _logger.Information(fileName != null ? $"FileName= {fileName}" : "FileName= NULL");//DEBUG
+                var str = fileName != null ? $"FileName= {fileName}" : "FileName= NULL";
+                _logger.Information("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", str);
             }
             if (string.IsNullOrEmpty(deviceName))
             {
                 ModelState.AddModelError("SendDataXmlMultipart4Devices", "deviceName == null");
-                _logger.Warning($"SendDataXmlMultipart4Devices. deviceName == null");
+                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "deviceName == null");
                 return BadRequest(ModelState);
             }
             if (!Enum.TryParse(dataAction, out DataAction dataActionParsed))
             {
                 ModelState.AddModelError("SendDataXmlMultipart4Devices", "DataAction Error Parse");
-                _logger.Warning($"SendDataXmlMultipart4Devices. DataAction Error Parse");
+                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "DataAction Error Parse");
                 return BadRequest(ModelState);
             }
             if (!Enum.TryParse(command, out Command4Device commandParse))
             {
                 ModelState.AddModelError("SendDataXmlMultipart4Devices", "Command4Device Error Parse");
-                _logger.Warning($"SendDataXmlMultipart4Devices. Command4Device Error Parse");
+                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "Command4Device Error Parse");
                 return BadRequest(ModelState);
             }
 
@@ -286,12 +287,13 @@ namespace WebApiSwc.Controllers
                         }
                     }
                 }
-                _logger.Warning($"SendDataXmlMultipart4Devices. Размер XML файла равен 0");
+
+                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "Размер XML файла равен 0");
                 return BadRequest("Размер XML файла равен 0");
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Ошибка в InputDataController/SendDataXmlMultipart4Devices");
+                _logger.Error(ex ,"{Type}", "Ошибка в InputDataController");
                 throw;
             }
         }
@@ -317,7 +319,7 @@ namespace WebApiSwc.Controllers
         /// <summary>
         /// Присвоить Id, если он не установлен
         /// </summary>
-        private void InitDataId(IList<AdInputType> datas)
+        private static void InitDataId(IList<AdInputType> datas)
         {
             for (var i = 0; i < datas.Count; i++)
             {

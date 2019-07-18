@@ -152,7 +152,7 @@ namespace Exchange.Base
             {
                 if (_transport.IsCycleReopened)
                 {
-                    _logger.Error($"ТРАНСПОРТ УЖЕ НАХОДИТСЯ В ЦИКЛЕ ПЕРЕОТКРЫТИЯ \"{_transport.KeyTransport}\"  KeyExchange \"{KeyExchange}\"");
+                    _logger.Error("{Type} {KeyExchange}  KeyTransport: \"{KeyTransport}\" ", "ТРАНСПОРТ УЖЕ НАХОДИТСЯ В ЦИКЛЕ ПЕРЕОТКРЫТИЯ", KeyExchange, _transport.KeyTransport);
                     return;
                 }
                 _cycleReOpenedCts?.Cancel();
@@ -346,7 +346,7 @@ namespace Exchange.Base
                 var errorResult = result.Error.DequeueResultError;
                 if (errorResult == DequeueResultError.FailTryDequeue || errorResult == DequeueResultError.FailTryPeek)
                 {
-                    _logger.Error($"Ошибка извлечения данных из ЦИКЛ. очереди {errorResult.ToString()}");
+                    _logger.Error("{Type} {KeyExchange}  {MessageShort}", "Ошибка извлечения данных из ЦИКЛ. очереди", KeyExchange, errorResult.ToString());
                     return;
                 }
             }
@@ -410,7 +410,7 @@ namespace Exchange.Base
 
                         //ТРАНСПОРТ НЕ ОТКРЫТ.
                         case StatusDataExchange.NotOpenTransport:
-                            _logger.Error($"ПОПЫТКА ОТПРАВИТЬ ЗАПРОС НА НЕ ОТКРЫТЫЙ ТРАНСПОРТ. KeyExchange: {KeyExchange}  KeyTransport: {KeyTransport}");
+                            _logger.Warning("{Type}  KeyExchange:{KeyExchange}   KeyTransport:{KeyTransport} ", "ПОПЫТКА ОТПРАВИТЬ ЗАПРОС НА НЕ ОТКРЫТЫЙ ТРАНСПОРТ.", KeyExchange, KeyTransport);
                             IsConnect = false;
                             break;
 
@@ -420,7 +420,7 @@ namespace Exchange.Base
                             {
                                 _countTimeoutTrying = 0;
                                 IsConnect = false;
-                                _logger.Warning($"ТАЙМАУТ ОТВЕТА. KeyExchange {KeyExchange}");
+                                _logger.Warning("{Type} {KeyExchange}", "ТАЙМАУТ ОТВЕТА.", KeyExchange);
                             }
                             break;
 
@@ -428,7 +428,7 @@ namespace Exchange.Base
                         case StatusDataExchange.EndWithTimeoutCritical:
                         case StatusDataExchange.EndWithErrorCritical:
                             CycleReOpened();
-                            _logger.Error($"ОБМЕН ЗАВЕРЩЕН КРИТИЧЕСКИ НЕ ПРАВИЛЬНО. ПЕРЕОТКРЫТИЕ СОЕДИНЕНИЯ. KeyExchange {KeyExchange}");
+                            _logger.Error("{Type} {KeyExchange}", "ОБМЕН ЗАВЕРЩЕН КРИТИЧЕСКИ НЕ ПРАВИЛЬНО. ПЕРЕОТКРЫТИЕ СОЕДИНЕНИЯ.", KeyExchange);
                             break;
 
                         //ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО. Считаем попытки.
@@ -437,7 +437,7 @@ namespace Exchange.Base
                             {
                                 _countErrorTrying = 0;
                                 IsConnect = false;
-                                _logger.Warning($"ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО. KeyExchange {KeyExchange}");
+                                _logger.Warning("{Type} {KeyExchange}", "ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО.", KeyExchange);
                                 CycleReOpened();
                             }
                             break;
@@ -448,7 +448,7 @@ namespace Exchange.Base
                     //ОШИБКА ТРАНСПОРТА.
                     IsConnect = false;
                     transportResp.TransportException = ex;
-                    _logger.Error(ex, $"ОШИБКА ТРАНСПОРТА. KeyExchange {KeyExchange}");
+                    _logger.Error("{Type} {KeyExchange}  KeyTransport:{KeyTransport}", "ОШИБКА ТРАНСПОРТА.", KeyExchange, KeyTransport);
                 }
                 finally
                 {
@@ -461,7 +461,7 @@ namespace Exchange.Base
 
             try
             {   //ЗАПУСК КОНВЕЕРА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ
-                using (_logger.OperationAt(LogEventLevel.Information).Time("TimeOpertaion End Exchanage Pipeline"))
+                using (_logger.OperationAt(LogEventLevel.Information).Time("{Type} {KeyExchange}", "ВРЕМЯ ИСПОЛНЕНИЯ", KeyExchange))
                 {
                     await _dataProvider.StartExchangePipeline(inData);
                 }
@@ -472,7 +472,7 @@ namespace Exchange.Base
                 IsConnect = false;
                 transportResponseWrapper.ExceptionExchangePipline = ex;
                 transportResponseWrapper.MessageDict = new Dictionary<string, string>(_dataProvider.StatusDict);
-                _logger.Error(ex, $"ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. KeyExchange {KeyExchange}");
+                _logger.Warning("{Type} {KeyExchange}", "ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ.", KeyExchange);
             }
             finally
             {
@@ -493,10 +493,12 @@ namespace Exchange.Base
             var numberPreparedPackages = response.ResponsesItems.Count;                                              //кол-во подготовленных к отправке пакетов        
             var countAll = response.ResponsesItems.Count(resp => resp.Status != StatusDataExchange.EndWithTimeout);  //кол-во ВСЕХ полученных ответов
             var countIsValid = response.ResponsesItems.Count(resp => resp.IsOutDataValid);                           //кол-во ВАЛИДНЫХ ответов
-            string errorStat = String.Empty;
+            string errorStat = string.Empty;
+            bool isValid = true;
             if (countIsValid < numberPreparedPackages)
             {
                 errorStat = response.ResponsesItems.Select(r => r.Status.ToString()).Aggregate((i, j) => i + " | " + j);
+                isValid = false;
             }
 
             var responseInfo = response.ResponsesItems.Select(item => new
@@ -516,8 +518,8 @@ namespace Exchange.Base
             };
             var jsonRespInfo = JsonConvert.SerializeObject(responseInfo, settings);
 
-            _logger.Information($"ЗАПРОСЫ В ПАКЕТНОЙ ОТПРАВКИ. KeyExchange= {KeyExchange}   jsonRespInfo= {jsonRespInfo}");
-            _logger.Information($"ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН . KeyExchange= {KeyExchange} успех/ответов/запросов=  ({countIsValid} / {countAll} / {numberPreparedPackages})   [{errorStat}]");
+            _logger.Information("{Type}  {KeyExchange}   РЕЗУЛЬТАТ= {isValid}   успех/ответов/запросов= ({countIsValid} / {countAll} / {numberPreparedPackages})   [{errorStat}]  jsonRespInfo= {jsonRespInfo}",
+                                "ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН.", KeyExchange, isValid, countIsValid, countAll, numberPreparedPackages, errorStat, jsonRespInfo);
         }
 
         #endregion
