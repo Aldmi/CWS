@@ -20,6 +20,9 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
         }
 
 
+        /// <summary>
+        /// Если слово слишком длинное оно обрезается (берется начальные LenghtLine символов слова)
+        /// </summary>
         protected override string ConvertChild(string inProp, int dataId)
         {
             var subStrings = inProp.SubstringWithWholeWords( _option.LenghtLine).ToList();

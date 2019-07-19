@@ -25,6 +25,7 @@ namespace Shared.Helpers
 
         /// <summary>
         /// Возвращает подстроку из базовой строки. Подстрока включает только целые слова или целые фразы отделяемые wordSeparator
+        /// Если указанна initPhrase, то она добавляется в начало каждой новой подстроки
         /// </summary>
         /// <param name="str">Строка для разбиения на подстроки</param>
         /// <param name="lenght">длинна подстроки</param>
@@ -50,7 +51,7 @@ namespace Shared.Helpers
                 var checkStr = sumWord + word;
                 if (checkStr.Length >= lenght)                              //Сохранить накопленную в sumWord подстроку
                 {
-                    if (sumWord.Length == 0)                                //Единичное слово слишком длинное, разобъем его на подстроки
+                    if (sumWord.Length == 0)                                //Единичное слово слишком длинное, разобъем его на подстроки и возьмем первую подстроку!!!
                     {
                         var firstWord = BreakWordIntoLines(word, lenght).FirstOrDefault().RemovingExtraSpaces();
                         resultList.Add(firstWord);

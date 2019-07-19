@@ -6,5 +6,6 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConver
     {
         public int Lenght { get; set; }
         public List<string> InitPharases { get; set; }
+        public char Separator { get; set; }
     }
 }

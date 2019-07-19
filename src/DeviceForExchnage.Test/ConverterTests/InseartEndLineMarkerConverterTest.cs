@@ -51,23 +51,23 @@ namespace DeviceForExchnage.Test.ConverterTests
 
 
         [Fact]
-        public void LenghtLineEqual_3()
+        public void LenghtLineEqual_9()
         {
             //Arrage
             var option = new InseartEndLineMarkerConverterOption
             {
-                LenghtLine = 3,
+                LenghtLine = 9,
                 Marker = "0x09"
 
             };
             var converer = new InseartEndLineMarkerConverter(option);
-            var str = "Строка1 Строка2 Строка3";
+            var str = "Строка1 СтрокаОченьдлинная2 Строка3";
 
             //Act
             var res = converer.Convert(str,1);
 
             //Asert
-            res.Should().Be("Стр0x09ока0x0910x09Стр0x09ока0x0920x09Стр0x09ока0x093"); 
+            res.Should().Be("Строка10x09СтрокаОче0x09Строка3"); 
         }
 
 

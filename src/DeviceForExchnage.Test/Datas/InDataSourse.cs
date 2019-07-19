@@ -11,37 +11,6 @@ namespace DeviceForExchnage.Test.Datas
 {
     public static class InDataSourse
     {
-        public static InputData<AdInputType> GetData(int countData)
-        {
-           var datas= Enumerable.Range(0, countData).Select(i => new AdInputType
-            {
-                Id = i,
-                Note = new Note
-                {
-                    NameRu = $"Index= {i}   Со всеми станциями кроие: Волочаевская, Климская",
-                },
-                StationDeparture = new Station
-                {
-                    NameRu = $"Index= {i}    Станция Отпр 1"
-                },
-                NumberOfTrain = "956"
-            }).ToList();
-
-
-            var inData = new InputData<AdInputType>()
-            {
-                Command = Command4Device.None,
-                DataAction = DataAction.CycleAction,
-                DeviceName = "Peron.P1",
-                DirectHandlerName = null,
-                ExchangeName = "Exch Peron.P1",
-                Data = datas
-            };
-
-            return inData;
-        }
-
-
         public static InputData<AdInputType> GetData_Note(int countData)
         {
             var datas = Enumerable.Range(0, countData).Select(i => new AdInputType
@@ -49,42 +18,11 @@ namespace DeviceForExchnage.Test.Datas
                 Id = i,
                 Note = new Note
                 {
-                    NameRu = $"Index= {i}   Со всеми станциями кроие: Волочаевская, Климская, Октябрьская, Новосибирская, Красноярская, Куйбышевская, Казахстанская, Свердлолвская, Московская, Горьковская",
+                    NameRu = $"С остановками: Волочаевская {i}, Климская {i}, Октябрьская {i}, Новосибирская {i}, Красноярская {i}, 25 Километр {i}, Волховские холмы {i}, Ленинско кузнецкие золотые сопки верхней пыжмы {i}, Куйбышевская {i}, Казахстанская {i}, Свердлолвская {i}, Московская {i}, Горьковская {i}",
                 },
                 StationDeparture = new Station
                 {
-                    NameRu = $"Index= {i}    Станция Отпр 1"
-                },
-                NumberOfTrain = "956"
-            }).ToList();
-
-
-            var inData = new InputData<AdInputType>()
-            {
-                Command = Command4Device.None,
-                DataAction = DataAction.CycleAction,
-                DeviceName = "Peron.P1",
-                DirectHandlerName = null,
-                ExchangeName = "Exch Peron.P1",
-                Data = datas
-            };
-
-            return inData;
-        }
-
-
-        public static InputData<AdInputType> GetData_Note_Index(int countData)
-        {
-            var datas = Enumerable.Range(0, countData).Select(i => new AdInputType
-            {
-                Id = i,
-                Note = new Note
-                {
-                    NameRu = $"Со всеми станциями кроме: Волочаевская{i}, Климская{i}, Октябрьская{i}, Новосибирская{i}, Красноярская{i}, Куйбышевская{i}, Казахстанская{i}, Свердлолвская{i}, Московская{i}, Горьковская{i}, Сочинская{i}, Маковая{i}, Красносельская{i}, Уютная{i}, Петушки{i}",
-                },
-                StationDeparture = new Station
-                {
-                    NameRu = $"Станция Отпр {i}"
+                    NameRu = $"Станция Отпр 1"
                 },
                 NumberOfTrain = "956"
             }).ToList();
@@ -160,7 +98,6 @@ namespace DeviceForExchnage.Test.Datas
 
             return inData;
         }
-
 
 
         public static InputData<AdInputType> GetData_Note_LongWord(int countData)

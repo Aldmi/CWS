@@ -23,7 +23,7 @@ namespace WebApiSwc
             Console.ForegroundColor = ConsoleColor.Red;
             const string version = "CWS Ver2.7";
             Console.Title = version;
-            Console.WriteLine($"{version}  [09.07.2019]  [Add carry by phrases for SubStringMemConverter]");
+            Console.WriteLine($"{version}  [09.07.2019]  [Add carry by phrases for SubStringMemConverter]  TestMemmory 222");
         }
 
 

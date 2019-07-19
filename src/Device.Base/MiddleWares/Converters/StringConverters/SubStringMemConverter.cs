@@ -37,7 +37,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
         {
             SubStringState GetResetState()
             {
-                return new SubStringState(inProp, _option.Lenght, _option.InitPharases);
+                return new SubStringState(inProp, _option.Lenght, _option.InitPharases, _option.Separator);
             }
           
             //Если данных нет в словаре. Добавить в словарь новые данные.
@@ -81,14 +81,14 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 
         #region ctor
 
-        public SubStringState(string baseStr, int subStrLenght, IEnumerable<string> phrases)
+        public SubStringState(string baseStr, int subStrLenght, IEnumerable<string> phrases, char separator)
         {
             _ingex = -1;
             _baseStr = baseStr;
 
             var (initPhrase, resStr) = HelperString.SearchPhrase(baseStr, phrases);
-            subStrLenght = subStrLenght - initPhrase.Length;
-            _subStrings = resStr.SubstringWithWholeWords(subStrLenght, initPhrase, ',').ToList();
+            subStrLenght -= initPhrase.Length;
+            _subStrings = resStr.SubstringWithWholeWords(subStrLenght, initPhrase, separator).ToList();
         }
 
         #endregion

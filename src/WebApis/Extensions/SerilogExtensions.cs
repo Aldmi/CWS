@@ -69,7 +69,7 @@ namespace WebApiSwc.Extensions
                     LogEventLevel.Information,
                     rollingInterval: RollingInterval.Day,                 //за 20 последних дней хранится Information лог (100МБ лимит размера файла)
                     retainedFileCountLimit: 20,
-                    fileSizeLimitBytes: 100000000,                   
+                    fileSizeLimitBytes: 100000000,
                     rollOnFileSizeLimit: true)
 
                 .WriteTo.File("logs/Error_Log.txt",                  //за 20 последних дней хранится Error лог (100МБ лимит размера файла)
@@ -84,35 +84,36 @@ namespace WebApiSwc.Extensions
                     rollingInterval: RollingInterval.Hour,
                     retainedFileCountLimit: 24,
                     fileSizeLimitBytes: 100000000,
-                    rollOnFileSizeLimit: true,                      
+                    rollOnFileSizeLimit: true,
                     shared: true)
 
-                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200"))
-                {
-                    MinimumLogEventLevel = LogEventLevel.Information,
-                    AutoRegisterTemplate = true,
-                    AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
-                    CustomFormatter = new ExceptionAsObjectJsonFormatter(renderMessage: true),
+                //.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200"))
+                //{
+                //    MinimumLogEventLevel = LogEventLevel.Information,
+                //    AutoRegisterTemplate = true,
+                //    AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
+                //    CustomFormatter = new ExceptionAsObjectJsonFormatter(renderMessage: true),
 
-                    //Правило формирования индекса
-                    IndexDecider = (@event, offset) =>
-                    {
-                        var indexNumber = Math.Ceiling((double)offset.Day / newIndexPerDay);
-                        var indexName = $"{appName.ToLower(CultureInfo.InvariantCulture)}-{offset:yyyy.MM}-{indexNumber}";
-                        return indexName;
-                    },
+                //    //Правило формирования индекса
+                //    IndexDecider = (@event, offset) =>
+                //    {
+                //        var indexNumber = Math.Ceiling((double)offset.Day / newIndexPerDay);
+                //        var indexName = $"{appName.ToLower(CultureInfo.InvariantCulture)}-{offset:yyyy.MM}-{indexNumber}";
+                //        return indexName;
+                //    },
 
-                    //Обработка ошибок записи в ES
-                    FailureCallback = e =>
-                    {
-                        Console.WriteLine("ES недоступно" + e.MessageTemplate);
-                    },
-                    EmitEventFailure = EmitEventFailureHandling.WriteToSelfLog |
-                                       EmitEventFailureHandling.WriteToFailureSink |
-                                       EmitEventFailureHandling.RaiseCallback,
-                    FailureSink = new FileSink("./failures.txt", new JsonFormatter(), null),
+                //    //Обработка ошибок записи в ES
+                //    FailureCallback = e =>
+                //    {
+                //        Console.WriteLine("ES недоступно" + e.MessageTemplate);
+                //    },
+                //    EmitEventFailure = EmitEventFailureHandling.WriteToSelfLog |
+                //                       EmitEventFailureHandling.WriteToFailureSink |
+                //                       EmitEventFailureHandling.RaiseCallback,
+                //    FailureSink = new FileSink("./failures.txt", new JsonFormatter(), null),
 
-                });
+                //})
+                ;
 
             //.WriteTo.Seq("http://localhost:5341", compact: true);
 

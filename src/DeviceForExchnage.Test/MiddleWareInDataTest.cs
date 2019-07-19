@@ -66,37 +66,36 @@ namespace DeviceForExchnage.Test
             //Asert
             resStep1.IsSuccess.Should().BeTrue();
             valStep1.Should().NotBeNull();
-            valStep1.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
+            valStep1.Should().Be("С остановками: Волочаевская 0, Климская0x090, Октябрьская 0, Новосибирская 0,0x09Красноярская 0, 25 Километр 0,");
 
             resStep2.IsSuccess.Should().BeTrue();
             valStep2.Should().NotBeNull();
-            valStep2.Should().Be("Красноярская, Куйбышевская,0x09Казахстанская, Свердлолвская,0x09Московская, Горьковская");
+            valStep2.Should().Be("С остановками: Волховские холмы 0,0x09Ленинско кузнецкие золотые сопки0x09верхней пыжмы 0, Куйбышевская 0,0x09Казахстанская 0,");
 
             resStep3.IsSuccess.Should().BeTrue();
             valStep3.Should().NotBeNull();
-            valStep3.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
+            valStep3.Should().Be("С остановками: Свердлолвская 0,0x09Московская 0, Горьковская 0");
 
             resStep4.IsSuccess.Should().BeTrue();
             valStep4.Should().NotBeNull();
-            valStep4.Should().Be("Красноярская, Куйбышевская,0x09Казахстанская, Свердлолвская,0x09Московская, Горьковская");
+            valStep4.Should().Be("С остановками: Волочаевская 0, Климская0x090, Октябрьская 0, Новосибирская 0,0x09Красноярская 0, 25 Километр 0,");
 
             resStep5.IsSuccess.Should().BeTrue();
             valStep5.Should().NotBeNull();
-            valStep5.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
+            valStep5.Should().Be("С остановками: Волховские холмы 0,0x09Ленинско кузнецкие золотые сопки0x09верхней пыжмы 0, Куйбышевская 0,0x09Казахстанская 0,");
 
             resStep6.IsSuccess.Should().BeTrue();
             valStep6.Should().NotBeNull();
-            valStep6.Should().Be("Красноярская, Куйбышевская,0x09Казахстанская, Свердлолвская,0x09Московская, Горьковская");
+            valStep6.Should().Be("С остановками: Свердлолвская 0,0x09Московская 0, Горьковская 0");
         }
 
 
         [Fact]
-        public void NormalUse_Note_Convert_WithPhrases_6Step()
+        public void NormalUse_Note_Convert_WithOutPhrases_6Step()
         {
             //Arrage
             var inData = InDataSourse.GetData_Note(1);
-            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu");
-            option.StringHandlers[0].SubStringMemConverterOption.InitPharases= new List<string> { "Со всеми станциями кроие:", "По станциям из списка:" };
+            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter_withoutPhrases("Note.NameRu");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 
             //Act
@@ -116,27 +115,27 @@ namespace DeviceForExchnage.Test
             //Asert
             resStep1.IsSuccess.Should().BeTrue();
             valStep1.Should().NotBeNull();
-            valStep1.Should().Be("Со всеми станциями кроие:Index= 00x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,"); 
+            valStep1.Should().Be("С остановками: Волочаевская 0, Климская0x090, Октябрьская 0, Новосибирская 0,0x09Красноярская 0, 25 Километр 0,"); 
 
             resStep2.IsSuccess.Should().BeTrue();
             valStep2.Should().NotBeNull();
-            valStep2.Should().Be("Со всеми станциями кроие:Красноярская,0x09Куйбышевская, Казахстанская,0x09Свердлолвская, Московская,"); 
+            valStep2.Should().Be("Волховские холмы 0, Ленинско кузнецкие0x09золотые сопки верхней пыжмы 0,0x09Куйбышевская 0, Казахстанская 0,0x09Свердлолвская 0,"); 
 
             resStep3.IsSuccess.Should().BeTrue();
             valStep3.Should().NotBeNull();
-            valStep3.Should().Be("Со всеми станциями кроие:Горьковская"); 
+            valStep3.Should().Be("Московская 0, Горьковская 0"); 
 
             resStep4.IsSuccess.Should().BeTrue();
             valStep4.Should().NotBeNull();
-            valStep4.Should().Be("Со всеми станциями кроие:Index= 00x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,"); 
+            valStep4.Should().Be("С остановками: Волочаевская 0, Климская0x090, Октябрьская 0, Новосибирская 0,0x09Красноярская 0, 25 Километр 0,"); 
 
             resStep5.IsSuccess.Should().BeTrue();
             valStep5.Should().NotBeNull();
-            valStep5.Should().Be("Со всеми станциями кроие:Красноярская,0x09Куйбышевская, Казахстанская,0x09Свердлолвская, Московская,"); 
+            valStep5.Should().Be("Волховские холмы 0, Ленинско кузнецкие0x09золотые сопки верхней пыжмы 0,0x09Куйбышевская 0, Казахстанская 0,0x09Свердлолвская 0,"); 
 
             resStep6.IsSuccess.Should().BeTrue();
             valStep6.Should().NotBeNull();
-            valStep6.Should().Be("Со всеми станциями кроие:Горьковская"); 
+            valStep6.Should().Be("Московская 0, Горьковская 0"); 
         }
 
 
@@ -145,7 +144,7 @@ namespace DeviceForExchnage.Test
         public void NormalUse_Note_2Data_Convert_6Step()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note_Index(2);
+            var inData = InDataSourse.GetData_Note(2);
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
 
             //Act
@@ -449,7 +448,7 @@ namespace DeviceForExchnage.Test
         public void  OnePropertyByStringType_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData(1);
+            var inData = InDataSourse.GetData_Note(1);
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
 
             //Act
@@ -467,7 +466,7 @@ namespace DeviceForExchnage.Test
         public void OnePropertyByStringType_ErrorPropName_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData(1);
+            var inData = InDataSourse.GetData_Note(1);
             _optionOneStringHandler.StringHandlers[0].PropName = "Note.xxxx";
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
 
@@ -487,7 +486,7 @@ namespace DeviceForExchnage.Test
         public void OnePropertyByStringType_ErrorPropName2_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData(1);
+            var inData = InDataSourse.GetData_Note(1);
             _optionOneStringHandler.StringHandlers[0].PropName = "ZZZ.xxxx";
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
 
@@ -507,7 +506,7 @@ namespace DeviceForExchnage.Test
         public void ManyPropertyByStringType_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData(1000);
+            var inData = InDataSourse.GetData_Note(1000);
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
 
             //Act
@@ -531,7 +530,7 @@ namespace DeviceForExchnage.Test
         public void ManyPropertyByStringType_ErrorPropName_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData(1000);
+            var inData = InDataSourse.GetData_Note(1000);
             _optionOneStringHandler.StringHandlers[0].PropName = "Note.xxxx";
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
 
@@ -555,7 +554,7 @@ namespace DeviceForExchnage.Test
         public void ManyPropertyByStringType_TwoStringHandler_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData(1000);
+            var inData = InDataSourse.GetData_Note(1000);
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionTwoStringHandler, _logger);
 
             //Act
@@ -579,7 +578,7 @@ namespace DeviceForExchnage.Test
         public void PropertyNoteEqualNull_OptionErrorPropName_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData(1);
+            var inData = InDataSourse.GetData_Note(1);
             inData.Data.First().Note = null;
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("Note");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
@@ -596,22 +595,22 @@ namespace DeviceForExchnage.Test
         }
 
 
-        [Fact]
-        public void PropertyNumberOfTrain_Test()
-        {
-            //Arrage
-            var inData = InDataSourse.GetData(1);
-            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("NumberOfTrain");
-            var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
+        //[Fact]
+        //public void PropertyNumberOfTrain_Test()
+        //{
+        //    //Arrage
+        //    var inData = InDataSourse.GetData_Note(1);
+        //    var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("NumberOfTrain");
+        //    var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 
-            //Act
-            var result = middleWareinData.HandleInvoke(inData);
-            var data = result.Value?.Data.FirstOrDefault();
+        //    //Act
+        //    var result = middleWareinData.HandleInvoke(inData);
+        //    var data = result.Value?.Data.FirstOrDefault();
 
-            //Asert
-            result.IsSuccess.Should().BeTrue();
-            data.NumberOfTrain.Should().Be("956After InseartStringConverterAfter LimitStringComverter");
-        }
+        //    //Asert
+        //    result.IsSuccess.Should().BeTrue();
+        //    data.NumberOfTrain.Should().Be("956After InseartStringConverterAfter LimitStringComverter");
+        //}
 
 
 
@@ -619,7 +618,7 @@ namespace DeviceForExchnage.Test
         public void PropertyNumberOfTrain_Null_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData(1);
+            var inData = InDataSourse.GetData_Note(1);
             inData.Data.First().NumberOfTrain = null;
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("NumberOfTrain");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);

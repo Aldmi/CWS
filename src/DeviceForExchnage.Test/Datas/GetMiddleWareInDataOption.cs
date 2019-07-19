@@ -19,10 +19,12 @@ namespace DeviceForExchnage.Test.Datas
                         PropName = propName,
                         LimitStringConverterOption = new LimitStringConverterOption
                         {
+                            Priority = 1,
                             Limit = 10
                         },
                         InseartStringConverterOption = new InseartStringConverterOption
                         {
+                            Priority = 2,
                             InseartDict = new Dictionary<int, string>
                             {
                                 {5, "0x09" },
@@ -96,7 +98,45 @@ namespace DeviceForExchnage.Test.Datas
                         SubStringMemConverterOption = new SubStringMemConverterOption
                         {
                             Priority = 1,
-                            Lenght = 100
+                            Lenght = 120,
+                            InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
+                            Separator = ','
+                        },
+                        InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
+                        {
+                            Priority = 2,
+                            LenghtLine = 40,
+                            Marker = "0x09"
+                        }
+                    }
+                },
+                InvokerOutput = new InvokerOutput
+                {
+                    Mode = InvokerOutputMode.Instantly
+                }
+            };
+
+            return middleWareInDataOption;
+        }
+
+
+
+        public static MiddleWareInDataOption GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter_withoutPhrases(string propName)
+        {
+            MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
+            {
+                Description = "Преобразование Note",
+                StringHandlers = new List<StringHandlerMiddleWareOption>
+                {
+                    new StringHandlerMiddleWareOption
+                    {
+                        PropName = propName,
+                        SubStringMemConverterOption = new SubStringMemConverterOption
+                        {
+                            Priority = 1,
+                            Lenght = 120,
+                            InitPharases = null,
+                            Separator = ','
                         },
                         InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
                         {
@@ -131,7 +171,8 @@ namespace DeviceForExchnage.Test.Datas
                         {
                             Priority = 1,
                             Lenght = 90,
-                            InitPharases = new List<string> { "Без остановок: ", "С остановками: " }
+                            InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
+                            Separator = ','
                         },
                         InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
                         {
@@ -166,7 +207,9 @@ namespace DeviceForExchnage.Test.Datas
                         SubStringMemConverterOption = new SubStringMemConverterOption
                         {
                             Priority = 1,
-                            Lenght = 100
+                            Lenght = 100,
+                            InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
+                            Separator = ','
                         },
                         InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
                         {
@@ -181,7 +224,10 @@ namespace DeviceForExchnage.Test.Datas
                         SubStringMemConverterOption = new SubStringMemConverterOption
                         {
                             Priority = 1,
-                            Lenght = 10
+                            Lenght = 10,
+                            InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
+                            Separator = ','
+
                         },
                     }
                 },
