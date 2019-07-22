@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Linq;
+using System.Spatial;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Serilog.Events;
 using Shared.Enums;
 
 namespace WebApiSwc.Settings
 {
-    public static class InitSettings
+    public static class SettingsFactory
     {
         public static string GetDbConnectionString(IHostingEnvironment env, IConfiguration conf)
         {
-           var connectionStr= env.IsDevelopment() ? conf.GetConnectionString("OptionDbConnectionUseNpgsql")
-                                                   : Environment.GetEnvironmentVariable("DbConnection");
+            var connectionStr = env.IsDevelopment() ? conf.GetConnectionString("OptionDbConnectionUseNpgsql")
+                                                    : Environment.GetEnvironmentVariable("DbConnection");
 
             if (string.IsNullOrEmpty(connectionStr))
                 throw new NullReferenceException($"Переменная connectionStr (строка подключения к БД) НЕ найденна. IsDevelopment= {env.IsDevelopment()}");
@@ -34,18 +36,6 @@ namespace WebApiSwc.Settings
         }
 
 
-        public static string GetLoggerMinlevel(IHostingEnvironment env, IConfiguration conf)
-        {
-            var minLevelStr= env.IsDevelopment()
-                ? conf["Logger:MinLevel"]
-                : Environment.GetEnvironmentVariable("Logger_MinLevel");
-
-            if (string.IsNullOrEmpty(minLevelStr))
-                throw new NullReferenceException($"Задание минимального уровня логировангия не найдено. IsDevelopment= {env.IsDevelopment()}");
-
-            return minLevelStr;
-        }
-
 
         public static FirewallSettings GetFirewallConfig(IHostingEnvironment env, IConfiguration conf)
         {
@@ -61,7 +51,7 @@ namespace WebApiSwc.Settings
                 if (!iPAddress.Any() && !cidrNotation.Any())
                     return null;
 
-                firewallSettings= new FirewallSettings(iPAddress, cidrNotation);
+                firewallSettings = new FirewallSettings(iPAddress, cidrNotation);
             }
             else
             {
@@ -81,6 +71,49 @@ namespace WebApiSwc.Settings
 
             return firewallSettings;
         }
+
+
+
+        public static LoggerSettings GetLoggerConfig(IHostingEnvironment env, IConfiguration conf)
+        {
+            LoggerSettings loggerSettings;
+
+            if (env.IsDevelopment())
+            {
+                if (!Enum.TryParse<LogEventLevel>(conf["Logger:MinLevel"], out var minLevel))
+                    throw new ParseErrorException($"Logger:MinLevel не удалось преобразовать к bool. IsDevelopment= {env.IsDevelopment()}");
+
+                if (!bool.TryParse(conf["Logger:fileSinkSetting:enable"], out var fileSinkEnabel))
+                    throw new ParseErrorException($"Logger:fileSinkSetting:enable не удалось преобразовать к bool. IsDevelopment= {env.IsDevelopment()}");
+
+                if (!bool.TryParse(conf["Logger:elasticsearchSinkSetting:enable"], out var elasticsearchSinkEnable))
+                    throw new ParseErrorException($"Logger:fileSinkSetting:enable не удалось преобразовать к bool. IsDevelopment= {env.IsDevelopment()}");
+
+                var fileSinkSett = new FileSinkSetting(fileSinkEnabel);
+                var elasticsearchSinkSetting = new ElasticsearchSinkSetting(elasticsearchSinkEnable);
+
+                loggerSettings = new LoggerSettings(minLevel, fileSinkSett, elasticsearchSinkSetting);
+            }
+            else
+            {
+                var loggerSett = Environment.GetEnvironmentVariable("LoggerSetting");
+                if (string.IsNullOrEmpty(loggerSett))
+                    return null;
+
+                try
+                {
+                    loggerSettings = JsonConvert.DeserializeObject<LoggerSettings>(loggerSett);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Исключение при дессериализации настроек логера {ex}");
+                }
+            }
+
+            return loggerSettings;
+        }
+
+
 
     }
 }

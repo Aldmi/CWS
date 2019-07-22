@@ -53,8 +53,8 @@ namespace WebApiSwc
                 checks.AddValueTaskCheck("HTTP Endpoint", () => new ValueTask<IHealthCheckResult>(HealthCheckResult.Healthy("Ok")));
             });
 
-            var minLogLevel = InitSettings.GetLoggerMinlevel(Env, AppConfiguration);
-            services.AddSerilogServices(minLogLevel, Env.ApplicationName);
+            var loggerSettings = SettingsFactory.GetLoggerConfig(Env, AppConfiguration);
+            services.AddSerilogServices(loggerSettings, Env.ApplicationName);
 
             services.AddTransient<IConfiguration>(provider => AppConfiguration);
 
@@ -77,7 +77,7 @@ namespace WebApiSwc
         {
             try
             {
-                var connectionString = InitSettings.GetDbConnectionString(Env, AppConfiguration);
+                var connectionString = SettingsFactory.GetDbConnectionString(Env, AppConfiguration);
                 builder.RegisterModule(new RepositoryAutofacModule(connectionString));
                 builder.RegisterModule(new EventBusAutofacModule());
                 builder.RegisterModule(new ControllerAutofacModule());
@@ -133,7 +133,7 @@ namespace WebApiSwc
             }
 
             //ПОДКЛЮЧИТЬ ФАЕРВОЛ (ФИЛЬТРАЦИЮ ПО IP)
-            var firewallConfig = InitSettings.GetFirewallConfig(Env, AppConfiguration);
+            var firewallConfig = SettingsFactory.GetFirewallConfig(Env, AppConfiguration);
             if (firewallConfig != null)
             {
                 app.UseFirewall(
@@ -283,7 +283,7 @@ namespace WebApiSwc
         private async Task InitializeAsync(ILifetimeScope scope)
         {
             var logger = scope.Resolve<ILogger>();
-            var howCreateDb = InitSettings.GetHowCreateDb(Env, AppConfiguration);
+            var howCreateDb = SettingsFactory.GetHowCreateDb(Env, AppConfiguration);
             //СОЗДАНИЕ БД--------------------------------------------------------------
             try
             {
@@ -291,12 +291,12 @@ namespace WebApiSwc
             }
             catch (PostgresException ex)
             {
-                var connectionString = InitSettings.GetDbConnectionString(Env, AppConfiguration);
+                var connectionString = SettingsFactory.GetDbConnectionString(Env, AppConfiguration);
                 logger.Fatal($"Ошибка создания БД. howCreateDb= {howCreateDb}  connectionString={connectionString}  Routine={ex.Routine}   SqlState= {ex.SqlState}   Exception= {ex}");
             }
             catch (Exception ex)
             {
-                var connectionString = InitSettings.GetDbConnectionString(Env, AppConfiguration);
+                var connectionString = SettingsFactory.GetDbConnectionString(Env, AppConfiguration);
               logger.Fatal($"НЕ ИЗВЕСТНАЯ Ошибка создания БД. howCreateDb= {howCreateDb}  connectionString={connectionString}   Exception= {ex} ");
             }
             //ИНИЦИАЛИЦИЯ РЕПОЗИТОРИЕВ--------------------------------------------------------

@@ -19,6 +19,7 @@ using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConvertersOption;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers;
 using WebApiSwc.Extensions;
+using WebApiSwc.Settings;
 using Worker.Background.Abstarct;
 
 
@@ -82,45 +83,12 @@ namespace WebApiSwc.Controllers
         [HttpGet]
         
         // public IEnumerable<InputData<AdInputType>> Get()
-        public MiddleWareInDataOptionDto Get()
+        public LoggerSettings Get()
         {
-            var middleWareInDataOptionDto = new MiddleWareInDataOptionDto
-            {
-                Description = "Преобразование Note и StationDeparture",
-                StringHandlers = new List<StringHandlerMiddleWareOptionDto>
-                {
-                    new StringHandlerMiddleWareOptionDto
-                    {
-                        PropName = "Note",
-                        LimitStringConverterOption = new LimitStringConverterOptionDto
-                        {
-                            Limit = 10
-                        },
-                        InseartStringConverterOption = new InseartStringConverterOptionDto
-                        {
-                            InseartDict = new Dictionary<int, string>
-                            {
-                                {5, "0x09" },
-                                {10, "0x09" },
-                            }
-                        }
-                    },
-                    new StringHandlerMiddleWareOptionDto
-                    {
-                        PropName = "StationDeparture",
-                        ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOptionDto
-                        {
-                            ReplacementString = "Посадки нет"
-                        }
-                    }
-                },
-                InvokerOutput = new InvokerOutputDto
-                {
-                    Mode = InvokerOutputMode.Instantly
-                }
-            };
+            var loggerSett = new LoggerSettings(LogEventLevel.Debug, new FileSinkSetting(true), new ElasticsearchSinkSetting(true));
+           
 
-            return middleWareInDataOptionDto;
+            return loggerSett;
 
 
             //var adInputType= new AdInputType
