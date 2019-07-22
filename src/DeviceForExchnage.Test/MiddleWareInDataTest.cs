@@ -29,7 +29,7 @@ namespace DeviceForExchnage.Test
         public MiddleWareInDataTest()
         {
              _optionOneStringHandler = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("Note.NameRu");
-             _optionTwoStringHandler = GetMiddleWareInDataOption.GetMiddleWareInDataOption_TwoStringHandlers("Note.NameRu", "StationDeparture.NameRu");
+             _optionTwoStringHandler = GetMiddleWareInDataOption.GetMiddleWareInDataOption_TwoStringHandlers("Note.NameRu", "StationsСut.NameRu");
              _optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu");
 
             //Loger Moq-----------------------------------------------
@@ -46,7 +46,7 @@ namespace DeviceForExchnage.Test
         public void NormalUse_Note_Convert_6Step()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note(1);
+            var inData = InDataSourse.GetData(1);
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
 
             //Act
@@ -94,7 +94,7 @@ namespace DeviceForExchnage.Test
         public void NormalUse_Note_Convert_WithOutPhrases_6Step()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note(1);
+            var inData = InDataSourse.GetData(1);
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter_withoutPhrases("Note.NameRu");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 
@@ -144,7 +144,7 @@ namespace DeviceForExchnage.Test
         public void NormalUse_Note_2Data_Convert_6Step()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note(2);
+            var inData = InDataSourse.GetData(2);
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
 
             //Act
@@ -216,7 +216,7 @@ namespace DeviceForExchnage.Test
         public void NormalUse_Note_StationDeparture_Convert_6Step()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note(1);
+            var inData = InDataSourse.GetData(1);
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_TwoStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu", "StationDeparture.NameRu");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 
@@ -277,7 +277,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             //Arrage
-            var inData = InDataSourse.GetData_Note(1);
+            var inData = InDataSourse.GetData(1);
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu");
             option.StringHandlers[0].SubStringMemConverterOption.Lenght = 300;
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
@@ -329,7 +329,7 @@ namespace DeviceForExchnage.Test
         public void NewInDataAfter2StepAnd5Step_6Step()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note(1);
+            var inData = InDataSourse.GetData(1);
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
 
             //Act
@@ -344,7 +344,7 @@ namespace DeviceForExchnage.Test
             var valStep4 = resStep4.Value?.Data?.FirstOrDefault()?.Note.NameRu;
             var resStep5 = middleWareinData.HandleInvoke(inData);
             var valStep5 = resStep5.Value?.Data?.FirstOrDefault()?.Note.NameRu;
-            inData = InDataSourse.GetData_Note(1);
+            inData = InDataSourse.GetData(1);
             var resStep6 = middleWareinData.HandleInvoke(inData);
             var valStep6 = resStep6.Value?.Data?.FirstOrDefault()?.Note.NameRu;
 
@@ -379,7 +379,7 @@ namespace DeviceForExchnage.Test
         public void EmptyNote_3Step()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note(1);
+            var inData = InDataSourse.GetData(1);
             inData.Data[0].Note.NameRu = string.Empty;
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
 
@@ -448,7 +448,7 @@ namespace DeviceForExchnage.Test
         public void  OnePropertyByStringType_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note(1);
+            var inData = InDataSourse.GetData(1);
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
 
             //Act
@@ -466,7 +466,7 @@ namespace DeviceForExchnage.Test
         public void OnePropertyByStringType_ErrorPropName_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note(1);
+            var inData = InDataSourse.GetData(1);
             _optionOneStringHandler.StringHandlers[0].PropName = "Note.xxxx";
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
 
@@ -486,7 +486,7 @@ namespace DeviceForExchnage.Test
         public void OnePropertyByStringType_ErrorPropName2_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note(1);
+            var inData = InDataSourse.GetData(1);
             _optionOneStringHandler.StringHandlers[0].PropName = "ZZZ.xxxx";
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
 
@@ -506,7 +506,7 @@ namespace DeviceForExchnage.Test
         public void ManyPropertyByStringType_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note(1000);
+            var inData = InDataSourse.GetData(1000);
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
 
             //Act
@@ -530,7 +530,7 @@ namespace DeviceForExchnage.Test
         public void ManyPropertyByStringType_ErrorPropName_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note(1000);
+            var inData = InDataSourse.GetData(1000);
             _optionOneStringHandler.StringHandlers[0].PropName = "Note.xxxx";
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
 
@@ -554,23 +554,47 @@ namespace DeviceForExchnage.Test
         public void ManyPropertyByStringType_TwoStringHandler_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note(1000);
+            var numberOfData = 8;
+            var inData = InDataSourse.GetData(numberOfData);
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionTwoStringHandler, _logger);
 
-            //Act
-            var result = middleWareinData.HandleInvoke(inData);
-            var datas = result.Value?.Data;
 
-            //Asert
-            result.IsSuccess.Should().BeTrue();
-            datas.Should().NotBeNull();
-            datas.Count.Should().Be(1000);
-            for (var i = 0; i < datas.Count; i++)
+            for (int step = 0; step < 5; step++)
             {
-                var data = datas[i];
-                data.Note.NameRu.Should().Be($"Index= {i}   Со всеми станциями кроие: Волочаевская, КлимскаяAfter InseartStringConverterAfter LimitStringComverter");
-                data.StationDeparture.NameRu.Should().Be($"Index= {i}    Станция Отпр 1After ReplaceEmptyStringConverter");
+                //Act
+                var result = middleWareinData.HandleInvoke(inData);
+                var datas = result.Value?.Data;
+
+                //Asert
+                result.IsSuccess.Should().BeTrue();
+                datas.Count.Should().Be(numberOfData);
+                for (var i = 0; i < datas.Count; i++)
+                {
+                    var data = datas[i];
+
+                    switch (step)
+                    {
+                        case 0:
+                            data.Note.NameRu.Should().Be($"С остановками: Волочаевская {i}, Климская0x09{i}, Октябрьская {i}, Новосибирская {i},0x09Красноярская {i}, 25 Километр {i},");
+                            break;
+                        case 1:
+                            data.Note.NameRu.Should().Be($"С остановками: Волховские холмы {i},0x09Ленинско кузнецкие золотые сопки0x09верхней пыжмы {i}, Куйбышевская {i},0x09Казахстанская {i},");
+                            break;
+                        case 2:
+                            data.Note.NameRu.Should().Be($"С остановками: Свердлолвская {i},0x09Московская {i}, Горьковская {i}");
+                            break;
+                        case 3:
+                            data.Note.NameRu.Should().Be($"С остановками: Волочаевская {i}, Климская0x09{i}, Октябрьская {i}, Новосибирская {i},0x09Красноярская {i}, 25 Километр {i},");
+                            break;
+                        case 4:
+                            data.Note.NameRu.Should().Be($"С остановками: Волховские холмы {i},0x09Ленинско кузнецкие золотые сопки0x09верхней пыжмы {i}, Куйбышевская {i},0x09Казахстанская {i},");
+                            break;
+                    }
+
+                    data.StationsСut.NameRu.Should().Be("Посадки нет");
+                }
             }
+
         }
 
 
@@ -578,7 +602,7 @@ namespace DeviceForExchnage.Test
         public void PropertyNoteEqualNull_OptionErrorPropName_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note(1);
+            var inData = InDataSourse.GetData(1);
             inData.Data.First().Note = null;
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("Note");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
@@ -618,7 +642,7 @@ namespace DeviceForExchnage.Test
         public void PropertyNumberOfTrain_Null_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note(1);
+            var inData = InDataSourse.GetData(1);
             inData.Data.First().NumberOfTrain = null;
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("NumberOfTrain");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
@@ -685,6 +709,41 @@ namespace DeviceForExchnage.Test
             //valStep3Data1.Should().Be();
             //valStep3Data2.Should().Be();
             //valStep3Data3.Should().Be();
+        }
+
+
+        [Fact]
+        public void PropertyStationCut_NotEmpty_Test()
+        {
+            //Arrage
+            var inData = InDataSourse.GetData_StationCut(1); //3
+            var option =GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_ReplaceEmptyStringConverterTest("StationsСut.NameRu");
+            var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
+
+            //Act
+            var resStep1 = middleWareinData.HandleInvoke(inData);
+            var valStep1Data1 = resStep1.Value?.Data[0].StationsСut.NameRu;
+
+
+            //Assert
+            valStep1Data1.Should().Be("Станция Отпр 1");
+        }
+
+
+        [Fact]
+        public void PropertyStationCut_Empty_Test()
+        {
+            //Arrage
+            var inData = InDataSourse.GetData(1); //3
+            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_ReplaceEmptyStringConverterTest("StationsСut.NameRu");
+            var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
+
+            //Act
+            var resStep1 = middleWareinData.HandleInvoke(inData);
+            var valStep1Data1 = resStep1.Value?.Data[0].StationsСut.NameRu;
+
+            //Assert
+            valStep1Data1.Should().Be("ПОСАДКИ НЕТ");
         }
 
     }

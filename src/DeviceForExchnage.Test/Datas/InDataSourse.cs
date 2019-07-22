@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DAL.Abstract.Entities.Options.MiddleWare;
 using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
@@ -11,7 +12,7 @@ namespace DeviceForExchnage.Test.Datas
 {
     public static class InDataSourse
     {
-        public static InputData<AdInputType> GetData_Note(int countData)
+        public static InputData<AdInputType> GetData(int countData)
         {
             var datas = Enumerable.Range(0, countData).Select(i => new AdInputType
             {
@@ -23,6 +24,10 @@ namespace DeviceForExchnage.Test.Datas
                 StationDeparture = new Station
                 {
                     NameRu = $"Станция Отпр 1"
+                },
+                StationsСut = new Station
+                {
+                    NameRu = String.Empty
                 },
                 NumberOfTrain = "956"
             }).ToList();
@@ -114,6 +119,32 @@ namespace DeviceForExchnage.Test.Datas
                     NameRu = $"Станция Отпр {i}"
                 },
                 NumberOfTrain = "956"
+            }).ToList();
+
+
+            var inData = new InputData<AdInputType>()
+            {
+                Command = Command4Device.None,
+                DataAction = DataAction.CycleAction,
+                DeviceName = "Peron.P1",
+                DirectHandlerName = null,
+                ExchangeName = "Exch Peron.P1",
+                Data = datas
+            };
+
+            return inData;
+        }
+
+
+        public static InputData<AdInputType> GetData_StationCut(int countData)
+        {
+            var datas = Enumerable.Range(0, countData).Select(i => new AdInputType
+            {
+                Id = i,
+                StationsСut = new Station
+                {
+                    NameRu = $"Станция Отпр 1"
+                },
             }).ToList();
 
 

@@ -53,17 +53,18 @@ namespace DeviceForExchnage.Test.Datas
                     new StringHandlerMiddleWareOption
                     {
                         PropName = propNames[0],
-                        LimitStringConverterOption = new LimitStringConverterOption
+                        SubStringMemConverterOption = new SubStringMemConverterOption
                         {
-                            Limit = 10
+                            Priority = 1,
+                            Lenght = 120,
+                            InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
+                            Separator = ','
                         },
-                        InseartStringConverterOption = new InseartStringConverterOption
+                        InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
                         {
-                            InseartDict = new Dictionary<int, string>
-                            {
-                                {5, "0x09" },
-                                {10, "0x09" },
-                            }
+                            Priority = 2,
+                            LenghtLine = 40,
+                            Marker = "0x09"
                         }
                     },
                     new StringHandlerMiddleWareOption
@@ -229,6 +230,34 @@ namespace DeviceForExchnage.Test.Datas
                             Separator = ','
 
                         },
+                    }
+                },
+                InvokerOutput = new InvokerOutput
+                {
+                    Mode = InvokerOutputMode.Instantly
+                }
+            };
+
+            return middleWareInDataOption;
+        }
+
+
+
+        public static MiddleWareInDataOption GetMiddleWareInDataOption_OneStringHandler_ReplaceEmptyStringConverterTest(params string[] propNames)
+        {
+            MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
+            {
+                Description = "Преобразование Note",
+                StringHandlers = new List<StringHandlerMiddleWareOption>
+                {
+                    new StringHandlerMiddleWareOption
+                    {
+                        PropName = propNames[0],
+                        ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOption
+                        {
+                            Priority = 1,
+                            ReplacementString = "ПОСАДКИ НЕТ"
+                        }
                     }
                 },
                 InvokerOutput = new InvokerOutput
