@@ -10,6 +10,7 @@ using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WebApiSwc.DTO.JSON.DevicesStateDto;
+using WebApiSwc.DTO.JSON.InputTypesDto;
 using WebApiSwc.DTO.JSON.OptionsDto.DeviceOption;
 using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption;
@@ -96,6 +97,35 @@ namespace WebApiSwc.AutoMapperConfig
                 }
                 )).ForAllMembers(opt => opt.Ignore());
             #endregion
+
+
+            #region AdInputType json in Data mapping
+            CreateMap<AdInputTypeDto, AdInputType>().ConstructUsing(src => new AdInputType(
+                src.ScheduleId,
+                src.TrnId,
+                src.Lang,
+                src.NumberOfTrain,
+                src.PathNumber,
+                src.Platform,
+                src.Event,
+                src.TrainType,
+                src.VagonDirection,
+                src.StationDeparture,
+                src.StationArrival,
+                src.StationWhereFrom,
+                src.StationWhereTo,
+                src.DirectionStation,
+                src.ArrivalTime,
+                src.DepartureTime,
+                src.DelayTime,
+                src.ExpectedTime,
+                src.StopTime,
+                src.Addition,
+                src.Note,
+                src.DaysFollowing
+                )).ForAllMembers(opt => opt.Ignore());
+            #endregion
+
 
 
             #region DeviceStateDto mapping

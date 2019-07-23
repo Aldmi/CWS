@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using WebApiSwc.DTO.JSON.InputTypesDto;
 using WebApiSwc.DTO.XML;
 using Worker.Background.Abstarct;
 
@@ -123,10 +124,11 @@ namespace WebApiSwc.Controllers
 
 
         [HttpPost("SendData4Devices")]
-        public async Task<IActionResult> SendData4Devices([FromBody] IReadOnlyList<InputData<AdInputType>> inputDatas)
+        public async Task<IActionResult> SendData4Devices([FromBody] IReadOnlyList<InputData<AdInputTypeDto>> inputDatasDto)
         {
             try
             {
+                var inputDatas = _mapper.Map<IReadOnlyList<InputData<AdInputType>>>(inputDatasDto);
                 var res = await InputDataHandler(inputDatas);
                 return res;
             }

@@ -14,6 +14,7 @@ using InputDataModel.Base;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Events;
 using Transport.SerialPort.Abstract;
+using WebApiSwc.DTO.JSON.InputTypesDto;
 using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConvertersOption;
@@ -42,11 +43,11 @@ namespace WebApiSwc.Controllers
 
 
 
-        //public ValuesController(TransportStorageService spSrStorageService, IMapper mapper)
-        //{
-        //    _spSrStorageService = spSrStorageService;
-        //    _mapper = mapper;
-        //}
+        public ValuesController(TransportStorageService spSrStorageService, IMapper mapper)
+        {
+            _spSrStorageService = spSrStorageService;
+            _mapper = mapper;
+        }
 
 
         //public ValuesController(MediatorForStorages<AdInputType> mediatorForStorages)
@@ -238,13 +239,13 @@ namespace WebApiSwc.Controllers
             return new List<string>{"str1", "str2"};
         }
 
-        // POST api/values
-        //[HttpPost]
-        //public void Post([FromBody]AdInputTypeDebug value)
-        //{
-        //    var exch = value;
+        //POST api/values
+       [HttpPost]
+        public void Post([FromBody]AdInputTypeDto value)
+        {
+            var res= _mapper.Map<AdInputType>(value);
 
-        //}
+        }
 
         // PUT api/values/5
         [HttpPut("{id}")]
