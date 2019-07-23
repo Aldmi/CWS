@@ -239,12 +239,12 @@ namespace WebApiSwc.Controllers
         }
 
         // POST api/values
-        [HttpPost]
-        public void Post([FromBody]AdInputTypeDebug value)
-        {
-            var exch = value;
+        //[HttpPost]
+        //public void Post([FromBody]AdInputTypeDebug value)
+        //{
+        //    var exch = value;
 
-        }
+        //}
 
         // PUT api/values/5
         [HttpPut("{id}")]

@@ -603,7 +603,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1);
-            inData.Data.First().Note = null;
+           // inData.Data.First().Note = null;
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("Note");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 
@@ -643,7 +643,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1);
-            inData.Data.First().NumberOfTrain = null;
+           // inData.Data.First().NumberOfTrain = null;
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("NumberOfTrain");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 

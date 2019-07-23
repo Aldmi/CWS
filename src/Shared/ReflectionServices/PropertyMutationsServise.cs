@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Reflection;
 using CSharpFunctionalExtensions;
 
@@ -78,7 +79,7 @@ namespace Shared.ReflectionServices
         private static PropertyInfo GetPropertyInfo(object inData, string name)
         {
             var type = inData.GetType();
-            var propInfo = type.GetProperty(name);
+            var propInfo = type.GetProperty(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             return propInfo;
         }
 

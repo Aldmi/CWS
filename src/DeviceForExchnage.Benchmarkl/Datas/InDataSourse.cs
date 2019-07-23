@@ -57,21 +57,21 @@ namespace DeviceForExchnage.Benchmark.Datas
 
         public static InputData<AdInputType> GetData()
         {
-           var datas= Enumerable.Range(0, 100).Select(i => new AdInputType
-            {
-                Id = i,
-                Note = new Note
-                {
-                    NameRu = $"{i} Со всеми станциями кроие: Волочаевская, Климская",
-                },
-                StationDeparture = new Station
-                {
-                    NameRu = $"{i} Станция Отпр 1"
-                }
+           //var datas= Enumerable.Range(0, 100).Select(i => new AdInputType
+           // {
+           //     Id = i,
+           //     Note = new Note
+           //     {
+           //         NameRu = $"{i} Со всеми станциями кроие: Волочаевская, Климская",
+           //     },
+           //     StationDeparture = new Station
+           //     {
+           //         NameRu = $"{i} Станция Отпр 1"
+           //     }
+           // }).ToList();
 
-            }).ToList();
 
-
+            var datas = Enumerable.Range(0, 100).Select(i => new AdInputType()).ToList();
             var inData = new InputData<AdInputType>()
             {
                 Command = Command4Device.None,

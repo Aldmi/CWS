@@ -34,68 +34,67 @@ namespace WebApiSwc.AutoMapperConfig
 
 
             #region AdInputType xml in Data mapping
-            CreateMap<AdInputType4XmlDto, AdInputType>()
-                .ForMember(dest => dest.ScheduleId, opt => opt.MapFrom(src => ConvertString2Int(src.ScheduleId)))
-                .ForMember(dest => dest.TrnId, opt => opt.MapFrom(src => ConvertString2Int(src.TrnId)))
-                .ForMember(dest => dest.Lang, opt => opt.MapFrom(src => Lang.Ru))
-                .ForMember(dest => dest.NumberOfTrain, opt => opt.MapFrom(src => src.TrainNumber))
-                .ForMember(dest => dest.PathNumber, opt => opt.MapFrom(src => src.TrackNumber))
-                .ForMember(dest => dest.Platform, opt => opt.MapFrom(src => src.Platform))
-                .ForMember(dest => dest.Event, opt => opt.MapFrom(src => new EventTrain(ConvertString2NullableInt(src.Direction))))
-                .ForMember(dest => dest.TrainType, opt => opt.MapFrom(src => new TypeTrain
+            CreateMap<AdInputType4XmlDto, AdInputType>().ConstructUsing(src => new AdInputType(
+                ConvertString2Int(src.ScheduleId),
+                ConvertString2Int(src.TrnId),
+                Lang.Ru,
+                src.TrainNumber,
+                src.TrackNumber,
+                src.Platform,
+                new EventTrain(ConvertString2NullableInt(src.Direction)),
+                new TypeTrain
                 {
                     NameRu = src.TypeName,
                     NameAliasRu = src.TypeAlias,
                     Num = ConvertString2NullableInt(src.TrainType) //TODO: игнор
-                }))
-                .ForMember(dest => dest.VagonDirection, opt => opt.MapFrom(src => new VagonDirection(src.VagonDirection)))
-                .ForMember(dest => dest.StationDeparture, opt => opt.MapFrom(src => new Station
+                },
+                new VagonDirection(src.VagonDirection),
+                new Station
                 {
                     NameRu = src.StartStation,
                     NameEng = src.StartStationENG,
                     NameCh = src.StartStationCH,
-                }))
-                .ForMember(dest => dest.StationArrival, opt => opt.MapFrom(src => new Station
+                },
+                new Station
                 {
                     NameRu = src.EndStation,
                     NameEng = src.EndStationENG,
                     NameCh = src.EndStationCH,
-                }))
-                .ForMember(dest => dest.Stations, opt => opt.MapFrom(src => CreateStations(src)))
-                .ForMember(dest => dest.StationsСut, opt => opt.MapFrom(src => CreateStationsCut(src)))
-                .ForMember(dest => dest.StationWhereFrom, opt => opt.MapFrom(src => new Station
+                },
+                new Station
                 {
                     NameRu = src.WhereFrom
-                }))
-                .ForMember(dest => dest.StationWhereTo, opt => opt.MapFrom(src => new Station
+                },
+                new Station
                 {
                     NameRu = src.WhereTo
-                }))
-                .ForMember(dest => dest.DirectionStation, opt => opt.MapFrom(src => new DirectionStation
+                },
+                new DirectionStation
                 {
                     NameRu = src.DirectionStation
-                }))
-                .ForMember(dest => dest.ArrivalTime, opt => opt.MapFrom(src => ConvertString2DataTime(src.RecDateTime)))
-                .ForMember(dest => dest.DepartureTime, opt => opt.MapFrom(src => ConvertString2DataTime(src.SndDateTime)))
-                .ForMember(dest => dest.DelayTime, opt => opt.MapFrom(src => ConvertString2DataTime(src.LateTime)))
-                .ForMember(dest => dest.ExpectedTime, opt => opt.MapFrom(src => ConvertString2DataTime(src.ExpectedTime) ?? DateTime.MinValue))
-                .ForMember(dest => dest.StopTime, opt => opt.MapFrom(src => ConvertString2TimeSpan(src.HereDateTime)))
-                .ForMember(dest => dest.Addition, opt => opt.MapFrom(src => new Addition
+                },
+                ConvertString2DataTime(src.RecDateTime),
+                ConvertString2DataTime(src.SndDateTime),
+                ConvertString2DataTime(src.LateTime),
+                ConvertString2DataTime(src.ExpectedTime) ?? DateTime.MinValue,  //TODO: выенсти в ctor
+                ConvertString2TimeSpan(src.HereDateTime),
+                new Addition
                 {
                     NameRu = src.Addition,
                     NameEng = src.AdditionENG
-                }))
-                .ForMember(dest => dest.Note, opt => opt.MapFrom(src => new Note
+                },
+                new Note
                 {
                     NameRu = src.Note,
                     NameEng = src.NoteENG
-                }))
-                .ForMember(dest => dest.DaysFollowing, opt => opt.MapFrom(src => new DaysFollowing
+                },
+                new DaysFollowing
                 {
                     NameRu = src.DaysOfGoing,
                     NameAliasRu = src.DaysOfGoingAlias,
                     NameAliasEng = src.DaysOfGoingAliasENG
-                }));
+                }
+                )).ForAllMembers(opt => opt.Ignore());
             #endregion
 
 
@@ -109,74 +108,6 @@ namespace WebApiSwc.AutoMapperConfig
                 .ForMember(dest => dest.CycleExchnageStatus, opt => opt.MapFrom(src => src.CycleExchnageStatus.ToString()));
             #endregion
 
-
-
-            #region DEBUG
-
-            CreateMap<AdInputType4XmlDto, AdInputTypeDebug>().ConstructUsing(src => new AdInputTypeDebug(
-                    ConvertString2Int(src.ScheduleId),
-            ConvertString2Int(src.TrnId),
-            Lang.Ru,
-            src.TrainNumber,
-            src.TrackNumber,
-            src.Platform,
-            new EventTrain(ConvertString2NullableInt(src.Direction)),
-            new TypeTrain
-            {
-                NameRu = src.TypeName,
-                NameAliasRu = src.TypeAlias,
-                Num = ConvertString2NullableInt(src.TrainType) //TODO: игнор
-            },
-            new VagonDirection(src.VagonDirection),
-            new Station
-            {
-                NameRu = src.StartStation,
-                NameEng = src.StartStationENG,
-                NameCh = src.StartStationCH,
-            },
-            new Station
-            {
-                NameRu = src.EndStation,
-                NameEng = src.EndStationENG,
-                NameCh = src.EndStationCH,
-            },
-            new Station
-            {
-                NameRu = src.WhereFrom
-            },
-            new Station
-            {
-                NameRu = src.WhereTo
-            },
-            new DirectionStation
-            {
-                NameRu = src.DirectionStation
-            },
-            ConvertString2DataTime(src.RecDateTime),
-            ConvertString2DataTime(src.SndDateTime),
-            ConvertString2DataTime(src.LateTime),
-            ConvertString2DataTime(src.ExpectedTime) ?? DateTime.MinValue,  //TODO: выенсти в ctor
-            ConvertString2TimeSpan(src.HereDateTime),
-            new Addition
-            {
-                NameRu = src.Addition,
-                NameEng = src.AdditionENG
-            },
-            new Note
-            {
-                NameRu = src.Note,
-                NameEng = src.NoteENG
-            },
-            new DaysFollowing
-            {
-                NameRu = src.DaysOfGoing,
-                NameAliasRu = src.DaysOfGoingAlias,
-                NameAliasEng = src.DaysOfGoingAliasENG
-            }
-            ))
-                .ForAllMembers(opt => opt.Ignore());
-
-            #endregion
         }
 
 
@@ -187,6 +118,7 @@ namespace WebApiSwc.AutoMapperConfig
 
             return null;
         }
+
 
         private static int ConvertString2Int(string str)
         {
@@ -226,71 +158,5 @@ namespace WebApiSwc.AutoMapperConfig
             }
             return null;
         }
-
-
-        private static Station CreateStations(AdInputType4XmlDto dto)
-        {
-            string CreateStationName(string stArrivalName, string stDepartName)
-            {
-                stArrivalName = stArrivalName ?? string.Empty;
-                stDepartName = stDepartName ?? string.Empty;
-
-                var stations = string.Empty;
-                if (!string.IsNullOrEmpty(stArrivalName) && !string.IsNullOrEmpty(stDepartName))
-                {
-                    stations = $"{stDepartName}-{stArrivalName}";
-                }
-                return stations;
-            }
-            var newStation = new Station
-            {
-                NameRu = CreateStationName(dto.EndStation, dto.StartStation),
-                NameEng = CreateStationName(dto.EndStationENG, dto.StartStationENG),
-                NameCh = CreateStationName(dto.EndStationCH, dto.StartStationCH)
-            };
-            return newStation;
-        }
-
-
-        private static Station CreateStationsCut(AdInputType4XmlDto dto)
-        {
-            string CreateStationCutName(string stArrivalName, string stDepartName)
-            {
-                stArrivalName = stArrivalName ?? string.Empty;
-                stDepartName = stDepartName ?? string.Empty;
-
-                var eventNum = ConvertString2NullableInt(dto.Direction);
-                if (!eventNum.HasValue)
-                    return string.Empty;
-
-                var stations = string.Empty;
-                switch (eventNum.Value)
-                {
-                    case 0: //"ПРИБ"
-                        stations = stDepartName;
-                        break;
-                    case 1:  //"ОТПР"
-                        stations = stArrivalName;
-                        break;
-                    case 2:   //"СТОЯНКА"
-                        stations = $"{stDepartName}-{stArrivalName}";
-                        break;
-                }
-                return stations;
-            }
-
-            var newStation = new Station
-            {
-                NameRu = CreateStationCutName(dto.EndStation, dto.StartStation),
-                NameEng = CreateStationCutName(dto.EndStationENG, dto.StartStationENG),
-                NameCh = CreateStationCutName(dto.EndStationCH, dto.StartStationCH)
-            };
-            return newStation;
-        }
-
     }
-
-
-
-
 }
