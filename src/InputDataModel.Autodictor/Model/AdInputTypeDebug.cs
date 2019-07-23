@@ -4,8 +4,83 @@ using InputDataModel.Base;
 
 namespace InputDataModel.Autodictor.Model
 {
+    //TODO: заменить поля на readonly сделать объект иммутабельным (проверить как работает мутация через рефлексию)
     public class AdInputTypeDebug : InputTypeBase
     {
+
+        #region prop
+
+        public int ScheduleId { get; }                         //ID поезда в годовом расписании (из ЦИС)
+        public int TrnId { get; }                               //уникальный ID отправления поезда из ЦИС
+
+        public Lang Lang { get; }                               //Язык вывода
+
+        public string NumberOfTrain { get; }                    //Номер поезда
+        public string PathNumber { get; }                       //Номер пути
+        public string Platform { get; }                         //Номер Платформы
+
+        public EventTrain Event { get; }                        //Событие (ОТПР./ПРИБ./СТОЯНКА)
+        public TypeTrain TrainType { get; }                     //тип поезда
+        public VagonDirection VagonDirection { get; }           //Нумерация вагона (с головы, с хвоста)
+
+        public Station StationDeparture { get; }
+        public Station StationArrival { get; }
+        public Station Stations { get; }                        //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
+        public Station StationsСut { get; }                     //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
+        public Station StationWhereFrom { get; }                //ближайшая станция после текущей
+        public Station StationWhereTo { get; }                  //ближайшая станция после текущей
+        public DirectionStation DirectionStation { get; }       //Направление.
+
+        public DateTime? ArrivalTime { get; }                   //Время прибытия
+        public DateTime? DepartureTime { get; }                 //Время отправления
+        public DateTime? DelayTime { get; }                     //Время задержки (прибытия или отправления поезда)
+        public DateTime ExpectedTime { get; }                   //Ожидаемое время (Время + Время задержки)
+        public TimeSpan? StopTime { get; }                      //время стоянки (для транзитов: Время отпр - время приб)
+
+        public Addition Addition { get; }                       //Дополнение (свободная строка)
+        public Note Note { get; }                               //Примечание.
+        public DaysFollowing DaysFollowing { get; }             //Дни следования
+
+
+        //ReadOnly------------------------------------------------------------------------------
+        //public readonly int ScheduleId;                       //ID поезда в годовом расписании (из ЦИС)
+        //public readonly int TrnId;                            //уникальный ID отправления поезда из ЦИС
+
+        //public readonly Lang Lang;                            //Язык вывода
+
+        //public readonly string NumberOfTrain;                    //Номер поезда
+        //public string PathNumber;                        //Номер пути
+        //public string Platform;                         //Номер Платформы
+
+        //public EventTrain Event;                        //Событие (ОТПР./ПРИБ./СТОЯНКА)
+        //public TypeTrain TrainType;                     //тип поезда
+        //public VagonDirection VagonDirection;          //Нумерация вагона (с головы, с хвоста)
+
+        //public Station StationDeparture;
+        //public Station StationArrival;
+        //public Station Stations;                       //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
+        //public Station StationsСut;                  //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
+        //public Station StationWhereFrom;               //ближайшая станция после текущей
+        //public Station StationWhereTo;                 //ближайшая станция после текущей
+        //public DirectionStation DirectionStation;      //Направление.
+
+        //public DateTime? ArrivalTime;                  //Время прибытия
+        //public DateTime? DepartureTime;                 //Время отправления
+        //public DateTime? DelayTime;                    //Время задержки (прибытия или отправления поезда)
+        //public DateTime ExpectedTim;                  //Ожидаемое время (Время + Время задержки)
+        //public TimeSpan? StopTime;                      //время стоянки (для транзитов: Время отпр - время приб)
+
+        //public Addition Addition;                      //Дополнение (свободная строка)
+        //public Note Note;                              //Примечание.
+        //public DaysFollowing DaysFollowing;             //Дни следования
+
+        #endregion
+
+
+
+
+        #region ctor
+
         public AdInputTypeDebug(int scheduleId, int trnId, Lang lang, string numberOfTrain, string pathNumber, string platform, EventTrain @event, TypeTrain trainType, VagonDirection vagonDirection, Station stationDeparture, Station stationArrival, Station stationWhereFrom, Station stationWhereTo, DirectionStation directionStation, DateTime? arrivalTime, DateTime? departureTime, DateTime? delayTime, DateTime expectedTime, TimeSpan? stopTime, Addition addition, Note note, DaysFollowing daysFollowing)
         {
             ScheduleId = scheduleId;
@@ -19,7 +94,6 @@ namespace InputDataModel.Autodictor.Model
             VagonDirection = vagonDirection;
             StationDeparture = stationDeparture;
             StationArrival = stationArrival;
-      
             StationWhereFrom = stationWhereFrom;
             StationWhereTo = stationWhereTo;
             DirectionStation = directionStation;
@@ -31,45 +105,80 @@ namespace InputDataModel.Autodictor.Model
             Addition = addition;
             Note = note;
             DaysFollowing = daysFollowing;
+            StationsСut = CreateStationsCut(StationArrival, StationDeparture, Event);
+            Stations = CreateStations(StationArrival, StationDeparture);
         }
 
+        #endregion
 
-        public AdInputTypeDebug(int scheduleId)
+
+
+
+
+
+
+
+        #region Methode
+
+        private static Station CreateStationsCut(Station arrivalSt, Station departureSt, EventTrain ev)
         {
-            ScheduleId = scheduleId;
+            string CreateStationCutName(string stArrivalName, string stDepartName)
+            {
+                if (!ev.Num.HasValue)
+                    return string.Empty;
+
+                stArrivalName = stArrivalName ?? string.Empty;
+                stDepartName = stDepartName ?? string.Empty;
+                var stations = string.Empty;
+                switch (ev.Num)
+                {
+                    case 0: //"ПРИБ"
+                        stations = stDepartName;
+                        break;
+                    case 1:  //"ОТПР"
+                        stations = stArrivalName;
+                        break;
+                    case 2:   //"СТОЯНКА"
+                        stations = $"{stDepartName}-{stArrivalName}";
+                        break;
+                }
+                return stations;
+            }
+
+            var newStation = new Station
+            {
+                NameRu = CreateStationCutName(arrivalSt?.NameRu, departureSt?.NameRu),
+                NameEng = CreateStationCutName(arrivalSt?.NameEng, departureSt?.NameEng),
+                NameCh = CreateStationCutName(arrivalSt?.NameCh, departureSt?.NameCh)
+            };
+            return newStation;
         }
 
 
+        private static Station CreateStations(Station arrivalSt, Station departureSt)
+        {
+            string CreateStationName(string stArrivalName, string stDepartName)
+            {
+                stArrivalName = stArrivalName ?? string.Empty;
+                stDepartName = stDepartName ?? string.Empty;
 
-        public int  ScheduleId { get; set; }                         //ID поезда в годовом расписании (из ЦИС)
-        public int TrnId { get; set; }                               //уникальный ID отправления поезда из ЦИС
+                var stations = string.Empty;
+                if (!string.IsNullOrEmpty(stArrivalName) && !string.IsNullOrEmpty(stDepartName))
+                {
+                    stations = $"{stDepartName}-{stArrivalName}";
+                }
+                return stations;
+            }
+            var newStation = new Station
+            {
+                NameRu = CreateStationName(arrivalSt?.NameRu, departureSt?.NameRu),
+                NameEng = CreateStationName(arrivalSt?.NameEng, departureSt?.NameEng),
+                NameCh = CreateStationName(arrivalSt?.NameCh, departureSt?.NameCh)
+            };
+            return newStation;
+        }
 
-        public Lang Lang { get; set; }                               //Язык вывода
+        #endregion
 
-        public string NumberOfTrain { get; set; }                    //Номер поезда
-        public string PathNumber { get; set; }                       //Номер пути
-        public string Platform { get; set; }                         //Номер Платформы
-        
-        public EventTrain Event { get; set; }                        //Событие (ОТПР./ПРИБ./СТОЯНКА)
-        public TypeTrain TrainType { get; set; }                     //тип поезда
-        public VagonDirection VagonDirection { get; set; }           //Нумерация вагона (с головы, с хвоста)
-
-        public Station StationDeparture { get; set; }
-        public Station StationArrival { get; set; }
-        public Station Stations { get; set; }                        //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
-        public Station StationsСut { get; set; }                     //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
-        public Station  StationWhereFrom { get; set; }               //ближайшая станция после текущей
-        public Station  StationWhereTo { get; set; }                 //ближайшая станция после текущей
-        public DirectionStation DirectionStation { get; set; }       //Направление.
-
-        public DateTime? ArrivalTime { get; set; }                   //Время прибытия
-        public DateTime? DepartureTime { get; set; }                 //Время отправления
-        public DateTime? DelayTime { get; set; }                     //Время задержки (прибытия или отправления поезда)
-        public DateTime ExpectedTime { get; set; }                   //Ожидаемое время (Время + Время задержки)
-        public TimeSpan? StopTime { get; set; }                      //время стоянки (для транзитов: Время отпр - время приб)
-
-        public Addition Addition { get; set; }                       //Дополнение (свободная строка)
-        public Note Note { get; set; }                               //Примечание.
-        public DaysFollowing DaysFollowing { get; set; }             //Дни следования
     }
 }

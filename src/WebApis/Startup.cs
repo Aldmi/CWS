@@ -116,7 +116,7 @@ namespace WebApiSwc
             //Проверка настройки маппинга
             try
             {
-                mapper.ConfigurationProvider.AssertConfigurationIsValid(); 
+                mapper.ConfigurationProvider.AssertConfigurationIsValid();  //TODO: новая версия AutoMapper не выдает Exception на текущие настройки маппинга 
             }
             catch (Exception ex)
             {

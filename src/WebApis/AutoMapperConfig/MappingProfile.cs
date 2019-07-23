@@ -113,67 +113,68 @@ namespace WebApiSwc.AutoMapperConfig
 
             #region DEBUG
 
-            //CreateMap<AdInputType4XmlDto, AdInputTypeDebug>().ConstructUsing(src => new AdInputTypeDebug(
-            //    ConvertString2Int(src.ScheduleId)
-            //    //ConvertString2Int(src.TrnId),
-            //    //Lang.Ru,
-            //    //src.TrainNumber,
-            //    //src.TrackNumber,
-            //    //src.Platform,
-            //    //new EventTrain(ConvertString2NullableInt(src.Direction)),
-            //    //new TypeTrain
-            //    //{
-            //    //    NameRu = src.TypeName,
-            //    //    NameAliasRu = src.TypeAlias,
-            //    //    Num = ConvertString2NullableInt(src.TrainType) //TODO: игнор
-            //    //},
-            //    //new VagonDirection(src.VagonDirection),
-            //    //new Station
-            //    //{
-            //    //    NameRu = src.StartStation,
-            //    //    NameEng = src.StartStationENG,
-            //    //    NameCh = src.StartStationCH,
-            //    //},
-            //    //new Station
-            //    //{
-            //    //    NameRu = src.EndStation,
-            //    //    NameEng = src.EndStationENG,
-            //    //    NameCh = src.EndStationCH,
-            //    //},
-            //    //new Station
-            //    //{
-            //    //    NameRu = src.WhereFrom
-            //    //},
-            //    //new Station
-            //    //{
-            //    //    NameRu = src.WhereTo
-            //    //},
-            //    //new DirectionStation
-            //    //{
-            //    //    NameRu = src.DirectionStation
-            //    //},
-            //    //ConvertString2DataTime(src.RecDateTime),
-            //    //ConvertString2DataTime(src.SndDateTime),
-            //    //ConvertString2DataTime(src.LateTime),
-            //    //ConvertString2DataTime(src.ExpectedTime) ?? DateTime.MinValue,  //TODO: выенсти в ctor
-            //    //ConvertString2TimeSpan(src.HereDateTime),
-            //    //new Addition
-            //    //{
-            //    //    NameRu = src.Addition,
-            //    //    NameEng = src.AdditionENG
-            //    //},
-            //    //new Note
-            //    //{
-            //    //    NameRu = src.Note,
-            //    //    NameEng = src.NoteENG
-            //    //},
-            //    //new DaysFollowing
-            //    //{
-            //    //    NameRu = src.DaysOfGoing,
-            //    //    NameAliasRu = src.DaysOfGoingAlias,
-            //    //    NameAliasEng = src.DaysOfGoingAliasENG
-            //    //}
-            //));
+            CreateMap<AdInputType4XmlDto, AdInputTypeDebug>().ConstructUsing(src => new AdInputTypeDebug(
+                    ConvertString2Int(src.ScheduleId),
+            ConvertString2Int(src.TrnId),
+            Lang.Ru,
+            src.TrainNumber,
+            src.TrackNumber,
+            src.Platform,
+            new EventTrain(ConvertString2NullableInt(src.Direction)),
+            new TypeTrain
+            {
+                NameRu = src.TypeName,
+                NameAliasRu = src.TypeAlias,
+                Num = ConvertString2NullableInt(src.TrainType) //TODO: игнор
+            },
+            new VagonDirection(src.VagonDirection),
+            new Station
+            {
+                NameRu = src.StartStation,
+                NameEng = src.StartStationENG,
+                NameCh = src.StartStationCH,
+            },
+            new Station
+            {
+                NameRu = src.EndStation,
+                NameEng = src.EndStationENG,
+                NameCh = src.EndStationCH,
+            },
+            new Station
+            {
+                NameRu = src.WhereFrom
+            },
+            new Station
+            {
+                NameRu = src.WhereTo
+            },
+            new DirectionStation
+            {
+                NameRu = src.DirectionStation
+            },
+            ConvertString2DataTime(src.RecDateTime),
+            ConvertString2DataTime(src.SndDateTime),
+            ConvertString2DataTime(src.LateTime),
+            ConvertString2DataTime(src.ExpectedTime) ?? DateTime.MinValue,  //TODO: выенсти в ctor
+            ConvertString2TimeSpan(src.HereDateTime),
+            new Addition
+            {
+                NameRu = src.Addition,
+                NameEng = src.AdditionENG
+            },
+            new Note
+            {
+                NameRu = src.Note,
+                NameEng = src.NoteENG
+            },
+            new DaysFollowing
+            {
+                NameRu = src.DaysOfGoing,
+                NameAliasRu = src.DaysOfGoingAlias,
+                NameAliasEng = src.DaysOfGoingAliasENG
+            }
+            ))
+                .ForAllMembers(opt => opt.Ignore());
 
             #endregion
         }
@@ -183,7 +184,7 @@ namespace WebApiSwc.AutoMapperConfig
         {
             if (int.TryParse(str, out var r))
                 return r;
-                    
+
             return null;
         }
 

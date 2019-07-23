@@ -240,7 +240,7 @@ namespace WebApiSwc.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]ExchangeOptionDto value)
+        public void Post([FromBody]AdInputTypeDebug value)
         {
             var exch = value;
 
