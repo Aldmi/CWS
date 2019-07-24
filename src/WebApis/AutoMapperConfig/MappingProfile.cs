@@ -36,6 +36,7 @@ namespace WebApiSwc.AutoMapperConfig
 
             #region AdInputType xml in Data mapping
             CreateMap<AdInputType4XmlDto, AdInputType>().ConstructUsing(src => new AdInputType(
+                src.Id,
                 ConvertString2Int(src.ScheduleId),
                 ConvertString2Int(src.TrnId),
                 Lang.Ru,
@@ -101,6 +102,7 @@ namespace WebApiSwc.AutoMapperConfig
 
             #region AdInputType json in Data mapping
             CreateMap<AdInputTypeDto, AdInputType>().ConstructUsing(src => new AdInputType(
+                src.Id,
                 src.ScheduleId,
                 src.TrnId,
                 src.Lang,

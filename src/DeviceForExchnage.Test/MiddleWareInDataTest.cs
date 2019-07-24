@@ -176,99 +176,124 @@ namespace DeviceForExchnage.Test
             resStep1.IsSuccess.Should().BeTrue();
             valStep1Data1.Should().NotBeNull();
             valStep1Data2.Should().NotBeNull();
-            valStep1Data1.Should().Be("Со всеми станциями кроме:0x09Волочаевская0, Климская0, Октябрьская0,0x09Новосибирская0, Красноярская0,");
-            valStep1Data2.Should().Be("Со всеми станциями кроме:0x09Волочаевская1, Климская1, Октябрьская1,0x09Новосибирская1, Красноярская1,"); 
+            valStep1Data1.Should().Be("С остановками: Волочаевская 0, Климская0x090, Октябрьская 0, Новосибирская 0,0x09Красноярская 0, 25 Километр 0,");
+            valStep1Data2.Should().Be("С остановками: Волочаевская 1, Климская0x091, Октябрьская 1, Новосибирская 1,0x09Красноярская 1, 25 Километр 1,"); 
 
             resStep2.IsSuccess.Should().BeTrue();
             valStep2Data1.Should().NotBeNull();
             valStep2Data2.Should().NotBeNull();
-            valStep2Data1.Should().Be("Куйбышевская0, Казахстанская0,0x09Свердлолвская0, Московская0,0x09Горьковская0, Сочинская0, Маковая0,"); 
-            valStep2Data2.Should().Be("Куйбышевская1, Казахстанская1,0x09Свердлолвская1, Московская1,0x09Горьковская1, Сочинская1, Маковая1,"); 
+            valStep2Data1.Should().Be("С остановками: Волховские холмы 0,0x09Ленинско кузнецкие золотые сопки0x09верхней пыжмы 0, Куйбышевская 0,0x09Казахстанская 0,"); 
+            valStep2Data2.Should().Be("С остановками: Волховские холмы 1,0x09Ленинско кузнецкие золотые сопки0x09верхней пыжмы 1, Куйбышевская 1,0x09Казахстанская 1,"); 
 
             resStep3.IsSuccess.Should().BeTrue();
             valStep3Data1.Should().NotBeNull();
             valStep3Data2.Should().NotBeNull();
-            valStep3Data1.Should().Be("Красносельская0, Уютная0, Петушки0"); 
-            valStep3Data2.Should().Be("Красносельская1, Уютная1, Петушки1");
+            valStep3Data1.Should().Be("С остановками: Свердлолвская 0,0x09Московская 0, Горьковская 0"); 
+            valStep3Data2.Should().Be("С остановками: Свердлолвская 1,0x09Московская 1, Горьковская 1");
 
             valStep4Data1.Should().NotBeNull();
             valStep4Data2.Should().NotBeNull();
-            valStep4Data1.Should().Be("Со всеми станциями кроме:0x09Волочаевская0, Климская0, Октябрьская0,0x09Новосибирская0, Красноярская0,");
-            valStep4Data2.Should().Be("Со всеми станциями кроме:0x09Волочаевская1, Климская1, Октябрьская1,0x09Новосибирская1, Красноярская1,");
+            valStep4Data1.Should().Be("С остановками: Волочаевская 0, Климская0x090, Октябрьская 0, Новосибирская 0,0x09Красноярская 0, 25 Километр 0,");
+            valStep4Data2.Should().Be("С остановками: Волочаевская 1, Климская0x091, Октябрьская 1, Новосибирская 1,0x09Красноярская 1, 25 Километр 1,");
 
             resStep5.IsSuccess.Should().BeTrue();
             valStep5Data1.Should().NotBeNull();
             valStep5Data2.Should().NotBeNull();
-            valStep5Data1.Should().Be("Куйбышевская0, Казахстанская0,0x09Свердлолвская0, Московская0,0x09Горьковская0, Сочинская0, Маковая0,");
-            valStep5Data2.Should().Be("Куйбышевская1, Казахстанская1,0x09Свердлолвская1, Московская1,0x09Горьковская1, Сочинская1, Маковая1,");
+            valStep5Data1.Should().Be("С остановками: Волховские холмы 0,0x09Ленинско кузнецкие золотые сопки0x09верхней пыжмы 0, Куйбышевская 0,0x09Казахстанская 0,");
+            valStep5Data2.Should().Be("С остановками: Волховские холмы 1,0x09Ленинско кузнецкие золотые сопки0x09верхней пыжмы 1, Куйбышевская 1,0x09Казахстанская 1,");
 
             resStep6.IsSuccess.Should().BeTrue();
             valStep6Data1.Should().NotBeNull();
             valStep6Data2.Should().NotBeNull();
-            valStep6Data1.Should().Be("Красносельская0, Уютная0, Петушки0");
-            valStep6Data2.Should().Be("Красносельская1, Уютная1, Петушки1");
+            valStep6Data1.Should().Be("С остановками: Свердлолвская 0,0x09Московская 0, Горьковская 0");
+            valStep6Data2.Should().Be("С остановками: Свердлолвская 1,0x09Московская 1, Горьковская 1");
         }
 
 
 
 
         [Fact]
-        public void NormalUse_Note_StationDeparture_Convert_6Step()
+        public void NormalUse_Note_2Data_StationDeparture_Convert_6Step()
         {
             //Arrage
-            var inData = InDataSourse.GetData(1);
+            var inData = InDataSourse.GetData(2);
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_TwoStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu", "StationDeparture.NameRu");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);
-            var valNoteStep1 = resStep1.Value?.Data?.FirstOrDefault()?.Note.NameRu;
-            var valStationDepartureStep1 = resStep1.Value?.Data?.FirstOrDefault()?.StationDeparture.NameRu;
+            var valNoteStep1Data1 = resStep1.Value?.Data[0].Note.NameRu;
+            var valNoteStep1Data2 = resStep1.Value?.Data[1].Note.NameRu;
+            var valStationDepartureStep1Data1 = resStep1.Value?.Data[0].StationDeparture.NameRu;
+            var valStationDepartureStep1Data2 = resStep1.Value?.Data[1].StationDeparture.NameRu;
 
             var resStep2 = middleWareinData.HandleInvoke(inData);
-            var valNoteStep2 = resStep2.Value?.Data?.FirstOrDefault()?.Note.NameRu;
-            var valStationDepartureStep2 = resStep2.Value?.Data?.FirstOrDefault()?.StationDeparture.NameRu;
+            var valNoteStep2Data1 = resStep2.Value?.Data[0].Note.NameRu;
+            var valNoteStep2Data2 = resStep2.Value?.Data[1].Note.NameRu;
+            var valStationDepartureStep2Data1 = resStep2.Value?.Data[0].StationDeparture.NameRu;
+            var valStationDepartureStep2Data2 = resStep2.Value?.Data[1].StationDeparture.NameRu;
 
             var resStep3 = middleWareinData.HandleInvoke(inData);
-            var valNoteStep3 = resStep3.Value?.Data?.FirstOrDefault()?.Note.NameRu;
-            var valStationDepartureStep3 = resStep3.Value?.Data?.FirstOrDefault()?.StationDeparture.NameRu;
+            var valNoteStep3Data1 = resStep3.Value?.Data[0].Note.NameRu;
+            var valNoteStep3Data2 = resStep3.Value?.Data[1].Note.NameRu;
+            var valStationDepartureStep3Data1 = resStep3.Value?.Data[0].StationDeparture.NameRu;
+            var valStationDepartureStep3Data2 = resStep3.Value?.Data[1].StationDeparture.NameRu;
 
             var resStep4 = middleWareinData.HandleInvoke(inData);
-            var valNoteStep4 = resStep4.Value?.Data?.FirstOrDefault()?.Note.NameRu;
-            var valStationDepartureStep4 = resStep4.Value?.Data?.FirstOrDefault()?.StationDeparture.NameRu;
+            var valNoteStep4Data1 = resStep4.Value?.Data[0].Note.NameRu;
+            var valNoteStep4Data2 = resStep4.Value?.Data[1].Note.NameRu;
+            var valStationDepartureStep4Data1 = resStep4.Value?.Data[0].StationDeparture.NameRu;
+            var valStationDepartureStep4Data2 = resStep4.Value?.Data[1].StationDeparture.NameRu;
 
             var resStep5 = middleWareinData.HandleInvoke(inData);
-            var valNoteStep5 = resStep5.Value?.Data?.FirstOrDefault()?.Note.NameRu;
-            var valStationDepartureStep5 = resStep5.Value?.Data?.FirstOrDefault()?.StationDeparture.NameRu;
+            var valNoteStep5Data1 = resStep5.Value?.Data[0].Note.NameRu;
+            var valNoteStep5Data2 = resStep5.Value?.Data[1].Note.NameRu;
+            var valStationDepartureStep5Data1 = resStep5.Value?.Data[0].StationDeparture.NameRu;
+            var valStationDepartureStep5Data2 = resStep5.Value?.Data[1].StationDeparture.NameRu;
 
             var resStep6 = middleWareinData.HandleInvoke(inData);
-            var valNoteStep6 = resStep6.Value?.Data?.FirstOrDefault()?.Note.NameRu;
-            var valStationDepartureStep6 = resStep6.Value?.Data?.FirstOrDefault()?.StationDeparture.NameRu;
+            var valNoteStep6Data1 = resStep6.Value?.Data[0].Note.NameRu;
+            var valNoteStep6Data2 = resStep6.Value?.Data[1].Note.NameRu;
+            var valStationDepartureStep6Data1 = resStep6.Value?.Data[0].StationDeparture.NameRu;
+            var valStationDepartureStep6Data2 = resStep6.Value?.Data[1].StationDeparture.NameRu;
 
             //Asert
             resStep1.IsSuccess.Should().BeTrue();
-            valNoteStep1.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
-            valStationDepartureStep1.Should().Be("Index= 0"); 
+            valNoteStep1Data1.Should().Be("С остановками: Волочаевская 0, Климская0x090, Октябрьская 0, Новосибирская 0,0x09Красноярская 0,");
+            valNoteStep1Data2.Should().Be("С остановками: Волочаевская 1, Климская0x091, Октябрьская 1, Новосибирская 1,0x09Красноярская 1,");
+            valStationDepartureStep1Data1.Should().Be("Станция0x09Отпр 0");
+            valStationDepartureStep1Data2.Should().Be("Станция0x09Отпр 1");
 
             resStep2.IsSuccess.Should().BeTrue();
-            valNoteStep2.Should().Be("Красноярская, Куйбышевская,0x09Казахстанская, Свердлолвская,0x09Московская, Горьковская");
-            valStationDepartureStep2.Should().Be("  Станция");
+            valNoteStep2Data1.Should().Be("С остановками: 25 Километр 0,0x09Волховские холмы 0, Ленинско кузнецкие0x09золотые сопки верхней пыжмы 0,");
+            valNoteStep2Data2.Should().Be("С остановками: 25 Километр 1,0x09Волховские холмы 1, Ленинско кузнецкие0x09золотые сопки верхней пыжмы 1,");
+            valStationDepartureStep2Data1.Should().Be("Станция0x09Отпр 0");
+            valStationDepartureStep2Data2.Should().Be("Станция0x09Отпр 1");
 
             resStep3.IsSuccess.Should().BeTrue();
-            valNoteStep3.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
-            valStationDepartureStep3.Should().Be("Отпр 1");
+            valNoteStep3Data1.Should().Be("С остановками: Куйбышевская 0,0x09Казахстанская 0, Свердлолвская 0,0x09Московская 0, Горьковская 0");
+            valNoteStep3Data2.Should().Be("С остановками: Куйбышевская 1,0x09Казахстанская 1, Свердлолвская 1,0x09Московская 1, Горьковская 1");
+            valStationDepartureStep3Data1.Should().Be("Станция0x09Отпр 0");
+            valStationDepartureStep3Data2.Should().Be("Станция0x09Отпр 1");
 
             resStep4.IsSuccess.Should().BeTrue();
-            valNoteStep4.Should().Be("Красноярская, Куйбышевская,0x09Казахстанская, Свердлолвская,0x09Московская, Горьковская");
-            valStationDepartureStep4.Should().Be("Index= 0");
+            valNoteStep4Data1.Should().Be("С остановками: Волочаевская 0, Климская0x090, Октябрьская 0, Новосибирская 0,0x09Красноярская 0,");
+            valNoteStep4Data2.Should().Be("С остановками: Волочаевская 1, Климская0x091, Октябрьская 1, Новосибирская 1,0x09Красноярская 1,");
+            valStationDepartureStep4Data1.Should().Be("Станция0x09Отпр 0");
+            valStationDepartureStep4Data2.Should().Be("Станция0x09Отпр 1");
 
             resStep5.IsSuccess.Should().BeTrue();
-            valNoteStep5.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
-            valStationDepartureStep5.Should().Be("  Станция");
+            valNoteStep5Data1.Should().Be("С остановками: 25 Километр 0,0x09Волховские холмы 0, Ленинско кузнецкие0x09золотые сопки верхней пыжмы 0,");
+            valNoteStep5Data2.Should().Be("С остановками: 25 Километр 1,0x09Волховские холмы 1, Ленинско кузнецкие0x09золотые сопки верхней пыжмы 1,");
+            valStationDepartureStep5Data1.Should().Be("Станция0x09Отпр 0");
+            valStationDepartureStep5Data2.Should().Be("Станция0x09Отпр 1");
 
             resStep6.IsSuccess.Should().BeTrue();
-            valNoteStep6.Should().Be("Красноярская, Куйбышевская,0x09Казахстанская, Свердлолвская,0x09Московская, Горьковская");
-            valStationDepartureStep6.Should().Be("Отпр 1");
+            valNoteStep6Data1.Should().Be("С остановками: Куйбышевская 0,0x09Казахстанская 0, Свердлолвская 0,0x09Московская 0, Горьковская 0");
+            valNoteStep6Data2.Should().Be("С остановками: Куйбышевская 1,0x09Казахстанская 1, Свердлолвская 1,0x09Московская 1, Горьковская 1");
+            valStationDepartureStep6Data1.Should().Be("Станция0x09Отпр 0");
+            valStationDepartureStep6Data2.Should().Be("Станция0x09Отпр 1");
+
         }
 
 

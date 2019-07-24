@@ -222,14 +222,12 @@ namespace DeviceForExchnage.Test.Datas
                     new StringHandlerMiddleWareOption
                     {
                         PropName = propNames[1],
-                        SubStringMemConverterOption = new SubStringMemConverterOption
+                        InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
                         {
                             Priority = 1,
-                            Lenght = 10,
-                            InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
-                            Separator = ','
-
-                        },
+                            LenghtLine = 7,
+                            Marker = "0x09"
+                        }
                     }
                 },
                 InvokerOutput = new InvokerOutput

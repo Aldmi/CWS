@@ -2,6 +2,11 @@
 {
     public abstract class InputTypeBase
     {
-        public int Id { get; set; }
+        public int Id { get; private set; }
+
+        protected InputTypeBase(int id)
+        {
+            Id = id;
+        }
     }
 }

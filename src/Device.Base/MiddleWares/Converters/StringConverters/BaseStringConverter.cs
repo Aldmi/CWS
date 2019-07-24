@@ -14,13 +14,10 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 
         public string Convert(string inProp, int dataId)
         {
-            if (inProp == null)
-                return null;
-
-            return ConvertChild(inProp, dataId);
+            return inProp == null ? null : ConvertChild(inProp, dataId);
         }
 
 
         protected abstract string ConvertChild(string inProp, int dataId);
     }
-}
+} 

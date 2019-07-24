@@ -10,6 +10,7 @@ using DAL.Abstract.Entities.Options.MiddleWare;
 using DeviceForExchange.MiddleWares.Converters.Exceptions;
 using DeviceForExchange.MiddleWares.Handlers;
 using DeviceForExchange.MiddleWares.Invokes;
+using FastDeepCloner;
 using InputDataModel.Base;
 using Serilog;
 using Shared.ReflectionServices;
@@ -68,7 +69,7 @@ namespace DeviceForExchange.MiddleWares
         /// </summary>
         public Result<InputData<TIn>, ErrorResultMiddleWareInData> HandleInvoke(InputData<TIn> inData)
         {
-            var inDataClone = FastDeepCloner.DeepCloner.Clone(inData);
+            var inDataClone = inData.Clone(FieldType.Both);
             string error;
             var errorHandlerWrapper= new ErrorResultMiddleWareInData();
             Parallel.ForEach(inDataClone.Data, (data) =>

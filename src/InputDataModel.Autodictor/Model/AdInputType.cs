@@ -45,7 +45,10 @@ namespace InputDataModel.Autodictor.Model
 
         #region ctor
 
-        public AdInputType(int scheduleId, int trnId, Lang lang, string numberOfTrain, string pathNumber, string platform, EventTrain @event, TypeTrain trainType, VagonDirection vagonDirection, Station stationDeparture, Station stationArrival, Station stationWhereFrom, Station stationWhereTo, DirectionStation directionStation, DateTime? arrivalTime, DateTime? departureTime, DateTime? delayTime, DateTime expectedTime, TimeSpan? stopTime, Addition addition, Note note, DaysFollowing daysFollowing)
+        public AdInputType(int id, int scheduleId, int trnId, Lang lang, string numberOfTrain, string pathNumber, string platform, EventTrain @event,
+        TypeTrain trainType, VagonDirection vagonDirection, Station stationDeparture, Station stationArrival, Station stationWhereFrom,
+        Station stationWhereTo, DirectionStation directionStation, DateTime? arrivalTime, DateTime? departureTime, DateTime? delayTime,
+        DateTime expectedTime, TimeSpan? stopTime, Addition addition, Note note, DaysFollowing daysFollowing) : base(id)
         {
             ScheduleId = scheduleId;
             TrnId = trnId;
@@ -74,28 +77,21 @@ namespace InputDataModel.Autodictor.Model
         }
 
 
-        public AdInputType(int id = 1, Lang lang = Lang.Ru, string numberOfTrain = null, Note note = null, string pathNumber = null, EventTrain @event = null, TypeTrain trainType = null, Station stationDeparture = null, Station stationArrival = null, DateTime? arrivalTime= null, DateTime? departureTime = null)
+        public AdInputType(int id, string numberOfTrain, Note note, string pathNumber, EventTrain @event, TypeTrain trainType, Station stationDeparture, Station stationArrival,
+            DateTime? arrivalTime, DateTime? departureTime, Lang lang = Lang.Ru)
+            : this(id,0, 0, lang, numberOfTrain, pathNumber, null, @event, trainType, null, stationDeparture, stationArrival,
+                null, null, null, arrivalTime, departureTime, null, DateTime.MinValue, null, null, note, null)
         {
-            Id = id;
-            Lang = lang;
-            NumberOfTrain = numberOfTrain;
-            Note = note;
-            PathNumber = pathNumber;
-            Event = @event;
-            TrainType = trainType;
-            StationDeparture = stationDeparture;
-            StationArrival = stationArrival;
-            ArrivalTime = arrivalTime;
-            DepartureTime = departureTime;
-            StationsСut = CreateStationsCut(StationArrival, StationDeparture, Event);
-            Stations = CreateStations(StationArrival, StationDeparture);
+           
         }
 
         /// <summary>
         /// для дефолтного создания объекта DefaultItemJson
         /// </summary>
-        private AdInputType(){}
-
+        private AdInputType() : base(0)
+        {
+        }
+        
         #endregion
 
 
@@ -161,6 +157,5 @@ namespace InputDataModel.Autodictor.Model
         }
 
         #endregion
-
     }
 }
