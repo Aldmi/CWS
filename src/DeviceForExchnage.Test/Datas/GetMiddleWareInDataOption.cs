@@ -7,7 +7,7 @@ namespace DeviceForExchnage.Test.Datas
 {
     public static class GetMiddleWareInDataOption
     {
-        public static MiddleWareInDataOption GetMiddleWareInDataOption_OneStringHandler(string propName)
+        public static MiddleWareInDataOption GetMiddleWareInDataOption_LimitStringConverter(string propName)
         {
             MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
             {
@@ -20,16 +20,7 @@ namespace DeviceForExchnage.Test.Datas
                         LimitStringConverterOption = new LimitStringConverterOption
                         {
                             Priority = 1,
-                            Limit = 10
-                        },
-                        InseartStringConverterOption = new InseartStringConverterOption
-                        {
-                            Priority = 2,
-                            InseartDict = new Dictionary<int, string>
-                            {
-                                {5, "0x09" },
-                                {10, "0x09" },
-                            }
+                            Limit = 80
                         }
                     }
                 },

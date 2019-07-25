@@ -20,7 +20,7 @@ namespace DeviceForExchnage.Test
 {
     public class MiddleWareInDataTest
     {
-        private readonly MiddleWareInDataOption _optionOneStringHandler;
+         private readonly MiddleWareInDataOption _optionLimitStringHandler;
         private readonly MiddleWareInDataOption _optionTwoStringHandler;
         private readonly MiddleWareInDataOption _optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter;
         private readonly ILogger _logger;
@@ -28,7 +28,7 @@ namespace DeviceForExchnage.Test
 
         public MiddleWareInDataTest()
         {
-             _optionOneStringHandler = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("Note.NameRu");
+             _optionLimitStringHandler = GetMiddleWareInDataOption.GetMiddleWareInDataOption_LimitStringConverter("Note.NameRu");
              _optionTwoStringHandler = GetMiddleWareInDataOption.GetMiddleWareInDataOption_TwoStringHandlers("Note.NameRu", "StationsСut.NameRu");
              _optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu");
 
@@ -139,7 +139,6 @@ namespace DeviceForExchnage.Test
         }
 
 
-
         [Fact]
         public void NormalUse_Note_2Data_Convert_6Step()
         {
@@ -208,8 +207,6 @@ namespace DeviceForExchnage.Test
             valStep6Data1.Should().Be("С остановками: Свердлолвская 0,0x09Московская 0, Горьковская 0");
             valStep6Data2.Should().Be("С остановками: Свердлолвская 1,0x09Московская 1, Горьковская 1");
         }
-
-
 
 
         [Fact]
@@ -304,7 +301,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var inData = InDataSourse.GetData(1);
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu");
-            option.StringHandlers[0].SubStringMemConverterOption.Lenght = 300;
+            option.StringHandlers[0].SubStringMemConverterOption.Lenght = 500;
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 
             //Act
@@ -322,7 +319,7 @@ namespace DeviceForExchnage.Test
             var valStep6 = resStep6.Value?.Data?.FirstOrDefault()?.Note.NameRu;
 
             //Asert
-            var assertStr ="Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская, Красноярская,0x09Куйбышевская, Казахстанская,0x09Свердлолвская, Московская, Горьковская";
+            var assertStr = "С остановками: Волочаевская 0, Климская0x090, Октябрьская 0, Новосибирская 0,0x09Красноярская 0, 25 Километр 0,0x09Волховские холмы 0, Ленинско кузнецкие0x09золотые сопки верхней пыжмы 0,0x09Куйбышевская 0, Казахстанская 0,0x09Свердлолвская 0, Московская 0,0x09Горьковская 0";
 
             resStep1.IsSuccess.Should().BeTrue();
             valStep1.Should().NotBeNull();
@@ -376,27 +373,27 @@ namespace DeviceForExchnage.Test
             //Asert
             resStep1.IsSuccess.Should().BeTrue();
             valStep1.Should().NotBeNull();
-            valStep1.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
+            valStep1.Should().Be("С остановками: Волочаевская 0, Климская0x090, Октябрьская 0, Новосибирская 0,0x09Красноярская 0, 25 Километр 0,");
 
             resStep2.IsSuccess.Should().BeTrue();
             valStep2.Should().NotBeNull();
-            valStep2.Should().Be("Красноярская, Куйбышевская,0x09Казахстанская, Свердлолвская,0x09Московская, Горьковская");
+            valStep2.Should().Be("С остановками: Волховские холмы 0,0x09Ленинско кузнецкие золотые сопки0x09верхней пыжмы 0, Куйбышевская 0,0x09Казахстанская 0,");
 
             resStep3.IsSuccess.Should().BeTrue();
             valStep3.Should().NotBeNull();
-            valStep3.Should().Be("Index= 0 Поезд Следует без остановок");
+            valStep3.Should().Be("С остановками: Жуковская 0, Новые0x09пушистые холмы 0, Кемеровская 0,0x09Медвежий остров 0, Собачья пасть 0,0x09Кенгуровый зуб 0,");
 
             resStep4.IsSuccess.Should().BeTrue();
             valStep4.Should().NotBeNull();
-            valStep4.Should().Be("Index= 0 Поезд Следует без остановок");
+            valStep4.Should().Be("С остановками: Харьковская 0");
 
             resStep5.IsSuccess.Should().BeTrue();
             valStep5.Should().NotBeNull();
-            valStep5.Should().Be("Index= 0 Поезд Следует без остановок");
+            valStep5.Should().Be("С остановками: Жуковская 0, Новые0x09пушистые холмы 0, Кемеровская 0,0x09Медвежий остров 0, Собачья пасть 0,0x09Кенгуровый зуб 0,");
 
             resStep6.IsSuccess.Should().BeTrue();
             valStep6.Should().NotBeNull();
-            valStep6.Should().Be("Index= 0   Со всеми станциями кроие:0x09Волочаевская, Климская, Октябрьская,0x09Новосибирская,");
+            valStep6.Should().Be("С остановками: Волочаевская 0, Климская0x090, Октябрьская 0, Новосибирская 0,0x09Красноярская 0, 25 Километр 0,");
         }
 
 
@@ -447,43 +444,18 @@ namespace DeviceForExchnage.Test
             var errorStep3 = resStep3.Error.GetErrors.FirstOrDefault();
 
             //Asert
+            var assertError ="MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  Родительский объект == Null. Note.NameRu. Невозможно обратится к свойству NameRu";
             resStep1.IsSuccess.Should().BeFalse();
             errorStep1.Should().NotBeNull();
-            errorStep1.Should().Be("MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  Родительский объект == Null. Note.NameRu. Невозможно обратится к свойству NameRu");
+            errorStep1.Should().Be(assertError);
 
             resStep2.IsSuccess.Should().BeFalse();
             errorStep2.Should().NotBeNull();
-            errorStep2.Should().Be("MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  Родительский объект == Null. Note.NameRu. Невозможно обратится к свойству NameRu");
+            errorStep2.Should().Be(assertError);
 
             resStep3.IsSuccess.Should().BeFalse();
             errorStep3.Should().NotBeNull();
-            errorStep3.Should().Be("MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  Родительский объект == Null. Note.NameRu. Невозможно обратится к свойству NameRu");
-        }
-
-
-        //-------------------------------------------------------------------------------
-
-
-
-
-
-
-
-        [Fact]
-        public void  OnePropertyByStringType_Test()
-        {
-            //Arrage
-            var inData = InDataSourse.GetData(1);
-            var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
-
-            //Act
-            var result = middleWareinData.HandleInvoke(inData);
-            var val = result.Value?.Data?.FirstOrDefault();
-
-            //Asert
-            result.IsSuccess.Should().BeTrue();
-            val.Should().NotBeNull();
-            val.Note.NameRu.Should().Be("Index= 0   Со всеми станциями кроие: Волочаевская, КлимскаяAfter InseartStringConverterAfter LimitStringComverter");
+            errorStep3.Should().Be(assertError);
         }
 
 
@@ -492,8 +464,8 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1);
-            _optionOneStringHandler.StringHandlers[0].PropName = "Note.xxxx";
-            var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
+            _optionLimitStringHandler.StringHandlers[0].PropName = "Note.xxxx";
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionLimitStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -512,8 +484,8 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1);
-            _optionOneStringHandler.StringHandlers[0].PropName = "ZZZ.xxxx";
-            var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
+            _optionLimitStringHandler.StringHandlers[0].PropName = "ZZZ.xxxx";
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionLimitStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -531,8 +503,9 @@ namespace DeviceForExchnage.Test
         public void ManyPropertyByStringType_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData(1000);
-            var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
+            var countData = 9;
+            var inData = InDataSourse.GetData(countData);
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionLimitStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -541,14 +514,13 @@ namespace DeviceForExchnage.Test
             //Asert
             result.IsSuccess.Should().BeTrue();
             datas.Should().NotBeNull();
-            datas.Count.Should().Be(1000);
+            datas.Count.Should().Be(countData);
             for (var i = 0; i < datas.Count; i++)
             {
                 var data = datas[i];
-                data.Note.NameRu.Should().Be($"Index= {i}   Со всеми станциями кроие: Волочаевская, КлимскаяAfter InseartStringConverterAfter LimitStringComverter");
+                data.Note.NameRu.Should().Be($"С остановками: Волочаевская {i}, Климская {i}, Октябрьская {i}, Новосибирская {i}, Красн");
             }
         }
-
 
 
         [Fact]
@@ -556,8 +528,8 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1000);
-            _optionOneStringHandler.StringHandlers[0].PropName = "Note.xxxx";
-            var middleWareinData = new MiddleWareInData<AdInputType>(_optionOneStringHandler, _logger);
+            _optionLimitStringHandler.StringHandlers[0].PropName = "Note.xxxx";
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionLimitStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -567,22 +539,20 @@ namespace DeviceForExchnage.Test
             result.IsSuccess.Should().BeFalse();
             result.Error.IsEmpty.Should().BeFalse();
             errors.Count.Should().Be(1000);
-            foreach (var error in errors)  //"MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  метаданные для xxxx не найдены"
+            foreach (var error in errors)
             {
                 error.Should().Be($"MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  метаданные для xxxx не найдены");
             }
         }
 
 
-
         [Fact]
         public void ManyPropertyByStringType_TwoStringHandler_Test()
         {
             //Arrage
-            var numberOfData = 8;
-            var inData = InDataSourse.GetData(numberOfData);
+            var numberOfData =4;
+            var inData = InDataSourse.GetData_Stations_Null(numberOfData);
             var middleWareinData = new MiddleWareInData<AdInputType>(_optionTwoStringHandler, _logger);
-
 
             for (int step = 0; step < 5; step++)
             {
@@ -627,9 +597,8 @@ namespace DeviceForExchnage.Test
         public void PropertyNoteEqualNull_OptionErrorPropName_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData(1);
-           // inData.Data.First().Note = null;
-            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("Note");
+            var inData = InDataSourse.GetData_WithoutNote(1);
+            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_LimitStringConverter("Note");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 
             //Act
@@ -644,32 +613,14 @@ namespace DeviceForExchnage.Test
         }
 
 
-        //[Fact]
-        //public void PropertyNumberOfTrain_Test()
-        //{
-        //    //Arrage
-        //    var inData = InDataSourse.GetData_Note(1);
-        //    var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("NumberOfTrain");
-        //    var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
-
-        //    //Act
-        //    var result = middleWareinData.HandleInvoke(inData);
-        //    var data = result.Value?.Data.FirstOrDefault();
-
-        //    //Asert
-        //    result.IsSuccess.Should().BeTrue();
-        //    data.NumberOfTrain.Should().Be("956After InseartStringConverterAfter LimitStringComverter");
-        //}
-
-
 
         [Fact]
         public void PropertyNumberOfTrain_Null_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData(1);
+            var inData = InDataSourse.GetData_NumberOfTrain_Null(1);
            // inData.Data.First().NumberOfTrain = null;
-            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler("NumberOfTrain");
+            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_LimitStringConverter("NumberOfTrain");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 
             //Act
@@ -687,53 +638,41 @@ namespace DeviceForExchnage.Test
         public void PropertyNote_LongWord_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData_Note_LongWord(1); //3
+            var inData = InDataSourse.GetData_Note_LongWord(3); //3
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter_Khazanskiy("Note.NameRu");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);
             var valStep1Data1 = resStep1.Value?.Data[0].Note.NameRu;
-            //var valStep1Data2 = resStep1.Value?.Data[1].Note.NameRu;
-            //var valStep1Data3 = resStep1.Value?.Data[2].Note.NameRu;
+            var valStep1Data2 = resStep1.Value?.Data[1].Note.NameRu;
+            var valStep1Data3 = resStep1.Value?.Data[2].Note.NameRu;
 
-            //var resStep2 = middleWareinData.HandleInvoke(inData);
-            //var valStep2Data1 = resStep2.Value?.Data[0].Note.NameRu;
-            //var valStep2Data2 = resStep2.Value?.Data[1].Note.NameRu;
-            //var valStep2Data3 = resStep2.Value?.Data[2].Note.NameRu;
+            var resStep2 = middleWareinData.HandleInvoke(inData);
+            var valStep2Data1 = resStep2.Value?.Data[0].Note.NameRu;
+            var valStep2Data2 = resStep2.Value?.Data[1].Note.NameRu;
+            var valStep2Data3 = resStep2.Value?.Data[2].Note.NameRu;
 
-            //var resStep3 = middleWareinData.HandleInvoke(inData);
-            //var valStep3Data1 = resStep3.Value?.Data[0].Note.NameRu;
-            //var valStep3Data2 = resStep3.Value?.Data[1].Note.NameRu;
-            //var valStep3Data3 = resStep3.Value?.Data[2].Note.NameRu;
-
-            
-            
-            
-
-            
-            //"Без остановок:0x09Золотая1, Конев Бор1,0x09Хорошово1,  Весенняя1,0x09Сказочная1,"
-            //"Без остановок:0x09Золотая2, Конев Бор2,0x09Хорошово2,  Весенняя2,0x09Сказочная2,"
-
-            //"Без остановок:0x09Платформа 113 км0,0x09Коломна0"
-            //"Без остановок:0x09Платформа 113 км1,0x09Коломна1"
-            //"Без остановок:0x09Платформа 113 км2,0x09Коломна2"
+            var resStep3 = middleWareinData.HandleInvoke(inData);
+            var valStep3Data1 = resStep3.Value?.Data[0].Note.NameRu;
+            var valStep3Data2 = resStep3.Value?.Data[1].Note.NameRu;
+            var valStep3Data3 = resStep3.Value?.Data[2].Note.NameRu;
 
             //Asert
             resStep1.IsSuccess.Should().BeTrue();
             valStep1Data1.Should().Be("Без остановок:0x09Трофимово0,0x09Воскресенск0, Шиферная0,0x09Москворецкая0,0x09Цемгигант0, Пески0,");
-            //valStep1Data2.Should().Be("Без остановок:0x09Трофимово1,0x09Воскресенск1, Шиферная1,0x09Москворецкая1,0x09Цемгигант1, Пески1,");
-            //valStep1Data3.Should().Be("Без остановок:0x09Трофимово2,0x09Воскресенск2, Шиферная2,0x09Москворецкая2,0x09Цемгигант2, Пески2,");
+            valStep1Data2.Should().Be("Без остановок:0x09Трофимово1,0x09Воскресенск1, Шиферная1,0x09Москворецкая1,0x09Цемгигант1, Пески1,");
+            valStep1Data3.Should().Be("Без остановок:0x09Трофимово2,0x09Воскресенск2, Шиферная2,0x09Москворецкая2,0x09Цемгигант2, Пески2,");
 
-            //resStep2.IsSuccess.Should().BeTrue();
-            //valStep2Data1.Should().Be("Без остановок:0x09Золотая0, Конев Бор0,0x09Хорошово0,  Весенняя0,0x09Сказочная0,");
-            //valStep2Data2.Should().Be("Без остановок:0x09Золотая1, Конев Бор1,0x09Хорошово1,  Весенняя1,0x09Сказочная1,");
-            //valStep2Data3.Should().Be();
-            
-            //resStep3.IsSuccess.Should().BeTrue();
-            //valStep3Data1.Should().Be();
-            //valStep3Data2.Should().Be();
-            //valStep3Data3.Should().Be();
+            resStep2.IsSuccess.Should().BeTrue();
+            valStep2Data1.Should().Be("Без остановок: Золотая0,0x09Конев Бор0, Хорошово0,0x09Весенняя0, Сказочная0,0x09Платформа 113 км0,");
+            valStep2Data2.Should().Be("Без остановок: Золотая1,0x09Конев Бор1, Хорошово1,0x09Весенняя1, Сказочная1,0x09Платформа 113 км1,");
+            valStep2Data3.Should().Be("Без остановок: Золотая2,0x09Конев Бор2, Хорошово2,0x09Весенняя2, Сказочная2,0x09Платформа 113 км2,");
+
+            resStep3.IsSuccess.Should().BeTrue();
+            valStep3Data1.Should().Be("Без остановок: Коломна0");
+            valStep3Data2.Should().Be("Без остановок: Коломна1");
+            valStep3Data3.Should().Be("Без остановок: Коломна2");
         }
 
 
@@ -751,7 +690,7 @@ namespace DeviceForExchnage.Test
 
 
             //Assert
-            valStep1Data1.Should().Be("Станция Отпр 1");
+            valStep1Data1.Should().Be("Станция Отпр 0-Станция Пртб 0");
         }
 
 
@@ -759,7 +698,7 @@ namespace DeviceForExchnage.Test
         public void PropertyStationCut_Empty_Test()
         {
             //Arrage
-            var inData = InDataSourse.GetData(1); //3
+            var inData = InDataSourse.GetData_Stations_Null(1); //3
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_ReplaceEmptyStringConverterTest("StationsСut.NameRu");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 
