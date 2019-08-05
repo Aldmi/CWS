@@ -40,8 +40,6 @@ namespace Exchange.Base
 
 
         #region StartStop
-        Task CycleReOpened();                                                      //Запуск задачи циклического переоткрытия.
-        void CycleReOpenedCancelation();                                           //Останов задачи циклического переоткрытия.
         void StartCycleExchange();                                                 //Запустить цикл. обмен (ДОБАВИТЬ функцию цикл обмена на бекграунд)
         void StopCycleExchange();                                                  //Остановить цикл. обмен (УДАЛИТЬ функцию цикл обмена из бекграунд)
         #endregion

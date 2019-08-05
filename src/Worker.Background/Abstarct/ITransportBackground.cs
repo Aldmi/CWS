@@ -9,5 +9,7 @@ namespace Worker.Background.Abstarct
     {
         void AddCycleAction(Func<CancellationToken, Task> action);
         void RemoveCycleFunc(Func<CancellationToken, Task> action);
+        Task PutOnStendBy();                                              //ПЕРЕВЕСТИ БГ В РЕЖИМ ГОТОВНОСТИ (ОЖИДАНИЯ)
+        void PutOnWork();                                                 //ПЕРЕВЕСТИ БГ В РЕЖИМ РАБОТЫ
     }
 }

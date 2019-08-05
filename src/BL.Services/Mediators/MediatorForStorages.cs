@@ -154,7 +154,7 @@ namespace BL.Services.Mediators
                 throw new StorageHandlerException($"Устройство с таким именем уже существует: {deviceOption.Name}");
             }
 
-            //ДОБАВИТЬ НОВЫЙ ТРАНСПОРТ-----------------------------------------------------------------------
+            //ДОБАВИТЬ НОВЫЙ ТРАНСПОРТ И БЕКГРАУНД ДЛЯ НЕГО-----------------------------------------------------------------------
             foreach (var spOption in optionAgregator.TransportOptions.SerialOptions)
             {
                 var keyTransport = new KeyTransport(spOption.Port, TransportType.SerialPort);
@@ -173,10 +173,11 @@ namespace BL.Services.Mediators
                 var tcpIp = _transportStorageService.Get(keyTransport);
                 if (tcpIp == null)
                 {
-                    tcpIp = new TcpIpTransport(tcpIpOption, keyTransport, _logger);
-                    _transportStorageService.AddNew(keyTransport, tcpIp);
                     var bg = new HostingBackgroundTransport(keyTransport, tcpIpOption.AutoStartBg, tcpIpOption.DutyCycleTimeBg, _logger);
                     _backgroundStorageService.AddNew(keyTransport, bg);
+                    tcpIp = new TcpIpTransport(bg, tcpIpOption, keyTransport, _logger);
+                    _transportStorageService.AddNew(keyTransport, tcpIp);
+
                 }
             }
             foreach (var httpOption in optionAgregator.TransportOptions.HttpOptions)
@@ -279,7 +280,7 @@ namespace BL.Services.Mediators
             var transport = _transportStorageService.Get(keyTransport);
             if (transport.IsCycleReopened)
             {
-                transport.CycleReOpenedCancelation();
+                transport.CycleReOpenedExecCancelation();
             }
             _transportStorageService.Remove(keyTransport);
             transport.Dispose();

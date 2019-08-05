@@ -107,13 +107,25 @@ namespace Transport.SerialPort.Concrete.SpWin
         public ISubject<StatusDataExchangeChangeRxModel> StatusDataExchangeChangeRx { get; } = new Subject<StatusDataExchangeChangeRxModel>();     //СОБЫТИЕ ИЗМЕНЕНИЯ ОТПРАВКИ ДАННЫХ ПО ПОРТУ
         public ISubject<StatusStringChangeRxModel> StatusStringChangeRx { get; } = new Subject<StatusStringChangeRxModel>();                       //СОБЫТИЕ ИЗМЕНЕНИЯ СТРОКИ СТАТУСА ПОРТА
 
+
         #endregion
 
 
 
 
         #region Methode
-        
+
+        public Task CycleReOpenedExec()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CycleReOpenedExecCancelation()
+        {
+            throw new NotImplementedException();
+        }
+
+
         public async Task<bool> CycleReOpened()
         {
             //IsCycleReopened = true;

@@ -19,9 +19,12 @@ using Shared.Types;
 using Transport.Base.DataProvidert;
 using Transport.Base.RxModel;
 using Transport.TcpIp.Abstract;
+using Worker.Background.Abstarct;
+using Worker.Background.Concrete.HostingBackground;
 
 namespace Transport.TcpIp.Concrete
 {
+    //TODO: выделить базовый абстрактный класс
     public class TcpIpTransport : ITcpIp
     {
         #region fields
@@ -30,7 +33,7 @@ namespace Transport.TcpIp.Concrete
         private NetworkStream _netStream;
 
         private const int TimeCycleReOpened = 500; //Большее время занимает ожидание ответа от ConnectAsync()
-        private CancellationTokenSource _ctsCycleReOpened;
+        private readonly ITransportBackground _transportBg;
         private readonly ILogger _logger;
 
         #endregion
@@ -87,10 +90,11 @@ namespace Transport.TcpIp.Concrete
 
         #region ctor
 
-        public TcpIpTransport(TcpIpOption option, KeyTransport keyTransport, ILogger logger)
+        public TcpIpTransport(ITransportBackground transportBg, TcpIpOption option, KeyTransport keyTransport, ILogger logger) //TODO: ITransportBackground вынести в абстрактный базовый класс
         {
             Option = option;
             KeyTransport = keyTransport;
+            _transportBg = transportBg;
             _logger = logger;
         }
 
@@ -110,20 +114,57 @@ namespace Transport.TcpIp.Concrete
 
         #region Methode
 
-        public async Task<bool> CycleReOpened()
+        /// <summary>
+        /// Циклическое открытие подключения
+        /// </summary>
+        private CancellationTokenSource _cycleReOpenedCts;
+        public async Task CycleReOpenedExec()
+        {
+            if (IsCycleReopened)
+            {
+                _logger.Error("{Type} KeyTransport: \"{KeyTransport}\" ", "ТРАНСПОРТ УЖЕ НАХОДИТСЯ В ЦИКЛЕ ПЕРЕОТКРЫТИЯ",  KeyTransport);
+                return;
+            }
+
+            //дожидаемся Перевода БГ в режим ожидания.
+            await _transportBg.PutOnStendBy();
+
+            //Запускаем задачу циклического переоткрытия соединения.
+            _cycleReOpenedCts?.Cancel();
+            _cycleReOpenedCts?.Dispose();
+            _cycleReOpenedCts = new CancellationTokenSource();
+            await Task.Factory.StartNew(async () =>
+            {
+               await CycleReOpened(_cycleReOpenedCts.Token);
+            }, _cycleReOpenedCts.Token);
+        }
+
+
+        /// <summary>
+        /// Отмена задачи циклического открытия подключения
+        /// </summary>
+        public void CycleReOpenedExecCancelation()
+        {
+            if (IsCycleReopened)
+            {
+                _cycleReOpenedCts.Cancel();
+            }
+        }
+
+
+        private async Task<bool> CycleReOpened(CancellationToken ct)
         {
             IsCycleReopened = true;
-            _ctsCycleReOpened = new CancellationTokenSource();
             bool res = false;
             try
             {
-                while (!_ctsCycleReOpened.IsCancellationRequested && !res)
+                while (!ct.IsCancellationRequested && !res)
                 {
                     res = await ReOpen();
                     if (!res)
                     {
                         _logger.Warning($"коннект для транспорта НЕ ОТКРЫТ: {KeyTransport}  {StatusString}");
-                        await Task.Delay(TimeCycleReOpened, _ctsCycleReOpened.Token);
+                        await Task.Delay(TimeCycleReOpened, ct);
                     }
                 }
             }
@@ -131,28 +172,19 @@ namespace Transport.TcpIp.Concrete
             {
                 _logger.Information($"ОТМЕНА ПЕРЕОТКРЫТИЯ СОЕДИНЕНИЯ ДЛЯ ТРАНСПОРТА: {KeyTransport}");
                 IsCycleReopened = false;
-                _ctsCycleReOpened.Dispose();
                 return false;
             }
 
             _logger.Information($"коннект для транспорта ОТКРЫТ: {KeyTransport}");
             IsCycleReopened = false;
+            _cycleReOpenedCts?.Dispose();
             return true;
         }
 
 
-        public void CycleReOpenedCancelation()
+        private async Task<bool> ReOpen() 
         {
-            if (IsCycleReopened)
-            {
-                _ctsCycleReOpened.Cancel();
-            }
-        }
-
-
-        public async Task<bool> ReOpen()
-        {
-            Dispose();
+            DisposeTcpClient();
             try
             {
                 IsOpen = false;
@@ -169,7 +201,7 @@ namespace Transport.TcpIp.Concrete
                 IsOpen = false;
                 StatusString = $"Ошибка инициализации соединения: \"{ex.Message}\"";
                 _logger.Debug(ex, StatusString); //TODO:??
-                Dispose();
+                DisposeTcpClient();
             }
             return false;
         }
@@ -247,7 +279,6 @@ namespace Transport.TcpIp.Concrete
             }
             return false;
         }
-
 
 
         /// <summary>
@@ -353,60 +384,13 @@ namespace Transport.TcpIp.Concrete
             }
         }
 
-
-        //public async Task<byte[]> TakeDataConstPeriodAsync(int nbytes, int timeOut, CancellationToken ct)
-        //{
-        //    int buferSize = 256;// читаем всегда весь буффер
-        //    byte[] bDataTemp = new byte[buferSize];
-
-        //    //Ожидаем накопление данных в буффере
-        //    await Task.Delay(timeOut, ct);
-
-        //    //DEBUG MEMLIK
-        //    // Console.WriteLine("TakeDataConstPeriodAsync >>>>>>>>>>>>>>>>>");
-        //    //return new byte[] { 0x02, 0x46, 0x46, 0x30, 0x38, 0x25, 0x41, 0x30, 0x37, 0x37, 0x41, 0x43, 0x4B, 0x45, 0x41, 0x03 };
-        //    //DEBUG MEMLIK
-
-        //    //Мгновенно с ожиданием в 50мс вычитываем поступивщий буффер
-        //    var ctsTimeout = new CancellationTokenSource();//токен сработает по таймауту в функции WithTimeout
-        //    var cts = CancellationTokenSource.CreateLinkedTokenSource(ctsTimeout.Token, ct); // Объединенный токен, сработает от выставленного ctsTimeout.Token или от ct
-        //    try
-        //    {
-        //        //int nByteTake = await _netStream.ReadAsync(bDataTemp, 0, buferSize, cts.Token).WithTimeout2CanceledTask(50, ctsTimeout);
-        //        //DEBUG
-        //        int nByteTake = _netStream.Read(bDataTemp, 0, buferSize);
-        //        if (nByteTake != nbytes)
-        //        {
-        //            _logger.Warning($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. КОЛ-ВО СЧИТАННЫХ БАЙТ НЕ ВЕРНОЕ. Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");
-        //        }
-        //        if (_netStream.DataAvailable)
-        //        {
-        //            _logger.Error($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. ПОСЛЕ ЧТЕНИЯ В БУФЕРЕ ОСТАЛИСЬ ДАННЫЕ. buferSize= \"{buferSize}\"");
-        //        }
-
-        //        var bData = new byte[nByteTake];
-        //        Array.Copy(bDataTemp, bData, nByteTake);
-        //        return bData;
-        //    }
-        //    finally
-        //    {
-        //        await _netStream.FlushAsync(cts.Token);//DEBUG
-
-
-        //        ctsTimeout.Cancel();
-        //        cts.Cancel();
-        //        ctsTimeout.Dispose();
-        //        cts.Dispose();
-        //    }
-        //}
-
         #endregion
 
 
 
         #region Disposable
 
-        public void Dispose()
+        private void DisposeTcpClient() 
         {
             if (_netStream != null)
             {
@@ -417,6 +401,15 @@ namespace Transport.TcpIp.Concrete
             _client?.Client?.Close();
             _client?.Client?.Dispose();
             _client?.Dispose();
+        }
+
+
+        public void Dispose()
+        {
+            DisposeTcpClient();
+
+            _cycleReOpenedCts?.Cancel(); 
+            _cycleReOpenedCts?.Dispose();
         }
 
         #endregion

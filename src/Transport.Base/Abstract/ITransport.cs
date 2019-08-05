@@ -20,9 +20,8 @@ namespace Transport.Base.Abstract
         ISubject<StatusDataExchangeChangeRxModel> StatusDataExchangeChangeRx { get; }          // СОБЫТИЕ СМЕНЫ СОСТОЯНИЯ СТАТУСА ОБМЕНА 
         ISubject<StatusStringChangeRxModel> StatusStringChangeRx { get; }                      // СОБЫТИЕ СМЕНЫ СТРОКИ СТАТУСА ПОРТА
 
-        Task<bool> CycleReOpened();                                                            // ПОПЫТКИ ЦИКЛИЧЕСКОГО ПЕРЕОТКРЫТИЯ ПОРТА (С УНИЧТОЖЕНИЕМ ТЕКУЩЕГО ЭКЗЕМПЛЯРА ПОРТА)
-        void CycleReOpenedCancelation();                                                       // ОТМЕНА ЦИКЛИЧЕСКОГО ПЕРЕОТКРЫТИЯ
-        Task<bool> ReOpen();                                                                   // ПЕРЕОТКРЫТЬ (БЕЗ УНИЧТОЖЕНИЕЯ ТЕКУЩЕГО ЭКЗЕМПЛЯРА ПОРТА)
+        Task CycleReOpenedExec();                                                              // ПОПЫТКИ ЦИКЛИЧЕСКОГО ПЕРЕОТКРЫТИЯ ПОРТА (С УНИЧТОЖЕНИЕМ ТЕКУЩЕГО ЭКЗЕМПЛЯРА ПОРТА)
+        void CycleReOpenedExecCancelation();                                                   // ОТМЕНА ЦИКЛИЧЕСКОГО ПЕРЕОТКРЫТИЯ
         Task<StatusDataExchange> DataExchangeAsync(int timeRespoune, ITransportDataProvider dataProvider, CancellationToken ct);   // ЗАПРОС/ОТВЕТ
     }
 }

@@ -140,46 +140,6 @@ namespace Exchange.Base
 
         #region Methode
 
-        #region ReOpen
-
-        /// <summary>
-        /// Циклическое открытие подключения
-        /// </summary>
-        private CancellationTokenSource _cycleReOpenedCts;
-        public async Task CycleReOpened()
-        {
-            if (_transport != null)
-            {
-                if (_transport.IsCycleReopened)
-                {
-                    _logger.Error("{Type} {KeyExchange}  KeyTransport: \"{KeyTransport}\" ", "ТРАНСПОРТ УЖЕ НАХОДИТСЯ В ЦИКЛЕ ПЕРЕОТКРЫТИЯ", KeyExchange, _transport.KeyTransport);
-                    return;
-                }
-                _cycleReOpenedCts?.Cancel();
-                _cycleReOpenedCts?.Dispose();
-                _cycleReOpenedCts = new CancellationTokenSource();
-                await Task.Factory.StartNew(async () =>
-                {
-                    await _transport.CycleReOpened();
-                }, _cycleReOpenedCts.Token);
-            }
-        }
-
-        /// <summary>
-        /// Отмена задачи циклического открытия подключения
-        /// </summary>
-        public void CycleReOpenedCancelation()
-        {
-            if (!IsOpen)
-            {
-                _transport.CycleReOpenedCancelation();
-                _cycleReOpenedCts?.Cancel();
-            }
-        }
-
-        #endregion
-
-
 
         #region CycleExchange
 
@@ -427,7 +387,8 @@ namespace Exchange.Base
                         //ОБМЕН ЗАВЕРЩЕН КРИТИЧЕСКИ НЕ ПРАВИЛЬНО. ПЕРЕОТКРЫТИЕ СОЕДИНЕНИЯ.
                         case StatusDataExchange.EndWithTimeoutCritical:
                         case StatusDataExchange.EndWithErrorCritical:
-                            CycleReOpened();
+                            _transport.CycleReOpenedExec(); //TODO: заменить на IncReopenCount
+                            //CycleReOpened();
                             _logger.Error("{Type} {KeyExchange}", "ОБМЕН ЗАВЕРЩЕН КРИТИЧЕСКИ НЕ ПРАВИЛЬНО. ПЕРЕОТКРЫТИЕ СОЕДИНЕНИЯ.", KeyExchange);
                             break;
 
@@ -438,7 +399,8 @@ namespace Exchange.Base
                                 _countErrorTrying = 0;
                                 IsConnect = false;
                                 _logger.Warning("{Type} {KeyExchange}", "ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО.", KeyExchange);
-                                CycleReOpened();
+                                _transport.CycleReOpenedExec();//TODO: заменить на IncReopenCount
+                                //CycleReOpened();
                             }
                             break;
                     }

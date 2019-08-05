@@ -175,7 +175,8 @@ namespace BL.Services.Actions
             if (exchange.IsCycleReopened)
                 throw new ActionHandlerException($"Соединение уже ОТКРЫТО для этого обмена: {exchnageKey}");
 
-            await exchange.CycleReOpened();
+            throw new NotImplementedException();
+            // await exchange.CycleReOpened();
         }
 
 
@@ -202,7 +203,8 @@ namespace BL.Services.Actions
             if (!exchange.IsCycleReopened)
                 throw new ActionHandlerException($"Соединение уже ЗАКРЫТО для этого обмена: {exchnageKey}");
 
-            exchange.CycleReOpenedCancelation();
+            throw new NotImplementedException();
+            //exchange.CycleReOpenedCancelation();
         }
 
         /// <summary>

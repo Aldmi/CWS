@@ -9,6 +9,7 @@ using MoreLinq.Extensions;
 using Serilog;
 using Shared.Types;
 using Worker.Background.Abstarct;
+using Worker.Background.Enums;
 
 namespace Worker.Background.Concrete.HostingBackground
 {
@@ -22,6 +23,8 @@ namespace Worker.Background.Concrete.HostingBackground
         private readonly ILogger _logger;
 
         private int _dutyCycleCounter;
+
+        private StatusBackground _statusBackground;
 
         #endregion
 
@@ -43,7 +46,8 @@ namespace Worker.Background.Concrete.HostingBackground
             KeyTransport = keyTransport;
             DutyCycleTime = dutyCycleTime;
             _logger = logger; 
-            _enumeratorCycleTimeFuncDict = _cycleTimeFuncDict.GetEnumerator();       
+            _enumeratorCycleTimeFuncDict = _cycleTimeFuncDict.GetEnumerator();
+            _statusBackground = StatusBackground.Off;
         }
 
         #endregion
@@ -86,14 +90,61 @@ namespace Worker.Background.Concrete.HostingBackground
         }
 
 
+
+
+
+        /// <summary>
+        /// Перевести бг в режим готовности (ожидания).
+        /// В этом режиме происходит пропуск выполнения функций.
+        /// </summary>
+        async Task ITransportBackground.PutOnStendBy()
+        {
+            _statusBackground = StatusBackground.StandByStarting;
+
+            await Task.Delay(1000);
+        }
+
+
+        void ITransportBackground.PutOnWork()
+        {
+            _statusBackground = StatusBackground.Work;
+
+        }
+
+
         /// <summary>
         /// ПОКА ЕСТЬ ОДИНОЧНЫЕ ФУНКЦИИ, ОБРАБАТЫВАЮТСЯ ТОЛЬКО ОНИ.
         /// ЕСЛИ ОДИНОЧНЫХ ФУНКЦИЙ НЕТ ВЫПОЛНЯЮТСЯ ЦИКЛИЧЕСКИЕ ФУНКЦИИ.
         /// </summary>
         /// <param name="stoppingToken"></param>
         /// <returns></returns>
-     
+
         protected override async Task ProcessAsync(CancellationToken stoppingToken)
+        {
+            switch (_statusBackground)
+            {
+                case StatusBackground.Off:
+                    break;
+
+                case StatusBackground.StandByStarting:
+                    _statusBackground = StatusBackground.StandByStarted;
+                    //TODO: cs - завершить task
+                    break;
+
+                case StatusBackground.StandByStarted:
+                    await Task.Delay(1000, stoppingToken);
+                    return; 
+
+                case StatusBackground.Work:
+                    await FuncQueueExec(stoppingToken);
+                    break;
+            }
+
+            await Task.Delay(CheckUpdateTime, stoppingToken);
+        }
+
+
+        private async Task FuncQueueExec(CancellationToken stoppingToken)
         {
             //вызов одиночной функции запроса---------------------------------------------------------------
             if (_oneTimeFuncQueue != null && _oneTimeFuncQueue.Count > 0)
@@ -105,7 +156,7 @@ namespace Worker.Background.Concrete.HostingBackground
                         await oneTimeAction(stoppingToken);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.Fatal($"HostingBackgroundTransport.ProcessAsync Однократные функции {ex}");
                 }
@@ -139,9 +190,9 @@ namespace Worker.Background.Concrete.HostingBackground
                     _logger.Fatal($"HostingBackgroundTransport.ProcessAsync Циклические функции {ex}");
                 }
             }
-            await Task.Delay(CheckUpdateTime, stoppingToken);
-            //Console.WriteLine($"BackGroundMasterSp  {KeyTransport.Key}"); //DEBUG
         }
+
+
 
         #endregion
     }

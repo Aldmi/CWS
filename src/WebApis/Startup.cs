@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,8 +20,6 @@ using MoreLinq;
 using Newtonsoft.Json;
 using Npgsql;
 using Serilog;
-using Serilog.Core;
-using Shared.Enums;
 using WebApiSwc.AutofacModules;
 using WebApiSwc.Extensions;
 using WebApiSwc.Settings;
@@ -123,7 +120,6 @@ namespace WebApiSwc
                 Console.WriteLine(ex.Message);
             }
 
-
             InitializeAsync(scope).Wait();
             ConfigurationBackgroundProcessAsync(app, scope);
           
@@ -180,17 +176,18 @@ namespace WebApiSwc
                 }
             });
 
-            //ЗАПУСК НА ОБМЕНЕ ОТКРЫТИЯ ПОДКЛЮЧЕНИЯ УСТРОЙСТВ (ТОЛЬКО С УНИКАЛЬНЫМ ТРАНСПОРТОМ)
-            var exchangeServices = scope.Resolve<ExchangeStorageService<AdInputType>>();
+            //ЗАПУСК НА ТРАНСПОРТЕ ЦИКЛИЧЕСКОГО ПЕРЕОТКРЫТИЯ УСТРОЙСТВА
+            var transportServices = scope.Resolve<TransportStorageService>();
             lifetimeApp.ApplicationStarted.Register(async () =>
             {
-                foreach (var exchange in exchangeServices.Values.DistinctBy(exch => exch.KeyTransport))
+                foreach (var transport in transportServices.Values)
                 {
-                   await exchange.CycleReOpened();
+                    await transport.CycleReOpenedExec();
                 }
             });
 
             //ЗАПУСК НА ОБМЕНЕ ЦИКЛИЧЕСКОГО ОБМЕНА.
+            var exchangeServices = scope.Resolve<ExchangeStorageService<AdInputType>>();
             lifetimeApp.ApplicationStarted.Register(() =>
             {
                 foreach (var exchange in exchangeServices.Values.Where(exch=> exch.AutoStartCycleFunc))
@@ -234,17 +231,18 @@ namespace WebApiSwc
                 }
             });
 
-            //ОСТАНОВ КОННЕКТА УСТРОЙСТВ
-            var exchangeServices = scope.Resolve<ExchangeStorageService<AdInputType>>();
-            lifetimeApp.ApplicationStopping.Register(() =>
+            //ОСТАНОВ НА ТРАНСПОРТЕ ЦИКЛИЧЕСКОГО ПЕРЕОТКРЫТИЯ УСТРОЙСТВА
+            var transportServices = scope.Resolve<TransportStorageService>();
+            lifetimeApp.ApplicationStarted.Register(async () =>
             {
-                foreach (var exchange in exchangeServices.Values.Where(exch => !exch.IsOpen))
+                foreach (var transport in transportServices.Values)
                 {
-                   exchange.CycleReOpenedCancelation();
+                    transport.CycleReOpenedExecCancelation();
                 }
             });
 
             //ОСТАНОВ НА ОБМЕНЕ ЦИКЛИЧЕСКОГО ОБМЕНА.
+            var exchangeServices = scope.Resolve<ExchangeStorageService<AdInputType>>();
             lifetimeApp.ApplicationStopping.Register(() =>
             {
                 foreach (var exchange in exchangeServices.Values.Where(exch => exch.CycleExchnageStatus != CycleExchnageStatus.Off))
@@ -284,7 +282,7 @@ namespace WebApiSwc
         {
             var logger = scope.Resolve<ILogger>();
             var howCreateDb = SettingsFactory.GetHowCreateDb(Env, AppConfiguration);
-            //СОЗДАНИЕ БД--------------------------------------------------------------
+            //СОЗДАНИЕ БД----------------------------------------------------------------------------
             try
             {
                 await scope.Resolve<ISerialPortOptionRepository>().CreateDb(howCreateDb);
@@ -299,36 +297,6 @@ namespace WebApiSwc
                 var connectionString = SettingsFactory.GetDbConnectionString(Env, AppConfiguration);
               logger.Fatal($"НЕ ИЗВЕСТНАЯ Ошибка создания БД. howCreateDb= {howCreateDb}  connectionString={connectionString}   Exception= {ex} ");
             }
-            //ИНИЦИАЛИЦИЯ РЕПОЗИТОРИЕВ--------------------------------------------------------
-            try
-            {
-                //var serialPortOptionRepository = scope.Resolve<ISerialPortOptionRepository>();
-                //var tcpIpOptionRepository = scope.Resolve<ITcpIpOptionRepository>();
-                //var httpOptionRepository = scope.Resolve<IHttpOptionRepository>();
-                //var exchangeOptionRepository = scope.Resolve<IExchangeOptionRepository>();
-                //var deviceOptionRepository = scope.Resolve<IDeviceOptionRepository>();
-
-                //await serialPortOptionRepository.InitializeAsync();
-                //await tcpIpOptionRepository.InitializeAsync();
-                //await httpOptionRepository.InitializeAsync();
-                //await exchangeOptionRepository.InitializeAsync();
-                //await deviceOptionRepository.InitializeAsync();
-
-                //DEBUG CRUD----------------------------------------------------------------
-                //var singleElem = serialPortOptionRepository.GetSingle(option => option.Port == "COM1");
-                //var httpElem = httpOptionRepository.GetSingle(option => option.Name == "Http table 1");
-                //var tcpIpElem = tcpIpOptionRepository.GetSingle(option => option.Name == "RemoteTcpIpTable 2");
-                //var exchangeElem = exchangeOptionRepository.GetSingle(option => option.Key == "SP_COM2_Vidor2");
-                //TODO: проверить остальные CRUD операции
-                //-----------------------------------------------------------------------------
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-  
-
             //СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ--------------------------------------------------
             try
             {
