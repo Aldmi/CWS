@@ -152,6 +152,7 @@ namespace Transport.TcpIp.Concrete
 
         public async Task<bool> ReOpen()
         {
+            Dispose();
             try
             {
                 IsOpen = false;
