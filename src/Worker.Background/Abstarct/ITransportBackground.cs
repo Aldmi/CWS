@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Shared.Types;
+using Worker.Background.Enums;
 
 namespace Worker.Background.Abstarct
 {
@@ -9,7 +10,7 @@ namespace Worker.Background.Abstarct
     {
         void AddCycleAction(Func<CancellationToken, Task> action);
         void RemoveCycleFunc(Func<CancellationToken, Task> action);
-        Task PutOnStendBy();                                              //ПЕРЕВЕСТИ БГ В РЕЖИМ ГОТОВНОСТИ (ОЖИДАНИЯ)
+        Task<StatusBackground> PutOnStendBy();                            //ПЕРЕВЕСТИ БГ В РЕЖИМ ГОТОВНОСТИ (ОЖИДАНИЯ)
         void PutOnWork();                                                 //ПЕРЕВЕСТИ БГ В РЕЖИМ РАБОТЫ
     }
 }

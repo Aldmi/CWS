@@ -21,6 +21,7 @@ using Transport.Base.RxModel;
 using Transport.TcpIp.Abstract;
 using Worker.Background.Abstarct;
 using Worker.Background.Concrete.HostingBackground;
+using Worker.Background.Enums;
 
 namespace Transport.TcpIp.Concrete
 {
@@ -122,21 +123,32 @@ namespace Transport.TcpIp.Concrete
         {
             if (IsCycleReopened)
             {
-                _logger.Error("{Type} KeyTransport: \"{KeyTransport}\" ", "ТРАНСПОРТ УЖЕ НАХОДИТСЯ В ЦИКЛЕ ПЕРЕОТКРЫТИЯ",  KeyTransport);
+                _logger.Error("{Type} KeyTransport: \"{KeyTransport}\" ", "ТРАНСПОРТ УЖЕ НАХОДИТСЯ В ЦИКЛЕ ПЕРЕОТКРЫТИЯ", KeyTransport);
                 return;
             }
 
             //дожидаемся Перевода БГ в режим ожидания.
-            await _transportBg.PutOnStendBy();
-
-            //Запускаем задачу циклического переоткрытия соединения.
-            _cycleReOpenedCts?.Cancel();
-            _cycleReOpenedCts?.Dispose();
-            _cycleReOpenedCts = new CancellationTokenSource();
-            await Task.Factory.StartNew(async () =>
+            var resStendBy= await _transportBg.PutOnStendBy();
+            switch (resStendBy)
             {
-               await CycleReOpened(_cycleReOpenedCts.Token);
-            }, _cycleReOpenedCts.Token);
+                case StatusBackground.StandByStarting:
+                    _logger.Error("{Type} KeyTransport: \"{KeyTransport}\" ", "БЕКГРАУНД НЕ ЗАКОНЧИЛ ПЕРЕВОД В РЕЖИМ ОЖИДАНИЯ ГОТОВНОСТИ (StandByStarted)", KeyTransport);
+                    return;
+
+                case StatusBackground.StandByStarted:
+                    //Запускаем задачу циклического переоткрытия соединения.
+                    _cycleReOpenedCts = new CancellationTokenSource();
+
+                    var resReOpened = await Task.Run(async () => await CycleReOpened(_cycleReOpenedCts.Token), _cycleReOpenedCts.Token);
+                    //Успешный реконнект. Перевести БГ в режим работы.
+                    if (resReOpened)
+                    {
+                        _transportBg.PutOnWork();
+                    }
+                    _cycleReOpenedCts?.Dispose();
+                    _cycleReOpenedCts = null;
+                    break;
+            }
         }
 
 
@@ -177,7 +189,6 @@ namespace Transport.TcpIp.Concrete
 
             _logger.Information($"коннект для транспорта ОТКРЫТ: {KeyTransport}");
             IsCycleReopened = false;
-            _cycleReOpenedCts?.Dispose();
             return true;
         }
 

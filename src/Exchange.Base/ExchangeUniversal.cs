@@ -388,7 +388,6 @@ namespace Exchange.Base
                         case StatusDataExchange.EndWithTimeoutCritical:
                         case StatusDataExchange.EndWithErrorCritical:
                             _transport.CycleReOpenedExec(); //TODO: заменить на IncReopenCount
-                            //CycleReOpened();
                             _logger.Error("{Type} {KeyExchange}", "ОБМЕН ЗАВЕРЩЕН КРИТИЧЕСКИ НЕ ПРАВИЛЬНО. ПЕРЕОТКРЫТИЕ СОЕДИНЕНИЯ.", KeyExchange);
                             break;
 
@@ -400,7 +399,6 @@ namespace Exchange.Base
                                 IsConnect = false;
                                 _logger.Warning("{Type} {KeyExchange}", "ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО.", KeyExchange);
                                 _transport.CycleReOpenedExec();//TODO: заменить на IncReopenCount
-                                //CycleReOpened();
                             }
                             break;
                     }

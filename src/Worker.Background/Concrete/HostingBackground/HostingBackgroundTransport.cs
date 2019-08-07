@@ -25,6 +25,7 @@ namespace Worker.Background.Concrete.HostingBackground
         private int _dutyCycleCounter;
 
         private StatusBackground _statusBackground;
+        private TaskCompletionSource<StatusBackground> _tcsPutOnStendBy;
 
         #endregion
 
@@ -90,18 +91,18 @@ namespace Worker.Background.Concrete.HostingBackground
         }
 
 
-
-
-
         /// <summary>
-        /// Перевести бг в режим готовности (ожидания).
+        /// Создает Task "Перевести бг в режим готовности (ожидания)"
         /// В этом режиме происходит пропуск выполнения функций.
         /// </summary>
-        async Task ITransportBackground.PutOnStendBy()
+        Task<StatusBackground> ITransportBackground.PutOnStendBy()
         {
+            if (_statusBackground == StatusBackground.StandByStarting)
+                return Task.Run(() => StatusBackground.StandByStarting);
+            
             _statusBackground = StatusBackground.StandByStarting;
-
-            await Task.Delay(1000);
+            _tcsPutOnStendBy = new TaskCompletionSource<StatusBackground>();
+            return _tcsPutOnStendBy.Task;
         }
 
 
@@ -118,7 +119,6 @@ namespace Worker.Background.Concrete.HostingBackground
         /// </summary>
         /// <param name="stoppingToken"></param>
         /// <returns></returns>
-
         protected override async Task ProcessAsync(CancellationToken stoppingToken)
         {
             switch (_statusBackground)
@@ -126,20 +126,19 @@ namespace Worker.Background.Concrete.HostingBackground
                 case StatusBackground.Off:
                     break;
 
-                case StatusBackground.StandByStarting:
+                case StatusBackground.StandByStarting:                       //При выполнении ReConnect на транспорте, ожидаем перевод БГ в режим ОЖИДАНИЯ 
                     _statusBackground = StatusBackground.StandByStarted;
-                    //TODO: cs - завершить task
+                    _tcsPutOnStendBy.TrySetResult(_statusBackground);
                     break;
 
-                case StatusBackground.StandByStarted:
+                case StatusBackground.StandByStarted:                       //Если Connect на транспорте не установлен, находится в режиме ОЖИДАНИЯ
                     await Task.Delay(1000, stoppingToken);
                     return; 
 
-                case StatusBackground.Work:
+                case StatusBackground.Work:                                 // При успешном Connect БШ переводится в режим работы
                     await FuncQueueExec(stoppingToken);
                     break;
             }
-
             await Task.Delay(CheckUpdateTime, stoppingToken);
         }
 

@@ -192,12 +192,12 @@ namespace WebApiSwc.Controllers
         /// <returns></returns>
         // PUT api/Devices/StartCycleReOpenedConnection
         [HttpPut("StartCycleReOpenedConnection")]
-        public async Task<IActionResult> StartCycleReOpenedConnection([FromBody] IReadOnlyList<string> exchnageKeys)
+        public async Task<IActionResult> StartCycleReOpenedConnection([FromBody] IReadOnlyList<KeyTransport> keysTransports)
         {
             try
             {
-               await _deviceActionService.StartCycleReOpenedConnections(exchnageKeys);
-               return Ok(exchnageKeys);
+               await _deviceActionService.StartCycleReOpenedConnections(keysTransports);
+               return Ok(keysTransports);
             }
             catch (ActionHandlerException ex)
             {
@@ -216,12 +216,12 @@ namespace WebApiSwc.Controllers
 
         // PUT api/Devices/StartCycleReOpenedConnection
         [HttpPut("StopCycleReOpenedConnection")]
-        public IActionResult StopCycleReOpenedConnection([FromBody] IReadOnlyList<string> exchnageKeys)
+        public IActionResult StopCycleReOpenedConnection([FromBody] IReadOnlyList<KeyTransport> keysTransports)
         {
             try
             {
-                _deviceActionService.StopCycleReOpenedConnections(exchnageKeys);
-                return Ok(exchnageKeys);
+                _deviceActionService.StopCycleReOpenedConnections(keysTransports);
+                return Ok(keysTransports);
             }
             catch (ActionHandlerException ex)
             {

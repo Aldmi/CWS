@@ -23,6 +23,7 @@ using InputDataModel.Base;
 using Serilog;
 using Shared.Enums;
 using Shared.Types;
+using Transport.Base.Abstract;
 using Transport.Http.Concrete;
 using Transport.SerialPort.Concrete.SpWin;
 using Transport.TcpIp.Concrete;
@@ -265,6 +266,16 @@ namespace BL.Services.Mediators
 
 
         /// <summary>
+        /// Вернуть транспорт по ключу
+        /// </summary>
+        public ITransport GetTransport(KeyTransport keyTransport)
+        {
+            var transport = _transportStorageService.Get(keyTransport);
+            return transport;
+        }
+
+
+        /// <summary>
         /// Ищет транспорт по ключу в нужном хранилище и Удаляет его.
         /// </summary>
         private async Task RemoveAndStopTransport(KeyTransport keyTransport)
@@ -285,6 +296,11 @@ namespace BL.Services.Mediators
             _transportStorageService.Remove(keyTransport);
             transport.Dispose();
         }
+
+
+
+
+
 
         #endregion
     }

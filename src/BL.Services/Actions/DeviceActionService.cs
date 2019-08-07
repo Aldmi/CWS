@@ -19,7 +19,7 @@ namespace BL.Services.Actions
     /// * Послать вручную данные на обмен ус-ва.
     /// 
     /// </summary>
-    public class DeviceActionService<TIn>where TIn : InputTypeBase
+    public class DeviceActionService<TIn> where TIn : InputTypeBase
     {
         #region fields
 
@@ -49,7 +49,7 @@ namespace BL.Services.Actions
         /// </summary>
         /// <param name="exchnageKey"></param>
         public void StartCycleExchange(string exchnageKey)
-        {         
+        {
             var exchange = _mediatorForStorages.GetExchange(exchnageKey);
             if (exchange == null)
                 throw new ActionHandlerException($"Обмен с таким ключем Не найден: {exchnageKey}");
@@ -111,7 +111,7 @@ namespace BL.Services.Actions
         /// </summary>
         /// <param name="keyTransport"></param>
         public async Task StartBackground(KeyTransport keyTransport)
-        {      
+        {
             var bg = _mediatorForStorages.GetBackground(keyTransport);
             if (bg.IsStarted)
                 throw new ActionHandlerException($"Бекграунд уже запущен: {bg.KeyTransport}");
@@ -141,7 +141,7 @@ namespace BL.Services.Actions
         /// <returns></returns>
         public async Task StartBackgrounds(IReadOnlyList<KeyTransport> keysTransport)
         {
-            var tasks= keysTransport.Select(StartBackground).ToList();
+            var tasks = keysTransport.Select(StartBackground).ToList();
             await Task.WhenAll(tasks);
         }
 
@@ -153,7 +153,7 @@ namespace BL.Services.Actions
         /// <returns></returns>
         public async Task StopBackgrounds(IReadOnlyList<KeyTransport> keysTransport)
         {
-            var tasks= keysTransport.Select(StopBackground).ToList();
+            var tasks = keysTransport.Select(StopBackground).ToList();
             await Task.WhenAll(tasks);
         }
 
@@ -166,17 +166,16 @@ namespace BL.Services.Actions
         /// <returns></returns>
         /// <exception cref="KeyNotFoundException">Обмен не найденн по ключу</exception>
         /// <exception cref="ActionHandlerException">Соединение уже открыто</exception>
-        public async Task StartCycleReOpenedConnection(string exchnageKey)
-        {         
-            var exchange = _mediatorForStorages.GetExchange(exchnageKey);
-            if (exchange == null)
+        public async Task StartCycleReOpenedConnection(KeyTransport keyTransport)
+        {
+            var transport = _mediatorForStorages.GetTransport(keyTransport);
+            if (transport == null)
                 throw new KeyNotFoundException();
 
-            if (exchange.IsCycleReopened)
-                throw new ActionHandlerException($"Соединение уже ОТКРЫТО для этого обмена: {exchnageKey}");
+            if (transport.IsCycleReopened)
+                throw new ActionHandlerException($"Транспорт уже находится в режиме циклического переоткрытия соединения: {keyTransport}");
 
-            throw new NotImplementedException();
-            // await exchange.CycleReOpened();
+            await transport.CycleReOpenedExec();
         }
 
 
@@ -184,38 +183,35 @@ namespace BL.Services.Actions
         /// Параллельный запуск открытия подключений на нескольких обменах
         /// </summary>
         /// <param name="exchnageKeys"></param>
-        public async Task StartCycleReOpenedConnections(IReadOnlyList<string> exchnageKeys)
+        public async Task StartCycleReOpenedConnections(IReadOnlyList<KeyTransport> transportKeys)
         {
-            await Task.WhenAll(exchnageKeys.Select(StartCycleReOpenedConnection).ToArray());
+            await Task.WhenAll(transportKeys.Select(StartCycleReOpenedConnection).ToArray());
         }
 
 
         /// <summary>
-        /// Останов задачи циклического открытия подключения для обмена
+        /// Останов задачи циклического открытия подключения для транспорта
         /// </summary>
-        /// <param name="exchnageKey"></param>
-        public void StopCycleReOpenedConnection(string exchnageKey)
-        {         
-            var exchange = _mediatorForStorages.GetExchange(exchnageKey);
-            if (exchange == null)
+        public void StopCycleReOpenedConnection(KeyTransport keyTransport)
+        {
+            var transport = _mediatorForStorages.GetTransport(keyTransport);
+            if (transport == null)
                 throw new KeyNotFoundException();
 
-            if (!exchange.IsCycleReopened)
-                throw new ActionHandlerException($"Соединение уже ЗАКРЫТО для этого обмена: {exchnageKey}");
+            if (!transport.IsCycleReopened)
+                throw new ActionHandlerException($"Транспорт вышел из режима циклического переоткрытия: {keyTransport}");
 
-            throw new NotImplementedException();
-            //exchange.CycleReOpenedCancelation();
+            transport.CycleReOpenedExecCancelation();
         }
 
         /// <summary>
         /// Останов задач циклического открытия подключения для нескольких обменов
         /// </summary>
-        /// <param name="exchnageKeys"></param>
-        public void  StopCycleReOpenedConnections(IReadOnlyList<string> exchnageKeys)
+        public void StopCycleReOpenedConnections(IReadOnlyList<KeyTransport> transportKeys)
         {
-            foreach (var exchnageKey in exchnageKeys)
+            foreach (var transportKey in transportKeys)
             {
-                StopCycleReOpenedConnection(exchnageKey);
+                StopCycleReOpenedConnection(transportKey);
             }
         }
 

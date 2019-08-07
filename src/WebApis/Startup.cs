@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -180,10 +181,13 @@ namespace WebApiSwc
             var transportServices = scope.Resolve<TransportStorageService>();
             lifetimeApp.ApplicationStarted.Register(async () =>
             {
+                List<Task> tasks = new List<Task>();
                 foreach (var transport in transportServices.Values)
                 {
-                    await transport.CycleReOpenedExec();
+                    tasks.Add(transport.CycleReOpenedExec());
                 }
+
+                await Task.WhenAll();
             });
 
             //ЗАПУСК НА ОБМЕНЕ ЦИКЛИЧЕСКОГО ОБМЕНА.
