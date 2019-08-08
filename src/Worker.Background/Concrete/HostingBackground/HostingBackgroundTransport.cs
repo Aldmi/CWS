@@ -191,8 +191,6 @@ namespace Worker.Background.Concrete.HostingBackground
             }
         }
 
-
-
         #endregion
     }
 }

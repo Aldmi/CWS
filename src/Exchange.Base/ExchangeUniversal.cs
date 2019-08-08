@@ -370,8 +370,8 @@ namespace Exchange.Base
 
                         //ТРАНСПОРТ НЕ ОТКРЫТ.
                         case StatusDataExchange.NotOpenTransport:
-                            _logger.Warning("{Type}  KeyExchange:{KeyExchange}   KeyTransport:{KeyTransport} ", "ПОПЫТКА ОТПРАВИТЬ ЗАПРОС НА НЕ ОТКРЫТЫЙ ТРАНСПОРТ.", KeyExchange, KeyTransport);
                             IsConnect = false;
+                            _logger.Warning("{Type}  KeyExchange:{KeyExchange}   KeyTransport:{KeyTransport} ", "ПОПЫТКА ОТПРАВИТЬ ЗАПРОС НА НЕ ОТКРЫТЫЙ ТРАНСПОРТ. IsConnect = false;", KeyExchange, KeyTransport);
                             break;
 
                         //ТАЙМАУТ ОТВЕТА.
@@ -380,24 +380,26 @@ namespace Exchange.Base
                             {
                                 _countTimeoutTrying = 0;
                                 IsConnect = false;
-                                _logger.Warning("{Type} {KeyExchange}", "ТАЙМАУТ ОТВЕТА.", KeyExchange);
+                                _logger.Warning("{Type} {KeyExchange}", "МАКСИМАЛЬНОЕ КОЛ-ВО ТАЙМАУТОВ ОТВЕТА ПРЕВЫШЕННО. IsConnect = false", KeyExchange);
                             }
                             break;
 
                         //ОБМЕН ЗАВЕРЩЕН КРИТИЧЕСКИ НЕ ПРАВИЛЬНО. ПЕРЕОТКРЫТИЕ СОЕДИНЕНИЯ.
                         case StatusDataExchange.EndWithTimeoutCritical:
                         case StatusDataExchange.EndWithErrorCritical:
+                            IsConnect = false;
                             _transport.CycleReOpenedExec(); //TODO: заменить на IncReopenCount
-                            _logger.Error("{Type} {KeyExchange}", "ОБМЕН ЗАВЕРЩЕН КРИТИЧЕСКИ НЕ ПРАВИЛЬНО. ПЕРЕОТКРЫТИЕ СОЕДИНЕНИЯ.", KeyExchange);
+                            _logger.Error("{Type} {KeyExchange} {ErrorStatus}", "КРИТИЧЕСКАЯ ОШИБКА. ПЕРЕОТКРЫТИЕ СОЕДИНЕНИЯ. IsConnect = false;", KeyExchange, status);
                             break;
 
-                        //ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО. Считаем попытки.
-                        default:  //EndWithError
+                        //ОБМЕН ЗАВЕРЩЕН С ОШИБКАМИ.
+                        case StatusDataExchange.EndWithErrorCannotSendData:
+                        case StatusDataExchange.EndWithErrorWrongAnswers:
                             if (++_countErrorTrying > NumberErrorTrying)
                             {
                                 _countErrorTrying = 0;
                                 IsConnect = false;
-                                _logger.Warning("{Type} {KeyExchange}", "ОБМЕН ЗАВЕРШЕН НЕ ПРАВИЛЬНО.", KeyExchange);
+                                _logger.Warning("{Type} {KeyExchange} {ErrorStatus}", "МАКСИМАЛЬНОЕ КОЛ-ВО НАКОПЛЕННЫХ ОШИБОК ПРЕВЫЩЕННО. ПЕРЕОТКРЫТИЕ СОЕДИНЕНИЯ. IsConnect = false;", KeyExchange, status);
                                 _transport.CycleReOpenedExec();//TODO: заменить на IncReopenCount
                             }
                             break;
@@ -408,7 +410,7 @@ namespace Exchange.Base
                     //ОШИБКА ТРАНСПОРТА.
                     IsConnect = false;
                     transportResp.TransportException = ex;
-                    _logger.Error("{Type} {KeyExchange}  KeyTransport:{KeyTransport}", "ОШИБКА ТРАНСПОРТА.", KeyExchange, KeyTransport);
+                    _logger.Error("{Type} {KeyExchange} KeyTransport:{KeyTransport}", "ОШИБКА ТРАНСПОРТА.", KeyExchange, KeyTransport);
                 }
                 finally
                 {

@@ -237,11 +237,11 @@ namespace WebApiSwc
 
             //ОСТАНОВ НА ТРАНСПОРТЕ ЦИКЛИЧЕСКОГО ПЕРЕОТКРЫТИЯ УСТРОЙСТВА
             var transportServices = scope.Resolve<TransportStorageService>();
-            lifetimeApp.ApplicationStarted.Register(async () =>
+            lifetimeApp.ApplicationStopping.Register(async () =>
             {
                 foreach (var transport in transportServices.Values)
                 {
-                    transport.CycleReOpenedExecCancelation();
+                    transport.Dispose();
                 }
             });
 

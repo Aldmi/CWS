@@ -1,41 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Reactive.Subjects;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Transport;
 using Serilog;
-using SerilogTimings.Extensions;
 using Shared.Enums;
-using Shared.Extensions;
-using Shared.Helpers;
 using Shared.Types;
+using Transport.Base.Abstract;
 using Transport.Base.DataProvidert;
-using Transport.Base.RxModel;
 using Transport.TcpIp.Abstract;
 using Worker.Background.Abstarct;
-using Worker.Background.Concrete.HostingBackground;
-using Worker.Background.Enums;
 
 namespace Transport.TcpIp.Concrete
 {
-    //TODO: выделить базовый абстрактный класс
-    public class TcpIpTransport : ITcpIp
+    public class TcpIpTransport : BaseTransport, ITcpIp
     {
         #region fields
 
         private TcpClient _client;
         private NetworkStream _netStream;
-
-        private const int TimeCycleReOpened = 500; //Большее время занимает ожидание ответа от ConnectAsync()
-        private readonly ITransportBackground _transportBg;
-        private readonly ILogger _logger;
 
         #endregion
 
@@ -44,181 +31,49 @@ namespace Transport.TcpIp.Concrete
         #region prop
 
         public TcpIpOption Option { get; }
-        public KeyTransport KeyTransport { get; }
-
-        private bool _isOpen;
-        public bool IsOpen
-        {
-            get => _isOpen;
-            private set
-            {
-                if (value == _isOpen) return;
-                _isOpen = value;
-                IsOpenChangeRx.OnNext(new IsOpenChangeRxModel { IsOpen = _isOpen, TransportName = Option.Name });
-            }
-        }
-
-        private string _statusString;
-        public string StatusString
-        {
-            get => _statusString;
-            private set
-            {
-                if (value == _statusString) return;
-                _statusString = value;
-                StatusStringChangeRx.OnNext(new StatusStringChangeRxModel { Status = _statusString, TransportName = Option.Name });
-            }
-        }
-
-        private StatusDataExchange _statusDataExchange;
-        public StatusDataExchange StatusDataExchange
-        {
-            get => _statusDataExchange;
-            private set
-            {
-                if (value == _statusDataExchange) return;
-                _statusDataExchange = value;
-                StatusDataExchangeChangeRx.OnNext(new StatusDataExchangeChangeRxModel { StatusDataExchange = _statusDataExchange, TransportName = Option.Name });
-            }
-        }
-
-        public bool IsCycleReopened { get; private set; }
 
         #endregion
-
 
 
 
         #region ctor
 
-        public TcpIpTransport(ITransportBackground transportBg, TcpIpOption option, KeyTransport keyTransport, ILogger logger) //TODO: ITransportBackground вынести в абстрактный базовый класс
+        public TcpIpTransport(ITransportBackground transportBg, TcpIpOption option, KeyTransport keyTransport, ILogger logger) 
+            : base(transportBg, keyTransport, logger)
         {
             Option = option;
-            KeyTransport = keyTransport;
-            _transportBg = transportBg;
-            _logger = logger;
         }
 
         #endregion
 
 
 
-        #region Rx
+        #region OverrideMembers
 
-        public ISubject<IsOpenChangeRxModel> IsOpenChangeRx { get; } = new Subject<IsOpenChangeRxModel>();                                        //СОБЫТИЕ ИЗМЕНЕНИЯ ОТКРЫТИЯ/ЗАКРЫТИЯ ПОРТА
-        public ISubject<StatusDataExchangeChangeRxModel> StatusDataExchangeChangeRx { get; } = new Subject<StatusDataExchangeChangeRxModel>();     //СОБЫТИЕ ИЗМЕНЕНИЯ ОТПРАВКИ ДАННЫХ ПО ПОРТУ
-        public ISubject<StatusStringChangeRxModel> StatusStringChangeRx { get; } = new Subject<StatusStringChangeRxModel>();                       //СОБЫТИЕ ИЗМЕНЕНИЯ СТРОКИ СТАТУСА ПОРТА
-
-        #endregion
-
-
-
-        #region Methode
-
-        /// <summary>
-        /// Циклическое открытие подключения
-        /// </summary>
-        private CancellationTokenSource _cycleReOpenedCts;
-        public async Task CycleReOpenedExec()
+        protected override async Task<bool> ReOpen()
         {
-            if (IsCycleReopened)
-            {
-                _logger.Error("{Type} KeyTransport: \"{KeyTransport}\" ", "ТРАНСПОРТ УЖЕ НАХОДИТСЯ В ЦИКЛЕ ПЕРЕОТКРЫТИЯ", KeyTransport);
-                return;
-            }
-
-            //дожидаемся Перевода БГ в режим ожидания.
-            var resStendBy= await _transportBg.PutOnStendBy();
-            switch (resStendBy)
-            {
-                case StatusBackground.StandByStarting:
-                    _logger.Error("{Type} KeyTransport: \"{KeyTransport}\" ", "БЕКГРАУНД НЕ ЗАКОНЧИЛ ПЕРЕВОД В РЕЖИМ ОЖИДАНИЯ ГОТОВНОСТИ (StandByStarted)", KeyTransport);
-                    return;
-
-                case StatusBackground.StandByStarted:
-                    //Запускаем задачу циклического переоткрытия соединения.
-                    _cycleReOpenedCts = new CancellationTokenSource();
-
-                    var resReOpened = await Task.Run(async () => await CycleReOpened(_cycleReOpenedCts.Token), _cycleReOpenedCts.Token);
-                    //Успешный реконнект. Перевести БГ в режим работы.
-                    if (resReOpened)
-                    {
-                        _transportBg.PutOnWork();
-                    }
-                    _cycleReOpenedCts?.Dispose();
-                    _cycleReOpenedCts = null;
-                    break;
-            }
-        }
-
-
-        /// <summary>
-        /// Отмена задачи циклического открытия подключения
-        /// </summary>
-        public void CycleReOpenedExecCancelation()
-        {
-            if (IsCycleReopened)
-            {
-                _cycleReOpenedCts.Cancel();
-            }
-        }
-
-
-        private async Task<bool> CycleReOpened(CancellationToken ct)
-        {
-            IsCycleReopened = true;
-            bool res = false;
+            DisposeTransport();
             try
             {
-                while (!ct.IsCancellationRequested && !res)
-                {
-                    res = await ReOpen();
-                    if (!res)
-                    {
-                        _logger.Warning($"коннект для транспорта НЕ ОТКРЫТ: {KeyTransport}  {StatusString}");
-                        await Task.Delay(TimeCycleReOpened, ct);
-                    }
-                }
-            }
-            catch (OperationCanceledException)
-            {
-                _logger.Information($"ОТМЕНА ПЕРЕОТКРЫТИЯ СОЕДИНЕНИЯ ДЛЯ ТРАНСПОРТА: {KeyTransport}");
-                IsCycleReopened = false;
-                return false;
-            }
-
-            _logger.Information($"коннект для транспорта ОТКРЫТ: {KeyTransport}");
-            IsCycleReopened = false;
-            return true;
-        }
-
-
-        private async Task<bool> ReOpen() 
-        {
-            DisposeTcpClient();
-            try
-            {
-                IsOpen = false;
                 _client = new TcpClient { NoDelay = false };  //true - пакет будет отправлен мгновенно (при NetworkStream.Write). false - пока не собранно значительное кол-во данных отправки не будет.
                 var ipAddress = IPAddress.Parse(Option.IpAddress);
                 StatusString = $"Conect to {ipAddress} : {Option.IpPort} ...";
                 await _client.ConnectAsync(ipAddress, Option.IpPort);
                 _netStream = _client.GetStream();
-                IsOpen = true;
                 return true;
             }
             catch (Exception ex)
             {
-                IsOpen = false;
+                //IsOpen = false;
                 StatusString = $"Ошибка инициализации соединения: \"{ex.Message}\"";
-                _logger.Debug(ex, StatusString); //TODO:??
-                DisposeTcpClient();
+                Logger.Debug(ex, StatusString); //TODO:??
+                DisposeTransport();
             }
             return false;
         }
 
 
-        public async Task<StatusDataExchange> DataExchangeAsync(int timeRespoune, ITransportDataProvider dataProvider, CancellationToken ct)
+        public override async Task<StatusDataExchange> DataExchangeAsync(int timeRespoune, ITransportDataProvider dataProvider, CancellationToken ct)
         {
             if (!IsOpen)
                 return StatusDataExchange.NotOpenTransport;
@@ -237,7 +92,7 @@ namespace Transport.TcpIp.Concrete
                     var res = dataProvider.SetDataByte(data);
                     if (!res)
                     {
-                        StatusDataExchange = StatusDataExchange.EndWithError;
+                        StatusDataExchange = StatusDataExchange.EndWithErrorWrongAnswers;
                         return StatusDataExchange;
                     }
                 }
@@ -253,13 +108,13 @@ namespace Transport.TcpIp.Concrete
                 }
                 catch (IOException ex)
                 {
-                    _logger.Error(ex, $"TcpIpTransport {KeyTransport}. IOException");
+                    Logger.Error(ex, $"TcpIpTransport {KeyTransport}. IOException");
                     StatusDataExchange = StatusDataExchange.EndWithErrorCritical;
                     return StatusDataExchange;
                 }
                 catch (Exception ex)
                 {
-                    _logger.Fatal(ex, $"TcpIpTransport {KeyTransport}. Exception");
+                    Logger.Fatal(ex, $"TcpIpTransport {KeyTransport}. Exception");
                     StatusDataExchange = StatusDataExchange.EndWithErrorCritical;
                     return StatusDataExchange;
                 }
@@ -267,12 +122,17 @@ namespace Transport.TcpIp.Concrete
                 return StatusDataExchange.End;
             }
 
-            StatusDataExchange = StatusDataExchange.EndWithError;
+            StatusDataExchange = StatusDataExchange.EndWithErrorCannotSendData;
             return StatusDataExchange;
         }
 
+        #endregion
 
-        public async Task<bool> SendDataAsync(ITransportDataProvider dataProvider, CancellationToken ct)
+
+
+        #region Methode
+
+        private async Task<bool> SendDataAsync(ITransportDataProvider dataProvider, CancellationToken ct)
         {
             byte[] buffer = dataProvider.GetDataByte();
             try
@@ -286,7 +146,7 @@ namespace Transport.TcpIp.Concrete
             catch (Exception ex)
             {
                 StatusString = $"ИСКЛЮЧЕНИЕ SendDataToServer :{ex.Message}";
-                _logger.Error(ex, $"TcpIpTransport/SendDataToServer {KeyTransport}");
+                Logger.Error(ex, $"TcpIpTransport/SendDataToServer {KeyTransport}");
             }
             return false;
         }
@@ -296,14 +156,14 @@ namespace Transport.TcpIp.Concrete
         /// Прием данных с пеерменным периодом.
         /// Прием заканчивается когда нужное кол-во данных поступит в входной буффер порта.
         /// </summary>
-        public async Task<byte[]> TakeDataInstantlyAsync(int nbytes, int timeOut, CancellationToken ct)
+        private async Task<byte[]> TakeDataInstantlyAsync(int nbytes, int timeOut, CancellationToken ct)
         {
             var ctsTimeout = new CancellationTokenSource();
             ctsTimeout.CancelAfter(timeOut);
             var cts = CancellationTokenSource.CreateLinkedTokenSource(ctsTimeout.Token, ct); // Объединенный токен, сработает от выставленного ctsTimeout.Token или от ct
             try
             {
-                var dataReadTask = Task.Run(async() =>
+                var dataReadTask = Task.Run(async () =>
                 {
                     const int polingTime = 100;
                     var sumBuffer = new List<byte>();
@@ -328,11 +188,11 @@ namespace Transport.TcpIp.Concrete
                     var receivedBytes = buffer.Count;
                     if (receivedBytes != nbytes)
                     {
-                        _logger.Warning($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. КОЛ-ВО СЧИТАННЫХ БАЙТ НЕ ВЕРНОЕ. Принято/Ожидаем= \"{receivedBytes} / {nbytes}\"");
+                        Logger.Warning($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. КОЛ-ВО СЧИТАННЫХ БАЙТ НЕ ВЕРНОЕ. Принято/Ожидаем= \"{receivedBytes} / {nbytes}\"");
                     }
                     if (_netStream.DataAvailable)
                     {
-                        _logger.Error($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. ПОСЛЕ ЧТЕНИЯ В БУФЕРЕ ОСТАЛИСЬ ДАННЫЕ. buferSize= \"{receivedBytes}\"");
+                        Logger.Error($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. ПОСЛЕ ЧТЕНИЯ В БУФЕРЕ ОСТАЛИСЬ ДАННЫЕ. buferSize= \"{receivedBytes}\"");
                     }
                     var resBuffer = buffer.Take(nbytes).ToArray();
                     return resBuffer;
@@ -353,11 +213,10 @@ namespace Transport.TcpIp.Concrete
         }
 
 
-
         /// <summary>
         /// Прием данных с постоянным периодом.
         /// </summary>
-        public async Task<byte[]> TakeDataConstPeriodAsync(int nbytes, int timeOut, CancellationToken ct)
+        private async Task<byte[]> TakeDataConstPeriodAsync(int nbytes, int timeOut, CancellationToken ct)
         {
             int buferSize = 256;// читаем всегда весь буфер
             byte[] bDataTemp = new byte[buferSize];
@@ -378,11 +237,11 @@ namespace Transport.TcpIp.Concrete
                 int nByteTake = _netStream.Read(bDataTemp, 0, buferSize);
                 if (nByteTake != nbytes)
                 {
-                    _logger.Warning($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. КОЛ-ВО СЧИТАННЫХ БАЙТ НЕ ВЕРНОЕ. Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");
+                    Logger.Warning($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. КОЛ-ВО СЧИТАННЫХ БАЙТ НЕ ВЕРНОЕ. Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");
                 }
                 if (_netStream.DataAvailable)
                 {
-                    _logger.Error($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. ПОСЛЕ ЧТЕНИЯ В БУФЕРЕ ОСТАЛИСЬ ДАННЫЕ. buferSize= \"{buferSize}\"");
+                    Logger.Error($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. ПОСЛЕ ЧТЕНИЯ В БУФЕРЕ ОСТАЛИСЬ ДАННЫЕ. buferSize= \"{buferSize}\"");
                 }
 
                 var bData = new byte[nByteTake];
@@ -401,7 +260,7 @@ namespace Transport.TcpIp.Concrete
 
         #region Disposable
 
-        private void DisposeTcpClient() 
+        protected override void DisposeTransport()
         {
             if (_netStream != null)
             {
@@ -412,15 +271,6 @@ namespace Transport.TcpIp.Concrete
             _client?.Client?.Close();
             _client?.Client?.Dispose();
             _client?.Dispose();
-        }
-
-
-        public void Dispose()
-        {
-            DisposeTcpClient();
-
-            _cycleReOpenedCts?.Cancel(); 
-            _cycleReOpenedCts?.Dispose();
         }
 
         #endregion

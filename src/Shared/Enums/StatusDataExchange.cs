@@ -12,7 +12,8 @@
         End,
         EndWithTimeout,
         EndWithCanceled,
-        EndWithError,
+        EndWithErrorCannotSendData,
+        EndWithErrorWrongAnswers,
         EndWithTimeoutCritical,
         EndWithErrorCritical
     }
