@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using DAL.Abstract.Entities.Options.Exchange;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Exchange.Base.DataProviderAbstract;
@@ -23,7 +22,6 @@ using Shared.Types;
 using Transport.Base.Abstract;
 using Transport.Base.RxModel;
 using Worker.Background.Abstarct;
-using Timer = System.Timers.Timer;
 
 namespace Exchange.Base
 {
@@ -39,6 +37,8 @@ namespace Exchange.Base
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(QueueMode.QueueExtractLastItem, MaxDataInQueue);   //Очередь данных для SendOneTimeData().
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue; //Очередь данных для SendCycleTimeData().
         private readonly InputCycleDataEntryCheker _inputCycleDataEntryCheker;      //таймер отсчитывает период от получения входных данных для цикл. обмена.
+
+        private readonly Stopwatch _sw = Stopwatch.StartNew();
         #endregion
 
 
@@ -285,7 +285,6 @@ namespace Exchange.Base
             //TODO: IsOpen на транспорте заменить на StatusConnect(Open, Reconnect, StopedReconnect)
             //TODO: 
 
-
             //if (!_transport.StatusConnecttus != Open)
             //{
             //    _logger.Warning($"Exchange/CycleTimeActionAsync Попытка отправить данные на не открытый тарнспорт {_transport.Status}");
@@ -423,10 +422,10 @@ namespace Exchange.Base
 
             try
             {   //ЗАПУСК КОНВЕЕРА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ
-                using (_logger.OperationAt(LogEventLevel.Information).Time("{Type} {KeyExchange}", "ВРЕМЯ ИСПОЛНЕНИЯ", KeyExchange))
-                {
-                    await _dataProvider.StartExchangePipeline(inData);
-                }
+                _sw.Restart();
+                await _dataProvider.StartExchangePipeline(inData);
+                _sw.Stop();
+                transportResponseWrapper.TimeAction= _sw.ElapsedMilliseconds;
             }
             catch (Exception ex)
             {
@@ -434,7 +433,7 @@ namespace Exchange.Base
                 IsConnect = false;
                 transportResponseWrapper.ExceptionExchangePipline = ex;
                 transportResponseWrapper.MessageDict = new Dictionary<string, string>(_dataProvider.StatusDict);
-                _logger.Warning("{Type} {KeyExchange}", "ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ.", KeyExchange);
+                _logger.Warning("{Type} {KeyExchange}", "ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. (смотерть ExceptionExchangePipline)", KeyExchange);
             }
             finally
             {
@@ -479,9 +478,10 @@ namespace Exchange.Base
                 NullValueHandling = NullValueHandling.Ignore  //Игнорировать пустые теги
             };
             var jsonRespInfo = JsonConvert.SerializeObject(responseInfo, settings);
-
-            _logger.Information("{Type}  {KeyExchange}   РЕЗУЛЬТАТ= {isValid}   успех/ответов/запросов= ({countIsValid} / {countAll} / {numberPreparedPackages})   [{errorStat}]  jsonRespInfo= {jsonRespInfo}",
-                                "ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН.", KeyExchange, isValid, countIsValid, countAll, numberPreparedPackages, errorStat, jsonRespInfo);
+            var countStat = $"успех/ответов/запросов= ({countIsValid} / {countAll} / {numberPreparedPackages})";
+            var timeAction = response.TimeAction;
+            _logger.Information("{Type} ({TimeAction} мс.) {KeyExchange}  РЕЗУЛЬТАТ= {isValid}  {countStat}  [{errorStat}] jsonRespInfo= {jsonRespInfo}",
+                                "ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН.", timeAction, KeyExchange, isValid, countStat, errorStat, jsonRespInfo);
         }
 
         #endregion

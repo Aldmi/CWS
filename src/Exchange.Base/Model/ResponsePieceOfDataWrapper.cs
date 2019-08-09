@@ -15,11 +15,14 @@ namespace Exchange.Base.Model
         public string KeyExchange { get; set; }                    //Ключ обмена
         public DataAction DataAction { get; set; }                 //Действие
 
+        public long TimeAction { get; set; }                    //Время выполнения обмена (на порцию данных)
+
         public Exception ExceptionExchangePipline { get; set; }    //Критическая Ошибка обработки данных в конвеере.
         public Dictionary<string, string> MessageDict { get; set; }        //Доп. информация
         public List<ResponseDataItem<TIn>> ResponsesItems { get; set; } = new List<ResponseDataItem<TIn>>();
                
         public Dictionary<string, dynamic> DataBag { get; set; }     //Не типизированный контейнер для передачи любых данных
+
     }
 
 

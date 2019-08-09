@@ -85,7 +85,6 @@ namespace Transport.Base.Abstract
                 case StatusBackground.StandByStarted:
                     //Запускаем задачу циклического переоткрытия соединения.
                     _cycleReOpenedCts = new CancellationTokenSource();
-
                     var resReOpened = await Task.Run(async () => await CycleReOpened(_cycleReOpenedCts.Token), _cycleReOpenedCts.Token);
                     //Успешный реконнект. Перевести БГ в режим работы.
                     if (resReOpened)
@@ -122,19 +121,19 @@ namespace Transport.Base.Abstract
                     IsOpen = await ReOpen();
                     if (!IsOpen)
                     {
-                        Logger.Warning($"коннект для транспорта НЕ ОТКРЫТ: {KeyTransport}  {StatusString}");
+                        Logger.Warning("{Type} {KeyTransport}", $"Connect для транспорта НЕ ОТКРЫТ: {StatusString}", KeyTransport);
                         await Task.Delay(TimeCycleReOpened, ct);
                     }
                 }
             }
             catch (OperationCanceledException)
             {
-                Logger.Information($"ОТМЕНА ПЕРЕОТКРЫТИЯ СОЕДИНЕНИЯ ДЛЯ ТРАНСПОРТА: {KeyTransport}");
+                Logger.Information("{Type} {KeyTransport}", "ОТМЕНА ПЕРЕОТКРЫТИЯ СОЕДИНЕНИЯ ДЛЯ ТРАНСПОРТА: ", KeyTransport);
                 IsCycleReopened = false;
                 return false;
             }
 
-            Logger.Information($"коннект для транспорта ОТКРЫТ: {KeyTransport}");
+            Logger.Information("{Type} {KeyTransport}", "Connect для транспорта ОТКРЫТ: ", KeyTransport);
             IsCycleReopened = false;
             return true;
         }
