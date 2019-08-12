@@ -158,11 +158,18 @@ namespace BL.Services.Actions
         }
 
 
+        /// <summary>
+        /// Параллельный запуск открытия подключений на нескольких обменах
+        /// </summary>
+        public async Task StartCycleReOpenedConnections(IReadOnlyList<KeyTransport> transportKeys)
+        {
+            await Task.WhenAll(transportKeys.Select(StartCycleReOpenedConnection).ToArray());
+        }
+
 
         /// <summary>
         /// Запуск открытия подключения для обмена
         /// </summary>
-        /// <param name="exchnageKey"></param>
         /// <returns></returns>
         /// <exception cref="KeyNotFoundException">Обмен не найденн по ключу</exception>
         /// <exception cref="ActionHandlerException">Соединение уже открыто</exception>
@@ -180,12 +187,14 @@ namespace BL.Services.Actions
 
 
         /// <summary>
-        /// Параллельный запуск открытия подключений на нескольких обменах
+        /// Останов задач циклического открытия подключения для нескольких обменов
         /// </summary>
-        /// <param name="exchnageKeys"></param>
-        public async Task StartCycleReOpenedConnections(IReadOnlyList<KeyTransport> transportKeys)
+        public void StopCycleReOpenedConnections(IReadOnlyList<KeyTransport> transportKeys)
         {
-            await Task.WhenAll(transportKeys.Select(StartCycleReOpenedConnection).ToArray());
+            foreach (var transportKey in transportKeys)
+            {
+                StopCycleReOpenedConnection(transportKey);
+            }
         }
 
 
@@ -204,16 +213,6 @@ namespace BL.Services.Actions
             transport.CycleReOpenedExecCancelation();
         }
 
-        /// <summary>
-        /// Останов задач циклического открытия подключения для нескольких обменов
-        /// </summary>
-        public void StopCycleReOpenedConnections(IReadOnlyList<KeyTransport> transportKeys)
-        {
-            foreach (var transportKey in transportKeys)
-            {
-                StopCycleReOpenedConnection(transportKey);
-            }
-        }
 
 
         //TODO: Добавить в контроллер DevicesController

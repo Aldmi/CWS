@@ -188,8 +188,6 @@ namespace WebApiSwc.Controllers
         /// <summary>
         /// Запустить ЦИКЛ. переоткрытие транспорта
         /// </summary>
-        /// <param name="exchnageKeys"></param>
-        /// <returns></returns>
         // PUT api/Devices/StartCycleReOpenedConnection
         [HttpPut("StartCycleReOpenedConnection")]
         public async Task<IActionResult> StartCycleReOpenedConnection([FromBody] IReadOnlyList<KeyTransport> keysTransports)
@@ -213,8 +211,10 @@ namespace WebApiSwc.Controllers
         }
 
 
-
-        // PUT api/Devices/StartCycleReOpenedConnection
+        /// <summary>
+        /// Остановить ЦИКЛ. переоткрытие транспорта
+        /// </summary>
+        // PUT api/Devices/StopCycleReOpenedConnection
         [HttpPut("StopCycleReOpenedConnection")]
         public IActionResult StopCycleReOpenedConnection([FromBody] IReadOnlyList<KeyTransport> keysTransports)
         {

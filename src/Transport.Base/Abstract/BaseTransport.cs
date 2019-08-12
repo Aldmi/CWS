@@ -12,7 +12,6 @@ using Worker.Background.Enums;
 
 namespace Transport.Base.Abstract
 {
-
     public abstract class BaseTransport : ITransport
     {
         #region fields
@@ -75,7 +74,7 @@ namespace Transport.Base.Abstract
             }
 
             //дожидаемся Перевода БГ в режим ожидания.
-            var resStendBy = await _transportBg.PutOnStendBy();
+            var resStendBy= await _transportBg.PutOnStendBy();
             switch (resStendBy)
             {
                 case StatusBackground.StandByStarting:
