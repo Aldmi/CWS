@@ -301,7 +301,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var departureTime = uit.DepartureTime ?? DateTime.MinValue;
             var time = (uit.Event?.Num != null && uit.Event.Num == 0) ? arrivalTime : departureTime;
             var delayTime= uit.DelayTime ?? DateTime.MinValue;
-            var expectedTime = uit.ExpectedTime;
+            var expectedTime = (uit.ExpectedTime == DateTime.MinValue) ? time : uit.ExpectedTime;
             var dict = new Dictionary<string, object>
             {
                 ["TypeName"] = string.IsNullOrEmpty(typeTrain) ? " " : typeTrain,

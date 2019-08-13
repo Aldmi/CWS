@@ -15,7 +15,8 @@ namespace Exchange.Base.Model
         public string KeyExchange { get; set; }                    //Ключ обмена
         public DataAction DataAction { get; set; }                 //Действие
 
-        public long TimeAction { get; set; }                    //Время выполнения обмена (на порцию данных)
+        public long TimeAction { get; set; }                       //Время выполнения обмена (на порцию данных)
+        public bool IsValidAll { get; set; }                       //Флаг фалидности всех ответов
 
         public Exception ExceptionExchangePipline { get; set; }    //Критическая Ошибка обработки данных в конвеере.
         public Dictionary<string, string> MessageDict { get; set; }        //Доп. информация

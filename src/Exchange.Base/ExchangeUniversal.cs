@@ -37,6 +37,7 @@ namespace Exchange.Base
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(QueueMode.QueueExtractLastItem, MaxDataInQueue);   //Очередь данных для SendOneTimeData().
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue; //Очередь данных для SendCycleTimeData().
         private readonly InputCycleDataEntryCheker _inputCycleDataEntryCheker;      //таймер отсчитывает период от получения входных данных для цикл. обмена.
+        private readonly SkippingPeriodChecker _skippingPeriodChecker;              //таймер отсчитывает время пропуска периода опроса.
 
         private readonly Stopwatch _sw = Stopwatch.StartNew();
         #endregion
@@ -107,6 +108,7 @@ namespace Exchange.Base
             _logger = logger;
             _cycleTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(exchangeOption.CycleQueueMode, MaxDataInQueue);
             _inputCycleDataEntryCheker= new InputCycleDataEntryCheker(KeyExchange, ExchangeOption.NormalFrequencyCycleDataEntry);
+            _skippingPeriodChecker= new SkippingPeriodChecker(20000);
         }
 
         #endregion
@@ -244,6 +246,7 @@ namespace Exchange.Base
                 return;
 
             _inputCycleDataEntryCheker.InputDataEntry();
+            _skippingPeriodChecker.StopSkipping();
 
             var dataWrapper = new InDataWrapper<TIn> { Datas = inData.ToList(), DirectHandlerName = directHandlerName };
             var result = _cycleTimeDataQueue.Enqueue(dataWrapper);
@@ -283,13 +286,17 @@ namespace Exchange.Base
         protected async Task CycleTimeActionAsync(CancellationToken ct)
         {
             //TODO: IsOpen на транспорте заменить на StatusConnect(Open, Reconnect, StopedReconnect)
-            //TODO: 
-
             //if (!_transport.StatusConnecttus != Open)
             //{
             //    _logger.Warning($"Exchange/CycleTimeActionAsync Попытка отправить данные на не открытый тарнспорт {_transport.Status}");
             //    return;
             //}
+
+            if (_skippingPeriodChecker.IsSkip)
+            {
+                Debug.WriteLine("CycleTimeActionAsync SKIP ----------------------------------------");
+                return;
+            }
 
             if (!_transport.IsOpen) 
                 return;
@@ -312,8 +319,12 @@ namespace Exchange.Base
             var transportResponseWrapper = await SendingPieceOfData(inData, ct);
             transportResponseWrapper.KeyExchange = KeyExchange;
             transportResponseWrapper.DataAction = DataAction.CycleAction;
-            ResponseChangeRx.OnNext(transportResponseWrapper);
+            if (transportResponseWrapper.IsValidAll)
+            {
+                _skippingPeriodChecker.StartSkipping(); //Если все ответы валидны - запустим отсчет пропуска CycleTimeAction.
+            }
 
+            ResponseChangeRx.OnNext(transportResponseWrapper);
             await Task.Delay(100, ct); //TODO: Продумать как задвать скважность между выполнением цикл. функции на обмене.
         }
 
@@ -455,11 +466,11 @@ namespace Exchange.Base
             var countAll = response.ResponsesItems.Count(resp => resp.Status != StatusDataExchange.EndWithTimeout);  //кол-во ВСЕХ полученных ответов
             var countIsValid = response.ResponsesItems.Count(resp => resp.IsOutDataValid);                           //кол-во ВАЛИДНЫХ ответов
             string errorStat = string.Empty;
-            bool isValid = true;
+            response.IsValidAll = true;
             if (countIsValid < numberPreparedPackages)
             {
                 errorStat = response.ResponsesItems.Select(r => r.Status.ToString()).Aggregate((i, j) => i + " | " + j);
-                isValid = false;
+                response.IsValidAll = false;
             }
 
             var responseInfo = response.ResponsesItems.Select(item => new
@@ -480,8 +491,9 @@ namespace Exchange.Base
             var jsonRespInfo = JsonConvert.SerializeObject(responseInfo, settings);
             var countStat = $"успех/ответов/запросов= ({countIsValid} / {countAll} / {numberPreparedPackages})";
             var timeAction = response.TimeAction;
+            var isValidAll = response.IsValidAll;
             _logger.Information("{Type} ({TimeAction} мс.) {KeyExchange}  РЕЗУЛЬТАТ= {isValid}  {countStat}  [{errorStat}] jsonRespInfo= {jsonRespInfo}",
-                                "ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН.", timeAction, KeyExchange, isValid, countStat, errorStat, jsonRespInfo);
+                                "ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН.", timeAction, KeyExchange, isValidAll, countStat, errorStat, jsonRespInfo);
         }
 
         #endregion
@@ -495,6 +507,7 @@ namespace Exchange.Base
         public void Dispose()
         {
             _inputCycleDataEntryCheker.Dispose();
+            _skippingPeriodChecker.Dispose();
         }
 
         #endregion
