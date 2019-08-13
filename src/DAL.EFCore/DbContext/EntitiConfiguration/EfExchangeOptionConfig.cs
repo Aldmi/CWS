@@ -18,6 +18,11 @@ namespace DAL.EFCore.DbContext.EntitiConfiguration
                 .HasField("_providerOptionMetaData")
                 .IsRequired();
 
+            //связать приватно поле _providerOptionMetaData с типом Provider в БД (типа string).  Для сериализации объекта в JSON.
+            builder.Property<string>("CycleFuncOptionMetaData")
+                .HasField("_cycleFuncOptionMetaData")
+                .IsRequired();
+
             //EfProvider.
             //Связь 1к1.
             //builder.HasOne(e => e.Provider)

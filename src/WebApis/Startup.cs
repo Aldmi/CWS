@@ -158,7 +158,7 @@ namespace WebApiSwc
         private void ApplicationStarted(IApplicationLifetime lifetimeApp, ILifetimeScope scope)
         {
             //ЗАПУСК БЕКГРАУНДА ОПРОСА ШИНЫ ДАННЫХ
-            scope.Resolve<ConsumerMessageBroker4InputData<AdInputType>>();//перед запусклм bg нужно создать ConsumerMessageBroker4InputData
+            scope.Resolve<ConsumerMessageBroker4InputData<AdInputType>>();//перед запуском bg нужно создать ConsumerMessageBroker4InputData
             bool.TryParse(AppConfiguration["MessageBrokerConsumer4InData:AutoStart"], out var autoStart);
             if (autoStart)
             {

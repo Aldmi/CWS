@@ -16,12 +16,8 @@ namespace DAL.EFCore.Entities.Exchange
         [Required]
         public string Key { get; set; }
 
-        public bool AutoStartCycleFunc { get; set; }
-        public QueueMode CycleQueueMode { get; set; }
-
         public int NumberErrorTrying { get; set; }
         public int NumberTimeoutTrying { get; set; }
-        public int NormalFrequencyCycleDataEntry { get; set; }
 
         private string _keyTransportMetaData;
         [NotMapped]
@@ -38,6 +34,14 @@ namespace DAL.EFCore.Entities.Exchange
             get => string.IsNullOrEmpty(_providerOptionMetaData) ? null : JsonConvert.DeserializeObject<EfProviderOption>(_providerOptionMetaData);
             set => _providerOptionMetaData = (value == null) ? null : JsonConvert.SerializeObject(value);
         }
+
+        private string _cycleFuncOptionMetaData;
+        [NotMapped]
+        public EfCycleFuncOption CycleFuncOption
+        {
+            get => string.IsNullOrEmpty(_cycleFuncOptionMetaData) ? null : JsonConvert.DeserializeObject<EfCycleFuncOption>(_cycleFuncOptionMetaData);
+            set => _cycleFuncOptionMetaData = (value == null) ? null : JsonConvert.SerializeObject(value);
+        }
     }
 
     public class EfKeyTransport
@@ -48,5 +52,13 @@ namespace DAL.EFCore.Entities.Exchange
         public TransportType TransportType { get; set; }
 
         #endregion
+    }
+
+    public class EfCycleFuncOption
+    {
+        public bool AutoStartCycleFunc { get; set; }
+        public int SkipInterval { get; set; }
+        public int NormalIntervalCycleDataEntry { get; set; }
+        public QueueMode CycleQueueMode { get; set; }
     }
 }

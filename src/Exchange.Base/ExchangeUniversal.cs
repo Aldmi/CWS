@@ -46,7 +46,7 @@ namespace Exchange.Base
 
         #region prop
         public string KeyExchange => ExchangeOption.Key;
-        public bool AutoStartCycleFunc => ExchangeOption.AutoStartCycleFunc;
+        public bool AutoStartCycleFunc => ExchangeOption.CycleFuncOption.AutoStartCycleFunc;
         public string ProviderName => ExchangeOption.Provider.Name;
         public int NumberErrorTrying => ExchangeOption.NumberErrorTrying;
         public int NumberTimeoutTrying => ExchangeOption.NumberTimeoutTrying;
@@ -106,9 +106,9 @@ namespace Exchange.Base
             _transportBackground = transportBackground;
             _dataProvider = dataProvider;
             _logger = logger;
-            _cycleTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(exchangeOption.CycleQueueMode, MaxDataInQueue);
-            _inputCycleDataEntryCheker= new InputCycleDataEntryCheker(KeyExchange, ExchangeOption.NormalFrequencyCycleDataEntry);
-            _skippingPeriodChecker= new SkippingPeriodChecker(20000);
+            _cycleTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(ExchangeOption.CycleFuncOption.CycleQueueMode, MaxDataInQueue);
+            _inputCycleDataEntryCheker= new InputCycleDataEntryCheker(KeyExchange, ExchangeOption.CycleFuncOption.NormalIntervalCycleDataEntry);
+            _skippingPeriodChecker= new SkippingPeriodChecker(ExchangeOption.CycleFuncOption.SkipInterval);
         }
 
         #endregion

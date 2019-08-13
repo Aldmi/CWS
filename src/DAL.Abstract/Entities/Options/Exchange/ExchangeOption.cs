@@ -12,13 +12,32 @@ namespace DAL.Abstract.Entities.Options.Exchange
 
         public int NumberErrorTrying { get; set; }                // Кол-во ошибочных запросов до переоткрытия соединения. IsConnect=false. ReOpenTransport()
         public int NumberTimeoutTrying { get; set; }              // Кол-во запросов не получивщих ответ за заданное время. IsConnect=false.
-        public int NormalFrequencyCycleDataEntry { get; set; }    // Допустимое время обновления цикл. данных
 
         /// <summary>
         /// Добавление функции циклического обмена на бекгроунд
         /// Флаг учитывается, только при старте сервис.
         /// </summary>
+        public CycleFuncOption CycleFuncOption { get; set; }
+    }
+
+
+    public class CycleFuncOption
+    {
+        /// <summary>
+        /// Добавление функции циклического обмена на бекгроунд
+        /// Флаг учитывается, только при старте сервис.
+        /// </summary>
         public bool AutoStartCycleFunc { get; set; }
+
+        /// <summary>
+        /// Интервал в течении которого пропускаем вызов цикл. функции на обмене
+        /// </summary>
+        public int SkipInterval { get; set; }
+
+        /// <summary>
+        /// Допустимое время обновления цикл. данных
+        /// </summary>
+        public int NormalIntervalCycleDataEntry { get; set; }
 
         /// <summary>
         /// Опции очереди данных для цикл. обмена
