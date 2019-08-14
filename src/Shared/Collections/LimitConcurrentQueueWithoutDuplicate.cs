@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using CSharpFunctionalExtensions;
@@ -74,20 +75,31 @@ namespace Shared.Collections
         /// <returns></returns>
         public Result<T> Enqueue(T item)
         {
-            if (_queueMode == QueueMode.OneItem)
+            switch (_queueMode)
             {
-                _oneItem = item;
-                return Result.Ok(item);
+                case QueueMode.OneItem:
+                    var cmpRes = Comparer(_oneItem, item);
+                    if (cmpRes.IsFailure)
+                    {
+                        _oneItem = item;
+                        return Result.Ok(item);
+                    }
+                    return Result.Fail<T>("Element already exist");
+
+                case QueueMode.QueueExtractLastItem:
+                case QueueMode.QueueNotExtractLastItem:
+                    if (IsFullLimit)
+                        return Result.Fail<T>("Max Limit fail");
+
+                    if (Contains(item))
+                        return Result.Fail<T>("Element already exist");
+
+                    _queue.Enqueue(item);
+                    return Result.Ok(item);
+
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-
-            if (IsFullLimit)
-                return Result.Fail<T>("Max Limit fail");
-
-            if (Contains(item))
-                return Result.Fail<T>("Element already exist");
-
-            _queue.Enqueue(item);
-            return Result.Ok(item);
         }
 
 

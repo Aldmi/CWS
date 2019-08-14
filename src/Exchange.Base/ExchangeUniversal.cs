@@ -246,10 +246,13 @@ namespace Exchange.Base
                 return;
 
             _inputCycleDataEntryCheker.InputDataEntry();
-            _skippingPeriodChecker.StopSkipping();
 
             var dataWrapper = new InDataWrapper<TIn> { Datas = inData.ToList(), DirectHandlerName = directHandlerName };
             var result = _cycleTimeDataQueue.Enqueue(dataWrapper);
+            if (result.IsSuccess) //Добавленны НОВЫЕ данные в очередь.
+            {
+                _skippingPeriodChecker.StopSkipping();
+            }
         }
 
         #endregion

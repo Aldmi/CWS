@@ -253,10 +253,12 @@ namespace Shared.Helpers
                 var func = expr.ToLambda<int>();
                 var arithmeticResult = func();
                 return arithmeticResult;
+
+                expr.
             }
             catch (Exception e)
             {
-                _logger.Fatal($"ОШИБКА В CalculateMathematicFormat:   {e.Message}     {e.StackTrace} ");
+                _logger.Fatal($"ОШИБКА В CalculateMathematicFormat:   {e.Message}     {e.StackTrace}");
                 throw;
             }
         }
