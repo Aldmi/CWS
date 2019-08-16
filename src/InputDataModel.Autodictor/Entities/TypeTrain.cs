@@ -7,11 +7,16 @@
 
         #region ctor
 
-        public TypeTrain(int num)
+        public TypeTrain(int? num)
         {
             Num = num;
-            switch (Num.Value)
+            switch (Num)
             {
+                case null:
+                    NameRu = null;
+                    NameAliasRu = null;
+                    break;
+
                 case 0:
                     NameRu = "Скорый";
                     NameAliasRu = "Скор.";
@@ -23,7 +28,6 @@
                     break;
 
                 case 2:
-                    //TODO: добавить типы
                     break;
 
                 case 3:

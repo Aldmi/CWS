@@ -10,7 +10,12 @@ namespace Shared.Helpers
 {
     public class HelperStringTemplateInsert
     {
+        #region fields
+
         private readonly ILogger _logger;
+        private static readonly object LockerNCalc = new object();
+
+        #endregion
 
 
 
@@ -246,15 +251,16 @@ namespace Shared.Helpers
         {
             try  //DEBUG (Отлов ошибки в Ncalc - многопоточный ошибка работы со словарем)
             {
-                var expr = new Expression(str)
+                lock (LockerNCalc)
                 {
-                    Parameters = { ["rowNumber"] = row }
-                };
-                var func = expr.ToLambda<int>();
-                var arithmeticResult = func();
-                return arithmeticResult;
-
-                expr.
+                    var expr = new Expression(str)
+                    {
+                        Parameters = { ["rowNumber"] = row }
+                    };
+                    var func = expr.ToLambda<int>();
+                    var arithmeticResult = func();
+                    return arithmeticResult;
+                }
             }
             catch (Exception e)
             {
