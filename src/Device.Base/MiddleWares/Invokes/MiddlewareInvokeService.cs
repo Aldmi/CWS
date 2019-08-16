@@ -98,6 +98,12 @@ namespace DeviceForExchange.MiddleWares.Invokes
 
         private void HandleInvoke(InputData<TIn> inData)
         {
+            //TODO: Можно кешировать результат res. По внешнему флагу IsСache выстваляемому в Device.
+            //IsСache == true => HandleInvoke не вызываем передаем предыдушший результат.
+            //IsСache == false => HandleInvoke вызываем переписываем результат.
+            //Device управляет IsСache след. образом: Если режим ByTimer, то пока все обмены не отправили предыдущую порцию данных IsСache = true (берем из кеша).
+            //Когда все обмены отправили данные IsСache = false (вычисляем новые данные).
+            //Это зашита от потери данных при использовании Mem конверторов, которые при каждом вызове выдают новые данные и если система отправки (очередь обменов) медленнее чем время предобработки, то данные потеряются.
             var res = _invoker.HandleInvoke(inData);
             InvokeIsCompleteRx.OnNext(res);
         }
