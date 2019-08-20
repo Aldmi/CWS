@@ -32,7 +32,7 @@ namespace Exchange.Base
         protected readonly ExchangeOption ExchangeOption;
         private readonly ITransport _transport;
         private readonly ITransportBackground _transportBackground;
-        private readonly IExchangeDataProvider<TIn, ResponseDataItem<TIn>> _dataProvider;         //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
+        private readonly IExchangeDataProvider<TIn, ResponseInfo> _dataProvider;         //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
         private readonly ILogger _logger;
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(QueueMode.QueueExtractLastItem, MaxDataInQueue);   //Очередь данных для SendOneTimeData().
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue; //Очередь данных для SendCycleTimeData().
@@ -98,7 +98,7 @@ namespace Exchange.Base
         public ExchangeUniversal(ExchangeOption exchangeOption,
                                  ITransport transport,
                                  ITransportBackground transportBackground,
-                                 IExchangeDataProvider<TIn, ResponseDataItem<TIn>> dataProvider,
+                                 IExchangeDataProvider<TIn, ResponseInfo> dataProvider,
                                  ILogger logger)
         {
             ExchangeOption = exchangeOption;
@@ -376,9 +376,7 @@ namespace Exchange.Base
                             _countErrorTrying = 0;
                             _countTimeoutTrying = 0;
                             LastSendData = provider.InputData;
-                            transportResp.ResponseData = provider.OutputData.ResponseData;
-                            transportResp.Encoding = provider.OutputData.Encoding;
-                            transportResp.IsOutDataValid = provider.OutputData.IsOutDataValid;
+                            transportResp.ResponseInfo = provider.OutputData;
                             break;
 
                         //ТРАНСПОРТ НЕ ОТКРЫТ.
@@ -467,7 +465,7 @@ namespace Exchange.Base
         {
             var numberPreparedPackages = response.ResponsesItems.Count;                                              //кол-во подготовленных к отправке пакетов        
             var countAll = response.ResponsesItems.Count(resp => resp.Status != StatusDataExchange.EndWithTimeout);  //кол-во ВСЕХ полученных ответов
-            var countIsValid = response.ResponsesItems.Count(resp => resp.IsOutDataValid);                           //кол-во ВАЛИДНЫХ ответов
+            var countIsValid = response.ResponsesItems.Count(resp => resp.ResponseInfo.IsOutDataValid);              //кол-во ВАЛИДНЫХ ответов
             string errorStat = string.Empty;
             response.IsValidAll = true;
             if (countIsValid < numberPreparedPackages)

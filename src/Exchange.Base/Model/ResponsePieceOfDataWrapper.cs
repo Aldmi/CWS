@@ -16,14 +16,12 @@ namespace Exchange.Base.Model
         public DataAction DataAction { get; set; }                 //Действие
 
         public long TimeAction { get; set; }                       //Время выполнения обмена (на порцию данных)
-        public bool IsValidAll { get; set; }                       //Флаг фалидности всех ответов
+        public bool IsValidAll { get; set; }                       //Флаг валидности всех ответов
 
         public Exception ExceptionExchangePipline { get; set; }    //Критическая Ошибка обработки данных в конвеере.
         public Dictionary<string, string> MessageDict { get; set; }        //Доп. информация
         public List<ResponseDataItem<TIn>> ResponsesItems { get; set; } = new List<ResponseDataItem<TIn>>();
-               
-        public Dictionary<string, dynamic> DataBag { get; set; }     //Не типизированный контейнер для передачи любых данных
-
+        //public Dictionary<string, dynamic> DataBag { get; set; }     //Не типизированный контейнер для передачи любых данных
     }
 
 
@@ -40,7 +38,14 @@ namespace Exchange.Base.Model
         public InDataWrapper<TIn> RequestData { get; set; }    //Данные запроса (в сыром виде)
         public Exception TransportException { get; set; }      //Ошибка передачи данных
 
+        public ResponseInfo ResponseInfo { get; set; }         //Ответ
+    }
+
+
+    public class ResponseInfo
+    { 
         public string ResponseData { get; set; }              //Ответ от устройства
+        public dynamic StronglyTypedResponse { get; set; }        // Типизированный Ответ от устройства (Преобразованный ResponseData)
         public string Encoding { get; set; }                  //Кодировка ответа    
         public bool IsOutDataValid { get; set; }              //Флаг валидности ответа
     }

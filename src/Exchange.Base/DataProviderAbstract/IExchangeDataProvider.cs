@@ -22,6 +22,6 @@ namespace Exchange.Base.DataProviderAbstract
         Subject<IExchangeDataProvider<TInput, TOutput>> RaiseSendDataRx { get; }     //Событие отправки данных, в процессе обработки их конвеером.
 
         ProviderOption GetCurrentOptionRt();                                          //Вернуть спсиок текущих опций (опции могут быть поменены и отличатсч от опций из БД)
-        bool SetCurrentOptionRt(ProviderOption optionNew);                                      //Установить новые настройки для провайдера. (конкретный провайдер сам возьмет нужные ему настройки)
+        bool SetCurrentOptionRt(ProviderOption optionNew);                            //Установить новые настройки для провайдера. (конкретный провайдер сам возьмет нужные ему настройки)
     }
 }

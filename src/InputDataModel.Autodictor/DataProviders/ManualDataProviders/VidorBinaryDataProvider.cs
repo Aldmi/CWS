@@ -12,7 +12,7 @@ using InputDataModel.Autodictor.Model;
 
 namespace InputDataModel.Autodictor.DataProviders.ManualDataProviders
 {
-    public class VidorBinaryDataProvider : BaseDataProvider, IExchangeDataProvider<AdInputType, ResponseDataItem<AdInputType>>
+    public class VidorBinaryDataProvider : BaseDataProvider, IExchangeDataProvider<AdInputType, ResponseInfo>
     {
         #region field
 
@@ -72,7 +72,7 @@ namespace InputDataModel.Autodictor.DataProviders.ManualDataProviders
 
         public int CountGetDataByte { get; }
         public int CountSetDataByte { get; }
-        public Subject<IExchangeDataProvider<AdInputType, ResponseDataItem<AdInputType>>> RaiseSendDataRx { get; }
+        public Subject<IExchangeDataProvider<AdInputType, ResponseInfo>> RaiseSendDataRx { get; }
 
         public void SendDataIsCompleted()
         {
@@ -80,7 +80,7 @@ namespace InputDataModel.Autodictor.DataProviders.ManualDataProviders
         }
 
         public InDataWrapper<AdInputType> InputData { get; set; }
-        public ResponseDataItem<AdInputType> OutputData { get; set; }
+        public ResponseInfo OutputData { get; set; }
         public bool IsOutDataValid { get; }
         public Subject<ResponseDataItem<AdInputType>> OutputDataChangeRx { get; }
         public string ProviderName { get; set; }

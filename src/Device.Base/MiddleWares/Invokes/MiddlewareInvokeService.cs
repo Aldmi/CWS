@@ -12,13 +12,24 @@ namespace DeviceForExchange.MiddleWares.Invokes
 {
     public class MiddlewareInvokeService<TIn> : IDisposable
     {
+        #region fields
+
         private readonly InvokerOutput _option;
         private readonly ISupportMiddlewareInvoke<TIn> _invoker;
         private readonly ILogger _logger;
-  
         private readonly Timer _timerInvoke;
-
         private InputData<TIn> _buferInData;
+
+        #endregion
+
+
+
+        #region prop
+
+        /// <summary>
+        /// Заполнить ыходной буффер.
+        /// Если данные новые, то перезапускается таймер, перезаписывается буффер и сразу вызывается HandleInvoke
+        /// </summary>
         private InputData<TIn> BuferInData
         {
             get => _buferInData;
@@ -35,6 +46,9 @@ namespace DeviceForExchange.MiddleWares.Invokes
                 }
             }
         }
+
+        #endregion
+
 
 
         #region ctor
@@ -103,6 +117,7 @@ namespace DeviceForExchange.MiddleWares.Invokes
             //IsСache == false => HandleInvoke вызываем переписываем результат.
             //Device управляет IsСache след. образом: Если режим ByTimer, то пока все обмены не отправили предыдущую порцию данных IsСache = true (берем из кеша).
             //Когда все обмены отправили данные IsСache = false (вычисляем новые данные).
+            //При обновлении данных на входе IsСache = false.
             //Это зашита от потери данных при использовании Mem конверторов, которые при каждом вызове выдают новые данные и если система отправки (очередь обменов) медленнее чем время предобработки, то данные потеряются.
             var res = _invoker.HandleInvoke(inData);
             InvokeIsCompleteRx.OnNext(res);

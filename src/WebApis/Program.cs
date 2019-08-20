@@ -21,9 +21,9 @@ namespace WebApiSwc
         public static void ViewVersionOnConsole()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            const string version = "CWS Ver2.8";
+            const string version = "CWS Ver2.9";
             Console.Title = version;
-            Console.WriteLine($"{version}  [13.08.2019]  [Add CycleFuncOption in ExchangeOption]");
+            Console.WriteLine($"{version}  [16.08.2019]  [Add TODO: for Cash HandleInvoke result in MiddlewareInvokeService]");
         }
 
 

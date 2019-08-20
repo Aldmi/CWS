@@ -12,6 +12,7 @@ using Exchange.Base.Model;
 using InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules;
 using InputDataModel.Autodictor.Extensions;
 using InputDataModel.Autodictor.Model;
+using InputDataModel.Autodictor.StronglyTypedResponse;
 using InputDataModel.Base;
 using Serilog;
 using Shared.Extensions;
@@ -19,11 +20,11 @@ using Shared.Helpers;
 
 namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 {
-    public class ByRulesDataProvider : BaseDataProvider, IExchangeDataProvider<AdInputType, ResponseDataItem<AdInputType>>
+    public class ByRulesDataProvider : BaseDataProvider, IExchangeDataProvider<AdInputType, ResponseInfo>
     {
         #region field
 
-        private readonly List<Rule> _rules;                   // Набор правил, для обработки данных.
+        private readonly List<Rule> _rules;        // Набор правил, для обработки данных.
         private ViewRuleTransferWrapper _current;  // Созданный запрос, после подготовки данных. 
         private readonly ILogger _logger;
 
@@ -58,7 +59,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         public string ProviderName { get; }
         public Dictionary<string, string> StatusDict { get; } = new Dictionary<string, string>();
         public InDataWrapper<AdInputType> InputData { get; set; }
-        public ResponseDataItem<AdInputType> OutputData { get; set; }
+        public ResponseInfo OutputData { get; set; }
         public bool IsOutDataValid { get; set; }
         public int TimeRespone => _current.Response.Option.TimeRespone;        //Время на ответ
         public int CountSetDataByte => _current.Response.Option.Lenght;        //Кол-во принимаемых байт в ответе
@@ -69,7 +70,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         #region RxEvent
 
-        public Subject<IExchangeDataProvider<AdInputType, ResponseDataItem<AdInputType>>> RaiseSendDataRx { get; } = new Subject<IExchangeDataProvider<AdInputType, ResponseDataItem<AdInputType>>>();
+        public Subject<IExchangeDataProvider<AdInputType, ResponseInfo>> RaiseSendDataRx { get; } = new Subject<IExchangeDataProvider<AdInputType, ResponseInfo>>();
 
         #endregion
 
@@ -107,7 +108,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             if (data == null)
             {
                 IsOutDataValid = false;
-                OutputData = new ResponseDataItem<AdInputType>
+                OutputData = new ResponseInfo
                 {
                     ResponseData = null,
                     Encoding = format,
@@ -116,12 +117,18 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 return false;
             }
             var stringResponse = data.ArrayByteToString(format);
+
+            //Создать строго типизитрованный ответ на базе строки сырого ответа
+            //Тут будет фабрика которая создаст тип по имени _current.Response.Option.StronglyTypedName
+            var stronglyTypedResponse = new EkrimStronglyTypedResp(stringResponse);
+            
             IsOutDataValid = (stringResponse == stringResponseRef); //TODO: как лутчше сравнивать строки???
-            OutputData = new ResponseDataItem<AdInputType>
+            OutputData = new ResponseInfo
             {
                 ResponseData = stringResponse,
                 Encoding = format,
-                IsOutDataValid = IsOutDataValid
+                IsOutDataValid = IsOutDataValid,
+                StronglyTypedResponse = stronglyTypedResponse //DEBUG
             };
             var diffResp = (!IsOutDataValid) ? $"ПринятоБайт/ОжидаемБайт= {data.Length}/{_current.Response.Option.Lenght}" : string.Empty;
             StatusDict["SetDataByte.StringResponse"] = $"{stringResponseRef} ?? {stringResponse}   diffResp=  {diffResp}";

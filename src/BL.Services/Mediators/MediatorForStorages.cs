@@ -46,7 +46,7 @@ namespace BL.Services.Mediators
         private readonly BackgroundStorageService _backgroundStorageService;
         private readonly TransportStorageService _transportStorageService;
         private readonly IEventBus _eventBus;
-        private readonly IIndex<string, Func<ProviderOption, IExchangeDataProvider<TIn, ResponseDataItem<TIn>>>> _dataProviderFactory;
+        private readonly IIndex<string, Func<ProviderOption, IExchangeDataProvider<TIn, ResponseInfo>>> _dataProviderFactory;
         private readonly Func<ProduserOption, Owned<IProduser>> _produser4DeviceRespFactory;
 
         private readonly AppConfigWrapper _appConfigWrapper;
@@ -65,7 +65,7 @@ namespace BL.Services.Mediators
             BackgroundStorageService backgroundStorageService,
             TransportStorageService transportStorageService,
             IEventBus eventBus,     
-            IIndex<string, Func<ProviderOption, IExchangeDataProvider<TIn,ResponseDataItem<TIn>>>> dataProviderFactory,
+            IIndex<string, Func<ProviderOption, IExchangeDataProvider<TIn, ResponseInfo>>> dataProviderFactory,
             Func<ProduserOption, Owned<IProduser>> produser4DeviceRespFactory,
             AppConfigWrapper appConfigWrapper,
             ILogger logger)
