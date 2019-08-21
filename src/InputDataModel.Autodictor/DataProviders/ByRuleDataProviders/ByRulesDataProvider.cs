@@ -13,10 +13,12 @@ using InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules;
 using InputDataModel.Autodictor.Extensions;
 using InputDataModel.Autodictor.Model;
 using InputDataModel.Autodictor.StronglyTypedResponse;
+using InputDataModel.Autodictor.StronglyTypedResponse.Types;
 using InputDataModel.Base;
 using Serilog;
 using Shared.Extensions;
 using Shared.Helpers;
+using Shared.Types;
 
 namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 {
@@ -119,20 +121,40 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
             var stringResponse = data.ArrayByteToString(format);
 
             //Создать строго типизитрованный ответ на базе строки сырого ответа
-            //Тут будет фабрика которая создаст тип по имени _current.Response.Option.StronglyTypedName
-            var stronglyTypedResponse = new EkrimStronglyTypedResp(stringResponse);
-            
+            var stronglyTypedResponse = CreateStronglyTypedResponseByOption(_current.Response.Option.StronglyTypedName, stringResponse);
             IsOutDataValid = (stringResponse == stringResponseRef); //TODO: как лутчше сравнивать строки???
             OutputData = new ResponseInfo
             {
                 ResponseData = stringResponse,
                 Encoding = format,
                 IsOutDataValid = IsOutDataValid,
-                StronglyTypedResponse = stronglyTypedResponse //DEBUG
+                StronglyTypedResponse = stronglyTypedResponse
             };
             var diffResp = (!IsOutDataValid) ? $"ПринятоБайт/ОжидаемБайт= {data.Length}/{_current.Response.Option.Lenght}" : string.Empty;
             StatusDict["SetDataByte.StringResponse"] = $"{stringResponseRef} ?? {stringResponse}   diffResp=  {diffResp}";
             return IsOutDataValid;
+        }
+
+        /// <summary>
+        ///Если указанно имя типа для ответоа, то мы его создаем через фабрику.
+        /// </summary>
+        private StronglyTypedRespBase CreateStronglyTypedResponseByOption(string stronglyTypedName, string stringResponse)
+        {
+            StronglyTypedRespBase stronglyTypedResponse = null;
+            StatusDict["SetDataByte.StronglyTypedResponse"] = null;
+            if (!string.IsNullOrEmpty(_current.Response.Option.StronglyTypedName))  
+            {
+                try
+                {
+                    stronglyTypedResponse = StronglyTypedResponseFactory.CreateStronglyTypedResponse(stronglyTypedName, stringResponse);
+                    StatusDict["SetDataByte.StronglyTypedResponse"] = stronglyTypedResponse.ToString();
+                }
+                catch (NotSupportedException ex)
+                {
+                    StatusDict["SetDataByte.StronglyTypedResponse"] = $"ОШИБКА= {ex}";
+                }
+            }
+            return stronglyTypedResponse;
         }
 
         #endregion

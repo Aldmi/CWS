@@ -49,7 +49,8 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption
         public string Format { get; set; }
         public int Lenght { get; set; }                     
         public int TimeRespone { get; set; }
-        public string Body { get; set; }                     
+        public string Body { get; set; }
+        public string StronglyTypedName { get; set; }
     }
 
 }

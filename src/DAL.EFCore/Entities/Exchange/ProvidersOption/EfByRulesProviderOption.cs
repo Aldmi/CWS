@@ -49,5 +49,6 @@ namespace DAL.EFCore.Entities.Exchange.ProvidersOption
         public int Lenght { get; set; }
         public int TimeRespone { get; set; }
         public string Body { get; set; }
+        public string StronglyTypedName { get; set; }
     }
 }

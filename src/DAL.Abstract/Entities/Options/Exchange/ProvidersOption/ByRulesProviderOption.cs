@@ -55,7 +55,7 @@ namespace DAL.Abstract.Entities.Options.Exchange.ProvidersOption
     public class ResponseOption : RequestResonseOption
     {
         public int Lenght { get; set; }                      // Ожидаемое кол-во байт ОТВЕТА
-        public int TimeRespone { get; set; }
-        // public string StronglyTypedName  { get; set; }       // Название типа в которое преобразуется Body. (Типизированный ответ)
+        public int TimeRespone { get; set; }                 // Время ответа
+        public string StronglyTypedName  { get; set; }       // Название типа в которое преобразуется Body. (Типизированный ответ)
     }
 }

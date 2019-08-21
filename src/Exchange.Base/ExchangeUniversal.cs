@@ -481,7 +481,8 @@ namespace Exchange.Base
                 Request = item.MessageDict["GetDataByte.Request"],
                 RequestBase = item.MessageDict["GetDataByte.RequestBase"],
                 StringResponseRef = item.MessageDict.ContainsKey("SetDataByte.StringResponse") ? item.MessageDict["SetDataByte.StringResponse"] : null,
-                TimeResponse = item.MessageDict["TimeResponse"]
+                TimeResponse = item.MessageDict["TimeResponse"],
+                StronglyTypedResponse = item.MessageDict["SetDataByte.StronglyTypedResponse"]
             }).ToList();
 
             var settings = new JsonSerializerSettings
