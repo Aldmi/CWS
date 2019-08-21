@@ -36,7 +36,7 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         #region ctor
 
-        public ByRulesDataProvider(ProviderOption providerOption, ILogger logger) : base(logger)
+        public ByRulesDataProvider(IStronglyTypedResponseFactory stronglyTypedResponseFactory, ProviderOption providerOption, ILogger logger) : base(stronglyTypedResponseFactory, logger)
         {
             var option = providerOption.ByRulesProviderOption;
             if (option == null)

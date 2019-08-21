@@ -4,9 +4,9 @@ using Shared.Types;
 
 namespace InputDataModel.Autodictor.StronglyTypedResponse
 {
-    public class StronglyTypedResponseFactory
+    public class AutodictorStronglyTypedResponseFactory : IStronglyTypedResponseFactory
     {
-        public static StronglyTypedRespBase CreateStronglyTypedResponse(string stronglyTypedName, string response)
+        public StronglyTypedRespBase CreateStronglyTypedResponse(string stronglyTypedName, string response)
         {
             switch (stronglyTypedName)
             {
@@ -17,6 +17,5 @@ namespace InputDataModel.Autodictor.StronglyTypedResponse
                     throw new NotSupportedException($"Фабрикой строго типизированных ответов Не поддерживает {stronglyTypedName}");
             }
         }
-
     }
 }
