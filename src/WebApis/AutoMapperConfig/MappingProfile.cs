@@ -8,7 +8,6 @@ using DeviceForExchange;
 using Exchange.Base;
 using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using WebApiSwc.DTO.JSON.DevicesStateDto;
 using WebApiSwc.DTO.JSON.InputTypesDto;
 using WebApiSwc.DTO.JSON.OptionsDto.DeviceOption;

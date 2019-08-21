@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq.Dynamic.Core.CustomTypeProviders;
-using System.Threading;
 using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
 using DeviceForExchange.MiddleWares.Converters.StringConverters;
 using FluentAssertions;

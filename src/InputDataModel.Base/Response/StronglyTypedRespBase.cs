@@ -1,4 +1,4 @@
-﻿namespace Shared.Types
+﻿namespace InputDataModel.Base.Response
 {
     /// <summary>
     /// Базовый тип для создания строго типизированных ответов из строкового представления ответа.

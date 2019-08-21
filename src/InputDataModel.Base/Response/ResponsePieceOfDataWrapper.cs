@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using InputDataModel.Base;
+using InputDataModel.Base.InData;
 using Shared.Enums;
+using Shared.Types;
 
-namespace Exchange.Base.Model
+namespace InputDataModel.Base.Response
 {
     /// <summary>
     /// Ответ от устройства на отправку порции данных.
@@ -41,12 +42,14 @@ namespace Exchange.Base.Model
         public ResponseInfo ResponseInfo { get; set; }         //Ответ
     }
 
-
+    /// <summary>
+    /// Вся информация про ответ
+    /// </summary>
     public class ResponseInfo
     { 
-        public string ResponseData { get; set; }              //Ответ от устройства
-        public dynamic StronglyTypedResponse { get; set; }        // Типизированный Ответ от устройства (Преобразованный ResponseData)
-        public string Encoding { get; set; }                  //Кодировка ответа    
-        public bool IsOutDataValid { get; set; }              //Флаг валидности ответа
+        public string ResponseData { get; set; }                                //Ответ от устройства
+        public StronglyTypedRespBase StronglyTypedResponse { get; set; }        //Типизированный Ответ от устройства (Преобразованный ResponseData)
+        public string Encoding { get; set; }                                    //Кодировка ответа    
+        public bool IsOutDataValid { get; set; }                               //Флаг валидности ответа
     }
 }

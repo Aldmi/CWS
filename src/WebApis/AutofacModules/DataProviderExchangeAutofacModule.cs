@@ -1,10 +1,11 @@
 ﻿using Autofac;
 using Exchange.Base.DataProviderAbstract;
-using Exchange.Base.Model;
 using InputDataModel.Autodictor.DataProviders.ByRuleDataProviders;
 using InputDataModel.Autodictor.DataProviders.ManualDataProviders;
 using InputDataModel.Autodictor.Model;
 using InputDataModel.Autodictor.StronglyTypedResponse;
+using InputDataModel.Base;
+using InputDataModel.Base.Response;
 using Shared.Types;
 
 namespace WebApiSwc.AutofacModules

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using DeviceForExchnage.Benchmark.Datas;
 using DeviceForExchnage.Benchmark.NotParallel;
 using InputDataModel.Autodictor.Model;

@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Subjects;
-using System.Text;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Exchange.Base.DataProviderAbstract;
-using Exchange.Base.Model;
 using InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules;
 using InputDataModel.Autodictor.Extensions;
 using InputDataModel.Autodictor.Model;
-using InputDataModel.Autodictor.StronglyTypedResponse;
-using InputDataModel.Autodictor.StronglyTypedResponse.Types;
 using InputDataModel.Base;
+using InputDataModel.Base.InData;
+using InputDataModel.Base.Providers;
+using InputDataModel.Base.Response;
 using Serilog;
 using Shared.Extensions;
 using Shared.Helpers;
@@ -22,7 +20,7 @@ using Shared.Types;
 
 namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 {
-    public class ByRulesDataProvider : BaseDataProvider, IExchangeDataProvider<AdInputType, ResponseInfo>
+    public class ByRulesDataProvider : BaseDataProvider<AdInputType>, IExchangeDataProvider<AdInputType, ResponseInfo>
     {
         #region field
 

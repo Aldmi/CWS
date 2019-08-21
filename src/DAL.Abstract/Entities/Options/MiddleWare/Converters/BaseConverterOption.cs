@@ -1,6 +1,4 @@
-﻿using System.Net.Mail;
-
-namespace DAL.Abstract.Entities.Options.MiddleWare.Converters
+﻿namespace DAL.Abstract.Entities.Options.MiddleWare.Converters
 {
     public abstract class BaseConverterOption
     {

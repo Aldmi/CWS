@@ -1,4 +1,4 @@
-﻿namespace Shared.Types
+﻿namespace InputDataModel.Base.Response
 {
     public interface IStronglyTypedResponseFactory
     {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Reactive.Subjects;
-using System.Text;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using Exchange.Base.Model;
+using InputDataModel.Base;
+using InputDataModel.Base.InData;
 using Transport.Base.DataProvidert;
 
 namespace Exchange.Base.DataProviderAbstract

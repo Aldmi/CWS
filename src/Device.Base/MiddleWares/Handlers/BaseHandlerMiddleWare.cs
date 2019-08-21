@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using DeviceForExchange.MiddleWares.Converters;
 
 namespace DeviceForExchange.MiddleWares.Handlers

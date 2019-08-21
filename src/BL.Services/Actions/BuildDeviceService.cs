@@ -6,6 +6,7 @@ using BL.Services.Exceptions;
 using BL.Services.Mediators;
 using DeviceForExchange;
 using InputDataModel.Base;
+using InputDataModel.Base.InData;
 
 namespace BL.Services.Actions
 {

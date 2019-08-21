@@ -3,6 +3,7 @@ using System.Linq;
 using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
 using InputDataModel.Base;
+using InputDataModel.Base.InData;
 
 namespace DeviceForExchnage.Test.Datas
 {

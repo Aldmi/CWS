@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using InputDataModel.Base;
+using InputDataModel.Base.InData;
 
 namespace DeviceForExchange.MiddleWares.Invokes
 {

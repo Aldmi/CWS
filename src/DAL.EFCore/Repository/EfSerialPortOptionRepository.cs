@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using AutoMapper.Extensions.ExpressionMapping;
-using DAL.Abstract.Abstract;
 using DAL.Abstract.Concrete;
 using DAL.Abstract.Entities.Options.Transport;
 using DAL.EFCore.Entities.Transport;
-using DAL.EFCore.Mappers;
-using Microsoft.EntityFrameworkCore;
 
 namespace DAL.EFCore.Repository
 {

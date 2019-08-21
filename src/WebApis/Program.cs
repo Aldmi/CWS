@@ -3,7 +3,6 @@ using System.Text;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
 
 namespace WebApiSwc

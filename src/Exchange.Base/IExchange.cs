@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using Exchange.Base.Model;
 using Exchange.Base.RxModel;
 using InputDataModel.Base;
+using InputDataModel.Base.InData;
+using InputDataModel.Base.Response;
 using Shared.Types;
 using Transport.Base.RxModel;
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DAL.EFCore.DbContext.EntitiConfiguration;
 using DAL.EFCore.Entities.Device;
 using DAL.EFCore.Entities.Exchange;

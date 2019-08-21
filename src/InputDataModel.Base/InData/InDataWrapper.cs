@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using InputDataModel.Base;
 
-namespace Exchange.Base.Model
+namespace InputDataModel.Base.InData
 {
     /// <summary>
     /// Контейнер-оболочка над входными данными для обменов

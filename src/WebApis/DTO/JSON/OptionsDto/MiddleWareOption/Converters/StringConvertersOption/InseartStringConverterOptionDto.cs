@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using DAL.Abstract.Entities.Options.MiddleWare.Converters;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConvertersOption
 {

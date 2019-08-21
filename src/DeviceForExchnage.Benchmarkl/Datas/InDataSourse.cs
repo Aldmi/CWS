@@ -7,6 +7,7 @@ using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
 using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
 using InputDataModel.Base;
+using InputDataModel.Base.InData;
 
 namespace DeviceForExchnage.Benchmark.Datas
 {

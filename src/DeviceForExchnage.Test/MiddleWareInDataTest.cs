@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Running;
-using CSharpFunctionalExtensions;
+﻿using System.Linq;
 using DAL.Abstract.Entities.Options.MiddleWare;
 using DeviceForExchange.MiddleWares;
 using DeviceForExchnage.Test.Datas;
 using FluentAssertions;
 using InputDataModel.Autodictor.Model;
-using InputDataModel.Base;
 using Moq;
 using Serilog;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace DeviceForExchnage.Test
 {

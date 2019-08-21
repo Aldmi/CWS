@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Spatial;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;

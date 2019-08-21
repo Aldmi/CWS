@@ -7,12 +7,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Exchange.Base.DataProviderAbstract;
-using Exchange.Base.Model;
 using InputDataModel.Autodictor.Model;
+using InputDataModel.Base;
+using InputDataModel.Base.InData;
+using InputDataModel.Base.Providers;
+using InputDataModel.Base.Response;
 
 namespace InputDataModel.Autodictor.DataProviders.ManualDataProviders
 {
-    public class VidorBinaryDataProvider : BaseDataProvider, IExchangeDataProvider<AdInputType, ResponseInfo>
+    public class VidorBinaryDataProvider : BaseDataProvider<AdInputType>, IExchangeDataProvider<AdInputType, ResponseInfo>
     {
         #region field
 
@@ -72,6 +75,11 @@ namespace InputDataModel.Autodictor.DataProviders.ManualDataProviders
 
         public int CountGetDataByte { get; }
         public int CountSetDataByte { get; }
+        Task IExchangeDataProvider<AdInputType, ResponseInfo>.StartExchangePipeline(InDataWrapper<AdInputType> inData)
+        {
+            return StartExchangePipeline(inData);
+        }
+
         public Subject<IExchangeDataProvider<AdInputType, ResponseInfo>> RaiseSendDataRx { get; }
 
         public void SendDataIsCompleted()
@@ -80,6 +88,12 @@ namespace InputDataModel.Autodictor.DataProviders.ManualDataProviders
         }
 
         public InDataWrapper<AdInputType> InputData { get; set; }
+        InDataWrapper<AdInputType> IExchangeDataProvider<AdInputType, ResponseInfo>.InputData
+        {
+            get => InputData;
+            set => InputData = value;
+        }
+
         public ResponseInfo OutputData { get; set; }
         public bool IsOutDataValid { get; }
         public Subject<ResponseDataItem<AdInputType>> OutputDataChangeRx { get; }

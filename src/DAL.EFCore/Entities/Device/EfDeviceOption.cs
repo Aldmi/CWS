@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DAL.Abstract.Entities.Options.MiddleWare;
-using DAL.EFCore.Entities.Exchange.ProvidersOption;
 using Newtonsoft.Json;
 
 namespace DAL.EFCore.Entities.Device

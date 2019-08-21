@@ -7,6 +7,7 @@ using BL.Services.MessageBroker;
 using Infrastructure.MessageBroker.Abstract;
 using Infrastructure.MessageBroker.Options;
 using InputDataModel.Base;
+using InputDataModel.Base.InData;
 using Microsoft.Extensions.Configuration;
 using Worker.Background.Abstarct;
 using Worker.Background.Concrete.HostingBackground;

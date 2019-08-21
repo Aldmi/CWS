@@ -7,6 +7,7 @@ using BL.Services.Exceptions;
 using BL.Services.Mediators;
 using Exchange.Base;
 using InputDataModel.Base;
+using InputDataModel.Base.InData;
 using Shared.Types;
 
 

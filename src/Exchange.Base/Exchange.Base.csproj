@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Worker.Background\Worker.Background.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
+
 </Project>

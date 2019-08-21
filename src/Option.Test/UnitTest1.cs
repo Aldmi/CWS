@@ -1,7 +1,4 @@
-using DAL.Abstract.Entities.Options.Device;
-using FluentAssertions;
 using Shared.CrcCalculate;
-using Shared.Helpers;
 using Xunit;
 
 namespace Option.Test

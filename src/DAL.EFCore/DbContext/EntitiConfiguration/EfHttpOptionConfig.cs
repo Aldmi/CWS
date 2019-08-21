@@ -1,5 +1,4 @@
-﻿using DAL.EFCore.Entities.Device;
-using DAL.EFCore.Entities.Transport;
+﻿using DAL.EFCore.Entities.Transport;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

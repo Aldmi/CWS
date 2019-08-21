@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Dynamic.Core;
-using System.Text.RegularExpressions;
-using Exchange.Base.Model;
-using InputDataModel.Autodictor.Model;
-using InputDataModel.Base;
-using Newtonsoft.Json;
+﻿using InputDataModel.Base.InData;
+using InputDataModel.Base.Response;
 using Serilog;
 using Shared.Types;
 
-namespace InputDataModel.Autodictor.DataProviders
+namespace InputDataModel.Base.Providers
 {
-    public class BaseDataProvider
+    //TODO: после созданния нескольких провайдеров, вынести обший функционал в этот класс
+    public class BaseDataProvider<TInput>
     {
-        protected readonly IStronglyTypedResponseFactory StronglyTypedResponseFactory;
+        protected readonly IStronglyTypedResponseFactory StronglyTypedResponseFactory;  //TODO: вынести обработку из SetDataByte потомков в базовый класс
         private readonly ILogger _logger;
 
 
@@ -30,28 +24,6 @@ namespace InputDataModel.Autodictor.DataProviders
         #endregion
 
 
-
-        ///// <summary>
-        ///// Определяет обработчик входных данных.
-        ///// Команда или Данные.
-        ///// </summary>
-        ///// <param name="command">Идентификатор команды в входных данных</param>
-        ///// <param name="handlerName">Имя обработчика входных данных</param>
-        ///// <returns></returns>
-        //public RuleSwitcher4InData SwitchInDataHandler(Command4Device command, string handlerName)
-        //{
-        //    var commandPrefix = "Command_";
-        //    var commandName = $"{commandPrefix}{command.ToString()}";  //Command_On, Command_Off, Command_Restart, Command_Clear
-        //    if(commandName.Equals(handlerName))
-        //        return RuleSwitcher4InData.CommandHanler;
-
-        //    if((command == Command4Device.None) && (!handlerName.Contains(commandPrefix)))
-        //        return RuleSwitcher4InData.InDataHandler;
-
-        //    return RuleSwitcher4InData.None;
-        //}
-
-
         /// <summary>
         /// Определяет обработчик входных данных.
         /// Команда или Данные.
@@ -59,7 +31,7 @@ namespace InputDataModel.Autodictor.DataProviders
         /// <param name="inData">Обертка над входными данными</param>
         /// <param name="handlerName">Имя обработчика входных данных</param>
         /// <returns></returns>
-        public RuleSwitcher4InData SwitchInDataHandler(InDataWrapper<AdInputType> inData, string handlerName)
+        public RuleSwitcher4InData SwitchInDataHandler(InDataWrapper<TInput> inData, string handlerName)
         {
             var command = inData.Command;
             var directHandlerName = inData.DirectHandlerName ?? string.Empty;

@@ -1,6 +1,4 @@
-﻿using Exchange.Base;
-
-namespace WebApiSwc.DTO.JSON.DevicesStateDto
+﻿namespace WebApiSwc.DTO.JSON.DevicesStateDto
 {
     public class ExchangeStateDto
     {

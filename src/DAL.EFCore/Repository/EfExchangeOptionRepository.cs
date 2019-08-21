@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using DAL.Abstract.Concrete;
-using DAL.Abstract.Entities.Options.Device;
 using DAL.Abstract.Entities.Options.Exchange;
 using DAL.EFCore.Entities.Exchange;
-using DAL.EFCore.Mappers;
 
 namespace DAL.EFCore.Repository
 {

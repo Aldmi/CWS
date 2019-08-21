@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DAL.Abstract.Entities.Options.Device;
 using DAL.Abstract.Entities.Options.Exchange;
-using DAL.Abstract.Entities.Options.MiddleWare;
 using DAL.Abstract.Entities.Options.Transport;
 using DAL.EFCore.Entities.Device;
 using DAL.EFCore.Entities.Exchange;

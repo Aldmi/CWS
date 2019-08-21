@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DAL.Abstract.Entities.Options.Transport;
 
 namespace DAL.EFCore.Entities.Transport
 {

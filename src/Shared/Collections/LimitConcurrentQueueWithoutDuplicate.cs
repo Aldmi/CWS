@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using CSharpFunctionalExtensions;
 using KellermanSoftware.CompareNetObjects;
 
