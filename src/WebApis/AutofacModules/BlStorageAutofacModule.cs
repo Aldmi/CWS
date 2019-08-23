@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using BL.Services.Storages;
-using InputDataModel.Base;
 using InputDataModel.Base.InData;
 
 namespace WebApiSwc.AutofacModules

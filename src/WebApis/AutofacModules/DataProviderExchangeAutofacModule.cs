@@ -1,12 +1,16 @@
-﻿using Autofac;
+﻿using AbstractProduser.AbstractProduser;
+using Autofac;
+using BL.Services.Produser;
 using Exchange.Base.DataProviderAbstract;
 using InputDataModel.Autodictor.DataProviders.ByRuleDataProviders;
 using InputDataModel.Autodictor.DataProviders.ManualDataProviders;
 using InputDataModel.Autodictor.Model;
 using InputDataModel.Autodictor.StronglyTypedResponse;
-using InputDataModel.Base;
 using InputDataModel.Base.Response;
-using Shared.Types;
+using KafkaProduser;
+using KafkaProduser.Options;
+using WebClientProduser;
+using WebClientProduser.Options;
 
 namespace WebApiSwc.AutofacModules
 {
@@ -20,7 +24,7 @@ namespace WebApiSwc.AutofacModules
             switch (typeof(TIn).Name)
             {
                 case "AdInputType":
-                    builder.RegisterType<AutodictorStronglyTypedResponseFactory>().As<IStronglyTypedResponseFactory>().SingleInstance();
+                    builder.RegisterType<AdStronglyTypedResponseFactory>().As<IStronglyTypedResponseFactory>().SingleInstance();
 
                     builder.RegisterType<VidorBinaryDataProvider>().Named<IExchangeDataProvider<AdInputType, ResponseInfo>>("VidorBinary").InstancePerDependency();
                     builder.RegisterType<ByRulesDataProvider>().Named<IExchangeDataProvider<AdInputType, ResponseInfo>>("ByRules").InstancePerDependency();
@@ -30,7 +34,15 @@ namespace WebApiSwc.AutofacModules
                     //builder.RegisterType<OtherTypeStronglyTypedResponseFactory>().As<IStronglyTypedResponseFactory>().SingleInstance();
                     //builder.RegisterType<OtherDataProvider>().As<IExchangeDataProvider<TIn, TransportResponse>>().InstancePerDependency();
                     break;
-            }      
+            }
+
+
+            //TODO: вынести в отдельный модуль
+            builder.RegisterType<ProdusersUnionFactory<AdInputType>>().InstancePerDependency();
+            builder.RegisterType<ProdusersUnion<AdInputType>>().InstancePerDependency();
+
+            builder.RegisterType<KafkaProduserWrapper>().As<IProduser<KafkaProduserOption>>().InstancePerDependency();
+            builder.RegisterType<WebClientProduserWrapper>().As<IProduser<WebClientProduserOption>>().InstancePerDependency();
         }
     }
 }

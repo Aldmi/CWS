@@ -6,14 +6,17 @@
 
   <ItemGroup>
     <PackageReference Include="CompareNETObjects" Version="4.57.0" />
-    <PackageReference Include="CSharpFunctionalExtensions" Version="1.14.0" />
+    <PackageReference Include="CSharpFunctionalExtensions" Version="1.19.1" />
     <PackageReference Include="morelinq" Version="3.1.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="SerilogTimings" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AbstractProduser\AbstractProduser.csproj" />
+    <ProjectReference Include="..\KaffkaProduser\KafkaProduser.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\WebClientProduser\WebClientProduser.csproj" />
   </ItemGroup>
 
   <ItemGroup>

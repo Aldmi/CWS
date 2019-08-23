@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using BL.Services.Mediators;
-using InputDataModel.Base;
 using InputDataModel.Base.InData;
 using Module = Autofac.Module;
 

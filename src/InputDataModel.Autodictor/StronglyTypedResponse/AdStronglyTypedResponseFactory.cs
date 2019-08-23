@@ -5,7 +5,7 @@ using Shared.Types;
 
 namespace InputDataModel.Autodictor.StronglyTypedResponse
 {
-    public class AutodictorStronglyTypedResponseFactory : IStronglyTypedResponseFactory
+    public class AdStronglyTypedResponseFactory : IStronglyTypedResponseFactory
     {
         public StronglyTypedRespBase CreateStronglyTypedResponse(string stronglyTypedName, string response)
         {

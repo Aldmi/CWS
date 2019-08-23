@@ -86,6 +86,7 @@ namespace WebApiSwc
                 {
                     case "AdInputType":
                         builder.RegisterModule(new DataProviderExchangeAutofacModule<AdInputType>());
+                        builder.RegisterModule(new ProduserUnionAutofacModule<AdInputType>());
                         builder.RegisterModule(new BlStorageAutofacModule<AdInputType>());
                         builder.RegisterModule(new BlActionsAutofacModule<AdInputType>());
                         builder.RegisterModule(new MediatorsAutofacModule<AdInputType>());
@@ -300,6 +301,21 @@ namespace WebApiSwc
                 var connectionString = SettingsFactory.GetDbConnectionString(Env, AppConfiguration);
               logger.Fatal($"НЕ ИЗВЕСТНАЯ Ошибка создания БД. howCreateDb= {howCreateDb}  connectionString={connectionString}   Exception= {ex} ");
             }
+
+            //СОЗДАНИЕ СПИСКА ПРОДЮССЕРОВ ДЛЯ ОТВЕТОВ-------------------------------------------------
+            try
+            {
+                var buildDeviceService = scope.Resolve<BuildProdusersUnionService<AdInputType>>();
+                await buildDeviceService.BuildAllProdusers();
+            }
+            catch (Exception ex)
+            {
+                //foreach (var innerException in ex.InnerExceptions)
+                //{
+                //    logger.Error(innerException, "ОШИБКА СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ");
+                //}
+            }
+
             //СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ--------------------------------------------------
             try
             {

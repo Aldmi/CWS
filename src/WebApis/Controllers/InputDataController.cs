@@ -10,7 +10,6 @@ using Autofac.Features.Indexed;
 using AutoMapper;
 using BL.Services.InputData;
 using InputDataModel.Autodictor.Model;
-using InputDataModel.Base;
 using InputDataModel.Base.InData;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
