@@ -15,6 +15,7 @@ namespace WebApiSwc.AutofacModules
             builder.RegisterType<BackgroundStorageService>().SingleInstance();
             builder.RegisterType<ExchangeStorageService<TIn>>().SingleInstance();
             builder.RegisterType<DeviceStorageService<TIn>>().SingleInstance();
+            builder.RegisterType<ProduserUnionStorageService<TIn>>().SingleInstance();
         }
     }
 }

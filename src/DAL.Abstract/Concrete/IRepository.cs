@@ -1,6 +1,7 @@
 ﻿using DAL.Abstract.Abstract;
 using DAL.Abstract.Entities.Options.Device;
 using DAL.Abstract.Entities.Options.Exchange;
+using DAL.Abstract.Entities.Options.ResponseProduser;
 using DAL.Abstract.Entities.Options.Transport;
 
 namespace DAL.Abstract.Concrete
@@ -37,4 +38,11 @@ namespace DAL.Abstract.Concrete
     {
     }
 
+
+    /// <summary>
+    /// Доступ Device
+    /// </summary>
+    public interface IProduserUnionOptionRepository : IGenericDataRepository<ProduserUnionOption>
+    {
+    }
 }

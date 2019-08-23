@@ -298,15 +298,15 @@ namespace WebApiSwc
             }
             catch (Exception ex)
             {
-                var connectionString = SettingsFactory.GetDbConnectionString(Env, AppConfiguration);
+              var connectionString = SettingsFactory.GetDbConnectionString(Env, AppConfiguration);
               logger.Fatal($"НЕ ИЗВЕСТНАЯ Ошибка создания БД. howCreateDb= {howCreateDb}  connectionString={connectionString}   Exception= {ex} ");
             }
 
             //СОЗДАНИЕ СПИСКА ПРОДЮССЕРОВ ДЛЯ ОТВЕТОВ-------------------------------------------------
             try
             {
-                var buildDeviceService = scope.Resolve<BuildProdusersUnionService<AdInputType>>();
-                await buildDeviceService.BuildAllProdusers();
+                var buildProdusersUnionService = scope.Resolve<BuildProdusersUnionService<AdInputType>>();
+                await buildProdusersUnionService.BuildAllProdusers();
             }
             catch (Exception ex)
             {

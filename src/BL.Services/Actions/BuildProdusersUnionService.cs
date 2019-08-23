@@ -2,11 +2,13 @@
 using System.Threading.Tasks;
 using BL.Services.Mediators;
 using BL.Services.Produser;
-using DeviceForExchange;
 using InputDataModel.Base.InData;
 
 namespace BL.Services.Actions
 {
+    /// <summary>
+    /// Создать коллекцию ProdusersUnion на базе опций и записать их в Storage.
+    /// </summary>
     public class BuildProdusersUnionService<TIn> where TIn : InputTypeBase
     {
         #region field
@@ -32,15 +34,24 @@ namespace BL.Services.Actions
 
 
 
+        #region Methode
 
         public async Task<IReadOnlyList<ProdusersUnion<TIn>>> BuildAllProdusers()
         {
-            // 1._mediatorForOptions вытаскивает из базы список ProduserUnionOption
-            // 2. _factory создает по 1 на базе ProduserUnionOption ProduserUnion
-            // 3. _mediatorForStorages записывает в storage полученный ProduserUnion
+            // 1. _mediatorForOptions вытаскивает из базы список ProduserUnionOption
+            var produsersUnionOptions = await _mediatorForOptions.GetProduserUnionOptions();
 
-            return null;
+            // 2. _factory создает по 1 на базе ProduserUnionOption ProduserUnion
+            //   _mediatorForStorages записывает в storage полученный ProduserUnion
+            foreach (var option in produsersUnionOptions)
+            {
+                var prodUnion= _factory.CreateProduserUnion(option);
+                _mediatorForStorages.AddProduserUnion(prodUnion.GetKey, prodUnion);
+            }
+
+            return _mediatorForStorages.GetProduserUnions();
         }
 
+        #endregion
     }
 }

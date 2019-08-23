@@ -7,6 +7,7 @@ using DAL.Abstract.Concrete;
 using DAL.Abstract.Entities.Options;
 using DAL.Abstract.Entities.Options.Device;
 using DAL.Abstract.Entities.Options.Exchange;
+using DAL.Abstract.Entities.Options.ResponseProduser;
 using DAL.Abstract.Entities.Options.Transport;
 using Shared.Enums;
 using Shared.Types;
@@ -27,6 +28,7 @@ namespace BL.Services.Mediators
         private readonly ISerialPortOptionRepository _serialPortOptionRep;
         private readonly ITcpIpOptionRepository _tcpIpOptionRep;
         private readonly IHttpOptionRepository _httpOptionRep;
+        private readonly IProduserUnionOptionRepository _produserUnionOptionRep;
 
         #endregion
 
@@ -39,13 +41,15 @@ namespace BL.Services.Mediators
             IExchangeOptionRepository exchangeOptionRep,
             ISerialPortOptionRepository serialPortOptionRep,
             ITcpIpOptionRepository tcpIpOptionRep,
-            IHttpOptionRepository httpOptionRep)
+            IHttpOptionRepository httpOptionRep,
+            IProduserUnionOptionRepository produserUnionOptionRep)
         {
             _deviceOptionRep = deviceOptionRep;
             _exchangeOptionRep = exchangeOptionRep;
             _serialPortOptionRep = serialPortOptionRep;
             _tcpIpOptionRep = tcpIpOptionRep;
             _httpOptionRep = httpOptionRep;
+            _produserUnionOptionRep = produserUnionOptionRep;
         }
 
         #endregion
@@ -532,6 +536,15 @@ namespace BL.Services.Mediators
 
 
         /// <summary>
+        /// Проверка наличия продюссера по ключу.
+        /// </summary>
+        public async Task<bool> IsExistProduserUnionAsync(string keyProduserUnion)
+        {
+            return await _produserUnionOptionRep.IsExistAsync(prod => prod.Key == keyProduserUnion);
+        }
+
+
+        /// <summary>
         /// Проверка наличия УНИКАЛЬНОСТИ ДОБАВЛЯЕМОГО ТРАНСПОРТА.
         /// Если транспорт опознанн по Id и Key, то такой транспорт уже существует.
         /// Если у транспорта не совпадвет Id и Key, то это НОВЫЙ транспорт.
@@ -578,9 +591,6 @@ namespace BL.Services.Mediators
         }
 
 
-
-
-
         /// <summary>
         /// Ищет транспорт по ключу в нужном репозитории и Удаляет его.
         /// Удаленный транспорт помещается в deletedTransport.
@@ -604,6 +614,35 @@ namespace BL.Services.Mediators
                     await _httpOptionRep.DeleteAsync(http => http.Name == keyTransport.Key);
                     break;
             }
+        }
+
+
+        /// <summary>
+        /// Вернуть список продюсеров.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IReadOnlyList<ProduserUnionOption>> GetProduserUnionOptions()
+        {
+            return await _produserUnionOptionRep.ListAsync();
+        }
+
+
+        /// <summary>
+        /// Добавить новый Продюсер.
+        /// </summary>
+        public async Task<bool> AddProduserUnionOptionAsync(ProduserUnionOption produserUnionOption)
+        {
+            if (produserUnionOption == null)
+                return false;
+
+            //ПРОВЕРКА ОТСУТСВИЯ УСТРОЙСТВА по имени
+            if (await IsExistProduserUnionAsync(produserUnionOption.Key))
+            {
+                throw new OptionHandlerException($"Продюсер с таким КЛЮЧЕМ уже существует:  {produserUnionOption.Key}");
+            }
+
+            await _produserUnionOptionRep.AddAsync(produserUnionOption);
+            return true;
         }
 
         #endregion

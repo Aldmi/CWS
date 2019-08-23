@@ -2,6 +2,7 @@
 using DAL.EFCore.DbContext.EntitiConfiguration;
 using DAL.EFCore.Entities.Device;
 using DAL.EFCore.Entities.Exchange;
+using DAL.EFCore.Entities.Produser;
 using DAL.EFCore.Entities.Transport;
 using Microsoft.EntityFrameworkCore;
 using Shared.Enums;
@@ -20,6 +21,7 @@ namespace DAL.EFCore.DbContext
         public DbSet<EfHttpOption> HttpOptions { get; set; }
         public DbSet<EfDeviceOption> DeviceOptions { get; set; }
         public DbSet<EfExchangeOption> ExchangeOptions { get; set; }
+        public DbSet<EfProduserUnionOption> ProduserUnionOptions { get; set; }
 
         #endregion
 
@@ -51,6 +53,7 @@ namespace DAL.EFCore.DbContext
            modelBuilder.ApplyConfiguration(new EfDeviceOptionConfig());
            modelBuilder.ApplyConfiguration(new EfExchangeOptionConfig());
            modelBuilder.ApplyConfiguration(new EfHttpOptionConfig());
+           modelBuilder.ApplyConfiguration(new EfProduserUnionOptionConfig());
            base.OnModelCreating(modelBuilder);
         }
 

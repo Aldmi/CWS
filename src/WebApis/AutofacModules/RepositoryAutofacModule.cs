@@ -59,6 +59,14 @@ namespace WebApiSwc.AutofacModules
                     new NamedParameter("connectionString", _connectionString),
                 })
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<EfProduserUnionOptionRepository>().As<IProduserUnionOptionRepository>()
+                .WithParameters(new List<Parameter>
+                {
+                    new NamedParameter("connectionString", _connectionString),
+                })
+                .InstancePerLifetimeScope();
+
         }
     }
 }

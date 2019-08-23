@@ -7,6 +7,7 @@ using Autofac.Features.Indexed;
 using Autofac.Features.OwnedInstances;
 using BL.Services.Config;
 using BL.Services.Exceptions;
+using BL.Services.Produser;
 using BL.Services.Storages;
 using DAL.Abstract.Entities.Options;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
@@ -44,6 +45,7 @@ namespace BL.Services.Mediators
         private readonly ExchangeStorageService<TIn> _exchangeStorageService;
         private readonly BackgroundStorageService _backgroundStorageService;
         private readonly TransportStorageService _transportStorageService;
+        private readonly ProduserUnionStorageService<TIn> _produserUnionStorageService;
         private readonly IEventBus _eventBus;
         private readonly IIndex<string, Func<ProviderOption, IExchangeDataProvider<TIn, ResponseInfo>>> _dataProviderFactory;
         private readonly Func<ProduserOption, Owned<IProduser>> _produser4DeviceRespFactory;
@@ -63,6 +65,7 @@ namespace BL.Services.Mediators
             ExchangeStorageService<TIn> exchangeStorageService,
             BackgroundStorageService backgroundStorageService,
             TransportStorageService transportStorageService,
+            ProduserUnionStorageService<TIn> produserUnionStorageService,
             IEventBus eventBus,     
             IIndex<string, Func<ProviderOption, IExchangeDataProvider<TIn, ResponseInfo>>> dataProviderFactory,
             Func<ProduserOption, Owned<IProduser>> produser4DeviceRespFactory,
@@ -70,6 +73,7 @@ namespace BL.Services.Mediators
             ILogger logger)
         {
             _transportStorageService = transportStorageService;
+            _produserUnionStorageService = produserUnionStorageService;
             _backgroundStorageService = backgroundStorageService;
             _exchangeStorageService = exchangeStorageService;
             _deviceStorageService = deviceStorageService;
@@ -297,8 +301,32 @@ namespace BL.Services.Mediators
         }
 
 
+        /// <summary>
+        /// Вренуть продюссер ответа по имени
+        /// </summary>
+        public ProdusersUnion<TIn> GetProduserUnion(string produserName)
+        {
+            var produser = _produserUnionStorageService.Get(produserName);
+            return produser;
+        }
 
 
+        /// <summary>
+        /// Вернуть всех продюссеров ответов.
+        /// </summary>
+        public IReadOnlyList<ProdusersUnion<TIn>> GetProduserUnions()
+        {
+            return _produserUnionStorageService.Values.ToList();
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void AddProduserUnion(string key, ProdusersUnion<TIn> value)
+        {
+            _produserUnionStorageService.AddNew(key, value);
+        }
 
 
         #endregion
