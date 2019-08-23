@@ -141,7 +141,6 @@ namespace Exchange.Base
 
         #region Methode
 
-
         #region CycleExchange
 
         /// <summary>
@@ -323,7 +322,7 @@ namespace Exchange.Base
             transportResponseWrapper.DataAction = DataAction.CycleAction;
             if (transportResponseWrapper.IsValidAll)
             {
-                _skippingPeriodChecker.StartSkipping(); //Если все ответы валидны - запустим отсчет пропуска CycleTimeAction.
+                _skippingPeriodChecker.StartSkipping(); //Если все ответы валидны - запустим отсчет пропуска вызовов CycleTimeAction.
             }
 
             ResponseChangeRx.OnNext(transportResponseWrapper);
@@ -425,6 +424,7 @@ namespace Exchange.Base
                 finally
                 {
                     transportResp.RequestData = provider.InputData;
+                    transportResp.ResponseInfo = provider.OutputData;
                     transportResp.Status = status;
                     transportResp.MessageDict = new Dictionary<string, string>(provider.StatusDict);
                     transportResponseWrapper.ResponsesItems.Add(transportResp);

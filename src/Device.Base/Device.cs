@@ -133,7 +133,7 @@ namespace DeviceForExchange
                 _disposeExchangesEventHandlers.Add(exch.IsConnectChangeRx.Subscribe(ConnectChangeRxEventHandler));
                 //_disposeExchangesEventHandlers.Add(exch.LastSendDataChangeRx.Subscribe(LastSendDataChangeRxEventHandler));
                 _disposeExchangesEventHandlers.Add(exch.IsOpenChangeTransportRx.Subscribe(OpenChangeTransportRxEventHandler));
-                _disposeExchangesEventHandlers.Add(exch.ResponseChangeRx.Subscribe(TransportResponseChangeRxEventHandler));
+                _disposeExchangesEventHandlers.Add(exch.ResponseChangeRx.Subscribe(ResponseChangeRxEventHandler));
             });
             return true;
         }
@@ -358,14 +358,17 @@ namespace DeviceForExchange
             _logger.Debug($"OpenChangeTransportRxEventHandler.  IsOpen = {model.IsOpen} для ТРАНСПОРТА {model.TransportName}");
         }
 
-        private async void TransportResponseChangeRxEventHandler(ResponsePieceOfDataWrapper<TIn> responsePieceOfDataWrapper)
+        private async void ResponseChangeRxEventHandler(ResponsePieceOfDataWrapper<TIn> responsePieceOfDataWrapper)
         {
             var settings= new JsonSerializerSettings
             {
-                Formatting = Formatting.Indented,             //Отступы дочерних элементов 
+                Formatting = Formatting.None,             //Отступы дочерних элементов 
                 NullValueHandling = NullValueHandling.Ignore  //Игнорировать пустые теги
             };
             var jsonResp = JsonConvert.SerializeObject(responsePieceOfDataWrapper, settings);
+
+            //TODO: вызвать Send2Produder на ProduserUnion.
+
             //await Send2Produder(Option.TopicName4MessageBroker, $"ResponseDataWrapper = {jsonResp}");
             _logger.Debug($"TransportResponseChangeRxEventHandler.  jsonResp = {jsonResp} ");
         }
