@@ -621,9 +621,19 @@ namespace BL.Services.Mediators
         /// Вернуть список продюсеров.
         /// </summary>
         /// <returns></returns>
-        public async Task<IReadOnlyList<ProduserUnionOption>> GetProduserUnionOptions()
+        public async Task<IReadOnlyList<ProduserUnionOption>> GetProduserUnionOptionsAsync()
         {
             return await _produserUnionOptionRep.ListAsync();
+        }
+
+
+        /// <summary>
+        /// Вернуть продюсер по ключу.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ProduserUnionOption> GetProduserUnionOptionAsync(string keyProduserUnion)
+        {
+            return await _produserUnionOptionRep.GetSingleAsync(option => option.Key == keyProduserUnion);
         }
 
 
@@ -644,6 +654,14 @@ namespace BL.Services.Mediators
             await _produserUnionOptionRep.AddAsync(produserUnionOption);
             return true;
         }
+
+        public async Task<ProduserUnionOption> RemoveProduserUnionOptionAsync(ProduserUnionOption produserUnionOption)
+        {
+            await _produserUnionOptionRep.DeleteAsync(produserUnionOption);
+            return produserUnionOption;
+        }
+
+
 
         #endregion
     }

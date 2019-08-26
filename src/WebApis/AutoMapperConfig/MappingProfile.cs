@@ -3,6 +3,7 @@ using AutoMapper;
 using DAL.Abstract.Entities.Options.Device;
 using DAL.Abstract.Entities.Options.Exchange;
 using DAL.Abstract.Entities.Options.MiddleWare;
+using DAL.Abstract.Entities.Options.ResponseProduser;
 using DAL.Abstract.Entities.Options.Transport;
 using DeviceForExchange;
 using Exchange.Base;
@@ -13,6 +14,7 @@ using WebApiSwc.DTO.JSON.InputTypesDto;
 using WebApiSwc.DTO.JSON.OptionsDto.DeviceOption;
 using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption;
+using WebApiSwc.DTO.JSON.OptionsDto.ProduserUnionOption;
 using WebApiSwc.DTO.JSON.OptionsDto.TransportOption;
 using WebApiSwc.DTO.XML;
 
@@ -30,6 +32,7 @@ namespace WebApiSwc.AutoMapperConfig
             CreateMap<HttpOption, HttpOptionDto>().ReverseMap();
             CreateMap<TransportOption, TransportOptionsDto>().ReverseMap();
             CreateMap<MiddleWareInDataOption, MiddleWareInDataOptionDto>().ReverseMap();
+            CreateMap<ProduserUnionOption, ProduserUnionOptionDto>().ReverseMap();
             #endregion
 
 
@@ -123,7 +126,6 @@ namespace WebApiSwc.AutoMapperConfig
             #endregion
 
 
-
             #region DeviceStateDto mapping
             CreateMap<Device<AdInputType>, DeviceStateDto>()
                 .ForMember(dest => dest.Option, opt => opt.MapFrom(src => src.Option))
@@ -133,7 +135,6 @@ namespace WebApiSwc.AutoMapperConfig
                 .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.KeyExchange))
                 .ForMember(dest => dest.CycleExchnageStatus, opt => opt.MapFrom(src => src.CycleExchnageStatus.ToString()));
             #endregion
-
         }
 
 

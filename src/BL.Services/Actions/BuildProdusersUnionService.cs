@@ -39,7 +39,7 @@ namespace BL.Services.Actions
         public async Task<IReadOnlyList<ProdusersUnion<TIn>>> BuildAllProdusers()
         {
             // 1. _mediatorForOptions вытаскивает из базы список ProduserUnionOption
-            var produsersUnionOptions = await _mediatorForOptions.GetProduserUnionOptions();
+            var produsersUnionOptions = await _mediatorForOptions.GetProduserUnionOptionsAsync();
 
             // 2. _factory создает по 1 на базе ProduserUnionOption ProduserUnion
             //   _mediatorForStorages записывает в storage полученный ProduserUnion

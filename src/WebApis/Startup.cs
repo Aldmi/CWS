@@ -23,6 +23,7 @@ using Serilog;
 using WebApiSwc.AutofacModules;
 using WebApiSwc.Extensions;
 using WebApiSwc.Settings;
+using WebClientProduser;
 using Worker.Background.Abstarct;
 
 namespace WebApiSwc
@@ -67,6 +68,8 @@ namespace WebApiSwc
 
             services.AddOptions();
             services.AddAutoMapper();
+
+            services.AddHttpClient<IHttpClientSupport, HttpClientSupport>();
         }
 
 
