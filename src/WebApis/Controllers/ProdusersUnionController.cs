@@ -113,17 +113,11 @@ namespace WebApiSwc.Controllers
             try
             {
                 var produserUnionOption = _mapper.Map<ProduserUnionOption>(data);
+                var (_, isFailure, value, error) = await _buildDeviceService.AddOrUpdateAndBuildProduserAsync(produserUnionOption);
+                if(isFailure)
+                    return BadRequest($"{error}");
 
-
-
-                var res = await _buildDeviceService.SaveOrUpdateAndBuildProduserAsync(produserUnionOption);
-                return CreatedAtAction("Get", new { deviceName = res.GetKey }, data); //возвращает в ответе данные запроса. в Header пишет значение Location→ http://localhost:44138/api/DevicesOption/{deviceName}
-            }
-            catch (OptionHandlerException ex)
-            {
-                _logger.Error(ex, "Ошибка в ProduserUnionOptionDto/Post");
-                ModelState.AddModelError("PostException", ex.Message);
-                return BadRequest(ModelState);
+                return CreatedAtAction("Get", new { deviceName = value.GetKey }, data);
             }
             catch (Exception ex)
             {

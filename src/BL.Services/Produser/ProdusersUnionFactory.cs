@@ -1,6 +1,7 @@
 ﻿using System;
 using AbstractProduser.AbstractProduser;
 using Autofac.Features.OwnedInstances;
+using CSharpFunctionalExtensions;
 using DAL.Abstract.Entities.Options.ResponseProduser;
 using KafkaProduser.Options;
 using WebClientProduser.Options;
@@ -42,8 +43,11 @@ namespace BL.Services.Produser
         /// Добавляет созданные на базе опций продюссеры к ProdusersUnion
         /// </summary>
         /// <param name="unionOption"></param>
-        public ProdusersUnion<TIn> CreateProduserUnion(ProduserUnionOption unionOption)
+        public Result<ProdusersUnion<TIn>> CreateProduserUnion(ProduserUnionOption unionOption)
         {
+            if (CheckEmptyStateAllProdussers(unionOption))
+                return Result.Fail<ProdusersUnion<TIn>>("Все Коллекции продюссеров пусты");
+
             var produsersUnion = _produsersUnionFactory(unionOption);
             foreach (var option in unionOption.KafkaProduserOptions)
             {
@@ -61,8 +65,18 @@ namespace BL.Services.Produser
                 produsersUnion.AddProduser(option.Key, prod.Value, prod);
             }
 
-            return produsersUnion;
+            return Result.Ok(produsersUnion);
         }
+
+
+        private bool CheckEmptyStateAllProdussers(ProduserUnionOption unionOption)
+        {
+            return (unionOption.KafkaProduserOptions.Count == 0) && 
+                   (unionOption.SignalRProduserOptions.Count == 0) &&
+                   (unionOption.WebClientProduserOptions.Count == 0);
+
+        }
+
 
         #endregion
     }

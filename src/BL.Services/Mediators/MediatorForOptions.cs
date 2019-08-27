@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BL.Services.Exceptions;
+using CSharpFunctionalExtensions;
 using DAL.Abstract.Concrete;
 using DAL.Abstract.Entities.Options;
 using DAL.Abstract.Entities.Options.Device;
@@ -643,10 +644,10 @@ namespace BL.Services.Mediators
         /// <summary>
         /// Добавить или Обновить Продюсер в репозитории
         /// </summary>
-        public async Task<bool> AddOrUpdateUnionOptionAsync(ProduserUnionOption produserUnionOption)
+        public async Task<Result> AddOrUpdateUnionOptionAsync(ProduserUnionOption produserUnionOption)
         {
             if (produserUnionOption == null)
-                return false;
+                return Result.Fail("produserUnionOption == null");
 
             if (await IsExistProduserUnionAsyncById(produserUnionOption.Id))
             {
@@ -657,11 +658,11 @@ namespace BL.Services.Mediators
                 //проверка уникальности ключа при добавлении.
                 if (await _produserUnionOptionRep.IsExistAsync(prod => prod.Key == produserUnionOption.Key))
                 {
-                    throw new InvalidDataException($"Уже существует в репозитории Key= {produserUnionOption.Key}");
+                    return Result.Fail($"Уже существует в репозитории Key= {produserUnionOption.Key}");
                 }
                 await _produserUnionOptionRep.AddAsync(produserUnionOption);
             }
-            return true;
+            return Result.Ok();
         }
 
 

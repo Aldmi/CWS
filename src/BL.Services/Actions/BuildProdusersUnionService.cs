@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using BL.Services.Mediators;
 using BL.Services.Produser;
+using CSharpFunctionalExtensions;
 using DAL.Abstract.Entities.Options.ResponseProduser;
 using InputDataModel.Base.InData;
 using Shared.Enums;
@@ -50,8 +51,8 @@ namespace BL.Services.Actions
             //   _mediatorForStorages записывает в storage полученный ProduserUnion
             foreach (var option in produsersUnionOptions)
             {
-                var prodUnion = _factory.CreateProduserUnion(option);
-                _mediatorForStorages.AddOrUpdateProduserUnion(prodUnion.GetKey, prodUnion);
+                var (_, _, value) = _factory.CreateProduserUnion(option);
+                _mediatorForStorages.AddOrUpdateProduserUnion(value.GetKey, value);
             }
 
             return _mediatorForStorages.GetProduserUnions();
@@ -61,22 +62,28 @@ namespace BL.Services.Actions
         /// <summary>
         /// Сохранить или обновить ProdusersUnion в репозитории и сразу сделать билд новго продюссера в Storage
         /// </summary>
-        public async Task<ProdusersUnion<TIn>> SaveOrUpdateAndBuildProduserAsync(ProduserUnionOption produsersUnionOption)
+        public async Task<Result<ProdusersUnion<TIn>>> AddOrUpdateAndBuildProduserAsync(ProduserUnionOption produsersUnionOption)
         {
             //Обновить или добавить в Репозиторий produsersUnionOption
-            var succsses = await _mediatorForOptions.AddOrUpdateUnionOptionAsync(produsersUnionOption); //TODO: вызов Exception заменить на возврат Result<T,T>
+            var addOrUpdateOptionResult = await _mediatorForOptions.AddOrUpdateUnionOptionAsync(produsersUnionOption);
+            if (addOrUpdateOptionResult.IsFailure)
+            {
+                return Result.Fail<ProdusersUnion<TIn>>($"{addOrUpdateOptionResult.Error}");
+            }
 
             //Если успешно обновили или добавили в репозиторий.
-            if (succsses)
-            {
-                // сбилдить ProduserUnion
-                var prodUnion = _factory.CreateProduserUnion(produsersUnionOption);
-                // Обновить или добавить в Storage
-                var res = _mediatorForStorages.AddOrUpdateProduserUnion(prodUnion.GetKey, prodUnion);
-                if (res == DictionaryCrudResult.Added || res == DictionaryCrudResult.Updated)
-                    return prodUnion;
-            }
-            return null;
+            // сбилдить ProduserUnion
+            var createResult = _factory.CreateProduserUnion(produsersUnionOption);
+            if (createResult.IsFailure)
+                return createResult;
+
+            // Обновить или добавить в Storage
+            var prodUnion = createResult.Value;
+            var addOrUpdateProduserUnionResult = _mediatorForStorages.AddOrUpdateProduserUnion(prodUnion.GetKey, prodUnion);
+            if (addOrUpdateProduserUnionResult == DictionaryCrudResult.Added || addOrUpdateProduserUnionResult == DictionaryCrudResult.Updated)
+                return Result.Ok(prodUnion);
+
+            return Result.Fail<ProdusersUnion<TIn>>($"ошибка добавления в Storage ProduserUnion res= {addOrUpdateProduserUnionResult}");
         }
 
 
@@ -86,7 +93,7 @@ namespace BL.Services.Actions
         public async Task<ProduserUnionOption> RemoveProduserAsync(ProduserUnionOption produserUnionOption)
         {
             var removed = await _mediatorForOptions.RemoveProduserUnionOptionAsync(produserUnionOption);
-            var res= _mediatorForStorages.RemoveProduserUnion(removed.Key);
+            var res = _mediatorForStorages.RemoveProduserUnion(removed.Key);
             return res != DictionaryCrudResult.KeyNotExist ? removed : null;
         }
 
