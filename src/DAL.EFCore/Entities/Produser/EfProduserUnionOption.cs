@@ -14,6 +14,7 @@ namespace DAL.EFCore.Entities.Produser
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
+
         public string Key { get; set; }
         public string ConverterName { get; set; }
 

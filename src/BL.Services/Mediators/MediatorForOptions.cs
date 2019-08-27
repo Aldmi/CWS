@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -357,7 +359,7 @@ namespace BL.Services.Mediators
             {
                 throw new OptionHandlerException($"Устройство с таким Id уже существует:  {deviceOption.Id}");
             }
-         
+
             var exchangeExternalIds = exchangeOptions.Select(exchangeOption => exchangeOption.Id).ToList();
             //ПРОВЕРКА ПОВТОРЯЮЩИХСЯ Id В СПИСКЕ НОВЫХ ОБМЕНОВ
             var repeatItems = exchangeExternalIds.GroupBy(x => x)
@@ -535,12 +537,13 @@ namespace BL.Services.Mediators
         }
 
 
+
         /// <summary>
-        /// Проверка наличия продюссера по ключу.
+        /// Проверка наличия продюссера по ключу и по Id.
         /// </summary>
-        public async Task<bool> IsExistProduserUnionAsync(string keyProduserUnion)
+        public async Task<bool> IsExistProduserUnionAsyncById(int id)
         {
-            return await _produserUnionOptionRep.IsExistAsync(prod => prod.Key == keyProduserUnion);
+            return await _produserUnionOptionRep.IsExistAsync(prod => prod.Id == id);
         }
 
 
@@ -573,7 +576,7 @@ namespace BL.Services.Mediators
                     existKey = await IsExistTransportAsync(new KeyTransport(option.Name, TransportType.TcpIp));
                     var res = existId ^ existKey;
                     if (res)
-                        errorStr.AppendFormat("TcpIp имеет такой ключ {0}, ", option.Id);                   
+                        errorStr.AppendFormat("TcpIp имеет такой ключ {0}, ", option.Id);
                 }
             }
             if (transportOption.TcpIpOptions != null)
@@ -631,37 +634,46 @@ namespace BL.Services.Mediators
         /// Вернуть продюсер по ключу.
         /// </summary>
         /// <returns></returns>
-        public async Task<ProduserUnionOption> GetProduserUnionOptionAsync(string keyProduserUnion)
+        public async Task<ProduserUnionOption> GetProduserUnionOptionAsync(int id)
         {
-            return await _produserUnionOptionRep.GetSingleAsync(option => option.Key == keyProduserUnion);
+            return await _produserUnionOptionRep.GetSingleAsync(option => option.Id == id);
         }
 
 
         /// <summary>
-        /// Добавить новый Продюсер.
+        /// Добавить или Обновить Продюсер в репозитории
         /// </summary>
-        public async Task<bool> AddProduserUnionOptionAsync(ProduserUnionOption produserUnionOption)
+        public async Task<bool> AddOrUpdateUnionOptionAsync(ProduserUnionOption produserUnionOption)
         {
             if (produserUnionOption == null)
                 return false;
 
-            //ПРОВЕРКА ОТСУТСВИЯ УСТРОЙСТВА по имени
-            if (await IsExistProduserUnionAsync(produserUnionOption.Key))
+            if (await IsExistProduserUnionAsyncById(produserUnionOption.Id))
             {
-                throw new OptionHandlerException($"Продюсер с таким КЛЮЧЕМ уже существует:  {produserUnionOption.Key}");
+                await _produserUnionOptionRep.EditAsync(produserUnionOption);
             }
-
-            await _produserUnionOptionRep.AddAsync(produserUnionOption);
+            else
+            {
+                //проверка уникальности ключа при добавлении.
+                if (await _produserUnionOptionRep.IsExistAsync(prod => prod.Key == produserUnionOption.Key))
+                {
+                    throw new InvalidDataException($"Уже существует в репозитории Key= {produserUnionOption.Key}");
+                }
+                await _produserUnionOptionRep.AddAsync(produserUnionOption);
+            }
             return true;
         }
 
+
+
+        /// <summary>
+        /// Удалить produserUnionOption
+        /// </summary>
         public async Task<ProduserUnionOption> RemoveProduserUnionOptionAsync(ProduserUnionOption produserUnionOption)
         {
             await _produserUnionOptionRep.DeleteAsync(produserUnionOption);
             return produserUnionOption;
         }
-
-
 
         #endregion
     }

@@ -321,14 +321,23 @@ namespace BL.Services.Mediators
 
 
         /// <summary>
-        /// 
+        /// Добавить или обновить ProdusersUnion в Storage
         /// </summary>
-        public void AddProduserUnion(string key, ProdusersUnion<TIn> value)
+        public DictionaryCrudResult AddOrUpdateProduserUnion(string key, ProdusersUnion<TIn> value)
         {
-            _produserUnionStorageService.AddNew(key, value);
+            return _produserUnionStorageService.IsExist(key) ?
+                _produserUnionStorageService.Update(key, value) :
+                _produserUnionStorageService.AddNew(key, value);
         }
 
 
+        /// <summary>
+        /// Добавить или обновить ProdusersUnion в Storage
+        /// </summary>
+        public DictionaryCrudResult RemoveProduserUnion(string key)
+        {
+            return _produserUnionStorageService.IsExist(key) ? _produserUnionStorageService.Remove(key) : DictionaryCrudResult.KeyNotExist;
+        }
         #endregion
     }
 

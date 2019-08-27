@@ -228,7 +228,8 @@ namespace DAL.EFCore.Repository
 
         protected async Task EditAsync(TMap entity)
         {
-            Context.Entry(entity).State = EntityState.Modified;
+            var efOptions = AutoMapperConfig.Mapper.Map<TDb>(entity);
+            DbSet.Update(efOptions);
             await Context.SaveChangesAsync();
         }
 

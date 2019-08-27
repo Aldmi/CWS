@@ -75,17 +75,17 @@ namespace WebApiSwc.Controllers
         }
 
 
-        // GET api/ProdusersUnion/Key
-        [HttpGet("{key}", Name = "GetProduserUnion")]
-        public async Task<IActionResult> Get([FromRoute]string key)
+        // GET api/ProdusersUnion/id
+        [HttpGet("{id}", Name = "GetProduserUnion")]
+        public async Task<IActionResult> Get([FromRoute]int id)
         {
             try
             {
-                if (!await _mediatorForOptionsRep.IsExistProduserUnionAsync(key))
+                if (!await _mediatorForOptionsRep.IsExistProduserUnionAsyncById(id))
                 {
-                    return NotFound(key);
+                    return NotFound(id);
                 }
-                var produserUnionOption = await _mediatorForOptionsRep.GetProduserUnionOptionAsync(key);
+                var produserUnionOption = await _mediatorForOptionsRep.GetProduserUnionOptionAsync(id);
                 var produserUnionOptionDto = _mapper.Map<ProduserUnionOptionDto>(produserUnionOption);
                 return new JsonResult(produserUnionOptionDto);
             }
@@ -113,8 +113,11 @@ namespace WebApiSwc.Controllers
             try
             {
                 var produserUnionOption = _mapper.Map<ProduserUnionOption>(data);
-                var res=  await _mediatorForOptionsRep.AddProduserUnionOptionAsync(produserUnionOption);
-                return CreatedAtAction("Get", new { deviceName = produserUnionOption.Key }, data); //возвращает в ответе данные запроса. в Header пишет значение Location→ http://localhost:44138/api/DevicesOption/{deviceName}
+
+
+
+                var res = await _buildDeviceService.SaveOrUpdateAndBuildProduserAsync(produserUnionOption);
+                return CreatedAtAction("Get", new { deviceName = res.GetKey }, data); //возвращает в ответе данные запроса. в Header пишет значение Location→ http://localhost:44138/api/DevicesOption/{deviceName}
             }
             catch (OptionHandlerException ex)
             {
@@ -130,19 +133,17 @@ namespace WebApiSwc.Controllers
         }
 
 
-
-
         // DELETE api/ProdusersUnion/5
-        [HttpDelete("{key}")]
-        public async Task<IActionResult> Delete([FromRoute]string key)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute]int id)
         {
-            var produserUnionOption = await _mediatorForOptionsRep.GetProduserUnionOptionAsync(key);
+            var produserUnionOption = await _mediatorForOptionsRep.GetProduserUnionOptionAsync(id);
             if (produserUnionOption == null)
-                return NotFound(key);
+                return NotFound(id);
 
             try
             {
-                var deletedOptionDeleted = await _mediatorForOptionsRep.RemoveProduserUnionOptionAsync(produserUnionOption);
+                var deletedOptionDeleted = await _buildDeviceService.RemoveProduserAsync(produserUnionOption);
                 return Ok(deletedOptionDeleted);
             }
             catch (Exception ex)
@@ -151,9 +152,6 @@ namespace WebApiSwc.Controllers
                 throw;
             }
         }
-
-
-
 
         #endregion
     }

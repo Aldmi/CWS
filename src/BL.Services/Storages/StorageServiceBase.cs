@@ -31,6 +31,17 @@ namespace BL.Services.Storages
         }
 
 
+        public DictionaryCrudResult Update(TKey key, TValue value)
+        {
+            if (!Storage.ContainsKey(key))
+            {
+                return DictionaryCrudResult.KeyNotExist;
+            }
+            
+            return (Storage.TryUpdate(key, value, Storage[key])) ? DictionaryCrudResult.Updated : DictionaryCrudResult.None;
+        }
+
+
         public DictionaryCrudResult Remove(TKey key)
         {
             if (!Storage.ContainsKey(key))
