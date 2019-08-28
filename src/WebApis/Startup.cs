@@ -22,6 +22,7 @@ using Npgsql;
 using Serilog;
 using WebApiSwc.AutofacModules;
 using WebApiSwc.Extensions;
+using WebApiSwc.Hubs;
 using WebApiSwc.Settings;
 using WebClientProduser;
 using Worker.Background.Abstarct;
@@ -68,6 +69,20 @@ namespace WebApiSwc
 
             services.AddOptions();
             services.AddAutoMapper();
+
+            services.AddSignalR();
+            services.AddCors(options =>
+            {
+                // задаём политику CORS, чтобы наше клиентское приложение могло отправить запрос на сервер API
+                options.AddPolicy("default", policy =>
+                {
+                    policy
+                        .AllowAnyOrigin()
+                        .AllowCredentials()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
 
             services.AddHttpClient<IHttpClientSupport, HttpClientSupport>();
         }
@@ -144,7 +159,16 @@ namespace WebApiSwc
                     //.ExceptFromLocalhost()
                 );
             }
-            
+
+            //ПОДКЛЮЧЕНИЕ SignalR ХАБА
+            app.UseCors("default");
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ProviderHub>("/providerHub");
+            });
+
             app.UseMvc();
         }
 

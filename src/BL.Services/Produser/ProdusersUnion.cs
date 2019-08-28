@@ -14,13 +14,9 @@ using Newtonsoft.Json;
 
 namespace BL.Services.Produser
 {
-    //TODO: Нужно разбить на 2 интерфейса:
-    //1.IControlProdusersUnion (AddProduser, RemoveProduser) - Использовать в контроллере и при инициализации системы для редактирования списка Продюссеров.
-    //2.ISenderProdusersUnion (SendAll, Send) - использовать в Device для отправки ответов.
-
-
     /// <summary>
-    /// 
+    /// Объединение продюссеров.
+    /// Под одним ключем находится Объединение продюссеров для отправки ответов.
     /// </summary>
     public class ProdusersUnion<TIn> : IDisposable
     {
@@ -79,8 +75,6 @@ namespace BL.Services.Produser
         /// </summary>
         public async Task<IList<Result<string, ErrorWrapper>>> SendAll(ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
         {
-            //TODO: используя _unionOption.InterpreterTypeName интерпретировать message в этот тип и пережать как ответ.
-            
             var message = ConvertResponse(_unionOption.ConverterName, response);
             var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(message, invokerName)).ToList();
             var results = await Task.WhenAll(tasks);

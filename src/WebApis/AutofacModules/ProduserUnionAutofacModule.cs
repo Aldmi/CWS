@@ -1,9 +1,12 @@
 ﻿using AbstractProduser.AbstractProduser;
 using Autofac;
 using BL.Services.Produser;
+using DAL.Abstract.Entities.Options.ResponseProduser;
 using InputDataModel.Autodictor.Model;
 using KafkaProduser;
 using KafkaProduser.Options;
+using WebApiSwc.Produsers;
+using WebApiSwc.SignalRClients;
 using WebClientProduser;
 using WebClientProduser.Options;
 
@@ -24,6 +27,9 @@ namespace WebApiSwc.AutofacModules
 
                     builder.RegisterType<KafkaProduserWrapper>().As<IProduser<KafkaProduserOption>>().InstancePerDependency();
                     builder.RegisterType<WebClientProduserWrapper>().As<IProduser<WebClientProduserOption>>().InstancePerDependency();
+
+                    builder.RegisterType<SignaRProduserClientsStorage<SignaRProdusserClientsInfo>>().SingleInstance();
+                    builder.RegisterType<SignalRProduserWrapper>().As<IProduser<SignalRProduserOption>>().InstancePerDependency();
                     break;
 
                 case "OtherType":

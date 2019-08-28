@@ -23,12 +23,12 @@ namespace BL.Services.Produser
 
 
         public ProdusersUnionFactory(Func<ProduserUnionOption, ProdusersUnion<TIn>> produsersUnionFactory,
-            //Func<SignalRProduserOption, Owned<IProduser<SignalRProduserOption>>> signalRFactory,
+            Func<SignalRProduserOption, Owned<IProduser<SignalRProduserOption>>> signalRFactory,
             Func<KafkaProduserOption, Owned<IProduser<KafkaProduserOption>>> kafkaFactory,
             Func<WebClientProduserOption, Owned<IProduser<WebClientProduserOption>>> webClientFactory)
         {
             _produsersUnionFactory = produsersUnionFactory;
-           // _signalRFactory = signalRFactory;
+            _signalRFactory = signalRFactory;
             _kafkaFactory = kafkaFactory;
             _webClientFactory = webClientFactory;
         }
@@ -69,14 +69,13 @@ namespace BL.Services.Produser
         }
 
 
-        private bool CheckEmptyStateAllProdussers(ProduserUnionOption unionOption)
+        private static bool CheckEmptyStateAllProdussers(ProduserUnionOption unionOption)
         {
             return (unionOption.KafkaProduserOptions.Count == 0) && 
                    (unionOption.SignalRProduserOptions.Count == 0) &&
                    (unionOption.WebClientProduserOptions.Count == 0);
 
         }
-
 
         #endregion
     }
