@@ -13,7 +13,9 @@ using Exchange.Base;
 using Firewall;
 using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.HealthChecks;
@@ -47,10 +49,7 @@ namespace WebApiSwc
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHealthChecks(checks =>
-            {
-                checks.AddValueTaskCheck("HTTP Endpoint", () => new ValueTask<IHealthCheckResult>(HealthCheckResult.Healthy("Ok")));
-            });
+            services.AddHealthChecks();
 
             var loggerSettings = SettingsFactory.GetLoggerConfig(Env, AppConfiguration);
             services.AddSerilogServices(loggerSettings, Env.ApplicationName);
@@ -129,6 +128,22 @@ namespace WebApiSwc
                               IConfiguration config,
                               IMapper mapper)
         {
+            //Настрока выдачи ответа для HealthCheck
+            var options = new HealthCheckOptions
+            {
+                ResponseWriter = async (c, r) =>
+                {
+                    c.Response.ContentType = "application/json";
+                    var result = JsonConvert.SerializeObject(new
+                    {
+                        status = r.Status.ToString(),
+                        Version= Program.GetVersion()
+                    });
+                    await c.Response.WriteAsync(result);
+                }
+            };
+            app.UseHealthChecks("/", options);
+
             //Проверка настройки маппинга
             try
             {

@@ -20,15 +20,21 @@ namespace WebApiSwc
         public static void ViewVersionOnConsole()
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            const string version = "CWS Ver2.9";
+            string version = GetVersion();
             Console.Title = version;
-            Console.WriteLine($"{version}  [16.08.2019]  [Add TODO: for Cash HandleInvoke result in MiddlewareInvokeService]");
+            Console.WriteLine($"{version}");
+        }
+
+
+        public static string GetVersion()
+        {
+            const string version = "CWS Ver2.9";
+            return $"{version}  [16.08.2019]  [Add TODO: for Cash HandleInvoke result in MiddlewareInvokeService]";
         }
 
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseHealthChecks("/")
                 .ConfigureServices(services => services.AddAutofac())
                 .UseSerilog()
                 .UseStartup<Startup>()
