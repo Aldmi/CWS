@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Shared.Enums;
 
-namespace BL.Services.Storages
+namespace Infrastructure.Storages
 {
-    public class StorageServiceBase<TKey, TValue> where TKey : IEquatable<TKey>
+    public class BaseStorage<TKey, TValue> where TKey : IEquatable<TKey>
                                                   where TValue : class, IDisposable
     {
         #region prop

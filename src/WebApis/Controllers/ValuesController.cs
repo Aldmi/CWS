@@ -24,7 +24,7 @@ namespace WebApiSwc.Controllers
     public class ValuesController: Controller
     {
         private readonly MediatorForStorages<AdInputType> _mediatorForStorages;
-        private readonly TransportStorageService _spSrStorageService;
+        private readonly TransportStorage _spSrStorage;
         private readonly IMapper _mapper;
         private readonly IEnumerable<IExchange<AdInputType>> _excBehaviors;
         private readonly IEnumerable<ITransportBackground> _backgroundServices;
@@ -33,9 +33,9 @@ namespace WebApiSwc.Controllers
 
 
 
-        public ValuesController(TransportStorageService spSrStorageService, IMapper mapper)
+        public ValuesController(TransportStorage spSrStorage, IMapper mapper)
         {
-            _spSrStorageService = spSrStorageService;
+            _spSrStorage = spSrStorage;
             _mapper = mapper;
         }
 

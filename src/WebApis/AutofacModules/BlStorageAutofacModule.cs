@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using BL.Services.Storages;
+using DeviceForExchange.Produser;
 using InputDataModel.Base.InData;
 
 namespace WebApiSwc.AutofacModules
@@ -11,11 +12,11 @@ namespace WebApiSwc.AutofacModules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<TransportStorageService>().SingleInstance(); 
-            builder.RegisterType<BackgroundStorageService>().SingleInstance();
-            builder.RegisterType<ExchangeStorageService<TIn>>().SingleInstance();
-            builder.RegisterType<DeviceStorageService<TIn>>().SingleInstance();
-            builder.RegisterType<ProduserUnionStorageService<TIn>>().SingleInstance();
+            builder.RegisterType<TransportStorage>().SingleInstance(); 
+            builder.RegisterType<BackgroundStorage>().SingleInstance();
+            builder.RegisterType<ExchangeStorage<TIn>>().SingleInstance();
+            builder.RegisterType<DeviceStorage<TIn>>().SingleInstance();
+            builder.RegisterType<ProduserUnionStorage<TIn>>().SingleInstance();
         }
     }
 }

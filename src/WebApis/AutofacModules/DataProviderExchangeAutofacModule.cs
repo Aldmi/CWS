@@ -1,6 +1,6 @@
 ﻿using AbstractProduser.AbstractProduser;
 using Autofac;
-using BL.Services.Produser;
+using DeviceForExchange.Produser;
 using Exchange.Base.DataProviderAbstract;
 using InputDataModel.Autodictor.DataProviders.ByRuleDataProviders;
 using InputDataModel.Autodictor.DataProviders.ManualDataProviders;

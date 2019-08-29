@@ -5,31 +5,45 @@ namespace AbstractProduser.Helpers
 
     public class ErrorWrapper
     {
-        public readonly ResultError DequeueResultError;
-        public readonly string _errorStr;
-        public readonly Exception _exception;
+        #region fields
+
+        public readonly ResultError ResultError;
+        public readonly string ErrorStr;
+        public readonly Exception Exception;
+
+        #endregion
 
 
 
         #region ctor
 
-        public ErrorWrapper(ResultError dequeueResultError)
+        public ErrorWrapper(ResultError resultError)
         {
-            DequeueResultError = dequeueResultError;
+            this.ResultError = resultError;
         }
 
-        public ErrorWrapper(ResultError dequeueResultError, Exception exception) : this(dequeueResultError)
+        public ErrorWrapper(ResultError resultError, Exception exception) : this(resultError)
         {
-            _exception = exception;
+            Exception = exception;
         }
 
-        public ErrorWrapper(ResultError dequeueResultError, string errorStr) : this(dequeueResultError)
+        public ErrorWrapper(ResultError resultError, string errorStr) : this(resultError)
         {
-            _errorStr = errorStr;
+            ErrorStr = errorStr;
         }
 
         #endregion
+
+
+
+        public override string ToString()
+        {
+            var errorStr = string.IsNullOrEmpty(ErrorStr) ? string.Empty : ErrorStr;
+            var exceptionStr = Exception?.ToString() ?? string.Empty;
+            return $"{ResultError}  {errorStr}  {exceptionStr}";
+        }
     }
+
 
     public enum ResultError
     {

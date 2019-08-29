@@ -19,7 +19,7 @@ namespace DAL.EFCore.Entities.Device
 
         [Required]
         [MaxLength(256)]
-        public string TopicName4MessageBroker { get; set; }         //Название топика для брокера обмена
+        public string ProduserUnionKey { get; set; }            
 
         [Required]
         public string Description { get; set; }

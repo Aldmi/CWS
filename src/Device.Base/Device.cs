@@ -9,6 +9,7 @@ using DAL.Abstract.Entities.Options.Device;
 using DAL.Abstract.Entities.Options.MiddleWare;
 using DeviceForExchange.MiddleWares;
 using DeviceForExchange.MiddleWares.Invokes;
+using DeviceForExchange.Produser;
 using Exchange.Base;
 using Exchange.Base.RxModel;
 using Exchange.Base.Services;
@@ -34,9 +35,8 @@ namespace DeviceForExchange
         #region field
 
         private readonly IEventBus _eventBus; //TODO: Not Use
+        private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
         private readonly ILogger _logger;
-        private readonly IProduser _produser;
-        private readonly Owned<IProduser> _produserOwner;
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
         private readonly List<IDisposable> _disposeExchangesCycleDataEntryStateEventHandlers = new List<IDisposable>();
         private IDisposable _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler;
@@ -50,7 +50,7 @@ namespace DeviceForExchange
         public DeviceOption Option { get;  }
         public List<IExchange<TIn>> Exchanges { get; }
         public MiddlewareInvokeService<TIn> MiddlewareInvokeService { get; private set; }
-        public string TopicName4MessageBroker { get; set; }
+        public string ProduserUnionKey { get; set; }
 
         #endregion
 
@@ -62,19 +62,15 @@ namespace DeviceForExchange
         public Device(DeviceOption option,
                       IEnumerable<IExchange<TIn>> exchanges,
                       IEventBus eventBus,
-                      Func<ProduserOption, Owned<IProduser>> produser4DeviceRespFactory,
-                      ProduserOption produser4DeviceOption,
+                      ProduserUnionStorage<TIn> produserUnionStorage,
                       ILogger logger)
         {
             Option = option;
             Exchanges = exchanges.ToList();
             _eventBus = eventBus;
+            _produserUnionStorage = produserUnionStorage;
             _logger = logger;
-
-            var produserOwner = produser4DeviceRespFactory(produser4DeviceOption);
-            _produserOwner = produserOwner;                  //можно создать/удалить produser в любое время используя фабрику и Owner 
-            _produser = produserOwner.Value;
-            TopicName4MessageBroker = null;
+            ProduserUnionKey = null;
             CreateMiddleWareInDataByOption();
         }
 
@@ -116,16 +112,16 @@ namespace DeviceForExchange
         /// <summary>
         /// Подписка на публикацию событий устройства на ВНЕШНЮЮ ШИНУ ДАННЫХ
         /// </summary>
-        /// <param name="topicName4MessageBroker">Имя топика, если == null, то берется из настроек</param>
-        public bool SubscrubeOnExchangesEvents(string topicName4MessageBroker = null)
+        /// <param name="produserUnionKey">Имя топика, если == null, то берется из настроек</param>
+        public bool SubscrubeOnExchangesEvents(string produserUnionKey = null)
         {
             //Подписка уже есть
-            if (!string.IsNullOrEmpty(TopicName4MessageBroker))
+            if (!string.IsNullOrEmpty(ProduserUnionKey))
                 return false;
 
             //Топик не указан
-            TopicName4MessageBroker = topicName4MessageBroker ?? Option.TopicName4MessageBroker;
-            if (string.IsNullOrEmpty(TopicName4MessageBroker))
+            ProduserUnionKey = produserUnionKey ?? Option.ProduserUnionKey;
+            if (string.IsNullOrEmpty(ProduserUnionKey))
                 return false;
 
             Exchanges.ForEach(exch =>
@@ -141,7 +137,7 @@ namespace DeviceForExchange
  
         public void UnsubscrubeOnExchangesEvents()
         {
-            TopicName4MessageBroker = null;
+            ProduserUnionKey = null;
             _disposeExchangesEventHandlers.ForEach(d=>d.Dispose());
         }
 
@@ -321,15 +317,17 @@ namespace DeviceForExchange
         }
 
 
-        private async Task Send2Produder(string topicName, string formatStr)
+        private async Task Send2ProduderUnion(ResponsePieceOfDataWrapper<TIn> response)
         {
-            try
+            var produser = _produserUnionStorage.Get(ProduserUnionKey);
+            if(produser == null)
+                _logger.Error($"Продюссер по ключу {ProduserUnionKey} НЕ НАЙДЕНН для Устройства= {Option.Name}");
+
+            var results= await produser.SendAll(response);
+            foreach (var (_, isFailure, _, error) in results)
             {
-               await _produser.ProduceAsync(topicName, formatStr);
-            }
-            catch (KafkaException ex)
-            {
-                _logger.Error(ex, $"KafkaException= {ex.Message} для {topicName}");
+                if (isFailure)
+                    _logger.Error($"Ошибки отправки ответов для Устройства= {Option.Name} через ProduderUnion = {ProduserUnionKey}  {error}");
             }
         }
 
@@ -346,10 +344,6 @@ namespace DeviceForExchange
             _logger.Debug($"ConnectChangeRxEventHandler.  Connect = {model.IsConnect} для обмена {model.KeyExchange}");
         }
 
-        private async void LastSendDataChangeRxEventHandler(LastSendDataChangeRxModel<TIn> model)
-        {
-            await Send2Produder(Option.TopicName4MessageBroker, $"LastSendData = {model.LastSendData} для обмена {model.KeyExchange}");
-        }
 
         private async void OpenChangeTransportRxEventHandler(IsOpenChangeRxModel model)
         {
@@ -360,16 +354,14 @@ namespace DeviceForExchange
 
         private async void ResponseChangeRxEventHandler(ResponsePieceOfDataWrapper<TIn> responsePieceOfDataWrapper)
         {
-            var settings= new JsonSerializerSettings
+            await Send2ProduderUnion(responsePieceOfDataWrapper);
+            //логирование ответов в полном виде
+            var settings = new JsonSerializerSettings
             {
-                Formatting = Formatting.None,             //Отступы дочерних элементов 
+                Formatting = Formatting.Indented,             //Отступы дочерних элементов 
                 NullValueHandling = NullValueHandling.Ignore  //Игнорировать пустые теги
             };
             var jsonResp = JsonConvert.SerializeObject(responsePieceOfDataWrapper, settings);
-
-            //TODO: вызвать Send2Produder на ProduserUnion.
-
-            //await Send2Produder(Option.TopicName4MessageBroker, $"ResponseDataWrapper = {jsonResp}");
             _logger.Debug($"TransportResponseChangeRxEventHandler.  jsonResp = {jsonResp} ");
         }
 
@@ -403,7 +395,6 @@ namespace DeviceForExchange
         {
             UnsubscrubeOnExchangesEvents();
             UnsubscrubeOnExchangesCycleDataEntryStateEvents();
-            _produserOwner.Dispose();
             _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler.Dispose();
             MiddlewareInvokeService.Dispose();
         }

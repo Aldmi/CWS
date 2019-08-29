@@ -11,7 +11,7 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.DeviceOption
         [Required(ErrorMessage = "Укажите название устройства")]
         public string Name { get; set; }
 
-        public string TopicName4MessageBroker { get; set; }   
+        public string ProduserUnionKey { get; set; }   
         public string Description { get; set; }
         public bool AutoBuild { get; set; }                        
         //public bool AutoStart{ get; set; }                       

@@ -229,8 +229,8 @@ namespace BL.Services.Actions
                 throw new ArgumentException();
 
             //Подписка уже есть. подписываться 2-ой раз нельзя
-            if (!string.IsNullOrEmpty(device.TopicName4MessageBroker))
-                throw new ActionHandlerException($"Ошибка подписи устройства на передачу данных по шине. Устройство уже подписанно на шину {device.TopicName4MessageBroker}. Необходимо сначало отписаться");
+            if (!string.IsNullOrEmpty(device.ProduserUnionKey))
+                throw new ActionHandlerException($"Ошибка подписи устройства на передачу данных по шине. Устройство уже подписанно на шину {device.ProduserUnionKey}. Необходимо сначало отписаться");
 
             device.SubscrubeOnExchangesEvents(topicName4MessageBroker);
         }

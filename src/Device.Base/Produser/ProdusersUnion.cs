@@ -12,7 +12,7 @@ using DAL.Abstract.Entities.Options.ResponseProduser;
 using InputDataModel.Base.Response;
 using Newtonsoft.Json;
 
-namespace BL.Services.Produser
+namespace DeviceForExchange.Produser
 {
     /// <summary>
     /// Объединение продюссеров.

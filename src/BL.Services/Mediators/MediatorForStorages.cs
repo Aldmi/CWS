@@ -7,11 +7,11 @@ using Autofac.Features.Indexed;
 using Autofac.Features.OwnedInstances;
 using BL.Services.Config;
 using BL.Services.Exceptions;
-using BL.Services.Produser;
 using BL.Services.Storages;
 using DAL.Abstract.Entities.Options;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using DeviceForExchange;
+using DeviceForExchange.Produser;
 using Exchange.Base;
 using Exchange.Base.DataProviderAbstract;
 using Infrastructure.EventBus.Abstract;
@@ -41,15 +41,13 @@ namespace BL.Services.Mediators
     {
         #region fields
 
-        private readonly DeviceStorageService<TIn> _deviceStorageService;
-        private readonly ExchangeStorageService<TIn> _exchangeStorageService;
-        private readonly BackgroundStorageService _backgroundStorageService;
-        private readonly TransportStorageService _transportStorageService;
-        private readonly ProduserUnionStorageService<TIn> _produserUnionStorageService;
+        private readonly DeviceStorage<TIn> _deviceStorage;
+        private readonly ExchangeStorage<TIn> _exchangeStorage;
+        private readonly BackgroundStorage _backgroundStorage;
+        private readonly TransportStorage _transportStorage;
+        private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
         private readonly IEventBus _eventBus;
         private readonly IIndex<string, Func<ProviderOption, IExchangeDataProvider<TIn, ResponseInfo>>> _dataProviderFactory;
-        private readonly Func<ProduserOption, Owned<IProduser>> _produser4DeviceRespFactory;
-
         private readonly AppConfigWrapper _appConfigWrapper;
         private readonly ILogger _logger;
         //опции для создания IProduser через фабрику
@@ -61,25 +59,23 @@ namespace BL.Services.Mediators
 
         #region ctor
 
-        public MediatorForStorages(DeviceStorageService<TIn> deviceStorageService,
-            ExchangeStorageService<TIn> exchangeStorageService,
-            BackgroundStorageService backgroundStorageService,
-            TransportStorageService transportStorageService,
-            ProduserUnionStorageService<TIn> produserUnionStorageService,
+        public MediatorForStorages(DeviceStorage<TIn> deviceStorage,
+            ExchangeStorage<TIn> exchangeStorage,
+            BackgroundStorage backgroundStorage,
+            TransportStorage transportStorage,
+            ProduserUnionStorage<TIn> produserUnionStorage,
             IEventBus eventBus,     
             IIndex<string, Func<ProviderOption, IExchangeDataProvider<TIn, ResponseInfo>>> dataProviderFactory,
-            Func<ProduserOption, Owned<IProduser>> produser4DeviceRespFactory,
             AppConfigWrapper appConfigWrapper,
             ILogger logger)
         {
-            _transportStorageService = transportStorageService;
-            _produserUnionStorageService = produserUnionStorageService;
-            _backgroundStorageService = backgroundStorageService;
-            _exchangeStorageService = exchangeStorageService;
-            _deviceStorageService = deviceStorageService;
+            _transportStorage = transportStorage;
+            _produserUnionStorage = produserUnionStorage;
+            _backgroundStorage = backgroundStorage;
+            _exchangeStorage = exchangeStorage;
+            _deviceStorage = deviceStorage;
             _eventBus = eventBus;
             _dataProviderFactory = dataProviderFactory;
-            _produser4DeviceRespFactory = produser4DeviceRespFactory;
             _appConfigWrapper = appConfigWrapper;
             _logger = logger;
         }
@@ -98,14 +94,14 @@ namespace BL.Services.Mediators
         /// <returns>Верунть ус-во</returns>
         public Device<TIn> GetDevice(string deviceName)
         {
-            var device = _deviceStorageService.Get(deviceName);
+            var device = _deviceStorage.Get(deviceName);
             return device;
         }
 
 
         public IReadOnlyList<Device<TIn>> GetDevices()
         {
-            return _deviceStorageService.Values.ToList();
+            return _deviceStorage.Values.ToList();
         }
 
 
@@ -116,7 +112,7 @@ namespace BL.Services.Mediators
         /// <returns></returns>
         public IReadOnlyList<Device<TIn>> GetDevicesUsingExchange(string exchnageKey)
         {
-            return _deviceStorageService.Values.Where(dev=>dev.Option.ExchangeKeys.Contains(exchnageKey)).ToList();
+            return _deviceStorage.Values.Where(dev=>dev.Option.ExchangeKeys.Contains(exchnageKey)).ToList();
         }
 
 
@@ -127,19 +123,19 @@ namespace BL.Services.Mediators
         /// <returns></returns>
         public IReadOnlyList<IExchange<TIn>> GetExchangesUsingTransport(KeyTransport keyTransport)
         {
-           return _exchangeStorageService.Values.Where(exch => exch.KeyTransport.Equals(keyTransport)).ToList();
+           return _exchangeStorage.Values.Where(exch => exch.KeyTransport.Equals(keyTransport)).ToList();
         }
 
 
         public IExchange<TIn> GetExchange(string exchnageKey)
         {
-            return _exchangeStorageService.Get(exchnageKey);
+            return _exchangeStorage.Get(exchnageKey);
         }
 
 
         public ITransportBackground GetBackground(KeyTransport keyTransport)
         {
-            return _backgroundStorageService.Get(keyTransport);
+            return _backgroundStorage.Get(keyTransport);
         }
 
 
@@ -153,7 +149,7 @@ namespace BL.Services.Mediators
         public Device<TIn> BuildAndAddDevice(OptionAgregator optionAgregator)
         {
             var deviceOption = optionAgregator.DeviceOptions.First();
-            if (_deviceStorageService.IsExist(deviceOption.Name))
+            if (_deviceStorage.IsExist(deviceOption.Name))
             {
                 throw new StorageHandlerException($"Устройство с таким именем уже существует: {deviceOption.Name}");
             }
@@ -162,57 +158,57 @@ namespace BL.Services.Mediators
             foreach (var spOption in optionAgregator.TransportOptions.SerialOptions)
             {
                 var keyTransport = new KeyTransport(spOption.Port, TransportType.SerialPort);
-                var sp = _transportStorageService.Get(keyTransport);
+                var sp = _transportStorage.Get(keyTransport);
                 if (sp == null)
                 {
                     sp = new SpWinSystemIo(spOption, keyTransport);
-                    _transportStorageService.AddNew(keyTransport, sp);
+                    _transportStorage.AddNew(keyTransport, sp);
                     var bg = new HostingBackgroundTransport(keyTransport, spOption.AutoStartBg, spOption.DutyCycleTimeBg, _logger);
-                    _backgroundStorageService.AddNew(keyTransport, bg);
+                    _backgroundStorage.AddNew(keyTransport, bg);
                 }
             }
             foreach (var tcpIpOption in optionAgregator.TransportOptions.TcpIpOptions)
             {
                 var keyTransport = new KeyTransport(tcpIpOption.Name, TransportType.TcpIp);
-                var tcpIp = _transportStorageService.Get(keyTransport);
+                var tcpIp = _transportStorage.Get(keyTransport);
                 if (tcpIp == null)
                 {
                     var bg = new HostingBackgroundTransport(keyTransport, tcpIpOption.AutoStartBg, tcpIpOption.DutyCycleTimeBg, _logger);
-                    _backgroundStorageService.AddNew(keyTransport, bg);
+                    _backgroundStorage.AddNew(keyTransport, bg);
                     tcpIp = new TcpIpTransport(bg, tcpIpOption, keyTransport, _logger);
-                    _transportStorageService.AddNew(keyTransport, tcpIp);
+                    _transportStorage.AddNew(keyTransport, tcpIp);
 
                 }
             }
             foreach (var httpOption in optionAgregator.TransportOptions.HttpOptions)
             {
                 var keyTransport = new KeyTransport(httpOption.Name, TransportType.Http);
-                var http = _transportStorageService.Get(keyTransport);
+                var http = _transportStorage.Get(keyTransport);
                 if (http == null)
                 {
                     http = new HttpTransport(httpOption, keyTransport);
-                    _transportStorageService.AddNew(keyTransport, http);
+                    _transportStorage.AddNew(keyTransport, http);
                     var bg = new HostingBackgroundTransport(keyTransport, httpOption.AutoStartBg, httpOption.DutyCycleTimeBg, _logger);
-                    _backgroundStorageService.AddNew(keyTransport, bg);
+                    _backgroundStorage.AddNew(keyTransport, bg);
                 }
             }
 
             //ДОБАВИТЬ НОВЫЕ ОБМЕНЫ---------------------------------------------------------------------------
             foreach (var exchOption in optionAgregator.ExchangeOptions)
             {
-                var exch = _exchangeStorageService.Get(exchOption.Key);
+                var exch = _exchangeStorage.Get(exchOption.Key);
                 if (exch != null)
                     continue;
 
                 var keyTransport = exchOption.KeyTransport;
-                var bg = _backgroundStorageService.Get(keyTransport);
-                var transport = _transportStorageService.Get(keyTransport);
+                var bg = _backgroundStorage.Get(keyTransport);
+                var transport = _transportStorage.Get(keyTransport);
 
                 try
                 {
                     var dataProvider = _dataProviderFactory[exchOption.Provider.Name](exchOption.Provider);
                     exch = new ExchangeUniversal<TIn>(exchOption, transport, bg, dataProvider, _logger);
-                    _exchangeStorageService.AddNew(exchOption.Key, exch);
+                    _exchangeStorage.AddNew(exchOption.Key, exch);
                 }
                 catch (Exception)
                 {
@@ -221,9 +217,9 @@ namespace BL.Services.Mediators
             }
 
             //ДОБАВИТЬ УСТРОЙСТВО--------------------------------------------------------------------------
-            var excanges = _exchangeStorageService.GetMany(deviceOption.ExchangeKeys).ToList();
-            var device = new Device<TIn>(deviceOption, excanges, _eventBus, _produser4DeviceRespFactory, _appConfigWrapper.GetProduser4DeviceOption, _logger);
-            _deviceStorageService.AddNew(device.Option.Name, device);
+            var excanges = _exchangeStorage.GetMany(deviceOption.ExchangeKeys).ToList();
+            var device = new Device<TIn>(deviceOption, excanges, _eventBus, _produserUnionStorage, _logger);
+            _deviceStorage.AddNew(device.Option.Name, device);
 
             return device;
         }
@@ -241,13 +237,13 @@ namespace BL.Services.Mediators
             if (device == null)
                 throw new StorageHandlerException($"Устройство с таким именем НЕ существует: {deviceName}");
 
-            var exchangeKeys = _deviceStorageService.Values.SelectMany(dev => dev.Option.ExchangeKeys).ToList();
-            var keyTransports = _exchangeStorageService.Values.Select(exc => exc.KeyTransport).ToList();
+            var exchangeKeys = _deviceStorage.Values.SelectMany(dev => dev.Option.ExchangeKeys).ToList();
+            var keyTransports = _exchangeStorage.Values.Select(exc => exc.KeyTransport).ToList();
             foreach (var exchKey in device.Option.ExchangeKeys)
             {
                 if (exchangeKeys.Count(key => key == exchKey) == 1)
                 {
-                    var removingExch = _exchangeStorageService.Get(exchKey);
+                    var removingExch = _exchangeStorage.Get(exchKey);
                     if (removingExch.CycleExchnageStatus != CycleExchnageStatus.Off)
                     {
                         removingExch.StopCycleExchange();
@@ -256,13 +252,13 @@ namespace BL.Services.Mediators
                     {
                         await RemoveAndStopTransport(removingExch.KeyTransport);
                     }
-                    _exchangeStorageService.Remove(exchKey);
+                    _exchangeStorage.Remove(exchKey);
                     removingExch.Dispose();
                 }
             }
 
             //УДАЛИМ УСТРОЙСТВО
-            _deviceStorageService.Remove(deviceName);
+            _deviceStorage.Remove(deviceName);
             device.Dispose(); //???
             return device;
         }
@@ -273,7 +269,7 @@ namespace BL.Services.Mediators
         /// </summary>
         public ITransport GetTransport(KeyTransport keyTransport)
         {
-            var transport = _transportStorageService.Get(keyTransport);
+            var transport = _transportStorage.Get(keyTransport);
             return transport;
         }
 
@@ -283,20 +279,20 @@ namespace BL.Services.Mediators
         /// </summary>
         private async Task RemoveAndStopTransport(KeyTransport keyTransport)
         {
-            var bg = _backgroundStorageService.Get(keyTransport);
+            var bg = _backgroundStorage.Get(keyTransport);
             if (bg.IsStarted)
             {
-                _backgroundStorageService.Remove(keyTransport);
+                _backgroundStorage.Remove(keyTransport);
                 await bg.StopAsync(CancellationToken.None);
                 bg.Dispose();
             }
 
-            var transport = _transportStorageService.Get(keyTransport);
+            var transport = _transportStorage.Get(keyTransport);
             if (transport.IsCycleReopened)
             {
                 transport.CycleReOpenedExecCancelation();
             }
-            _transportStorageService.Remove(keyTransport);
+            _transportStorage.Remove(keyTransport);
             transport.Dispose();
         }
 
@@ -306,7 +302,7 @@ namespace BL.Services.Mediators
         /// </summary>
         public ProdusersUnion<TIn> GetProduserUnion(string produserName)
         {
-            var produser = _produserUnionStorageService.Get(produserName);
+            var produser = _produserUnionStorage.Get(produserName);
             return produser;
         }
 
@@ -316,7 +312,7 @@ namespace BL.Services.Mediators
         /// </summary>
         public IReadOnlyList<ProdusersUnion<TIn>> GetProduserUnions()
         {
-            return _produserUnionStorageService.Values.ToList();
+            return _produserUnionStorage.Values.ToList();
         }
 
 
@@ -325,9 +321,9 @@ namespace BL.Services.Mediators
         /// </summary>
         public DictionaryCrudResult AddOrUpdateProduserUnion(string key, ProdusersUnion<TIn> value)
         {
-            return _produserUnionStorageService.IsExist(key) ?
-                _produserUnionStorageService.Update(key, value) :
-                _produserUnionStorageService.AddNew(key, value);
+            return _produserUnionStorage.IsExist(key) ?
+                _produserUnionStorage.Update(key, value) :
+                _produserUnionStorage.AddNew(key, value);
         }
 
 
@@ -336,7 +332,7 @@ namespace BL.Services.Mediators
         /// </summary>
         public DictionaryCrudResult RemoveProduserUnion(string key)
         {
-            return _produserUnionStorageService.IsExist(key) ? _produserUnionStorageService.Remove(key) : DictionaryCrudResult.KeyNotExist;
+            return _produserUnionStorage.IsExist(key) ? _produserUnionStorage.Remove(key) : DictionaryCrudResult.KeyNotExist;
         }
         #endregion
     }

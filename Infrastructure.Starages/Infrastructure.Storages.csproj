@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\Device.Base\DeviceForExchange.csproj" />
+    <ProjectReference Include="..\src\Shared\Shared.csproj" />
+    <ProjectReference Include="..\src\Worker.Background\Worker.Background.csproj" />
+  </ItemGroup>
+
+</Project>

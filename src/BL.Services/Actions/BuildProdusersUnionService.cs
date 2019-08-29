@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using BL.Services.Mediators;
-using BL.Services.Produser;
 using CSharpFunctionalExtensions;
 using DAL.Abstract.Entities.Options.ResponseProduser;
+using DeviceForExchange.Produser;
 using InputDataModel.Base.InData;
 using Shared.Enums;
 

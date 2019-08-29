@@ -195,7 +195,7 @@ namespace WebApiSwc
             }
 
             //ЗАПУСК БЕКГРАУНДА ОПРОСА УСТРОЙСТВ
-            var backgroundServices = scope.Resolve<BackgroundStorageService>();
+            var backgroundServices = scope.Resolve<BackgroundStorage>();
             lifetimeApp.ApplicationStarted.Register(() =>
             {      
                 foreach (var back in backgroundServices.Values.Where(bg => bg.AutoStart))
@@ -205,7 +205,7 @@ namespace WebApiSwc
             });
 
             //ЗАПУСК НА ТРАНСПОРТЕ ЦИКЛИЧЕСКОГО ПЕРЕОТКРЫТИЯ УСТРОЙСТВА
-            var transportServices = scope.Resolve<TransportStorageService>();
+            var transportServices = scope.Resolve<TransportStorage>();
             lifetimeApp.ApplicationStarted.Register(async () =>
             {
                 List<Task> tasks = new List<Task>();
@@ -218,7 +218,7 @@ namespace WebApiSwc
             });
 
             //ЗАПУСК НА ОБМЕНЕ ЦИКЛИЧЕСКОГО ОБМЕНА.
-            var exchangeServices = scope.Resolve<ExchangeStorageService<AdInputType>>();
+            var exchangeServices = scope.Resolve<ExchangeStorage<AdInputType>>();
             lifetimeApp.ApplicationStarted.Register(() =>
             {
                 foreach (var exchange in exchangeServices.Values.Where(exch=> exch.AutoStartCycleFunc))
@@ -228,17 +228,16 @@ namespace WebApiSwc
             });
 
             //ПОДПИСКА ДЕВАЙСА.
-            var deviceServices = scope.Resolve<DeviceStorageService<AdInputType>>();
+            var deviceServices = scope.Resolve<DeviceStorage<AdInputType>>();
             lifetimeApp.ApplicationStarted.Register(() =>
             {
-                // СОБЫТИЯ ПУБЛИКУЕМЫЕ НА IProduser (kaffka).
-                foreach (var device in deviceServices.Values.Where(dev => !string.IsNullOrEmpty(dev.Option.TopicName4MessageBroker)))
-                {
-                    device.SubscrubeOnExchangesEvents();
-                }
-                //СОБЫТИЯ СМЕНЫ СОСТОЯНИЯ ПОСТУПЛЕНИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ. ОБМЕНА.
                 foreach (var device in deviceServices.Values)
                 {
+                    // СОБЫТИЯ ПУБЛИКУЕМЫЕ НА ProduserUnion.
+                    if (!string.IsNullOrEmpty(device.ProduserUnionKey))
+                        device.SubscrubeOnExchangesEvents();
+
+                    //СОБЫТИЯ СМЕНЫ СОСТОЯНИЯ ПОСТУПЛЕНИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ. ОБМЕНА.
                     device.SubscrubeOnExchangesCycleDataEntryStateEvents();
                 }
             });
@@ -253,7 +252,7 @@ namespace WebApiSwc
             lifetimeApp.ApplicationStopping.Register(() => bgConsumer.StopAsync(CancellationToken.None));
 
             //ОСТАНОВ ЗАПУЩЕННОГО БЕКГРАУНДА ОПРОСА УСТРОЙСТВ
-            var backgroundServices = scope.Resolve<BackgroundStorageService>();
+            var backgroundServices = scope.Resolve<BackgroundStorage>();
             lifetimeApp.ApplicationStopping.Register(() =>
             {
                 foreach (var back in backgroundServices.Values.Where(bg => bg.IsStarted))
@@ -263,7 +262,7 @@ namespace WebApiSwc
             });
 
             //ОСТАНОВ НА ТРАНСПОРТЕ ЦИКЛИЧЕСКОГО ПЕРЕОТКРЫТИЯ УСТРОЙСТВА
-            var transportServices = scope.Resolve<TransportStorageService>();
+            var transportServices = scope.Resolve<TransportStorage>();
             lifetimeApp.ApplicationStopping.Register(async () =>
             {
                 foreach (var transport in transportServices.Values)
@@ -273,7 +272,7 @@ namespace WebApiSwc
             });
 
             //ОСТАНОВ НА ОБМЕНЕ ЦИКЛИЧЕСКОГО ОБМЕНА.
-            var exchangeServices = scope.Resolve<ExchangeStorageService<AdInputType>>();
+            var exchangeServices = scope.Resolve<ExchangeStorage<AdInputType>>();
             lifetimeApp.ApplicationStopping.Register(() =>
             {
                 foreach (var exchange in exchangeServices.Values.Where(exch => exch.CycleExchnageStatus != CycleExchnageStatus.Off))
@@ -283,17 +282,14 @@ namespace WebApiSwc
             });
 
             //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ
-            var deviceServices = scope.Resolve<DeviceStorageService<AdInputType>>();
+            var deviceServices = scope.Resolve<DeviceStorage<AdInputType>>();
             lifetimeApp.ApplicationStopping.Register(() =>
             {
-                //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ ПУБЛИКУЕМЫХ НА IProduser (kaffka).
                 foreach (var device in deviceServices.Values)
                 {
-                     device.UnsubscrubeOnExchangesEvents();
-                }
-                //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ СМЕНЫ СОСТОЯНИЯ ПОСТУПЛЕНИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ. ОБМЕНА.
-                foreach (var device in deviceServices.Values)
-                {
+                    //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ ПУБЛИКУЕМЫХ НА ProduserUnion.
+                    device.UnsubscrubeOnExchangesEvents();
+                    //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ СМЕНЫ СОСТОЯНИЯ ПОСТУПЛЕНИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ. ОБМЕНА.
                     device.UnsubscrubeOnExchangesCycleDataEntryStateEvents();
                 }
             });
@@ -335,12 +331,9 @@ namespace WebApiSwc
                 var buildProdusersUnionService = scope.Resolve<BuildProdusersUnionService<AdInputType>>();
                 await buildProdusersUnionService.BuildAllProdusers();
             }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
-                //foreach (var innerException in ex.InnerExceptions)
-                //{
-                //    logger.Error(innerException, "ОШИБКА СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ");
-                //}
+                logger.Error( $"ОШИБКА СОЗДАНИЕ СПИСКА ПРОДЮССЕРОВ НА БАЗЕ ОПЦИЙ  {ex}");
             }
 
             //СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ--------------------------------------------------
