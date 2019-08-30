@@ -154,7 +154,7 @@ namespace WebApiSwc.Controllers
 
 
 
-        // DELETE api/values/5
+        // DELETE api/devicesoption/5
         [HttpDelete("{deviceName}")]
         public async Task<IActionResult> Delete([FromRoute]string deviceName)
         {
@@ -175,6 +175,24 @@ namespace WebApiSwc.Controllers
         }
 
 
+        /// <summary>
+        /// В теле запроса должно быть указанно "Ok" в формате application/json
+        /// </summary>
+        // DELETE api/devicesoption
+        [HttpDelete]
+        public async Task<IActionResult> Erase([FromBody] string resolution)
+        {
+            if(!resolution.Equals("Ok"))
+                return BadRequest(" Не верный resolution в теле запроса");
+
+            var (isSuccess, _, error) = await _mediatorForOptionsRep.EraseDeviceOptionAsync();
+            if (isSuccess)
+                return Ok();
+
+            _logger.Error(error, "Ошибка в DevicesOptionController/Delete");
+            return BadRequest(error);
+        }
+
 
         // PUT api/devicesoption/BuildDevice/deviceName
         [HttpPut("BuildDevice/{deviceName}")]
@@ -182,7 +200,7 @@ namespace WebApiSwc.Controllers
         {
             try
             {
-                var newDevice =  await _buildDeviceService.BuildDevice(deviceName);
+                var newDevice = await _buildDeviceService.BuildDevice(deviceName);
                 if (newDevice == null)
                 {
                     return NotFound(deviceName);

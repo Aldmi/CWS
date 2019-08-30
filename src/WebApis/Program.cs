@@ -28,8 +28,8 @@ namespace WebApiSwc
 
         public static string GetVersion()
         {
-            const string version = "CWS Ver2.9";
-            return $"{version}  [16.08.2019]  [Add TODO: for Cash HandleInvoke result in MiddlewareInvokeService]";
+            const string version = "CWS Ver3.0";
+            return $"{version}  [30.08.2019]  [Reliz]";
         }
 
 

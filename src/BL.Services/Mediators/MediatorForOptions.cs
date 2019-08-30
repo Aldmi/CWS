@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
@@ -213,7 +214,7 @@ namespace BL.Services.Mediators
                     var singleExchOption = await _exchangeOptionRep.GetSingleAsync(exc => exc.Key == exchangeKey);
                     if ((await _exchangeOptionRep.ListAsync()).Count(option => option.KeyTransport.Equals(singleExchOption.KeyTransport)) == 1)  //найденн транспорт используемый только этим (удаленным) обменом
                     {
-                        await RemoveTransportAsync(singleExchOption.KeyTransport, deletedOptions.TransportOptions);                                                               //Удалить транспорт
+                        await RemoveTransportAsync(singleExchOption.KeyTransport, deletedOptions.TransportOptions);                               //Удалить транспорт
                     }
                     deletedOptions.ExchangeOptions.Add(singleExchOption);
                     await _exchangeOptionRep.DeleteAsync(singleExchOption);                                                                      //Удалить обмен
@@ -224,6 +225,27 @@ namespace BL.Services.Mediators
             deletedOptions.DeviceOptions.Add(deviceOption);
             await _deviceOptionRep.DeleteAsync(deviceOption);
             return deletedOptions;
+        }
+
+
+        /// <summary>
+        /// удалить все устройства и их зависимости (Exchanges и Transports)
+        /// </summary>
+        public async Task<Result> EraseDeviceOptionAsync()
+        {
+            try
+            {
+                await _deviceOptionRep.DeleteAsync(option => true);
+                await _exchangeOptionRep.DeleteAsync(option => true);
+                await _tcpIpOptionRep.DeleteAsync(option => true);
+                await _serialPortOptionRep.DeleteAsync(option => true);
+                await _httpOptionRep.DeleteAsync(option => true);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail<string>($"ИСКЛЮЧЕНИЕ В EraseDeviceOptionAsync: {ex}");
+            }
+            return Result.Ok();
         }
 
 

@@ -18,7 +18,7 @@ namespace DeviceForExchange.MiddleWares.Converters.StringConverters
 
         protected override string ConvertChild(string inProp, int dataId)
         {
-            return (inProp.Length < _option.Limit) ? inProp : inProp.Remove(_option.Limit);
+            return (inProp.Length <= _option.Limit) ? inProp : inProp.Remove(_option.Limit);
         }
     }
 }
