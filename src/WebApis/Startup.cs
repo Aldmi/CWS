@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.HealthChecks;
@@ -49,7 +50,7 @@ namespace WebApiSwc
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHealthChecks();
+            //services.AddHealthChecks();
 
             var loggerSettings = SettingsFactory.GetLoggerConfig(Env, AppConfiguration);
             services.AddSerilogServices(loggerSettings, Env.ApplicationName);
@@ -64,7 +65,8 @@ namespace WebApiSwc
                     o.SerializerSettings.Formatting = Formatting.Indented;
                     o.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                     o.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                });
+                }).
+                SetCompatibilityVersion(CompatibilityVersion.Version_2_2); ;
 
             services.AddOptions();
             services.AddAutoMapper();
@@ -137,7 +139,7 @@ namespace WebApiSwc
                     var result = JsonConvert.SerializeObject(new
                     {
                         status = r.Status.ToString(),
-                        Version= Program.GetVersion()
+                        Version = Program.GetVersion()
                     });
                     await c.Response.WriteAsync(result);
                 }
@@ -156,7 +158,7 @@ namespace WebApiSwc
 
             InitializeAsync(scope).Wait();
             ConfigurationBackgroundProcessAsync(app, scope);
-          
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -171,7 +173,7 @@ namespace WebApiSwc
                         .DenyAllAccess()
                         .ExceptFromIPAddressRanges(firewallConfig.AllowedCidRs)
                         .ExceptFromIPAddresses(firewallConfig.AllowedIPs)
-                    //.ExceptFromLocalhost()
+                //.ExceptFromLocalhost()
                 );
             }
 

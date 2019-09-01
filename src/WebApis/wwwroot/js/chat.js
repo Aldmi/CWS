@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-let hubUrl = 'http://localhost:53439/providerHub';
+let hubUrl = 'http://localhost:44138/providerHub';
 var connection = new signalR.HubConnectionBuilder().withUrl(hubUrl).build();
 
 //Если в течение этого периода сервер не присылает никакого сообщения, то клиент считает, что подключение к серверу разорвано. 

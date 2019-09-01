@@ -16,7 +16,7 @@ namespace BL.Services.Actions
     {
         #region field
 
-        private readonly MediatorForOptions _mediatorForOptions;
+        private readonly MediatorForProduserUnionOptions _mediatorForProduserUnionOptions;
         private readonly MediatorForStorages<TIn> _mediatorForStorages;
         private readonly ProdusersUnionFactory<TIn> _factory;
 
@@ -26,9 +26,9 @@ namespace BL.Services.Actions
 
         #region ctor
 
-        public BuildProdusersUnionService(MediatorForOptions mediatorForOptions, MediatorForStorages<TIn> mediatorForStorages, ProdusersUnionFactory<TIn> factory)
+        public BuildProdusersUnionService(MediatorForProduserUnionOptions mediatorForProduserUnionOptions, MediatorForStorages<TIn> mediatorForStorages, ProdusersUnionFactory<TIn> factory)
         {
-            _mediatorForOptions = mediatorForOptions;
+            _mediatorForProduserUnionOptions = mediatorForProduserUnionOptions;
             _mediatorForStorages = mediatorForStorages;
             _factory = factory;
         }
@@ -45,7 +45,7 @@ namespace BL.Services.Actions
         public async Task<IReadOnlyList<ProdusersUnion<TIn>>> BuildAllProdusers()
         {
             // 1. _mediatorForOptions вытаскивает из базы список ProduserUnionOption
-            var produsersUnionOptions = await _mediatorForOptions.GetProduserUnionOptionsAsync();
+            var produsersUnionOptions = await _mediatorForProduserUnionOptions.GetProduserUnionOptionsAsync();
 
             // 2. _factory создает по 1 на базе ProduserUnionOption ProduserUnion
             //   _mediatorForStorages записывает в storage полученный ProduserUnion
@@ -65,14 +65,13 @@ namespace BL.Services.Actions
         public async Task<Result<ProdusersUnion<TIn>>> AddOrUpdateAndBuildProduserAsync(ProduserUnionOption produsersUnionOption)
         {
             //Обновить или добавить в Репозиторий produsersUnionOption
-            var addOrUpdateOptionResult = await _mediatorForOptions.AddOrUpdateUnionOptionAsync(produsersUnionOption);
+            var addOrUpdateOptionResult = await _mediatorForProduserUnionOptions.AddOrUpdateUnionOptionAsync(produsersUnionOption);
             if (addOrUpdateOptionResult.IsFailure)
             {
                 return Result.Fail<ProdusersUnion<TIn>>($"{addOrUpdateOptionResult.Error}");
             }
 
-            //Если успешно обновили или добавили в репозиторий.
-            // сбилдить ProduserUnion
+            //Если успешно обновили или добавили ProduserUnionOption в репозиторий, сбилдить ProduserUnion
             var createResult = _factory.CreateProduserUnion(produsersUnionOption);
             if (createResult.IsFailure)
                 return createResult;
@@ -92,7 +91,7 @@ namespace BL.Services.Actions
         /// </summary>
         public async Task<ProduserUnionOption> RemoveProduserAsync(ProduserUnionOption produserUnionOption)
         {
-            var removed = await _mediatorForOptions.RemoveProduserUnionOptionAsync(produserUnionOption);
+            var removed = await _mediatorForProduserUnionOptions.RemoveProduserUnionOptionAsync(produserUnionOption);
             var res = _mediatorForStorages.RemoveProduserUnion(removed.Key);
             return res != DictionaryCrudResult.KeyNotExist ? removed : null;
         }

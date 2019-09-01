@@ -29,7 +29,7 @@ namespace WebApiSwc.Controllers
     {
         #region fields
 
-        private readonly MediatorForOptions _mediatorForOptionsRep;
+        private readonly MediatorForDeviceOptions _mediatorForDeviceOptionsRep;
         private readonly BuildDeviceService<AdInputType> _buildDeviceService;
 
         private readonly IMapper _mapper;
@@ -42,12 +42,12 @@ namespace WebApiSwc.Controllers
 
         #region ctor
 
-        public DevicesOptionController(MediatorForOptions mediatorForOptionsRep,
+        public DevicesOptionController(MediatorForDeviceOptions mediatorForDeviceOptionsRep,
                                        BuildDeviceService<AdInputType> buildDeviceService,
                                        IMapper mapper,
                                        ILogger logger)
         {
-            _mediatorForOptionsRep = mediatorForOptionsRep;
+            _mediatorForDeviceOptionsRep = mediatorForDeviceOptionsRep;
             _buildDeviceService = buildDeviceService;
             _mapper = mapper;
             _logger = logger;
@@ -67,9 +67,9 @@ namespace WebApiSwc.Controllers
             try
             {
                 //TODO: Добавить GetOptionAgregator в _mediatorForOptionsRep. Сделать по аналогии GetOptionAgregatorForDeviceAsync()
-                var deviceOptions = await _mediatorForOptionsRep.GetDeviceOptionsAsync();
-                var exchangeOptions = await _mediatorForOptionsRep.GetExchangeOptionsAsync();
-                var transportOption = await _mediatorForOptionsRep.GetTransportOptionsAsync();
+                var deviceOptions = await _mediatorForDeviceOptionsRep.GetDeviceOptionsAsync();
+                var exchangeOptions = await _mediatorForDeviceOptionsRep.GetExchangeOptionsAsync();
+                var transportOption = await _mediatorForDeviceOptionsRep.GetTransportOptionsAsync();
 
                 var deviceOptionsDto = _mapper.Map<List<DeviceOptionDto>>(deviceOptions);
                 var exchangeOptionsDto = _mapper.Map<List<ExchangeOptionDto>>(exchangeOptions);
@@ -98,11 +98,11 @@ namespace WebApiSwc.Controllers
         {
             try
             {
-                if (!await _mediatorForOptionsRep.IsExistDeviceAsync(deviceName))
+                if (!await _mediatorForDeviceOptionsRep.IsExistDeviceAsync(deviceName))
                 {
                     return NotFound(deviceName);
                 }
-                var optionAgregator = await _mediatorForOptionsRep.GetOptionAgregatorForDeviceAsync(deviceName);
+                var optionAgregator = await _mediatorForDeviceOptionsRep.GetOptionAgregatorForDeviceAsync(deviceName);
                 var agregatorOptionDto = _mapper.Map<OptionAgregatorDto>(optionAgregator);
                 return new JsonResult(agregatorOptionDto);
             }
@@ -136,7 +136,7 @@ namespace WebApiSwc.Controllers
                 var deviceOption = _mapper.Map<DeviceOption>(deviceOptionDto);
                 var exchangeOption = _mapper.Map<IReadOnlyList<ExchangeOption>>(exchangeOptionDto);
                 var transportOption = _mapper.Map<TransportOption>(transportOptionDto);
-                await _mediatorForOptionsRep.AddDeviceOptionAsync(deviceOption, exchangeOption, transportOption);
+                await _mediatorForDeviceOptionsRep.AddDeviceOptionAsync(deviceOption, exchangeOption, transportOption);
                 return CreatedAtAction("Get", new { deviceName = deviceOptionDto.Name }, data); //возвращает в ответе данные запроса. в Header пишет значение Location→ http://localhost:44138/api/DevicesOption/{deviceName}
             }
             catch (OptionHandlerException ex)
@@ -158,13 +158,13 @@ namespace WebApiSwc.Controllers
         [HttpDelete("{deviceName}")]
         public async Task<IActionResult> Delete([FromRoute]string deviceName)
         {
-            var deviceOption = await _mediatorForOptionsRep.GetDeviceOptionByNameAsync(deviceName);
+            var deviceOption = await _mediatorForDeviceOptionsRep.GetDeviceOptionByNameAsync(deviceName);
             if (deviceOption == null)
                 return NotFound(deviceName);
 
             try
             {
-                var deletedOption = await _mediatorForOptionsRep.RemoveDeviceOptionAsync(deviceOption);
+                var deletedOption = await _mediatorForDeviceOptionsRep.RemoveDeviceOptionAsync(deviceOption);
                 return Ok(deletedOption);
             }
             catch (Exception ex)
@@ -185,7 +185,7 @@ namespace WebApiSwc.Controllers
             if(!resolution.Equals("Ok"))
                 return BadRequest(" Не верный resolution в теле запроса");
 
-            var (isSuccess, _, error) = await _mediatorForOptionsRep.EraseDeviceOptionAsync();
+            var (isSuccess, _, error) = await _mediatorForDeviceOptionsRep.EraseDeviceOptionAsync();
             if (isSuccess)
                 return Ok();
 

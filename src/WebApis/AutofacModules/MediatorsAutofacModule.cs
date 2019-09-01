@@ -10,7 +10,8 @@ namespace WebApiSwc.AutofacModules
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<MediatorForStorages<TIn>>().InstancePerDependency();
-            builder.RegisterType<MediatorForOptions>().InstancePerDependency();
+            builder.RegisterType<MediatorForDeviceOptions>().InstancePerDependency();
+            builder.RegisterType<MediatorForProduserUnionOptions>().InstancePerDependency();
         }
     }
 }

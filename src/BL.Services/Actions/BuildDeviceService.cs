@@ -19,7 +19,7 @@ namespace BL.Services.Actions
     {
         #region field
 
-        private readonly MediatorForOptions _mediatorForOptionsRep;
+        private readonly MediatorForDeviceOptions _mediatorForDeviceOptions;
         private readonly MediatorForStorages<TIn> _mediatorForStorages;
 
         #endregion
@@ -29,9 +29,9 @@ namespace BL.Services.Actions
 
         #region ctor
 
-        public BuildDeviceService(MediatorForOptions mediatorForOptionsRep, MediatorForStorages<TIn> mediatorForStorages)
+        public BuildDeviceService(MediatorForDeviceOptions mediatorForDeviceOptions, MediatorForStorages<TIn> mediatorForStorages)
         {
-            _mediatorForOptionsRep = mediatorForOptionsRep;
+            _mediatorForDeviceOptions = mediatorForDeviceOptions;
             _mediatorForStorages = mediatorForStorages;
         }
 
@@ -51,7 +51,7 @@ namespace BL.Services.Actions
         {
             var newDevices = new List<Device<TIn>>();
             var exceptions = new List<Exception>();
-            var devices = await _mediatorForOptionsRep.GetDeviceOptionsWithAutoBuildAsync();
+            var devices = await _mediatorForDeviceOptions.GetDeviceOptionsWithAutoBuildAsync();
             foreach (var device in devices)
             {
                 try
@@ -83,11 +83,11 @@ namespace BL.Services.Actions
         /// <exception cref="Exception"></exception> 
         public async Task<Device<TIn>> BuildDevice(string deviceName)
         {        
-            if (!await _mediatorForOptionsRep.IsExistDeviceAsync(deviceName))
+            if (!await _mediatorForDeviceOptions.IsExistDeviceAsync(deviceName))
             {
                 return null;
             }
-            var optionAgregator = await _mediatorForOptionsRep.GetOptionAgregatorForDeviceAsync(deviceName);
+            var optionAgregator = await _mediatorForDeviceOptions.GetOptionAgregatorForDeviceAsync(deviceName);
             var newDevice = _mediatorForStorages.BuildAndAddDevice(optionAgregator);
             return newDevice;
         }

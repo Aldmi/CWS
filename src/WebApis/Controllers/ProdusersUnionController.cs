@@ -28,7 +28,7 @@ namespace WebApiSwc.Controllers
     {
         #region fields
 
-        private readonly MediatorForOptions _mediatorForOptionsRep;
+        private readonly MediatorForProduserUnionOptions _mediatorForProduserUnionOptions;
         private readonly BuildProdusersUnionService<AdInputType> _buildDeviceService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
@@ -40,12 +40,12 @@ namespace WebApiSwc.Controllers
 
         #region ctor
 
-        public ProdusersUnionController(MediatorForOptions mediatorForOptionsRep,
+        public ProdusersUnionController(MediatorForProduserUnionOptions mediatorForProduserUnionOptions,
             BuildProdusersUnionService<AdInputType> buildDeviceService,
             IMapper mapper,
             ILogger logger)
         {
-            _mediatorForOptionsRep = mediatorForOptionsRep;
+            _mediatorForProduserUnionOptions = mediatorForProduserUnionOptions;
             _buildDeviceService = buildDeviceService;
             _mapper = mapper;
             _logger = logger;
@@ -63,7 +63,7 @@ namespace WebApiSwc.Controllers
         {
             try
             {
-                var produserUnionOptions = await _mediatorForOptionsRep.GetProduserUnionOptionsAsync();
+                var produserUnionOptions = await _mediatorForProduserUnionOptions.GetProduserUnionOptionsAsync();
                 var produserUnionOptionsDto = _mapper.Map<List<ProduserUnionOptionDto>>(produserUnionOptions);
                 return new JsonResult(produserUnionOptionsDto);
             }
@@ -81,11 +81,11 @@ namespace WebApiSwc.Controllers
         {
             try
             {
-                if (!await _mediatorForOptionsRep.IsExistProduserUnionAsyncById(id))
+                if (!await _mediatorForProduserUnionOptions.IsExistProduserUnionAsyncById(id))
                 {
                     return NotFound(id);
                 }
-                var produserUnionOption = await _mediatorForOptionsRep.GetProduserUnionOptionAsync(id);
+                var produserUnionOption = await _mediatorForProduserUnionOptions.GetProduserUnionOptionAsync(id);
                 var produserUnionOptionDto = _mapper.Map<ProduserUnionOptionDto>(produserUnionOption);
                 return new JsonResult(produserUnionOptionDto);
             }
@@ -131,7 +131,7 @@ namespace WebApiSwc.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute]int id)
         {
-            var produserUnionOption = await _mediatorForOptionsRep.GetProduserUnionOptionAsync(id);
+            var produserUnionOption = await _mediatorForProduserUnionOptions.GetProduserUnionOptionAsync(id);
             if (produserUnionOption == null)
                 return NotFound(id);
 

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,9 +19,8 @@ namespace BL.Services.Mediators
     /// <summary>
     /// Сервис объединяет работу с репозиотриями опций для устройств.
     /// DeviceOption + ExchangeOption + TransportOption.
-    /// 
     /// </summary>
-    public class MediatorForOptions
+    public class MediatorForDeviceOptions
     {
         #region fields
 
@@ -32,7 +29,6 @@ namespace BL.Services.Mediators
         private readonly ISerialPortOptionRepository _serialPortOptionRep;
         private readonly ITcpIpOptionRepository _tcpIpOptionRep;
         private readonly IHttpOptionRepository _httpOptionRep;
-        private readonly IProduserUnionOptionRepository _produserUnionOptionRep;
 
         #endregion
 
@@ -41,19 +37,17 @@ namespace BL.Services.Mediators
 
         #region ctor
 
-        public MediatorForOptions(IDeviceOptionRepository deviceOptionRep,
+        public MediatorForDeviceOptions(IDeviceOptionRepository deviceOptionRep,
             IExchangeOptionRepository exchangeOptionRep,
             ISerialPortOptionRepository serialPortOptionRep,
             ITcpIpOptionRepository tcpIpOptionRep,
-            IHttpOptionRepository httpOptionRep,
-            IProduserUnionOptionRepository produserUnionOptionRep)
+            IHttpOptionRepository httpOptionRep)
         {
             _deviceOptionRep = deviceOptionRep;
             _exchangeOptionRep = exchangeOptionRep;
             _serialPortOptionRep = serialPortOptionRep;
             _tcpIpOptionRep = tcpIpOptionRep;
             _httpOptionRep = httpOptionRep;
-            _produserUnionOptionRep = produserUnionOptionRep;
         }
 
         #endregion
@@ -560,16 +554,6 @@ namespace BL.Services.Mediators
         }
 
 
-
-        /// <summary>
-        /// Проверка наличия продюссера по ключу и по Id.
-        /// </summary>
-        public async Task<bool> IsExistProduserUnionAsyncById(int id)
-        {
-            return await _produserUnionOptionRep.IsExistAsync(prod => prod.Id == id);
-        }
-
-
         /// <summary>
         /// Проверка наличия УНИКАЛЬНОСТИ ДОБАВЛЯЕМОГО ТРАНСПОРТА.
         /// Если транспорт опознанн по Id и Key, то такой транспорт уже существует.
@@ -640,62 +624,6 @@ namespace BL.Services.Mediators
                     await _httpOptionRep.DeleteAsync(http => http.Name == keyTransport.Key);
                     break;
             }
-        }
-
-
-        /// <summary>
-        /// Вернуть список продюсеров.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IReadOnlyList<ProduserUnionOption>> GetProduserUnionOptionsAsync()
-        {
-            return await _produserUnionOptionRep.ListAsync();
-        }
-
-
-        /// <summary>
-        /// Вернуть продюсер по ключу.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<ProduserUnionOption> GetProduserUnionOptionAsync(int id)
-        {
-            return await _produserUnionOptionRep.GetSingleAsync(option => option.Id == id);
-        }
-
-
-        /// <summary>
-        /// Добавить или Обновить Продюсер в репозитории
-        /// </summary>
-        public async Task<Result> AddOrUpdateUnionOptionAsync(ProduserUnionOption produserUnionOption)
-        {
-            if (produserUnionOption == null)
-                return Result.Fail("produserUnionOption == null");
-
-            if (await IsExistProduserUnionAsyncById(produserUnionOption.Id))
-            {
-                await _produserUnionOptionRep.EditAsync(produserUnionOption);
-            }
-            else
-            {
-                //проверка уникальности ключа при добавлении.
-                if (await _produserUnionOptionRep.IsExistAsync(prod => prod.Key == produserUnionOption.Key))
-                {
-                    return Result.Fail($"Уже существует в репозитории Key= {produserUnionOption.Key}");
-                }
-                await _produserUnionOptionRep.AddAsync(produserUnionOption);
-            }
-            return Result.Ok();
-        }
-
-
-
-        /// <summary>
-        /// Удалить produserUnionOption
-        /// </summary>
-        public async Task<ProduserUnionOption> RemoveProduserUnionOptionAsync(ProduserUnionOption produserUnionOption)
-        {
-            await _produserUnionOptionRep.DeleteAsync(produserUnionOption);
-            return produserUnionOption;
         }
 
         #endregion
