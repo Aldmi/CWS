@@ -46,7 +46,7 @@ namespace WebApiSwc.AutoMapperConfig
                 src.TrackNumber,
                 src.Platform,
                 new EventTrain(ConvertString2NullableInt(src.Direction)),
-                new TypeTrain(ConvertString2NullableInt(src.TrainType)),
+                new TypeTrain(src.TypeName),
                 new VagonDirection(src.VagonDirection),
                 new Station
                 {

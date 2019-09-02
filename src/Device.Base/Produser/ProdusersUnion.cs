@@ -96,6 +96,7 @@ namespace DeviceForExchange.Produser
         }
 
 
+        //TODO: ConvertResponse вынести в отдельный сервис. 
         private static string ConvertResponse(string converterName, ResponsePieceOfDataWrapper<TIn> response)
         {
             object convertedResp = null;
@@ -169,7 +170,6 @@ namespace DeviceForExchange.Produser
                 throw;
             }
         }
-
 
         #endregion
 

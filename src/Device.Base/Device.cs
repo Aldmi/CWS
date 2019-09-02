@@ -50,7 +50,7 @@ namespace DeviceForExchange
         public DeviceOption Option { get;  }
         public List<IExchange<TIn>> Exchanges { get; }
         public MiddlewareInvokeService<TIn> MiddlewareInvokeService { get; private set; }
-        public string ProduserUnionKey { get; set; }
+        public string ProduserUnionKey => Option.ProduserUnionKey;
 
         #endregion
 
@@ -70,7 +70,7 @@ namespace DeviceForExchange
             _eventBus = eventBus;
             _produserUnionStorage = produserUnionStorage;
             _logger = logger;
-            ProduserUnionKey = null;
+
             CreateMiddleWareInDataByOption();
         }
 
@@ -115,12 +115,7 @@ namespace DeviceForExchange
         /// <param name="produserUnionKey">Имя топика, если == null, то берется из настроек</param>
         public bool SubscrubeOnExchangesEvents(string produserUnionKey = null)
         {
-            //Подписка уже есть
-            if (!string.IsNullOrEmpty(ProduserUnionKey))
-                return false;
-
             //Топик не указан
-            ProduserUnionKey = produserUnionKey ?? Option.ProduserUnionKey;
             if (string.IsNullOrEmpty(ProduserUnionKey))
                 return false;
 
@@ -137,7 +132,6 @@ namespace DeviceForExchange
  
         public void UnsubscrubeOnExchangesEvents()
         {
-            ProduserUnionKey = null;
             _disposeExchangesEventHandlers.ForEach(d=>d.Dispose());
         }
 
@@ -320,14 +314,20 @@ namespace DeviceForExchange
         private async Task Send2ProduderUnion(ResponsePieceOfDataWrapper<TIn> response)
         {
             var produser = _produserUnionStorage.Get(ProduserUnionKey);
-            if(produser == null)
+            if (produser == null)
+            {
                 _logger.Error($"Продюссер по ключу {ProduserUnionKey} НЕ НАЙДЕНН для Устройства= {Option.Name}");
+                return;
+            }
 
             var results= await produser.SendAll(response);
-            foreach (var (_, isFailure, _, error) in results)
+            foreach (var (isSuccess, isFailure, _, error) in results)
             {
                 if (isFailure)
                     _logger.Error($"Ошибки отправки ответов для Устройства= {Option.Name} через ProduderUnion = {ProduserUnionKey}  {error}");
+
+                if(isSuccess)
+                    _logger.Information($"ОТПРАВКА ОТВЕТОВ УСПЕШНА для устройства {Option.Name} через ProduderUnion = {ProduserUnionKey}");
             }
         }
 

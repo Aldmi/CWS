@@ -50,7 +50,7 @@ namespace WebApiSwc
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddHealthChecks();
+            services.AddHealthChecks();
 
             var loggerSettings = SettingsFactory.GetLoggerConfig(Env, AppConfiguration);
             services.AddSerilogServices(loggerSettings, Env.ApplicationName);

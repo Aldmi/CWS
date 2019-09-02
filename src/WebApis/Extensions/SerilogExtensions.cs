@@ -21,7 +21,6 @@ namespace WebApiSwc.Extensions
 
 
 
-
         #region Methode
 
         public static void ChangeLogEventLevel(LogEventLevel minLevel)
@@ -41,6 +40,8 @@ namespace WebApiSwc.Extensions
         }
 
         #endregion
+
+
 
 
         private static LoggerConfiguration ConfigLogger(string appName)
@@ -72,10 +73,10 @@ namespace WebApiSwc.Extensions
                         rollOnFileSizeLimit: true)
 
                     .WriteTo.File(
-                        "logs/Debug/Debug_Log.txt", //За 24 последних часов переписывается Debug лог (100МБ лимит размера файла).
+                        "logs/Debug/Debug_Log.txt", //За 48 последних часов переписывается Debug лог (100МБ лимит размера файла).
                         LogEventLevel.Debug,
                         rollingInterval: RollingInterval.Hour,
-                        retainedFileCountLimit: 24,
+                        retainedFileCountLimit: 48,
                         fileSizeLimitBytes: 100000000,
                         rollOnFileSizeLimit: true,
                         shared: true);

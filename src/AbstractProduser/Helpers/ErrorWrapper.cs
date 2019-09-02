@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace AbstractProduser.Helpers
 {
@@ -7,6 +8,7 @@ namespace AbstractProduser.Helpers
     {
         #region fields
 
+        public readonly string Key;
         public readonly ResultError ResultError;
         public readonly string ErrorStr;
         public readonly Exception Exception;
@@ -17,17 +19,21 @@ namespace AbstractProduser.Helpers
 
         #region ctor
 
-        public ErrorWrapper(ResultError resultError)
+        public ErrorWrapper(string key, ResultError resultError)
         {
+            if (string.IsNullOrEmpty(key))
+                throw new ValidationException("Key не указан");
+
+            Key = key;
             this.ResultError = resultError;
         }
 
-        public ErrorWrapper(ResultError resultError, Exception exception) : this(resultError)
+        public ErrorWrapper(string key, ResultError resultError, Exception exception) : this(key, resultError)
         {
             Exception = exception;
         }
 
-        public ErrorWrapper(ResultError resultError, string errorStr) : this(resultError)
+        public ErrorWrapper(string key, ResultError resultError, string errorStr) : this(key, resultError)
         {
             ErrorStr = errorStr;
         }
@@ -35,12 +41,11 @@ namespace AbstractProduser.Helpers
         #endregion
 
 
-
         public override string ToString()
         {
             var errorStr = string.IsNullOrEmpty(ErrorStr) ? string.Empty : ErrorStr;
             var exceptionStr = Exception?.ToString() ?? string.Empty;
-            return $"{ResultError}  {errorStr}  {exceptionStr}";
+            return $"Key= \"{Key}\" {ResultError}  {errorStr}  {exceptionStr}";
         }
     }
 

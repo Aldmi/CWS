@@ -50,7 +50,7 @@ namespace AbstractProduser.AbstractProduser
         {
             TrottlingCounter++;
             if(TrottlingCounter.IsTrottle)
-               return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(ResultError.Trottling));
+               return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Trottling));
 
             var cts = new CancellationTokenSource(_timeRequest);
             try
@@ -60,11 +60,11 @@ namespace AbstractProduser.AbstractProduser
             }
             catch (TaskCanceledException)
             {
-                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(ResultError.Timeout));
+                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Timeout));
             }
             catch (Exception ex)
             {
-                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(ResultError.SendException, ex));
+                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.SendException, ex));
             }
             finally
             {
@@ -78,7 +78,7 @@ namespace AbstractProduser.AbstractProduser
         {
             TrottlingCounter++;
             if (TrottlingCounter.IsTrottle)
-                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(ResultError.Trottling));
+                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Trottling));
 
             var cts = new CancellationTokenSource(_timeRequest);
             try
@@ -88,11 +88,11 @@ namespace AbstractProduser.AbstractProduser
             }
             catch (TaskCanceledException)
             {
-                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(ResultError.Timeout));
+                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Timeout));
             }
             catch (Exception ex)
             {
-                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(ResultError.SendException, ex));
+                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.SendException, ex));
             }
             finally
             {
