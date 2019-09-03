@@ -15,7 +15,17 @@ namespace DAL.EFCore.Entities.Device
         [MaxLength(256)]
         public string Name { get; set; }
 
+        //DEBUG migrations--------------------
         //public string NameNew111 { get; set; }
+
+        //[Required]
+        //[MaxLength(256)]
+        //public string NameNew222 { get; set; }
+
+        //[Required]
+        //[MaxLength(256)]
+        //public string NameNew333 { get; set; }
+        //DEBUG migrations--------------------
 
         [Required]
         [MaxLength(256)]

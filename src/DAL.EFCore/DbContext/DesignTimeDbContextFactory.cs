@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Design;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Shared.ForConfigFiles;
 
@@ -11,7 +12,9 @@ namespace DAL.EFCore.DbContext
     {
         public Context CreateDbContext(string[] args)
         {
-            var path = @"D:\\Git\\CWS\\src\\WebApis";
+            Console.WriteLine(args.Length);//DEBUG
+
+            var path = @"F:\\Git\\CWS\\src\\WebApis";
             var config = JsonConfigLib.GetConfiguration(path);
             var connectionString = config.GetConnectionString("OptionDbConnectionUseNpgsql");
             return new Context(connectionString);

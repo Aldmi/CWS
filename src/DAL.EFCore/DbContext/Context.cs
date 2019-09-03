@@ -46,8 +46,6 @@ namespace DAL.EFCore.DbContext
             optionsBuilder.UseNpgsql(_connStr);
         }
 
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
            modelBuilder.ApplyConfiguration(new EfDeviceOptionConfig());
