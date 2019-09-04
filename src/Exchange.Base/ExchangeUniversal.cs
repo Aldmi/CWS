@@ -326,7 +326,7 @@ namespace Exchange.Base
             }
 
             ResponseChangeRx.OnNext(transportResponseWrapper);
-            await Task.Delay(100, ct); //TODO: Продумать как задвать скважность между выполнением цикл. функции на обмене.
+            await Task.Delay(1, ct); //TODO: Продумать как задвать скважность между выполнением цикл. функции на обмене.
         }
 
 
