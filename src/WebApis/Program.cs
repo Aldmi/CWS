@@ -28,8 +28,8 @@ namespace WebApiSwc
 
         public static string GetVersion()
         {
-            const string version = "CWS Ver3.0";
-            return $"{version}  [30.08.2019]  [Reliz]";
+            const string version = "CWS Ver3.1";
+            return $"{version}  [09.09.2019]  [Reliz. Change username->userfile in WebApi]";
         }
 
 

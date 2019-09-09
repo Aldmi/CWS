@@ -419,50 +419,6 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
 
         /// <summary>
-        /// Вернуть станции в зависимости от События поезда("ПРИБ"/"ОТПР"/"СТОЯНКА").
-        /// </summary>
-        private string CreateStationsCutStr(AdInputType uit, Lang lang)
-        {
-            var eventNum = uit.Event?.Num;
-            if (!eventNum.HasValue)
-                return string.Empty;
-
-            var stArrival = uit.StationArrival?.GetName(lang);
-            var stDepart = uit.StationDeparture?.GetName(lang);
-            var stations = string.Empty;
-            switch (eventNum.Value)
-            {
-                case 0: //"ПРИБ"
-                    stations = stDepart;
-                    break;
-                case 1:  //"ОТПР"
-                    stations = stArrival;
-                    break;
-                case 2:   //"СТОЯНКА"
-                    stations = $"{stDepart}-{stArrival}";
-                    break;
-            }
-            return stations;
-        }
-
-
-        /// <summary>
-        /// Вернуть станции {stArrival}-{stDepart}, если обе не NULL
-        /// </summary>
-        private string CreateStationsStr(AdInputType uit, Lang lang)
-        {
-            var stArrival = uit.StationArrival?.GetName(lang);
-            var stDepart = uit.StationDeparture?.GetName(lang);
-            var stations = string.Empty;
-            if (!string.IsNullOrEmpty(stArrival) && !string.IsNullOrEmpty(stDepart))
-            {
-                stations = $"{stDepart}-{stArrival}";
-            }
-            return stations;
-        }
-
-
-        /// <summary>
         /// Заменить все переменные NumberOfCharacters.
         /// Вычислить N символов след. за NumberOfCharacters в кавычках
         /// </summary>
@@ -610,8 +566,4 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 
         #endregion
     }
-
-
-
-
 }
