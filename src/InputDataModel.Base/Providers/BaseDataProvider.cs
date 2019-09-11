@@ -5,7 +5,7 @@ using Serilog;
 namespace Domain.InputDataModel.Base.Providers
 {
     //TODO: после созданния нескольких провайдеров, вынести обший функционал в этот класс
-    public class BaseDataProvider<TInput>
+    public class BaseDataProvider<TInput> where TInput : InputTypeBase
     {
         protected readonly IStronglyTypedResponseFactory StronglyTypedResponseFactory;  //TODO: вынести обработку из SetDataByte потомков в базовый класс
         private readonly ILogger _logger;

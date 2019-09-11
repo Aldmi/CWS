@@ -54,7 +54,7 @@ namespace Domain.Device.Produser
 
         public void AddProduser(string key, IProduser<BaseProduserOption> value, IDisposable owner)
         {
-              _produsersDict[key] = new ProduserOwner {Produser = value, Owner = owner};
+            _produsersDict[key] = new ProduserOwner { Produser = value, Owner = owner };
         }
 
 
@@ -141,10 +141,26 @@ namespace Domain.Device.Produser
                         }).ToList()
                     };
                     break;
+
+                case "Indigo":  //{"result": 1, "message": "", "DeviceName": "fff"}
+                    var responsesItems = response.ResponsesItems.Select(item => new
+                    {
+                        item.RequestId,
+                        item.StatusStr,
+                        item.TransportException,
+                        item.ResponseInfo.StronglyTypedResponse
+                    }).ToList();
+                    convertedResp = new
+                    {
+                        response.DeviceName,
+                        result = response.IsValidAll ? 1 : 0,
+                        Message = Convert2RawJson(responsesItems)
+                    };
+                    break;
             }
 
-            var message = Convert2RawJson(convertedResp);
-            return message;
+            var rawJson = Convert2RawJson(convertedResp);
+            return rawJson;
         }
 
 
