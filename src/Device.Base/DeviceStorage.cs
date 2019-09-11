@@ -1,8 +1,7 @@
-﻿using Domain.Device;
-using Domain.InputDataModel.Base.InData;
+﻿using Domain.InputDataModel.Base.InData;
 using Infrastructure.Storages;
 
-namespace App.Services.Storages
+namespace Domain.Device
 {
     public class DeviceStorage<TIn> : BaseStorage<string, Device<TIn>> where TIn : InputTypeBase
     {

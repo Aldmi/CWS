@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using App.Services.Mediators;
-using App.Services.Storages;
 using Autofac;
 using AutoMapper;
 using Domain.Exchange;
 using Domain.InputDataModel.Autodictor.Model;
 using Infrastructure.Background.Abstarct;
+using Infrastructure.Transport;
 using Infrastructure.Transport.Base.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Events;

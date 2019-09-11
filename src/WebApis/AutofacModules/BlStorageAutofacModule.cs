@@ -1,7 +1,10 @@
-﻿using App.Services.Storages;
-using Autofac;
+﻿using Autofac;
+using Domain.Device;
 using Domain.Device.Produser;
+using Domain.Exchange;
 using Domain.InputDataModel.Base.InData;
+using Infrastructure.Background;
+using Infrastructure.Transport;
 
 namespace WebApiSwc.AutofacModules
 {

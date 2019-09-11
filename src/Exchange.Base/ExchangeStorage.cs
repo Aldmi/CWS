@@ -1,7 +1,6 @@
-﻿using Domain.Exchange;
-using Infrastructure.Storages;
+﻿using Infrastructure.Storages;
 
-namespace App.Services.Storages
+namespace Domain.Exchange
 {
     public class ExchangeStorage<TIn> : BaseStorage<string, IExchange<TIn>>
     {
