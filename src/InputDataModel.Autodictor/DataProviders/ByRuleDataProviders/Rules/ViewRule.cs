@@ -283,11 +283,17 @@ namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
             var typeAlias = uit.TrainType?.GetNameAlias(lang);
             var eventTrain = uit.Event?.GetName(lang);
             var addition = uit.Addition?.GetName(lang);
-            var stations = uit.Stations?.GetName(lang);
-            var stationsCut = uit.StationsСut?.GetName(lang);
+            var stations = uit.Stations?.GetName(lang);  //CreateStationsStr(uit, lang);
+            var stationsCut = uit.StationsСut?.GetName(lang);//CreateStationsCutStr(uit, lang);
             var note = uit.Note?.GetName(lang);
+            //DEBUG------Костыль по ограничению------
+            //if (noteStr.Length > 100)
+            //{
+            //    noteStr = "Информация об остановках передается по громкоговорящей связи";
+            //}
             var stationsCutStr = string.IsNullOrEmpty(stationsCut) ? "ПОСАДКИ НЕТ" : stationsCut;
-            
+            //DEBUG------
+
             var daysFollowing = uit.DaysFollowing?.GetName(lang);
             var daysFollowingAlias = uit.DaysFollowing?.GetNameAlias(lang);
             var arrivalTime = uit.ArrivalTime ?? DateTime.MinValue;
