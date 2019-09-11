@@ -15,8 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AbstractProduser\AbstractProduser.csproj" />
-    <ProjectReference Include="..\Communication.SerialPort\Transport.SerialPort.csproj" />
-    <ProjectReference Include="..\Communication.TcpIp\Transport.TcpIp.csproj" />
     <ProjectReference Include="..\Device.Base\DeviceForExchange.csproj" />
     <ProjectReference Include="..\Exchange.Base\Exchange.Base.csproj" />
     <ProjectReference Include="..\Infrastructure.MessageBroker\Infrastructure.MessageBroker.csproj" />
@@ -25,8 +23,6 @@
     <ProjectReference Include="..\InputDataModel.Autodictor\InputDataModel.Autodictor.csproj" />
     <ProjectReference Include="..\InputDataModel.Base\InputDataModel.Base.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
-    <ProjectReference Include="..\Transport.Base\Transport.Base.csproj" />
-    <ProjectReference Include="..\Transport.Http\Transport.Http.csproj" />
     <ProjectReference Include="..\Worker.Background\Worker.Background.csproj" />
   </ItemGroup>
 

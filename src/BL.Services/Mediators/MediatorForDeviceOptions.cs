@@ -9,7 +9,6 @@ using DAL.Abstract.Concrete;
 using DAL.Abstract.Entities.Options;
 using DAL.Abstract.Entities.Options.Device;
 using DAL.Abstract.Entities.Options.Exchange;
-using DAL.Abstract.Entities.Options.ResponseProduser;
 using DAL.Abstract.Entities.Options.Transport;
 using Shared.Enums;
 using Shared.Types;

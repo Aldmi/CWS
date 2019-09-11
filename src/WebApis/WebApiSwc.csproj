@@ -37,8 +37,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BL.Services\BL.Services.csproj" />
-    <ProjectReference Include="..\Communication.SerialPort\Transport.SerialPort.csproj" />
-    <ProjectReference Include="..\Communication.TcpIp\Transport.TcpIp.csproj" />
     <ProjectReference Include="..\DAL.Abstract\DAL.Abstract.csproj" />
     <ProjectReference Include="..\DAL.EFCore\DAL.EFCore.csproj" />
     <ProjectReference Include="..\DAL.InMemory\DAL.InMemory.csproj" />

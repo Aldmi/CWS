@@ -1,5 +1,4 @@
-﻿using InputDataModel.Base;
-using InputDataModel.Base.InData;
+﻿using InputDataModel.Base.InData;
 
 namespace Exchange.Base.RxModel
 {

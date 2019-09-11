@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace InputDataModel.Autodictor.Entities
+﻿namespace InputDataModel.Autodictor.Entities
 {
     public class TypeTrain : TrainBase
     {

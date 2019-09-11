@@ -1,8 +1,6 @@
 ﻿using DAL.Abstract.Entities.Options.Transport;
-using Transport.Base.Abstract;
 
-
-namespace Transport.SerialPort.Abstract
+namespace Infrastructure.Transport.Base.Abstract
 {
     public interface ISerailPort : ITransport
     {

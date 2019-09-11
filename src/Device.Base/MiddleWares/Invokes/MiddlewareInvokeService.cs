@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Timers;
 using CSharpFunctionalExtensions;
 using DAL.Abstract.Entities.Options.MiddleWare;
-using InputDataModel.Base;
 using InputDataModel.Base.InData;
 using KellermanSoftware.CompareNetObjects;
 using Serilog;

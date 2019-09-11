@@ -2,13 +2,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Transport;
+using Infrastructure.Transport.Base.Abstract;
+using Infrastructure.Transport.Base.DataProvidert;
+using Infrastructure.Transport.Base.RxModel;
 using Shared.Enums;
 using Shared.Types;
-using Transport.Base.DataProvidert;
-using Transport.Base.RxModel;
-using Transport.Http.Abstract;
 
-namespace Transport.Http.Concrete
+namespace Infrastructure.Transport.Http
 {
     public class HttpTransport : IHttp
     {

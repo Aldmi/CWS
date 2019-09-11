@@ -1,6 +1,6 @@
 ﻿using Infrastructure.Storages;
+using Infrastructure.Transport.Base.Abstract;
 using Shared.Types;
-using Transport.Base.Abstract;
 
 namespace BL.Services.Storages
 {

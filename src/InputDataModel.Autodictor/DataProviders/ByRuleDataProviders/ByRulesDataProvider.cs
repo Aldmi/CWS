@@ -9,14 +9,12 @@ using Exchange.Base.DataProviderAbstract;
 using InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules;
 using InputDataModel.Autodictor.Extensions;
 using InputDataModel.Autodictor.Model;
-using InputDataModel.Base;
 using InputDataModel.Base.InData;
 using InputDataModel.Base.Providers;
 using InputDataModel.Base.Response;
 using Serilog;
 using Shared.Extensions;
 using Shared.Helpers;
-using Shared.Types;
 
 namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 {

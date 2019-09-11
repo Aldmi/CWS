@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Reactive.Subjects;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Exchange.Base.RxModel;
-using InputDataModel.Base;
+using Infrastructure.Transport.Base.RxModel;
 using InputDataModel.Base.InData;
 using InputDataModel.Base.Response;
 using Shared.Types;
-using Transport.Base.RxModel;
 
 namespace Exchange.Base
 {

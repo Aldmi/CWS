@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using InputDataModel.Base;
 using InputDataModel.Base.InData;
 
 namespace DeviceForExchange.MiddleWares.Invokes

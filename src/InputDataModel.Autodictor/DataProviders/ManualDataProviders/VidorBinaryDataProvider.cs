@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Exchange.Base.DataProviderAbstract;
 using InputDataModel.Autodictor.Model;
-using InputDataModel.Base;
 using InputDataModel.Base.InData;
 using InputDataModel.Base.Providers;
 using InputDataModel.Base.Response;

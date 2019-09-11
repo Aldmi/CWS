@@ -1,6 +1,5 @@
 ﻿using System;
 using InputDataModel.Autodictor.Entities;
-using InputDataModel.Base;
 using InputDataModel.Base.InData;
 
 namespace InputDataModel.Autodictor.Model

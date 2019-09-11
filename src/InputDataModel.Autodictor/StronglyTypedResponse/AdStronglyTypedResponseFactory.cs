@@ -1,7 +1,6 @@
 ﻿using System;
 using InputDataModel.Autodictor.StronglyTypedResponse.Types;
 using InputDataModel.Base.Response;
-using Shared.Types;
 
 namespace InputDataModel.Autodictor.StronglyTypedResponse
 {

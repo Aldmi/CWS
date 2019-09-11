@@ -2,15 +2,17 @@
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Infrastructure.Transport.Base.DataProvidert;
+using Infrastructure.Transport.Base.RxModel;
 using Serilog;
 using Shared.Enums;
 using Shared.Types;
-using Transport.Base.DataProvidert;
-using Transport.Base.RxModel;
 using Worker.Background.Abstarct;
 using Worker.Background.Enums;
 
-namespace Transport.Base.Abstract
+
+namespace Infrastructure.Transport.Base.Abstract
 {
     public abstract class BaseTransport : ITransport
     {

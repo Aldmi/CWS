@@ -1,7 +1,6 @@
 ﻿using DAL.Abstract.Entities.Options.Transport;
-using Transport.Base.Abstract;
 
-namespace Transport.Http.Abstract
+namespace Infrastructure.Transport.Base.Abstract
 {
     public interface IHttp :  ITransport
     {

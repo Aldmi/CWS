@@ -1,7 +1,6 @@
 ﻿using DAL.Abstract.Entities.Options.Transport;
-using Transport.Base.Abstract;
 
-namespace Transport.TcpIp.Abstract
+namespace Infrastructure.Transport.Base.Abstract
 {
     public interface ITcpIp : ITransport
     {

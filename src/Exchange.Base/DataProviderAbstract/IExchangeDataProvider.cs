@@ -2,9 +2,8 @@
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using InputDataModel.Base;
+using Infrastructure.Transport.Base.DataProvidert;
 using InputDataModel.Base.InData;
-using Transport.Base.DataProvidert;
 
 namespace Exchange.Base.DataProviderAbstract
 {

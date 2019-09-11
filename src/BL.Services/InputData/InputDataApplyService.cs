@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using BL.Services.Mediators;
-using InputDataModel.Base;
 using InputDataModel.Base.InData;
 using Newtonsoft.Json;
 using Serilog;

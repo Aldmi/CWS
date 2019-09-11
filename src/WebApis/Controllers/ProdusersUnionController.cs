@@ -1,24 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BL.Services.Actions;
-using BL.Services.Exceptions;
 using BL.Services.Mediators;
-using DAL.Abstract.Entities.Options.Device;
-using DAL.Abstract.Entities.Options.Exchange;
 using DAL.Abstract.Entities.Options.ResponseProduser;
-using DAL.Abstract.Entities.Options.Transport;
 using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using WebApiSwc.DTO.JSON.OptionsDto;
-using WebApiSwc.DTO.JSON.OptionsDto.DeviceOption;
-using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
 using WebApiSwc.DTO.JSON.OptionsDto.ProduserUnionOption;
-using WebApiSwc.DTO.JSON.OptionsDto.TransportOption;
-using WebClientProduser.Options;
 
 namespace WebApiSwc.Controllers
 {

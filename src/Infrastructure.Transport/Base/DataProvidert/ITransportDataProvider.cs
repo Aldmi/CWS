@@ -1,7 +1,7 @@
 ﻿
 using System.IO;
 
-namespace Transport.Base.DataProvidert
+namespace Infrastructure.Transport.Base.DataProvidert
 {
     public interface ITransportDataProvider
     {

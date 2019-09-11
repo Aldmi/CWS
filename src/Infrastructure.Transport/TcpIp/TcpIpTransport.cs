@@ -7,15 +7,14 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Transport;
+using Infrastructure.Transport.Base.Abstract;
+using Infrastructure.Transport.Base.DataProvidert;
 using Serilog;
 using Shared.Enums;
 using Shared.Types;
-using Transport.Base.Abstract;
-using Transport.Base.DataProvidert;
-using Transport.TcpIp.Abstract;
 using Worker.Background.Abstarct;
 
-namespace Transport.TcpIp.Concrete
+namespace Infrastructure.Transport.TcpIp
 {
     public class TcpIpTransport : BaseTransport, ITcpIp
     {

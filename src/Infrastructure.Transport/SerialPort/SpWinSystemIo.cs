@@ -5,17 +5,17 @@ using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Transport;
+using Infrastructure.Transport.Base.Abstract;
+using Infrastructure.Transport.Base.DataProvidert;
+using Infrastructure.Transport.Base.RxModel;
 using Shared.Enums;
 using Shared.Helpers;
 using Shared.Types;
-using Transport.Base.DataProvidert;
-using Transport.Base.RxModel;
-using Transport.SerialPort.Abstract;
 using Parity = System.IO.Ports.Parity;
 using StopBits = System.IO.Ports.StopBits;
 
 
-namespace Transport.SerialPort.Concrete.SpWin
+namespace Infrastructure.Transport.SerialPort
 {
     public class SpWinSystemIo : ISerailPort
     {
@@ -89,8 +89,8 @@ namespace Transport.SerialPort.Concrete.SpWin
             {
                 BaudRate = option.BaudRate,
                 DataBits = option.DataBits,
-                StopBits = (StopBits) option.StopBits,
-                Parity = (Parity) option.Parity,
+                StopBits =  (StopBits) option.StopBits,
+                Parity =  (Parity) option.Parity,
                 DtrEnable = option.DtrEnable,
                 RtsEnable = option.RtsEnable
             };

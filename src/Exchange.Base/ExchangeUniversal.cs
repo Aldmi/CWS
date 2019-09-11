@@ -10,7 +10,8 @@ using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Exchange.Base.DataProviderAbstract;
 using Exchange.Base.RxModel;
 using Exchange.Base.Services;
-using InputDataModel.Base;
+using Infrastructure.Transport.Base.Abstract;
+using Infrastructure.Transport.Base.RxModel;
 using InputDataModel.Base.InData;
 using InputDataModel.Base.Response;
 using Newtonsoft.Json;
@@ -18,8 +19,6 @@ using Serilog;
 using Shared.Collections;
 using Shared.Enums;
 using Shared.Types;
-using Transport.Base.Abstract;
-using Transport.Base.RxModel;
 using Worker.Background.Abstarct;
 
 namespace Exchange.Base

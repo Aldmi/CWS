@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using InputDataModel.Base.InData;
 using Shared.Enums;
-using Shared.Types;
 
 namespace InputDataModel.Base.Response
 {

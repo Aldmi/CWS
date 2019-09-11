@@ -2,12 +2,12 @@
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using Infrastructure.Transport.Base.DataProvidert;
+using Infrastructure.Transport.Base.RxModel;
 using Shared.Enums;
 using Shared.Types;
-using Transport.Base.DataProvidert;
-using Transport.Base.RxModel;
 
-namespace Transport.Base.Abstract
+namespace Infrastructure.Transport.Base.Abstract
 {
     public interface ITransport : ISupportKeyTransport, IDisposable
     {

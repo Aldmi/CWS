@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Timers;
 using DAL.Abstract.Entities.Options.MiddleWare;
 using DeviceForExchnage.Benchmark.Shared.Handlers;
-using InputDataModel.Base;
 using InputDataModel.Base.InData;
 using Serilog;
 

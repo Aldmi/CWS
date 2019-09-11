@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using InputDataModel.Autodictor.Entities;
 using InputDataModel.Autodictor.Model;
 using Serilog;
 using Shared.CrcCalculate;

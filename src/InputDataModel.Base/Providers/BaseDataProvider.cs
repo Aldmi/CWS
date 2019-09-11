@@ -1,7 +1,6 @@
 ﻿using InputDataModel.Base.InData;
 using InputDataModel.Base.Response;
 using Serilog;
-using Shared.Types;
 
 namespace InputDataModel.Base.Providers
 {

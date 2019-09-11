@@ -1,7 +1,6 @@
 ﻿
 using DeviceForExchange;
 using Infrastructure.Storages;
-using InputDataModel.Base;
 using InputDataModel.Base.InData;
 
 namespace BL.Services.Storages

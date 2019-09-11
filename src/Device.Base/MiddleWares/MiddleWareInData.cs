@@ -9,7 +9,6 @@ using DeviceForExchange.MiddleWares.Converters.Exceptions;
 using DeviceForExchange.MiddleWares.Handlers;
 using DeviceForExchange.MiddleWares.Invokes;
 using FastDeepCloner;
-using InputDataModel.Base;
 using InputDataModel.Base.InData;
 using Serilog;
 using Shared.ReflectionServices;

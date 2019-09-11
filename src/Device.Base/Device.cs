@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Autofac.Features.OwnedInstances;
-using Confluent.Kafka;
 using CSharpFunctionalExtensions;
 using DAL.Abstract.Entities.Options.Device;
 using DAL.Abstract.Entities.Options.MiddleWare;
@@ -14,14 +12,11 @@ using Exchange.Base;
 using Exchange.Base.RxModel;
 using Exchange.Base.Services;
 using Infrastructure.EventBus.Abstract;
-using Infrastructure.MessageBroker.Abstract;
-using Infrastructure.MessageBroker.Options;
-using InputDataModel.Base;
+using Infrastructure.Transport.Base.RxModel;
 using InputDataModel.Base.InData;
 using InputDataModel.Base.Response;
 using Newtonsoft.Json;
 using Serilog;
-using Transport.Base.RxModel;
 
 namespace DeviceForExchange
 {

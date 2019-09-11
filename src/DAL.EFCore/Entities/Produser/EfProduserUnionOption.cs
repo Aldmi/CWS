@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DAL.Abstract.Entities.Options.MiddleWare;
 using DAL.Abstract.Entities.Options.ResponseProduser;
 using KafkaProduser.Options;
 using Newtonsoft.Json;

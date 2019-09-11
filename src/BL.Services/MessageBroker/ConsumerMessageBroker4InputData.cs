@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using BL.Services.InputData;
 using Confluent.Kafka;
 using Infrastructure.MessageBroker.Abstract;
-using InputDataModel.Base;
 using InputDataModel.Base.InData;
 using Serilog;
 using Newtonsoft.Json;

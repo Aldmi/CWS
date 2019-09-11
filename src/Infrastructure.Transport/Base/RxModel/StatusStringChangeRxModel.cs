@@ -1,4 +1,4 @@
-﻿namespace Transport.Base.RxModel
+﻿namespace Infrastructure.Transport.Base.RxModel
 {
     public class StatusStringChangeRxModel
     {
