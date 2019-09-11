@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\DAL.Abstract\DAL.Abstract.csproj" />
+    <ProjectReference Include="..\src\Shared\Shared.csproj" />
+    <ProjectReference Include="..\src\Worker.Background\Worker.Background.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.IO.Ports" Version="4.5.0" />
+  </ItemGroup>
+
+</Project>
