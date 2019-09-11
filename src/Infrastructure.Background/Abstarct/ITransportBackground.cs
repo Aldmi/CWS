@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Infrastructure.Background.Enums;
 using Shared.Types;
-using Worker.Background.Enums;
 
-namespace Worker.Background.Abstarct
+namespace Infrastructure.Background.Abstarct
 {
     public interface ITransportBackground : IBackground, ISupportKeyTransport
     {

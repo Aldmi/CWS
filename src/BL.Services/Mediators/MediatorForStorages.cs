@@ -13,6 +13,8 @@ using DeviceForExchange;
 using DeviceForExchange.Produser;
 using Exchange.Base;
 using Exchange.Base.DataProviderAbstract;
+using Infrastructure.Background.Abstarct;
+using Infrastructure.Background.Concrete.HostingBackground;
 using Infrastructure.EventBus.Abstract;
 using Infrastructure.Transport.Base.Abstract;
 using Infrastructure.Transport.Http;
@@ -23,8 +25,6 @@ using InputDataModel.Base.Response;
 using Serilog;
 using Shared.Enums;
 using Shared.Types;
-using Worker.Background.Abstarct;
-using Worker.Background.Concrete.HostingBackground;
 
 
 namespace BL.Services.Mediators

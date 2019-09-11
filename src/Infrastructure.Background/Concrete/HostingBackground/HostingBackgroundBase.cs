@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Worker.Background.Concrete.HostingBackground
+namespace Infrastructure.Background.Concrete.HostingBackground
 {
     /// <summary>
     /// аналог IHostedService.

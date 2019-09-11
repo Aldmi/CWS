@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Worker.Background.Abstarct;
+using Infrastructure.Background.Abstarct;
 
-namespace Worker.Background.Concrete.HostingBackground
+namespace Infrastructure.Background.Concrete.HostingBackground
 {
     public class HostingBackgroundSimple : HostingBackgroundBase, ISimpleBackground
     {

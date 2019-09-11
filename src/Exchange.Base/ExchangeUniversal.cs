@@ -10,6 +10,7 @@ using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Exchange.Base.DataProviderAbstract;
 using Exchange.Base.RxModel;
 using Exchange.Base.Services;
+using Infrastructure.Background.Abstarct;
 using Infrastructure.Transport.Base.Abstract;
 using Infrastructure.Transport.Base.RxModel;
 using InputDataModel.Base.InData;
@@ -19,7 +20,7 @@ using Serilog;
 using Shared.Collections;
 using Shared.Enums;
 using Shared.Types;
-using Worker.Background.Abstarct;
+
 
 namespace Exchange.Base
 {

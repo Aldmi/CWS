@@ -1,4 +1,4 @@
-﻿namespace Worker.Background.Abstarct
+﻿namespace Infrastructure.Background.Abstarct
 {
     public interface ISimpleBackground : IBackground
     {

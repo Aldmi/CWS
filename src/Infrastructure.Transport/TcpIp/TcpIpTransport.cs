@@ -7,12 +7,13 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Transport;
+using Infrastructure.Background.Abstarct;
 using Infrastructure.Transport.Base.Abstract;
 using Infrastructure.Transport.Base.DataProvidert;
 using Serilog;
 using Shared.Enums;
 using Shared.Types;
-using Worker.Background.Abstarct;
+
 
 namespace Infrastructure.Transport.TcpIp
 {

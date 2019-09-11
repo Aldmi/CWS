@@ -4,12 +4,13 @@ using Autofac;
 using Autofac.Core;
 using BL.Services.InputData;
 using BL.Services.MessageBroker;
+using Infrastructure.Background.Abstarct;
+using Infrastructure.Background.Concrete.HostingBackground;
 using Infrastructure.MessageBroker.Abstract;
 using Infrastructure.MessageBroker.Options;
 using InputDataModel.Base.InData;
 using Microsoft.Extensions.Configuration;
-using Worker.Background.Abstarct;
-using Worker.Background.Concrete.HostingBackground;
+
 
 namespace WebApiSwc.AutofacModules
 {

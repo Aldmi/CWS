@@ -17,13 +17,13 @@
     <ProjectReference Include="..\AbstractProduser\AbstractProduser.csproj" />
     <ProjectReference Include="..\Device.Base\DeviceForExchange.csproj" />
     <ProjectReference Include="..\Exchange.Base\Exchange.Base.csproj" />
+    <ProjectReference Include="..\Infrastructure.Background\Infrastructure.Background.csproj" />
     <ProjectReference Include="..\Infrastructure.MessageBroker\Infrastructure.MessageBroker.csproj" />
     <ProjectReference Include="..\Infrastructure.Storages\Infrastructure.Storages.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.EventBus.csproj" />
     <ProjectReference Include="..\InputDataModel.Autodictor\InputDataModel.Autodictor.csproj" />
     <ProjectReference Include="..\InputDataModel.Base\InputDataModel.Base.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
-    <ProjectReference Include="..\Worker.Background\Worker.Background.csproj" />
   </ItemGroup>
 
   <ItemGroup>

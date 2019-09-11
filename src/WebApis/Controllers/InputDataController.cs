@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using Autofac.Features.Indexed;
 using AutoMapper;
 using BL.Services.InputData;
+using Infrastructure.Background.Abstarct;
 using InputDataModel.Autodictor.Model;
 using InputDataModel.Base.InData;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +18,6 @@ using Microsoft.Extensions.Configuration;
 using Serilog;
 using WebApiSwc.DTO.JSON.InputTypesDto;
 using WebApiSwc.DTO.XML;
-using Worker.Background.Abstarct;
 
 namespace WebApiSwc.Controllers
 {

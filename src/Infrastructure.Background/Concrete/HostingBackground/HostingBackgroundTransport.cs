@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Infrastructure.Background.Abstarct;
+using Infrastructure.Background.Enums;
 using Serilog;
 using Shared.Types;
-using Worker.Background.Abstarct;
-using Worker.Background.Enums;
 
-namespace Worker.Background.Concrete.HostingBackground
+namespace Infrastructure.Background.Concrete.HostingBackground
 {
     public class HostingBackgroundTransport : HostingBackgroundBase, ITransportBackground
     {

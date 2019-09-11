@@ -1,6 +1,6 @@
-﻿using Infrastructure.Storages;
+﻿using Infrastructure.Background.Abstarct;
+using Infrastructure.Storages;
 using Shared.Types;
-using Worker.Background.Abstarct;
 
 namespace BL.Services.Storages
 {

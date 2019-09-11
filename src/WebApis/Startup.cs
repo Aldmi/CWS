@@ -11,6 +11,7 @@ using BL.Services.Storages;
 using DAL.Abstract.Concrete;
 using Exchange.Base;
 using Firewall;
+using Infrastructure.Background.Abstarct;
 using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -27,7 +28,6 @@ using WebApiSwc.Extensions;
 using WebApiSwc.Hubs;
 using WebApiSwc.Settings;
 using WebClientProduser;
-using Worker.Background.Abstarct;
 
 namespace WebApiSwc
 {

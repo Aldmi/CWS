@@ -1,4 +1,4 @@
-﻿namespace Worker.Background.Enums
+﻿namespace Infrastructure.Background.Enums
 {
     public enum StatusBackground
     {

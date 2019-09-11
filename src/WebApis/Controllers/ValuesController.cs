@@ -4,6 +4,7 @@ using AutoMapper;
 using BL.Services.Mediators;
 using BL.Services.Storages;
 using Exchange.Base;
+using Infrastructure.Background.Abstarct;
 using Infrastructure.Transport.Base.Abstract;
 using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ using Serilog.Events;
 using WebApiSwc.DTO.JSON.InputTypesDto;
 using WebApiSwc.Extensions;
 using WebApiSwc.Settings;
-using Worker.Background.Abstarct;
+
 
 
 namespace WebApiSwc.Controllers

@@ -6,11 +6,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using BL.Services.InputData;
 using Confluent.Kafka;
+using Infrastructure.Background.Abstarct;
 using Infrastructure.MessageBroker.Abstract;
 using InputDataModel.Base.InData;
 using Serilog;
 using Newtonsoft.Json;
-using Worker.Background.Abstarct;
 
 namespace BL.Services.MessageBroker
 {

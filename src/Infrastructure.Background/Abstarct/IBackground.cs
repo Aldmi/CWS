@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Worker.Background.Abstarct
+namespace Infrastructure.Background.Abstarct
 {
     public interface IBackground : IDisposable 
     {
