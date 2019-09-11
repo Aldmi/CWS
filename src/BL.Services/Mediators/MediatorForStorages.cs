@@ -203,7 +203,7 @@ namespace App.Services.Mediators
                 try
                 {
                     var dataProvider = _dataProviderFactory[exchOption.Provider.Name](exchOption.Provider);
-                    exch = new ExchangeUniversal<TIn>(exchOption, transport, bg, dataProvider, _logger);
+                    exch = new Exchange<TIn>(exchOption, transport, bg, dataProvider, _logger);
                     _exchangeStorage.AddNew(exchOption.Key, exch);
                 }
                 catch (Exception)

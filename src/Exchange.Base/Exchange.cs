@@ -23,7 +23,7 @@ using Shared.Types;
 
 namespace Domain.Exchange
 {
-    public class ExchangeUniversal<TIn> : IExchange<TIn>
+    public class Exchange<TIn> : IExchange<TIn>
     {
         #region field
         private const int MaxDataInQueue = 5;
@@ -93,7 +93,7 @@ namespace Domain.Exchange
 
         #region ctor
 
-        public ExchangeUniversal(ExchangeOption exchangeOption,
+        public Exchange(ExchangeOption exchangeOption,
                                  ITransport transport,
                                  ITransportBackground transportBackground,
                                  IExchangeDataProvider<TIn, ResponseInfo> dataProvider,
