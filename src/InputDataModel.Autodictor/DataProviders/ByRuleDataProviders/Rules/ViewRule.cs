@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Autodictor.Model;
 using Serilog;
 using Shared.CrcCalculate;
 using Shared.Extensions;
 using Shared.Helpers;
 
-namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
+namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 {
     /// <summary>
     /// Правило отображения порции даных

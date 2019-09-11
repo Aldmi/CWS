@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Text.RegularExpressions;
-using InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Autodictor.Model;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace InputDataModel.Autodictor.Extensions
+namespace Domain.InputDataModel.Autodictor.Extensions
 {
     public static class AdInputTypeCollectionExtensions
     {

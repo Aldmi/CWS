@@ -4,15 +4,15 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using BL.Services.InputData;
+using App.Services.InputData;
 using Confluent.Kafka;
+using Domain.InputDataModel.Base.InData;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.MessageBroker.Abstract;
-using InputDataModel.Base.InData;
-using Serilog;
 using Newtonsoft.Json;
+using Serilog;
 
-namespace BL.Services.MessageBroker
+namespace App.Services.MessageBroker
 {
     /// <summary>
     /// Фоновый прлцесс получения даныых от брокера сообщений

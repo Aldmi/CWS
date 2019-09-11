@@ -1,7 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using DeviceForExchnage.Benchmark.Datas;
 using DeviceForExchnage.Benchmark.NotParallel;
-using InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Autodictor.Model;
 
 namespace DeviceForExchnage.Benchmark
 {

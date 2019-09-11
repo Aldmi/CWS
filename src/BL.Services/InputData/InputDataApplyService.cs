@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BL.Services.Mediators;
-using InputDataModel.Base.InData;
+using App.Services.Mediators;
+using Domain.InputDataModel.Base.InData;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace BL.Services.InputData
+namespace App.Services.InputData
 {
     public class InputDataApplyService<TIn> where TIn : InputTypeBase
     {

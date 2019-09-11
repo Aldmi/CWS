@@ -2,7 +2,7 @@
 using Infrastructure.Storages;
 using Shared.Types;
 
-namespace BL.Services.Storages
+namespace App.Services.Storages
 {
     public class BackgroundStorage : BaseStorage<KeyTransport, ITransportBackground>
     {

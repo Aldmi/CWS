@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
+using App.Services.Mediators;
+using App.Services.Storages;
 using Autofac;
 using AutoMapper;
-using BL.Services.Mediators;
-using BL.Services.Storages;
-using Exchange.Base;
+using Domain.Exchange;
+using Domain.InputDataModel.Autodictor.Model;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.Transport.Base.Abstract;
-using InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Events;
 using WebApiSwc.DTO.JSON.InputTypesDto;

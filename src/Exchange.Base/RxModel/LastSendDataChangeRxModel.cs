@@ -1,6 +1,6 @@
-﻿using InputDataModel.Base.InData;
+﻿using Domain.InputDataModel.Base.InData;
 
-namespace Exchange.Base.RxModel
+namespace Domain.Exchange.RxModel
 {
     public class LastSendDataChangeRxModel<T>
     {

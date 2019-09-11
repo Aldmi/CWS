@@ -1,4 +1,4 @@
-﻿namespace InputDataModel.Autodictor.Entities
+﻿namespace Domain.InputDataModel.Autodictor.Entities
 {
     public enum Lang
     {

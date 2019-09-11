@@ -6,13 +6,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using Exchange.Base.DataProviderAbstract;
-using InputDataModel.Autodictor.Model;
-using InputDataModel.Base.InData;
-using InputDataModel.Base.Providers;
-using InputDataModel.Base.Response;
+using Domain.Exchange.DataProviderAbstract;
+using Domain.InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.Providers;
+using Domain.InputDataModel.Base.Response;
 
-namespace InputDataModel.Autodictor.DataProviders.ManualDataProviders
+namespace Domain.InputDataModel.Autodictor.DataProviders.ManualDataProviders
 {
     public class VidorBinaryDataProvider : BaseDataProvider<AdInputType>, IExchangeDataProvider<AdInputType, ResponseInfo>
     {

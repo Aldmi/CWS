@@ -7,22 +7,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using Exchange.Base.DataProviderAbstract;
-using Exchange.Base.RxModel;
-using Exchange.Base.Services;
+using Domain.Exchange.DataProviderAbstract;
+using Domain.Exchange.RxModel;
+using Domain.Exchange.Services;
+using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.Response;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.Transport.Base.Abstract;
 using Infrastructure.Transport.Base.RxModel;
-using InputDataModel.Base.InData;
-using InputDataModel.Base.Response;
 using Newtonsoft.Json;
 using Serilog;
 using Shared.Collections;
 using Shared.Enums;
 using Shared.Types;
 
-
-namespace Exchange.Base
+namespace Domain.Exchange
 {
     public class ExchangeUniversal<TIn> : IExchange<TIn>
     {

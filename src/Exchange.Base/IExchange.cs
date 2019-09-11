@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Reactive.Subjects;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using Exchange.Base.RxModel;
+using Domain.Exchange.RxModel;
+using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.Response;
 using Infrastructure.Transport.Base.RxModel;
-using InputDataModel.Base.InData;
-using InputDataModel.Base.Response;
 using Shared.Types;
 
-namespace Exchange.Base
+namespace Domain.Exchange
 {
     /// <summary>
     /// УНИВЕРСАЛЬНЫЙ ОБМЕН ДАННЫМИ СО ВСЕМИ УСТРОЙСТВАМИ.

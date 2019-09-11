@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Autodictor.Model;
 using KellermanSoftware.CompareNetObjects;
 
-namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
+namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 {
     /// <summary>
     /// Единица запроса обработанная ViewRule.

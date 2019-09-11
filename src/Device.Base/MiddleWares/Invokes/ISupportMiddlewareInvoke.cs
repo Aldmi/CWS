@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
-using InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.InData;
 
-namespace DeviceForExchange.MiddleWares.Invokes
+namespace Domain.Device.MiddleWares.Invokes
 {
     public interface ISupportMiddlewareInvoke<TIn>
     {

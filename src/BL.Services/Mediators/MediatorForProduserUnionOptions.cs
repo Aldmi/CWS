@@ -4,7 +4,7 @@ using CSharpFunctionalExtensions;
 using DAL.Abstract.Concrete;
 using DAL.Abstract.Entities.Options.ResponseProduser;
 
-namespace BL.Services.Mediators
+namespace App.Services.Mediators
 {
     /// <summary>
     /// Сервис объединяет работу с репозиотриями опций для устройств.

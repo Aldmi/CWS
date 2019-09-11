@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using App.Services.Config;
+using App.Services.Exceptions;
+using App.Services.Storages;
 using Autofac.Features.Indexed;
-using BL.Services.Config;
-using BL.Services.Exceptions;
-using BL.Services.Storages;
 using DAL.Abstract.Entities.Options;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using DeviceForExchange;
-using DeviceForExchange.Produser;
-using Exchange.Base;
-using Exchange.Base.DataProviderAbstract;
+using Domain.Device;
+using Domain.Device.Produser;
+using Domain.Exchange;
+using Domain.Exchange.DataProviderAbstract;
+using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.Response;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.Background.Concrete.HostingBackground;
 using Infrastructure.EventBus.Abstract;
@@ -20,14 +22,11 @@ using Infrastructure.Transport.Base.Abstract;
 using Infrastructure.Transport.Http;
 using Infrastructure.Transport.SerialPort;
 using Infrastructure.Transport.TcpIp;
-using InputDataModel.Base.InData;
-using InputDataModel.Base.Response;
 using Serilog;
 using Shared.Enums;
 using Shared.Types;
 
-
-namespace BL.Services.Mediators
+namespace App.Services.Mediators
 {
     /// <summary>
     /// Сервис объединяет работу со всеми Storage,

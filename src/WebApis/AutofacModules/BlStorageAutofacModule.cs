@@ -1,7 +1,7 @@
-﻿using Autofac;
-using BL.Services.Storages;
-using DeviceForExchange.Produser;
-using InputDataModel.Base.InData;
+﻿using App.Services.Storages;
+using Autofac;
+using Domain.Device.Produser;
+using Domain.InputDataModel.Base.InData;
 
 namespace WebApiSwc.AutofacModules
 {

@@ -1,6 +1,6 @@
-﻿using InputDataModel.Base.Response;
+﻿using Domain.InputDataModel.Base.Response;
 
-namespace InputDataModel.Autodictor.StronglyTypedResponse.Types
+namespace Domain.InputDataModel.Autodictor.StronglyTypedResponse.Types
 {
     public class EkrimStronglyTypedResp : StronglyTypedRespBase
     {

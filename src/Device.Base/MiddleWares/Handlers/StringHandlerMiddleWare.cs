@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
-using DeviceForExchange.MiddleWares.Converters.StringConverters;
+using Domain.Device.MiddleWares.Converters.StringConverters;
 
-namespace DeviceForExchange.MiddleWares.Handlers
+namespace Domain.Device.MiddleWares.Handlers
 {
     /// <summary>
     /// Обработчик строковой переменной.

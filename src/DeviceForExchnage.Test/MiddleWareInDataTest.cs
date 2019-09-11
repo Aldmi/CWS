@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using DAL.Abstract.Entities.Options.MiddleWare;
-using DeviceForExchange.MiddleWares;
 using DeviceForExchnage.Test.Datas;
+using Domain.Device.MiddleWares;
+using Domain.InputDataModel.Autodictor.Model;
 using FluentAssertions;
-using InputDataModel.Autodictor.Model;
 using Moq;
 using Serilog;
 using Xunit;

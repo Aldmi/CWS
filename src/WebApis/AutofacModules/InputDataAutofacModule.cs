@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using App.Services.InputData;
+using App.Services.MessageBroker;
 using Autofac;
 using Autofac.Core;
-using BL.Services.InputData;
-using BL.Services.MessageBroker;
+using Domain.InputDataModel.Base.InData;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.Background.Concrete.HostingBackground;
 using Infrastructure.MessageBroker.Abstract;
 using Infrastructure.MessageBroker.Options;
-using InputDataModel.Base.InData;
 using Microsoft.Extensions.Configuration;
 
 

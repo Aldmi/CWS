@@ -5,18 +5,18 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using Exchange.Base.DataProviderAbstract;
-using InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules;
-using InputDataModel.Autodictor.Extensions;
-using InputDataModel.Autodictor.Model;
-using InputDataModel.Base.InData;
-using InputDataModel.Base.Providers;
-using InputDataModel.Base.Response;
+using Domain.Exchange.DataProviderAbstract;
+using Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules;
+using Domain.InputDataModel.Autodictor.Extensions;
+using Domain.InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.Providers;
+using Domain.InputDataModel.Base.Response;
 using Serilog;
 using Shared.Extensions;
 using Shared.Helpers;
 
-namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
+namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 {
     public class ByRulesDataProvider : BaseDataProvider<AdInputType>, IExchangeDataProvider<AdInputType, ResponseInfo>
     {

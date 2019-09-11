@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using DeviceForExchange.MiddleWares.Converters;
+using Domain.Device.MiddleWares.Converters;
 
-namespace DeviceForExchange.MiddleWares.Handlers
+namespace Domain.Device.MiddleWares.Handlers
 {
     public abstract class BaseHandlerMiddleWare<T>
     {

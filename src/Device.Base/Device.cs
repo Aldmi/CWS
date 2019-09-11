@@ -5,20 +5,20 @@ using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DAL.Abstract.Entities.Options.Device;
 using DAL.Abstract.Entities.Options.MiddleWare;
-using DeviceForExchange.MiddleWares;
-using DeviceForExchange.MiddleWares.Invokes;
-using DeviceForExchange.Produser;
-using Exchange.Base;
-using Exchange.Base.RxModel;
-using Exchange.Base.Services;
+using Domain.Device.MiddleWares;
+using Domain.Device.MiddleWares.Invokes;
+using Domain.Device.Produser;
+using Domain.Exchange;
+using Domain.Exchange.RxModel;
+using Domain.Exchange.Services;
+using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.Response;
 using Infrastructure.EventBus.Abstract;
 using Infrastructure.Transport.Base.RxModel;
-using InputDataModel.Base.InData;
-using InputDataModel.Base.Response;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace DeviceForExchange
+namespace Domain.Device
 {
     /// <summary>
     /// Устройство.

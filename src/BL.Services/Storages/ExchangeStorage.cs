@@ -1,7 +1,7 @@
-﻿using Exchange.Base;
+﻿using Domain.Exchange;
 using Infrastructure.Storages;
 
-namespace BL.Services.Storages
+namespace App.Services.Storages
 {
     public class ExchangeStorage<TIn> : BaseStorage<string, IExchange<TIn>>
     {

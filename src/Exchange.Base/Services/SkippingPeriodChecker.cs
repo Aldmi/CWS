@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Timers;
 
-namespace Exchange.Base.Services
+namespace Domain.Exchange.Services
 {
     /// <summary>
     /// Проверка Пропуска по таймеру.

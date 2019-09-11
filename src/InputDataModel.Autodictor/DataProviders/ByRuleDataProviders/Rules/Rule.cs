@@ -3,7 +3,7 @@ using System.Linq;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Serilog;
 
-namespace InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
+namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 {
     public class Rule
     {

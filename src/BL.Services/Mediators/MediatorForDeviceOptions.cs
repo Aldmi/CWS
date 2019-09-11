@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BL.Services.Exceptions;
+using App.Services.Exceptions;
 using CSharpFunctionalExtensions;
 using DAL.Abstract.Concrete;
 using DAL.Abstract.Entities.Options;
@@ -13,7 +13,7 @@ using DAL.Abstract.Entities.Options.Transport;
 using Shared.Enums;
 using Shared.Types;
 
-namespace BL.Services.Mediators
+namespace App.Services.Mediators
 {
     /// <summary>
     /// Сервис объединяет работу с репозиотриями опций для устройств.

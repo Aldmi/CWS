@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Services.Actions;
+using App.Services.Exceptions;
+using App.Services.Mediators;
 using AutoMapper;
-using BL.Services.Actions;
-using BL.Services.Exceptions;
-using BL.Services.Mediators;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using DAL.Abstract.Entities.Options.MiddleWare;
-using InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Shared.Types;

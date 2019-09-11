@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using System.Timers;
 using CSharpFunctionalExtensions;
 using DAL.Abstract.Entities.Options.MiddleWare;
-using InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.InData;
 using KellermanSoftware.CompareNetObjects;
 using Serilog;
 
-namespace DeviceForExchange.MiddleWares.Invokes
+namespace Domain.Device.MiddleWares.Invokes
 {
     public class MiddlewareInvokeService<TIn> : IDisposable
     {

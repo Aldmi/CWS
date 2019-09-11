@@ -1,6 +1,6 @@
-﻿using Autofac;
-using BL.Services.Actions;
-using InputDataModel.Base.InData;
+﻿using App.Services.Actions;
+using Autofac;
+using Domain.InputDataModel.Base.InData;
 
 namespace WebApiSwc.AutofacModules
 {

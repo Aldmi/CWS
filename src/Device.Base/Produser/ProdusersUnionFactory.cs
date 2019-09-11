@@ -6,7 +6,7 @@ using DAL.Abstract.Entities.Options.ResponseProduser;
 using KafkaProduser.Options;
 using WebClientProduser.Options;
 
-namespace DeviceForExchange.Produser
+namespace Domain.Device.Produser
 {
     /// <summary>
     /// Фабрика по созданию объединения продюсеров.

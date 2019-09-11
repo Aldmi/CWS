@@ -17,11 +17,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DAL.Abstract\DAL.Abstract.csproj" />
-    <ProjectReference Include="..\Exchange.Base\Exchange.Base.csproj" />
+    <ProjectReference Include="..\Exchange.Base\Domain.Exchange.csproj" />
     <ProjectReference Include="..\Infrastructure.MessageBroker\Infrastructure.MessageBroker.csproj" />
     <ProjectReference Include="..\Infrastructure.Storages\Infrastructure.Storages.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.EventBus.csproj" />
-    <ProjectReference Include="..\InputDataModel.Base\InputDataModel.Base.csproj" />
+    <ProjectReference Include="..\InputDataModel.Autodictor\Domain.InputDataModel.Autodictor.csproj" />
+    <ProjectReference Include="..\InputDataModel.Base\Domain.InputDataModel.Base.csproj" />
   </ItemGroup>
 
 </Project>

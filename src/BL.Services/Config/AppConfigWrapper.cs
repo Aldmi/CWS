@@ -1,7 +1,7 @@
 ﻿using Infrastructure.MessageBroker.Options;
 using Microsoft.Extensions.Configuration;
 
-namespace BL.Services.Config
+namespace App.Services.Config
 {
     public class AppConfigWrapper
     {

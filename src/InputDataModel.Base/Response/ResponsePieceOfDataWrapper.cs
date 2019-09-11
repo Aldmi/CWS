@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.InData;
 using Shared.Enums;
 
-namespace InputDataModel.Base.Response
+namespace Domain.InputDataModel.Base.Response
 {
     /// <summary>
     /// Ответ от устройства на отправку порции данных.

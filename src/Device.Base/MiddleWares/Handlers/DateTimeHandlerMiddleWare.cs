@@ -1,8 +1,8 @@
 ﻿using System;
 using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
-using DeviceForExchange.MiddleWares.Converters.DateTimeConverters;
+using Domain.Device.MiddleWares.Converters.DateTimeConverters;
 
-namespace DeviceForExchange.MiddleWares.Handlers
+namespace Domain.Device.MiddleWares.Handlers
 {
     public class DateTimeHandlerMiddleWare : BaseHandlerMiddleWare<DateTime>
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
-using DeviceForExchange.MiddleWares.Converters.StringConverters;
+using Domain.Device.MiddleWares.Converters.StringConverters;
 using FluentAssertions;
 using Xunit;
 

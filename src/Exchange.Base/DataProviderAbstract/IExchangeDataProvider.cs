@@ -2,10 +2,10 @@
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
+using Domain.InputDataModel.Base.InData;
 using Infrastructure.Transport.Base.DataProvidert;
-using InputDataModel.Base.InData;
 
-namespace Exchange.Base.DataProviderAbstract
+namespace Domain.Exchange.DataProviderAbstract
 {
     public interface IExchangeDataProvider<TInput, TOutput> : ITransportDataProvider
     {

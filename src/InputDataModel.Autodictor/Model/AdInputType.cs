@@ -1,8 +1,8 @@
 ﻿using System;
-using InputDataModel.Autodictor.Entities;
-using InputDataModel.Base.InData;
+using Domain.InputDataModel.Autodictor.Entities;
+using Domain.InputDataModel.Base.InData;
 
-namespace InputDataModel.Autodictor.Model
+namespace Domain.InputDataModel.Autodictor.Model
 {
     public class AdInputType : InputTypeBase
     {

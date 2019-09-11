@@ -1,6 +1,6 @@
-﻿using Exchange.Base.Services;
+﻿using Domain.Exchange.Services;
 
-namespace Exchange.Base.RxModel
+namespace Domain.Exchange.RxModel
 {
     public class InputDataStateRxModel
     {

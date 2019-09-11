@@ -1,4 +1,4 @@
-﻿namespace InputDataModel.Autodictor.Helpers
+﻿namespace Domain.InputDataModel.Autodictor.Helpers
 {
     public class AdInputTypeInseartDataHandler
     {

@@ -1,5 +1,5 @@
 ﻿using System;
-using InputDataModel.Autodictor.Entities;
+using Domain.InputDataModel.Autodictor.Entities;
 
 namespace WebApiSwc.DTO.JSON.InputTypesDto
 {

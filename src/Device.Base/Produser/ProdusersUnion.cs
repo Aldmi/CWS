@@ -9,10 +9,10 @@ using AbstractProduser.Helpers;
 using AbstractProduser.Options;
 using CSharpFunctionalExtensions;
 using DAL.Abstract.Entities.Options.ResponseProduser;
-using InputDataModel.Base.Response;
+using Domain.InputDataModel.Base.Response;
 using Newtonsoft.Json;
 
-namespace DeviceForExchange.Produser
+namespace Domain.Device.Produser
 {
     /// <summary>
     /// Объединение продюссеров.

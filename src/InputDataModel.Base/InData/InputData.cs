@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace InputDataModel.Base.InData
+namespace Domain.InputDataModel.Base.InData
 {
     public class InputData<TIn>
     {

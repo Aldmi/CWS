@@ -1,4 +1,4 @@
-﻿namespace Exchange.Base.RxModel
+﻿namespace Domain.Exchange.RxModel
 {
     public class ConnectChangeRxModel
     {

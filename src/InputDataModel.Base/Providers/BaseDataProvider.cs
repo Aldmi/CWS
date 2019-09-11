@@ -1,8 +1,8 @@
-﻿using InputDataModel.Base.InData;
-using InputDataModel.Base.Response;
+﻿using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.Response;
 using Serilog;
 
-namespace InputDataModel.Base.Providers
+namespace Domain.InputDataModel.Base.Providers
 {
     //TODO: после созданния нескольких провайдеров, вынести обший функционал в этот класс
     public class BaseDataProvider<TInput>

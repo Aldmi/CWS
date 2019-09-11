@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reactive.Subjects;
 using System.Timers;
-using Exchange.Base.RxModel;
+using Domain.Exchange.RxModel;
 using Timer = System.Timers.Timer;
 
-namespace Exchange.Base.Services
+namespace Domain.Exchange.Services
 {
     public enum InputDataState { NormalEntry, ToLongNoEntry };
 

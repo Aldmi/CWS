@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using BL.Services.Exceptions;
-using BL.Services.Mediators;
-using Exchange.Base;
-using InputDataModel.Base.InData;
+using App.Services.Exceptions;
+using App.Services.Mediators;
+using Domain.Exchange;
+using Domain.InputDataModel.Base.InData;
 using Shared.Types;
 
-
-namespace BL.Services.Actions
+namespace App.Services.Actions
 {
     /// <summary>
     /// Сервис для работы с текущим набором устройств

@@ -1,9 +1,8 @@
-﻿
-using DeviceForExchange;
+﻿using Domain.Device;
+using Domain.InputDataModel.Base.InData;
 using Infrastructure.Storages;
-using InputDataModel.Base.InData;
 
-namespace BL.Services.Storages
+namespace App.Services.Storages
 {
     public class DeviceStorage<TIn> : BaseStorage<string, Device<TIn>> where TIn : InputTypeBase
     {

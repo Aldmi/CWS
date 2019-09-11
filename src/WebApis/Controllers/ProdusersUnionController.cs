@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using App.Services.Actions;
+using App.Services.Mediators;
 using AutoMapper;
-using BL.Services.Actions;
-using BL.Services.Mediators;
 using DAL.Abstract.Entities.Options.ResponseProduser;
-using InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using WebApiSwc.DTO.JSON.OptionsDto.ProduserUnionOption;

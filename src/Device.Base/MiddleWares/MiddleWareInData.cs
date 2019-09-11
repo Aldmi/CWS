@@ -5,15 +5,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DAL.Abstract.Entities.Options.MiddleWare;
-using DeviceForExchange.MiddleWares.Converters.Exceptions;
-using DeviceForExchange.MiddleWares.Handlers;
-using DeviceForExchange.MiddleWares.Invokes;
+using Domain.Device.MiddleWares.Converters.Exceptions;
+using Domain.Device.MiddleWares.Handlers;
+using Domain.Device.MiddleWares.Invokes;
+using Domain.InputDataModel.Base.InData;
 using FastDeepCloner;
-using InputDataModel.Base.InData;
 using Serilog;
 using Shared.ReflectionServices;
 
-namespace DeviceForExchange.MiddleWares
+namespace Domain.Device.MiddleWares
 {
     /// <summary>
     /// Промежуточный обработчик входных данных.

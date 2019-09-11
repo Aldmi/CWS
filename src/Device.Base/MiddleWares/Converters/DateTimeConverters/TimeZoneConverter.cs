@@ -1,7 +1,7 @@
 ﻿using System;
 using DAL.Abstract.Entities.Options.MiddleWare.Converters.DateTimeConverterOption;
 
-namespace DeviceForExchange.MiddleWares.Converters.DateTimeConverters
+namespace Domain.Device.MiddleWares.Converters.DateTimeConverters
 {
     public class TimeZoneConverter : IConverterMiddleWare<DateTime>
     {

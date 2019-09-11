@@ -1,7 +1,7 @@
 ﻿using System;
 using AutoMapper;
+using Domain.InputDataModel.Autodictor.Model;
 using FluentAssertions;
-using InputDataModel.Autodictor.Model;
 using WebApiSwc.AutoMapperConfig;
 using WebApiSwc.DTO.XML;
 using Xunit;

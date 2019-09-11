@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using InputDataModel.Autodictor.Entities;
-using InputDataModel.Autodictor.Model;
-using InputDataModel.Base.InData;
+using Domain.InputDataModel.Autodictor.Entities;
+using Domain.InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Base.InData;
 
 namespace DeviceForExchnage.Test.Datas
 {
