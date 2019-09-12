@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Domain.InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Base;
 using Serilog;
 using Shared.CrcCalculate;
 using Shared.Extensions;
@@ -25,6 +26,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
         private readonly ViewRuleOption _option;
         private readonly ILogger _logger;
         private readonly HelperStringTemplateInsert _helperStringTemplateInsert;
+        private readonly IIndependentInserts _independentInserts;
 
         #endregion
 
@@ -38,6 +40,8 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
             _option = option;
             _logger = logger;
             _helperStringTemplateInsert= new HelperStringTemplateInsert(_logger);
+
+            _independentInserts= new AdInputTypeIndependentInserts();
         }
 
         #endregion
@@ -63,9 +67,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
         /// <returns>строку запроса и батч данных в обертке </returns>
         public IEnumerable<ViewRuleTransferWrapper<TIn>> GetDataRequestString(List<TIn> items)
         {
-           var tempItems= items.Cast<AdInputType>().ToList(); //DEBUG !!!!!!!!!!!  (пока класс не до конца generic)
-
-            var viewedItems = GetViewedItems(tempItems);
+            var viewedItems = GetViewedItems(items);
             if (viewedItems == null)
             {
                 yield return null;
@@ -123,7 +125,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
                     {
                         StartItemIndex = startItemIndex,
                         BatchSize = _option.BatchSize,
-                        BatchedData =  batch.Cast<TIn>(),    //DEBUG !!!!!!!!!!!  Cast (пока класс не до конца generic)        
+                        BatchedData =  batch,    
                         Request = request,
                         Response = response,
                     };
@@ -183,7 +185,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
         /// Вернуть элементы из диапазона укзанного в правиле отображения
         /// Если границы диапазона не прпавильны вернуть null
         /// </summary>
-        private IEnumerable<AdInputType> GetViewedItems(List<AdInputType> items)
+        private IEnumerable<TIn> GetViewedItems(List<TIn> items)
         {
             try
             {
@@ -199,7 +201,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
         /// <summary>
         /// Создать строку Запроса (используя форматную строку RequestOption) из одного батча данных.
         /// </summary>
-        private RequestTransfer CreateStringRequest(IEnumerable<AdInputType> batch, int startItemIndex)
+        private RequestTransfer CreateStringRequest(IEnumerable<TIn> batch, int startItemIndex)
         {
             var items = batch.ToList();
             var header = _option.RequestOption.Header;
@@ -276,62 +278,10 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
         /// <summary>
         /// Первоначальная вставка НЕЗАВИСИМЫХ переменных
         /// </summary>
-        private string MakeBodySectionIndependentInserts(string body, AdInputType uit, int currentRow)
+        private string MakeBodySectionIndependentInserts(string body, TIn uit, int currentRow)
         {
-            var lang = uit.Lang;
-            //ЗАПОЛНИТЬ СЛОВАРЬ ВСЕМИ ВОЗМОЖНЫМИ ВАРИАНТАМИ ВСТАВОК
-            var typeTrain = uit.TrainType?.GetName(lang);
-            var typeAlias = uit.TrainType?.GetNameAlias(lang);
-            var eventTrain = uit.Event?.GetName(lang);
-            var addition = uit.Addition?.GetName(lang);
-            var stations = uit.Stations?.GetName(lang);  //CreateStationsStr(uit, lang);
-            var stationsCut = uit.StationsСut?.GetName(lang);//CreateStationsCutStr(uit, lang);
-            var note = uit.Note?.GetName(lang);
-            //DEBUG------Костыль по ограничению------
-            //if (noteStr.Length > 100)
-            //{
-            //    noteStr = "Информация об остановках передается по громкоговорящей связи";
-            //}
-            var stationsCutStr = string.IsNullOrEmpty(stationsCut) ? "ПОСАДКИ НЕТ" : stationsCut;
-            //DEBUG------
-
-            var daysFollowing = uit.DaysFollowing?.GetName(lang);
-            var daysFollowingAlias = uit.DaysFollowing?.GetNameAlias(lang);
-            var arrivalTime = uit.ArrivalTime ?? DateTime.MinValue;
-            var departureTime = uit.DepartureTime ?? DateTime.MinValue;
-            var time = (uit.Event?.Num != null && uit.Event.Num == 0) ? arrivalTime : departureTime;
-            var delayTime= uit.DelayTime ?? DateTime.MinValue;
-            var expectedTime = (uit.ExpectedTime == DateTime.MinValue) ? time : uit.ExpectedTime;
-            var dict = new Dictionary<string, object>
-            {
-                ["TypeName"] = string.IsNullOrEmpty(typeTrain) ? " " : typeTrain,
-                ["TypeAlias"] = string.IsNullOrEmpty(typeAlias) ? " " : typeAlias,
-                [nameof(uit.NumberOfTrain)] = string.IsNullOrEmpty(uit.NumberOfTrain) ? " " : uit.NumberOfTrain,
-                [nameof(uit.PathNumber)] = string.IsNullOrEmpty(uit.PathNumber) ? " " : uit.PathNumber,
-                [nameof(uit.Platform)] = string.IsNullOrEmpty(uit.Platform) ? " " : uit.Platform,
-                [nameof(uit.Event)] = string.IsNullOrEmpty(eventTrain) ? " " : eventTrain,
-                [nameof(uit.Addition)] = string.IsNullOrEmpty(addition) ? " " : addition,
-                ["Stations"] = string.IsNullOrEmpty(stations) ? " " : stations,
-                ["StationsCut"] = stationsCutStr,//string.IsNullOrEmpty(stationsCut) ? " " : stationsCut,
-                [nameof(uit.StationArrival)] = uit.StationArrival?.GetName(lang) ?? " ",
-                [nameof(uit.StationDeparture)] = uit.StationDeparture?.GetName(lang) ?? " ",
-                [nameof(uit.Note)] = string.IsNullOrEmpty(note) ? " " : note,
-                ["DaysFollowing"] = string.IsNullOrEmpty(daysFollowing) ? " " : daysFollowing,
-                ["DaysFollowingAlias"] = string.IsNullOrEmpty(daysFollowingAlias) ? " " : daysFollowingAlias,
-                [nameof(uit.DelayTime)] = uit.DelayTime ?? DateTime.MinValue,
-                [nameof(uit.ExpectedTime)] = uit.ExpectedTime,
-                ["TArrival"] = arrivalTime,
-                ["TDepart"] = departureTime,
-                ["Hour"] = DateTime.Now.Hour,
-                ["Minute"] = DateTime.Now.Minute,
-                ["Second"] = DateTime.Now.Second,
-                ["Time"] = time,
-                ["DelayTime"] = delayTime,
-                ["ExpectedTime"] = expectedTime,
-                ["SyncTInSec"] = DateTime.Now.Hour * 3600 + DateTime.Now.Minute * 60 + DateTime.Now.Second,
-                ["rowNumber"] = currentRow
-            };
-            //ВСТАВИТЬ ПЕРЕМЕННЫЕ ИЗ СЛОВАРЯ В body
+            var dict= _independentInserts.CreateDictionary(uit);
+            dict["rowNumber"] = currentRow;                     //TODO: rowNumber нужен не для всех входных типов. Может передавать currentRow в  CreateDictionary ???
             var resStr = _helperStringTemplateInsert.StringTemplateInsert(body, dict);
             return resStr;
         }

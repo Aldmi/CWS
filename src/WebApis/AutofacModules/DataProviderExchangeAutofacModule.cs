@@ -6,6 +6,7 @@ using Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders;
 using Domain.InputDataModel.Autodictor.DataProviders.ManualDataProviders;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Autodictor.StronglyTypedResponse;
+using Domain.InputDataModel.Base;
 using Domain.InputDataModel.Base.Response;
 using KafkaProduser;
 using KafkaProduser.Options;
@@ -28,6 +29,8 @@ namespace WebApiSwc.AutofacModules
 
                     builder.RegisterType<VidorBinaryDataProvider>().Named<IExchangeDataProvider<AdInputType, ResponseInfo>>("VidorBinary").InstancePerDependency();
                     builder.RegisterType<ByRulesDataProvider<AdInputType>>().Named<IExchangeDataProvider<AdInputType, ResponseInfo>>("ByRules").InstancePerDependency();
+
+                    builder.RegisterType<AdInputTypeIndependentInserts>().As<IIndependentInserts>().SingleInstance();
                     break;
 
                 case "OtherType": 
