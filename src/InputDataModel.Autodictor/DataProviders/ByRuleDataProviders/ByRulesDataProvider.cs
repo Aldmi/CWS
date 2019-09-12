@@ -18,12 +18,12 @@ using Shared.Helpers;
 
 namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 {
-    public class ByRulesDataProvider<TInput> : BaseDataProvider<TInput>, IExchangeDataProvider<TInput, ResponseInfo> where TInput : InputTypeBase//, new()
+    public class ByRulesDataProvider<TIn> : BaseDataProvider<TIn>, IExchangeDataProvider<TIn, ResponseInfo> where TIn : InputTypeBase//, new()
     {
         #region field
 
-        private readonly List<Rule<TInput>> _rules;        // Набор правил, для обработки данных.
-        private ViewRuleTransferWrapper _current;  // Созданный запрос, после подготовки данных. 
+        private readonly List<Rule<TIn>> _rules;        // Набор правил, для обработки данных.
+        private ViewRuleTransferWrapper<TIn> _current;  // Созданный запрос, после подготовки данных. 
         private readonly ILogger _logger;
 
         #endregion
@@ -39,7 +39,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 throw new ArgumentNullException(providerOption.Name);
 
             ProviderName = providerOption.Name;
-            _rules = option.Rules.Select(opt => new Rule<TInput>(opt, logger)).ToList();
+            _rules = option.Rules.Select(opt => new Rule<TIn>(opt, logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(option.RuleName4DefaultHandle)
                 ? "DefaultHandler"//_rules.First().Option.Name
                 : option.RuleName4DefaultHandle;
@@ -52,11 +52,11 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         #region prop
 
-        private IEnumerable<Rule<TInput>> GetRules => _rules.ToList();                     //Копия списка Rules, чтобы  избежать Exception при перечислении (т.к. Rules - мутабельна).
+        private IEnumerable<Rule<TIn>> GetRules => _rules.ToList();                     //Копия списка Rules, чтобы  избежать Exception при перечислении (т.к. Rules - мутабельна).
         public string RuleName4DefaultHandle { get; }
         public string ProviderName { get; }
         public Dictionary<string, string> StatusDict { get; } = new Dictionary<string, string>();
-        public InDataWrapper<TInput> InputData { get; set; }
+        public InDataWrapper<TIn> InputData { get; set; }
         public ResponseInfo OutputData { get; set; }
         public bool IsOutDataValid { get; set; }
         public int TimeRespone => _current.Response.Option.TimeRespone;        //Время на ответ
@@ -68,7 +68,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         #region RxEvent
 
-        public Subject<IExchangeDataProvider<TInput, ResponseInfo>> RaiseSendDataRx { get; } = new Subject<IExchangeDataProvider<TInput, ResponseInfo>>();
+        public Subject<IExchangeDataProvider<TIn, ResponseInfo>> RaiseSendDataRx { get; } = new Subject<IExchangeDataProvider<TIn, ResponseInfo>>();
 
         #endregion
 
@@ -187,7 +187,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 throw new ArgumentNullException(optionNew.Name);
 
             _rules.Clear();
-            var newRules = option.Rules.Select(opt => new Rule<TInput>(opt, _logger)).ToList();//TODO: валидация проводить в самом dto объекте Rule и ViewRule
+            var newRules = option.Rules.Select(opt => new Rule<TIn>(opt, _logger)).ToList();//TODO: валидация проводить в самом dto объекте Rule и ViewRule
             _rules.AddRange(newRules);
 
             return true;
@@ -203,14 +203,14 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         /// <summary>
         /// Запуск конвеера обработки запрос-ответ для обмена
         /// </summary>
-        public async Task StartExchangePipeline(InDataWrapper<TInput> inData)
+        public async Task StartExchangePipeline(InDataWrapper<TIn> inData)
         {
             //ЕСЛИ ДАННЫХ ДЛЯ ОТПРАВКИ НЕТ (например для Цикл. обмена при старте)
             if (inData == null)
             {
-                inData = new InDataWrapper<TInput>
+                inData = new InDataWrapper<TIn>
                 {
-                    Datas = new List<TInput>(),
+                    Datas = new List<TIn>(),
                     Command = Command4Device.None,
                     DirectHandlerName = RuleName4DefaultHandle
                 };
@@ -262,7 +262,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         /// <summary>
         /// Отобразить данные через коллекцию ViewRules у правила.
         /// </summary>
-        private void ViewRuleSendData(Rule<TInput> rule, List<TInput> takesItems)
+        private void ViewRuleSendData(Rule<TIn> rule, List<TIn> takesItems)
         {
             if (takesItems != null && takesItems.Any())
             {
@@ -277,7 +277,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                             continue;
 
                         _current = request;
-                        InputData = new InDataWrapper<TInput> { Datas = _current.BatchedData.ToList() };
+                        InputData = new InDataWrapper<TIn> { Datas = _current.BatchedData.ToList() };
                         StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption.Id}";
                         StatusDict["Request.BodyLenght"] = $"{_current.Request.BodyLenght}";
                         RaiseSendDataRx.OnNext(this);
@@ -290,11 +290,11 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         /// <summary>
         /// Отправить команду через первое ViewRule.
         /// </summary>
-        private void ViewRuleSendCommand(Rule<TInput> rule, Command4Device command)
+        private void ViewRuleSendCommand(Rule<TIn> rule, Command4Device command)
         {
             var commandViewRule = rule.GetViewRules.FirstOrDefault();
             _current = commandViewRule?.GetCommandRequestString();
-            InputData = new InDataWrapper<TInput> { Command = command };
+            InputData = new InDataWrapper<TIn> { Command = command };
             StatusDict["Command"] = $"{command}";
             StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
             StatusDict["viewRule.Id"] = $"{commandViewRule.GetCurrentOption.Id}";

@@ -17,7 +17,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
     /// STX - \u0002
     /// RTX - \u0003
     /// </summary>
-    public class ViewRule<TInput>
+    public class ViewRule<TIn>
     {
         #region fields
 
@@ -61,10 +61,9 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
         /// </summary>
         /// <param name="items">элементы прошедшие фильтрацию для правила</param>
         /// <returns>строку запроса и батч данных в обертке </returns>
-        public IEnumerable<ViewRuleTransferWrapper> GetDataRequestString(List<TInput> items)
+        public IEnumerable<ViewRuleTransferWrapper<TIn>> GetDataRequestString(List<TIn> items)
         {
-           var tempItems= items.Cast<AdInputType>().ToList(); //DEBUG (пока класс не до конца generic)
-
+           var tempItems= items.Cast<AdInputType>().ToList(); //DEBUG !!!!!!!!!!!  (пока класс не до конца generic)
 
             var viewedItems = GetViewedItems(tempItems);
             if (viewedItems == null)
@@ -120,11 +119,11 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
                         continue;
                     }
 
-                    yield return new ViewRuleTransferWrapper
+                    yield return new ViewRuleTransferWrapper<TIn>
                     {
                         StartItemIndex = startItemIndex,
                         BatchSize = _option.BatchSize,
-                        BatchedData = batch,              
+                        BatchedData =  batch.Cast<TIn>(),    //DEBUG !!!!!!!!!!!  Cast (пока класс не до конца generic)        
                         Request = request,
                         Response = response,
                     };
@@ -139,7 +138,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
         /// Body содержит готовый запрос для команды.
         /// </summary>
         /// <returns></returns>
-        public ViewRuleTransferWrapper GetCommandRequestString()
+        public ViewRuleTransferWrapper<TIn> GetCommandRequestString()
         {
             //TODO: ФОРМИРОВАНИЕ ЗАПРОСА ДЛЯ КОНМАДЫ ВЫНЕСТИ В ОТДЕШЛЬНЫЙ МЕТОД, ПО АНАЛОГИИ С CreateStringRequest()
 
@@ -171,7 +170,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
             //ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.-------------------------------------------------------------------------------
             var response = CreateStringResponse();
 
-            return new ViewRuleTransferWrapper
+            return new ViewRuleTransferWrapper<TIn>
             {
                 BatchedData = null,
                 Request = request,
