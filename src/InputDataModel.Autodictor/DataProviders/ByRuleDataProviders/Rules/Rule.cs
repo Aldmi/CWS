@@ -5,20 +5,20 @@ using Serilog;
 
 namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
 {
-    public class Rule
+    public class Rule<TIn>
     {
         #region fields
 
         protected RuleOption Option;
         private readonly ILogger _logger;
-        private readonly List<ViewRule> _viewRules;
+        private readonly List<ViewRule<TIn>> _viewRules;
 
         #endregion
 
 
         #region prop
 
-        public IEnumerable<ViewRule> GetViewRules => _viewRules.ToList();
+        public IEnumerable<ViewRule<TIn>> GetViewRules => _viewRules.ToList();
 
         #endregion
 
@@ -30,7 +30,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
         {
             Option = option;
             _logger = logger;
-            _viewRules= option.ViewRules.Select(opt=> new ViewRule(Option.AddressDevice, opt, _logger)).ToList();
+            _viewRules= option.ViewRules.Select(opt=> new ViewRule<TIn>(Option.AddressDevice, opt, _logger)).ToList();
         }
 
         #endregion

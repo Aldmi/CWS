@@ -27,7 +27,7 @@ namespace WebApiSwc.AutofacModules
                     builder.RegisterType<AdStronglyTypedResponseFactory>().As<IStronglyTypedResponseFactory>().SingleInstance();
 
                     builder.RegisterType<VidorBinaryDataProvider>().Named<IExchangeDataProvider<AdInputType, ResponseInfo>>("VidorBinary").InstancePerDependency();
-                    builder.RegisterType<ByRulesDataProvider>().Named<IExchangeDataProvider<AdInputType, ResponseInfo>>("ByRules").InstancePerDependency();
+                    builder.RegisterType<ByRulesDataProvider<AdInputType>>().Named<IExchangeDataProvider<AdInputType, ResponseInfo>>("ByRules").InstancePerDependency();
                     break;
 
                 case "OtherType": 

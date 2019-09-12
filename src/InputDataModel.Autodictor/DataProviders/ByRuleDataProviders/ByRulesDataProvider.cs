@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Domain.Exchange.DataProviderAbstract;
 using Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules;
-using Domain.InputDataModel.Autodictor.Extensions;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.Providers;
 using Domain.InputDataModel.Base.Response;
 using Serilog;
+using Shared.Collections;
 using Shared.Extensions;
 using Shared.Helpers;
 
 namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 {
-    public class ByRulesDataProvider : BaseDataProvider<AdInputType>, IExchangeDataProvider<AdInputType, ResponseInfo>
+    public class ByRulesDataProvider<TInput> : BaseDataProvider<TInput>, IExchangeDataProvider<TInput, ResponseInfo> where TInput : InputTypeBase//, new()
     {
         #region field
 
-        private readonly List<Rule> _rules;        // Набор правил, для обработки данных.
+        private readonly List<Rule<TInput>> _rules;        // Набор правил, для обработки данных.
         private ViewRuleTransferWrapper _current;  // Созданный запрос, после подготовки данных. 
         private readonly ILogger _logger;
 
@@ -39,7 +39,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 throw new ArgumentNullException(providerOption.Name);
 
             ProviderName = providerOption.Name;
-            _rules = option.Rules.Select(opt => new Rule(opt, logger)).ToList();
+            _rules = option.Rules.Select(opt => new Rule<TInput>(opt, logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(option.RuleName4DefaultHandle)
                 ? "DefaultHandler"//_rules.First().Option.Name
                 : option.RuleName4DefaultHandle;
@@ -52,11 +52,11 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         #region prop
 
-        private IEnumerable<Rule> GetRules => _rules.ToList();                     //Копия списка Rules, чтобы  избежать Exception при перечислении (т.к. Rules - мутабельна).
+        private IEnumerable<Rule<TInput>> GetRules => _rules.ToList();                     //Копия списка Rules, чтобы  избежать Exception при перечислении (т.к. Rules - мутабельна).
         public string RuleName4DefaultHandle { get; }
         public string ProviderName { get; }
         public Dictionary<string, string> StatusDict { get; } = new Dictionary<string, string>();
-        public InDataWrapper<AdInputType> InputData { get; set; }
+        public InDataWrapper<TInput> InputData { get; set; }
         public ResponseInfo OutputData { get; set; }
         public bool IsOutDataValid { get; set; }
         public int TimeRespone => _current.Response.Option.TimeRespone;        //Время на ответ
@@ -68,7 +68,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         #region RxEvent
 
-        public Subject<IExchangeDataProvider<AdInputType, ResponseInfo>> RaiseSendDataRx { get; } = new Subject<IExchangeDataProvider<AdInputType, ResponseInfo>>();
+        public Subject<IExchangeDataProvider<TInput, ResponseInfo>> RaiseSendDataRx { get; } = new Subject<IExchangeDataProvider<TInput, ResponseInfo>>();
 
         #endregion
 
@@ -187,7 +187,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                 throw new ArgumentNullException(optionNew.Name);
 
             _rules.Clear();
-            var newRules = option.Rules.Select(opt => new Rule(opt, _logger)).ToList();//TODO: валидация проводить в самом dto объекте Rule и ViewRule
+            var newRules = option.Rules.Select(opt => new Rule<TInput>(opt, _logger)).ToList();//TODO: валидация проводить в самом dto объекте Rule и ViewRule
             _rules.AddRange(newRules);
 
             return true;
@@ -203,14 +203,14 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         /// <summary>
         /// Запуск конвеера обработки запрос-ответ для обмена
         /// </summary>
-        public async Task StartExchangePipeline(InDataWrapper<AdInputType> inData)
+        public async Task StartExchangePipeline(InDataWrapper<TInput> inData)
         {
             //ЕСЛИ ДАННЫХ ДЛЯ ОТПРАВКИ НЕТ (например для Цикл. обмена при старте)
             if (inData == null)
             {
-                inData = new InDataWrapper<AdInputType>
+                inData = new InDataWrapper<TInput>
                 {
-                    Datas = new List<AdInputType>(),
+                    Datas = new List<TInput>(),
                     Command = Command4Device.None,
                     DirectHandlerName = RuleName4DefaultHandle
                 };
@@ -229,7 +229,8 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
                     //ДАННЫЕ ДЛЯ УКАЗАНОГО RULE--------------------------------------------
                     case RuleSwitcher4InData.InDataDirectHandler:
-                        var takesItems = inData.Datas?.Order(ruleOption.OrderBy, _logger)
+                        var takesItems = inData.Datas
+                            ?.Order(ruleOption.OrderBy, _logger)
                             ?.TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
                             ?.ToList();
                         ViewRuleSendData(rule, takesItems);
@@ -261,13 +262,12 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         /// <summary>
         /// Отобразить данные через коллекцию ViewRules у правила.
         /// </summary>
-        private void ViewRuleSendData(Rule rule, List<AdInputType> takesItems)
+        private void ViewRuleSendData(Rule<TInput> rule, List<TInput> takesItems)
         {
             if (takesItems != null && takesItems.Any())
             {
                 StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
                 //_logger.Information($"Отправка ДАННЫХ через {rule.Option.Name}. Кол-во данных:{takesItems.Count}");
-
 
                 foreach (var viewRule in rule.GetViewRules)
                 {
@@ -277,7 +277,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
                             continue;
 
                         _current = request;
-                        InputData = new InDataWrapper<AdInputType> { Datas = _current.BatchedData.ToList() };
+                        InputData = new InDataWrapper<TInput> { Datas = _current.BatchedData.ToList() };
                         StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption.Id}";
                         StatusDict["Request.BodyLenght"] = $"{_current.Request.BodyLenght}";
                         RaiseSendDataRx.OnNext(this);
@@ -290,11 +290,11 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         /// <summary>
         /// Отправить команду через первое ViewRule.
         /// </summary>
-        private void ViewRuleSendCommand(Rule rule, Command4Device command)
+        private void ViewRuleSendCommand(Rule<TInput> rule, Command4Device command)
         {
             var commandViewRule = rule.GetViewRules.FirstOrDefault();
             _current = commandViewRule?.GetCommandRequestString();
-            InputData = new InDataWrapper<AdInputType> { Command = command };
+            InputData = new InDataWrapper<TInput> { Command = command };
             StatusDict["Command"] = $"{command}";
             StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
             StatusDict["viewRule.Id"] = $"{commandViewRule.GetCurrentOption.Id}";

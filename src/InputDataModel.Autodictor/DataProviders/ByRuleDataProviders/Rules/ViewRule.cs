@@ -17,7 +17,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
     /// STX - \u0002
     /// RTX - \u0003
     /// </summary>
-    public class ViewRule
+    public class ViewRule<TInput>
     {
         #region fields
 
@@ -61,9 +61,12 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
         /// </summary>
         /// <param name="items">элементы прошедшие фильтрацию для правила</param>
         /// <returns>строку запроса и батч данных в обертке </returns>
-        public IEnumerable<ViewRuleTransferWrapper> GetDataRequestString(List<AdInputType> items)
+        public IEnumerable<ViewRuleTransferWrapper> GetDataRequestString(List<TInput> items)
         {
-            var viewedItems = GetViewedItems(items);
+           var tempItems= items.Cast<AdInputType>().ToList(); //DEBUG (пока класс не до конца generic)
+
+
+            var viewedItems = GetViewedItems(tempItems);
             if (viewedItems == null)
             {
                 yield return null;
