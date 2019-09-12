@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace Shared.Collections
+namespace Shared.Extensions
 {
     public static class EnumerableExtensions
     {
@@ -105,6 +105,37 @@ namespace Shared.Collections
             {
                 logger?.Warning($"Filter In Data Exception: {ex}");
                 return null;
+            }
+        }
+
+
+
+        /// <summary>
+        /// Разбивает коллекцию на порции (батчи)
+        /// </summary>
+        /// <param name="source">коллекция</param>
+        /// <param name="size">размер батча</param>
+        /// <returns></returns>
+        public static IEnumerable<IEnumerable<T>> Batch<T>(this IEnumerable<T> source, int size)
+        {
+            using (var iter = source.GetEnumerator())
+            {
+                while (iter.MoveNext())
+                {
+                    var chunk = new T[size];
+                    var count = 1;
+                    chunk[0] = iter.Current;
+                    for (int i = 1; i < size && iter.MoveNext(); i++)
+                    {
+                        chunk[i] = iter.Current;
+                        count++;
+                    }
+                    if (count < size)
+                    {
+                        Array.Resize(ref chunk, count);
+                    }
+                    yield return chunk;
+                }
             }
         }
     }

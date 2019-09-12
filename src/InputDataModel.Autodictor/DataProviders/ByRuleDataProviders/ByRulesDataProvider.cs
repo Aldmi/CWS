@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Domain.Exchange.DataProviderAbstract;
 using Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules;
-using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.Providers;
 using Domain.InputDataModel.Base.Response;
@@ -18,7 +17,7 @@ using Shared.Helpers;
 
 namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 {
-    public class ByRulesDataProvider<TIn> : BaseDataProvider<TIn>, IExchangeDataProvider<TIn, ResponseInfo> where TIn : InputTypeBase//, new()
+    public class ByRulesDataProvider<TIn> : BaseDataProvider<TIn>, IExchangeDataProvider<TIn, ResponseInfo> where TIn : InputTypeBase
     {
         #region field
 

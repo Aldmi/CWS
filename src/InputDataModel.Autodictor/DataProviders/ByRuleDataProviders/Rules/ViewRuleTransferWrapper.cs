@@ -12,7 +12,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
     {
         public int StartItemIndex { get; set; }                     //Начальный индекс (в базовом массиве, после TakeItems) элемента после разбиения на батчи.
         public int BatchSize { get; set; }                          //Размер батча.
-        public IEnumerable<TIn> BatchedData { get; set; }   //Набор входных данных на базе которых созданна StringRequest.
+        public IEnumerable<TIn> BatchedData { get; set; }           //Набор входных данных на базе которых созданна StringRequest.
         public RequestTransfer Request { get; set; }                //Строка запроса, созданная по правилам RequestOption.
         public ResponseTransfer Response { get; set; }              //Строка ответа, созданная по правилам ResponseOption.
     }
