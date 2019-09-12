@@ -25,7 +25,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
         private readonly string _addressDevice;
         private readonly ViewRuleOption _option;
         private readonly ILogger _logger;
-        private readonly HelperStringTemplateInsert _helperStringTemplateInsert;
+        private readonly HelperStringTemplateInsert _helperStringTemplateInsert;  //TODO: нет смысла использовать отдельные экземпляры
         private readonly IIndependentInserts _independentInserts;
 
         #endregion
@@ -34,14 +34,13 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
 
         #region ctor
 
-        public ViewRule(string addressDevice, ViewRuleOption option, ILogger logger)
+        public ViewRule(string addressDevice, ViewRuleOption option, IIndependentInserts independentInserts, ILogger logger)
         {
             _addressDevice = addressDevice;
             _option = option;
             _logger = logger;
             _helperStringTemplateInsert= new HelperStringTemplateInsert(_logger);
-
-            _independentInserts= new AdInputTypeIndependentInserts();
+            _independentInserts= independentInserts;
         }
 
         #endregion

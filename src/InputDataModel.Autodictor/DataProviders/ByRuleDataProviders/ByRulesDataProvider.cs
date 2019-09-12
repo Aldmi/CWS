@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Domain.Exchange.DataProviderAbstract;
 using Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules;
+using Domain.InputDataModel.Base;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.Providers;
 using Domain.InputDataModel.Base.Response;
@@ -31,14 +32,14 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         #region ctor
 
-        public ByRulesDataProvider(IStronglyTypedResponseFactory stronglyTypedResponseFactory, ProviderOption providerOption, ILogger logger) : base(stronglyTypedResponseFactory, logger)
+        public ByRulesDataProvider(IStronglyTypedResponseFactory stronglyTypedResponseFactory, ProviderOption providerOption, IIndependentInserts independentInserts, ILogger logger) : base(stronglyTypedResponseFactory, logger)
         {
             var option = providerOption.ByRulesProviderOption;
             if (option == null)
                 throw new ArgumentNullException(providerOption.Name);
 
             ProviderName = providerOption.Name;
-            _rules = option.Rules.Select(opt => new Rule<TIn>(opt, logger)).ToList();
+            _rules = option.Rules.Select(opt => new Rule<TIn>(opt, independentInserts, logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(option.RuleName4DefaultHandle)
                 ? "DefaultHandler"//_rules.First().Option.Name
                 : option.RuleName4DefaultHandle;
@@ -181,13 +182,14 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
         /// </summary>
         public bool SetCurrentOptionRt(ProviderOption optionNew)
         {
-            var option = optionNew.ByRulesProviderOption;
-            if (option == null)
-                throw new ArgumentNullException(optionNew.Name);
+            //TODO: лутчше весь ByRulesDataProvider сделать Immutable, чем перезаписывать список _rules  
+            //var option = optionNew.ByRulesProviderOption;
+            //if (option == null)
+            //    throw new ArgumentNullException(optionNew.Name);
 
-            _rules.Clear();
-            var newRules = option.Rules.Select(opt => new Rule<TIn>(opt, _logger)).ToList();//TODO: валидация проводить в самом dto объекте Rule и ViewRule
-            _rules.AddRange(newRules);
+            //_rules.Clear();
+            //var newRules = option.Rules.Select(opt => new Rule<TIn>(opt, _logger)).ToList();//TODO: валидация проводить в самом dto объекте Rule и ViewRule
+            //_rules.AddRange(newRules);
 
             return true;
         }
