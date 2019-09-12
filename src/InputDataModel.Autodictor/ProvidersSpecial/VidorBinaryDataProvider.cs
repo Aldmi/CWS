@@ -6,15 +6,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using Domain.Exchange.DataProviderAbstract;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.InData;
-using Domain.InputDataModel.Base.Providers;
+using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.Response;
 
-namespace Domain.InputDataModel.Autodictor.DataProviders.ManualDataProviders
+namespace Domain.InputDataModel.Autodictor.ProvidersSpecial
 {
-    public class VidorBinaryDataProvider : BaseDataProvider<AdInputType>, IExchangeDataProvider<AdInputType, ResponseInfo>
+    public class VidorBinaryDataProvider : BaseDataProvider<AdInputType>, IDataProvider<AdInputType, ResponseInfo>
     {
         #region field
 
@@ -74,12 +73,12 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ManualDataProviders
 
         public int CountGetDataByte { get; }
         public int CountSetDataByte { get; }
-        Task IExchangeDataProvider<AdInputType, ResponseInfo>.StartExchangePipeline(InDataWrapper<AdInputType> inData)
+        Task IDataProvider<AdInputType, ResponseInfo>.StartExchangePipeline(InDataWrapper<AdInputType> inData)
         {
             return StartExchangePipeline(inData);
         }
 
-        public Subject<IExchangeDataProvider<AdInputType, ResponseInfo>> RaiseSendDataRx { get; }
+        public Subject<IDataProvider<AdInputType, ResponseInfo>> RaiseSendDataRx { get; }
 
         public void SendDataIsCompleted()
         {
@@ -87,7 +86,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ManualDataProviders
         }
 
         public InDataWrapper<AdInputType> InputData { get; set; }
-        InDataWrapper<AdInputType> IExchangeDataProvider<AdInputType, ResponseInfo>.InputData
+        InDataWrapper<AdInputType> IDataProvider<AdInputType, ResponseInfo>.InputData
         {
             get => InputData;
             set => InputData = value;

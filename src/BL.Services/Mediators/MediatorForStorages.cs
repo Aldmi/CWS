@@ -11,8 +11,8 @@ using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Domain.Device;
 using Domain.Device.Produser;
 using Domain.Exchange;
-using Domain.Exchange.DataProviderAbstract;
 using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.Response;
 using Infrastructure.Background;
 using Infrastructure.Background.Abstarct;
@@ -43,7 +43,7 @@ namespace App.Services.Mediators
         private readonly TransportStorage _transportStorage;
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
         private readonly IEventBus _eventBus;
-        private readonly IIndex<string, Func<ProviderOption, IExchangeDataProvider<TIn, ResponseInfo>>> _dataProviderFactory;
+        private readonly IIndex<string, Func<ProviderOption, IDataProvider<TIn, ResponseInfo>>> _dataProviderFactory;
         private readonly AppConfigWrapper _appConfigWrapper;
         private readonly ILogger _logger;
         //опции для создания IProduser через фабрику
@@ -61,7 +61,7 @@ namespace App.Services.Mediators
             TransportStorage transportStorage,
             ProduserUnionStorage<TIn> produserUnionStorage,
             IEventBus eventBus,     
-            IIndex<string, Func<ProviderOption, IExchangeDataProvider<TIn, ResponseInfo>>> dataProviderFactory,
+            IIndex<string, Func<ProviderOption, IDataProvider<TIn, ResponseInfo>>> dataProviderFactory,
             AppConfigWrapper appConfigWrapper,
             ILogger logger)
         {

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Domain.InputDataModel.Base;
+using Domain.InputDataModel.Base.ProvidersAbstract;
 
 namespace Domain.InputDataModel.Autodictor.Model
 {
-    public class AdInputTypeIndependentInserts : IIndependentInserts
+    public class AdInputTypeIndependentInsertsService : IIndependentInsertsService
     {
         public Dictionary<string, object> CreateDictionary(object inData)
         {

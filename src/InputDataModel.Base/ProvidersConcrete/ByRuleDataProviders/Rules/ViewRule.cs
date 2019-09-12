@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using Domain.InputDataModel.Autodictor.Model;
-using Domain.InputDataModel.Base;
+using Domain.InputDataModel.Base.ProvidersAbstract;
 using Serilog;
 using Shared.CrcCalculate;
 using Shared.Extensions;
 using Shared.Helpers;
 
-namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
+namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 {
     /// <summary>
     /// Правило отображения порции даных
@@ -26,7 +25,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
         private readonly ViewRuleOption _option;
         private readonly ILogger _logger;
         private readonly HelperStringTemplateInsert _helperStringTemplateInsert;  //TODO: нет смысла использовать отдельные экземпляры
-        private readonly IIndependentInserts _independentInserts;
+        private readonly IIndependentInsertsService _independentInsertsService;
 
         #endregion
 
@@ -34,13 +33,13 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
 
         #region ctor
 
-        public ViewRule(string addressDevice, ViewRuleOption option, IIndependentInserts independentInserts, ILogger logger)
+        public ViewRule(string addressDevice, ViewRuleOption option, IIndependentInsertsService independentInsertsService, ILogger logger)
         {
             _addressDevice = addressDevice;
             _option = option;
             _logger = logger;
             _helperStringTemplateInsert= new HelperStringTemplateInsert(_logger);
-            _independentInserts= independentInserts;
+            _independentInsertsService= independentInsertsService;
         }
 
         #endregion
@@ -279,7 +278,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
         /// </summary>
         private string MakeBodySectionIndependentInserts(string body, TIn uit, int currentRow)
         {
-            var dict= _independentInserts.CreateDictionary(uit);
+            var dict= _independentInsertsService.CreateDictionary(uit);
             dict["rowNumber"] = currentRow;                     //TODO: rowNumber нужен не для всех входных типов. Может передавать currentRow в  CreateDictionary ???
             var resStr = _helperStringTemplateInsert.StringTemplateInsert(body, dict);
             return resStr;

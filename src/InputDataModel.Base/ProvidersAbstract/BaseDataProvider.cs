@@ -2,7 +2,7 @@
 using Domain.InputDataModel.Base.Response;
 using Serilog;
 
-namespace Domain.InputDataModel.Base.Providers
+namespace Domain.InputDataModel.Base.ProvidersAbstract
 {
     //TODO: после созданния нескольких провайдеров, вынести обший функционал в этот класс
     public abstract class BaseDataProvider<TInput> where TInput : InputTypeBase
@@ -14,7 +14,7 @@ namespace Domain.InputDataModel.Base.Providers
 
         #region ctor
 
-        public BaseDataProvider(IStronglyTypedResponseFactory stronglyTypedResponseFactory, ILogger logger)
+        protected BaseDataProvider(IStronglyTypedResponseFactory stronglyTypedResponseFactory, ILogger logger)
         {
             StronglyTypedResponseFactory = stronglyTypedResponseFactory;
             _logger = logger;

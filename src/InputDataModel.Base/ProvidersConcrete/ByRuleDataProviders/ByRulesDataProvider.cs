@@ -5,20 +5,17 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using Domain.Exchange.DataProviderAbstract;
-using Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules;
-using Domain.InputDataModel.Base;
 using Domain.InputDataModel.Base.InData;
-using Domain.InputDataModel.Base.Providers;
+using Domain.InputDataModel.Base.ProvidersAbstract;
+using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.Response;
 using Serilog;
-using Shared.Collections;
 using Shared.Extensions;
 using Shared.Helpers;
 
-namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
+namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 {
-    public class ByRulesDataProvider<TIn> : BaseDataProvider<TIn>, IExchangeDataProvider<TIn, ResponseInfo> where TIn : InputTypeBase
+    public class ByRulesDataProvider<TIn> : BaseDataProvider<TIn>, IDataProvider<TIn, ResponseInfo> where TIn : InputTypeBase
     {
         #region field
 
@@ -32,14 +29,14 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         #region ctor
 
-        public ByRulesDataProvider(IStronglyTypedResponseFactory stronglyTypedResponseFactory, ProviderOption providerOption, IIndependentInserts independentInserts, ILogger logger) : base(stronglyTypedResponseFactory, logger)
+        public ByRulesDataProvider(IStronglyTypedResponseFactory stronglyTypedResponseFactory, ProviderOption providerOption, IIndependentInsertsService independentInsertsService, ILogger logger) : base(stronglyTypedResponseFactory, logger)
         {
             var option = providerOption.ByRulesProviderOption;
             if (option == null)
                 throw new ArgumentNullException(providerOption.Name);
 
             ProviderName = providerOption.Name;
-            _rules = option.Rules.Select(opt => new Rule<TIn>(opt, independentInserts, logger)).ToList();
+            _rules = option.Rules.Select(opt => new Rule<TIn>(opt, independentInsertsService, logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(option.RuleName4DefaultHandle)
                 ? "DefaultHandler"//_rules.First().Option.Name
                 : option.RuleName4DefaultHandle;
@@ -68,7 +65,7 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders
 
         #region RxEvent
 
-        public Subject<IExchangeDataProvider<TIn, ResponseInfo>> RaiseSendDataRx { get; } = new Subject<IExchangeDataProvider<TIn, ResponseInfo>>();
+        public Subject<IDataProvider<TIn, ResponseInfo>> RaiseSendDataRx { get; } = new Subject<IDataProvider<TIn, ResponseInfo>>();
 
         #endregion
 

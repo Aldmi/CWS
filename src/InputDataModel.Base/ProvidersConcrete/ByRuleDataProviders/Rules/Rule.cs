@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using Domain.InputDataModel.Base;
+using Domain.InputDataModel.Base.ProvidersAbstract;
 using Serilog;
 
-namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rules
+namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 {
     public class Rule<TIn>
     {
@@ -27,11 +27,11 @@ namespace Domain.InputDataModel.Autodictor.DataProviders.ByRuleDataProviders.Rul
 
         #region ctor
 
-        public Rule(RuleOption option, IIndependentInserts independentInserts, ILogger logger)
+        public Rule(RuleOption option, IIndependentInsertsService independentInsertsService, ILogger logger)
         {
             Option = option;
             _logger = logger;
-            _viewRules= option.ViewRules.Select(opt=> new ViewRule<TIn>(Option.AddressDevice, opt, independentInserts, _logger)).ToList();
+            _viewRules= option.ViewRules.Select(opt=> new ViewRule<TIn>(Option.AddressDevice, opt, independentInsertsService, _logger)).ToList();
         }
 
         #endregion

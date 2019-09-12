@@ -24,17 +24,15 @@ namespace WebApiSwc.AutofacModules
                 case "AdInputType":
                     builder.RegisterType<ProdusersUnionFactory<AdInputType>>().InstancePerDependency();
                     builder.RegisterType<ProdusersUnion<AdInputType>>().InstancePerDependency();
-
-                    builder.RegisterType<KafkaProduserWrapper>().As<IProduser<KafkaProduserOption>>().InstancePerDependency();
-                    builder.RegisterType<WebClientProduserWrapper>().As<IProduser<WebClientProduserOption>>().InstancePerDependency();
-
-                    builder.RegisterType<SignaRProduserClientsStorage<SignaRProdusserClientsInfo>>().SingleInstance();
-                    builder.RegisterType<SignalRProduserWrapper>().As<IProduser<SignalRProduserOption>>().InstancePerDependency();
                     break;
 
                 case "OtherType":
                     break;
             }
+            builder.RegisterType<KafkaProduserWrapper>().As<IProduser<KafkaProduserOption>>().InstancePerDependency();
+            builder.RegisterType<WebClientProduserWrapper>().As<IProduser<WebClientProduserOption>>().InstancePerDependency();
+            builder.RegisterType<SignaRProduserClientsStorage<SignaRProdusserClientsInfo>>().SingleInstance();
+            builder.RegisterType<SignalRProduserWrapper>().As<IProduser<SignalRProduserOption>>().InstancePerDependency();
         }
     }
 }

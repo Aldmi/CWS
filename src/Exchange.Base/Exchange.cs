@@ -7,10 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using DAL.Abstract.Entities.Options.Exchange;
 using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using Domain.Exchange.DataProviderAbstract;
 using Domain.Exchange.RxModel;
 using Domain.Exchange.Services;
 using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.Response;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.Transport.Base.Abstract;
@@ -30,7 +30,7 @@ namespace Domain.Exchange
         protected readonly ExchangeOption ExchangeOption;
         private readonly ITransport _transport;
         private readonly ITransportBackground _transportBackground;
-        private readonly IExchangeDataProvider<TIn, ResponseInfo> _dataProvider;         //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
+        private readonly IDataProvider<TIn, ResponseInfo> _dataProvider;         //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
         private readonly ILogger _logger;
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(QueueMode.QueueExtractLastItem, MaxDataInQueue);   //Очередь данных для SendOneTimeData().
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue; //Очередь данных для SendCycleTimeData().
@@ -96,7 +96,7 @@ namespace Domain.Exchange
         public Exchange(ExchangeOption exchangeOption,
                                  ITransport transport,
                                  ITransportBackground transportBackground,
-                                 IExchangeDataProvider<TIn, ResponseInfo> dataProvider,
+                                 IDataProvider<TIn, ResponseInfo> dataProvider,
                                  ILogger logger)
         {
             ExchangeOption = exchangeOption;
