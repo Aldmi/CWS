@@ -461,39 +461,46 @@ namespace Domain.Exchange
         /// </summary>
         private void LogedResponseInformation(ResponsePieceOfDataWrapper<TIn> response)
         {
-            var numberPreparedPackages = response.ResponsesItems.Count;                                              //кол-во подготовленных к отправке пакетов        
-            var countAll = response.ResponsesItems.Count(resp => resp.Status != StatusDataExchange.EndWithTimeout);  //кол-во ВСЕХ полученных ответов
-            var countIsValid = response.ResponsesItems.Count(resp => resp.ResponseInfo.IsOutDataValid);              //кол-во ВАЛИДНЫХ ответов
-            string errorStat = string.Empty;
-            response.IsValidAll = true;
-            if (countIsValid < numberPreparedPackages)
+            try
             {
-                errorStat = response.ResponsesItems.Select(r => r.Status.ToString()).Aggregate((i, j) => i + " | " + j);
-                response.IsValidAll = false;
+                var numberPreparedPackages = response.ResponsesItems.Count;                                                                           //кол-во подготовленных к отправке пакетов        
+                var countAll = response.ResponsesItems.Count(resp => resp.Status != StatusDataExchange.EndWithTimeout);                               //кол-во ВСЕХ полученных ответов
+                var countIsValid = response.ResponsesItems.Count(resp => resp.ResponseInfo != null && resp.ResponseInfo.IsOutDataValid);              //кол-во ВАЛИДНЫХ ответов
+                string errorStat = string.Empty;
+                response.IsValidAll = true;
+                if (countIsValid < numberPreparedPackages)
+                {
+                    errorStat = response.ResponsesItems.Select(r => r.Status.ToString()).Aggregate((i, j) => i + " | " + j);
+                    response.IsValidAll = false;
+                }
+
+                var responseInfo = response.ResponsesItems.Select(item => new
+                {
+                    Rule = $"RuleName= {item.MessageDict["RuleName"]}  viewRule.Id= {item.MessageDict["viewRule.Id"]}",
+                    StatusStr = item.StatusStr,
+                    Request = item.MessageDict["GetDataByte.Request"],
+                    RequestBase = item.MessageDict["GetDataByte.RequestBase"],
+                    StringResponseRef = item.MessageDict.ContainsKey("SetDataByte.StringResponse") ? item.MessageDict["SetDataByte.StringResponse"] : null,
+                    TimeResponse = item.MessageDict["TimeResponse"],
+                    StronglyTypedResponse = item.MessageDict.ContainsKey("SetDataByte.StronglyTypedResponse") ? item.MessageDict["SetDataByte.StronglyTypedResponse"] : null,
+                }).ToList();
+
+                var settings = new JsonSerializerSettings
+                {
+                    Formatting = Formatting.Indented,             //Отступы дочерних элементов 
+                    NullValueHandling = NullValueHandling.Ignore  //Игнорировать пустые теги
+                };
+                var jsonRespInfo = JsonConvert.SerializeObject(responseInfo, settings);
+                var countStat = $"успех/ответов/запросов= ({countIsValid} / {countAll} / {numberPreparedPackages})";
+                var timeAction = response.TimeAction;
+                var isValidAll = response.IsValidAll;
+                _logger.Information("{Type} ({TimeAction} мс.) {KeyExchange}  РЕЗУЛЬТАТ= {isValid}  {countStat}  [{errorStat}] jsonRespInfo= {jsonRespInfo}",
+                                    "ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН.", timeAction, KeyExchange, isValidAll, countStat, errorStat, jsonRespInfo);
             }
-
-            var responseInfo = response.ResponsesItems.Select(item => new
+            catch (Exception ex)
             {
-                Rule = $"RuleName= {item.MessageDict["RuleName"]}  viewRule.Id= {item.MessageDict["viewRule.Id"]}",
-                StatusStr = item.StatusStr,
-                Request = item.MessageDict["GetDataByte.Request"],
-                RequestBase = item.MessageDict["GetDataByte.RequestBase"],
-                StringResponseRef = item.MessageDict.ContainsKey("SetDataByte.StringResponse") ? item.MessageDict["SetDataByte.StringResponse"] : null,
-                TimeResponse = item.MessageDict["TimeResponse"],
-                StronglyTypedResponse = item.MessageDict.ContainsKey("SetDataByte.StronglyTypedResponse") ? item.MessageDict["SetDataByte.StronglyTypedResponse"] : null,
-            }).ToList();
-
-            var settings = new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented,             //Отступы дочерних элементов 
-                NullValueHandling = NullValueHandling.Ignore  //Игнорировать пустые теги
-            };
-            var jsonRespInfo = JsonConvert.SerializeObject(responseInfo, settings);
-            var countStat = $"успех/ответов/запросов= ({countIsValid} / {countAll} / {numberPreparedPackages})";
-            var timeAction = response.TimeAction;
-            var isValidAll = response.IsValidAll;
-            _logger.Information("{Type} ({TimeAction} мс.) {KeyExchange}  РЕЗУЛЬТАТ= {isValid}  {countStat}  [{errorStat}] jsonRespInfo= {jsonRespInfo}",
-                                "ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН.", timeAction, KeyExchange, isValidAll, countStat, errorStat, jsonRespInfo);
+                _logger.Error("{Type} {KeyExchange}  {Exception}", "ОШИБКА LogedResponseInformation", KeyExchange, ex);
+            }
         }
 
         #endregion
