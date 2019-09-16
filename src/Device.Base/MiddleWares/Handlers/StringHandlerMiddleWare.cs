@@ -1,5 +1,7 @@
 ﻿using System.Linq;
+using DAL.Abstract.Entities.Options.MiddleWare.Converters;
 using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
+using Domain.Device.MiddleWares.Converters;
 using Domain.Device.MiddleWares.Converters.StringConverters;
 
 namespace Domain.Device.MiddleWares.Handlers
@@ -36,11 +38,24 @@ namespace Domain.Device.MiddleWares.Handlers
             {
                 Converters.Add(new SubStringMemConverter(option.SubStringMemConverterOption));
             }
+            if (option.InsertAtEndOfLineConverterOption != null)
+            {
+                Converters.Add(new InsertAtEndOfLineConverter(option.InsertAtEndOfLineConverterOption));
+            }
 
             var orderedConverters = Converters.OrderBy(c => c.Priority).ToList();
             Converters.Clear();
             Converters.AddRange(orderedConverters);
         }
+
+
+
+        //private bool AddConverter(BaseConverterOption converterOption)
+        //{
+        //    if (converterOption == null)
+        //        return false;
+
+        //}
 
         #endregion
     }
