@@ -19,9 +19,8 @@ namespace Infrastructure.Dal.EfCore.Entities.Transport
         [MaxLength(256)]
         public string Address { get; set; }
 
-
-        public bool AutoStart { get; set; }
-
+        public bool AutoStartBg { get; set; }
+        public int DutyCycleTimeBg { get; set; }
 
         private string _headersMetaData;
         [NotMapped]

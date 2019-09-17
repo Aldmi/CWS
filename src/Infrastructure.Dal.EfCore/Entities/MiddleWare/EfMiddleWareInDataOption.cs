@@ -16,8 +16,14 @@ namespace Infrastructure.Dal.EfCore.Entities.MiddleWare
 
     public class EfInvokerOutput
     {
-        public InvokerOutputMode Mode { get; set; }
+        public EfInvokerOutputMode Mode { get; set; }
         public int Time { get; set; }                        //Время сработки события отправки данных
     }
-    public enum InvokerOutputMode {Instantly, ByTimer}
+
+
+    public enum EfInvokerOutputMode : byte
+    {
+        Instantly,
+        ByTimer
+    }
 }

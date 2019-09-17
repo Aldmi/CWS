@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using App.Services.Exceptions;
 using App.Services.Mediators;
 using Domain.Exchange;
+using Domain.Exchange.Enums;
 using Domain.InputDataModel.Base.InData;
 using Shared.Types;
 

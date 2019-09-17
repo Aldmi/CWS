@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AbstractProduser.AbstractProduser;
+using AbstractProduser.Enums;
 using AbstractProduser.Helpers;
 using Confluent.Kafka;
 using Confluent.Kafka.Serialization;

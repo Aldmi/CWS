@@ -9,6 +9,7 @@ using Autofac;
 using AutoMapper;
 using Domain.Device;
 using Domain.Exchange;
+using Domain.Exchange.Enums;
 using Domain.InputDataModel.Autodictor.Model;
 using Firewall;
 using Infrastructure.Background;

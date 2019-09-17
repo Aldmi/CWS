@@ -2,6 +2,7 @@
 using System.Linq;
 using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 
 namespace DeviceForExchnage.Test.Datas

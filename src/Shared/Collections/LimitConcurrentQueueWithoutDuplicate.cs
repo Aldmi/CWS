@@ -168,7 +168,7 @@ namespace Shared.Collections
     /// <summary>
     /// Опции Очереди
     /// </summary>
-    public enum QueueMode
+    public enum QueueMode : byte
     {
         /// <summary>
         /// ConcurrentQueue не используется. Значение хранится в одной переменной.
@@ -205,7 +205,7 @@ namespace Shared.Collections
     }
 
 
-    public enum DequeueResultError
+    public enum DequeueResultError : byte
     {
         Empty,
         FailTryPeek,

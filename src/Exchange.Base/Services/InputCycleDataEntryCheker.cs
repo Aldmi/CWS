@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Reactive.Subjects;
 using System.Timers;
+using Domain.Exchange.Enums;
 using Domain.Exchange.RxModel;
 using Timer = System.Timers.Timer;
 
 namespace Domain.Exchange.Services
 {
-    public enum InputDataState { NormalEntry, ToLongNoEntry };
-
     /// <summary>
     /// Сервис проверки входных данных.
     /// Если за время checkInterval не будет вызванн метод InputDataEntry(), то InputDataState = ToLongNoEntry.
@@ -31,7 +30,7 @@ namespace Domain.Exchange.Services
         /// Состояние получения входных данных
         /// true - нормальное состояние
         /// </summary>
-        public InputDataState InputDataState { get; private set; }
+        public InputDataStatus InputDataStatus { get; private set; }
 
         #endregion
 
@@ -56,7 +55,7 @@ namespace Domain.Exchange.Services
             _checkInterval = checkInterval;
             _timerInputCycleDataCheck = new Timer();
             _timerInputCycleDataCheck.Elapsed += TimerToLongNoEntryElapsed;
-            InputDataState = InputDataState.NormalEntry;
+            InputDataStatus = InputDataStatus.NormalEntry;
         }
 
         #endregion
@@ -68,10 +67,10 @@ namespace Domain.Exchange.Services
         private void TimerToLongNoEntryElapsed(object sender, ElapsedEventArgs e)
         {
             //ПЕРЕХОД В СОСТОЯНИЕ ДОЛГОГО ОТСУТСВИЯ ДАННЫХ.
-            if (InputDataState == InputDataState.NormalEntry)
+            if (InputDataStatus == InputDataStatus.NormalEntry)
             {
-                InputDataState = InputDataState.ToLongNoEntry;
-                CycleDataEntryStateChangeRx.OnNext(new InputDataStateRxModel(_key, InputDataState));
+                InputDataStatus = InputDataStatus.ToLongNoEntry;
+                CycleDataEntryStateChangeRx.OnNext(new InputDataStateRxModel(_key, InputDataStatus));
             }
         }
 
@@ -108,10 +107,10 @@ namespace Domain.Exchange.Services
                return;
 
             _timerInputCycleDataCheck.Interval = _checkInterval;
-            if (InputDataState == InputDataState.ToLongNoEntry)
+            if (InputDataStatus == InputDataStatus.ToLongNoEntry)
             {
-                InputDataState = InputDataState.NormalEntry;
-                CycleDataEntryStateChangeRx.OnNext(new InputDataStateRxModel(_key, InputDataState));
+                InputDataStatus = InputDataStatus.NormalEntry;
+                CycleDataEntryStateChangeRx.OnNext(new InputDataStateRxModel(_key, InputDataStatus));
             }
         }
 

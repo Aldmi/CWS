@@ -3,7 +3,7 @@
     /// <summary>
     /// статус ПОСЛЕДНЕГО обмена данными
     /// </summary>
-    public enum StatusDataExchange
+    public enum StatusDataExchange : byte
     {
         None,
         NotOpenTransport,

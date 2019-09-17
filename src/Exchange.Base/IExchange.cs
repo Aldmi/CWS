@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Subjects;
+using Domain.Exchange.Enums;
 using Domain.Exchange.RxModel;
+using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.Response;
 using Infrastructure.Transport.Base.RxModel;

@@ -1,4 +1,5 @@
 ﻿using AbstractProduser.Options;
+using Shared.Enums;
 
 namespace WebClientProduser.Options
 {
@@ -8,5 +9,4 @@ namespace WebClientProduser.Options
         public HttpMethode HttpMethode { get; set; }
     }
 
-    public enum HttpMethode { Get, Post, Put }
 }

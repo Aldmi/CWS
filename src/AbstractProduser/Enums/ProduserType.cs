@@ -1,6 +1,6 @@
 ﻿namespace AbstractProduser.Enums
 {
-    public enum ProduserType
+    public enum ProduserType : byte
     {
         Kafaka,
         SerilogLoger,

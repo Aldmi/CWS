@@ -5,8 +5,10 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using Domain.Exchange.Enums;
 using Domain.Exchange.RxModel;
 using Domain.Exchange.Services;
+using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.Response;
@@ -520,5 +522,4 @@ namespace Domain.Exchange
         #endregion
     }
 
-    public enum CycleExchnageStatus{Off, Normal, Emergency}
 }

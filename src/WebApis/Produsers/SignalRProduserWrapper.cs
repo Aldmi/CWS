@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AbstractProduser.AbstractProduser;
+using AbstractProduser.Enums;
 using AbstractProduser.Helpers;
 using CSharpFunctionalExtensions;
 using Domain.Device.Repository.Entities.ResponseProduser;

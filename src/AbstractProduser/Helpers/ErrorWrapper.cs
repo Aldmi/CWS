@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using AbstractProduser.Enums;
 
 namespace AbstractProduser.Helpers
 {
@@ -49,13 +50,4 @@ namespace AbstractProduser.Helpers
         }
     }
 
-
-    public enum ResultError
-    {
-        Trottling,
-        SendException,
-        Timeout,
-        RespawnProduserError,
-        NoClientBySending
-    }
 }

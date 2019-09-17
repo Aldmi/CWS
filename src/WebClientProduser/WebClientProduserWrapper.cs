@@ -4,8 +4,10 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using AbstractProduser.AbstractProduser;
+using AbstractProduser.Enums;
 using AbstractProduser.Helpers;
 using CSharpFunctionalExtensions;
+using Shared.Enums;
 using WebClientProduser.Options;
 
 namespace WebClientProduser

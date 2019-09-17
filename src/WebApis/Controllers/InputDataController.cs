@@ -10,6 +10,7 @@ using App.Services.InputData;
 using Autofac.Features.Indexed;
 using AutoMapper;
 using Domain.InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Infrastructure.Background.Abstarct;
 using Microsoft.AspNetCore.Http;

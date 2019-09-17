@@ -1,6 +1,6 @@
 ﻿namespace Infrastructure.Dal.Abstract
 {
-    public enum HowCreateDb
+    public enum HowCreateDb : byte
     {
         None,                 //Не создавать
         Migrate,              //С помощью последней миграции 

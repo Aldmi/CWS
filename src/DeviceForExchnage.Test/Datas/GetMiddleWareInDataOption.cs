@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Domain.Device.Enums;
 using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption;
 using Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption;

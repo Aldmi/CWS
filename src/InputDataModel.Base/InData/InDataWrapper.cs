@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Domain.InputDataModel.Base.Enums;
 
 namespace Domain.InputDataModel.Base.InData
 {

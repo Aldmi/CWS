@@ -9,6 +9,10 @@ using Domain.Exchange;
 using Domain.Exchange.Repository.Entities;
 using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
+using Infrastructure.Dal.EfCore.Entities.Device;
+using Infrastructure.Dal.EfCore.Entities.Exchange;
+using Infrastructure.Dal.EfCore.Entities.Produser;
+using Infrastructure.Dal.EfCore.Entities.Transport;
 using Infrastructure.Transport.Http;
 using Infrastructure.Transport.SerialPort;
 using Infrastructure.Transport.TcpIp;
@@ -27,7 +31,7 @@ namespace WebApiSwc.AutoMapperConfig
     {
         public MappingProfile()
         {
-            #region Option mapping
+            #region Option 2 Dto mapping
             CreateMap<DeviceOption, DeviceOptionDto>().ReverseMap();
             CreateMap<ExchangeOption, ExchangeOptionDto>().ReverseMap();
             CreateMap<SerialOption, SerialOptionDto>().ReverseMap();
@@ -36,6 +40,16 @@ namespace WebApiSwc.AutoMapperConfig
             CreateMap<TransportOption, TransportOptionsDto>().ReverseMap();
             CreateMap<MiddleWareInDataOption, MiddleWareInDataOptionDto>().ReverseMap();
             CreateMap<ProduserUnionOption, ProduserUnionOptionDto>().ReverseMap();
+            #endregion
+
+
+            #region Option 2 EfEntities mapping
+            CreateMap<SerialOption, EfSerialOption>().ReverseMap();
+            CreateMap<TcpIpOption, EfTcpIpOption>().ReverseMap();
+            CreateMap<HttpOption, EfHttpOption>().ReverseMap();
+            CreateMap<DeviceOption, EfDeviceOption>().ReverseMap();
+            CreateMap<ExchangeOption, EfExchangeOption>().ReverseMap();
+            CreateMap<ProduserUnionOption, EfProduserUnionOption>().ReverseMap();
             #endregion
 
 

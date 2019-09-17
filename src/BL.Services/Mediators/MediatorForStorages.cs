@@ -9,6 +9,7 @@ using Autofac.Features.Indexed;
 using Domain.Device;
 using Domain.Device.Produser;
 using Domain.Exchange;
+using Domain.Exchange.Enums;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;

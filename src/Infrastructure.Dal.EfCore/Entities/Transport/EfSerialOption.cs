@@ -15,16 +15,17 @@ namespace Infrastructure.Dal.EfCore.Entities.Transport
 
         public int BaudRate { get; set; }
         public int DataBits { get; set; }
-        public StopBits StopBits { get; set; }
-        public Parity Parity { get; set; }
+        public EfStopBits StopBits { get; set; }
+        public EfParity Parity { get; set; }
         public bool DtrEnable { get; set; }
         public bool RtsEnable { get; set; }
 
-        public bool AutoStart { get; set; }
+        public bool AutoStartBg { get; set; }
+        public int DutyCycleTimeBg { get; set; }
     }
 
 
-    public enum StopBits
+    public enum EfStopBits : byte
     {
         //
         // Summary:
@@ -45,7 +46,7 @@ namespace Infrastructure.Dal.EfCore.Entities.Transport
         OnePointFive = 3
     }
 
-    public enum Parity
+    public enum EfParity : byte
     {
         //
         // Summary:

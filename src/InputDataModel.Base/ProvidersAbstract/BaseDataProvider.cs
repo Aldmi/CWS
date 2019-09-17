@@ -1,4 +1,5 @@
-﻿using Domain.InputDataModel.Base.InData;
+﻿using Domain.InputDataModel.Base.Enums;
+using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.Response;
 using Serilog;
 
@@ -54,14 +55,4 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         }
     }
 
-    /// <summary>
-    /// Выбор Обработчика входных данных.
-    /// </summary>
-    public enum RuleSwitcher4InData
-    {
-        None,
-        CommandHanler,
-        InDataHandler,
-        InDataDirectHandler
-    }
 }

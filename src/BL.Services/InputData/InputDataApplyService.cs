@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using App.Services.Mediators;
+using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Newtonsoft.Json;
 using Serilog;

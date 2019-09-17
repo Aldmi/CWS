@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Domain.Device.Enums;
 using Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption;
 
 namespace Domain.Device.Repository.Entities.MiddleWareOption
@@ -19,5 +20,5 @@ namespace Domain.Device.Repository.Entities.MiddleWareOption
         public InvokerOutputMode Mode { get; set; }
         public int Time { get; set; }                        //Время сработки события отправки данных
     }
-    public enum InvokerOutputMode {Instantly, ByTimer}
+
 }

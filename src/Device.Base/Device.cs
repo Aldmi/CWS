@@ -8,8 +8,10 @@ using Domain.Device.MiddleWares.Invokes;
 using Domain.Device.Produser;
 using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.Exchange;
+using Domain.Exchange.Enums;
 using Domain.Exchange.RxModel;
 using Domain.Exchange.Services;
+using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.Response;
 using Infrastructure.EventBus.Abstract;
@@ -367,14 +369,14 @@ namespace Domain.Device
         private void CycleDataEntryStateChangeRxEventHandler(InputDataStateRxModel dataState)
         {
             //Debug.WriteLine($"{dataState.KeyExchange}   {dataState.InputDataState}");//DEBUG
-            _logger.Information($"NormalFrequencyCycleDataEntryChangeRxEventHandler.  {dataState.KeyExchange}  InputDataState= {dataState.InputDataState}");
+            _logger.Information($"NormalFrequencyCycleDataEntryChangeRxEventHandler.  {dataState.KeyExchange}  InputDataState= {dataState.InputDataStatus}");
             var exch= Exchanges.FirstOrDefault(e => e.KeyExchange.Equals(dataState.KeyExchange));
-            switch (dataState.InputDataState)
+            switch (dataState.InputDataStatus)
             {
-                case InputDataState.NormalEntry:
+                case InputDataStatus.NormalEntry:
                     exch.Switch2NormalCycleExchange();
                     break;
-                case InputDataState.ToLongNoEntry:
+                case InputDataStatus.ToLongNoEntry:
                     exch.Switch2CycleCommandEmergency();
                     break;
             }
