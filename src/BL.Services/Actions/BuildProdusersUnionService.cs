@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using App.Services.Mediators;
 using CSharpFunctionalExtensions;
-using DAL.Abstract.Entities.Options.ResponseProduser;
 using Domain.Device.Produser;
+using Domain.Device.Repository.Entities.ResponseProduser;
 using Domain.InputDataModel.Base.InData;
 using Shared.Enums;
 

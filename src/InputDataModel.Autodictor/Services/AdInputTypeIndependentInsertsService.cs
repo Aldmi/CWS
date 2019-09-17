@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Domain.InputDataModel.Base;
-using Domain.InputDataModel.Base.ProvidersAbstract;
+using Domain.InputDataModel.Base.Services;
 
 namespace Domain.InputDataModel.Autodictor.Model
 {

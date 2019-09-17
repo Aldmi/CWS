@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Subjects;
-using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Domain.Exchange.RxModel;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.Response;
 using Infrastructure.Transport.Base.RxModel;
 using Shared.Types;
+using ProviderOption = Domain.InputDataModel.Base.ProvidersOption.ProviderOption;
 
 namespace Domain.Exchange
 {

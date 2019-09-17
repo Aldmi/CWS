@@ -50,6 +50,7 @@ namespace DAL.EFCore.Repository
 
         #region CRUD
 
+        //TODO: сделать public virtual все методы
         protected TMap GetById(int id)
         {
             var efSpOption = DbSet.Find(id);

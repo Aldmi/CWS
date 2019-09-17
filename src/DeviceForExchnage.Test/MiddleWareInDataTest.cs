@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using DAL.Abstract.Entities.Options.MiddleWare;
 using DeviceForExchnage.Test.Datas;
 using Domain.Device.MiddleWares;
+using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.InputDataModel.Autodictor.Model;
 using FluentAssertions;
 using Moq;

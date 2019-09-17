@@ -1,4 +1,4 @@
-﻿using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
+﻿using InseartStringConverterOption = Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption.InseartStringConverterOption;
 
 namespace Domain.Device.MiddleWares.Converters.StringConverters
 {

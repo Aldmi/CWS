@@ -1,17 +1,11 @@
-﻿using AbstractProduser.AbstractProduser;
-using Autofac;
-using Domain.Device.Produser;
+﻿using Autofac;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Autodictor.ProvidersSpecial;
 using Domain.InputDataModel.Autodictor.StronglyTypedResponse;
-using Domain.InputDataModel.Base;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;
 using Domain.InputDataModel.Base.Response;
-using KafkaProduser;
-using KafkaProduser.Options;
-using WebClientProduser;
-using WebClientProduser.Options;
+using Domain.InputDataModel.Base.Services;
 
 namespace WebApiSwc.AutofacModules
 {

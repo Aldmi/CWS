@@ -1,7 +1,7 @@
 ﻿using AbstractProduser.AbstractProduser;
 using Autofac;
-using DAL.Abstract.Entities.Options.ResponseProduser;
 using Domain.Device.Produser;
+using Domain.Device.Repository.Entities.ResponseProduser;
 using Domain.InputDataModel.Autodictor.Model;
 using KafkaProduser;
 using KafkaProduser.Options;

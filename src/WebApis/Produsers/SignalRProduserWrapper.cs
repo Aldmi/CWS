@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AbstractProduser.AbstractProduser;
 using AbstractProduser.Helpers;
 using CSharpFunctionalExtensions;
-using DAL.Abstract.Entities.Options.ResponseProduser;
+using Domain.Device.Repository.Entities.ResponseProduser;
 using Microsoft.AspNetCore.SignalR;
 using WebApiSwc.Hubs;
 using WebApiSwc.SignalRClients;

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.ProvidersOption;
 using Infrastructure.Transport.Base.DataProvidert;
 
 namespace Domain.InputDataModel.Base.ProvidersAbstract

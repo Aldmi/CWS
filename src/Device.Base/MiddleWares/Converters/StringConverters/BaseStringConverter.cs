@@ -1,4 +1,4 @@
-﻿using DAL.Abstract.Entities.Options.MiddleWare.Converters;
+﻿using BaseConverterOption = Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.BaseConverterOption;
 
 namespace Domain.Device.MiddleWares.Converters.StringConverters
 {

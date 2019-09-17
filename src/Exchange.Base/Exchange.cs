@@ -5,8 +5,6 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
-using DAL.Abstract.Entities.Options.Exchange;
-using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Domain.Exchange.RxModel;
 using Domain.Exchange.Services;
 using Domain.InputDataModel.Base.InData;
@@ -20,6 +18,8 @@ using Serilog;
 using Shared.Collections;
 using Shared.Enums;
 using Shared.Types;
+using ExchangeOption = Domain.Exchange.Repository.Entities.ExchangeOption;
+using ProviderOption = Domain.InputDataModel.Base.ProvidersOption.ProviderOption;
 
 namespace Domain.Exchange
 {

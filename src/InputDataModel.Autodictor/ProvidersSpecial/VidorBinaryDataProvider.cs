@@ -5,10 +5,10 @@ using System.Reactive.Subjects;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
+using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response;
 
 namespace Domain.InputDataModel.Autodictor.ProvidersSpecial

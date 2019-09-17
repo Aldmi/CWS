@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using DAL.Abstract.Entities.Options.MiddleWare.Converters;
-using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
+﻿using InsertAtEndOfLineConverterOption = Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption.InsertAtEndOfLineConverterOption;
 
 namespace Domain.Device.MiddleWares.Converters.StringConverters
 {

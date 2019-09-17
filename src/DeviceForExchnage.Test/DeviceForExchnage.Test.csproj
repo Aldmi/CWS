@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DAL.Abstract\DAL.Abstract.csproj" />
     <ProjectReference Include="..\Device.Base\Domain.Device.csproj" />
     <ProjectReference Include="..\InputDataModel.Autodictor\Domain.InputDataModel.Autodictor.csproj" />
     <ProjectReference Include="..\InputDataModel.Base\Domain.InputDataModel.Base.csproj" />

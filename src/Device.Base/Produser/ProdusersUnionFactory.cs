@@ -2,7 +2,7 @@
 using AbstractProduser.AbstractProduser;
 using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
-using DAL.Abstract.Entities.Options.ResponseProduser;
+using Domain.Device.Repository.Entities.ResponseProduser;
 using KafkaProduser.Options;
 using WebClientProduser.Options;
 

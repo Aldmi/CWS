@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="CompareNETObjects" Version="4.57.0" />
     <PackageReference Include="CSharpFunctionalExtensions" Version="1.19.1" />
     <PackageReference Include="morelinq" Version="3.1.0" />
@@ -20,8 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DAL.Abstract\DAL.Abstract.csproj" />
+    <ProjectReference Include="..\..\Infrastructure.Dal.Abstract\Infrastructure.Dal.Abstract.csproj" />
     <ProjectReference Include="..\Infrastructure.Background\Infrastructure.Background.csproj" />
+    <ProjectReference Include="..\Infrastructure.Dal.EfCore\Infrastructure.Dal.EfCore.csproj" />
+    <ProjectReference Include="..\Infrastructure.Storages\Infrastructure.Storages.csproj" />
     <ProjectReference Include="..\Infrastructure.Transport\Infrastructure.Transport.csproj" />
     <ProjectReference Include="..\InputDataModel.Base\Domain.InputDataModel.Base.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Domain.InputDataModel.Base.ProvidersAbstract
+namespace Domain.InputDataModel.Base.Services
 {
     /// <summary>
     /// Интерфейс задает правила создания словаря ВСТАВОК независимых данных (данных самого типа). 

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Spatial;
+using Infrastructure.Dal.Abstract;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Serilog.Events;
-using Shared.Enums;
 
 namespace WebApiSwc.Settings
 {

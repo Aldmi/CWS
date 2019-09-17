@@ -8,9 +8,9 @@ using AbstractProduser.AbstractProduser;
 using AbstractProduser.Helpers;
 using AbstractProduser.Options;
 using CSharpFunctionalExtensions;
-using DAL.Abstract.Entities.Options.ResponseProduser;
 using Domain.InputDataModel.Base.Response;
 using Newtonsoft.Json;
+using ProduserUnionOption = Domain.Device.Repository.Entities.ResponseProduser.ProduserUnionOption;
 
 namespace Domain.Device.Produser
 {

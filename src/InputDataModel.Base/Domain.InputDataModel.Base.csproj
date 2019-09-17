@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DAL.Abstract\DAL.Abstract.csproj" />
     <ProjectReference Include="..\Infrastructure.Transport\Infrastructure.Transport.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>

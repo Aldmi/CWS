@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using App.Services.Agregators;
 using App.Services.Exceptions;
 using CSharpFunctionalExtensions;
-using DAL.Abstract.Concrete;
-using DAL.Abstract.Entities.Options;
-using DAL.Abstract.Entities.Options.Device;
-using DAL.Abstract.Entities.Options.Exchange;
-using DAL.Abstract.Entities.Options.Transport;
+using Domain.Device.Repository.Abstract;
+using Domain.Device.Repository.Entities;
+using Domain.Exchange.Repository.Abstract;
+using Domain.Exchange.Repository.Entities;
+using Infrastructure.Transport.Http;
+using Infrastructure.Transport.Repository.Abstract;
+using Infrastructure.Transport.SerialPort;
+using Infrastructure.Transport.TcpIp;
 using Shared.Enums;
 using Shared.Types;
+using OptionAgregator = App.Services.Agregators.OptionAgregator;
 
 namespace App.Services.Mediators
 {

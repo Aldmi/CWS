@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
-using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
 using Shared.Helpers;
+using InseartEndLineMarkerConverterOption = Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption.InseartEndLineMarkerConverterOption;
 
 namespace Domain.Device.MiddleWares.Converters.StringConverters
 {

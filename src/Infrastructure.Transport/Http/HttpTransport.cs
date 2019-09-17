@@ -1,7 +1,6 @@
 ﻿using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
-using DAL.Abstract.Entities.Options.Transport;
 using Infrastructure.Transport.Base.Abstract;
 using Infrastructure.Transport.Base.DataProvidert;
 using Infrastructure.Transport.Base.RxModel;

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using Domain.InputDataModel.Base.ProvidersAbstract;
+using Domain.InputDataModel.Base.ProvidersOption;
+using Domain.InputDataModel.Base.Services;
 using Serilog;
 
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules

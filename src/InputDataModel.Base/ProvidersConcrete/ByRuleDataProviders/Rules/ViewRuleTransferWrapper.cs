@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
+using Domain.InputDataModel.Base.ProvidersOption;
 using KellermanSoftware.CompareNetObjects;
 
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules

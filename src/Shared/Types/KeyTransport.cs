@@ -1,6 +1,7 @@
 ﻿using System;
 using Shared.Enums;
 
+
 namespace Shared.Types
 {
     public class KeyTransport : IEquatable<KeyTransport>
@@ -11,7 +12,6 @@ namespace Shared.Types
         public TransportType TransportType { get; }
 
         #endregion
-
 
 
 

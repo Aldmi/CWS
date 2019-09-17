@@ -1,8 +1,6 @@
 ﻿using System.Linq;
-using DAL.Abstract.Entities.Options.MiddleWare.Converters;
-using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
-using Domain.Device.MiddleWares.Converters;
 using Domain.Device.MiddleWares.Converters.StringConverters;
+using StringHandlerMiddleWareOption = Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption.StringHandlerMiddleWareOption;
 
 namespace Domain.Device.MiddleWares.Handlers
 {

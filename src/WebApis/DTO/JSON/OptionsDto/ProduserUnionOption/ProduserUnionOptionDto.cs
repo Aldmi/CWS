@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using DAL.Abstract.Entities.Options.ResponseProduser;
+using Domain.Device.Repository.Entities.ResponseProduser;
 using KafkaProduser.Options;
 using WebClientProduser.Options;
 

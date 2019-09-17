@@ -1,9 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
 using Domain.Device.MiddleWares.Converters.Exceptions;
 using Shared.Helpers;
+using SubStringMemConverterOption = Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption.SubStringMemConverterOption;
 
 namespace Domain.Device.MiddleWares.Converters.StringConverters
 {

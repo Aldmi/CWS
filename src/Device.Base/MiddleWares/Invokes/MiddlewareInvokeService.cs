@@ -3,10 +3,11 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using System.Timers;
 using CSharpFunctionalExtensions;
-using DAL.Abstract.Entities.Options.MiddleWare;
 using Domain.InputDataModel.Base.InData;
 using KellermanSoftware.CompareNetObjects;
 using Serilog;
+using InvokerOutput = Domain.Device.Repository.Entities.MiddleWareOption.InvokerOutput;
+using InvokerOutputMode = Domain.Device.Repository.Entities.MiddleWareOption.InvokerOutputMode;
 
 namespace Domain.Device.MiddleWares.Invokes
 {

@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 using App.Services.Config;
 using App.Services.Exceptions;
 using Autofac.Features.Indexed;
-using DAL.Abstract.Entities.Options;
-using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
 using Domain.Device;
 using Domain.Device.Produser;
 using Domain.Exchange;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
+using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response;
 using Infrastructure.Background;
 using Infrastructure.Background.Abstarct;
@@ -26,6 +25,7 @@ using Infrastructure.Transport.TcpIp;
 using Serilog;
 using Shared.Enums;
 using Shared.Types;
+using OptionAgregator = App.Services.Agregators.OptionAgregator;
 
 namespace App.Services.Mediators
 {

@@ -4,15 +4,13 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
-using DAL.Abstract.Entities.Options.Transport;
 using Infrastructure.Transport.Base.Abstract;
 using Infrastructure.Transport.Base.DataProvidert;
 using Infrastructure.Transport.Base.RxModel;
 using Shared.Enums;
 using Shared.Helpers;
 using Shared.Types;
-using Parity = System.IO.Ports.Parity;
-using StopBits = System.IO.Ports.StopBits;
+
 
 
 namespace Infrastructure.Transport.SerialPort
@@ -89,8 +87,8 @@ namespace Infrastructure.Transport.SerialPort
             {
                 BaudRate = option.BaudRate,
                 DataBits = option.DataBits,
-                StopBits =  (StopBits) option.StopBits,
-                Parity =  (Parity) option.Parity,
+                StopBits = option.StopBits,
+                Parity =  option.Parity,
                 DtrEnable = option.DtrEnable,
                 RtsEnable = option.RtsEnable
             };

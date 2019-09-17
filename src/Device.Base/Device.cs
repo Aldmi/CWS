@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
-using DAL.Abstract.Entities.Options.Device;
-using DAL.Abstract.Entities.Options.MiddleWare;
 using Domain.Device.MiddleWares;
 using Domain.Device.MiddleWares.Invokes;
 using Domain.Device.Produser;
+using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.Exchange;
 using Domain.Exchange.RxModel;
 using Domain.Exchange.Services;
@@ -17,6 +16,8 @@ using Infrastructure.EventBus.Abstract;
 using Infrastructure.Transport.Base.RxModel;
 using Newtonsoft.Json;
 using Serilog;
+using DeviceOption = Domain.Device.Repository.Entities.DeviceOption;
+
 
 namespace Domain.Device
 {

@@ -1,6 +1,6 @@
 ﻿using System;
-using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
 using Domain.Device.MiddleWares.Converters.DateTimeConverters;
+using DateTimeHandlerMiddleWareOption = Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption.DateTimeHandlerMiddleWareOption;
 
 namespace Domain.Device.MiddleWares.Handlers
 {

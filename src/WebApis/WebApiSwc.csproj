@@ -39,9 +39,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BL.Services\App.Services.csproj" />
-    <ProjectReference Include="..\DAL.Abstract\DAL.Abstract.csproj" />
-    <ProjectReference Include="..\DAL.EFCore\DAL.EFCore.csproj" />
-    <ProjectReference Include="..\DAL.InMemory\DAL.InMemory.csproj" />
     <ProjectReference Include="..\Device.Base\Domain.Device.csproj" />
     <ProjectReference Include="..\Exchange.Base\Domain.Exchange.csproj" />
     <ProjectReference Include="..\Infrastructure.MessageBroker\Infrastructure.MessageBroker.csproj" />

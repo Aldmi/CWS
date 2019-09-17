@@ -1,6 +1,6 @@
 ﻿using System;
-using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
 using Domain.Device.MiddleWares.Converters.StringConverters;
+using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption;
 using FluentAssertions;
 using Xunit;
 

@@ -1,4 +1,4 @@
-﻿using DAL.Abstract.Entities.Options.Transport;
+﻿using Infrastructure.Transport.SerialPort;
 
 namespace Infrastructure.Transport.Base.Abstract
 {

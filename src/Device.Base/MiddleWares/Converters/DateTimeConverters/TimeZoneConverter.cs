@@ -1,5 +1,5 @@
 ﻿using System;
-using DAL.Abstract.Entities.Options.MiddleWare.Converters.DateTimeConverterOption;
+using TimeZoneConverterOption = Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.DateTimeConverterOption.TimeZoneConverterOption;
 
 namespace Domain.Device.MiddleWares.Converters.DateTimeConverters
 {

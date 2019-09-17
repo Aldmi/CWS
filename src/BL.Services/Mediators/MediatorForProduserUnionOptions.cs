@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
-using DAL.Abstract.Concrete;
-using DAL.Abstract.Entities.Options.ResponseProduser;
+using Domain.Device.Repository.Abstract;
+using Domain.Device.Repository.Entities.ResponseProduser;
 
 namespace App.Services.Mediators
 {

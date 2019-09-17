@@ -11,7 +11,6 @@ using Shared.Enums;
 using Shared.Types;
 
 
-
 namespace Infrastructure.Transport.Base.Abstract
 {
     public abstract class BaseTransport : ITransport

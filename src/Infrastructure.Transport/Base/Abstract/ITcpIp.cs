@@ -1,4 +1,4 @@
-﻿using DAL.Abstract.Entities.Options.Transport;
+﻿using TcpIpOption = Infrastructure.Transport.TcpIp.TcpIpOption;
 
 namespace Infrastructure.Transport.Base.Abstract
 {

@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
 using Autofac;
 using Autofac.Core;
-using DAL.Abstract.Concrete;
-using DAL.EFCore.Repository;
+using Domain.Device.Repository.Abstract;
+using Domain.Device.Repository.Concrete.EF;
+using Domain.Exchange.Repository.Abstract;
+using Domain.Exchange.Repository.Concrete;
+using Infrastructure.Transport.Repository.Abstract;
+using Infrastructure.Transport.Repository.Concrete.EF;
 
 namespace WebApiSwc.AutofacModules
 {

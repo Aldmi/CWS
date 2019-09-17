@@ -1,4 +1,4 @@
-﻿using DAL.Abstract.Entities.Options.Transport;
+﻿using Infrastructure.Transport.Http;
 
 namespace Infrastructure.Transport.Base.Abstract
 {

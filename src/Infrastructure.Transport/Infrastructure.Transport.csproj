@@ -10,9 +10,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DAL.Abstract\DAL.Abstract.csproj" />
+    <ProjectReference Include="..\..\Infrastructure.Dal.Abstract\Infrastructure.Dal.Abstract.csproj" />
     <ProjectReference Include="..\Infrastructure.Background\Infrastructure.Background.csproj" />
+    <ProjectReference Include="..\Infrastructure.Dal.EfCore\Infrastructure.Dal.EfCore.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Enums\" />
   </ItemGroup>
 
 </Project>
