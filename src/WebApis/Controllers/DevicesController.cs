@@ -5,10 +5,13 @@ using System.Threading.Tasks;
 using App.Services.Actions;
 using App.Services.Exceptions;
 using App.Services.Mediators;
+using Autofac.Features.Indexed;
 using AutoMapper;
 using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;
+using Domain.InputDataModel.Base.Response;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Shared.Types;
@@ -346,6 +349,14 @@ namespace WebApiSwc.Controllers
             }
 
             var providerOption = _mapper.Map<ProviderOption>(providerOptionDto);
+
+            //DEBUG-----------------
+            IIndex<string, Func<ProviderOption, IDataProvider<AdInputType, ResponseInfo>>> _dataProviderFactory = null; //Передавать через DI
+            var dataProvider = _dataProviderFactory[providerOption.Name](providerOption);
+            //exchange.ProviderOptionRt = dataProvider;
+            //---------------------
+
+
             try
             {
                 exchange.ProviderOptionRt = providerOption;

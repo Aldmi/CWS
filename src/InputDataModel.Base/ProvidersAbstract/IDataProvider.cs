@@ -3,6 +3,7 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersOption;
+using Domain.InputDataModel.Base.Response;
 using Infrastructure.Transport.Base.DataProvidert;
 
 namespace Domain.InputDataModel.Base.ProvidersAbstract
@@ -21,6 +22,9 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         Subject<IDataProvider<TInput, TOutput>> RaiseSendDataRx { get; }             //Событие отправки данных, в процессе обработки их конвеером.
 
         ProviderOption GetCurrentOptionRt();                                         //Вернуть спсиок текущих опций (опции могут быть поменены и отличатсч от опций из БД)
+
+        //TODO:удалить SetCurrentOptionRt, обмен принимаетуже созданного провайдера (провайдер имммутабелен)
         bool SetCurrentOptionRt(ProviderOption optionNew);                           //Установить новые настройки для провайдера. (конкретный провайдер сам возьмет нужные ему настройки)
+
     }
 }

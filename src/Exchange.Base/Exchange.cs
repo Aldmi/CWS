@@ -6,11 +6,13 @@ using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain.Exchange.Enums;
+using Domain.Exchange.Repository.Entities;
 using Domain.Exchange.RxModel;
 using Domain.Exchange.Services;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
+using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.Transport.Base.Abstract;
@@ -20,8 +22,7 @@ using Serilog;
 using Shared.Collections;
 using Shared.Enums;
 using Shared.Types;
-using ExchangeOption = Domain.Exchange.Repository.Entities.ExchangeOption;
-using ProviderOption = Domain.InputDataModel.Base.ProvidersOption.ProviderOption;
+
 
 namespace Domain.Exchange
 {
