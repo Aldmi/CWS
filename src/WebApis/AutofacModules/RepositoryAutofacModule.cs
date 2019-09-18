@@ -5,6 +5,8 @@ using Domain.Device.Repository.Abstract;
 using Domain.Device.Repository.Concrete.EF;
 using Domain.Exchange.Repository.Abstract;
 using Domain.Exchange.Repository.Concrete;
+using Infrastructure.Dal.Abstract;
+using Infrastructure.Dal.EfCore;
 using Infrastructure.Transport.Repository.Abstract;
 using Infrastructure.Transport.Repository.Concrete.EF;
 
@@ -29,6 +31,13 @@ namespace WebApiSwc.AutofacModules
 
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<EfActionDb>().As<IActionDb>()
+                .WithParameters(new List<Parameter>
+                {
+                    new NamedParameter("connectionString", _connectionString),
+                })
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<EfSerialPortOptionRepository>().As<ISerialPortOptionRepository>()
                 .WithParameters(new List<Parameter>
                 {
@@ -70,7 +79,6 @@ namespace WebApiSwc.AutofacModules
                     new NamedParameter("connectionString", _connectionString),
                 })
                 .InstancePerLifetimeScope();
-
         }
     }
 }

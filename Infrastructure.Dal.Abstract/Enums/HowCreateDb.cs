@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Dal.Abstract
+﻿namespace Infrastructure.Dal.Abstract.Enums
 {
     public enum HowCreateDb : byte
     {

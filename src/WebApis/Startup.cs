@@ -14,6 +14,7 @@ using Domain.InputDataModel.Autodictor.Model;
 using Firewall;
 using Infrastructure.Background;
 using Infrastructure.Background.Abstarct;
+using Infrastructure.Dal.Abstract;
 using Infrastructure.Transport;
 using Infrastructure.Transport.Repository.Abstract;
 using Microsoft.AspNetCore.Builder;
@@ -331,7 +332,7 @@ namespace WebApiSwc
             //СОЗДАНИЕ БД----------------------------------------------------------------------------
             try
             {
-                await scope.Resolve<ISerialPortOptionRepository>().CreateDb(howCreateDb);
+                await scope.Resolve<IActionDb>().CreateDb(howCreateDb);
             }
             catch (PostgresException ex)
             {

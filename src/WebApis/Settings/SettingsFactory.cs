@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Spatial;
 using Infrastructure.Dal.Abstract;
+using Infrastructure.Dal.Abstract.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;

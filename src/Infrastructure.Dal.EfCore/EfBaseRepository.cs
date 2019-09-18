@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.Extensions.ExpressionMapping;
 using Infrastructure.Dal.Abstract;
+using Infrastructure.Dal.Abstract.Enums;
 using Infrastructure.Dal.EfCore.DbContext;
 using Infrastructure.Dal.EfCore.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -246,18 +247,6 @@ namespace Infrastructure.Dal.EfCore
         }
 
         #endregion
-
-
-
-        #region CreateDeleteDb
-
-        public async Task CreateDb(HowCreateDb howCreateDb)
-        {
-          await  Context.CreateDb(howCreateDb);
-        }
-
-        #endregion
-
 
 
         #region Methode
