@@ -21,10 +21,6 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         Task StartExchangePipeline(InDataWrapper<TInput> inData);                     //Запустить конвеер обмена. После окончания подготовки порции данных конвеером, срабатывает RaiseSendDataRx.
         Subject<IDataProvider<TInput, TOutput>> RaiseSendDataRx { get; }             //Событие отправки данных, в процессе обработки их конвеером.
 
-        ProviderOption GetCurrentOptionRt();                                         //Вернуть спсиок текущих опций (опции могут быть поменены и отличатсч от опций из БД)
-
-        //TODO:удалить SetCurrentOptionRt, обмен принимаетуже созданного провайдера (провайдер имммутабелен)
-        bool SetCurrentOptionRt(ProviderOption optionNew);                           //Установить новые настройки для провайдера. (конкретный провайдер сам возьмет нужные ему настройки)
-
+        ProviderOption GetCurrentOption();                                           //Вернуть список текущих опций (опции могут быть изменены и отличатся от опций из БД)
     }
 }

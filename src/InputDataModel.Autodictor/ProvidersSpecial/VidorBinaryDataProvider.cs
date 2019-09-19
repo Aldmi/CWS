@@ -106,7 +106,7 @@ namespace Domain.InputDataModel.Autodictor.ProvidersSpecial
             throw new NotImplementedException();
         }
 
-        public ProviderOption GetCurrentOptionRt()
+        public ProviderOption GetCurrentOption()
         {
             throw new NotImplementedException();
         }

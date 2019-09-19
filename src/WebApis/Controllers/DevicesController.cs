@@ -35,6 +35,7 @@ namespace WebApiSwc.Controllers
 
         private readonly MediatorForStorages<AdInputType> _mediatorForStorages;
         private readonly DeviceActionService<AdInputType> _deviceActionService;
+        private readonly IIndex<string, Func<ProviderOption, IDataProvider<AdInputType, ResponseInfo>>> _dataProviderFactory;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
@@ -47,11 +48,13 @@ namespace WebApiSwc.Controllers
 
         public DevicesController(MediatorForStorages<AdInputType> mediatorForStorages,
                                  DeviceActionService<AdInputType> deviceActionService,
+                                 IIndex<string, Func<ProviderOption, IDataProvider<AdInputType, ResponseInfo>>> dataProviderFactory, //TODO: попробовать вендрять в prop
                                  IMapper mapper,
                                  ILogger logger)
         {
             _mediatorForStorages = mediatorForStorages;
             _deviceActionService = deviceActionService;
+            _dataProviderFactory = dataProviderFactory;
             _mapper = mapper;
             _logger = logger;
         }
@@ -322,7 +325,7 @@ namespace WebApiSwc.Controllers
             {
                 return NotFound(exchName);
             }
-            var providerOption = exchange.ProviderOptionRt;
+            var providerOption = exchange.GetProviderOption;
             var providerOptionDto = _mapper.Map<ProviderOptionDto>(providerOption);
 
             await Task.CompletedTask;
@@ -349,17 +352,10 @@ namespace WebApiSwc.Controllers
             }
 
             var providerOption = _mapper.Map<ProviderOption>(providerOptionDto);
-
-            //DEBUG-----------------
-            IIndex<string, Func<ProviderOption, IDataProvider<AdInputType, ResponseInfo>>> _dataProviderFactory = null; //Передавать через DI
-            var dataProvider = _dataProviderFactory[providerOption.Name](providerOption);
-            //exchange.ProviderOptionRt = dataProvider;
-            //---------------------
-
-
             try
             {
-                exchange.ProviderOptionRt = providerOption;
+                var dataProvider = _dataProviderFactory[providerOption.Name](providerOption);
+                exchange.SetNewProvider(dataProvider);
             }
             catch (Exception ex)
             {

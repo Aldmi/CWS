@@ -17,6 +17,11 @@ using Shared.Helpers;
 
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 {
+    /// <summary>
+    /// Immutable.
+    /// Задает провайдер конфигурируемый правилами.
+    /// </summary>
+    /// <typeparam name="TIn">тип входных данных для провайдера.</typeparam>
     public class ByRulesDataProvider<TIn> : BaseDataProvider<TIn>, IDataProvider<TIn, ResponseInfo> where TIn : InputTypeBase
     {
         #region field
@@ -24,6 +29,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         private readonly List<Rule<TIn>> _rules;        // Набор правил, для обработки данных.
         private ViewRuleTransferWrapper<TIn> _current;  // Созданный запрос, после подготовки данных. 
         private readonly ILogger _logger;
+        private readonly ByRulesProviderOption _option;          
 
         #endregion
 
@@ -33,15 +39,15 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
         public ByRulesDataProvider(IStronglyTypedResponseFactory stronglyTypedResponseFactory, ProviderOption providerOption, IIndependentInsertsService independentInsertsService, ILogger logger) : base(stronglyTypedResponseFactory, logger)
         {
-            var option = providerOption.ByRulesProviderOption;
-            if (option == null)
+            _option = providerOption.ByRulesProviderOption;
+            if (_option == null)
                 throw new ArgumentNullException(providerOption.Name);
 
             ProviderName = providerOption.Name;
-            _rules = option.Rules.Select(opt => new Rule<TIn>(opt, independentInsertsService, logger)).ToList();
-            RuleName4DefaultHandle = string.IsNullOrEmpty(option.RuleName4DefaultHandle)
-                ? "DefaultHandler"//_rules.First().Option.Name
-                : option.RuleName4DefaultHandle;
+            _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, independentInsertsService, logger)).ToList();
+            RuleName4DefaultHandle = string.IsNullOrEmpty(_option.RuleName4DefaultHandle)
+                ? "DefaultHandler"
+                : _option.RuleName4DefaultHandle;
             _logger = logger;
         }
 
@@ -161,36 +167,19 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         /// <summary>
         /// Вернуть опции провайдера
         /// </summary>
-        public ProviderOption GetCurrentOptionRt()
+        public ProviderOption GetCurrentOption()
         {
             var provideroption = new ProviderOption
             {
-                Name = ProviderName,
-                ByRulesProviderOption = new ByRulesProviderOption
-                {
-                    RuleName4DefaultHandle = RuleName4DefaultHandle,
-                    Rules = GetRules.Select(r => r.GetCurrentOption()).ToList()
-                }
+                //Name = ProviderName,
+                //ByRulesProviderOption = new ByRulesProviderOption
+                //{
+                //    RuleName4DefaultHandle = RuleName4DefaultHandle,
+                //    Rules = GetRules.Select(r => r.GetCurrentOption()).ToList()
+                //}
+                ByRulesProviderOption = _option
             };
             return provideroption;
-        }
-
-
-        /// <summary>
-        /// Меняются все опции провайдера на optionNew.
-        /// </summary>
-        public bool SetCurrentOptionRt(ProviderOption optionNew)
-        {
-            //TODO: лутчше весь ByRulesDataProvider сделать Immutable, чем перезаписывать список _rules  
-            //var option = optionNew.ByRulesProviderOption;
-            //if (option == null)
-            //    throw new ArgumentNullException(optionNew.Name);
-
-            //_rules.Clear();
-            //var newRules = option.Rules.Select(opt => new Rule<TIn>(opt, _logger)).ToList();//TODO: валидация проводить в самом dto объекте Rule и ViewRule
-            //_rules.AddRange(newRules);
-
-            return true;
         }
 
         #endregion

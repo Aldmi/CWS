@@ -33,7 +33,7 @@ namespace Domain.Exchange
         protected readonly ExchangeOption ExchangeOption;
         private readonly ITransport _transport;
         private readonly ITransportBackground _transportBackground;
-        private readonly IDataProvider<TIn, ResponseInfo> _dataProvider;         //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
+        private  IDataProvider<TIn, ResponseInfo> _dataProvider;                      //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
         private readonly ILogger _logger;
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(QueueMode.QueueExtractLastItem, MaxDataInQueue);   //Очередь данных для SendOneTimeData().
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue; //Очередь данных для SendCycleTimeData().
@@ -52,6 +52,7 @@ namespace Domain.Exchange
         public int NumberErrorTrying => ExchangeOption.NumberErrorTrying;
         public int NumberTimeoutTrying => ExchangeOption.NumberTimeoutTrying;
         public KeyTransport KeyTransport => ExchangeOption.KeyTransport;
+
         public bool IsOpen => _transport.IsOpen;
         public bool IsCycleReopened => _transport.IsCycleReopened;
         public bool IsStartedTransportBg => _transportBackground.IsStarted;
@@ -83,13 +84,10 @@ namespace Domain.Exchange
 
         public bool IsFullOneTimeDataQueue => _oneTimeDataQueue.IsFullLimit;
         public bool IsFullCycleTimeDataQueue => _cycleTimeDataQueue.IsFullLimit;
-        public bool IsNormalFrequencyCycleDataEntry { get; private set; } = true;
+        public bool IsNormalFrequencyCycleDataEntry { get; } = true;
 
-        public ProviderOption ProviderOptionRt
-        {
-            get => _dataProvider.GetCurrentOptionRt();
-            set => _dataProvider.SetCurrentOptionRt(value);
-        }
+        public ProviderOption GetProviderOption => _dataProvider.GetCurrentOption();
+
         #endregion
 
 
@@ -186,7 +184,6 @@ namespace Domain.Exchange
         }
 
         #endregion
-
 
 
         #region SendData
@@ -504,6 +501,16 @@ namespace Domain.Exchange
             {
                 _logger.Error("{Type} {KeyExchange}  {Exception}", "ОШИБКА LogedResponseInformation", KeyExchange, ex);
             }
+        }
+
+        #endregion
+
+
+        #region dataProvider
+
+        public void SetNewProvider(IDataProvider<TIn, ResponseInfo> provider)
+        {
+            _dataProvider = provider;
         }
 
         #endregion

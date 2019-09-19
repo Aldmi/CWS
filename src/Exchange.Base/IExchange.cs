@@ -5,6 +5,7 @@ using Domain.Exchange.Enums;
 using Domain.Exchange.RxModel;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.Response;
 using Infrastructure.Transport.Base.RxModel;
 using Shared.Types;
@@ -23,8 +24,16 @@ namespace Domain.Exchange
         string ProviderName { get; }
         int NumberErrorTrying { get;}                                           //Кол-во ошибочных запросов до переоткрытия соединения. IsConnect=false. ReOpenTransport()
         int NumberTimeoutTrying { get; }                                        //Кол-во запросов без ответов (таймаут ответа).IsConnect=false. ПЕРЕОТКРЫТИЕ НЕ ПРОИСХОДИТ.
-        ProviderOption ProviderOptionRt { get; set; }
         #endregion
+
+        #region dataProvider
+
+        ProviderOption GetProviderOption { get; }
+        void SetNewProvider(IDataProvider<T, ResponseInfo> provider);
+
+        #endregion
+
+
 
 
         #region StateExchange
