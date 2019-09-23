@@ -315,18 +315,11 @@ namespace WebApiSwc.Controllers
         [HttpGet("GetProviderOption/{deviceName}/{exchName}")]
         public async Task<IActionResult> GetProviderOption([FromRoute] string deviceName, [FromRoute] string exchName)
         {
-            var device = _mediatorForStorages.GetDevice(deviceName);
-            if (device == null)
-            {
-                return NotFound(deviceName);
-            }
-            var exchange = device.Exchanges.FirstOrDefault(e => e.KeyExchange == exchName);
-            if (exchange == null)
-            {
-                return NotFound(exchName);
-            }
-            var providerOption = exchange.GetProviderOption;
-            var providerOptionDto = _mapper.Map<ProviderOptionDto>(providerOption);
+            var (_, isFailure, option, error) = _deviceActionService.GetProviderOption(deviceName, exchName);
+            if (isFailure)
+                return BadRequest(error);
+
+            var providerOptionDto = _mapper.Map<ProviderOptionDto>(option);
 
             await Task.CompletedTask;
             return new JsonResult(providerOptionDto);
@@ -340,30 +333,14 @@ namespace WebApiSwc.Controllers
             [FromRoute] string exchName,
             [FromBody] ProviderOptionDto providerOptionDto)
         {
-            var device = _mediatorForStorages.GetDevice(deviceName);
-            if (device == null)
-            {
-                return NotFound(deviceName);
-            }
-            var exchange = device.Exchanges.FirstOrDefault(e => e.KeyExchange == exchName);
-            if (exchange == null)
-            {
-                return NotFound(exchName);
-            }
 
             var providerOption = _mapper.Map<ProviderOption>(providerOptionDto);
-            try
-            {
-                var dataProvider = _dataProviderFactory[providerOption.Name](providerOption);
-                exchange.SetNewProvider(dataProvider);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Исключение при установке ProviderOptionRt {ex}");
-            }
-   
+            var (_, isFailure, error) = _deviceActionService.SetProvider(deviceName, exchName, providerOption);
+            if (isFailure)
+                return BadRequest(error);
+
             await Task.CompletedTask;
-            return  Ok("Опции успешно приняты");
+            return Ok("Опции успешно приняты");
         }
 
 
@@ -408,7 +385,6 @@ namespace WebApiSwc.Controllers
             await Task.CompletedTask;
             return Ok("Опции успешно приняты");
         }
-
 
         #endregion
     }

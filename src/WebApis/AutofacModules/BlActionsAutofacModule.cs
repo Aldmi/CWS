@@ -8,7 +8,7 @@ namespace WebApiSwc.AutofacModules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<DeviceActionService<TIn>>().InstancePerDependency();    
+            builder.RegisterType<DeviceActionService<TIn>>().PropertiesAutowired().InstancePerDependency();
             builder.RegisterType<BuildDeviceService<TIn>>().InstancePerDependency();
             builder.RegisterType<BuildProdusersUnionService<TIn>>().InstancePerDependency();
             
