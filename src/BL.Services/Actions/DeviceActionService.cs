@@ -50,7 +50,7 @@ namespace App.Services.Actions
 
         #region prop
 
-        public IIndex<string, Func<ProviderOption, IDataProvider<TIn, ResponseInfo>>> DataProviderFactory { get; protected set; }  //внедряется через DI
+        public IIndex<string, Func<ProviderOption, IDataProvider<TIn, ResponseInfo>>> DataProviderFactory { get; set; }  //внедряется через DI
 
         #endregion
 

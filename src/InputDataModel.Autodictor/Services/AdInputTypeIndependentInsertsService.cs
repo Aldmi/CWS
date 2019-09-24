@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.Services;
 
-namespace Domain.InputDataModel.Autodictor.Model
+namespace Domain.InputDataModel.Autodictor.Services
 {
     public class AdInputTypeIndependentInsertsService : IIndependentInsertsService
     {
