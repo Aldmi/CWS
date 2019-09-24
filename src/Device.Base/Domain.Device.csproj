@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructure.Dal.Abstract\Infrastructure.Dal.Abstract.csproj" />
+    <ProjectReference Include="..\Infrastructure.Dal.Abstract\Infrastructure.Dal.Abstract.csproj" />
     <ProjectReference Include="..\Exchange.Base\Domain.Exchange.csproj" />
     <ProjectReference Include="..\Infrastructure.Dal.EfCore\Infrastructure.Dal.EfCore.csproj" />
     <ProjectReference Include="..\Infrastructure.MessageBroker\Infrastructure.MessageBroker.csproj" />

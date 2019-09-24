@@ -50,9 +50,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeviceForExchnage.Benchmark
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchmarks", "Benchmarks", "{47CDEA07-507F-4082-ADD4-275CB788F625}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Test", "..\Shared.Test\Shared.Test.csproj", "{DC957386-C42E-4CE8-892F-957510D23A54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Test", "Shared.Test\Shared.Test.csproj", "{DC957386-C42E-4CE8-892F-957510D23A54}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MappingTest", "..\MappingTest\MappingTest.csproj", "{3478F800-BF4A-41BC-8D32-FAE13CCE3793}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MappingTest", "MappingTest\MappingTest.csproj", "{3478F800-BF4A-41BC-8D32-FAE13CCE3793}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Produser", "Produser", "{7A2FECDF-A43E-4195-9597-C72220F4717D}"
 EndProject
@@ -76,7 +76,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{64D372
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dal", "Dal", "{DF6100DF-CC77-42D3-B416-CC714194898B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Dal.Abstract", "..\Infrastructure.Dal.Abstract\Infrastructure.Dal.Abstract.csproj", "{7A15CA0F-DBB1-4BD1-BFB0-3BA71BE15DD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Dal.Abstract", "Infrastructure.Dal.Abstract\Infrastructure.Dal.Abstract.csproj", "{7A15CA0F-DBB1-4BD1-BFB0-3BA71BE15DD5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Dal.EfCore", "Infrastructure.Dal.EfCore\Infrastructure.Dal.EfCore.csproj", "{D3F3B23F-8FAF-4EC4-ABB2-1B1025A2D1A0}"
 EndProject

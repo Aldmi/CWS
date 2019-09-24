@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructure.Dal.Abstract\Infrastructure.Dal.Abstract.csproj" />
+    <ProjectReference Include="..\Infrastructure.Dal.Abstract\Infrastructure.Dal.Abstract.csproj" />
     <ProjectReference Include="..\Infrastructure.Background\Infrastructure.Background.csproj" />
     <ProjectReference Include="..\Infrastructure.Dal.EfCore\Infrastructure.Dal.EfCore.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
