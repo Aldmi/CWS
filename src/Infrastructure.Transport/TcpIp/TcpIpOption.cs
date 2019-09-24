@@ -1,4 +1,4 @@
-﻿using DAL.Abstract.Entities.Options.Transport;
+﻿using Infrastructure.Background.Concrete;
 
 namespace Infrastructure.Transport.TcpIp
 {

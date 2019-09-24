@@ -2,7 +2,7 @@
 using Domain.Device.Repository.Abstract;
 using Domain.Device.Repository.Entities.ResponseProduser;
 using Infrastructure.Dal.EfCore;
-using Infrastructure.Dal.EfCore.Entities.Produser;
+using Infrastructure.Dal.EfCore.Entities.ResponseProduser;
 
 namespace Domain.Device.Repository.Concrete.EF
 {

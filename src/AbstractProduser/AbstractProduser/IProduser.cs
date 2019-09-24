@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AbstractProduser.Helpers;
-using AbstractProduser.Options;
 using CSharpFunctionalExtensions;
+using Infrastructure.Produser.AbstractProduser.Helpers;
+using Infrastructure.Produser.AbstractProduser.Options;
 
-namespace AbstractProduser.AbstractProduser
+namespace Infrastructure.Produser.AbstractProduser.AbstractProduser
 {
     public interface IProduser<out TOption> : IDisposable where TOption : BaseProduserOption
     {

@@ -3,14 +3,14 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using AbstractProduser.AbstractProduser;
-using AbstractProduser.Enums;
-using AbstractProduser.Helpers;
 using CSharpFunctionalExtensions;
+using Infrastructure.Produser.AbstractProduser.AbstractProduser;
+using Infrastructure.Produser.AbstractProduser.Enums;
+using Infrastructure.Produser.AbstractProduser.Helpers;
+using Infrastructure.Produser.WebClientProduser.Options;
 using Shared.Enums;
-using WebClientProduser.Options;
 
-namespace WebClientProduser
+namespace Infrastructure.Produser.WebClientProduser
 {
     public class WebClientProduserWrapper : BaseProduser<WebClientProduserOption>
     {

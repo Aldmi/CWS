@@ -1,7 +1,7 @@
-﻿using AbstractProduser.Options;
+﻿using Infrastructure.Produser.AbstractProduser.Options;
 using Shared.Enums;
 
-namespace WebClientProduser.Options
+namespace Infrastructure.Produser.WebClientProduser.Options
 {
     public class WebClientProduserOption : BaseProduserOption
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WebClientProduser
+namespace Infrastructure.Produser.WebClientProduser
 {
     /// <summary>
     /// Внедряется через HttpClientFactory.

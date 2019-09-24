@@ -37,7 +37,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
         #region ctor
 
-        public ByRulesDataProvider(IStronglyTypedResponseFactory stronglyTypedResponseFactory, ProviderOption providerOption, IIndependentInsertsService independentInsertsService, ILogger logger) : base(stronglyTypedResponseFactory, logger)
+        public ByRulesDataProvider(IStronglyTypedResponseFactory stronglyTypedResponseFactory, ProviderOption providerOption, IIndependentInsertsService independentInsertsService, ILogger logger)
+            : base(stronglyTypedResponseFactory, logger)
         {
             _option = providerOption.ByRulesProviderOption;
             if (_option == null)

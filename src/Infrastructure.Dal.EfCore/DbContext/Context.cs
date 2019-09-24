@@ -4,7 +4,7 @@ using Infrastructure.Dal.Abstract.Enums;
 using Infrastructure.Dal.EfCore.DbContext.EntitiConfiguration;
 using Infrastructure.Dal.EfCore.Entities.Device;
 using Infrastructure.Dal.EfCore.Entities.Exchange;
-using Infrastructure.Dal.EfCore.Entities.Produser;
+using Infrastructure.Dal.EfCore.Entities.ResponseProduser;
 using Infrastructure.Dal.EfCore.Entities.Transport;
 using Microsoft.EntityFrameworkCore;
 

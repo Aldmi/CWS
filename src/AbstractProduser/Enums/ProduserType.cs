@@ -1,4 +1,4 @@
-﻿namespace AbstractProduser.Enums
+﻿namespace Infrastructure.Produser.AbstractProduser.Enums
 {
     public enum ProduserType : byte
     {

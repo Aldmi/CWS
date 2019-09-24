@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AbstractProduser.AbstractProduser;
-using AbstractProduser.Enums;
-using AbstractProduser.Helpers;
 using CSharpFunctionalExtensions;
 using Domain.Device.Repository.Entities.ResponseProduser;
+using Infrastructure.Produser.AbstractProduser.AbstractProduser;
+using Infrastructure.Produser.AbstractProduser.Enums;
+using Infrastructure.Produser.AbstractProduser.Helpers;
 using Microsoft.AspNetCore.SignalR;
 using WebApiSwc.Hubs;
 using WebApiSwc.SignalRClients;

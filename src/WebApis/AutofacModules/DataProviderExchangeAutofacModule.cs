@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Autodictor.ProvidersSpecial;
+using Domain.InputDataModel.Autodictor.Services;
 using Domain.InputDataModel.Autodictor.StronglyTypedResponse;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;

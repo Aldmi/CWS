@@ -1,4 +1,4 @@
-﻿using AbstractProduser.Options;
+﻿using Infrastructure.Produser.AbstractProduser.Options;
 
 namespace Domain.Device.Repository.Entities.ResponseProduser
 {

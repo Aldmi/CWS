@@ -1,4 +1,4 @@
-﻿using Infrastructure.Dal.EfCore.Entities.Produser;
+﻿using Infrastructure.Dal.EfCore.Entities.ResponseProduser;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

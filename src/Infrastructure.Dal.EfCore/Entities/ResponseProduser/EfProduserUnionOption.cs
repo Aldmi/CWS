@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Infrastructure.Dal.EfCore.Entities.ResponseProduser.Produssers;
 using Newtonsoft.Json;
 
-namespace Infrastructure.Dal.EfCore.Entities.Produser
+namespace Infrastructure.Dal.EfCore.Entities.ResponseProduser
 {
     public class EfProduserUnionOption : IEntity
     {

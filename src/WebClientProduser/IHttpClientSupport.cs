@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WebClientProduser
+namespace Infrastructure.Produser.WebClientProduser
 {
     public interface IHttpClientSupport
     {

@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AbstractProduser\AbstractProduser.csproj" />
+    <ProjectReference Include="..\AbstractProduser\Infrastructure.Produser.AbstractProduser.csproj" />
     <ProjectReference Include="..\Device.Base\Domain.Device.csproj" />
     <ProjectReference Include="..\Exchange.Base\Domain.Exchange.csproj" />
     <ProjectReference Include="..\Infrastructure.Background\Infrastructure.Background.csproj" />

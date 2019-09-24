@@ -1,14 +1,14 @@
-﻿using AbstractProduser.AbstractProduser;
-using Autofac;
+﻿using Autofac;
 using Domain.Device.Produser;
 using Domain.Device.Repository.Entities.ResponseProduser;
 using Domain.InputDataModel.Autodictor.Model;
-using KafkaProduser;
-using KafkaProduser.Options;
+using Infrastructure.Produser.AbstractProduser.AbstractProduser;
+using Infrastructure.Produser.KafkaProduser;
+using Infrastructure.Produser.KafkaProduser.Options;
+using Infrastructure.Produser.WebClientProduser;
+using Infrastructure.Produser.WebClientProduser.Options;
 using WebApiSwc.Produsers;
 using WebApiSwc.SignalRClients;
-using WebClientProduser;
-using WebClientProduser.Options;
 
 namespace WebApiSwc.AutofacModules
 {

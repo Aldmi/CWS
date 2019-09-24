@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Infrastructure.Dal.Abstract;
-using KafkaProduser.Options;
-using WebClientProduser.Options;
+using Infrastructure.Produser.KafkaProduser.Options;
+using Infrastructure.Produser.WebClientProduser.Options;
 
 namespace Domain.Device.Repository.Entities.ResponseProduser
 {

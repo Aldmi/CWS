@@ -1,6 +1,6 @@
 ﻿using Infrastructure.Dal.Abstract;
 
-namespace DAL.Abstract.Entities.Options.Transport
+namespace Infrastructure.Background.Concrete
 {
     public class BackgroundOption : EntityBase
     {

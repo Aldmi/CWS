@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using AbstractProduser.Enums;
+using Infrastructure.Produser.AbstractProduser.Enums;
 
-namespace AbstractProduser.Helpers
+namespace Infrastructure.Produser.AbstractProduser.Helpers
 {
 
     public class ErrorWrapper

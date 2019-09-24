@@ -15,6 +15,7 @@ using Firewall;
 using Infrastructure.Background;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.Dal.Abstract;
+using Infrastructure.Produser.WebClientProduser;
 using Infrastructure.Transport;
 using Infrastructure.Transport.Repository.Abstract;
 using Microsoft.AspNetCore.Builder;
@@ -31,7 +32,6 @@ using WebApiSwc.AutofacModules;
 using WebApiSwc.Extensions;
 using WebApiSwc.Hubs;
 using WebApiSwc.Settings;
-using WebClientProduser;
 
 namespace WebApiSwc
 {

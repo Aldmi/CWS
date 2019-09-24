@@ -1,5 +1,5 @@
 ﻿using System.IO.Ports;
-using DAL.Abstract.Entities.Options.Transport;
+using Infrastructure.Background.Concrete;
 
 namespace Infrastructure.Transport.SerialPort
 {

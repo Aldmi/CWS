@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AbstractProduser.Options
+namespace Infrastructure.Produser.AbstractProduser.Options
 {
     public class BaseProduserOption
     {

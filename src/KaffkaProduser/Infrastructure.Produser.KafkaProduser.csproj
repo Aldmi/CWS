@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AbstractProduser\AbstractProduser.csproj" />
+    <ProjectReference Include="..\AbstractProduser\Infrastructure.Produser.AbstractProduser.csproj" />
   </ItemGroup>
 
 </Project>

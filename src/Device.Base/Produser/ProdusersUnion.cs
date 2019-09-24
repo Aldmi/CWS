@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using AbstractProduser.AbstractProduser;
-using AbstractProduser.Helpers;
-using AbstractProduser.Options;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.Response;
+using Infrastructure.Produser.AbstractProduser.AbstractProduser;
+using Infrastructure.Produser.AbstractProduser.Helpers;
+using Infrastructure.Produser.AbstractProduser.Options;
 using Newtonsoft.Json;
 using ProduserUnionOption = Domain.Device.Repository.Entities.ResponseProduser.ProduserUnionOption;
 

@@ -11,7 +11,7 @@ using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
 using Infrastructure.Dal.EfCore.Entities.Device;
 using Infrastructure.Dal.EfCore.Entities.Exchange;
-using Infrastructure.Dal.EfCore.Entities.Produser;
+using Infrastructure.Dal.EfCore.Entities.ResponseProduser;
 using Infrastructure.Dal.EfCore.Entities.Transport;
 using Infrastructure.Transport.Http;
 using Infrastructure.Transport.SerialPort;

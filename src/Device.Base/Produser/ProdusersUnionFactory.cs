@@ -1,10 +1,10 @@
 ﻿using System;
-using AbstractProduser.AbstractProduser;
 using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
 using Domain.Device.Repository.Entities.ResponseProduser;
-using KafkaProduser.Options;
-using WebClientProduser.Options;
+using Infrastructure.Produser.AbstractProduser.AbstractProduser;
+using Infrastructure.Produser.KafkaProduser.Options;
+using Infrastructure.Produser.WebClientProduser.Options;
 
 namespace Domain.Device.Produser
 {

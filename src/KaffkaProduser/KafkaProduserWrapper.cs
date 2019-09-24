@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using AbstractProduser.AbstractProduser;
-using AbstractProduser.Enums;
-using AbstractProduser.Helpers;
 using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
 using CSharpFunctionalExtensions;
-using KafkaProduser.Options;
+using Infrastructure.Produser.AbstractProduser.AbstractProduser;
+using Infrastructure.Produser.AbstractProduser.Enums;
+using Infrastructure.Produser.AbstractProduser.Helpers;
+using Infrastructure.Produser.KafkaProduser.Options;
 
-namespace KafkaProduser
+namespace Infrastructure.Produser.KafkaProduser
 {
     /// <summary>
     /// Отправка на шину сообщений Kaffka

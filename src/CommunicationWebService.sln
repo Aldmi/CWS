@@ -58,13 +58,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Produser", "Produser", "{7A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConcreteProdusers", "ConcreteProdusers", "{1435EB20-5282-4E16-921C-1EB89F4C204B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaProduser", "KaffkaProduser\KafkaProduser.csproj", "{FCA99839-3FB0-475E-868F-0FC1DEAAF2D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Produser.KafkaProduser", "KaffkaProduser\Infrastructure.Produser.KafkaProduser.csproj", "{FCA99839-3FB0-475E-868F-0FC1DEAAF2D2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogerSerilogProduser", "LogerSerilogProduser\LogerSerilogProduser.csproj", "{97782161-251C-4C1A-8787-A3A771DD2D8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Produser.LogerSerilogProduser", "LogerSerilogProduser\Infrastructure.Produser.LogerSerilogProduser.csproj", "{97782161-251C-4C1A-8787-A3A771DD2D8C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebClientProduser", "WebClientProduser\WebClientProduser.csproj", "{28489A8C-2C22-4730-AC25-6EB617B9A324}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Produser.WebClientProduser", "WebClientProduser\Infrastructure.Produser.WebClientProduser.csproj", "{28489A8C-2C22-4730-AC25-6EB617B9A324}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbstractProduser", "AbstractProduser\AbstractProduser.csproj", "{A7BE9DB7-7FEF-4C6C-A19F-75195DEFBEA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Produser.AbstractProduser", "AbstractProduser\Infrastructure.Produser.AbstractProduser.csproj", "{A7BE9DB7-7FEF-4C6C-A19F-75195DEFBEA5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Storages", "Infrastructure.Storages\Infrastructure.Storages.csproj", "{39E7E0DC-23CE-4201-A5B2-53CCB7016704}"
 EndProject
