@@ -27,7 +27,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         #region field
 
         private readonly List<Rule<TIn>> _rules;        // Набор правил, для обработки данных.
-        private ViewRuleTransferWrapper<TIn> _current;  // Созданный запрос, после подготовки данных. 
+        private ProviderTransfer<TIn> _current;         // Созданный запрос, после подготовки данных. 
         private readonly ILogger _logger;
         private readonly ByRulesProviderOption _option;          
 
@@ -89,11 +89,10 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         public byte[] GetDataByte()
         {
             var stringRequset = _current.Request.StrRepresent.Str; 
-            var format = _current.Request.StrRepresent.Format; 
+            var format = _current.Request.StrRepresent.Format;
+            var resultBuffer = stringRequset.ConvertString2ByteArray(format); //Преобразовываем КОНЕЧНУЮ строку в массив байт
             StatusDict["GetDataByte.Request"] = $"[{stringRequset}] Lenght= {stringRequset.Length}  Format={format}";
             StatusDict["GetDataByte.RequestBase"] = _current.Request.EqualStrRepresent ? null : $"[{_current.Request.StrRepresentBase.Str}]  Lenght= {_current.Request.StrRepresentBase.Str.Length}   Format= {_current.Request.StrRepresentBase.Format}";
-            //Преобразовываем КОНЕЧНУЮ строку в массив байт
-            var resultBuffer = stringRequset.ConvertString2ByteArray(format);
             StatusDict["GetDataByte.ByteRequest"] = $"{ resultBuffer.ArrayByteToString("X2")} Lenght= {resultBuffer.Length}";
             StatusDict["TimeResponse"] = $"{TimeRespone}";
             return resultBuffer;
@@ -270,6 +269,9 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                         InputData = new InDataWrapper<TIn> { Datas = _current.BatchedData.ToList() };
                         StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption.Id}";
                         StatusDict["Request.BodyLenght"] = $"{_current.Request.BodyLenght}";
+
+                        var providerCore= new ProviderCore<TIn>(_current, StronglyTypedResponseFactory);//DEBUG передавать в трнаспорт через RaiseSendDataRx
+
                         RaiseSendDataRx.OnNext(this);
                     }
                 }
@@ -311,7 +313,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
             throw new NotImplementedException();
         }
 
-        public bool SetString(Stream stream)
+        public bool SetString(string stream)
         {
             throw new NotImplementedException();
         }

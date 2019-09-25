@@ -80,7 +80,7 @@ namespace Infrastructure.Transport.TcpIp
                 return StatusDataExchange.None;
 
             StatusDataExchange = StatusDataExchange.Start;
-            if (await SendDataAsync(dataProvider, ct))
+            if (await SendDataAsync(dataProvider.GetDataByte(), ct))
             {
                 try
                 {
@@ -130,9 +130,8 @@ namespace Infrastructure.Transport.TcpIp
 
         #region Methode
 
-        private async Task<bool> SendDataAsync(ITransportDataProvider dataProvider, CancellationToken ct)
+        private async Task<bool> SendDataAsync(byte[] buffer, CancellationToken ct)
         {
-            byte[] buffer = dataProvider.GetDataByte();
             try
             {
                 if (_client != null && _netStream != null && _client.Client != null && _client.Client.Connected)

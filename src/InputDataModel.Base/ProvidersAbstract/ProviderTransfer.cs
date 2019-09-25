@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using Domain.InputDataModel.Base.ProvidersOption;
 using KellermanSoftware.CompareNetObjects;
+using Shared.Types;
 
-namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
+namespace Domain.InputDataModel.Base.ProvidersAbstract
 {
     /// <summary>
     /// Единица запроса обработанная ViewRule.
     /// </summary>
-    public class ViewRuleTransferWrapper<TIn>
+    public class ProviderTransfer<TIn>
     {
         public int StartItemIndex { get; set; }                     //Начальный индекс (в базовом массиве, после TakeItems) элемента после разбиения на батчи.
         public int BatchSize { get; set; }                          //Размер батча.
@@ -96,18 +97,4 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
     }
 
 
-    /// <summary>
-    /// Строка в формате представления
-    /// </summary>
-    public class StringRepresentation
-    {
-        public string Str { get;  }
-        public string Format { get;  }
-
-        public StringRepresentation(string str, string format)
-        {
-            Str = str;
-            Format = format;
-        }
-    }
 }

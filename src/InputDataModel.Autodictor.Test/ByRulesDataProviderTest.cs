@@ -11,6 +11,7 @@ using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response;
 using Domain.InputDataModel.Base.Services;
+using FluentAssertions;
 using Moq;
 using Serilog;
 using Xunit;
@@ -103,8 +104,12 @@ namespace InputDataModel.Autodictor.Test
             byte[] getDataByte = null;
             var subscription = btByRulesDataProvider.RaiseSendDataRx.Subscribe(provider =>
                 {
-                    countSetDataByte = provider.CountSetDataByte;
-                    getDataByte = provider.GetDataByte();
+
+
+
+                    countSetDataByte = provider.CountSetDataByte; //Сколько байт ожидаем в ответ
+                    getDataByte = provider.GetDataByte(); // ByRulesDataProvider выставляет массив байт для транспорта
+                    countSetDataByte.Should().Be(5);
                 });
 
             await btByRulesDataProvider.StartExchangePipeline(inDataWrapper);

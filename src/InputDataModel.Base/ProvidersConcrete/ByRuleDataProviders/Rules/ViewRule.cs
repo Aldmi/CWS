@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Services;
 using Serilog;
 using Shared.CrcCalculate;
 using Shared.Extensions;
 using Shared.Helpers;
+using Shared.Types;
 
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 {
@@ -63,7 +65,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// </summary>
         /// <param name="items">элементы прошедшие фильтрацию для правила</param>
         /// <returns>строку запроса и батч данных в обертке </returns>
-        public IEnumerable<ViewRuleTransferWrapper<TIn>> GetDataRequestString(List<TIn> items)
+        public IEnumerable<ProviderTransfer<TIn>> GetDataRequestString(List<TIn> items)
         {
             var viewedItems = GetViewedItems(items);
             if (viewedItems == null)
@@ -119,7 +121,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                         continue;
                     }
 
-                    yield return new ViewRuleTransferWrapper<TIn>
+                    yield return new ProviderTransfer<TIn>
                     {
                         StartItemIndex = startItemIndex,
                         BatchSize = _option.BatchSize,
@@ -138,7 +140,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// Body содержит готовый запрос для команды.
         /// </summary>
         /// <returns></returns>
-        public ViewRuleTransferWrapper<TIn> GetCommandRequestString()
+        public ProviderTransfer<TIn> GetCommandRequestString()
         {
             //TODO: ФОРМИРОВАНИЕ ЗАПРОСА ДЛЯ КОНМАДЫ ВЫНЕСТИ В ОТДЕШЛЬНЫЙ МЕТОД, ПО АНАЛОГИИ С CreateStringRequest()
 
@@ -170,7 +172,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             //ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.-------------------------------------------------------------------------------
             var response = CreateStringResponse();
 
-            return new ViewRuleTransferWrapper<TIn>
+            return new ProviderTransfer<TIn>
             {
                 BatchedData = null,
                 Request = request,
