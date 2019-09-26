@@ -8,18 +8,13 @@ using Infrastructure.Transport.Base.DataProvidert;
 
 namespace Domain.InputDataModel.Base.ProvidersAbstract
 {
-    public interface IDataProvider<TInput, TOutput> : ITransportDataProvider
+    public interface IDataProvider<TInput, TOutput>
     {
-        InDataWrapper<TInput> InputData { get; set; }                //передача входных даных внешним кодом.
-        TOutput OutputData { get; set; }                             //возврат выходных данных во внешний код.
-        bool IsOutDataValid { get; }                                 //флаг валидности выходных данных (OutputData)
-         
         string ProviderName { get;  }                                 //Название провайдера
         Dictionary<string, string> StatusDict{ get; }                 //Статус провайдера.
-        int TimeRespone { get; }                                      //Время на ответ
 
-        Task StartExchangePipeline(InDataWrapper<TInput> inData);                     //Запустить конвеер обмена. После окончания подготовки порции данных конвеером, срабатывает RaiseSendDataRx.
-        Subject<IDataProvider<TInput, TOutput>> RaiseSendDataRx { get; }             //Событие отправки данных, в процессе обработки их конвеером.
+        Task StartExchangePipeline(InDataWrapper<TInput> inData);                   //Запустить конвеер обмена. После окончания подготовки порции данных конвеером, срабатывает RaiseSendDataRx.
+        Subject<ProviderResult<TInput>> RaiseSendDataRx { get; }                   //Событие отправки данных, в процессе обработки их конвеером.
 
         ProviderOption GetCurrentOption();                                           //Вернуть список текущих опций (опции могут быть изменены и отличатся от опций из БД)
     }

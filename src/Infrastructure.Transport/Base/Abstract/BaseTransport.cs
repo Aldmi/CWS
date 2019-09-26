@@ -145,7 +145,7 @@ namespace Infrastructure.Transport.Base.Abstract
         #region abstracts
 
         protected abstract Task<bool> ReOpen();
-        public abstract Task<StatusDataExchange> DataExchangeAsync(int timeRespoune, ITransportDataProvider dataProvider, CancellationToken ct); //TODO: Постараться выделить шаблонный метод (по аналогии с CycleReOpenedExec)
+        public abstract Task<StatusDataExchange> DataExchangeAsync(ITransportDataProvider dataProvider, CancellationToken ct); //TODO: Постараться выделить шаблонный метод (по аналогии с CycleReOpenedExec)
         protected abstract void DisposeTransport();
 
         #endregion

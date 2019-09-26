@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Services;
@@ -128,6 +129,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                         BatchedData =  batch,    
                         Request = request,
                         Response = response,
+                        Command = Command4Device.None
                     };
                 }
             }
@@ -140,7 +142,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// Body содержит готовый запрос для команды.
         /// </summary>
         /// <returns></returns>
-        public ProviderTransfer<TIn> GetCommandRequestString()
+        public ProviderTransfer<TIn> GetCommandProviderTransfer(Command4Device command)
         {
             //TODO: ФОРМИРОВАНИЕ ЗАПРОСА ДЛЯ КОНМАДЫ ВЫНЕСТИ В ОТДЕШЛЬНЫЙ МЕТОД, ПО АНАЛОГИИ С CreateStringRequest()
 
@@ -156,10 +158,10 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ В ТЕЛО ЗАПРОСА--------------------------------------------------------------------------------------
             var resBodyDependentStr = MakeBodyDependentInserts(resSumStr);
 
-            //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})-------------------------------------------------------------------------
+            //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})---------------------------------------------------------------------
             var resDependencyStr = MakeDependentInserts(resBodyDependentStr, format);
 
-            //ПРОВЕРКА НЕОБХОДИМОСТИ СМЕНЫ ФОРМАТА СТРОКИ.-----------------------------------------------------------------------------------------
+            //ПРОВЕРКА НЕОБХОДИМОСТИ СМЕНЫ ФОРМАТА СТРОКИ.----------------------------------------------------------------------------------
             SwitchFormatCheck2Hex(resDependencyStr, format, out var newStr, out var newFormat);
 
             //ФОРМИРОВАНИЕ ОБЪЕКТА ЗАПРОСА.------------------------------------------------------------------------------------------------
@@ -176,7 +178,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             {
                 BatchedData = null,
                 Request = request,
-                Response = response
+                Response = response,
+                Command = command
             };
         }
 

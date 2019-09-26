@@ -113,10 +113,8 @@ namespace Domain.Exchange
         #endregion
 
 
-
         #region EventHandler
         #endregion
-
 
 
         #region InputDataChangeRx
@@ -138,11 +136,7 @@ namespace Domain.Exchange
         #endregion
 
 
-
-        #region Methode
-
         #region CycleExchange
-
         /// <summary>
         /// Добавление ЦИКЛ. функций на БГ
         /// </summary>
@@ -182,7 +176,6 @@ namespace Domain.Exchange
             _transportBackground.AddCycleAction(CycleCommandEmergencyActionAsync);
             CycleExchnageStatus = CycleExchnageStatus.Emergency;
         }
-
         #endregion
 
 
@@ -251,12 +244,10 @@ namespace Domain.Exchange
                 _skippingPeriodChecker.StopSkipping();
             }
         }
-
         #endregion
 
 
         #region Actions
-
         /// <summary>
         /// Однократно вызываемая функция.
         /// </summary>
@@ -275,7 +266,7 @@ namespace Domain.Exchange
                 ResponseChangeRx.OnNext(transportResponseWrapper);
             }
         }
-
+        
 
         /// <summary>
         /// Обработка отправки цикл. даных.
@@ -329,27 +320,26 @@ namespace Domain.Exchange
         }
 
 
-
         /// <summary>
+        /// Выставить на циклический обмен команду InfoEmergency.
         /// </summary>
         protected async Task CycleCommandEmergencyActionAsync(CancellationToken ct)
         {
             if (!_transport.IsOpen)
                 return;
 
-            InDataWrapper<TIn> inData = new InDataWrapper<TIn> {Command = Command4Device.InfoEmergency};        
+            var inData = new InDataWrapper<TIn> {Command = Command4Device.InfoEmergency};        
             var transportResponseWrapper = await SendingPieceOfData(inData, ct);
             transportResponseWrapper.KeyExchange = KeyExchange;
             transportResponseWrapper.DataAction = DataAction.CycleAction;
             ResponseChangeRx.OnNext(transportResponseWrapper);
-
-            await Task.Delay(100, ct); //TODO: Продумать как задвать скважность между выполнением цикл. функции на обмене.
+            await Task.Delay(1, ct); //TODO: Продумать как задвать скважность между выполнением цикл. функции на обмене.
         }
-
 
 
         /// <summary>
         /// Отправка порции данных.
+        /// Провайдер подготавливает данные, транспорт осушетвляет обмен данными. 
         /// </summary>
         /// <returns>Ответ на отправку порции данных</returns>
         private int _countErrorTrying = 0;
@@ -358,13 +348,13 @@ namespace Domain.Exchange
         {
             var transportResponseWrapper = new ResponsePieceOfDataWrapper<TIn>();
             //ПОДПИСКА НА СОБЫТИЕ ОТПРАВКИ ПОРЦИИ ДАННЫХ
-            var subscription = _dataProvider.RaiseSendDataRx.Subscribe(provider =>
+            var subscription = _dataProvider.RaiseSendDataRx.Subscribe(providerResult =>
             {
                 var transportResp = new ResponseDataItem<TIn>();
                 var status = StatusDataExchange.None;
                 try
                 {
-                    status = _transport.DataExchangeAsync(provider.TimeRespone, provider, ct).GetAwaiter().GetResult();
+                    status = _transport.DataExchangeAsync(providerResult, ct).GetAwaiter().GetResult();
                     switch (status)
                     {
                         //ОБМЕН ЗАВЕРШЕН ПРАВИЛЬНО.
@@ -372,8 +362,8 @@ namespace Domain.Exchange
                             IsConnect = true;
                             _countErrorTrying = 0;
                             _countTimeoutTrying = 0;
-                            LastSendData = provider.InputData;
-                            transportResp.ResponseInfo = provider.OutputData;
+                            LastSendData = providerResult.InputData;
+                            transportResp.ResponseInfo = providerResult.OutputData;
                             break;
 
                         //ТРАНСПОРТ НЕ ОТКРЫТ.
@@ -422,10 +412,10 @@ namespace Domain.Exchange
                 }
                 finally
                 {
-                    transportResp.RequestData = provider.InputData;
-                    transportResp.ResponseInfo = provider.OutputData;
+                    transportResp.RequestData = providerResult.InputData;
+                    transportResp.ResponseInfo = providerResult.OutputData;
                     transportResp.Status = status;
-                    transportResp.MessageDict = new Dictionary<string, string>(provider.StatusDict);
+                    transportResp.MessageDict = new Dictionary<string, string>(providerResult.StatusDict);
                     transportResponseWrapper.ResponsesItems.Add(transportResp);
                 }
             });
@@ -457,7 +447,7 @@ namespace Domain.Exchange
 
 
         /// <summary>
-        /// 
+        /// Логирование информации.
         /// </summary>
         private void LogedResponseInformation(ResponsePieceOfDataWrapper<TIn> response)
         {
@@ -515,10 +505,7 @@ namespace Domain.Exchange
 
         #endregion
 
-        #endregion
-
-
-
+        
         #region Disposable
 
         public void Dispose()
@@ -529,5 +516,4 @@ namespace Domain.Exchange
 
         #endregion
     }
-
 }

@@ -10,7 +10,6 @@ using Shared.Types;
 namespace Infrastructure.Transport.SibWay
 {
     public class SibWayTransport : BaseTransport, ISibWay
-
     {
         public SibWayTransport(ITransportBackground transportBg, KeyTransport keyTransport, ILogger logger) : base(transportBg, keyTransport, logger)
         {
@@ -21,7 +20,7 @@ namespace Infrastructure.Transport.SibWay
             throw new System.NotImplementedException();
         }
 
-        public override Task<StatusDataExchange> DataExchangeAsync(int timeRespoune, ITransportDataProvider dataProvider, CancellationToken ct)
+        public override Task<StatusDataExchange> DataExchangeAsync(ITransportDataProvider dataProvider, CancellationToken ct)
         {
             throw new System.NotImplementedException();
         }

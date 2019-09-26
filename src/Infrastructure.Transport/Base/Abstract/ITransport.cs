@@ -22,6 +22,6 @@ namespace Infrastructure.Transport.Base.Abstract
 
         Task CycleReOpenedExec();                                                              // ПОПЫТКИ ЦИКЛИЧЕСКОГО ПЕРЕОТКРЫТИЯ ПОРТА (С УНИЧТОЖЕНИЕМ ТЕКУЩЕГО ЭКЗЕМПЛЯРА ПОРТА)
         void CycleReOpenedExecCancelation();                                                   // ОТМЕНА ЦИКЛИЧЕСКОГО ПЕРЕОТКРЫТИЯ
-        Task<StatusDataExchange> DataExchangeAsync(int timeRespoune, ITransportDataProvider dataProvider, CancellationToken ct);   // ЗАПРОС/ОТВЕТ
+        Task<StatusDataExchange> DataExchangeAsync(ITransportDataProvider dataProvider, CancellationToken ct);   // ЗАПРОС/ОТВЕТ через переданный ITransportDataProvider
     }
 }

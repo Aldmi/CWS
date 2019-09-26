@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Domain.InputDataModel.Base.Enums;
+using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.Response;
 using Infrastructure.Transport.Base.DataProvidert;
@@ -10,12 +13,13 @@ using Shared.Helpers;
 namespace Domain.InputDataModel.Base.ProvidersAbstract
 {
     /// <summary>
+    /// Результат работы провайдера.
     /// Связующий объект между провайдером и транспортом.
     /// Провайдер создает ProviderTransfer и на базе него создает ProviderCore.
     /// ProviderCore Реализует все возможные варианта обмена даныыми и проверки ответов для всех транспортов через реализацию ITransportDataProvider.
     /// </summary>
     /// <typeparam name="TIn">тип входных данных для провайдера.</typeparam>
-    public class ProviderCore<TIn> : ITransportDataProvider
+    public class ProviderResult<TIn> : ITransportDataProvider
     {
         #region field
         private readonly ProviderTransfer<TIn> _transfer;
@@ -24,24 +28,23 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
 
 
         #region prop
-        public Dictionary<string, string> StatusDict { get; } = new Dictionary<string, string>();
+        public Dictionary<string, string> StatusDict { get; }
         public int TimeRespone => _transfer.Response.Option.TimeRespone;         //Время на ответ
         public int CountSetDataByte => _transfer.Response.Option.Lenght;        //Кол-во принимаемых байт в ответе
+        public InDataWrapper<TIn> InputData =>  new InDataWrapper<TIn> { Datas = _transfer.BatchedData?.ToList(), Command = _transfer.Command}; 
         public ResponseInfo OutputData { get; private set; }
         public bool IsOutDataValid { get; private set; }
         #endregion
 
 
-
         #region ctor
-        public ProviderCore(ProviderTransfer<TIn> transfer, IStronglyTypedResponseFactory stronglyTypedResponseFactory)
+        public ProviderResult(ProviderTransfer<TIn> transfer, IDictionary<string, string> providerStatusDict, IStronglyTypedResponseFactory stronglyTypedResponseFactory)
         {
             _transfer = transfer;
+            StatusDict = providerStatusDict == null ? new Dictionary<string, string>() : new Dictionary<string, string>(providerStatusDict);
             _stronglyTypedResponseFactory = stronglyTypedResponseFactory;
         }
         #endregion
-
-
 
 
         #region Byte[]
@@ -140,7 +143,6 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
             throw new NotImplementedException();
         }
         #endregion
-
 
 
         #region OtherMethode

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
@@ -13,7 +12,7 @@ using Domain.InputDataModel.Base.Response;
 using Domain.InputDataModel.Base.Services;
 using Serilog;
 using Shared.Extensions;
-using Shared.Helpers;
+
 
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 {
@@ -25,18 +24,13 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
     public class ByRulesDataProvider<TIn> : BaseDataProvider<TIn>, IDataProvider<TIn, ResponseInfo> where TIn : InputTypeBase
     {
         #region field
-
         private readonly List<Rule<TIn>> _rules;        // Набор правил, для обработки данных.
-        private ProviderTransfer<TIn> _current;         // Созданный запрос, после подготовки данных. 
         private readonly ILogger _logger;
-        private readonly ByRulesProviderOption _option;          
-
+        private readonly ByRulesProviderOption _option;
         #endregion
 
 
-
         #region ctor
-
         public ByRulesDataProvider(IStronglyTypedResponseFactory stronglyTypedResponseFactory, ProviderOption providerOption, IIndependentInsertsService independentInsertsService, ILogger logger)
             : base(stronglyTypedResponseFactory, logger)
         {
@@ -51,112 +45,22 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 : _option.RuleName4DefaultHandle;
             _logger = logger;
         }
-
         #endregion
 
 
 
         #region prop
-
+        public string ProviderName { get; }
         private IEnumerable<Rule<TIn>> GetRules => _rules.ToList();                     //Копия списка Rules, чтобы  избежать Exception при перечислении (т.к. Rules - мутабельна).
         public string RuleName4DefaultHandle { get; }
-        public string ProviderName { get; }
         public Dictionary<string, string> StatusDict { get; } = new Dictionary<string, string>();
-        public InDataWrapper<TIn> InputData { get; set; }
-        public ResponseInfo OutputData { get; set; }
-        public bool IsOutDataValid { get; set; }
-        public int TimeRespone => _current.Response.Option.TimeRespone;        //Время на ответ
-        public int CountSetDataByte => _current.Response.Option.Lenght;        //Кол-во принимаемых байт в ответе
-
         #endregion
 
 
 
         #region RxEvent
 
-        public Subject<IDataProvider<TIn, ResponseInfo>> RaiseSendDataRx { get; } = new Subject<IDataProvider<TIn, ResponseInfo>>();
-
-        #endregion
-
-
-
-        #region IExchangeDataProviderImplementation
-
-        /// <summary>
-        /// Сформировать буфер ЗАПРОСА
-        /// </summary>
-        /// <returns></returns>
-        public byte[] GetDataByte()
-        {
-            var stringRequset = _current.Request.StrRepresent.Str; 
-            var format = _current.Request.StrRepresent.Format;
-            var resultBuffer = stringRequset.ConvertString2ByteArray(format); //Преобразовываем КОНЕЧНУЮ строку в массив байт
-            StatusDict["GetDataByte.Request"] = $"[{stringRequset}] Lenght= {stringRequset.Length}  Format={format}";
-            StatusDict["GetDataByte.RequestBase"] = _current.Request.EqualStrRepresent ? null : $"[{_current.Request.StrRepresentBase.Str}]  Lenght= {_current.Request.StrRepresentBase.Str.Length}   Format= {_current.Request.StrRepresentBase.Format}";
-            StatusDict["GetDataByte.ByteRequest"] = $"{ resultBuffer.ArrayByteToString("X2")} Lenght= {resultBuffer.Length}";
-            StatusDict["TimeResponse"] = $"{TimeRespone}";
-            return resultBuffer;
-        }
-
-
-        /// <summary>
-        /// Проверить ответ, Присвоить выходные данные.
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public bool SetDataByte(byte[] data)
-        {
-            var stringResponseRef = _current.Response.StrRepresent.Str;
-            var format = _current.Response.StrRepresent.Format;           
-            if (data == null)
-            {
-                IsOutDataValid = false;
-                OutputData = new ResponseInfo
-                {
-                    ResponseData = null,
-                    Encoding = format,
-                    IsOutDataValid = IsOutDataValid
-                };
-                return false;
-            }
-            var stringResponse = data.ArrayByteToString(format);
-
-            //Создать строго типизитрованный ответ на базе строки сырого ответа
-            var stronglyTypedResponse = CreateStronglyTypedResponseByOption(_current.Response.Option.StronglyTypedName, stringResponse);
-            IsOutDataValid = (stringResponse == stringResponseRef); //TODO: как лутчше сравнивать строки???
-            OutputData = new ResponseInfo
-            {
-                ResponseData = stringResponse,
-                Encoding = format,
-                IsOutDataValid = IsOutDataValid,
-                StronglyTypedResponse = stronglyTypedResponse
-            };
-            var diffResp = (!IsOutDataValid) ? $"ПринятоБайт/ОжидаемБайт= {data.Length}/{_current.Response.Option.Lenght}" : string.Empty;
-            StatusDict["SetDataByte.StringResponse"] = $"{stringResponseRef} ?? {stringResponse}   diffResp=  {diffResp}";
-            return IsOutDataValid;
-        }
-
-        /// <summary>
-        ///Если указанно имя типа для ответоа, то мы его создаем через фабрику.
-        /// </summary>
-        private StronglyTypedRespBase CreateStronglyTypedResponseByOption(string stronglyTypedName, string stringResponse)
-        {
-            StronglyTypedRespBase stronglyTypedResponse = null;
-            StatusDict["SetDataByte.StronglyTypedResponse"] = null;
-            if (!string.IsNullOrEmpty(_current.Response.Option.StronglyTypedName))  
-            {
-                try
-                {
-                    stronglyTypedResponse = StronglyTypedResponseFactory.CreateStronglyTypedResponse(stronglyTypedName, stringResponse);
-                    StatusDict["SetDataByte.StronglyTypedResponse"] = stronglyTypedResponse.ToString();
-                }
-                catch (NotSupportedException ex)
-                {
-                    StatusDict["SetDataByte.StronglyTypedResponse"] = $"ОШИБКА= {ex}";
-                }
-            }
-            return stronglyTypedResponse;
-        }
+        public Subject<ProviderResult<TIn>> RaiseSendDataRx { get; } = new Subject<ProviderResult<TIn>>();
 
         #endregion
 
@@ -186,7 +90,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
 
 
-
         #region Methode
 
         /// <summary>
@@ -204,7 +107,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                     DirectHandlerName = RuleName4DefaultHandle
                 };
             }
-
             foreach (var rule in GetRules)
             {
                 StatusDict.Clear();
@@ -241,7 +143,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                         continue;
                 }
             }
-
             //Конвеер обработки входных данных завершен    
             StatusDict.Clear();
             await Task.CompletedTask;
@@ -256,23 +157,17 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
             if (takesItems != null && takesItems.Any())
             {
                 StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
-                //_logger.Information($"Отправка ДАННЫХ через {rule.Option.Name}. Кол-во данных:{takesItems.Count}");
-
                 foreach (var viewRule in rule.GetViewRules)
                 {
-                    foreach (var request in viewRule.GetDataRequestString(takesItems))
+                    foreach (var providerTransfer in viewRule.GetDataRequestString(takesItems))
                     {
-                        if (request == null) //правило отображения не подходит под ДАННЫЕ
+                        if (providerTransfer == null) //правило отображения не подходит под ДАННЫЕ
                             continue;
 
-                        _current = request;
-                        InputData = new InDataWrapper<TIn> { Datas = _current.BatchedData.ToList() };
                         StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption.Id}";
-                        StatusDict["Request.BodyLenght"] = $"{_current.Request.BodyLenght}";
-
-                        var providerCore= new ProviderCore<TIn>(_current, StronglyTypedResponseFactory);//DEBUG передавать в трнаспорт через RaiseSendDataRx
-
-                        RaiseSendDataRx.OnNext(this);
+                        StatusDict["Request.BodyLenght"] = $"{providerTransfer.Request.BodyLenght}";
+                        var providerCore= new ProviderResult<TIn>(providerTransfer, StatusDict, StronglyTypedResponseFactory); //TODO: создавать через фабрику Func<ProviderTransfer<Tin>, Dictionary<string, string>, ProviderResult>
+                        RaiseSendDataRx.OnNext(providerCore);
                     }
                 }
             }
@@ -285,38 +180,13 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         private void ViewRuleSendCommand(Rule<TIn> rule, Command4Device command)
         {
             var commandViewRule = rule.GetViewRules.FirstOrDefault();
-            _current = commandViewRule?.GetCommandRequestString();
-            InputData = new InDataWrapper<TIn> { Command = command };
+            var providerTransfer = commandViewRule?.GetCommandProviderTransfer(command);
             StatusDict["Command"] = $"{command}";
             StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
             StatusDict["viewRule.Id"] = $"{commandViewRule.GetCurrentOption.Id}";
-            RaiseSendDataRx.OnNext(this);
+            var providerCore = new ProviderResult<TIn>(providerTransfer, StatusDict, StronglyTypedResponseFactory);
+            RaiseSendDataRx.OnNext(providerCore);
         }
-
-        #endregion
-
-
-
-        #region NotImplemented
-        public Stream GetStream()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool SetStream(Stream stream)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetString()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool SetString(string stream)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
+       #endregion
     }
 }

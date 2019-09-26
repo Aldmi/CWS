@@ -233,7 +233,7 @@ namespace Infrastructure.Transport.SerialPort
         /// Функция обмена по порту. Запрос-ожидание-ответ.
         /// Возвращает true если результат обмена успешен.
         /// </summary>
-        public async Task<StatusDataExchange> DataExchangeAsync(int timeRespoune, ITransportDataProvider dataProvider, CancellationToken ct)
+        public async Task<StatusDataExchange> DataExchangeAsync(ITransportDataProvider dataProvider, CancellationToken ct)
         {
             if (!IsOpen)
                 return StatusDataExchange.None;
@@ -248,7 +248,7 @@ namespace Infrastructure.Transport.SerialPort
                 if (writeBuffer != null && writeBuffer.Any())
                 {
                     StatusDataExchange = StatusDataExchange.Process;
-                    var readBuff = await RequestAndRespawnConstPeriodAsync(writeBuffer, dataProvider.CountSetDataByte, timeRespoune, ct);
+                    var readBuff = await RequestAndRespawnConstPeriodAsync(writeBuffer, dataProvider.CountSetDataByte, dataProvider.TimeRespone, ct);
                     dataProvider.SetDataByte(readBuff);
                 }
             }

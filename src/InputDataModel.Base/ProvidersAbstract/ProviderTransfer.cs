@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.ProvidersOption;
 using KellermanSoftware.CompareNetObjects;
 using Shared.Types;
@@ -6,7 +7,7 @@ using Shared.Types;
 namespace Domain.InputDataModel.Base.ProvidersAbstract
 {
     /// <summary>
-    /// Единица запроса обработанная ViewRule.
+    /// Единица запроса.
     /// </summary>
     public class ProviderTransfer<TIn>
     {
@@ -15,13 +16,14 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         public IEnumerable<TIn> BatchedData { get; set; }           //Набор входных данных на базе которых созданна StringRequest.
         public RequestTransfer Request { get; set; }                //Строка запроса, созданная по правилам RequestOption.
         public ResponseTransfer Response { get; set; }              //Строка ответа, созданная по правилам ResponseOption.
+        public Command4Device Command { get; set; }                 //Команда
     }
 
 
 
     public abstract class BaseTransfer
     {
-        private readonly RequestResonseOption _option;               //Base опции.
+        private readonly RequestResonseOption _option;                          //Base опции.
 
 
         #region prop

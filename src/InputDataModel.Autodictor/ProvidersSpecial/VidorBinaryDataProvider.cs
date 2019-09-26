@@ -18,6 +18,7 @@ namespace Domain.InputDataModel.Autodictor.ProvidersSpecial
         #region field
 
         private readonly ManualProviderOption _providerOption;
+        private Subject<ProviderResult<AdInputType>> _raiseSendDataRx;
 
         #endregion
 
@@ -66,6 +67,11 @@ namespace Domain.InputDataModel.Autodictor.ProvidersSpecial
             throw new System.NotImplementedException();
         }
 
+        public bool SetString(string stream)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool SetString(Stream stream)
         {
             throw new System.NotImplementedException();
@@ -78,6 +84,8 @@ namespace Domain.InputDataModel.Autodictor.ProvidersSpecial
             return StartExchangePipeline(inData);
         }
 
+        Subject<ProviderResult<AdInputType>> IDataProvider<AdInputType, ResponseInfo>.RaiseSendDataRx => _raiseSendDataRx;
+
         public Subject<IDataProvider<AdInputType, ResponseInfo>> RaiseSendDataRx { get; }
 
         public void SendDataIsCompleted()
@@ -86,11 +94,6 @@ namespace Domain.InputDataModel.Autodictor.ProvidersSpecial
         }
 
         public InDataWrapper<AdInputType> InputData { get; set; }
-        InDataWrapper<AdInputType> IDataProvider<AdInputType, ResponseInfo>.InputData
-        {
-            get => InputData;
-            set => InputData = value;
-        }
 
         public ResponseInfo OutputData { get; set; }
         public bool IsOutDataValid { get; }

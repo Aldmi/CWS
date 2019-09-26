@@ -79,7 +79,7 @@ namespace Infrastructure.Transport.Http
             throw new System.NotImplementedException();
         }
 
-        public Task<StatusDataExchange> DataExchangeAsync(int timeRespoune, ITransportDataProvider dataProvider, CancellationToken ct)
+        public Task<StatusDataExchange> DataExchangeAsync(ITransportDataProvider dataProvider, CancellationToken ct)
         {
             throw new System.NotImplementedException();
         }

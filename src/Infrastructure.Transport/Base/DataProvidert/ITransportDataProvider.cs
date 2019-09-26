@@ -5,6 +5,8 @@ namespace Infrastructure.Transport.Base.DataProvidert
 {
     public interface ITransportDataProvider //TODO: переименовать на IProviderCore
     {
+        int TimeRespone { get; }        //Время на ответ
+
         byte[] GetDataByte();            //сформировать буфер для отправки.
         bool SetDataByte(byte[] data);   //получить принятый буфер.
         int CountSetDataByte { get; }    //кол-во байт для приема.

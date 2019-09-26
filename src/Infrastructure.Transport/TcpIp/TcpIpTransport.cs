@@ -71,7 +71,7 @@ namespace Infrastructure.Transport.TcpIp
         }
 
 
-        public override async Task<StatusDataExchange> DataExchangeAsync(int timeRespoune, ITransportDataProvider dataProvider, CancellationToken ct)
+        public override async Task<StatusDataExchange> DataExchangeAsync(ITransportDataProvider dataProvider, CancellationToken ct)
         {
             if (!IsOpen)
                 return StatusDataExchange.NotOpenTransport;
@@ -85,7 +85,7 @@ namespace Infrastructure.Transport.TcpIp
                 try
                 {
 
-                    var data = await TakeDataConstPeriodAsync(dataProvider.CountSetDataByte, timeRespoune, ct);
+                    var data = await TakeDataConstPeriodAsync(dataProvider.CountSetDataByte, dataProvider.TimeRespone, ct);
                     //var data = await TakeDataInstantlyAsync(dataProvider.CountSetDataByte, timeRespoune, ct);
                     var res = dataProvider.SetDataByte(data);
                     if (!res)
