@@ -3,32 +3,34 @@ using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Autodictor.ProvidersSpecial;
 using Domain.InputDataModel.Autodictor.Services;
 using Domain.InputDataModel.Autodictor.StronglyTypedResponse;
+using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;
 using Domain.InputDataModel.Base.Response;
 using Domain.InputDataModel.Base.Services;
+using Infrastructure.Transport.Base.DataProvidert;
 
 namespace WebApiSwc.AutofacModules
 {
     /// <summary>
     /// Регистрируем КОНКРЕТНЫЕ провайдеры по типу.
     /// </summary>
-    public class DataProviderExchangeAutofacModule<TIn> : Module
+    public class DataProviderExchangeAutofacModule<TIn> : Module where TIn : InputTypeBase
     {
         protected override void Load(ContainerBuilder builder)
-        {          
+        {
             switch (typeof(TIn).Name)
             {
                 case "AdInputType":
+                    builder.RegisterType<ProviderResult<TIn>>().As<ITransportDataProvider>().InstancePerDependency();
                     builder.RegisterType<AdStronglyTypedResponseFactory>().As<IStronglyTypedResponseFactory>().SingleInstance();
-
-                    builder.RegisterType<VidorBinaryDataProvider>().Named<IDataProvider<AdInputType, ResponseInfo>>("VidorBinary").InstancePerDependency();
-                    builder.RegisterType<ByRulesDataProvider<AdInputType>>().Named<IDataProvider<AdInputType, ResponseInfo>>("ByRules").InstancePerDependency();
-
                     builder.RegisterType<AdInputTypeIndependentInsertsService>().As<IIndependentInsertsService>().SingleInstance();
+
+                    builder.RegisterType<VidorBinaryDataProvider>().Named<IDataProvider<TIn, ResponseInfo>>("VidorBinary").InstancePerDependency();
+                    builder.RegisterType<ByRulesDataProvider<TIn>>().Named<IDataProvider<TIn, ResponseInfo>>("ByRules").InstancePerDependency();
                     break;
 
-                case "OtherType": 
+                case "OtherType":
                     //builder.RegisterType<OtherTypeStronglyTypedResponseFactory>().As<IStronglyTypedResponseFactory>().SingleInstance();
                     //builder.RegisterType<OtherDataProvider>().As<IExchangeDataProvider<TIn, TransportResponse>>().InstancePerDependency();
                     break;
