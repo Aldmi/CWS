@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Features.OwnedInstances;
 using Domain.Exchange.Enums;
 using Domain.Exchange.Repository.Entities;
 using Domain.Exchange.RxModel;
@@ -34,6 +35,7 @@ namespace Domain.Exchange
         private readonly ITransport _transport;
         private readonly ITransportBackground _transportBackground;
         private  IDataProvider<TIn, ResponseInfo> _dataProvider;                      //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
+        private readonly IDisposable _dataProviderOwner;                              //управляет временем жизни _dataProvider
         private readonly ILogger _logger;
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(QueueMode.QueueExtractLastItem, MaxDataInQueue);   //Очередь данных для SendOneTimeData().
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue; //Очередь данных для SendCycleTimeData().
@@ -97,13 +99,14 @@ namespace Domain.Exchange
         public Exchange(ExchangeOption exchangeOption,
                                  ITransport transport,
                                  ITransportBackground transportBackground,
-                                 IDataProvider<TIn, ResponseInfo> dataProvider,
+                                 Owned<IDataProvider<TIn, ResponseInfo>> dataProviderOwner,
                                  ILogger logger)
         {
             ExchangeOption = exchangeOption;
             _transport = transport;
             _transportBackground = transportBackground;
-            _dataProvider = dataProvider;
+            _dataProviderOwner = dataProviderOwner;
+            _dataProvider = dataProviderOwner.Value;
             _logger = logger;
             _cycleTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(ExchangeOption.CycleFuncOption.CycleQueueMode, MaxDataInQueue);
             _inputCycleDataEntryCheker= new InputCycleDataEntryCheker(KeyExchange, ExchangeOption.CycleFuncOption.NormalIntervalCycleDataEntry);
@@ -512,6 +515,7 @@ namespace Domain.Exchange
         {
             _inputCycleDataEntryCheker.Dispose();
             _skippingPeriodChecker.Dispose();
+            _dataProviderOwner.Dispose();
         }
 
         #endregion

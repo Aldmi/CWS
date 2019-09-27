@@ -169,16 +169,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
                         StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption.Id}";
                         StatusDict["Request.BodyLenght"] = $"{providerTransfer.Request.BodyLenght}";
-                        try //DEBUG
-                        {
-                            var providerCore = ProviderResultFactory(providerTransfer, StatusDict);
-                            RaiseSendDataRx.OnNext(providerCore);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e);
-                        }
-                  
+                        var providerResult = ProviderResultFactory(providerTransfer, StatusDict);
+                        RaiseSendDataRx.OnNext(providerResult);
                     }
                 }
             }
@@ -195,8 +187,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
             StatusDict["Command"] = $"{command}";
             StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
             StatusDict["viewRule.Id"] = $"{commandViewRule.GetCurrentOption.Id}";
-            var providerCore = ProviderResultFactory(providerTransfer, StatusDict);
-            RaiseSendDataRx.OnNext(providerCore);
+            var providerResult = ProviderResultFactory(providerTransfer, StatusDict);
+            RaiseSendDataRx.OnNext(providerResult);
         }
        #endregion
     }

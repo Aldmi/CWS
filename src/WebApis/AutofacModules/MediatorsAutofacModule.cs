@@ -9,7 +9,7 @@ namespace WebApiSwc.AutofacModules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<MediatorForStorages<TIn>>().SingleInstance();           //SingleInstance - т.к. в его Scope находится _dataProviderFactory, который 
+            builder.RegisterType<MediatorForStorages<TIn>>().InstancePerDependency();           //SingleInstance - т.к. в его Scope находится _dataProviderFactory, который 
             builder.RegisterType<MediatorForDeviceOptions>().InstancePerDependency();
             builder.RegisterType<MediatorForProduserUnionOptions>().InstancePerDependency();
         }

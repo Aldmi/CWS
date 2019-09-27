@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using App.Services.Config;
 using App.Services.Exceptions;
 using Autofac.Features.Indexed;
+using Autofac.Features.OwnedInstances;
 using Domain.Device;
 using Domain.Device.Produser;
 using Domain.Exchange;
@@ -44,7 +45,7 @@ namespace App.Services.Mediators
         private readonly TransportStorage _transportStorage;
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
         private readonly IEventBus _eventBus;
-        private readonly IIndex<string, Func<ProviderOption, IDataProvider<TIn, ResponseInfo>>> _dataProviderFactory;
+        private readonly IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, ResponseInfo>>>> _dataProviderFactory;
         private readonly AppConfigWrapper _appConfigWrapper;
         private readonly ILogger _logger;
         //опции для создания IProduser через фабрику
@@ -62,7 +63,7 @@ namespace App.Services.Mediators
             TransportStorage transportStorage,
             ProduserUnionStorage<TIn> produserUnionStorage,
             IEventBus eventBus,     
-            IIndex<string, Func<ProviderOption, IDataProvider<TIn, ResponseInfo>>> dataProviderFactory,
+            IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, ResponseInfo>>>> dataProviderFactory,
             AppConfigWrapper appConfigWrapper,
             ILogger logger)
         {
@@ -217,7 +218,6 @@ namespace App.Services.Mediators
             var excanges = _exchangeStorage.GetMany(deviceOption.ExchangeKeys).ToList();
             var device = new Device<TIn>(deviceOption, excanges, _eventBus, _produserUnionStorage, _logger);
             _deviceStorage.AddNew(device.Option.Name, device);
-
             return device;
         }
 

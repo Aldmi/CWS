@@ -10,21 +10,24 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
     //TODO: после созданния нескольких провайдеров, вынести обший функционал в этот класс
     public abstract class BaseDataProvider<TIn> where TIn : InputTypeBase
     {
+        #region field
         protected readonly Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> ProviderResultFactory;
         private readonly ILogger _logger;
+        #endregion
 
 
 
         #region ctor
-
         protected BaseDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> providerResultFactory, ILogger logger)
         {
             ProviderResultFactory = providerResultFactory;
             _logger = logger;
         }
-
         #endregion
 
+
+
+        #region Methode
 
         /// <summary>
         /// Определяет обработчик входных данных.
@@ -55,6 +58,7 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
                     return RuleSwitcher4InData.None;
             }
         }
-    }
 
+        #endregion
+    }
 }
