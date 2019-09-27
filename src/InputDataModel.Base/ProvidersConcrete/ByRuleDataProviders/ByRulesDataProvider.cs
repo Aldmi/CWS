@@ -29,14 +29,15 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         private readonly ByRulesProviderOption _option;
         #endregion
 
+        
 
         #region ctor
-        public ByRulesDataProvider(IStronglyTypedResponseFactory stronglyTypedResponseFactory, ProviderOption providerOption, IIndependentInsertsService independentInsertsService, ILogger logger)
-            : base(stronglyTypedResponseFactory, logger)
+        public ByRulesDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> providerResultFactory, ProviderOption providerOption, IIndependentInsertsService independentInsertsService, ILogger logger)
+            : base(providerResultFactory, logger)
         {
             _option = providerOption.ByRulesProviderOption;
             if (_option == null)
-                throw new ArgumentNullException(providerOption.Name);
+                throw new ArgumentNullException(providerOption.Name); //TODO: выбросы исключений пометсить в Shared ThrowIfNull(object obj)
 
             ProviderName = providerOption.Name;
             _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, independentInsertsService, logger)).ToList();
@@ -44,6 +45,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 ? "DefaultHandler"
                 : _option.RuleName4DefaultHandle;
             _logger = logger;
+
+            //var providerCore = ProviderResultFactory(null, StatusDict);//DEBUG
         }
         #endregion
 
@@ -166,8 +169,16 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
                         StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption.Id}";
                         StatusDict["Request.BodyLenght"] = $"{providerTransfer.Request.BodyLenght}";
-                        var providerCore= new ProviderResult<TIn>(providerTransfer, StatusDict, StronglyTypedResponseFactory); //TODO: создавать через фабрику Func<ProviderTransfer<Tin>, Dictionary<string, string>, ProviderResult>
-                        RaiseSendDataRx.OnNext(providerCore);
+                        try //DEBUG
+                        {
+                            var providerCore = ProviderResultFactory(providerTransfer, StatusDict);
+                            RaiseSendDataRx.OnNext(providerCore);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
+                  
                     }
                 }
             }
@@ -184,7 +195,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
             StatusDict["Command"] = $"{command}";
             StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
             StatusDict["viewRule.Id"] = $"{commandViewRule.GetCurrentOption.Id}";
-            var providerCore = new ProviderResult<TIn>(providerTransfer, StatusDict, StronglyTypedResponseFactory);
+            var providerCore = ProviderResultFactory(providerTransfer, StatusDict);
             RaiseSendDataRx.OnNext(providerCore);
         }
        #endregion

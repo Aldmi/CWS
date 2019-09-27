@@ -1,4 +1,6 @@
-﻿using Domain.InputDataModel.Base.Enums;
+﻿using System;
+using System.Collections.Generic;
+using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.Response;
 using Serilog;
@@ -6,18 +8,18 @@ using Serilog;
 namespace Domain.InputDataModel.Base.ProvidersAbstract
 {
     //TODO: после созданния нескольких провайдеров, вынести обший функционал в этот класс
-    public abstract class BaseDataProvider<TInput> where TInput : InputTypeBase
+    public abstract class BaseDataProvider<TIn> where TIn : InputTypeBase
     {
-        protected readonly IStronglyTypedResponseFactory StronglyTypedResponseFactory;  //TODO: вынести обработку из SetDataByte потомков в базовый класс
+        protected readonly Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> ProviderResultFactory;
         private readonly ILogger _logger;
 
 
 
         #region ctor
 
-        protected BaseDataProvider(IStronglyTypedResponseFactory stronglyTypedResponseFactory, ILogger logger)
+        protected BaseDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> providerResultFactory, ILogger logger)
         {
-            StronglyTypedResponseFactory = stronglyTypedResponseFactory;
+            ProviderResultFactory = providerResultFactory;
             _logger = logger;
         }
 
@@ -31,7 +33,7 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         /// <param name="inData">Обертка над входными данными</param>
         /// <param name="handlerName">Имя обработчика входных данных</param>
         /// <returns></returns>
-        public RuleSwitcher4InData SwitchInDataHandler(InDataWrapper<TInput> inData, string handlerName)
+        public RuleSwitcher4InData SwitchInDataHandler(InDataWrapper<TIn> inData, string handlerName)
         {
             var command = inData.Command;
             var directHandlerName = inData.DirectHandlerName ?? string.Empty;

@@ -107,7 +107,7 @@ namespace WebApiSwc
                 switch (inputDataName)
                 {
                     case "AdInputType":
-                        builder.RegisterModule(new DataProviderExchangeAutofacModule<AdInputType>());
+                        builder.RegisterModule(new DataProviderAutofacModule<AdInputType>());
                         builder.RegisterModule(new ProduserUnionAutofacModule<AdInputType>());
                         builder.RegisterModule(new BlStorageAutofacModule<AdInputType>());
                         builder.RegisterModule(new BlActionsAutofacModule<AdInputType>());

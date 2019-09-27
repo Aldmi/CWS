@@ -15,14 +15,13 @@ namespace WebApiSwc.AutofacModules
     /// <summary>
     /// Регистрируем КОНКРЕТНЫЕ провайдеры по типу.
     /// </summary>
-    public class DataProviderExchangeAutofacModule<TIn> : Module where TIn : InputTypeBase
+    public class DataProviderAutofacModule<TIn> : Module where TIn : InputTypeBase
     {
         protected override void Load(ContainerBuilder builder)
         {
             switch (typeof(TIn).Name)
             {
                 case "AdInputType":
-                    builder.RegisterType<ProviderResult<TIn>>().As<ITransportDataProvider>().InstancePerDependency();
                     builder.RegisterType<AdStronglyTypedResponseFactory>().As<IStronglyTypedResponseFactory>().SingleInstance();
                     builder.RegisterType<AdInputTypeIndependentInsertsService>().As<IIndependentInsertsService>().SingleInstance();
 
@@ -35,6 +34,8 @@ namespace WebApiSwc.AutofacModules
                     //builder.RegisterType<OtherDataProvider>().As<IExchangeDataProvider<TIn, TransportResponse>>().InstancePerDependency();
                     break;
             }
+
+            builder.RegisterType<ProviderResult<TIn>>().InstancePerDependency();
         }
     }
 }
