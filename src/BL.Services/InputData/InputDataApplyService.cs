@@ -85,13 +85,12 @@ namespace App.Services.InputData
             };
             var infoObjsJson = JsonConvert.SerializeObject(infoObj, settings);
             _logger.Information($"ПРИНЯТЫ ДАННЫЕ ДЛЯ: {infoObjsJson}");
-            if (inData.Command != Command4Device.None)
+            if (inData.Command == Command4Device.None)
             {
                 var debugObjsJson = JsonConvert.SerializeObject(inData, settings);
-                _logger.Information($"ПРИНЯТЫ ДАННЫЕ ПОДРОБНО: {debugObjsJson}"); //TODO: поменять на DEBUG
+                _logger.Debug($"ПРИНЯТЫ ДАННЫЕ ПОДРОБНО: {debugObjsJson}"); 
             }
         }
-
 
         #endregion
     }

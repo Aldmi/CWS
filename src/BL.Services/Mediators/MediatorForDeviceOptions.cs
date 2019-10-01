@@ -247,6 +247,26 @@ namespace App.Services.Mediators
         }
 
 
+
+        /// <summary>
+        /// Вернуть все Device и из зависимости.
+        /// </summary>
+        public async Task<OptionAgregator> GetOptionAgregatorAsync()
+        {
+            var deviceOptions = await GetDeviceOptionsAsync();
+            var exchangeOptions = await GetExchangeOptionsAsync();
+            var transportOption = await GetTransportOptionsAsync();
+            var optionAgregator = new OptionAgregator
+            {
+                DeviceOptions = deviceOptions.ToList(),
+                ExchangeOptions = exchangeOptions.ToList(),
+                TransportOptions = transportOption
+            };
+            return optionAgregator;
+        }
+
+
+
         /// <summary>
         /// Найти Device и все его зависимости в репоизиториях.
         /// Вернуть найденное под OptionAgregator.

@@ -92,7 +92,7 @@ namespace WebApiSwc.AutoMapperConfig
                 ConvertString2DataTime(src.RecDateTime),
                 ConvertString2DataTime(src.SndDateTime),
                 ConvertString2DataTime(src.LateTime),
-                ConvertString2DataTime(src.ExpectedTime) ?? DateTime.MinValue,  //TODO: выенсти в ctor
+                ConvertString2DataTime(src.ExpectedTime),
                 ConvertString2TimeSpan(src.HereDateTime),
                 new Addition
                 {

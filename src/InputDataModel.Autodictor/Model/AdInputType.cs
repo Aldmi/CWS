@@ -7,38 +7,36 @@ namespace Domain.InputDataModel.Autodictor.Model
     public class AdInputType : InputTypeBase
     {
         #region prop
+        public int ScheduleId { get; }                          //ID поезда в годовом расписании (из ЦИС)
+        public int TrnId { get; }                               //уникальный ID отправления поезда из ЦИС
 
-        public int ScheduleId { get; private set;}                          //ID поезда в годовом расписании (из ЦИС)
-        public int TrnId { get; private set; }                               //уникальный ID отправления поезда из ЦИС
+        public Lang Lang { get; }                               //Язык вывода
 
-        public Lang Lang { get; private set; }                               //Язык вывода
+        public string NumberOfTrain { get; }                    //Номер поезда
+        public string PathNumber { get; }                       //Номер пути
+        public string Platform { get; }                         //Номер Платформы
 
-        public string NumberOfTrain { get; private set; }                    //Номер поезда
-        public string PathNumber { get; private set; }                       //Номер пути
-        public string Platform { get; private set; }                         //Номер Платформы
+        public EventTrain Event { get; }                        //Событие (ОТПР./ПРИБ./СТОЯНКА)
+        public TypeTrain TrainType { get; }                     //тип поезда
+        public VagonDirection VagonDirection { get; }           //Нумерация вагона (с головы, с хвоста)
 
-        public EventTrain Event { get; private set; }                        //Событие (ОТПР./ПРИБ./СТОЯНКА)
-        public TypeTrain TrainType { get; private set; }                     //тип поезда
-        public VagonDirection VagonDirection { get; private set; }           //Нумерация вагона (с головы, с хвоста)
+        public Station StationDeparture { get; }
+        public Station StationArrival { get; }
+        public Station Stations { get; }                        //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
+        public Station StationsСut { get; }                     //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
+        public Station StationWhereFrom { get; }               //ближайшая станция после текущей
+        public Station StationWhereTo { get; }                 //ближайшая станция после текущей
+        public DirectionStation DirectionStation { get; }       //Направление.
 
-        public Station StationDeparture { get; private set; }
-        public Station StationArrival { get; private set; }
-        public Station Stations { get; private set; }                        //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
-        public Station StationsСut { get; private set; }                     //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
-        public Station StationWhereFrom { get; private set; }               //ближайшая станция после текущей
-        public Station StationWhereTo { get; private set; }                 //ближайшая станция после текущей
-        public DirectionStation DirectionStation { get; private set; }       //Направление.
+        public DateTime? ArrivalTime { get; }                   //Время прибытия
+        public DateTime? DepartureTime { get; }                 //Время отправления
+        public DateTime? DelayTime { get; }                     //Время задержки (прибытия или отправления поезда)
+        public DateTime ExpectedTime { get; }                   //Ожидаемое время (Время + Время задержки)
+        public TimeSpan? StopTime { get; }                      //время стоянки (для транзитов: Время отпр - время приб)
 
-        public DateTime? ArrivalTime { get; private set; }                   //Время прибытия
-        public DateTime? DepartureTime { get; private set; }                 //Время отправления
-        public DateTime? DelayTime { get; private set; }                     //Время задержки (прибытия или отправления поезда)
-        public DateTime ExpectedTime { get; private set; }                   //Ожидаемое время (Время + Время задержки)
-        public TimeSpan? StopTime { get; private set; }                      //время стоянки (для транзитов: Время отпр - время приб)
-
-        public Addition Addition { get; private set; }                       //Дополнение (свободная строка)
-        public Note Note { get; private set; }                               //Примечание.
-        public DaysFollowing DaysFollowing { get; private set; }             //Дни следования
-
+        public Addition Addition { get; }                       //Дополнение (свободная строка)
+        public Note Note { get; }                               //Примечание.
+        public DaysFollowing DaysFollowing { get; }             //Дни следования
         #endregion
 
 
@@ -48,7 +46,7 @@ namespace Domain.InputDataModel.Autodictor.Model
         public AdInputType(int id, int scheduleId, int trnId, Lang lang, string numberOfTrain, string pathNumber, string platform, EventTrain @event,
         TypeTrain trainType, VagonDirection vagonDirection, Station stationDeparture, Station stationArrival, Station stationWhereFrom,
         Station stationWhereTo, DirectionStation directionStation, DateTime? arrivalTime, DateTime? departureTime, DateTime? delayTime,
-        DateTime expectedTime, TimeSpan? stopTime, Addition addition, Note note, DaysFollowing daysFollowing) : base(id)
+        DateTime? expectedTime, TimeSpan? stopTime, Addition addition, Note note, DaysFollowing daysFollowing) : base(id)
         {
             ScheduleId = scheduleId;
             TrnId = trnId;
@@ -67,7 +65,7 @@ namespace Domain.InputDataModel.Autodictor.Model
             ArrivalTime = arrivalTime;
             DepartureTime = departureTime;
             DelayTime = delayTime;
-            ExpectedTime = expectedTime;
+            ExpectedTime = expectedTime ?? DateTime.MinValue;
             StopTime = stopTime;
             Addition = addition;
             Note = note;

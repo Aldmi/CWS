@@ -152,7 +152,6 @@ namespace WebApiSwc.Controllers
             //};
 
 
-            //TODO: заменить на РЕАЛЬНый тестовый запрос
             //var inData = new List<InputData<AdInputType>> //коллекция данных для уст-ва.
             //    {
             //        new InputData<AdInputType>

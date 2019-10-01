@@ -18,17 +18,11 @@ namespace WebApiSwc.AutofacModules
     public class ProduserUnionAutofacModule<TIn> : Module
     {
         protected override void Load(ContainerBuilder builder)
-        {          
-            switch (typeof(TIn).Name)
-            {
-                case "AdInputType":
-                    builder.RegisterType<ProdusersUnionFactory<AdInputType>>().InstancePerDependency();
-                    builder.RegisterType<ProdusersUnion<AdInputType>>().InstancePerDependency();
-                    break;
+        {
+            builder.RegisterType<ProdusersUnionResponseConverter<TIn>>().SingleInstance();
+            builder.RegisterType<ProdusersUnionFactory<TIn>>().InstancePerDependency();
+            builder.RegisterType<ProdusersUnion<TIn>>().InstancePerDependency();
 
-                case "OtherType":
-                    break;
-            }
             builder.RegisterType<KafkaProduserWrapper>().As<IProduser<KafkaProduserOption>>().InstancePerDependency();
             builder.RegisterType<WebClientProduserWrapper>().As<IProduser<WebClientProduserOption>>().InstancePerDependency();
             builder.RegisterType<SignaRProduserClientsStorage<SignaRProdusserClientsInfo>>().SingleInstance();

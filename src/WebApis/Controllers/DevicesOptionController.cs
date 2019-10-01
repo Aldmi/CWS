@@ -13,9 +13,7 @@ using Domain.InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using WebApiSwc.DTO.JSON.OptionsDto;
-using WebApiSwc.DTO.JSON.OptionsDto.DeviceOption;
-using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
-using WebApiSwc.DTO.JSON.OptionsDto.TransportOption;
+
 
 namespace WebApiSwc.Controllers
 {
@@ -28,20 +26,15 @@ namespace WebApiSwc.Controllers
     public class DevicesOptionController : Controller
     {
         #region fields
-
         private readonly MediatorForDeviceOptions _mediatorForDeviceOptionsRep;
         private readonly BuildDeviceService<AdInputType> _buildDeviceService;
-
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
-
         #endregion
 
 
 
-
         #region ctor
-
         public DevicesOptionController(MediatorForDeviceOptions mediatorForDeviceOptionsRep,
                                        BuildDeviceService<AdInputType> buildDeviceService,
                                        IMapper mapper,
@@ -52,36 +45,20 @@ namespace WebApiSwc.Controllers
             _mapper = mapper;
             _logger = logger;
         }
-
         #endregion
 
 
 
-
         #region ApiMethode
-
         // GET api/devicesoption
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             try
             {
-                //TODO: Добавить GetOptionAgregator в _mediatorForOptionsRep. Сделать по аналогии GetOptionAgregatorForDeviceAsync()
-                var deviceOptions = await _mediatorForDeviceOptionsRep.GetDeviceOptionsAsync();
-                var exchangeOptions = await _mediatorForDeviceOptionsRep.GetExchangeOptionsAsync();
-                var transportOption = await _mediatorForDeviceOptionsRep.GetTransportOptionsAsync();
-
-                var deviceOptionsDto = _mapper.Map<List<DeviceOptionDto>>(deviceOptions);
-                var exchangeOptionsDto = _mapper.Map<List<ExchangeOptionDto>>(exchangeOptions);
-                var transportOptionDto = _mapper.Map<TransportOptionsDto>(transportOption);
-
-                var agregatorOptionDto = new OptionAgregatorDto
-                {
-                    DeviceOptions = deviceOptionsDto,
-                    ExchangeOptions = exchangeOptionsDto,
-                    TransportOptions = transportOptionDto
-                };
-                return new JsonResult(agregatorOptionDto);
+                var agregatorOption= await _mediatorForDeviceOptionsRep.GetOptionAgregatorAsync();
+               var agregatorOptionDto = _mapper.Map<OptionAgregatorDto>(agregatorOption);
+               return new JsonResult(agregatorOptionDto);
             }
             catch (Exception ex)
             {
@@ -89,7 +66,6 @@ namespace WebApiSwc.Controllers
                 throw;
             }
         }
-
 
 
         // GET api/devicesoption/deviceName
@@ -112,7 +88,6 @@ namespace WebApiSwc.Controllers
                 throw;
             }
         }
-
 
 
         // POST api/devicesoption
@@ -151,7 +126,6 @@ namespace WebApiSwc.Controllers
                 return BadRequest(ex);
             }
         }
-
 
 
         // DELETE api/devicesoption/5
@@ -219,7 +193,6 @@ namespace WebApiSwc.Controllers
                 throw;
             }
         }
-
         #endregion
     }
 }
