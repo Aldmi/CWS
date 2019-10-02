@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using Domain.Device.MiddleWares;
@@ -38,6 +39,7 @@ namespace Domain.Device
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
         private readonly List<IDisposable> _disposeExchangesCycleDataEntryStateEventHandlers = new List<IDisposable>();
         private IDisposable _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler;
+        private readonly AllExchangesResponseAnalitic _allExchangesResponseAnalitic;
 
         #endregion
 
@@ -70,6 +72,8 @@ namespace Domain.Device
             _logger = logger;
 
             CreateMiddleWareInDataByOption();
+            _allExchangesResponseAnalitic= new AllExchangesResponseAnalitic(Exchanges.Select(exch=> exch.KeyExchange));
+            _allExchangesResponseAnalitic.AllExchangeDoneRx.Subscribe(AllExhangeDoneEventHandler);
         }
 
         #endregion
@@ -179,6 +183,21 @@ namespace Domain.Device
         }
 
 
+        private async void MiddlewareInvokeIsCompleteRxEventHandler(Result<InputData<TIn>, ErrorResultMiddleWareInData> result)
+        {
+            if (result.IsSuccess)
+            {
+                var inData = result.Value;
+                await ResiveInExchange(inData);
+                _logger.Information($"Данные УСПЕШНО подготовленны MiddlewareInData для устройства: {Option.Name}");
+            }
+            else
+            {
+                _logger.Error($"ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ MiddlewareInData ДЛЯ: {Option.Name} Errors= {result.Error.GetErrorsArgegator}"); //ВСЕ ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ.
+            }
+        }
+
+
         private async Task ResiveInExchange(InputData<TIn> inData)
         {
             if (string.IsNullOrEmpty(inData.ExchangeName))
@@ -188,21 +207,6 @@ namespace Domain.Device
             else
             {
                 await Send2ConcreteExchanges(inData.ExchangeName, inData.DataAction, inData.Data, inData.Command, inData.DirectHandlerName);
-            }
-        }
-
-
-        private async void MiddlewareInvokeIsCompleteRxEventHandler(Result<InputData<TIn>, ErrorResultMiddleWareInData> result)
-        {
-            if (result.IsSuccess)
-            {
-                var inData = result.Value; 
-                await ResiveInExchange(inData);
-                _logger.Information($"Данные УСПЕШНО подготовленны MiddlewareInData для устройства: {Option.Name}");
-            }
-            else
-            {
-                _logger.Error($"ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ MiddlewareInData ДЛЯ: {Option.Name} Errors= {result.Error.GetErrorsArgegator}"); //ВСЕ ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ.
             }
         }
 
@@ -335,7 +339,6 @@ namespace Domain.Device
 
 
         #region RxEventHandler 
-
         private async void ConnectChangeRxEventHandler(ConnectChangeRxModel model)
         {
             //await Send2Produder(Option.TopicName4MessageBroker, $"Connect = {model.IsConnect} для обмена {model.KeyExchange}");
@@ -350,8 +353,14 @@ namespace Domain.Device
             _logger.Debug($"OpenChangeTransportRxEventHandler.  IsOpen = {model.IsOpen} для ТРАНСПОРТА {model.TransportName}");
         }
 
+
+        /// <summary>
+        /// Обработчик события получения Результата обмена.
+        /// </summary>
+        /// <param name="responsePieceOfDataWrapper"></param>
         private async void ResponseChangeRxEventHandler(ResponsePieceOfDataWrapper<TIn> responsePieceOfDataWrapper)
         {
+            _allExchangesResponseAnalitic.SetResponseResult(responsePieceOfDataWrapper.KeyExchange, responsePieceOfDataWrapper.IsValidAll);
             await Send2ProduderUnion(responsePieceOfDataWrapper);
             //логирование ответов в полном виде
             var settings = new JsonSerializerSettings
@@ -362,6 +371,21 @@ namespace Domain.Device
             var jsonResp = JsonConvert.SerializeObject(responsePieceOfDataWrapper, settings);
             _logger.Debug($"TransportResponseChangeRxEventHandler.  jsonResp = {jsonResp} ");
         }
+
+
+        /// <summary>
+        /// Событие все обмены завершены
+        /// </summary>
+        /// <param name="allExchResult">true- если все обмены завершены успешно</param>
+        private void AllExhangeDoneEventHandler((bool, bool) allExchResultTuple)
+        {
+            var (allSucsess, anySucsess) = allExchResultTuple;
+            if (anySucsess)
+            {
+                //TODO: Сбросить кеширование в middleware
+            }
+        }
+            
 
         /// <summary>
         /// Обработчик события смены режима поступления входных данных
@@ -381,14 +405,91 @@ namespace Domain.Device
                     break;
             }
         }
-
         #endregion
 
 
 
+        #region NestedClass
+        public class AllExchangesResponseAnalitic
+        {
+            #region fields
+            private readonly Dictionary<string, bool?> _dictionary = new Dictionary<string, bool?>();
+            #endregion
+
+
+            #region ExchangeRx
+            /// <summary>
+            /// Событие. Все Обмены завершены.
+            /// </summary>
+            public ISubject<(bool, bool)> AllExchangeDoneRx{ get; } = new Subject<(bool, bool)>();
+            #endregion
+
+
+            #region ctor
+            public AllExchangesResponseAnalitic(IEnumerable<string> keys)
+            {
+                foreach (var key in keys)
+                {
+                    _dictionary[key] = null;
+                }
+            }
+            #endregion
+
+
+            #region Methode
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="key"></param>
+            /// <param name="respResult"></param>
+            public void SetResponseResult(string key, bool respResult)
+            {
+                if (_dictionary.ContainsKey(key))
+                {
+                    _dictionary[key] = respResult;
+                    DoAnalitic();
+                }
+            }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            private void ResetAllResult()
+            {
+                foreach (var key in _dictionary.Keys.ToArray())
+                {
+                    _dictionary[key] = null;
+                }
+            }
+
+            /// <summary>
+            /// Аналитика результатов обмена.
+            /// Васе обмены должны закончится (получить результат)
+            /// И хотя бы 1 обмен должен завершится успешно.
+            /// Тогда срабатывает событие AnalyticsDoneRx.
+            /// </summary>
+            private void DoAnalitic()
+            {
+               var allResult= _dictionary.Select(pair => pair.Value).ToList();
+               var allResultSet = allResult.All(flag => flag.HasValue);            //Все обмены получили результат.
+               if (allResultSet)
+               {
+                   var anyResultSucsses = allResult.Any(flag => flag ?? false);    //Хотя бы один обмен завершился успешно.
+                   var allResultSucsses = allResult.All(flag => flag ?? false);    //Все обмены завершились успешно.
+                   var tuple = (allResultSucsses, anyResultSucsses);
+                   ResetAllResult();
+                   AllExchangeDoneRx.OnNext(tuple);
+               }
+            }
+
+
+            #endregion
+        }
+        #endregion
+
+
 
         #region Disposable
-
         public void Dispose()
         {
             UnsubscrubeOnExchangesEvents();
@@ -396,7 +497,6 @@ namespace Domain.Device
             _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler.Dispose();
             MiddlewareInvokeService.Dispose();
         }
-
         #endregion
     }
 }
