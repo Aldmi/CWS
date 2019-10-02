@@ -376,7 +376,7 @@ namespace Domain.Device
         /// <summary>
         /// Событие все обмены завершены
         /// </summary>
-        /// <param name="allExchResult">true- если все обмены завершены успешно</param>
+        /// <param name="allExchResultTuple">true- если все обмены завершены успешно</param>
         private void AllExhangeDoneEventHandler((bool, bool) allExchResultTuple)
         {
             var (allSucsess, anySucsess) = allExchResultTuple;
