@@ -117,10 +117,6 @@ namespace Domain.Device
         /// <param name="produserUnionKey">Имя топика, если == null, то берется из настроек</param>
         public bool SubscrubeOnExchangesEvents(string produserUnionKey = null)
         {
-            //Топик не указан
-            if (string.IsNullOrEmpty(ProduserUnionKey))
-                return false;
-
             Exchanges.ForEach(exch =>
             {
                 _disposeExchangesEventHandlers.Add(exch.IsConnectChangeRx.Subscribe(ConnectChangeRxEventHandler));
@@ -156,7 +152,8 @@ namespace Domain.Device
 
         /// <summary>
         /// Принять данные для УСТРОЙСТВА.
-        /// Данные будут переданны напрямую на обмены или в конвеер MiddleWare 
+        /// Данные будут переданны напрямую на обмены или в конвеер MiddleWare
+        /// Команды передаются напрямую.
         /// </summary>
         /// <param name="inData">входные данные в обертке</param>
         public async Task Resive(InputData<TIn> inData)
@@ -179,21 +176,6 @@ namespace Domain.Device
             else
             {
                await ResiveInExchange(inData);
-            }
-        }
-
-
-        private async void MiddlewareInvokeIsCompleteRxEventHandler(Result<InputData<TIn>, ErrorResultMiddleWareInData> result)
-        {
-            if (result.IsSuccess)
-            {
-                var inData = result.Value;
-                await ResiveInExchange(inData);
-                _logger.Information($"Данные УСПЕШНО подготовленны MiddlewareInData для устройства: {Option.Name}");
-            }
-            else
-            {
-                _logger.Error($"ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ MiddlewareInData ДЛЯ: {Option.Name} Errors= {result.Error.GetErrorsArgegator}"); //ВСЕ ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ.
             }
         }
 
@@ -360,8 +342,13 @@ namespace Domain.Device
         /// <param name="responsePieceOfDataWrapper"></param>
         private async void ResponseChangeRxEventHandler(ResponsePieceOfDataWrapper<TIn> responsePieceOfDataWrapper)
         {
+            //Топик не указан. Нет отправки ответа через ProduserUnion.
+            if (!string.IsNullOrEmpty(ProduserUnionKey))
+                await Send2ProduderUnion(responsePieceOfDataWrapper);
+
+            //Анализ ответов от всех обменов.
             _allExchangesResponseAnalitic.SetResponseResult(responsePieceOfDataWrapper.KeyExchange, responsePieceOfDataWrapper.IsValidAll);
-            await Send2ProduderUnion(responsePieceOfDataWrapper);
+          
             //логирование ответов в полном виде
             var settings = new JsonSerializerSettings
             {
@@ -382,7 +369,8 @@ namespace Domain.Device
             var (allSucsess, anySucsess) = allExchResultTuple;
             if (anySucsess)
             {
-                //TODO: Сбросить кеширование в middleware
+                //Если хотя бы 1 обмен завершен успешно, выставить флаг обратной связи для MiddlewareInvokeService
+                MiddlewareInvokeService?.SetFeedBack();
             }
         }
             
@@ -403,6 +391,25 @@ namespace Domain.Device
                 case InputDataStatus.ToLongNoEntry:
                     exch.Switch2CycleCommandEmergency();
                     break;
+            }
+        }
+
+
+        /// <summary>
+        /// Обработчик события получения данных после подготовки в Middleware.
+        /// </summary>
+        /// <param name="result">результат подготовки данных через конвееры Middleware</param>
+        private async void MiddlewareInvokeIsCompleteRxEventHandler(Result<InputData<TIn>, ErrorResultMiddleWareInData> result)
+        {
+            if (result.IsSuccess)
+            {
+                var inData = result.Value;
+                await ResiveInExchange(inData);
+                _logger.Information($"Данные УСПЕШНО подготовленны MiddlewareInData для устройства: {Option.Name}");
+            }
+            else
+            {
+                _logger.Error($"ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ MiddlewareInData ДЛЯ: {Option.Name} Errors= {result.Error.GetErrorsArgegator}"); //ВСЕ ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ.
             }
         }
         #endregion

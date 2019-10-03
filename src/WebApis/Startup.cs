@@ -254,9 +254,7 @@ namespace WebApiSwc
                 foreach (var device in deviceServices.Values)
                 {
                     // СОБЫТИЯ ПУБЛИКУЕМЫЕ НА ProduserUnion.
-                    if (!string.IsNullOrEmpty(device.ProduserUnionKey))
-                        device.SubscrubeOnExchangesEvents();
-
+                    device.SubscrubeOnExchangesEvents();
                     //СОБЫТИЯ СМЕНЫ СОСТОЯНИЯ ПОСТУПЛЕНИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ. ОБМЕНА.
                     device.SubscrubeOnExchangesCycleDataEntryStateEvents();
                 }
