@@ -48,7 +48,6 @@ namespace Infrastructure.Dal.EfCore
 
         #region CRUD
 
-        //TODO: сделать public virtual все методы
         public virtual TMap GetById(int id)
         {
             var efSpOption = DbSet.Find(id);

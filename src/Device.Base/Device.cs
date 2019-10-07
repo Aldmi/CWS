@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Subjects;
@@ -73,7 +74,7 @@ namespace Domain.Device
 
             CreateMiddleWareInDataByOption();
             _allExchangesResponseAnalitic= new AllExchangesResponseAnalitic(Exchanges.Select(exch=> exch.KeyExchange));
-            _allExchangesResponseAnalitic.AllExchangeDoneRx.Subscribe(AllExhangeDoneEventHandler);
+            _allExchangesResponseAnalitic.AllExchangeAnaliticDoneRx.Subscribe(AllExhangeAnaliticDoneEventHandler);
         }
 
         #endregion
@@ -344,7 +345,7 @@ namespace Domain.Device
         {
             //Топик не указан. Нет отправки ответа через ProduserUnion.
             if (!string.IsNullOrEmpty(ProduserUnionKey))
-                await Send2ProduderUnion(responsePieceOfDataWrapper);
+                await Send2ProduderUnion(responsePieceOfDataWrapper);  //TODO: Нет смысла дожидаться ответа на отправку в продюссеры
 
             //Анализ ответов от всех обменов.
             _allExchangesResponseAnalitic.SetResponseResult(responsePieceOfDataWrapper.KeyExchange, responsePieceOfDataWrapper.IsValidAll);
@@ -364,7 +365,7 @@ namespace Domain.Device
         /// Событие все обмены завершены
         /// </summary>
         /// <param name="allExchResultTuple">true- если все обмены завершены успешно</param>
-        private void AllExhangeDoneEventHandler((bool, bool) allExchResultTuple)
+        private void AllExhangeAnaliticDoneEventHandler((bool, bool) allExchResultTuple)
         {
             var (allSucsess, anySucsess) = allExchResultTuple;
             if (anySucsess)
@@ -417,10 +418,13 @@ namespace Domain.Device
 
 
         #region NestedClass
-        public class AllExchangesResponseAnalitic
+        /// <summary>
+        /// Анализ ответов от всех обменов.
+        /// </summary>
+        private class AllExchangesResponseAnalitic
         {
             #region fields
-            private readonly Dictionary<string, bool?> _dictionary = new Dictionary<string, bool?>();
+            private readonly ConcurrentDictionary<string, bool?> _dictionary = new ConcurrentDictionary<string, bool?>();
             #endregion
 
 
@@ -428,7 +432,7 @@ namespace Domain.Device
             /// <summary>
             /// Событие. Все Обмены завершены.
             /// </summary>
-            public ISubject<(bool, bool)> AllExchangeDoneRx{ get; } = new Subject<(bool, bool)>();
+            public ISubject<(bool, bool)> AllExchangeAnaliticDoneRx{ get; } = new Subject<(bool, bool)>();  //(allResultSucsses, anyResultSucsses)
             #endregion
 
 
@@ -445,27 +449,17 @@ namespace Domain.Device
 
             #region Methode
             /// <summary>
-            /// 
+            /// Записать результат обмена (ответ).
+            /// И выполнить аналитику всех ответов.
             /// </summary>
-            /// <param name="key"></param>
-            /// <param name="respResult"></param>
+            /// <param name="key">ключ</param>
+            /// <param name="respResult">ответ</param>
             public void SetResponseResult(string key, bool respResult)
             {
                 if (_dictionary.ContainsKey(key))
                 {
                     _dictionary[key] = respResult;
                     DoAnalitic();
-                }
-            }
-
-            /// <summary>
-            /// 
-            /// </summary>
-            private void ResetAllResult()
-            {
-                foreach (var key in _dictionary.Keys.ToArray())
-                {
-                    _dictionary[key] = null;
                 }
             }
 
@@ -485,10 +479,20 @@ namespace Domain.Device
                    var allResultSucsses = allResult.All(flag => flag ?? false);    //Все обмены завершились успешно.
                    var tuple = (allResultSucsses, anyResultSucsses);
                    ResetAllResult();
-                   AllExchangeDoneRx.OnNext(tuple);
+                   AllExchangeAnaliticDoneRx.OnNext(tuple);
                }
             }
 
+            /// <summary>
+            /// Сбросить все значения в null.
+            /// </summary>
+            private void ResetAllResult()
+            {
+                foreach (var key in _dictionary.Keys.ToArray())
+                {
+                    _dictionary[key] = null;
+                }
+            }
 
             #endregion
         }

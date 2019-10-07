@@ -9,13 +9,19 @@ using KellermanSoftware.CompareNetObjects;
 using Serilog;
 using InvokerOutput = Domain.Device.Repository.Entities.MiddleWareOption.InvokerOutput;
 
-
 namespace Domain.Device.MiddleWares.Invokes
 {
+    /// <summary>
+    /// Определяет способ запуска обработчика ISupportMiddlewareInvoke.
+    /// "Instantly" - с приходом данных сразу запускается обработка.
+    /// "ByTimer" - Обработчик запускается по внутреннему таймеру.
+    /// Если приходят новые данные, то таймер перезапускается и обработчик вызывается сразу.
+    /// "FeedBackWaiting" - В этот режим система переходит САМА, если метод SetFeedBack (выставляет флаг обратной связи)
+    /// был вызван ПОЗЖЕ чем прошла обработка вызванная ByTimer (в режиме Instantly обратная связь не работает).
+    /// </summary>
     public class MiddlewareInvokeService<TIn> : IDisposable
     {
         #region fields
-
         private readonly InvokerOutput _option;
         private readonly ISupportMiddlewareInvoke<TIn> _invoker;
         private readonly ILogger _logger;
@@ -25,7 +31,6 @@ namespace Domain.Device.MiddleWares.Invokes
         /// Обратная связь
         /// </summary>
         private bool _feedBackEnable;
-
         #endregion
 
 
@@ -115,8 +120,9 @@ namespace Domain.Device.MiddleWares.Invokes
 
 
         /// <summary>
-        /// Установить обратную связь.
-        /// Это разрешает вызов обработки.
+        /// Установить флаг обратной связи.
+        /// Если система находится в состоянии FeedBackWaiting,
+        /// то сбрасывается таймер и HandleInvoke вызывается сразу.
         /// </summary>
         public void SetFeedBack()
         {
@@ -132,6 +138,8 @@ namespace Domain.Device.MiddleWares.Invokes
 
         /// <summary>
         /// Обработчик с ожиданием обратной связи.
+        /// Если флаг обратной связи установлен, то вызывается обработчик HandleInvoke.
+        /// Если флаг обратной связи НЕ установлен, то перводится система в состоянии FeedBackWaiting. 
         /// </summary>
         private void HandleInvokeByFeedBack(InputData<TIn> inData)
         {
