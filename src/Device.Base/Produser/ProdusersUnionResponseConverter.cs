@@ -6,6 +6,12 @@ namespace Domain.Device.Produser
 {
     public class ProdusersUnionResponseConverter<TIn>
     {
+        /// <summary>
+        /// Конвертер для ответов.
+        /// </summary>
+        /// <param name="converterName"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
         public  string Convert(string converterName, ResponsePieceOfDataWrapper<TIn> response)
         {
             object convertedResp = null;
@@ -71,5 +77,43 @@ namespace Domain.Device.Produser
             var rawJson = HelpersJson.Serialize2RawJson(convertedResp);
             return rawJson;
         }
+
+
+        /// <summary>
+        /// конвертер для строковых сообщений
+        /// </summary>
+        /// <param name="converterName"></param>
+        /// <param name="objectName"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public string Convert(string converterName, string objectName, string message)
+        {
+            object convertedMessage = null;
+            switch (converterName)
+            {
+                case "Full":
+                case "Medium":
+                case "Lite":
+                    convertedMessage = new
+                    {
+                        DeviceName = objectName,
+                        Message = message
+                    };
+                    break;
+
+                case "Indigo":  //{"result": 1, "message": "", "DeviceName": "fff"}
+                    convertedMessage = new
+                    {
+                        result = 0,
+                        DeviceName = objectName,
+                        Message = message
+                    };
+                    break;
+            }
+
+            var rawJson = HelpersJson.Serialize2RawJson(convertedMessage);
+            return rawJson;
+        }
+
     }
 }

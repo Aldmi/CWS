@@ -351,7 +351,7 @@ namespace WebApiSwc.Controllers
                 return NotFound(deviceName);
             }
 
-            var middleWareInDataOption = device.GetMiddleWareInDataOption();
+            var middleWareInDataOption = device.MiddleWareInDataOption;
             var middleWareInDataOptionDto = _mapper.Map<MiddleWareInDataOptionDto>(middleWareInDataOption);
 
             await Task.CompletedTask;
@@ -372,7 +372,7 @@ namespace WebApiSwc.Controllers
             var middleWareInDataOption = _mapper.Map<MiddleWareInDataOption>(middleWareInDataOptionDto);
             try
             {
-                device.SetMiddleWareInDataOptionAndCreateNewMiddleWareInData(middleWareInDataOption);
+                device.MiddleWareInDataOption= middleWareInDataOption;
             }
             catch (Exception ex)
             {

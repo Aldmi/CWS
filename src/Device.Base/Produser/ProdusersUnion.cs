@@ -78,21 +78,21 @@ namespace Domain.Device.Produser
 
 
         /// <summary>
-        /// Отправить всем продюссерам
+        /// Отправить всем продюссерам ответ на обмен порцией данных.
         /// </summary>
-        public async Task<IList<Result<string, ErrorWrapper>>> SendAll(ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
+        public async Task<IList<Result<string, ErrorWrapper>>> SendResponseAll(ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
         {
-            var message = _responseConverter.Convert(_unionOption.ConverterName, response);
-            var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(message, invokerName)).ToList();
+            var messageConverted = _responseConverter.Convert(_unionOption.ConverterName, response);
+            var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(messageConverted, invokerName)).ToList();
             var results = await Task.WhenAll(tasks);
             return results;
         }
 
 
         /// <summary>
-        /// Отправить продюсеру по ключу
+        /// Отправить продюсеру по ключу ответ на обмен порцией данных.
         /// </summary>
-        public async Task<Result<string, ErrorWrapper>> Send(string key, ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
+        public async Task<Result<string, ErrorWrapper>> SendResponse(string key, ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
         {
             if (!_produsersDict.ContainsKey(key))
                 throw new KeyNotFoundException(key);
@@ -101,6 +101,19 @@ namespace Domain.Device.Produser
             var result = await _produsersDict[key].Produser.Send(message, invokerName);
             return result;
         }
+
+
+        /// <summary>
+        /// Отправить всем продюссерам сообщение об ошибки.
+        /// </summary>
+        public async Task<IList<Result<string, ErrorWrapper>>> SendMessageAll(string objectName, string message, string invokerName = null)
+        {
+            var messageConverted = _responseConverter.Convert(_unionOption.ConverterName, objectName, message);
+            var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(messageConverted, invokerName)).ToList();
+            var results = await Task.WhenAll(tasks);
+            return results;
+        }
+
         #endregion
 
 

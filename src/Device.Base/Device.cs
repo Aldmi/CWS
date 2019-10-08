@@ -12,7 +12,6 @@ using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.Exchange;
 using Domain.Exchange.Enums;
 using Domain.Exchange.RxModel;
-using Domain.Exchange.Services;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.Response;
@@ -28,12 +27,11 @@ namespace Domain.Device
     /// <summary>
     /// Устройство.
     /// Содержит список обменов.
-    /// Ответы о своей работе каждое ус-во выставляет самостоятельно на шину данных
+    /// Ответы о своей работе каждое ус-во выставляет самостоятельно на шину данных.
     /// </summary>
     public class Device<TIn> : IDisposable where TIn : InputTypeBase
     {
         #region field
-
         private readonly IEventBus _eventBus; //TODO: Not Use
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
         private readonly ILogger _logger;
@@ -41,25 +39,32 @@ namespace Domain.Device
         private readonly List<IDisposable> _disposeExchangesCycleDataEntryStateEventHandlers = new List<IDisposable>();
         private IDisposable _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler;
         private readonly AllExchangesResponseAnalitic _allExchangesResponseAnalitic;
-
         #endregion
 
 
 
         #region prop
-
         public DeviceOption Option { get;  }
         public List<IExchange<TIn>> Exchanges { get; }
         public MiddlewareInvokeService<TIn> MiddlewareInvokeService { get; private set; }
         public string ProduserUnionKey => Option.ProduserUnionKey;
-
+        /// <summary>
+        /// Настройки MiddleWareInData сервиса.
+        /// </summary>
+        public MiddleWareInDataOption MiddleWareInDataOption
+        {
+            get=> Option.MiddleWareInData;
+            set
+            {
+                Option.MiddleWareInData = value;
+                CreateMiddleWareInDataByOption(Option.MiddleWareInData);
+            }
+        }
         #endregion
 
 
 
-
         #region ctor
-
         public Device(DeviceOption option,
                       IEnumerable<IExchange<TIn>> exchanges,
                       IEventBus eventBus,
@@ -72,48 +77,35 @@ namespace Domain.Device
             _produserUnionStorage = produserUnionStorage;
             _logger = logger;
 
-            CreateMiddleWareInDataByOption();
+            CreateMiddleWareInDataByOption(Option.MiddleWareInData);
             _allExchangesResponseAnalitic= new AllExchangesResponseAnalitic(Exchanges.Select(exch=> exch.KeyExchange));
             _allExchangesResponseAnalitic.AllExchangeAnaliticDoneRx.Subscribe(AllExhangeAnaliticDoneEventHandler);
         }
-
         #endregion
 
 
 
-
         #region Methode
-
-        public MiddleWareInDataOption GetMiddleWareInDataOption()
-        {
-            return Option.MiddleWareInData;
-        }
-
-
-        public void SetMiddleWareInDataOptionAndCreateNewMiddleWareInData(MiddleWareInDataOption option)
-        {
-            Option.MiddleWareInData = option;
-            CreateMiddleWareInDataByOption();
-        }
-
-
-        private void CreateMiddleWareInDataByOption()
+        /// <summary>
+        /// Создать MiddlewareInvokeService из опций.
+        /// </summary>
+        /// <param name="option">Опции. Если option == null, то ранее созданный MiddlewareInvokeService уничтожается</param>
+        private void CreateMiddleWareInDataByOption(MiddleWareInDataOption option)
         {
             _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler?.Dispose();
             MiddlewareInvokeService?.Dispose();
             MiddlewareInvokeService = null;
-            if (Option.MiddleWareInData != null)
+            if (option != null)
             {
-                var middleWareInData = new MiddleWareInData<TIn>(Option.MiddleWareInData, _logger);
-                MiddlewareInvokeService = new MiddlewareInvokeService<TIn>(Option.MiddleWareInData.InvokerOutput, middleWareInData, _logger);
+                var middleWareInData = new MiddleWareInData<TIn>(option, _logger);
+                MiddlewareInvokeService = new MiddlewareInvokeService<TIn>(option.InvokerOutput, middleWareInData, _logger);
                 _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler= MiddlewareInvokeService?.InvokeIsCompleteRx.Subscribe(MiddlewareInvokeIsCompleteRxEventHandler);
             }
         }
 
 
-
         /// <summary>
-        /// Подписка на публикацию событий устройства на ВНЕШНЮЮ ШИНУ ДАННЫХ
+        /// Подписка на события от обменов.
         /// </summary>
         /// <param name="produserUnionKey">Имя топика, если == null, то берется из настроек</param>
         public bool SubscrubeOnExchangesEvents(string produserUnionKey = null)
@@ -128,16 +120,23 @@ namespace Domain.Device
             return true;
         }
 
- 
+
+        /// <summary>
+        /// Отписка на событий обменов.
+        /// </summary>
         public void UnsubscrubeOnExchangesEvents()
         {
             _disposeExchangesEventHandlers.ForEach(d=>d.Dispose());
         }
 
 
+        /// <summary>
+        /// Подписка на события смены состояния обменов.
+        /// </summary>
+        /// <returns></returns>
         public bool SubscrubeOnExchangesCycleDataEntryStateEvents()
         {
-            Exchanges.ForEach(exch =>
+            Exchanges.ForEach(exch=>
             {
                 _disposeExchangesCycleDataEntryStateEventHandlers.Add(exch.CycleDataEntryStateChangeRx.Subscribe(CycleDataEntryStateChangeRxEventHandler));
             });
@@ -145,6 +144,7 @@ namespace Domain.Device
         }
 
 
+        //TODO: 
         public void UnsubscrubeOnExchangesCycleDataEntryStateEvents()
         {
             _disposeExchangesCycleDataEntryStateEventHandlers.ForEach(d => d.Dispose());
@@ -153,7 +153,7 @@ namespace Domain.Device
 
         /// <summary>
         /// Принять данные для УСТРОЙСТВА.
-        /// Данные будут переданны напрямую на обмены или в конвеер MiddleWare
+        /// Данные будут переданны напрямую на обмены или в конвеер MiddleWare (если обработчик MiddleWare создан)
         /// Команды передаются напрямую.
         /// </summary>
         /// <param name="inData">входные данные в обертке</param>
@@ -181,6 +181,9 @@ namespace Domain.Device
         }
 
 
+        /// <summary>
+        /// Передать данные на все обмены или на конкретный обмен.
+        /// </summary>
         private async Task ResiveInExchange(InputData<TIn> inData)
         {
             if (string.IsNullOrEmpty(inData.ExchangeName))
@@ -194,14 +197,10 @@ namespace Domain.Device
         }
 
 
-
         /// <summary>
         /// Отправить данные или команду на все обмены.
         /// </summary>
-        /// <param name="dataAction"></param>
-        /// <param name="inData"></param>
-        /// <param name="command4Device"></param>
-        public async Task Send2AllExchanges(DataAction dataAction, List<TIn> inData, Command4Device command4Device = Command4Device.None)
+        private async Task Send2AllExchanges(DataAction dataAction, List<TIn> inData, Command4Device command4Device = Command4Device.None)
         {
             var tasks= new List<Task>();
             foreach (var exchange in Exchanges)
@@ -213,13 +212,9 @@ namespace Domain.Device
 
 
         /// <summary>
-        /// Отправить данные или команду на выбранный обмен.
+        /// Отправить данные или команду на конкретный обмен.
         /// </summary>
-        /// <param name="keyExchange"></param>
-        /// <param name="dataAction"></param>
-        /// <param name="inData"></param>
-        /// <param name="command4Device"></param>
-        public async Task Send2ConcreteExchanges(string keyExchange, DataAction dataAction, List<TIn> inData, Command4Device command4Device = Command4Device.None, string directHandlerName = null)
+        private async Task Send2ConcreteExchanges(string keyExchange, DataAction dataAction, List<TIn> inData, Command4Device command4Device = Command4Device.None, string directHandlerName = null)
         {
             var exchange = Exchanges.FirstOrDefault(exch=> exch.KeyExchange == keyExchange);
             if (exchange == null)
@@ -240,16 +235,17 @@ namespace Domain.Device
         /// <param name="command4Device"></param>
         private async Task SendDataOrCommand(IExchange<TIn> exchange, DataAction dataAction, List<TIn> inData, Command4Device command4Device = Command4Device.None, string directHandlerName = null)
         {
+            string warningStr;
             if (!exchange.IsStartedTransportBg)
             {
-                _logger.Warning($"Отправка данных НЕ удачна, Бекграунд обмена {exchange.KeyExchange} НЕ ЗАПЦУЩЕН");
-                //await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, Бекграунд обмена {exchange.KeyExchange} НЕ ЗАПЦУЩЕН");
+                warningStr = $"Отправка данных НЕ удачна, Бекграунд обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН";
+                await SendWarningResult(warningStr);
                 return;
             }
             if (!exchange.IsOpen)
             {
-                _logger.Warning($"Отправка данных НЕ удачна, соединение транспорта для обмена {exchange.KeyExchange} НЕ ОТКРЫТО");
-                //await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, соединение транспорта для обмена {exchange.KeyExchange} НЕ ОТКРЫТО");
+                warningStr = $"Отправка данных НЕ удачна, соединение транспорта для обмена {exchange.KeyExchange} НЕ ОТКРЫТО";
+                await SendWarningResult(warningStr);
                 return;
             }
             switch (dataAction)
@@ -257,8 +253,8 @@ namespace Domain.Device
                 case DataAction.OneTimeAction:
                     if (exchange.IsFullOneTimeDataQueue)
                     {
-                        _logger.Error($"Отправка данных НЕ удачна, очередь однократных данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}");
-                        //await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН");
+                        warningStr = $"Отправка данных НЕ удачна, очередь однократных данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}";
+                        await SendWarningResult(warningStr);
                         return;
                     }
                     exchange.SendOneTimeData(inData, directHandlerName);
@@ -267,14 +263,14 @@ namespace Domain.Device
                 case DataAction.CycleAction:
                     if (exchange.CycleExchnageStatus == CycleExchnageStatus.Off)
                     {
-                        _logger.Warning($"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН");
-                        //await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН");
+                        warningStr = $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН";
+                        await SendWarningResult(warningStr);
                         return;
                     }
                     if (exchange.IsFullCycleTimeDataQueue)
                     {
-                        _logger.Error($"Отправка данных НЕ удачна, очередь цикличеких данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}");
-                        //await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН");
+                        warningStr = $"Отправка данных НЕ удачна, очередь цикличеких данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}";
+                        await SendWarningResult(warningStr);
                         return;
                     }
                     exchange.SendCycleTimeData(inData, directHandlerName);
@@ -283,8 +279,8 @@ namespace Domain.Device
                 case DataAction.CommandAction:
                     if (exchange.IsFullOneTimeDataQueue)
                     {
-                        _logger.Error($"Отправка команды НЕ удачна, очередь однократных данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}");
-                        //await Send2Produder(Option.TopicName4MessageBroker, $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН");
+                        warningStr = $"Отправка команды НЕ удачна, очередь однократных данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}";
+                        await SendWarningResult(warningStr);
                         return;
                     }
                     exchange.SendCommand(command4Device);
@@ -296,6 +292,19 @@ namespace Domain.Device
         }
 
 
+        /// <summary>
+        /// Отправить предупреждение о неверной работе устройства.
+        /// </summary>
+        private async Task SendWarningResult(string warningStr)
+        {
+            _logger.Warning(warningStr);
+            await Send2ProduderUnion(Option.Name, warningStr);
+        }
+
+
+        /// <summary>
+        /// Отправить ответ от обмена на ProduserUnion.
+        /// </summary>
         private async Task Send2ProduderUnion(ResponsePieceOfDataWrapper<TIn> response)
         {
             var produser = _produserUnionStorage.Get(ProduserUnionKey);
@@ -305,7 +314,7 @@ namespace Domain.Device
                 return;
             }
 
-            var results= await produser.SendAll(response);
+            var results= await produser.SendResponseAll(response);
             foreach (var (isSuccess, isFailure, _, error) in results)
             {
                 if (isFailure)
@@ -316,8 +325,31 @@ namespace Domain.Device
             }
         }
 
-        #endregion
 
+        /// <summary>
+        /// Отправить сообщение от устройства на ProduserUnion.
+        /// </summary>
+        private async Task Send2ProduderUnion(string objectName, string message)
+        {
+            var produser = _produserUnionStorage.Get(ProduserUnionKey);
+            if (produser == null)
+            {
+                _logger.Error($"Продюссер по ключу {ProduserUnionKey} НЕ НАЙДЕНН для Устройства= {Option.Name}");
+                return;
+            }
+
+            var results = await produser.SendMessageAll(objectName, message);
+            foreach (var (isSuccess, isFailure, _, error) in results)
+            {
+                if (isFailure)
+                    _logger.Error($"Ошибки отправки сообщений для Устройства= {Option.Name} через ProduderUnion = {ProduserUnionKey}  {error}");
+
+                if (isSuccess)
+                    _logger.Information($"ОТПРАВКА ОТВЕТОВ УСПЕШНА для устройства {Option.Name} через ProduderUnion = {ProduserUnionKey}");
+            }
+        }
+
+        #endregion
 
 
 
@@ -345,7 +377,7 @@ namespace Domain.Device
         {
             //Топик не указан. Нет отправки ответа через ProduserUnion.
             if (!string.IsNullOrEmpty(ProduserUnionKey))
-                await Send2ProduderUnion(responsePieceOfDataWrapper);  //TODO: Нет смысла дожидаться ответа на отправку в продюссеры
+                await Send2ProduderUnion(responsePieceOfDataWrapper);
 
             //Анализ ответов от всех обменов.
             _allExchangesResponseAnalitic.SetResponseResult(responsePieceOfDataWrapper.KeyExchange, responsePieceOfDataWrapper.IsValidAll);

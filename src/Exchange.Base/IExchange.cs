@@ -67,7 +67,7 @@ namespace Domain.Exchange
 
 
         #region InputDataRx
-        ISubject<InputDataStateRxModel> CycleDataEntryStateChangeRx { get; } //СОБЫТИЕ СМЕНЫ ДОЛГОГО ОТСУТСВИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ ОБМЕНА. Передает ИМЯ обмена.
+        ISubject<InputDataStateRxModel> CycleDataEntryStateChangeRx { get; }        //СОБЫТИЕ СМЕНЫ ДОЛГОГО ОТСУТСВИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ ОБМЕНА. Передает ИМЯ обмена.
         #endregion
 
 
