@@ -1,7 +1,10 @@
 ﻿"use strict";
 
-let hubUrl = 'http://localhost:44138/providerHub';
-var connection = new signalR.HubConnectionBuilder().withUrl(hubUrl).build();
+let hubUrl = '/providerHub';
+var connection = new signalR.HubConnectionBuilder()
+    .withUrl(hubUrl)
+    .configureLogging(signalR.LogLevel.Information)
+    .build();
 
 //Если в течение этого периода сервер не присылает никакого сообщения, то клиент считает, что подключение к серверу разорвано. 
 //вызывается событие onclose()
@@ -9,6 +12,7 @@ connection.serverTimeoutInMilliseconds = 1000 * 60 * 10; //1000 * 60 * 10
 
 //событие закрытия соединения
 connection.onclose(function () {
+    document.getElementById("stateHub").innerHTML = "CONNECTION Close !!!";
     console.info("$.onclose Event: " + connection.state);
     //рестарт после 5 сек
     //setTimeout(function () {
@@ -17,7 +21,7 @@ connection.onclose(function () {
 });
 
 
-
+//событие получения данных
 connection.on("ReceiveMessage", function (message) {
     var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     var encodedMsg = `says ${msg}`;
@@ -26,16 +30,67 @@ connection.on("ReceiveMessage", function (message) {
     document.getElementById("messagesList").appendChild(li);
 });
 
-connection.start()
-    .catch(function(err) {
+
+//Функция подключения к хабу
+async function start()
+{
+    try
+    {
+        if (connection.state === signalR.HubConnectionState.Disconnected)
+        {
+            await connection.start();
+            document.getElementById("stateHub").innerHTML = "CONNECTION IsDone";
+            return console.info("CONNECTION IsDone");
+        }
+        else
+        {
+            return console.info("Already Connected !!!");
+        }
+    } catch (err)
+    {
+        document.getElementById("stateHub").innerHTML = "CONNECTION Errors: " + err.toString();
         return console.error(err.toString());
-    })
-    .then(function () {
-        return console.info("CONNECTION IsDone");
-    });
+    }
+};
+
+//Функция отключения от хаба
+async function stop()
+{
+    try
+    {
+        if (connection.state === signalR.HubConnectionState.Connected)
+        {
+            await connection.stop();
+        }
+        else {
+            console.info("Already Disconnected !!!");
+        }
+    } catch (err)
+    {
+        document.getElementById("stateHub").innerHTML = "Disconnected Errors: " + err.toString();
+    }
+};
+
+
+//Подключение к хабу....
+start();
 
 
 
+
+
+//КНОПКА подключения к hub
+document.getElementById("connectButton").addEventListener("click", function (event) {
+    start();
+});
+
+//КНОПКА Разрыва коннекта с hub
+document.getElementById("disconnectButton").addEventListener("click", function (event) {
+    stop();
+});
+
+
+//КНОПКА отправить тестовой сообщение через hub
 document.getElementById("sendButton").addEventListener("click", function (event) {
     var user = document.getElementById("userInput").value;
     var message = document.getElementById("messageInput").value;
@@ -50,64 +105,51 @@ document.getElementById("sendButton").addEventListener("click", function (event)
 });
 
 
-document.getElementById("disconnectButton").addEventListener("click", function (event) {
-    console.info("$.connection.state: " + connection.state);
-    connection.stop();
-});
-
-document.getElementById("reconnectButton").addEventListener("click", function (event) {
-    if (connection.state === 0) 
-    {
-        connection.start();
-    }  
-    else
-    {
-        connection.stop();
-        connection.start();
-    }
-    console.info("$.connection.hub.state: " + connection.state);
-});
 
 
 
-document.getElementById("StartStream").addEventListener("click", function (event) {
-    connection.stream("Counter", 10, 500)
-        .subscribe({
-            next: (item) => {
-                var li = document.createElement("li");
-                li.textContent = item;
-                document.getElementById("messagesList").appendChild(li);
-            },
-            complete: () => {
-                var li = document.createElement("li");
-                li.textContent = "Stream completed";
-                document.getElementById("messagesList").appendChild(li);
-            },
-            error: (err) => {
-                var li = document.createElement("li");
-                li.textContent = err;
-                document.getElementById("messagesList").appendChild(li);
-            },
-        });
-    event.preventDefault();
-});
 
 
-connection.stream("Counter", 10, 500)
-    .subscribe({
-        next: (item) => {
-            var li = document.createElement("li");
-            li.textContent = item;
-            document.getElementById("messagesList").appendChild(li);
-        },
-        complete: () => {
-            var li = document.createElement("li");
-            li.textContent = "Stream completed";
-            document.getElementById("messagesList").appendChild(li);
-        },
-        error: (err) => {
-            var li = document.createElement("li");
-            li.textContent = err;
-            document.getElementById("messagesList").appendChild(li);
-        },
-    });
+//STREAM sending
+//document.getElementById("StartStream").addEventListener("click", function (event) {
+//    connection.stream("Counter", 10, 500)
+//        .subscribe({
+//            next: (item) => {
+//                var li = document.createElement("li");
+//                li.textContent = item;
+//                document.getElementById("messagesList").appendChild(li);
+//            },
+//            complete: () => {
+//                var li = document.createElement("li");
+//                li.textContent = "Stream completed";
+//                document.getElementById("messagesList").appendChild(li);
+//            },
+//            error: (err) => {
+//                var li = document.createElement("li");
+//                li.textContent = err;
+//                document.getElementById("messagesList").appendChild(li);
+//            },
+//        });
+//    event.preventDefault();
+//});
+
+
+//connection.stream("Counter", 10, 500)
+//    .subscribe({
+//        next: (item) => {
+//            var li = document.createElement("li");
+//            li.textContent = item;
+//            document.getElementById("messagesList").appendChild(li);
+//        },
+//        complete: () => {
+//            var li = document.createElement("li");
+//            li.textContent = "Stream completed";
+//            document.getElementById("messagesList").appendChild(li);
+//        },
+//        error: (err) => {
+//            var li = document.createElement("li");
+//            li.textContent = err;
+//            document.getElementById("messagesList").appendChild(li);
+//        },
+//    });
+

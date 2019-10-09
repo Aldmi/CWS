@@ -12,22 +12,23 @@ ENV LC_ALL ru_RU.UTF-8
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
 COPY ["WebApis/WebApiSwc.csproj", "WebApis/"]
+#COPY ["DAL.EFCore/DAL.EFCore.csproj", "DAL.EFCore/"]
 COPY ["Shared/Shared.csproj", "Shared/"]
+#COPY ["DAL.Abstract/DAL.Abstract.csproj", "DAL.Abstract/"]
+COPY ["AbstractProduser/AbstractProduser.csproj", "AbstractProduser/"]
+COPY ["KaffkaProduser/KafkaProduser.csproj", "KaffkaProduser/"]
+COPY ["WebClientProduser/WebClientProduser.csproj", "WebClientProduser/"]
 COPY ["Infrastructure/Infrastructure.EventBus.csproj", "Infrastructure/"]
 COPY ["InputDataModel.Autodictor/Domain.InputDataModel.Autodictor.csproj", "InputDataModel.Autodictor/"]
 COPY ["Exchange.Base/Domain.Exchange.csproj", "Exchange.Base/"]
 COPY ["InputDataModel.Base/Domain.InputDataModel.Base.csproj", "InputDataModel.Base/"]
 COPY ["Infrastructure.Transport/Infrastructure.Transport.csproj", "Infrastructure.Transport/"]
-COPY ["Infrastructure.Dal.EfCore/Infrastructure.Dal.EfCore.csproj", "Infrastructure.Dal.EfCore/"]
-COPY ["Infrastructure.Dal.Abstract/Infrastructure.Dal.Abstract.csproj", "Infrastructure.Dal.Abstract/"]
 COPY ["Infrastructure.Background/Infrastructure.Background.csproj", "Infrastructure.Background/"]
 COPY ["Infrastructure.Storages/Infrastructure.Storages.csproj", "Infrastructure.Storages/"]
 COPY ["Device.Base/Domain.Device.csproj", "Device.Base/"]
-COPY ["WebClientProduser/Infrastructure.Produser.WebClientProduser.csproj", "WebClientProduser/"]
-COPY ["AbstractProduser/Infrastructure.Produser.AbstractProduser.csproj", "AbstractProduser/"]
-COPY ["KaffkaProduser/Infrastructure.Produser.KafkaProduser.csproj", "KaffkaProduser/"]
 COPY ["Infrastructure.MessageBroker/Infrastructure.MessageBroker.csproj", "Infrastructure.MessageBroker/"]
 COPY ["BL.Services/App.Services.csproj", "BL.Services/"]
+#COPY ["DAL.InMemory/DAL.InMemory.csproj", "DAL.InMemory/"]
 RUN dotnet restore "WebApis/WebApiSwc.csproj"
 COPY . .
 WORKDIR "/src/WebApis"

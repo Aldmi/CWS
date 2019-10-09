@@ -7,6 +7,7 @@ using Domain.InputDataModel.Autodictor.Services;
 using Domain.InputDataModel.Autodictor.StronglyTypedResponse;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response;
@@ -97,22 +98,27 @@ namespace InputDataModel.Autodictor.Test
                 }
             };
 
-            //var btByRulesDataProvider= new ByRulesDataProvider<AdInputType>(_stronglyTypedResponseFactory, option, _independentInsertsService, _logger);
+            Func<ProviderTransfer<AdInputType>, IDictionary<string, string>, ProviderResult<AdInputType>> providerResultFactory =
+                (transfer, dictionary) =>
+                {
+                    return new ProviderResult<AdInputType>(transfer, dictionary, _stronglyTypedResponseFactory);
+                };
+            var btByRulesDataProvider= new ByRulesDataProvider<AdInputType>(providerResultFactory, option, _independentInsertsService, _logger);
 
-            //// Act
-            //int countSetDataByte = 0;
-            //byte[] getDataByte = null;
-            //var subscription = btByRulesDataProvider.RaiseSendDataRx.Subscribe(provider =>
-            //    {
+            // Act
+            int countSetDataByte = 0;
+            byte[] getDataByte = null;
+            var subscription = btByRulesDataProvider.RaiseSendDataRx.Subscribe(provider =>
+                {
 
 
 
-            //        countSetDataByte = provider.CountSetDataByte; //Сколько байт ожидаем в ответ
-            //        getDataByte = provider.GetDataByte(); // ByRulesDataProvider выставляет массив байт для транспорта
-            //        countSetDataByte.Should().Be(5);
-            //    });
+                    countSetDataByte = provider.CountSetDataByte; //Сколько байт ожидаем в ответ87
+                    getDataByte = provider.GetDataByte(); // ByRulesDataProvider выставляет массив байт для транспорта
+                    countSetDataByte.Should().Be(5);
+                });
 
-            //await btByRulesDataProvider.StartExchangePipeline(inDataWrapper);
+            await btByRulesDataProvider.StartExchangePipeline(inDataWrapper);
 
 
             // Asssert
