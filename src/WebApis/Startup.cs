@@ -131,7 +131,8 @@ namespace WebApiSwc
                               IHostingEnvironment env,
                               ILifetimeScope scope,
                               IConfiguration config,
-                              IMapper mapper)
+                              IMapper mapper,
+                              ILogger loger)
         {
             //Настрока выдачи ответа для HealthCheck
             var options = new HealthCheckOptions
@@ -178,6 +179,7 @@ namespace WebApiSwc
                         .ExceptFromIPAddresses(firewallConfig.AllowedIPs)
                 //.ExceptFromLocalhost()
                 );
+                loger.Information("Enable firewall !!!!");
             }
 
             //ПОДКЛЮЧЕНИЕ SignalR ХАБА

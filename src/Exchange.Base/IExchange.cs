@@ -26,14 +26,11 @@ namespace Domain.Exchange
         int NumberTimeoutTrying { get; }                                        //Кол-во запросов без ответов (таймаут ответа).IsConnect=false. ПЕРЕОТКРЫТИЕ НЕ ПРОИСХОДИТ.
         #endregion
 
-        #region dataProvider
 
+        #region dataProvider
         ProviderOption GetProviderOption { get; }
         void SetNewProvider(IDataProvider<T, ResponseInfo> provider);
-
         #endregion
-
-
 
 
         #region StateExchange

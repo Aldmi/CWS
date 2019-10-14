@@ -41,7 +41,6 @@ namespace Domain.Exchange
         private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue; //Очередь данных для SendCycleTimeData().
         private readonly InputCycleDataEntryCheker _inputCycleDataEntryCheker;      //таймер отсчитывает период от получения входных данных для цикл. обмена.
         private readonly SkippingPeriodChecker _skippingPeriodChecker;              //таймер отсчитывает время пропуска периода опроса.
-
         private readonly Stopwatch _sw = Stopwatch.StartNew();
         #endregion
 
@@ -89,7 +88,6 @@ namespace Domain.Exchange
         public bool IsNormalFrequencyCycleDataEntry { get; } = true;
 
         public ProviderOption GetProviderOption => _dataProvider.GetCurrentOption();
-
         #endregion
 
 
@@ -237,6 +235,9 @@ namespace Domain.Exchange
 
             if (!_transport.IsOpen)
                 return;
+
+            //TODO: отправку данных делегировать поведению CycleBehavior
+            //CycleBehavior.SendData(inData, directHandlerName);
 
             _inputCycleDataEntryCheker.InputDataEntry();
 

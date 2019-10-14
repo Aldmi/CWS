@@ -77,8 +77,6 @@ start();
 
 
 
-
-
 //КНОПКА подключения к hub
 document.getElementById("connectButton").addEventListener("click", function (event) {
     start();
@@ -106,11 +104,7 @@ document.getElementById("sendButton").addEventListener("click", function (event)
 
 
 
-
-
-
-
-//STREAM sending
+//using STREAM sending
 //document.getElementById("StartStream").addEventListener("click", function (event) {
 //    connection.stream("Counter", 10, 500)
 //        .subscribe({
