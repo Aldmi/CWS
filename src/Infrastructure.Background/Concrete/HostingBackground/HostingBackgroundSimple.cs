@@ -37,7 +37,6 @@ namespace Infrastructure.Background.Concrete.HostingBackground
                 ActionBg = action;
         }
 
-
         protected override async Task ProcessAsync(CancellationToken stoppingToken)
         {
             await ActionBg(stoppingToken);

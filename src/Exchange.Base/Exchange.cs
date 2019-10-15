@@ -30,17 +30,17 @@ namespace Domain.Exchange
     public class Exchange<TIn> : IExchange<TIn>
     {
         #region field
-        private const int MaxDataInQueue = 5;
+        private const int MaxDataInQueue = 5;                         //In Behavior
         protected readonly ExchangeOption ExchangeOption;
         private readonly ITransport _transport;
-        private readonly ITransportBackground _transportBackground;
-        private  IDataProvider<TIn, ResponseInfo> _dataProvider;                      //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
+        private readonly ITransportBackground _transportBackground;  //In CycleBehavior
+        private IDataProvider<TIn, ResponseInfo> _dataProvider;                       //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
         private readonly IDisposable _dataProviderOwner;                              //управляет временем жизни _dataProvider
         private readonly ILogger _logger;
-        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(QueueMode.QueueExtractLastItem, MaxDataInQueue);   //Очередь данных для SendOneTimeData().
-        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue; //Очередь данных для SendCycleTimeData().
-        private readonly InputCycleDataEntryCheker _inputCycleDataEntryCheker;      //таймер отсчитывает период от получения входных данных для цикл. обмена.
-        private readonly SkippingPeriodChecker _skippingPeriodChecker;              //таймер отсчитывает время пропуска периода опроса.
+        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(QueueMode.QueueExtractLastItem, MaxDataInQueue);   //Очередь данных для SendOneTimeData(). In CycleBehavior
+        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue; //Очередь данных для SendCycleTimeData(). In CycleBehavior
+        private readonly InputCycleDataEntryCheker _inputCycleDataEntryCheker;      //таймер отсчитывает период от получения входных данных для цикл. обмена. In CycleBehavior
+        private readonly SkippingPeriodChecker _skippingPeriodChecker;              //таймер отсчитывает время пропуска периода опроса.  In CycleBehavior
         private readonly Stopwatch _sw = Stopwatch.StartNew();
         #endregion
 
@@ -48,7 +48,7 @@ namespace Domain.Exchange
 
         #region prop
         public string KeyExchange => ExchangeOption.Key;
-        public bool AutoStartCycleFunc => ExchangeOption.CycleFuncOption.AutoStartCycleFunc;
+        public bool AutoStartCycleFunc => ExchangeOption.CycleFuncOption.AutoStartCycleFunc;   //In CycleBehavior
         public string ProviderName => ExchangeOption.Provider.Name;
         public int NumberErrorTrying => ExchangeOption.NumberErrorTrying;
         public int NumberTimeoutTrying => ExchangeOption.NumberTimeoutTrying;
@@ -83,9 +83,9 @@ namespace Domain.Exchange
             }
         }
 
-        public bool IsFullOneTimeDataQueue => _oneTimeDataQueue.IsFullLimit;
-        public bool IsFullCycleTimeDataQueue => _cycleTimeDataQueue.IsFullLimit;
-        public bool IsNormalFrequencyCycleDataEntry { get; } = true;
+        public bool IsFullOneTimeDataQueue => _oneTimeDataQueue.IsFullLimit;    //In CycleBehavior
+        public bool IsFullCycleTimeDataQueue => _cycleTimeDataQueue.IsFullLimit;//In CycleBehavior
+        public bool IsNormalFrequencyCycleDataEntry { get; } = true;            //In CycleBehavior
 
         public ProviderOption GetProviderOption => _dataProvider.GetCurrentOption();
         #endregion
@@ -96,7 +96,7 @@ namespace Domain.Exchange
 
         public Exchange(ExchangeOption exchangeOption,
                                  ITransport transport,
-                                 ITransportBackground transportBackground,
+                                 ITransportBackground transportBackground, 
                                  Owned<IDataProvider<TIn, ResponseInfo>> dataProviderOwner,
                                  ILogger logger)
         {
@@ -119,7 +119,7 @@ namespace Domain.Exchange
 
 
         #region InputDataChangeRx
-        public ISubject<InputDataStateRxModel> CycleDataEntryStateChangeRx =>_inputCycleDataEntryCheker.CycleDataEntryStateChangeRx;
+        public ISubject<InputDataStateRxModel> CycleDataEntryStateChangeRx =>_inputCycleDataEntryCheker.CycleDataEntryStateChangeRx;    //In CycleBehavior
         #endregion
 
 
@@ -141,7 +141,7 @@ namespace Domain.Exchange
         /// <summary>
         /// Добавление ЦИКЛ. функций на БГ
         /// </summary>
-        public void StartCycleExchange()
+        public void StartCycleExchange()             //In CycleBehavior
         {
             Switch2NormalCycleExchange();
             _inputCycleDataEntryCheker.StartChecking();
@@ -150,7 +150,7 @@ namespace Domain.Exchange
         /// <summary>
         /// Удаление ЦИКЛ. функций из БГ
         /// </summary>
-        public void StopCycleExchange()
+        public void StopCycleExchange()            //In CycleBehavior
         {
             _transportBackground.RemoveCycleFunc(CycleTimeActionAsync);
             _transportBackground.RemoveCycleFunc(CycleCommandEmergencyActionAsync);
@@ -161,7 +161,7 @@ namespace Domain.Exchange
         /// <summary>
         /// перевести в режим НОРМАЛЬНЫЙ цикл. обмен на БГ
         /// </summary>
-        public void Switch2NormalCycleExchange()
+        public void Switch2NormalCycleExchange()    //In CycleBehavior
         {
             _transportBackground.RemoveCycleFunc(CycleCommandEmergencyActionAsync);
             _transportBackground.AddCycleAction(CycleTimeActionAsync);
@@ -171,7 +171,7 @@ namespace Domain.Exchange
         /// <summary>
         /// перевести в режим АВАРИЙНЫЙ цикл. обмен на БГ
         /// </summary>
-        public void Switch2CycleCommandEmergency()
+        public void Switch2CycleCommandEmergency()   //In CycleBehavior
         {
             _transportBackground.RemoveCycleFunc(CycleTimeActionAsync);
             _transportBackground.AddCycleAction(CycleCommandEmergencyActionAsync);
@@ -255,7 +255,7 @@ namespace Domain.Exchange
         /// <summary>
         /// Однократно вызываемая функция.
         /// </summary>
-        protected async Task OneTimeActionAsync(CancellationToken ct)
+        protected async Task OneTimeActionAsync(CancellationToken ct)      //In Behavior
         {
             if (!_transport.IsOpen)
                 return;
@@ -278,7 +278,7 @@ namespace Domain.Exchange
         /// Если очередь ПУСТА, отправляется NULL.
         /// Если ошибка извлечения из очереди, данные не отправляются
         /// </summary>
-        protected async Task CycleTimeActionAsync(CancellationToken ct)
+        protected async Task CycleTimeActionAsync(CancellationToken ct)      //In CycleBehavior
         {
             //TODO: IsOpen на транспорте заменить на StatusConnect(Open, Reconnect, StopedReconnect)
             //if (!_transport.StatusConnecttus != Open)
@@ -327,7 +327,7 @@ namespace Domain.Exchange
         /// <summary>
         /// Выставить на циклический обмен команду InfoEmergency.
         /// </summary>
-        protected async Task CycleCommandEmergencyActionAsync(CancellationToken ct)
+        protected async Task CycleCommandEmergencyActionAsync(CancellationToken ct)   //In CycleBehavior
         {
             if (!_transport.IsOpen)
                 return;

@@ -50,7 +50,7 @@ namespace Domain.Exchange.Behaviors
 
 
         #region Rx
-        public ISubject<ResponsePieceOfDataWrapper<TIn>> ResponseChangeRx { get; } = new Subject<ResponsePieceOfDataWrapper<TIn>>();
+        public ISubject<ResponsePieceOfDataWrapper<TIn>> ResponseReadyRx { get; } = new Subject<ResponsePieceOfDataWrapper<TIn>>();
         #endregion
 
 

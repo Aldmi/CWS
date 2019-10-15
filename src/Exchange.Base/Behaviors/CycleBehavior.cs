@@ -156,7 +156,7 @@ namespace Domain.Exchange.Behaviors
             {
                 _skippingPeriodChecker.StartSkipping(); //Если все ответы валидны - запустим отсчет пропуска вызовов CycleTimeAction.
             }
-            ResponseChangeRx.OnNext(transportResponseWrapper);
+            ResponseReadyRx.OnNext(transportResponseWrapper);
             await Task.Delay(1, ct); //TODO: Продумать как задвать скважность между выполнением цикл. функции на обмене.
         }
 
@@ -164,13 +164,13 @@ namespace Domain.Exchange.Behaviors
         /// <summary>
         /// Выставить на циклический обмен команду InfoEmergency.
         /// </summary>
-        protected async Task CycleCommandEmergencyActionAsync(CancellationToken ct)
+        private async Task CycleCommandEmergencyActionAsync(CancellationToken ct)
         {
             var inData = new InDataWrapper<TIn> { Command = Command4Device.InfoEmergency };
             var transportResponseWrapper = await PieceOfDataSender(inData, ct);
             transportResponseWrapper.KeyExchange = KeyExchange;
             transportResponseWrapper.DataAction = DataAction.CycleAction;
-            ResponseChangeRx.OnNext(transportResponseWrapper);
+            ResponseReadyRx.OnNext(transportResponseWrapper);
             await Task.Delay(1, ct); //TODO: Продумать как задвать скважность между выполнением цикл. функции на обмене.
         }
         #endregion

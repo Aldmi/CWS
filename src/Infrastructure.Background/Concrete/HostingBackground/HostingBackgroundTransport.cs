@@ -18,6 +18,7 @@ namespace Infrastructure.Background.Concrete.HostingBackground
         private readonly ConcurrentDictionary<Guid, Func<CancellationToken, Task>> _cycleTimeFuncDict = new ConcurrentDictionary<Guid, Func<CancellationToken, Task>>();
         private IEnumerator<KeyValuePair<Guid, Func<CancellationToken, Task>>> _enumeratorCycleTimeFuncDict;
         private readonly ConcurrentQueue<Func<CancellationToken, Task>> _oneTimeFuncQueue = new ConcurrentQueue<Func<CancellationToken, Task>>();
+        private readonly ConcurrentQueue<Func<CancellationToken, Task>> _commandFuncQueue = new ConcurrentQueue<Func<CancellationToken, Task>>();
         private readonly ILogger _logger;
 
         private int _dutyCycleCounter;
@@ -90,6 +91,16 @@ namespace Infrastructure.Background.Concrete.HostingBackground
 
 
         /// <summary>
+        /// добавить команду (приортитетное одиночное выполнение)
+        /// </summary>
+        public void AddCommandAction(Func<CancellationToken, Task> action)
+        {
+            if (action != null)
+                _commandFuncQueue.Enqueue(action);
+        }
+
+
+        /// <summary>
         /// Создает Task "Перевести бг в режим готовности (ожидания)"
         /// В этом режиме происходит пропуск выполнения функций.
         /// </summary>
@@ -107,7 +118,6 @@ namespace Infrastructure.Background.Concrete.HostingBackground
         void ITransportBackground.PutOnWork()
         {
             _statusBackground = StatusBackground.Work;
-
         }
 
 
@@ -142,8 +152,23 @@ namespace Infrastructure.Background.Concrete.HostingBackground
 
 
         private async Task FuncQueueExec(CancellationToken stoppingToken)
-        {
-            //вызов одиночной функции запроса---------------------------------------------------------------
+        { 
+            //вызов одиночной функции запроса--------------------------------------------------------------------
+            if (_commandFuncQueue != null && _commandFuncQueue.Count > 0)
+            {
+                try
+                {
+                    while (_commandFuncQueue.TryDequeue(out var commandAction))
+                    {
+                        await commandAction(stoppingToken);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Fatal($"HostingBackgroundTransport.ProcessAsync Команды. {ex}");
+                }
+            }
+            else   //вызов одиночной функции запроса---------------------------------------------------------------
             if (_oneTimeFuncQueue != null && _oneTimeFuncQueue.Count > 0)
             {
                 try
@@ -155,12 +180,11 @@ namespace Infrastructure.Background.Concrete.HostingBackground
                 }
                 catch (Exception ex)
                 {
-                    _logger.Fatal($"HostingBackgroundTransport.ProcessAsync Однократные функции {ex}");
+                    _logger.Fatal($"HostingBackgroundTransport.ProcessAsync Однократные функции. {ex}");
                 }
             }
-            else
+            else  //вызов циклических функций---------------------------------------------------------------------
             {
-                //вызов циклических функций--------------------------------------------------------------------
                 try
                 {
                     if (_cycleTimeFuncDict != null && !_cycleTimeFuncDict.IsEmpty)
@@ -184,7 +208,7 @@ namespace Infrastructure.Background.Concrete.HostingBackground
                 }
                 catch (Exception ex)
                 {
-                    _logger.Fatal($"HostingBackgroundTransport.ProcessAsync Циклические функции {ex}");
+                    _logger.Fatal($"HostingBackgroundTransport.ProcessAsync Циклические функции. {ex}");
                 }
             }
         }
