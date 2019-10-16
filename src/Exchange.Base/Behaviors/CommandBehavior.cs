@@ -12,10 +12,10 @@ using Shared.Collections;
 
 namespace Domain.Exchange.Behaviors
 {
-    public class OnceBehavior<TIn> : BaseBehavior<TIn> where TIn : InputTypeBase
+    public class CommandBehavior<TIn> : BaseBehavior<TIn> where TIn : InputTypeBase
     {
         #region ctor
-        public OnceBehavior(string keyExchange,
+        public CommandBehavior(string keyExchange,
             ITransportBackground transportBackground,
             ILogger logger) : base(keyExchange, transportBackground, QueueMode.QueueExtractLastItem, logger)
         {
@@ -25,35 +25,34 @@ namespace Domain.Exchange.Behaviors
 
 
         #region Methode
+        /// <summary>
+        /// Отправить команду. аналог однократно выставляемой функции.
+        /// </summary>
+        /// <param name="command"></param>
+        public void SendCommand(Command4Device command)
+        {
+            if (command == Command4Device.None)
+                return;
+
+            var dataWrapper = new InDataWrapper<TIn> { Command = command };
+            DataQueue.Enqueue(dataWrapper);
+            TransportBackground.AddCommandAction(CommandActionAsync);
+        }
+
+
         public override void SendData(IEnumerable<TIn> inData, string directHandlerName, Func<InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>> pieceOfDataSender)
         {
-            if (pieceOfDataSender == null)
-                throw new ArgumentNullException($"{nameof(pieceOfDataSender)} НЕ может быть NULL");
-
-            if (inData == null)
-                throw new ArgumentNullException($"{nameof(inData)} НЕ может быть NULL");
-
-            PieceOfDataSender = pieceOfDataSender;
-            var dataWrapper = new InDataWrapper<TIn> { Datas = inData.ToList(), DirectHandlerName = directHandlerName };
-            var result = DataQueue.Enqueue(dataWrapper);
-            if (result.IsSuccess)
-            {
-                TransportBackground.AddOneTimeAction(OneTimeActionAsync);
-            }
-            else
-            {
-                //_logger.Debug($"SendOneTimeData in Queue Error: {result.Error}");
-            }
+            //TODO: для команд не нужен
         }
         #endregion
 
 
 
-        #region OneTimeActions
+        #region CommandActions
         /// <summary>
-        /// Однократно вызываемая функция.
+        ///Выполнить команду. Приоритетная однократно вызываемая функция.
         /// </summary>
-        private async Task OneTimeActionAsync(CancellationToken ct)
+        private async Task CommandActionAsync(CancellationToken ct)
         {
             var result = DataQueue.Dequeue();
             if (result.IsSuccess)
@@ -61,7 +60,7 @@ namespace Domain.Exchange.Behaviors
                 var inData = result.Value;
                 var transportResponseWrapper = await PieceOfDataSender(inData, ct);
                 transportResponseWrapper.KeyExchange = KeyExchange;
-                transportResponseWrapper.DataAction = DataAction.OneTimeAction;
+                transportResponseWrapper.DataAction = DataAction.CommandAction;
                 ResponseReadyRx.OnNext(transportResponseWrapper);
             }
         }

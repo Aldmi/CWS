@@ -93,7 +93,6 @@ namespace Domain.Exchange
 
 
         #region ctor
-
         public Exchange(ExchangeOption exchangeOption,
                                  ITransport transport,
                                  ITransportBackground transportBackground, 
@@ -110,7 +109,6 @@ namespace Domain.Exchange
             _inputCycleDataEntryCheker= new InputCycleDataEntryCheker(KeyExchange, ExchangeOption.CycleFuncOption.NormalIntervalCycleDataEntry);
             _skippingPeriodChecker= new SkippingPeriodChecker(ExchangeOption.CycleFuncOption.SkipInterval);
         }
-
         #endregion
 
 

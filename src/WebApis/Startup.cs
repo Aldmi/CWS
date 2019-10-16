@@ -112,6 +112,7 @@ namespace WebApiSwc
                         builder.RegisterModule(new BlStorageAutofacModule<AdInputType>());
                         builder.RegisterModule(new BlActionsAutofacModule<AdInputType>());
                         builder.RegisterModule(new MediatorsAutofacModule<AdInputType>());
+                        builder.RegisterModule(new BehaviorExchangeAutofacModule<AdInputType>());
                         builder.RegisterModule(new InputDataAutofacModule<AdInputType>(AppConfiguration.GetSection("MessageBrokerConsumer4InData")));
                         break;
 

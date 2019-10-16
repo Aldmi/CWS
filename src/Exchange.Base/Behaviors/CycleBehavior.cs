@@ -35,12 +35,12 @@ namespace Domain.Exchange.Behaviors
 
 
         #region ctor
-        public CycleBehavior(CycleFuncOption cycleFuncOption,
-                             string keyExchange,
-                             InputCycleDataEntryCheker inputCycleDataEntryCheker,
-                             SkippingPeriodChecker skippingPeriodChecker,
-                             ITransportBackground transportBackground, 
-                             ILogger logger) : base(keyExchange, transportBackground, cycleFuncOption.CycleQueueMode, logger)
+        public CycleBehavior(string keyExchange,
+            ITransportBackground transportBackground,
+            CycleFuncOption cycleFuncOption,
+            ILogger logger,
+            InputCycleDataEntryCheker inputCycleDataEntryCheker,
+             SkippingPeriodChecker skippingPeriodChecker) : base(keyExchange, transportBackground, cycleFuncOption.CycleQueueMode, logger)
         {
             _inputCycleDataEntryCheker = inputCycleDataEntryCheker;
             _skippingPeriodChecker = skippingPeriodChecker;
