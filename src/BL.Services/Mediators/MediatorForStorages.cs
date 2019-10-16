@@ -10,7 +10,9 @@ using Autofac.Features.OwnedInstances;
 using Domain.Device;
 using Domain.Device.Produser;
 using Domain.Exchange;
+using Domain.Exchange.Behaviors;
 using Domain.Exchange.Enums;
+using Domain.Exchange.Repository.Entities;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;
@@ -45,7 +47,7 @@ namespace App.Services.Mediators
         private readonly TransportStorage _transportStorage;
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
         private readonly IEventBus _eventBus;
-        private readonly IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, ResponseInfo>>>> _dataProviderFactory;
+        private readonly Func<ExchangeOption, ITransport, ITransportBackground, Exchange<TIn>> _exchangeFactory;
         private readonly AppConfigWrapper _appConfigWrapper;
         private readonly ILogger _logger;
         //опции для создания IProduser через фабрику
@@ -62,8 +64,8 @@ namespace App.Services.Mediators
             BackgroundStorage backgroundStorage,
             TransportStorage transportStorage,
             ProduserUnionStorage<TIn> produserUnionStorage,
-            IEventBus eventBus,     
-            IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, ResponseInfo>>>> dataProviderFactory,
+            IEventBus eventBus,
+            Func<ExchangeOption, ITransport, ITransportBackground, Exchange<TIn>> exchangeFactory,
             AppConfigWrapper appConfigWrapper,
             ILogger logger)
         {
@@ -73,7 +75,9 @@ namespace App.Services.Mediators
             _exchangeStorage = exchangeStorage;
             _deviceStorage = deviceStorage;
             _eventBus = eventBus;
-            _dataProviderFactory = dataProviderFactory;
+            _exchangeFactory = exchangeFactory;
+
+
             _appConfigWrapper = appConfigWrapper;
             _logger = logger;
         }
@@ -204,8 +208,8 @@ namespace App.Services.Mediators
 
                 try
                 {
-                    var dataProvider = _dataProviderFactory[exchOption.Provider.Name](exchOption.Provider);
-                    exch = new Exchange<TIn>(exchOption, transport, bg, dataProvider, _logger);
+                    //exch = new Exchange<TIn>(exchOption, transport, bg, dataProvider, _logger);
+                    exch = _exchangeFactory(exchOption, transport, bg);
                     _exchangeStorage.AddNew(exchOption.Key, exch);
                 }
                 catch (Exception)

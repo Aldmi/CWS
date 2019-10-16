@@ -39,11 +39,11 @@ namespace Domain.Exchange.Behaviors
             ITransportBackground transportBackground,
             CycleFuncOption cycleFuncOption,
             ILogger logger,
-            InputCycleDataEntryCheker inputCycleDataEntryCheker,
-             SkippingPeriodChecker skippingPeriodChecker) : base(keyExchange, transportBackground, cycleFuncOption.CycleQueueMode, logger)
+            Func<string, int, InputCycleDataEntryCheker> inputCycleDataEntryChekerFactory,
+            Func<int, SkippingPeriodChecker> skippingPeriodCheckerFactory) : base(keyExchange, transportBackground, cycleFuncOption.CycleQueueMode, logger)
         {
-            _inputCycleDataEntryCheker = inputCycleDataEntryCheker;
-            _skippingPeriodChecker = skippingPeriodChecker;
+            _inputCycleDataEntryCheker = inputCycleDataEntryChekerFactory(keyExchange, cycleFuncOption.NormalIntervalCycleDataEntry);
+            _skippingPeriodChecker = skippingPeriodCheckerFactory(cycleFuncOption.SkipInterval);
             CycleFuncOption = cycleFuncOption;
         }
         #endregion

@@ -5,7 +5,9 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using Autofac.Features.OwnedInstances;
+using Domain.Exchange.Behaviors;
 using Domain.Exchange.Enums;
 using Domain.Exchange.Repository.Entities;
 using Domain.Exchange.RxModel;
@@ -27,7 +29,7 @@ using Shared.Types;
 
 namespace Domain.Exchange
 {
-    public class Exchange<TIn> : IExchange<TIn>
+    public class Exchange<TIn> : IExchange<TIn> where TIn : InputTypeBase
     {
         #region field
         private const int MaxDataInQueue = 5;                         //In Behavior
@@ -42,6 +44,10 @@ namespace Domain.Exchange
         private readonly InputCycleDataEntryCheker _inputCycleDataEntryCheker;      //таймер отсчитывает период от получения входных данных для цикл. обмена. In CycleBehavior
         private readonly SkippingPeriodChecker _skippingPeriodChecker;              //таймер отсчитывает время пропуска периода опроса.  In CycleBehavior
         private readonly Stopwatch _sw = Stopwatch.StartNew();
+
+        private readonly CycleBehavior<TIn> _cycleBehavior;
+        private readonly OnceBehavior<TIn> _onceBehavior;
+        private readonly CommandBehavior<TIn> _commandBehavior;
         #endregion
 
 
@@ -95,19 +101,28 @@ namespace Domain.Exchange
         #region ctor
         public Exchange(ExchangeOption exchangeOption,
                                  ITransport transport,
-                                 ITransportBackground transportBackground, 
-                                 Owned<IDataProvider<TIn, ResponseInfo>> dataProviderOwner,
-                                 ILogger logger)
+                                 ITransportBackground transportBackground,
+                                 IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, ResponseInfo>>>> dataProviderFactory,
+                                 ILogger logger,
+                                 Func<string, ITransportBackground, CycleFuncOption, CycleBehavior<TIn>> cycleBehaviorFactory,
+                                 Func<string, ITransportBackground, OnceBehavior<TIn>> onceBehaviorFactory,
+                                 Func<string, ITransportBackground, CommandBehavior<TIn>> commandBehaviorFactory)
         {
             ExchangeOption = exchangeOption;
             _transport = transport;
             _transportBackground = transportBackground;
-            _dataProviderOwner = dataProviderOwner;
-            _dataProvider = dataProviderOwner.Value;
+            var owner= dataProviderFactory[ExchangeOption.Provider.Name](ExchangeOption.Provider);
+            _dataProviderOwner = owner;
+            _dataProvider = owner.Value;
             _logger = logger;
+
             _cycleTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(ExchangeOption.CycleFuncOption.CycleQueueMode, MaxDataInQueue);
             _inputCycleDataEntryCheker= new InputCycleDataEntryCheker(KeyExchange, ExchangeOption.CycleFuncOption.NormalIntervalCycleDataEntry);
             _skippingPeriodChecker= new SkippingPeriodChecker(ExchangeOption.CycleFuncOption.SkipInterval);
+
+            _cycleBehavior= cycleBehaviorFactory(KeyExchange, transportBackground, ExchangeOption.CycleFuncOption);
+            _onceBehavior= onceBehaviorFactory(KeyExchange, transportBackground);
+            _commandBehavior= commandBehaviorFactory(KeyExchange, transportBackground);
         }
         #endregion
 

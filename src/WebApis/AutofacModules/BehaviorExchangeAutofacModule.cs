@@ -1,6 +1,7 @@
 ﻿using App.Services.Actions;
 using Autofac;
 using Domain.Exchange.Behaviors;
+using Domain.Exchange.Services;
 using Domain.InputDataModel.Base.InData;
 
 namespace WebApiSwc.AutofacModules
@@ -12,6 +13,9 @@ namespace WebApiSwc.AutofacModules
             builder.RegisterType<CycleBehavior<TIn>>().InstancePerDependency();
             builder.RegisterType<OnceBehavior<TIn>>().InstancePerDependency();
             builder.RegisterType<CommandBehavior<TIn>>().InstancePerDependency();
+
+            builder.RegisterType<InputCycleDataEntryCheker>().InstancePerDependency();
+            builder.RegisterType<SkippingPeriodChecker>().InstancePerDependency();
         }
     }
 }
