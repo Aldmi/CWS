@@ -169,18 +169,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
                         StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption.Id}";
                         StatusDict["Request.BodyLenght"] = $"{providerTransfer.Request.BodyLenght}";
-
-                        try//DEBUG--------
-                        {
-                            var providerResult = ProviderResultFactory(providerTransfer, StatusDict);
-                            RaiseSendDataRx.OnNext(providerResult);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e);
-                    
-                        }
-                 
+                        var providerResult = ProviderResultFactory(providerTransfer, StatusDict);
+                        RaiseSendDataRx.OnNext(providerResult);
                     }
                 }
             }

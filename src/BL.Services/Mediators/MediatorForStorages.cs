@@ -277,9 +277,8 @@ namespace App.Services.Mediators
             var bg = _backgroundStorage.Get(keyTransport);
             if (bg.IsStarted)
             {
-                _backgroundStorage.Remove(keyTransport);
                 await bg.StopAsync(CancellationToken.None);
-                bg.Dispose();
+                _backgroundStorage.Remove(keyTransport);
             }
 
             var transport = _transportStorage.Get(keyTransport);
@@ -288,7 +287,6 @@ namespace App.Services.Mediators
                 transport.CycleReOpenedExecCancelation();
             }
             _transportStorage.Remove(keyTransport);
-            transport.Dispose();
         }
 
 

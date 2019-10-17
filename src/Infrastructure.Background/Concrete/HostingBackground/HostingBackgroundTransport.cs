@@ -163,6 +163,10 @@ namespace Infrastructure.Background.Concrete.HostingBackground
                         await commandAction(stoppingToken);
                     }
                 }
+                catch (TaskCanceledException)
+                {
+                    _logger.Warning($"HostingBackgroundTransport.ProcessAsync Команды были отменены через CancellationToken.");
+                }
                 catch (Exception ex)
                 {
                     _logger.Fatal($"HostingBackgroundTransport.ProcessAsync Команды. {ex}");
@@ -177,6 +181,10 @@ namespace Infrastructure.Background.Concrete.HostingBackground
                     {
                         await oneTimeAction(stoppingToken);
                     }
+                }
+                catch (TaskCanceledException)
+                {
+                    _logger.Warning($"HostingBackgroundTransport.ProcessAsync Однократные функции были отменены через CancellationToken.");
                 }
                 catch (Exception ex)
                 {
@@ -206,13 +214,16 @@ namespace Infrastructure.Background.Concrete.HostingBackground
                         }
                     }
                 }
+                catch (TaskCanceledException)
+                {
+                    _logger.Warning($"HostingBackgroundTransport.ProcessAsync Циклические функции были отменены через CancellationToken.");
+                }
                 catch (Exception ex)
                 {
                     _logger.Fatal($"HostingBackgroundTransport.ProcessAsync Циклические функции. {ex}");
                 }
             }
         }
-
         #endregion
     }
 }

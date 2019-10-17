@@ -537,8 +537,8 @@ namespace Domain.Device
         {
             UnsubscrubeOnExchangesEvents();
             UnsubscrubeOnExchangesCycleDataEntryStateEvents();
-            _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler.Dispose();
-            MiddlewareInvokeService.Dispose();
+            _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler?.Dispose();
+            MiddlewareInvokeService?.Dispose();
         }
         #endregion
     }
