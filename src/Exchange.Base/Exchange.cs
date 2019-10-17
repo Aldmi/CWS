@@ -45,6 +45,7 @@ namespace Domain.Exchange
         private readonly SkippingPeriodChecker _skippingPeriodChecker;              //таймер отсчитывает время пропуска периода опроса.  In CycleBehavior
         private readonly Stopwatch _sw = Stopwatch.StartNew();
 
+        private readonly List<IDisposable> _behaviorOwners;
         private readonly CycleBehavior<TIn> _cycleBehavior;
         private readonly OnceBehavior<TIn> _onceBehavior;
         private readonly CommandBehavior<TIn> _commandBehavior;
@@ -104,9 +105,9 @@ namespace Domain.Exchange
                                  ITransportBackground transportBackground,
                                  IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, ResponseInfo>>>> dataProviderFactory,
                                  ILogger logger,
-                                 Func<string, ITransportBackground, CycleFuncOption, CycleBehavior<TIn>> cycleBehaviorFactory,
-                                 Func<string, ITransportBackground, OnceBehavior<TIn>> onceBehaviorFactory,
-                                 Func<string, ITransportBackground, CommandBehavior<TIn>> commandBehaviorFactory)
+                                 Func<string, ITransportBackground, CycleFuncOption, Owned<CycleBehavior<TIn>>> cycleBehaviorFactory,
+                                 Func<string, ITransportBackground, Owned<OnceBehavior<TIn>>> onceBehaviorFactory,
+                                 Func<string, ITransportBackground, Owned<CommandBehavior<TIn>>> commandBehaviorFactory)
         {
             ExchangeOption = exchangeOption;
             _transport = transport;
@@ -120,9 +121,13 @@ namespace Domain.Exchange
             _inputCycleDataEntryCheker= new InputCycleDataEntryCheker(KeyExchange, ExchangeOption.CycleFuncOption.NormalIntervalCycleDataEntry);
             _skippingPeriodChecker= new SkippingPeriodChecker(ExchangeOption.CycleFuncOption.SkipInterval);
 
-            _cycleBehavior= cycleBehaviorFactory(KeyExchange, transportBackground, ExchangeOption.CycleFuncOption);
-            _onceBehavior= onceBehaviorFactory(KeyExchange, transportBackground);
-            _commandBehavior= commandBehaviorFactory(KeyExchange, transportBackground);
+            var cycleBehaviorOwner = cycleBehaviorFactory(KeyExchange, transportBackground, ExchangeOption.CycleFuncOption);
+            var onceBehaviorOwner = onceBehaviorFactory(KeyExchange, transportBackground);
+            var commandBehaviorOwner = commandBehaviorFactory(KeyExchange, transportBackground);
+            _behaviorOwners = new List<IDisposable> {cycleBehaviorOwner, onceBehaviorOwner, commandBehaviorOwner};
+            _cycleBehavior = cycleBehaviorOwner.Value;
+            _onceBehavior= onceBehaviorOwner.Value;
+            _commandBehavior= commandBehaviorOwner.Value;
         }
         #endregion
 
