@@ -47,7 +47,7 @@ namespace App.Services.Mediators
         private readonly TransportStorage _transportStorage;
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
         private readonly IEventBus _eventBus;
-        private readonly Func<ExchangeOption, ITransport, ITransportBackground, Exchange<TIn>> _exchangeFactory;
+        private readonly Func<ExchangeOption, ITransport, ITransportBackground, Owned<IExchange<TIn>>> _exchangeFactory;
         private readonly AppConfigWrapper _appConfigWrapper;
         private readonly ILogger _logger;
         //опции для создания IProduser через фабрику
@@ -65,7 +65,7 @@ namespace App.Services.Mediators
             TransportStorage transportStorage,
             ProduserUnionStorage<TIn> produserUnionStorage,
             IEventBus eventBus,
-            Func<ExchangeOption, ITransport, ITransportBackground, Exchange<TIn>> exchangeFactory,
+            Func<ExchangeOption, ITransport, ITransportBackground, Owned<IExchange<TIn>>> exchangeFactory,
             AppConfigWrapper appConfigWrapper,
             ILogger logger)
         {
@@ -76,8 +76,6 @@ namespace App.Services.Mediators
             _deviceStorage = deviceStorage;
             _eventBus = eventBus;
             _exchangeFactory = exchangeFactory;
-
-
             _appConfigWrapper = appConfigWrapper;
             _logger = logger;
         }
@@ -125,13 +123,13 @@ namespace App.Services.Mediators
         /// <returns></returns>
         public IReadOnlyList<IExchange<TIn>> GetExchangesUsingTransport(KeyTransport keyTransport)
         {
-           return _exchangeStorage.Values.Where(exch => exch.KeyTransport.Equals(keyTransport)).ToList();
+           return _exchangeStorage.Values.Select(owned => owned.Value).Where(exch => exch.KeyTransport.Equals(keyTransport)).ToList();
         }
 
 
         public IExchange<TIn> GetExchange(string exchnageKey)
         {
-            return _exchangeStorage.Get(exchnageKey);
+            return _exchangeStorage.Get(exchnageKey)?.Value;
         }
 
 
@@ -205,7 +203,6 @@ namespace App.Services.Mediators
                 var keyTransport = exchOption.KeyTransport;
                 var bg = _backgroundStorage.Get(keyTransport);
                 var transport = _transportStorage.Get(keyTransport);
-
                 try
                 {
                     //exch = new Exchange<TIn>(exchOption, transport, bg, dataProvider, _logger);
@@ -219,7 +216,7 @@ namespace App.Services.Mediators
             }
 
             //ДОБАВИТЬ УСТРОЙСТВО--------------------------------------------------------------------------
-            var excanges = _exchangeStorage.GetMany(deviceOption.ExchangeKeys).ToList();
+            var excanges = _exchangeStorage.GetMany(deviceOption.ExchangeKeys).Select(owned =>owned.Value).ToList();
             var device = new Device<TIn>(deviceOption, excanges, _eventBus, _produserUnionStorage, _logger);
             _deviceStorage.AddNew(device.Option.Name, device);
             return device;
@@ -239,12 +236,12 @@ namespace App.Services.Mediators
                 throw new StorageHandlerException($"Устройство с таким именем НЕ существует: {deviceName}");
 
             var exchangeKeys = _deviceStorage.Values.SelectMany(dev => dev.Option.ExchangeKeys).ToList();
-            var keyTransports = _exchangeStorage.Values.Select(exc => exc.KeyTransport).ToList();
+            var keyTransports = _exchangeStorage.Values.Select(owned => owned.Value.KeyTransport).ToList();
             foreach (var exchKey in device.Option.ExchangeKeys)
             {
                 if (exchangeKeys.Count(key => key == exchKey) == 1)
                 {
-                    var removingExch = _exchangeStorage.Get(exchKey);
+                    var removingExch = _exchangeStorage.Get(exchKey).Value;
                     if (removingExch.CycleExchnageStatus != CycleExchnageStatus.Off)
                     {
                         removingExch.StopCycleExchange();
@@ -254,13 +251,10 @@ namespace App.Services.Mediators
                         await RemoveAndStopTransport(removingExch.KeyTransport);
                     }
                     _exchangeStorage.Remove(exchKey);
-                    removingExch.Dispose();
                 }
             }
-
             //УДАЛИМ УСТРОЙСТВО
             _deviceStorage.Remove(deviceName);
-            device.Dispose(); //???
             return device;
         }
 

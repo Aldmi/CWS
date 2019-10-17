@@ -48,9 +48,9 @@ namespace Infrastructure.Storages
             {
                 return DictionaryCrudResult.KeyNotExist;
             }
-            var sp = Storage[key];
-            sp.Dispose();
-            return (Storage.TryRemove(key, out sp)) ? DictionaryCrudResult.Removed : DictionaryCrudResult.None; 
+            var value = Storage[key];
+            value.Dispose();
+            return (Storage.TryRemove(key, out value)) ? DictionaryCrudResult.Removed : DictionaryCrudResult.None; 
         }
 
 

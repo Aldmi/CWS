@@ -112,7 +112,7 @@ namespace WebApiSwc
                         builder.RegisterModule(new BlStorageAutofacModule<AdInputType>());
                         builder.RegisterModule(new BlActionsAutofacModule<AdInputType>());
                         builder.RegisterModule(new MediatorsAutofacModule<AdInputType>());
-                        builder.RegisterModule(new BehaviorExchangeAutofacModule<AdInputType>());
+                        builder.RegisterModule(new ExchangeAutofacModule<AdInputType>());
                         builder.RegisterModule(new InputDataAutofacModule<AdInputType>(AppConfiguration.GetSection("MessageBrokerConsumer4InData")));
                         break;
 
@@ -244,7 +244,7 @@ namespace WebApiSwc
             var exchangeServices = scope.Resolve<ExchangeStorage<AdInputType>>();
             lifetimeApp.ApplicationStarted.Register(() =>
             {
-                foreach (var exchange in exchangeServices.Values.Where(exch=> exch.AutoStartCycleFunc))
+                foreach (var exchange in exchangeServices.Values.Select(owned => owned.Value).Where(exch=> exch.AutoStartCycleFunc))
                 {
                    exchange.StartCycleExchange();
                 }
@@ -296,7 +296,7 @@ namespace WebApiSwc
             var exchangeServices = scope.Resolve<ExchangeStorage<AdInputType>>();
             lifetimeApp.ApplicationStopping.Register(() =>
             {
-                foreach (var exchange in exchangeServices.Values.Where(exch => exch.CycleExchnageStatus != CycleExchnageStatus.Off))
+                foreach (var exchange in exchangeServices.Values.Select(owned => owned.Value).Where(exch => exch.CycleExchnageStatus != CycleExchnageStatus.Off))
                 {
                      exchange.StopCycleExchange();
                 }
