@@ -8,7 +8,7 @@ using Serilog;
 namespace Domain.InputDataModel.Base.ProvidersAbstract
 {
     //TODO: после созданния нескольких провайдеров, вынести обший функционал в этот класс
-    public abstract class BaseDataProvider<TIn> where TIn : InputTypeBase
+    public abstract class BaseDataProvider<TIn> : IDisposable where TIn : InputTypeBase
     {
         #region field
         protected readonly Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> ProviderResultFactory;
@@ -59,6 +59,14 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
             }
         }
 
+        #endregion
+
+
+
+        #region Disposable
+        public virtual void Dispose()
+        {
+        }
         #endregion
     }
 }

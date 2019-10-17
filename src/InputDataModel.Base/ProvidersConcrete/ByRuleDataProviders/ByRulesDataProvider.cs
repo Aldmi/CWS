@@ -191,5 +191,14 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
             RaiseSendDataRx.OnNext(providerResult);
         }
        #endregion
+
+
+
+
+       public override void Dispose()
+       {
+           base.Dispose();
+           RaiseSendDataRx?.Dispose();
+       }
     }
 }
