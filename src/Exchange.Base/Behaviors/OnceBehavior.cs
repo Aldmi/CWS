@@ -17,7 +17,8 @@ namespace Domain.Exchange.Behaviors
         #region ctor
         public OnceBehavior(string keyExchange,
             ITransportBackground transportBackground,
-            ILogger logger) : base(keyExchange, transportBackground, QueueMode.QueueExtractLastItem, logger)
+            Func<InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>> pieceOfDataSender,
+            ILogger logger) : base(keyExchange, transportBackground, QueueMode.QueueExtractLastItem, pieceOfDataSender, logger)
         {
         }
         #endregion
@@ -25,15 +26,11 @@ namespace Domain.Exchange.Behaviors
 
 
         #region Methode
-        public override void SendData(IEnumerable<TIn> inData, string directHandlerName, Func<InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>> pieceOfDataSender)
+        public void SendData(IEnumerable<TIn> inData, string directHandlerName)
         {
-            if (pieceOfDataSender == null)
-                throw new ArgumentNullException($"{nameof(pieceOfDataSender)} НЕ может быть NULL");
-
             if (inData == null)
                 throw new ArgumentNullException($"{nameof(inData)} НЕ может быть NULL");
 
-            PieceOfDataSender = pieceOfDataSender;
             var dataWrapper = new InDataWrapper<TIn> { Datas = inData.ToList(), DirectHandlerName = directHandlerName };
             var result = DataQueue.Enqueue(dataWrapper);
             if (result.IsSuccess)

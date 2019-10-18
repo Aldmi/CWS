@@ -38,9 +38,10 @@ namespace Domain.Exchange.Behaviors
         public CycleBehavior(string keyExchange,
             ITransportBackground transportBackground,
             CycleFuncOption cycleFuncOption,
+            Func<InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>> pieceOfDataSender,
             ILogger logger,
             Func<string, int, InputCycleDataEntryCheker> inputCycleDataEntryChekerFactory,
-            Func<int, SkippingPeriodChecker> skippingPeriodCheckerFactory) : base(keyExchange, transportBackground, cycleFuncOption.CycleQueueMode, logger)
+            Func<int, SkippingPeriodChecker> skippingPeriodCheckerFactory) : base(keyExchange, transportBackground, cycleFuncOption.CycleQueueMode, pieceOfDataSender, logger)
         {
             _inputCycleDataEntryCheker = inputCycleDataEntryChekerFactory(keyExchange, cycleFuncOption.NormalIntervalCycleDataEntry);
             _skippingPeriodChecker = skippingPeriodCheckerFactory(cycleFuncOption.SkipInterval);
@@ -104,15 +105,11 @@ namespace Domain.Exchange.Behaviors
         /// <summary>
         /// Выставить данные для цикл. функции.
         /// </summary>
-        public override void SendData(IEnumerable<TIn> inData, string directHandlerName, Func<InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>> pieceOfDataSender)
+        public void SendData(IEnumerable<TIn> inData, string directHandlerName)
         {
-            if(pieceOfDataSender == null)
-                throw new ArgumentNullException($"{nameof(pieceOfDataSender)} НЕ может быть NULL");
-            
             if (inData == null)
                 throw new ArgumentNullException($"{nameof(inData)} НЕ может быть NULL");
 
-            PieceOfDataSender = pieceOfDataSender;
             _inputCycleDataEntryCheker.InputDataEntry();
             var dataWrapper = new InDataWrapper<TIn> { Datas = inData.ToList(), DirectHandlerName = directHandlerName };
             var result = DataQueue.Enqueue(dataWrapper);

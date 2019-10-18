@@ -115,7 +115,7 @@ namespace Domain.Device
                 _disposeExchangesEventHandlers.Add(exch.IsConnectChangeRx.Subscribe(ConnectChangeRxEventHandler));
                 //_disposeExchangesEventHandlers.Add(exch.LastSendDataChangeRx.Subscribe(LastSendDataChangeRxEventHandler));
                 _disposeExchangesEventHandlers.Add(exch.IsOpenChangeTransportRx.Subscribe(OpenChangeTransportRxEventHandler));
-                _disposeExchangesEventHandlers.Add(exch.ResponseChangeRx.Subscribe(ResponseChangeRxEventHandler));
+                _disposeExchangesEventHandlers.Add(exch.ResponseReadyUnionBehaviorsRx.Subscribe(ResponseChangeRxEventHandler));
             });
             return true;
         }

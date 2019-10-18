@@ -17,7 +17,8 @@ namespace Domain.Exchange.Behaviors
         #region ctor
         public CommandBehavior(string keyExchange,
             ITransportBackground transportBackground,
-            ILogger logger) : base(keyExchange, transportBackground, QueueMode.QueueExtractLastItem, logger)
+            Func<InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>> pieceOfDataSender,
+            ILogger logger) : base(keyExchange, transportBackground, QueueMode.QueueExtractLastItem, pieceOfDataSender, logger)
         {
         }
         #endregion
@@ -37,12 +38,6 @@ namespace Domain.Exchange.Behaviors
             var dataWrapper = new InDataWrapper<TIn> { Command = command };
             DataQueue.Enqueue(dataWrapper);
             TransportBackground.AddCommandAction(CommandActionAsync);
-        }
-
-
-        public override void SendData(IEnumerable<TIn> inData, string directHandlerName, Func<InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>> pieceOfDataSender)
-        {
-            //TODO: для команд не нужен
         }
         #endregion
 
