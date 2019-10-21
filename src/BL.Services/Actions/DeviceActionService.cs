@@ -68,10 +68,10 @@ namespace App.Services.Actions
             if (exchange == null)
                 throw new ActionHandlerException($"Обмен с таким ключем Не найден: {exchnageKey}");
 
-            if (exchange.CycleExchnageStatus != CycleExchnageStatus.Off)
+            if (exchange.CycleBehavior.CycleExchnageStatus != CycleExchnageStatus.Off) 
                 throw new ActionHandlerException($"Цикл. обмен уже запущен: {exchnageKey}");
 
-            exchange.StartCycleExchange();
+            exchange.CycleBehavior.StartCycleExchange();
         }
 
 
@@ -85,10 +85,10 @@ namespace App.Services.Actions
             if (exchange == null)
                 throw new ActionHandlerException($"Обмен с таким ключем Не найден: {exchnageKey}");
 
-            if (exchange.CycleExchnageStatus == CycleExchnageStatus.Off)
+            if (exchange.CycleBehavior.CycleExchnageStatus == CycleExchnageStatus.Off)
                 throw new ActionHandlerException($"Цикл. обмен уже остановлен: {exchnageKey}");
 
-            exchange.StopCycleExchange();
+            exchange.CycleBehavior.StopCycleExchange();
         }
 
 

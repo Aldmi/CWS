@@ -138,7 +138,7 @@ namespace Domain.Device
         {
             Exchanges.ForEach(exch=>
             {
-                _disposeExchangesCycleDataEntryStateEventHandlers.Add(exch.CycleDataEntryStateChangeRx.Subscribe(CycleDataEntryStateChangeRxEventHandler));
+                _disposeExchangesCycleDataEntryStateEventHandlers.Add(exch.CycleBehavior.CycleDataEntryStateChangeRx.Subscribe(CycleDataEntryStateChangeRxEventHandler));
             });
             return true;
         }
@@ -251,7 +251,7 @@ namespace Domain.Device
             switch (dataAction)
             {
                 case DataAction.OneTimeAction:
-                    if (exchange.IsFullOneTimeDataQueue)
+                    if (exchange.OnceBehavior.IsFullDataQueue)
                     {
                         warningStr = $"Отправка данных НЕ удачна, очередь однократных данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}";
                         await SendWarningResult(warningStr);
@@ -261,13 +261,13 @@ namespace Domain.Device
                     break;
 
                 case DataAction.CycleAction:
-                    if (exchange.CycleExchnageStatus == CycleExchnageStatus.Off)
+                    if (exchange.CycleBehavior.CycleExchnageStatus == CycleExchnageStatus.Off) 
                     {
                         warningStr = $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН";
                         await SendWarningResult(warningStr);
                         return;
                     }
-                    if (exchange.IsFullCycleTimeDataQueue)
+                    if (exchange.CycleBehavior.IsFullDataQueue)
                     {
                         warningStr = $"Отправка данных НЕ удачна, очередь цикличеких данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}";
                         await SendWarningResult(warningStr);
@@ -277,7 +277,7 @@ namespace Domain.Device
                     break;
 
                 case DataAction.CommandAction:
-                    if (exchange.IsFullOneTimeDataQueue)
+                    if (exchange.CommandBehavior.IsFullDataQueue)
                     {
                         warningStr = $"Отправка команды НЕ удачна, очередь однократных данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}";
                         await SendWarningResult(warningStr);
@@ -419,10 +419,10 @@ namespace Domain.Device
             switch (dataState.InputDataStatus)
             {
                 case InputDataStatus.NormalEntry:
-                    exch.Switch2NormalCycleExchange();
+                    exch.CycleBehavior.Switch2NormalCycleExchange();
                     break;
                 case InputDataStatus.ToLongNoEntry:
-                    exch.Switch2CycleCommandEmergency();
+                    exch.CycleBehavior.Switch2CycleCommandEmergency();
                     break;
             }
         }

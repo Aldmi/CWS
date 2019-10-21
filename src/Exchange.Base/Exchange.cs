@@ -116,7 +116,6 @@ namespace Domain.Exchange
             CycleBehavior.ResponseReadyRx.Subscribe(ResponseReadyRxEventHandler);
             OnceBehavior.ResponseReadyRx.Subscribe(ResponseReadyRxEventHandler);
             CommandBehavior.ResponseReadyRx.Subscribe(ResponseReadyRxEventHandler);
-
         }
         #endregion
 

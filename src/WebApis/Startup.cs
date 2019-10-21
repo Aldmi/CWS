@@ -244,9 +244,9 @@ namespace WebApiSwc
             var exchangeServices = scope.Resolve<ExchangeStorage<AdInputType>>();
             lifetimeApp.ApplicationStarted.Register(() =>
             {
-                foreach (var exchange in exchangeServices.Values.Select(owned => owned.Value).Where(exch=> exch.AutoStartCycleFunc))
+                foreach (var exchange in exchangeServices.Values.Select(owned => owned.Value).Where(exch=> exch.CycleBehavior.CycleFuncOption.AutoStartCycleFunc))
                 {
-                   exchange.StartCycleExchange();
+                   exchange.CycleBehavior.StartCycleExchange();
                 }
             });
 
@@ -296,9 +296,9 @@ namespace WebApiSwc
             var exchangeServices = scope.Resolve<ExchangeStorage<AdInputType>>();
             lifetimeApp.ApplicationStopping.Register(() =>
             {
-                foreach (var exchange in exchangeServices.Values.Select(owned => owned.Value).Where(exch => exch.CycleExchnageStatus != CycleExchnageStatus.Off))
+                foreach (var exchange in exchangeServices.Values.Select(owned => owned.Value).Where(exch => exch.CycleBehavior.CycleExchnageStatus != CycleExchnageStatus.Off))
                 {
-                     exchange.StopCycleExchange();
+                     exchange.CycleBehavior.StopCycleExchange();
                 }
             });
 
