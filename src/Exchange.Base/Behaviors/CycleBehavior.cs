@@ -18,18 +18,19 @@ using Shared.Collections;
 
 namespace Domain.Exchange.Behaviors
 {
-    public class CycleBehavior<TIn> : BaseBehavior<TIn> where TIn : InputTypeBase
+    public class CycleBehavior<TIn> : BaseBehavior<TIn>, IDisposable where TIn : InputTypeBase
     {
         #region field
         private readonly InputCycleDataEntryCheker _inputCycleDataEntryCheker;      //таймер отсчитывает период от получения входных данных для цикл. обмена.
         private readonly SkippingPeriodChecker _skippingPeriodChecker;              //таймер отсчитывает время пропуска периода опроса.
+        private readonly string _keyExchange;
         public readonly CycleFuncOption CycleFuncOption;
         #endregion
 
 
 
         #region prop
-        public CycleExchnageStatus CycleExchnageStatus { get; private set; } //TODO:???
+        public CycleBehaviorState CycleBehaviorState { get; private set; } //TODO:???
         #endregion
 
 
@@ -40,11 +41,13 @@ namespace Domain.Exchange.Behaviors
             CycleFuncOption cycleFuncOption,
             Func<InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>> pieceOfDataSender,
             ILogger logger,
-            Func<string, int, InputCycleDataEntryCheker> inputCycleDataEntryChekerFactory,
+            Func<int, InputCycleDataEntryCheker> inputCycleDataEntryChekerFactory,
             Func<int, SkippingPeriodChecker> skippingPeriodCheckerFactory) : base(keyExchange, transportBackground, cycleFuncOption.CycleQueueMode, pieceOfDataSender, logger)
         {
-            _inputCycleDataEntryCheker = inputCycleDataEntryChekerFactory(keyExchange, cycleFuncOption.NormalIntervalCycleDataEntry);
+            _inputCycleDataEntryCheker = inputCycleDataEntryChekerFactory(cycleFuncOption.NormalIntervalCycleDataEntry);
+            _inputCycleDataEntryCheker.CycleDataEntryStateChangeRx.Subscribe(CycleDataEntryStateChangeRxEventHandler);
             _skippingPeriodChecker = skippingPeriodCheckerFactory(cycleFuncOption.SkipInterval);
+            _keyExchange = keyExchange;
             CycleFuncOption = cycleFuncOption;
         }
         #endregion
@@ -52,7 +55,24 @@ namespace Domain.Exchange.Behaviors
 
 
         #region InputDataChangeRx
-        public ISubject<InputDataStateRxModel> CycleDataEntryStateChangeRx => _inputCycleDataEntryCheker.CycleDataEntryStateChangeRx;
+        public ISubject<CycleBehaviorStateRxModel> CycleBehaviorStateChangeRx { get; } = new Subject<CycleBehaviorStateRxModel>();
+        #endregion
+
+
+
+        #region RxEventHandlers
+        private void CycleDataEntryStateChangeRxEventHandler(InputDataStatus inputDataStatus)
+        {
+            switch (inputDataStatus)
+            {
+                case InputDataStatus.NormalEntry:
+                    Switch2NormalCycleExchange();
+                    break;
+                case InputDataStatus.ToLongNoEntry:
+                    Switch2CycleCommandEmergency();
+                    break;
+            }
+        }
         #endregion
 
 
@@ -74,8 +94,9 @@ namespace Domain.Exchange.Behaviors
         {
             TransportBackground.RemoveCycleFunc(CycleTimeActionAsync);
             TransportBackground.RemoveCycleFunc(CycleCommandEmergencyActionAsync);
-            CycleExchnageStatus = CycleExchnageStatus.Off;
             _inputCycleDataEntryCheker.StopChecking();
+            CycleBehaviorState = CycleBehaviorState.Off;
+            CycleBehaviorStateChangeRx.OnNext(new CycleBehaviorStateRxModel(_keyExchange, CycleBehaviorState));
         }
 
         /// <summary>
@@ -85,7 +106,8 @@ namespace Domain.Exchange.Behaviors
         {
             TransportBackground.RemoveCycleFunc(CycleCommandEmergencyActionAsync);
             TransportBackground.AddCycleAction(CycleTimeActionAsync);
-            CycleExchnageStatus = CycleExchnageStatus.Normal;
+            CycleBehaviorState = CycleBehaviorState.Normal;
+            CycleBehaviorStateChangeRx.OnNext(new CycleBehaviorStateRxModel(_keyExchange, CycleBehaviorState));
         }
 
         /// <summary>
@@ -95,7 +117,8 @@ namespace Domain.Exchange.Behaviors
         {
             TransportBackground.RemoveCycleFunc(CycleTimeActionAsync);
             TransportBackground.AddCycleAction(CycleCommandEmergencyActionAsync);
-            CycleExchnageStatus = CycleExchnageStatus.Emergency;
+            CycleBehaviorState = CycleBehaviorState.Emergency;
+            CycleBehaviorStateChangeRx.OnNext(new CycleBehaviorStateRxModel(_keyExchange, CycleBehaviorState));
         }
         #endregion
 
@@ -171,5 +194,14 @@ namespace Domain.Exchange.Behaviors
             await Task.Delay(1, ct); //TODO: Продумать как задвать скважность между выполнением цикл. функции на обмене.
         }
         #endregion
+
+
+
+
+        public void Dispose()
+        {
+            _inputCycleDataEntryCheker?.Dispose();
+            _skippingPeriodChecker?.Dispose();
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
@@ -19,6 +20,7 @@ using Infrastructure.EventBus.Abstract;
 using Infrastructure.Transport.Base.RxModel;
 using Newtonsoft.Json;
 using Serilog;
+using Shared.Extensions;
 using DeviceOption = Domain.Device.Repository.Entities.DeviceOption;
 
 
@@ -36,7 +38,7 @@ namespace Domain.Device
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
         private readonly ILogger _logger;
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
-        private readonly List<IDisposable> _disposeExchangesCycleDataEntryStateEventHandlers = new List<IDisposable>();
+        private readonly List<IDisposable> _disposeExchangesCycleBehaviorEventHandlers = new List<IDisposable>();
         private IDisposable _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler;
         private readonly AllExchangesResponseAnalitic _allExchangesResponseAnalitic;
         #endregion
@@ -131,23 +133,24 @@ namespace Domain.Device
 
 
         /// <summary>
-        /// Подписка на события смены состояния обменов.
+        /// Подписка на события смены состояния Цикл поведения обменов.
         /// </summary>
-        /// <returns></returns>
-        public bool SubscrubeOnExchangesCycleDataEntryStateEvents()
+        public bool SubscrubeOnExchangesCycleBehaviorEvents()
         {
-            Exchanges.ForEach(exch=>
+            Exchanges.ForEach(exch =>
             {
-                _disposeExchangesCycleDataEntryStateEventHandlers.Add(exch.CycleBehavior.CycleDataEntryStateChangeRx.Subscribe(CycleDataEntryStateChangeRxEventHandler));
+                _disposeExchangesCycleBehaviorEventHandlers.Add(exch.CycleBehavior.CycleBehaviorStateChangeRx.SubscribeAsyncConcurrent(CycleBehaviorStateChangeRxEventHandler));
             });
             return true;
         }
 
 
-        //TODO: 
-        public void UnsubscrubeOnExchangesCycleDataEntryStateEvents()
+        /// <summary>
+        /// Отписка от событий смены состояния Цикл поведения обменов.
+        /// </summary>
+        public void UnsubscrubeOnExchangesCycleBehaviorEvents()
         {
-            _disposeExchangesCycleDataEntryStateEventHandlers.ForEach(d => d.Dispose());
+            _disposeExchangesCycleBehaviorEventHandlers.ForEach(d => d.Dispose());
         }
 
 
@@ -261,7 +264,7 @@ namespace Domain.Device
                     break;
 
                 case DataAction.CycleAction:
-                    if (exchange.CycleBehavior.CycleExchnageStatus == CycleExchnageStatus.Off) 
+                    if (exchange.CycleBehavior.CycleBehaviorState == CycleBehaviorState.Off) 
                     {
                         warningStr = $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН";
                         await SendWarningResult(warningStr);
@@ -409,22 +412,13 @@ namespace Domain.Device
             
 
         /// <summary>
-        /// Обработчик события смены режима поступления входных данных
+        /// Обработчик события смены режима Циклической обмена
         /// </summary>
-        private void CycleDataEntryStateChangeRxEventHandler(InputDataStateRxModel dataState)
+        private async Task CycleBehaviorStateChangeRxEventHandler(CycleBehaviorStateRxModel dataState)
         {
-            //Debug.WriteLine($"{dataState.KeyExchange}   {dataState.InputDataState}");//DEBUG
-            _logger.Information($"NormalFrequencyCycleDataEntryChangeRxEventHandler.  {dataState.KeyExchange}  InputDataState= {dataState.InputDataStatus}");
-            var exch= Exchanges.FirstOrDefault(e => e.KeyExchange.Equals(dataState.KeyExchange));
-            switch (dataState.InputDataStatus)
-            {
-                case InputDataStatus.NormalEntry:
-                    exch.CycleBehavior.Switch2NormalCycleExchange();
-                    break;
-                case InputDataStatus.ToLongNoEntry:
-                    exch.CycleBehavior.Switch2CycleCommandEmergency();
-                    break;
-            }
+            var message= $"Переключился режим Циклического обмена.  {dataState.KeyExchange}  {dataState.CycleBehaviorState}";
+            _logger.Information(message);
+            await Send2ProduderUnion(Option.Name, message);
         }
 
 
@@ -536,7 +530,7 @@ namespace Domain.Device
         public void Dispose()
         {
             UnsubscrubeOnExchangesEvents();
-            UnsubscrubeOnExchangesCycleDataEntryStateEvents();
+            UnsubscrubeOnExchangesCycleBehaviorEvents();
             _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler?.Dispose();
             MiddlewareInvokeService?.Dispose();
         }

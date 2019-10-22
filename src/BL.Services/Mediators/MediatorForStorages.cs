@@ -242,7 +242,7 @@ namespace App.Services.Mediators
                 if (exchangeKeys.Count(key => key == exchKey) == 1)
                 {
                     var removingExch = _exchangeStorage.Get(exchKey).Value;
-                    if (removingExch.CycleBehavior.CycleExchnageStatus != CycleExchnageStatus.Off)
+                    if (removingExch.CycleBehavior.CycleBehaviorState != CycleBehaviorState.Off)
                     {
                         removingExch.CycleBehavior.StopCycleExchange();
                     }

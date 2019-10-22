@@ -3,21 +3,19 @@ using Domain.Exchange.Services;
 
 namespace Domain.Exchange.RxModel
 {
-    public class InputDataStateRxModel
+    public class CycleBehaviorStateRxModel
     {
         public string KeyExchange { get;  }
-        public InputDataStatus InputDataStatus { get; }
+        public CycleBehaviorState CycleBehaviorState { get; }
 
 
 
         #region ctor
-
-        public InputDataStateRxModel(string keyExchange, InputDataStatus inputDataStatus)
+        public CycleBehaviorStateRxModel(string keyExchange, CycleBehaviorState cycleBehaviorState)
         {
             KeyExchange = keyExchange;
-            InputDataStatus = inputDataStatus;
+            CycleBehaviorState = cycleBehaviorState;
         }
-
         #endregion
     }
 }

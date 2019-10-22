@@ -1,6 +1,6 @@
 ﻿namespace Domain.Exchange.Enums
 {
-    public enum CycleExchnageStatus : byte
+    public enum CycleBehaviorState : byte
     {
         Off,
         Normal,

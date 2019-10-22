@@ -15,71 +15,58 @@ namespace Domain.Exchange.Services
     public class InputCycleDataEntryCheker : IDisposable
     {
         #region fields
-
-        private readonly string _key;
         private readonly int _checkInterval;
         private readonly Timer _timerInputCycleDataCheck;
-
         #endregion
 
 
 
         #region prop
-
         /// <summary>
         /// Состояние получения входных данных
         /// true - нормальное состояние
         /// </summary>
         public InputDataStatus InputDataStatus { get; private set; }
-
         #endregion
 
 
 
         #region InputDataRx
-
         /// <summary>
         /// Событие смены состояния получения данных
         /// </summary>
-        public ISubject<InputDataStateRxModel> CycleDataEntryStateChangeRx { get; } = new Subject<InputDataStateRxModel>();
-
+        public ISubject<InputDataStatus> CycleDataEntryStateChangeRx { get; } = new Subject<InputDataStatus>();
         #endregion
 
 
 
         #region ctor
-
-        public InputCycleDataEntryCheker(string key, int checkInterval)
+        public InputCycleDataEntryCheker(int checkInterval)
         {
-            _key = key;
             _checkInterval = checkInterval;
             _timerInputCycleDataCheck = new Timer();
             _timerInputCycleDataCheck.Elapsed += TimerToLongNoEntryElapsed;
             InputDataStatus = InputDataStatus.NormalEntry;
         }
-
         #endregion
 
 
 
         #region EventHandlers
-
         private void TimerToLongNoEntryElapsed(object sender, ElapsedEventArgs e)
         {
             //ПЕРЕХОД В СОСТОЯНИЕ ДОЛГОГО ОТСУТСВИЯ ДАННЫХ.
             if (InputDataStatus == InputDataStatus.NormalEntry)
             {
                 InputDataStatus = InputDataStatus.ToLongNoEntry;
-                CycleDataEntryStateChangeRx.OnNext(new InputDataStateRxModel(_key, InputDataStatus));
+                CycleDataEntryStateChangeRx.OnNext(InputDataStatus);
             }
         }
-
         #endregion
 
 
 
         #region Mehods
-
         public void StartChecking()
         {
             if (_checkInterval > 0)
@@ -110,21 +97,18 @@ namespace Domain.Exchange.Services
             if (InputDataStatus == InputDataStatus.ToLongNoEntry)
             {
                 InputDataStatus = InputDataStatus.NormalEntry;
-                CycleDataEntryStateChangeRx.OnNext(new InputDataStateRxModel(_key, InputDataStatus));
+                CycleDataEntryStateChangeRx.OnNext(InputDataStatus);
             }
         }
-
         #endregion
 
 
 
         #region Disposable
-
         public void Dispose()
         {
             _timerInputCycleDataCheck?.Dispose();
         }
-
         #endregion
     }
 }

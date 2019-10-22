@@ -32,7 +32,7 @@ namespace Domain.Exchange
     public class Exchange<TIn> : IExchange<TIn> where TIn : InputTypeBase
     {
         #region field
-        protected readonly ExchangeOption ExchangeOption;
+        private readonly ExchangeOption _option;
         private readonly ITransport _transport;
         private readonly ITransportBackground _transportBackground;
         private IDataProvider<TIn, ResponseInfo> _dataProvider;                       //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
@@ -44,16 +44,15 @@ namespace Domain.Exchange
 
 
         #region prop
-        public string KeyExchange => ExchangeOption.Key;
-        public string ProviderName => ExchangeOption.Provider.Name;
-        public int NumberErrorTrying => ExchangeOption.NumberErrorTrying;
-        public int NumberTimeoutTrying => ExchangeOption.NumberTimeoutTrying;
-        public KeyTransport KeyTransport => ExchangeOption.KeyTransport;
+        public string KeyExchange => _option.Key;
+        public string ProviderName => _option.Provider.Name;
+        public int NumberErrorTrying => _option.NumberErrorTrying;
+        public int NumberTimeoutTrying => _option.NumberTimeoutTrying;
+        public KeyTransport KeyTransport => _option.KeyTransport;
 
         public bool IsOpen => _transport.IsOpen;
         public bool IsCycleReopened => _transport.IsCycleReopened;
         public bool IsStartedTransportBg => _transportBackground.IsStarted;
-
 
         private bool _isConnect;
         public bool IsConnect
@@ -89,7 +88,7 @@ namespace Domain.Exchange
 
 
         #region ctor
-        public Exchange(ExchangeOption exchangeOption,
+        public Exchange(ExchangeOption option,
                                  ITransport transport,
                                  ITransportBackground transportBackground,
                                  IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, ResponseInfo>>>> dataProviderFactory,
@@ -98,15 +97,15 @@ namespace Domain.Exchange
                                  Func<string, ITransportBackground, Func<InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<OnceBehavior<TIn>>> onceBehaviorFactory,
                                  Func<string, ITransportBackground, Func<InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<CommandBehavior<TIn>>> commandBehaviorFactory)
         {
-            ExchangeOption = exchangeOption;
+            _option = option;
             _transport = transport;
             _transportBackground = transportBackground;
-            var owner= dataProviderFactory[ExchangeOption.Provider.Name](ExchangeOption.Provider);
+            var owner= dataProviderFactory[_option.Provider.Name](_option.Provider);
             _dataProviderOwner = owner;
             _dataProvider = owner.Value;
             _logger = logger;
 
-            var cycleBehaviorOwner = cycleBehaviorFactory(KeyExchange, transportBackground, ExchangeOption.CycleFuncOption, SendingPieceOfData);
+            var cycleBehaviorOwner = cycleBehaviorFactory(KeyExchange, transportBackground, _option.CycleFuncOption, SendingPieceOfData);
             var onceBehaviorOwner = onceBehaviorFactory(KeyExchange, transportBackground, SendingPieceOfData);
             var commandBehaviorOwner = commandBehaviorFactory(KeyExchange, transportBackground, SendingPieceOfData);
             _behaviorOwners = new List<IDisposable> {cycleBehaviorOwner, onceBehaviorOwner, commandBehaviorOwner};
@@ -346,12 +345,10 @@ namespace Domain.Exchange
 
 
         #region dataProvider
-
         public void SetNewProvider(IDataProvider<TIn, ResponseInfo> provider)
         {
             _dataProvider = provider;
         }
-
         #endregion
 
         
