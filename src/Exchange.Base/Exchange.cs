@@ -112,21 +112,6 @@ namespace Domain.Exchange
             CycleBehavior = cycleBehaviorOwner.Value;
             OnceBehavior = onceBehaviorOwner.Value;
             CommandBehavior = commandBehaviorOwner.Value;
-            CycleBehavior.ResponseReadyRx.Subscribe(ResponseReadyRxEventHandler);
-            OnceBehavior.ResponseReadyRx.Subscribe(ResponseReadyRxEventHandler);
-            CommandBehavior.ResponseReadyRx.Subscribe(ResponseReadyRxEventHandler);
-        }
-        #endregion
-
-
-        #region  RxEventHandler
-        /// <summary>
-        /// Объединяет ответы от всех поведений.
-        /// Т.е. любой ответ об отправки данных через этот обмнен.
-        /// </summary>
-        private void ResponseReadyRxEventHandler(ResponsePieceOfDataWrapper<TIn> pieceOfData)
-        {
-            ResponseReadyUnionBehaviorsRx.OnNext(pieceOfData);
         }
         #endregion
 
@@ -134,7 +119,6 @@ namespace Domain.Exchange
         #region ExchangeRx
         public ISubject<ConnectChangeRxModel> IsConnectChangeRx { get; } = new Subject<ConnectChangeRxModel>();
         public ISubject<LastSendDataChangeRxModel<TIn>> LastSendDataChangeRx { get; } = new Subject<LastSendDataChangeRxModel<TIn>>();
-        public ISubject<ResponsePieceOfDataWrapper<TIn>> ResponseReadyUnionBehaviorsRx { get; } = new Subject<ResponsePieceOfDataWrapper<TIn>>();
         #endregion
 
 

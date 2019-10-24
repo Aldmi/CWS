@@ -60,7 +60,6 @@ namespace Domain.Exchange
         #region ExchangeRx
         ISubject<ConnectChangeRxModel> IsConnectChangeRx { get; }                   //СОБЫТИЕ СМЕНЫ КОННЕКТА IsConnect. МЕНЯЕТСЯ В ПРОЦЕССЕ ОБМЕНА.
         ISubject<LastSendDataChangeRxModel<T>> LastSendDataChangeRx { get; }        //СОБЫТИЕ ИЗМЕНЕНИЯ ПОСЛЕД ОТПРАВЕЛННЫХ ДАННЫХ LastSendData.
-        ISubject<ResponsePieceOfDataWrapper<T>> ResponseReadyUnionBehaviorsRx { get; }           //СОБЫТИЕ ОТВЕТА НА ПЕРЕДАННЫЮ ПОРЦИЮ ДАННЫХ. 
         #endregion
 
 

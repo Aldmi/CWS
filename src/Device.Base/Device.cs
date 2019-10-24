@@ -10,6 +10,7 @@ using Domain.Device.MiddleWares;
 using Domain.Device.MiddleWares.Invokes;
 using Domain.Device.Produser;
 using Domain.Device.Repository.Entities.MiddleWareOption;
+using Domain.Device.Services;
 using Domain.Exchange;
 using Domain.Exchange.Enums;
 using Domain.Exchange.RxModel;
@@ -40,7 +41,7 @@ namespace Domain.Device
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
         private readonly List<IDisposable> _disposeExchangesCycleBehaviorEventHandlers = new List<IDisposable>();
         private IDisposable _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler;
-        private readonly AllExchangesResponseAnalitic _allExchangesResponseAnalitic;
+        private readonly AllExchangesResponseAnaliticService _allCycleBehaviorResponseAnalitic;
         #endregion
 
 
@@ -78,10 +79,9 @@ namespace Domain.Device
             _eventBus = eventBus;
             _produserUnionStorage = produserUnionStorage;
             _logger = logger;
-
             CreateMiddleWareInDataByOption(Option.MiddleWareInData);
-            _allExchangesResponseAnalitic= new AllExchangesResponseAnalitic(Exchanges.Select(exch=> exch.KeyExchange));
-            _allExchangesResponseAnalitic.AllExchangeAnaliticDoneRx.Subscribe(AllExhangeAnaliticDoneEventHandler);
+            _allCycleBehaviorResponseAnalitic= new AllExchangesResponseAnaliticService(Exchanges.Select(exch=> exch.KeyExchange));
+            _allCycleBehaviorResponseAnalitic.AllExchangeAnaliticDoneRx.Subscribe(AllExhangeAnaliticDoneRxEventHandler);
         }
         #endregion
 
@@ -117,14 +117,16 @@ namespace Domain.Device
                 _disposeExchangesEventHandlers.Add(exch.IsConnectChangeRx.Subscribe(ConnectChangeRxEventHandler));
                 //_disposeExchangesEventHandlers.Add(exch.LastSendDataChangeRx.Subscribe(LastSendDataChangeRxEventHandler));
                 _disposeExchangesEventHandlers.Add(exch.IsOpenChangeTransportRx.Subscribe(OpenChangeTransportRxEventHandler));
-                _disposeExchangesEventHandlers.Add(exch.ResponseReadyUnionBehaviorsRx.Subscribe(ResponseChangeRxEventHandler));
+                _disposeExchangesEventHandlers.Add(exch.CycleBehavior.ResponseReadyRx.Subscribe(CycleBehaviorResponseReadyRxEventHandler));
+                _disposeExchangesEventHandlers.Add(exch.OnceBehavior.ResponseReadyRx.Subscribe(OnceAndCommandBehaviorResponseReadyRxEventHandler));
+                _disposeExchangesEventHandlers.Add(exch.CommandBehavior.ResponseReadyRx.Subscribe(OnceAndCommandBehaviorResponseReadyRxEventHandler));
             });
             return true;
         }
 
 
         /// <summary>
-        /// Отписка на событий обменов.
+        /// Отписка от событий обменов.
         /// </summary>
         public void UnsubscrubeOnExchangesEvents()
         {
@@ -351,12 +353,14 @@ namespace Domain.Device
                     _logger.Information($"ОТПРАВКА ОТВЕТОВ УСПЕШНА для устройства {Option.Name} через ProduderUnion = {ProduserUnionKey}");
             }
         }
-
         #endregion
 
 
 
         #region RxEventHandler 
+        /// <summary>
+        /// Обработка события смены флага IsConnect у обмена.
+        /// </summary>
         private async void ConnectChangeRxEventHandler(ConnectChangeRxModel model)
         {
             //await Send2Produder(Option.TopicName4MessageBroker, $"Connect = {model.IsConnect} для обмена {model.KeyExchange}");
@@ -364,6 +368,9 @@ namespace Domain.Device
         }
 
 
+        /// <summary>
+        /// Обработка события смены флага IsOpen у обмена.
+        /// </summary>
         private async void OpenChangeTransportRxEventHandler(IsOpenChangeRxModel model)
         {
             //await Send2Produder(Option.TopicName4MessageBroker,$"IsOpen = {model.IsOpen} для ТРАНСПОРТА {model.TransportName}");
@@ -373,18 +380,25 @@ namespace Domain.Device
 
 
         /// <summary>
-        /// Обработчик события получения Результата обмена.
+        /// Обработчик события получения Результата обмена от циклического поведения.
         /// </summary>
-        /// <param name="responsePieceOfDataWrapper"></param>
-        private async void ResponseChangeRxEventHandler(ResponsePieceOfDataWrapper<TIn> responsePieceOfDataWrapper)
+        private async void CycleBehaviorResponseReadyRxEventHandler(ResponsePieceOfDataWrapper<TIn> responsePieceOfDataWrapper)
+        {
+            //Анализ ответов от всех обменов.
+            _allCycleBehaviorResponseAnalitic.SetResponseResult(responsePieceOfDataWrapper.KeyExchange, responsePieceOfDataWrapper.IsValidAll);
+            OnceAndCommandBehaviorResponseReadyRxEventHandler(responsePieceOfDataWrapper);
+        }
+
+
+        /// <summary>
+        /// Обработчик события получения Результата обмена от однократного обмена или команды.
+        /// </summary>
+        private async void OnceAndCommandBehaviorResponseReadyRxEventHandler(ResponsePieceOfDataWrapper<TIn> responsePieceOfDataWrapper)
         {
             //Топик не указан. Нет отправки ответа через ProduserUnion.
             if (!string.IsNullOrEmpty(ProduserUnionKey))
                 await Send2ProduderUnion(responsePieceOfDataWrapper);
 
-            //Анализ ответов от всех обменов.
-            _allExchangesResponseAnalitic.SetResponseResult(responsePieceOfDataWrapper.KeyExchange, responsePieceOfDataWrapper.IsValidAll);
-          
             //логирование ответов в полном виде
             var settings = new JsonSerializerSettings
             {
@@ -397,12 +411,13 @@ namespace Domain.Device
 
 
         /// <summary>
-        /// Событие все обмены завершены
+        /// Событие все обмены завершены.
+        /// АНАЛИЗ ПРОВОДИТСЯ ТОЛЬКО ДЛЯ ЦИКЛ. ПОВЕДЕНИЯ
         /// </summary>
         /// <param name="allExchResultTuple">true- если все обмены завершены успешно</param>
-        private void AllExhangeAnaliticDoneEventHandler((bool, bool) allExchResultTuple)
+        private void AllExhangeAnaliticDoneRxEventHandler((bool, bool) allExchResultTuple)
         {
-            var (allSucsess, anySucsess) = allExchResultTuple;
+            var (_, anySucsess) = allExchResultTuple;
             if (anySucsess)
             {
                 //Если хотя бы 1 обмен завершен успешно, выставить флаг обратной связи для MiddlewareInvokeService
@@ -438,89 +453,6 @@ namespace Domain.Device
             {
                 _logger.Error($"ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ MiddlewareInData ДЛЯ: {Option.Name} Errors= {result.Error.GetErrorsArgegator}"); //ВСЕ ОШИБКИ ПРЕОБРАЗОВАНИЯ ВХОДНЫХ ДАННЫХ.
             }
-        }
-        #endregion
-
-
-
-        #region NestedClass
-        /// <summary>
-        /// Анализ ответов от всех обменов.
-        /// </summary>
-        private class AllExchangesResponseAnalitic
-        {
-            #region fields
-            private readonly ConcurrentDictionary<string, bool?> _dictionary = new ConcurrentDictionary<string, bool?>();
-            #endregion
-
-
-            #region ExchangeRx
-            /// <summary>
-            /// Событие. Все Обмены завершены.
-            /// </summary>
-            public ISubject<(bool, bool)> AllExchangeAnaliticDoneRx{ get; } = new Subject<(bool, bool)>();  //(allResultSucsses, anyResultSucsses)
-            #endregion
-
-
-            #region ctor
-            public AllExchangesResponseAnalitic(IEnumerable<string> keys)
-            {
-                foreach (var key in keys)
-                {
-                    _dictionary[key] = null;
-                }
-            }
-            #endregion
-
-
-            #region Methode
-            /// <summary>
-            /// Записать результат обмена (ответ).
-            /// И выполнить аналитику всех ответов.
-            /// </summary>
-            /// <param name="key">ключ</param>
-            /// <param name="respResult">ответ</param>
-            public void SetResponseResult(string key, bool respResult)
-            {
-                if (_dictionary.ContainsKey(key))
-                {
-                    _dictionary[key] = respResult;
-                    DoAnalitic();
-                }
-            }
-
-            /// <summary>
-            /// Аналитика результатов обмена.
-            /// Васе обмены должны закончится (получить результат)
-            /// И хотя бы 1 обмен должен завершится успешно.
-            /// Тогда срабатывает событие AnalyticsDoneRx.
-            /// </summary>
-            private void DoAnalitic()
-            {
-               var allResult= _dictionary.Select(pair => pair.Value).ToList();
-               var allResultSet = allResult.All(flag => flag.HasValue);            //Все обмены получили результат.
-               if (allResultSet)
-               {
-                   var anyResultSucsses = allResult.Any(flag => flag ?? false);    //Хотя бы один обмен завершился успешно.
-                   var allResultSucsses = allResult.All(flag => flag ?? false);    //Все обмены завершились успешно.
-                   var tuple = (allResultSucsses, anyResultSucsses);
-                   ResetAllResult();
-                   AllExchangeAnaliticDoneRx.OnNext(tuple);
-               }
-            }
-
-            /// <summary>
-            /// Сбросить все значения в null.
-            /// </summary>
-            private void ResetAllResult()
-            {
-                foreach (var key in _dictionary.Keys.ToArray())
-                {
-                    _dictionary[key] = null;
-                }
-            }
-
-            #endregion
         }
         #endregion
 
