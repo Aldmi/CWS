@@ -35,7 +35,7 @@ namespace Domain.Device
     public class Device<TIn> : IDisposable where TIn : InputTypeBase
     {
         #region field
-        private readonly IEventBus _eventBus; //TODO: Not Use
+        private readonly Func<InvokerOutput, ISupportMiddlewareInvoke<TIn>, MiddlewareInvokeService<TIn>> _middleWareInDataFactory;
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
         private readonly ILogger _logger;
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
@@ -70,18 +70,22 @@ namespace Domain.Device
         #region ctor
         public Device(DeviceOption option,
                       IEnumerable<IExchange<TIn>> exchanges,
-                      IEventBus eventBus,
                       ProduserUnionStorage<TIn> produserUnionStorage,
-                      ILogger logger)
+                      ILogger logger,
+                      Func<InvokerOutput, ISupportMiddlewareInvoke<TIn>, MiddlewareInvokeService<TIn>> middleWareInDataFactory,  //TODO: Owned???
+                      Func<IEnumerable<string>, AllExchangesResponseAnaliticService> allExchangesResponseAnaliticServiceFactory) //TODO: Owned???
         {
             Option = option;
             Exchanges = exchanges.ToList();
-            _eventBus = eventBus;
+            _middleWareInDataFactory = middleWareInDataFactory;
             _produserUnionStorage = produserUnionStorage;
             _logger = logger;
-            CreateMiddleWareInDataByOption(Option.MiddleWareInData);
-            _allCycleBehaviorResponseAnalitic= new AllExchangesResponseAnaliticService(Exchanges.Select(exch=> exch.KeyExchange));
+
+            //_allCycleBehaviorResponseAnalitic= new AllExchangesResponseAnaliticService(Exchanges.Select(exch=> exch.KeyExchange));
+            _allCycleBehaviorResponseAnalitic = allExchangesResponseAnaliticServiceFactory(Exchanges.Select(exch => exch.KeyExchange));
             _allCycleBehaviorResponseAnalitic.AllExchangeAnaliticDoneRx.Subscribe(AllExhangeAnaliticDoneRxEventHandler);
+
+            CreateMiddleWareInDataByOption(Option.MiddleWareInData);
         }
         #endregion
 
@@ -99,8 +103,9 @@ namespace Domain.Device
             MiddlewareInvokeService = null;
             if (option != null)
             {
-                var middleWareInData = new MiddleWareInData<TIn>(option, _logger);
-                MiddlewareInvokeService = new MiddlewareInvokeService<TIn>(option.InvokerOutput, middleWareInData, _logger);
+                var middleWareInData = new MiddleWareInData<TIn>(option, _logger); //TODO: Создавать внутри MiddlewareInvokeService
+                MiddlewareInvokeService = _middleWareInDataFactory(option.InvokerOutput, middleWareInData);
+                //MiddlewareInvokeService = new MiddlewareInvokeService<TIn>(option.InvokerOutput, middleWareInData, _logger);
                 _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler= MiddlewareInvokeService?.InvokeIsCompleteRx.Subscribe(MiddlewareInvokeIsCompleteRxEventHandler);
             }
         }

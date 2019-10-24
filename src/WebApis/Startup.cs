@@ -113,6 +113,7 @@ namespace WebApiSwc
                         builder.RegisterModule(new BlActionsAutofacModule<AdInputType>());
                         builder.RegisterModule(new MediatorsAutofacModule<AdInputType>());
                         builder.RegisterModule(new ExchangeAutofacModule<AdInputType>());
+                        builder.RegisterModule(new DeviceAutofacModule<AdInputType>());
                         builder.RegisterModule(new InputDataAutofacModule<AdInputType>(AppConfiguration.GetSection("MessageBrokerConsumer4InData")));
                         break;
 
@@ -254,7 +255,7 @@ namespace WebApiSwc
             var deviceServices = scope.Resolve<DeviceStorage<AdInputType>>();
             lifetimeApp.ApplicationStarted.Register(() =>
             {
-                foreach (var device in deviceServices.Values)
+                foreach (var device in deviceServices.Values.Select(owned => owned.Value))
                 {
                     //ПОДПИСКА НА СОБЫТИЯ ОТ ОБМЕНОВ.
                     device.SubscrubeOnExchangesEvents();
@@ -306,7 +307,7 @@ namespace WebApiSwc
             var deviceServices = scope.Resolve<DeviceStorage<AdInputType>>();
             lifetimeApp.ApplicationStopping.Register(() =>
             {
-                foreach (var device in deviceServices.Values)
+                foreach (var device in deviceServices.Values.Select(owned => owned.Value))
                 {
                     //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ ПУБЛИКУЕМЫХ НА ProduserUnion.
                     device.UnsubscrubeOnExchangesEvents();

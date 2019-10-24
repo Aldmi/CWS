@@ -9,6 +9,7 @@ using Autofac.Features.Indexed;
 using Autofac.Features.OwnedInstances;
 using Domain.Device;
 using Domain.Device.Produser;
+using Domain.Device.Repository.Entities;
 using Domain.Exchange;
 using Domain.Exchange.Behaviors;
 using Domain.Exchange.Enums;
@@ -40,18 +41,16 @@ namespace App.Services.Mediators
     public class MediatorForStorages<TIn> where TIn : InputTypeBase
     {
         #region fields
-
         private readonly DeviceStorage<TIn> _deviceStorage;
         private readonly ExchangeStorage<TIn> _exchangeStorage;
         private readonly BackgroundStorage _backgroundStorage;
         private readonly TransportStorage _transportStorage;
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
-        private readonly IEventBus _eventBus;
         private readonly Func<ExchangeOption, ITransport, ITransportBackground, Owned<IExchange<TIn>>> _exchangeFactory;
+        private readonly Func<DeviceOption, IEnumerable<IExchange<TIn>>, Owned<Device<TIn>>> _deviceFactory;
         private readonly AppConfigWrapper _appConfigWrapper;
         private readonly ILogger _logger;
         //опции для создания IProduser через фабрику
-
         #endregion
 
 
@@ -64,8 +63,8 @@ namespace App.Services.Mediators
             BackgroundStorage backgroundStorage,
             TransportStorage transportStorage,
             ProduserUnionStorage<TIn> produserUnionStorage,
-            IEventBus eventBus,
             Func<ExchangeOption, ITransport, ITransportBackground, Owned<IExchange<TIn>>> exchangeFactory,
+            Func<DeviceOption, IEnumerable<IExchange<TIn>>,  Owned<Device<TIn>>> deviceFactory,
             AppConfigWrapper appConfigWrapper,
             ILogger logger)
         {
@@ -74,8 +73,8 @@ namespace App.Services.Mediators
             _backgroundStorage = backgroundStorage;
             _exchangeStorage = exchangeStorage;
             _deviceStorage = deviceStorage;
-            _eventBus = eventBus;
             _exchangeFactory = exchangeFactory;
+            _deviceFactory = deviceFactory;
             _appConfigWrapper = appConfigWrapper;
             _logger = logger;
         }
@@ -94,14 +93,14 @@ namespace App.Services.Mediators
         /// <returns>Верунть ус-во</returns>
         public Device<TIn> GetDevice(string deviceName)
         {
-            var device = _deviceStorage.Get(deviceName);
+            var device = _deviceStorage.Get(deviceName)?.Value;
             return device;
         }
 
 
         public IReadOnlyList<Device<TIn>> GetDevices()
         {
-            return _deviceStorage.Values.ToList();
+            return _deviceStorage.Values.Select(owned=> owned.Value).ToList();
         }
 
 
@@ -112,7 +111,7 @@ namespace App.Services.Mediators
         /// <returns></returns>
         public IReadOnlyList<Device<TIn>> GetDevicesUsingExchange(string exchnageKey)
         {
-            return _deviceStorage.Values.Where(dev=>dev.Option.ExchangeKeys.Contains(exchnageKey)).ToList();
+            return _deviceStorage.Values.Select(owned => owned.Value).Where(dev=>dev.Option.ExchangeKeys.Contains(exchnageKey)).ToList();
         }
 
 
@@ -205,8 +204,7 @@ namespace App.Services.Mediators
                 var transport = _transportStorage.Get(keyTransport);
                 try
                 {
-                    //exch = new Exchange<TIn>(exchOption, transport, bg, dataProvider, _logger);
-                    exch = _exchangeFactory(exchOption, transport, bg);
+                    exch= _exchangeFactory(exchOption, transport, bg);
                     _exchangeStorage.AddNew(exchOption.Key, exch);
                 }
                 catch (Exception)
@@ -217,9 +215,9 @@ namespace App.Services.Mediators
 
             //ДОБАВИТЬ УСТРОЙСТВО--------------------------------------------------------------------------
             var excanges = _exchangeStorage.GetMany(deviceOption.ExchangeKeys).Select(owned =>owned.Value).ToList();
-            var device = new Device<TIn>(deviceOption, excanges, _eventBus, _produserUnionStorage, _logger);
-            _deviceStorage.AddNew(device.Option.Name, device);
-            return device;
+            var deviceOwner = _deviceFactory(deviceOption, excanges);
+            _deviceStorage.AddNew(deviceOwner.Value.Option.Name, deviceOwner);
+            return deviceOwner.Value;
         }
 
 
@@ -235,7 +233,7 @@ namespace App.Services.Mediators
             if (device == null)
                 throw new StorageHandlerException($"Устройство с таким именем НЕ существует: {deviceName}");
 
-            var exchangeKeys = _deviceStorage.Values.SelectMany(dev => dev.Option.ExchangeKeys).ToList();
+            var exchangeKeys = _deviceStorage.Values.Select(owned => owned.Value).SelectMany(dev => dev.Option.ExchangeKeys).ToList();
             var keyTransports = _exchangeStorage.Values.Select(owned => owned.Value.KeyTransport).ToList();
             foreach (var exchKey in device.Option.ExchangeKeys)
             {
