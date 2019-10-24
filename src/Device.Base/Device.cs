@@ -117,9 +117,9 @@ namespace Domain.Device
                 _disposeExchangesEventHandlers.Add(exch.IsConnectChangeRx.Subscribe(ConnectChangeRxEventHandler));
                 //_disposeExchangesEventHandlers.Add(exch.LastSendDataChangeRx.Subscribe(LastSendDataChangeRxEventHandler));
                 _disposeExchangesEventHandlers.Add(exch.IsOpenChangeTransportRx.Subscribe(OpenChangeTransportRxEventHandler));
-                _disposeExchangesEventHandlers.Add(exch.CycleBehavior.ResponseReadyRx.Subscribe(CycleBehaviorResponseReadyRxEventHandler));
-                _disposeExchangesEventHandlers.Add(exch.OnceBehavior.ResponseReadyRx.Subscribe(OnceAndCommandBehaviorResponseReadyRxEventHandler));
-                _disposeExchangesEventHandlers.Add(exch.CommandBehavior.ResponseReadyRx.Subscribe(OnceAndCommandBehaviorResponseReadyRxEventHandler));
+                _disposeExchangesEventHandlers.Add(exch.CycleBehavior.ResponseReadyRx.SubscribeAsyncConcurrent(CycleBehaviorResponseReadyRxEventHandler));
+                _disposeExchangesEventHandlers.Add(exch.OnceBehavior.ResponseReadyRx.SubscribeAsyncConcurrent(OnceAndCommandBehaviorResponseReadyRxEventHandler));
+                _disposeExchangesEventHandlers.Add(exch.CommandBehavior.ResponseReadyRx.SubscribeAsyncConcurrent(OnceAndCommandBehaviorResponseReadyRxEventHandler));
             });
             return true;
         }
@@ -382,18 +382,18 @@ namespace Domain.Device
         /// <summary>
         /// Обработчик события получения Результата обмена от циклического поведения.
         /// </summary>
-        private async void CycleBehaviorResponseReadyRxEventHandler(ResponsePieceOfDataWrapper<TIn> responsePieceOfDataWrapper)
+        private async Task CycleBehaviorResponseReadyRxEventHandler(ResponsePieceOfDataWrapper<TIn> responsePieceOfDataWrapper)
         {
             //Анализ ответов от всех обменов.
             _allCycleBehaviorResponseAnalitic.SetResponseResult(responsePieceOfDataWrapper.KeyExchange, responsePieceOfDataWrapper.IsValidAll);
-            OnceAndCommandBehaviorResponseReadyRxEventHandler(responsePieceOfDataWrapper);
+            await OnceAndCommandBehaviorResponseReadyRxEventHandler(responsePieceOfDataWrapper);
         }
 
 
         /// <summary>
         /// Обработчик события получения Результата обмена от однократного обмена или команды.
         /// </summary>
-        private async void OnceAndCommandBehaviorResponseReadyRxEventHandler(ResponsePieceOfDataWrapper<TIn> responsePieceOfDataWrapper)
+        private async Task OnceAndCommandBehaviorResponseReadyRxEventHandler(ResponsePieceOfDataWrapper<TIn> responsePieceOfDataWrapper)
         {
             //Топик не указан. Нет отправки ответа через ProduserUnion.
             if (!string.IsNullOrEmpty(ProduserUnionKey))

@@ -43,6 +43,7 @@ namespace Domain.Exchange
         #endregion
 
 
+
         #region prop
         public string KeyExchange => _option.Key;
         public string ProviderName => _option.Provider.Name;
@@ -104,7 +105,6 @@ namespace Domain.Exchange
             _dataProviderOwner = owner;
             _dataProvider = owner.Value;
             _logger = logger;
-
             var cycleBehaviorOwner = cycleBehaviorFactory(KeyExchange, transportBackground, _option.CycleFuncOption, SendingPieceOfData);
             var onceBehaviorOwner = onceBehaviorFactory(KeyExchange, transportBackground, SendingPieceOfData);
             var commandBehaviorOwner = commandBehaviorFactory(KeyExchange, transportBackground, SendingPieceOfData);
@@ -116,10 +116,12 @@ namespace Domain.Exchange
         #endregion
 
 
+
         #region ExchangeRx
         public ISubject<ConnectChangeRxModel> IsConnectChangeRx { get; } = new Subject<ConnectChangeRxModel>();
         public ISubject<LastSendDataChangeRxModel<TIn>> LastSendDataChangeRx { get; } = new Subject<LastSendDataChangeRxModel<TIn>>();
         #endregion
+
 
 
         #region TransportRx
@@ -127,6 +129,7 @@ namespace Domain.Exchange
         public ISubject<StatusDataExchangeChangeRxModel> StatusDataExchangeChangeTransportRx => _transport.StatusDataExchangeChangeRx;
         public ISubject<StatusStringChangeRxModel> StatusStringChangeTransportRx => _transport.StatusStringChangeRx;
         #endregion
+
 
 
         #region SendData
@@ -167,6 +170,7 @@ namespace Domain.Exchange
             CycleBehavior.SendData(inData, directHandlerName);
         }
         #endregion
+
 
 
         #region Actions
@@ -328,6 +332,7 @@ namespace Domain.Exchange
         #endregion
 
 
+
         #region dataProvider
         public void SetNewProvider(IDataProvider<TIn, ResponseInfo> provider)
         {
@@ -336,6 +341,7 @@ namespace Domain.Exchange
         #endregion
 
         
+
         #region Disposable
         public void Dispose()
         {
