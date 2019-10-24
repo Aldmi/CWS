@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
 using Domain.Device.MiddleWares;
 using Domain.Device.MiddleWares.Invokes;
@@ -35,28 +36,31 @@ namespace Domain.Device
     public class Device<TIn> : IDisposable where TIn : InputTypeBase
     {
         #region field
-        private readonly Func<InvokerOutput, ISupportMiddlewareInvoke<TIn>, MiddlewareInvokeService<TIn>> _middleWareInDataFactory;
+        private readonly Func<InvokerOutput, ISupportMiddlewareInvoke<TIn>, Owned<MiddlewareInvokeService<TIn>>> _middleWareInDataFactory;  //MiddlewareInvokeService пересоздается динамически, поэтому стару версию нужно уничтожать через Owned
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
         private readonly ILogger _logger;
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
         private readonly List<IDisposable> _disposeExchangesCycleBehaviorEventHandlers = new List<IDisposable>();
         private IDisposable _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler;
         private readonly AllExchangesResponseAnaliticService _allCycleBehaviorResponseAnalitic;
+        private readonly IDisposable _allCycleBehaviorResponseAnaliticOwner;
+        private IDisposable _middlewareInvokeServiceOwner;
         #endregion
 
 
 
         #region prop
-        public DeviceOption Option { get;  }
+        public DeviceOption Option { get; }
         public List<IExchange<TIn>> Exchanges { get; }
         public MiddlewareInvokeService<TIn> MiddlewareInvokeService { get; private set; }
+
         public string ProduserUnionKey => Option.ProduserUnionKey;
         /// <summary>
         /// Настройки MiddleWareInData сервиса.
         /// </summary>
         public MiddleWareInDataOption MiddleWareInDataOption
         {
-            get=> Option.MiddleWareInData;
+            get => Option.MiddleWareInData;
             set
             {
                 Option.MiddleWareInData = value;
@@ -72,8 +76,8 @@ namespace Domain.Device
                       IEnumerable<IExchange<TIn>> exchanges,
                       ProduserUnionStorage<TIn> produserUnionStorage,
                       ILogger logger,
-                      Func<InvokerOutput, ISupportMiddlewareInvoke<TIn>, MiddlewareInvokeService<TIn>> middleWareInDataFactory,  //TODO: Owned???
-                      Func<IEnumerable<string>, AllExchangesResponseAnaliticService> allExchangesResponseAnaliticServiceFactory) //TODO: Owned???
+                      Func<InvokerOutput, ISupportMiddlewareInvoke<TIn>, Owned<MiddlewareInvokeService<TIn>>> middleWareInDataFactory,
+                      Func<IEnumerable<string>, Owned<AllExchangesResponseAnaliticService>> allExchangesResponseAnaliticServiceFactory)
         {
             Option = option;
             Exchanges = exchanges.ToList();
@@ -81,9 +85,10 @@ namespace Domain.Device
             _produserUnionStorage = produserUnionStorage;
             _logger = logger;
 
-            //_allCycleBehaviorResponseAnalitic= new AllExchangesResponseAnaliticService(Exchanges.Select(exch=> exch.KeyExchange));
-            _allCycleBehaviorResponseAnalitic = allExchangesResponseAnaliticServiceFactory(Exchanges.Select(exch => exch.KeyExchange));
+            var owner = allExchangesResponseAnaliticServiceFactory(Exchanges.Select(exch => exch.KeyExchange));
+            _allCycleBehaviorResponseAnalitic = owner.Value;
             _allCycleBehaviorResponseAnalitic.AllExchangeAnaliticDoneRx.Subscribe(AllExhangeAnaliticDoneRxEventHandler);
+            _allCycleBehaviorResponseAnaliticOwner = owner;
 
             CreateMiddleWareInDataByOption(Option.MiddleWareInData);
         }
@@ -99,14 +104,15 @@ namespace Domain.Device
         private void CreateMiddleWareInDataByOption(MiddleWareInDataOption option)
         {
             _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler?.Dispose();
-            MiddlewareInvokeService?.Dispose();
+            _middlewareInvokeServiceOwner?.Dispose();
             MiddlewareInvokeService = null;
             if (option != null)
             {
                 var middleWareInData = new MiddleWareInData<TIn>(option, _logger); //TODO: Создавать внутри MiddlewareInvokeService
-                MiddlewareInvokeService = _middleWareInDataFactory(option.InvokerOutput, middleWareInData);
-                //MiddlewareInvokeService = new MiddlewareInvokeService<TIn>(option.InvokerOutput, middleWareInData, _logger);
-                _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler= MiddlewareInvokeService?.InvokeIsCompleteRx.Subscribe(MiddlewareInvokeIsCompleteRxEventHandler);
+                var owner = _middleWareInDataFactory(option.InvokerOutput, middleWareInData);
+                MiddlewareInvokeService = owner.Value;
+                _middlewareInvokeServiceOwner = owner;
+                _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler = MiddlewareInvokeService?.InvokeIsCompleteRx.Subscribe(MiddlewareInvokeIsCompleteRxEventHandler);
             }
         }
 
@@ -135,7 +141,7 @@ namespace Domain.Device
         /// </summary>
         public void UnsubscrubeOnExchangesEvents()
         {
-            _disposeExchangesEventHandlers.ForEach(d=>d.Dispose());
+            _disposeExchangesEventHandlers.ForEach(d => d.Dispose());
         }
 
 
@@ -177,7 +183,7 @@ namespace Domain.Device
                         await MiddlewareInvokeService.InputSetInstantly(inData);
                         break;
                     case DataAction.CycleAction: //однократные данные обрабатываем сразу.
-                         await MiddlewareInvokeService.InputSetByOptionMode(inData);
+                        await MiddlewareInvokeService.InputSetByOptionMode(inData);
                         break;
                     case DataAction.CommandAction://Команды не проходят обработку через MiddlewareInvokeService
                         await ResiveInExchange(inData);
@@ -186,7 +192,7 @@ namespace Domain.Device
             }
             else
             {
-               await ResiveInExchange(inData);
+                await ResiveInExchange(inData);
             }
         }
 
@@ -212,7 +218,7 @@ namespace Domain.Device
         /// </summary>
         private async Task Send2AllExchanges(DataAction dataAction, List<TIn> inData, Command4Device command4Device = Command4Device.None)
         {
-            var tasks= new List<Task>();
+            var tasks = new List<Task>();
             foreach (var exchange in Exchanges)
             {
                 tasks.Add(SendDataOrCommand(exchange, dataAction, inData, command4Device));
@@ -226,13 +232,13 @@ namespace Domain.Device
         /// </summary>
         private async Task Send2ConcreteExchanges(string keyExchange, DataAction dataAction, List<TIn> inData, Command4Device command4Device = Command4Device.None, string directHandlerName = null)
         {
-            var exchange = Exchanges.FirstOrDefault(exch=> exch.KeyExchange == keyExchange);
+            var exchange = Exchanges.FirstOrDefault(exch => exch.KeyExchange == keyExchange);
             if (exchange == null)
             {
                 //await Send2Produder(Option.TopicName4MessageBroker, $"Обмен не найденн для этого ус-ва {keyExchange}");
                 return;
             }
-            await SendDataOrCommand(exchange, dataAction, inData, command4Device, directHandlerName);  
+            await SendDataOrCommand(exchange, dataAction, inData, command4Device, directHandlerName);
         }
 
 
@@ -271,7 +277,7 @@ namespace Domain.Device
                     break;
 
                 case DataAction.CycleAction:
-                    if (exchange.CycleBehavior.CycleBehaviorState == CycleBehaviorState.Off) 
+                    if (exchange.CycleBehavior.CycleBehaviorState == CycleBehaviorState.Off)
                     {
                         warningStr = $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН";
                         await SendWarningResult(warningStr);
@@ -324,13 +330,13 @@ namespace Domain.Device
                 return;
             }
 
-            var results= await produser.SendResponseAll(response);
+            var results = await produser.SendResponseAll(response);
             foreach (var (isSuccess, isFailure, _, error) in results)
             {
                 if (isFailure)
                     _logger.Error($"Ошибки отправки ответов для Устройства= {Option.Name} через ProduderUnion = {ProduserUnionKey}  {error}");
 
-                if(isSuccess)
+                if (isSuccess)
                     _logger.Information($"ОТПРАВКА ОТВЕТОВ УСПЕШНА для устройства {Option.Name} через ProduderUnion = {ProduserUnionKey}");
             }
         }
@@ -429,14 +435,14 @@ namespace Domain.Device
                 MiddlewareInvokeService?.SetFeedBack();
             }
         }
-            
+
 
         /// <summary>
         /// Обработчик события смены режима Циклической обмена
         /// </summary>
         private async Task CycleBehaviorStateChangeRxEventHandler(CycleBehaviorStateRxModel dataState)
         {
-            var message= $"Переключился режим Циклического обмена.  {dataState.KeyExchange}  {dataState.CycleBehaviorState}";
+            var message = $"Переключился режим Циклического обмена.  {dataState.KeyExchange}  {dataState.CycleBehaviorState}";
             _logger.Information(message);
             await Send2ProduderUnion(Option.Name, message);
         }
@@ -466,10 +472,11 @@ namespace Domain.Device
         #region Disposable
         public void Dispose()
         {
+            _middlewareInvokeServiceOwner?.Dispose();
+            _allCycleBehaviorResponseAnaliticOwner.Dispose();
             UnsubscrubeOnExchangesEvents();
             UnsubscrubeOnExchangesCycleBehaviorEvents();
             _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler?.Dispose();
-            MiddlewareInvokeService?.Dispose();
         }
         #endregion
     }
