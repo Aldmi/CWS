@@ -17,7 +17,7 @@ namespace Domain.Exchange.Behaviors
         #region ctor
         public CommandBehavior(string keyExchange,
             ITransportBackground transportBackground,
-            Func<InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>> pieceOfDataSender,
+            Func<DataAction, InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>> pieceOfDataSender,
             ILogger logger) : base(keyExchange, transportBackground, QueueMode.QueueExtractLastItem, pieceOfDataSender, logger)
         {
         }
@@ -53,9 +53,7 @@ namespace Domain.Exchange.Behaviors
             if (result.IsSuccess)
             {
                 var inData = result.Value;
-                var transportResponseWrapper = await PieceOfDataSender(inData, ct);
-                transportResponseWrapper.KeyExchange = KeyExchange;
-                transportResponseWrapper.DataAction = DataAction.CommandAction;
+                var transportResponseWrapper = await PieceOfDataSender(DataAction.CommandAction,inData, ct);
                 ResponseReadyRx.OnNext(transportResponseWrapper);
             }
         }

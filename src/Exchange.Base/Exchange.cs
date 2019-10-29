@@ -46,6 +46,7 @@ namespace Domain.Exchange
 
         #region prop
         public string KeyExchange => _option.Key;
+        public string DeviceName { get; }
         public string ProviderName => _option.Provider.Name;
         public int NumberErrorTrying => _option.NumberErrorTrying;
         public int NumberTimeoutTrying => _option.NumberTimeoutTrying;
@@ -67,15 +68,18 @@ namespace Domain.Exchange
             }
         }
 
-        private InDataWrapper<TIn> _lastSendData;
-        public InDataWrapper<TIn> LastSendData
+        private LastSendPieceOfDataRxModel<TIn> _lastSendData;
+        /// <summary>
+        /// Актуальная отправленная информация через обмен.
+        /// </summary>
+        public LastSendPieceOfDataRxModel<TIn> LastSendData
         {
             get => _lastSendData;
             private set
             {
                 if (value == _lastSendData) return;
                 _lastSendData = value;
-                LastSendDataChangeRx.OnNext(new LastSendDataChangeRxModel<TIn> { KeyExchange = KeyExchange, LastSendData = LastSendData });
+                LastSendDataChangeRx.OnNext(_lastSendData);
             }
         }
 
@@ -89,15 +93,17 @@ namespace Domain.Exchange
 
 
         #region ctor
-        public Exchange(ExchangeOption option,
+        public Exchange(string deviceName,
+                                 ExchangeOption option,
                                  ITransport transport,
                                  ITransportBackground transportBackground,
                                  IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, ResponseInfo>>>> dataProviderFactory,
                                  ILogger logger,
-                                 Func<string, ITransportBackground, CycleFuncOption, Func<InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<CycleBehavior<TIn>>> cycleBehaviorFactory,
-                                 Func<string, ITransportBackground, Func<InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<OnceBehavior<TIn>>> onceBehaviorFactory,
-                                 Func<string, ITransportBackground, Func<InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<CommandBehavior<TIn>>> commandBehaviorFactory)
+                                 Func<string, ITransportBackground, CycleFuncOption, Func<DataAction, InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<CycleBehavior<TIn>>> cycleBehaviorFactory,
+                                 Func<string, ITransportBackground, Func<DataAction, InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<OnceBehavior<TIn>>> onceBehaviorFactory,
+                                 Func<string, ITransportBackground, Func<DataAction, InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<CommandBehavior<TIn>>> commandBehaviorFactory)
         {
+            DeviceName = deviceName;
             _option = option;
             _transport = transport;
             _transportBackground = transportBackground;
@@ -119,7 +125,7 @@ namespace Domain.Exchange
 
         #region ExchangeRx
         public ISubject<ConnectChangeRxModel> IsConnectChangeRx { get; } = new Subject<ConnectChangeRxModel>();
-        public ISubject<LastSendDataChangeRxModel<TIn>> LastSendDataChangeRx { get; } = new Subject<LastSendDataChangeRxModel<TIn>>();
+        public ISubject<LastSendPieceOfDataRxModel<TIn>> LastSendDataChangeRx { get; } = new Subject<LastSendPieceOfDataRxModel<TIn>>();
         #endregion
 
 
@@ -181,9 +187,9 @@ namespace Domain.Exchange
         /// <returns>Ответ на отправку порции данных</returns>
         private int _countErrorTrying = 0;
         private int _countTimeoutTrying = 0;
-        private async Task<ResponsePieceOfDataWrapper<TIn>> SendingPieceOfData(InDataWrapper<TIn> inData, CancellationToken ct)
+        private async Task<ResponsePieceOfDataWrapper<TIn>> SendingPieceOfData(DataAction dataAction, InDataWrapper<TIn> inData, CancellationToken ct)
         {
-            var transportResponseWrapper = new ResponsePieceOfDataWrapper<TIn>();
+            var transportResponseWrapper = new ResponsePieceOfDataWrapper<TIn> {KeyExchange = KeyExchange, DeviceName = DeviceName, DataAction = dataAction};
             //ПОДПИСКА НА СОБЫТИЕ ОТПРАВКИ ПОРЦИИ ДАННЫХ
             var subscription = _dataProvider.RaiseSendDataRx.Subscribe(providerResult =>
             {
@@ -199,7 +205,6 @@ namespace Domain.Exchange
                             IsConnect = true;
                             _countErrorTrying = 0;
                             _countTimeoutTrying = 0;
-                            LastSendData = providerResult.InputData;
                             transportResp.ResponseInfo = providerResult.OutputData;
                             break;
 
@@ -277,7 +282,12 @@ namespace Domain.Exchange
                 subscription.Dispose();
             }
 
-            //ВЫВОД ОТЧЕТА ОБ ОТПРАВКИ ПОРЦИИ ДАННЫХ.
+            //ОТЧЕТ ОБ ОТПРАВКИ ПОРЦИИ ДАННЫХ.
+            LastSendData= new LastSendPieceOfDataRxModel<TIn>(transportResponseWrapper.DeviceName,
+                transportResponseWrapper.KeyExchange,
+                transportResponseWrapper.DataAction,
+                transportResponseWrapper.TimeAction, 
+                transportResponseWrapper.IsValidAll, inData);
             LogedResponseInformation(transportResponseWrapper);
             return transportResponseWrapper;
         }

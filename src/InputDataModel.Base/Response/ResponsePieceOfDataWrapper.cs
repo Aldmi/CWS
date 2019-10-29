@@ -50,6 +50,6 @@ namespace Domain.InputDataModel.Base.Response
         public string ResponseData { get; set; }                                //Ответ от устройства
         public StronglyTypedRespBase StronglyTypedResponse { get; set; }        //Типизированный Ответ от устройства (Преобразованный ResponseData)
         public string Encoding { get; set; }                                    //Кодировка ответа    
-        public bool IsOutDataValid { get; set; }                               //Флаг валидности ответа
+        public bool IsOutDataValid { get; set; }                                //Флаг валидности ответа
     }
 }

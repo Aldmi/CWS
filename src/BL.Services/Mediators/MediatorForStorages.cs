@@ -46,7 +46,7 @@ namespace App.Services.Mediators
         private readonly BackgroundStorage _backgroundStorage;
         private readonly TransportStorage _transportStorage;
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
-        private readonly Func<ExchangeOption, ITransport, ITransportBackground, Owned<IExchange<TIn>>> _exchangeFactory;
+        private readonly Func<string, ExchangeOption, ITransport, ITransportBackground, Owned<IExchange<TIn>>> _exchangeFactory;
         private readonly Func<DeviceOption, IEnumerable<IExchange<TIn>>, Owned<Device<TIn>>> _deviceFactory;
         private readonly AppConfigWrapper _appConfigWrapper;
         private readonly ILogger _logger;
@@ -63,7 +63,7 @@ namespace App.Services.Mediators
             BackgroundStorage backgroundStorage,
             TransportStorage transportStorage,
             ProduserUnionStorage<TIn> produserUnionStorage,
-            Func<ExchangeOption, ITransport, ITransportBackground, Owned<IExchange<TIn>>> exchangeFactory,
+            Func<string, ExchangeOption, ITransport, ITransportBackground, Owned<IExchange<TIn>>> exchangeFactory,
             Func<DeviceOption, IEnumerable<IExchange<TIn>>,  Owned<Device<TIn>>> deviceFactory,
             AppConfigWrapper appConfigWrapper,
             ILogger logger)
@@ -204,7 +204,7 @@ namespace App.Services.Mediators
                 var transport = _transportStorage.Get(keyTransport);
                 try
                 {
-                    exch= _exchangeFactory(exchOption, transport, bg);
+                    exch= _exchangeFactory(deviceOption.Name, exchOption, transport, bg);
                     _exchangeStorage.AddNew(exchOption.Key, exch);
                 }
                 catch (Exception)

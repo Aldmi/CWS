@@ -36,7 +36,7 @@ namespace Domain.Device
     public class Device<TIn> : IDisposable where TIn : InputTypeBase
     {
         #region field
-        private readonly Func<InvokerOutput, ISupportMiddlewareInvoke<TIn>, Owned<MiddlewareInvokeService<TIn>>> _middleWareInDataFactory;  //MiddlewareInvokeService пересоздается динамически, поэтому стару версию нужно уничтожать через Owned
+        private readonly Func<InvokerOutput, ISupportMiddlewareInvoke<TIn>, Owned<MiddlewareInvokeService<TIn>>> _middlewareInvokeServiceFactory;  //MiddlewareInvokeService пересоздается динамически, поэтому стару версию нужно уничтожать через Owned
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
         private readonly ILogger _logger;
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
@@ -76,12 +76,12 @@ namespace Domain.Device
                       IEnumerable<IExchange<TIn>> exchanges,
                       ProduserUnionStorage<TIn> produserUnionStorage,
                       ILogger logger,
-                      Func<InvokerOutput, ISupportMiddlewareInvoke<TIn>, Owned<MiddlewareInvokeService<TIn>>> middleWareInDataFactory,
+                      Func<InvokerOutput, ISupportMiddlewareInvoke<TIn>, Owned<MiddlewareInvokeService<TIn>>> middlewareInvokeServiceFactory,
                       Func<IEnumerable<string>, Owned<AllExchangesResponseAnaliticService>> allExchangesResponseAnaliticServiceFactory)
         {
             Option = option;
             Exchanges = exchanges.ToList();
-            _middleWareInDataFactory = middleWareInDataFactory;
+            _middlewareInvokeServiceFactory = middlewareInvokeServiceFactory;
             _produserUnionStorage = produserUnionStorage;
             _logger = logger;
 
@@ -109,7 +109,7 @@ namespace Domain.Device
             if (option != null)
             {
                 var middleWareInData = new MiddleWareInData<TIn>(option, _logger); //TODO: Создавать внутри MiddlewareInvokeService
-                var owner = _middleWareInDataFactory(option.InvokerOutput, middleWareInData);
+                var owner = _middlewareInvokeServiceFactory(option.InvokerOutput, middleWareInData);
                 MiddlewareInvokeService = owner.Value;
                 _middlewareInvokeServiceOwner = owner;
                 _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler = MiddlewareInvokeService?.InvokeIsCompleteRx.Subscribe(MiddlewareInvokeIsCompleteRxEventHandler);
@@ -326,7 +326,7 @@ namespace Domain.Device
             var produser = _produserUnionStorage.Get(ProduserUnionKey);
             if (produser == null)
             {
-                _logger.Error($"Продюссер по ключу {ProduserUnionKey} НЕ НАЙДЕНН для Устройства= {Option.Name}");
+                _logger.Error($"Продюссер по ключу {ProduserUnionKey} НЕ НАЙДЕНН для Устройства= {response.DeviceName}");
                 return;
             }
 
@@ -334,10 +334,10 @@ namespace Domain.Device
             foreach (var (isSuccess, isFailure, _, error) in results)
             {
                 if (isFailure)
-                    _logger.Error($"Ошибки отправки ответов для Устройства= {Option.Name} через ProduderUnion = {ProduserUnionKey}  {error}");
+                    _logger.Error($"Ошибки отправки ответов для Устройства= {response.DeviceName} через ProduderUnion = {ProduserUnionKey}  {error}");
 
                 if (isSuccess)
-                    _logger.Information($"ОТПРАВКА ОТВЕТОВ УСПЕШНА для устройства {Option.Name} через ProduderUnion = {ProduserUnionKey}");
+                    _logger.Information($"ОТПРАВКА ОТВЕТОВ УСПЕШНА для устройства {response.DeviceName} через ProduderUnion = {ProduserUnionKey}");
             }
         }
 

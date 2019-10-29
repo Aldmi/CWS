@@ -13,7 +13,7 @@ namespace WebApiSwc.AutofacModules
         {
             builder.RegisterType<Exchange<TIn>>().As<IExchange<TIn>>().AsSelf().InstancePerDependency();
 
-            builder.RegisterType<CycleBehavior<TIn>>().InstancePerDependency(); //.InstancePerDependency();
+            builder.RegisterType<CycleBehavior<TIn>>().InstancePerDependency();
             builder.RegisterType<OnceBehavior<TIn>>().InstancePerDependency();
             builder.RegisterType<CommandBehavior<TIn>>().InstancePerDependency();
 
