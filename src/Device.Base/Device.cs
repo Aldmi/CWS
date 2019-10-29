@@ -36,7 +36,7 @@ namespace Domain.Device
     public class Device<TIn> : IDisposable where TIn : InputTypeBase
     {
         #region field
-        private readonly Func<InvokerOutput, ISupportMiddlewareInvoke<TIn>, Owned<MiddlewareInvokeService<TIn>>> _middlewareInvokeServiceFactory;  //MiddlewareInvokeService пересоздается динамически, поэтому стару версию нужно уничтожать через Owned
+        private readonly Func<MiddleWareInDataOption, Owned<MiddlewareInvokeService<TIn>>> _middlewareInvokeServiceFactory;  //MiddlewareInvokeService пересоздается динамически, поэтому стару версию нужно уничтожать через Owned
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
         private readonly ILogger _logger;
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
@@ -76,7 +76,7 @@ namespace Domain.Device
                       IEnumerable<IExchange<TIn>> exchanges,
                       ProduserUnionStorage<TIn> produserUnionStorage,
                       ILogger logger,
-                      Func<InvokerOutput, ISupportMiddlewareInvoke<TIn>, Owned<MiddlewareInvokeService<TIn>>> middlewareInvokeServiceFactory,
+                      Func<MiddleWareInDataOption, Owned<MiddlewareInvokeService<TIn>>> middlewareInvokeServiceFactory,
                       Func<IEnumerable<string>, Owned<AllExchangesResponseAnaliticService>> allExchangesResponseAnaliticServiceFactory)
         {
             Option = option;
@@ -108,8 +108,8 @@ namespace Domain.Device
             MiddlewareInvokeService = null;
             if (option != null)
             {
-                var middleWareInData = new MiddleWareInData<TIn>(option, _logger); //TODO: Создавать внутри MiddlewareInvokeService
-                var owner = _middlewareInvokeServiceFactory(option.InvokerOutput, middleWareInData);
+               // var middleWareInData = new MiddleWareInData<TIn>(option, _logger); //TODO: Создавать внутри MiddlewareInvokeService
+                var owner = _middlewareInvokeServiceFactory(option);
                 MiddlewareInvokeService = owner.Value;
                 _middlewareInvokeServiceOwner = owner;
                 _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler = MiddlewareInvokeService?.InvokeIsCompleteRx.Subscribe(MiddlewareInvokeIsCompleteRxEventHandler);
@@ -396,7 +396,8 @@ namespace Domain.Device
         private async Task CycleBehaviorResponseReadyRxEventHandler(ResponsePieceOfDataWrapper<TIn> responsePieceOfDataWrapper)
         {
             //Анализ ответов от всех обменов.
-            _allCycleBehaviorResponseAnalitic.SetResponseResult(responsePieceOfDataWrapper.KeyExchange, responsePieceOfDataWrapper.IsValidAll);
+           var exchangesInfoTuple= Exchanges.Select(exchange=> (key: exchange.KeyExchange, isOpen: exchange.IsOpen)).ToList(); 
+            _allCycleBehaviorResponseAnalitic.SetResponseResult(responsePieceOfDataWrapper.KeyExchange, responsePieceOfDataWrapper.IsValidAll, exchangesInfoTuple);
             await OnceAndCommandBehaviorResponseReadyRxEventHandler(responsePieceOfDataWrapper);
         }
 

@@ -283,12 +283,12 @@ namespace Domain.Exchange
             }
 
             //ОТЧЕТ ОБ ОТПРАВКИ ПОРЦИИ ДАННЫХ.
-            LastSendData= new LastSendPieceOfDataRxModel<TIn>(transportResponseWrapper.DeviceName,
+            LogedResponseInformation(transportResponseWrapper);
+            LastSendData = new LastSendPieceOfDataRxModel<TIn>(transportResponseWrapper.DeviceName,
                 transportResponseWrapper.KeyExchange,
                 transportResponseWrapper.DataAction,
-                transportResponseWrapper.TimeAction, 
+                transportResponseWrapper.TimeAction,
                 transportResponseWrapper.IsValidAll, inData);
-            LogedResponseInformation(transportResponseWrapper);
             return transportResponseWrapper;
         }
 
