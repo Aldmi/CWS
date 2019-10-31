@@ -611,7 +611,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData_NumberOfTrain_Null(1);
-           // inData.Data.First().NumberOfTrain = null;
+           // inData.ProcessedItemsInBatch.First().NumberOfTrain = null;
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_LimitStringConverter("NumberOfTrain");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 

@@ -206,6 +206,7 @@ namespace Domain.Exchange
                             _countErrorTrying = 0;
                             _countTimeoutTrying = 0;
                             transportResp.ResponseInfo = providerResult.OutputData;
+                            transportResp.ProcessedItemsInBatch = providerResult.ProcessedItemsInBatch;
                             break;
 
                         //ТРАНСПОРТ НЕ ОТКРЫТ.
@@ -284,11 +285,12 @@ namespace Domain.Exchange
 
             //ОТЧЕТ ОБ ОТПРАВКИ ПОРЦИИ ДАННЫХ.
             LogedResponseInformation(transportResponseWrapper);
+            var processedItemsInBatches = transportResponseWrapper.ResponsesItems.Select(item => item.ProcessedItemsInBatch).ToList();
             LastSendData = new LastSendPieceOfDataRxModel<TIn>(transportResponseWrapper.DeviceName,
                 transportResponseWrapper.KeyExchange,
                 transportResponseWrapper.DataAction,
                 transportResponseWrapper.TimeAction,
-                transportResponseWrapper.IsValidAll, inData);
+                transportResponseWrapper.IsValidAll, processedItemsInBatches);
             return transportResponseWrapper;
         }
 
@@ -296,7 +298,7 @@ namespace Domain.Exchange
         /// <summary>
         /// Логирование информации.
         /// </summary>
-        private void LogedResponseInformation(ResponsePieceOfDataWrapper<TIn> response)
+        private void LogedResponseInformation(ResponsePieceOfDataWrapper<TIn> response)//TODO: Разнести обработку (выставить response.IsValidAll) и логирование данных.
         {
             try
             {

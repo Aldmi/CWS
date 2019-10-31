@@ -91,7 +91,7 @@ namespace InputDataModel.Autodictor.Test
                     {
                         new RuleOption
                         {
-                            Name = "Data",
+                            Name = "ProcessedItemsInBatch",
                             AddressDevice = "1"
                         }
                     }

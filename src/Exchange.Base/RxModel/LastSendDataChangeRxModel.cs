@@ -1,5 +1,7 @@
-﻿using Domain.InputDataModel.Base.Enums;
+﻿using System.Collections.Generic;
+using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.ProvidersAbstract;
 
 namespace Domain.Exchange.RxModel
 {
@@ -12,19 +14,19 @@ namespace Domain.Exchange.RxModel
         public long TimeAction { get; }                       //Время выполнения обмена (на порцию данных)
         public bool IsValidAll { get; }                       //Флаг валидности всех ответов
         public string Status { get; private set; }
-        public InDataWrapper<T> Data { get; }
+        public List<ProcessedItemsInBatch<T>> ProcessedItemsInBatch { get; } //Батчи обработанных элементов.
         #endregion
 
 
         #region ctor
-        public LastSendPieceOfDataRxModel(string deviceName, string keyExchange, DataAction dataAction, long timeAction, bool isValidAll, InDataWrapper<T> data)
+        public LastSendPieceOfDataRxModel(string deviceName, string keyExchange, DataAction dataAction, long timeAction, bool isValidAll, List<ProcessedItemsInBatch<T>> processedItemsInBatch)
         {
             DeviceName = deviceName;
             KeyExchange = keyExchange;
             DataAction = dataAction;
             TimeAction = timeAction;
             IsValidAll = isValidAll;
-            Data = data;
+            ProcessedItemsInBatch = processedItemsInBatch;
             CalcStatus();
         }
         #endregion
@@ -33,7 +35,7 @@ namespace Domain.Exchange.RxModel
 
         private void CalcStatus()
         {
-            if (Data == null)
+            if (ProcessedItemsInBatch == null)
                 Status = "Отправлены данные по умолчанию";
             else
             if(IsValidAll)

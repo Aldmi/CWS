@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.ProvidersAbstract;
 using Shared.Enums;
 
 namespace Domain.InputDataModel.Base.Response
@@ -20,8 +21,9 @@ namespace Domain.InputDataModel.Base.Response
         public bool IsValidAll { get; set; }                       //Флаг валидности всех ответов
 
         public Exception ExceptionExchangePipline { get; set; }    //Критическая Ошибка обработки данных в конвеере.
-        public Dictionary<string, string> MessageDict { get; set; }        //Доп. информация
+        public Dictionary<string, string> MessageDict { get; set; } //Доп. информация
         public List<ResponseDataItem<TIn>> ResponsesItems { get; set; } = new List<ResponseDataItem<TIn>>();
+
         //public Dictionary<string, dynamic> DataBag { get; set; }     //Не типизированный контейнер для передачи любых данных
     }
 
@@ -38,8 +40,12 @@ namespace Domain.InputDataModel.Base.Response
 
         public InDataWrapper<TIn> RequestData { get; set; }    //Данные запроса (в сыром виде)
         public Exception TransportException { get; set; }      //Ошибка передачи данных
-
         public ResponseInfo ResponseInfo { get; set; }         //Ответ
+
+        /// <summary>
+        /// Результат работы провайдера, обработанные и выставленные в протокол данные из InputData
+        /// </summary>
+        public ProcessedItemsInBatch<TIn> ProcessedItemsInBatch { get; set; }
     }
 
     /// <summary>
