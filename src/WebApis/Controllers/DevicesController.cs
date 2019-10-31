@@ -100,6 +100,22 @@ namespace WebApiSwc.Controllers
         }
 
 
+        // GET api/Devices/GetLastSendData/exchnageKey
+        [HttpGet("GetLastSendData/{exchnageKey}")]
+        public async Task<IActionResult> GetLastSendData([FromRoute] string exchnageKey)
+        {
+            var exchange = _mediatorForStorages.GetExchange(exchnageKey);
+            if (exchange == null)
+            {
+                return NotFound(exchnageKey);
+            }
+
+            var lastSendData = exchange.LastSendData;
+            await Task.CompletedTask;
+            return new JsonResult(lastSendData);
+        }
+
+
 
         // DELETE api/Devices/{deviceName}
         [HttpDelete("{deviceName}")]
@@ -121,7 +137,6 @@ namespace WebApiSwc.Controllers
                 throw;
             }
         }
-
 
 
         /// <summary>
@@ -155,7 +170,6 @@ namespace WebApiSwc.Controllers
         }
 
 
-
         /// <summary>
         /// Остановить обмен по ключу
         /// </summary>
@@ -185,7 +199,6 @@ namespace WebApiSwc.Controllers
                 throw;
             }
         }
-
 
 
         /// <summary>
@@ -305,7 +318,6 @@ namespace WebApiSwc.Controllers
                 throw;
             }
         }
-
 
 
         // GET api/Devices/GetProviderOption/{deviceName}/{exchName}
