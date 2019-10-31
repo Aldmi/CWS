@@ -11,7 +11,6 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
     /// </summary>
     public class ProviderTransfer<TIn>
     {
-        public IEnumerable<TIn> BatchedData { get; set; }           //Набор входных данных на базе которых созданна StringRequest. //TODO: убрать
         public RequestTransfer<TIn> Request { get; set; }           //Строка запроса, созданная по правилам RequestOption.
         public ResponseTransfer Response { get; set; }              //Строка ответа, созданная по правилам ResponseOption.
         public Command4Device Command { get; set; }                 //Команда

@@ -31,7 +31,6 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         public Dictionary<string, string> StatusDict { get; }
         public int TimeRespone => _transfer.Response.Option.TimeRespone;         //Время на ответ
         public int CountSetDataByte => _transfer.Response.Option.Lenght;        //Кол-во принимаемых байт в ответе
-        public InDataWrapper<TIn> InputData =>  new InDataWrapper<TIn> { Datas = _transfer.BatchedData?.ToList(), Command = _transfer.Command}; 
         public ResponseInfo OutputData { get; private set; }
         public bool IsOutDataValid { get; private set; }
         /// <summary>

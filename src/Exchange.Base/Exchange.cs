@@ -255,7 +255,6 @@ namespace Domain.Exchange
                 }
                 finally
                 {
-                    transportResp.RequestData = providerResult.InputData;
                     transportResp.ResponseInfo = providerResult.OutputData;
                     transportResp.Status = status;
                     transportResp.MessageDict = new Dictionary<string, string>(providerResult.StatusDict);

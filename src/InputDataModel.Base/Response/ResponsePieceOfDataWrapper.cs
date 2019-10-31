@@ -38,7 +38,6 @@ namespace Domain.InputDataModel.Base.Response
         public StatusDataExchange Status { get; set; }
         public string StatusStr => Status.ToString();
 
-        public InDataWrapper<TIn> RequestData { get; set; }    //Данные запроса (в сыром виде)
         public Exception TransportException { get; set; }      //Ошибка передачи данных
         public ResponseInfo ResponseInfo { get; set; }         //Ответ
 

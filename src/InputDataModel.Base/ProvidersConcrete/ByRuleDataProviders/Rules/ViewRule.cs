@@ -124,7 +124,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
                     yield return new ProviderTransfer<TIn>
                     {
-                        BatchedData =  batch,    
                         Request = request,
                         Response = response,
                         Command = Command4Device.None
@@ -174,7 +173,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
             return new ProviderTransfer<TIn>
             {
-                BatchedData = null,
                 Request = request,
                 Response = response,
                 Command = command
