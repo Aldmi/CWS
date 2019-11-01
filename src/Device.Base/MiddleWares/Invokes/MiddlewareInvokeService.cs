@@ -2,8 +2,10 @@
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using System.Timers;
+using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
 using Domain.Device.Enums;
+using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.InputDataModel.Base.InData;
 using KellermanSoftware.CompareNetObjects;
 using Serilog;
@@ -12,7 +14,7 @@ using InvokerOutput = Domain.Device.Repository.Entities.MiddleWareOption.Invoker
 namespace Domain.Device.MiddleWares.Invokes
 {
     /// <summary>
-    /// Определяет способ запуска обработчика ISupportMiddlewareInvoke.
+    /// Определяет способ запуска обработчика IMiddlewareInData.
     /// "Instantly" - с приходом данных сразу запускается обработка.
     /// "ByTimer" - Обработчик запускается по внутреннему таймеру.
     /// Если приходят новые данные, то таймер перезапускается и обработчик вызывается сразу.
@@ -23,7 +25,8 @@ namespace Domain.Device.MiddleWares.Invokes
     {
         #region fields
         private readonly InvokerOutput _option;
-        private readonly ISupportMiddlewareInvoke<TIn> _invoker;
+        private readonly IMiddlewareInData<TIn> _middleware;
+        private readonly IDisposable _middlewareOwner;
         private readonly ILogger _logger;
         private readonly Timer _timerInvoke;
         private InputData<TIn> _buferInData;
@@ -62,10 +65,12 @@ namespace Domain.Device.MiddleWares.Invokes
 
 
         #region ctor
-        public MiddlewareInvokeService(InvokerOutput option, ISupportMiddlewareInvoke<TIn> invoker, ILogger logger)
+        public MiddlewareInvokeService(MiddleWareInDataOption option, Func<MiddleWareInDataOption, Owned<IMiddlewareInData<TIn>>> middlewareFactory, ILogger logger)
         {
-            _option = option;
-            _invoker = invoker;
+            _option = option.InvokerOutput;
+            var middlewareOwner = middlewareFactory(option);
+            _middlewareOwner = middlewareOwner;
+            _middleware = middlewareOwner.Value;
             _logger = logger;
             InvokerOutputMode = _option.Mode;
 
@@ -161,7 +166,7 @@ namespace Domain.Device.MiddleWares.Invokes
         /// </summary>
         private void HandleInvoke(InputData<TIn> inData)
         {
-            var res = _invoker.HandleInvoke(inData);
+            var res = _middleware.HandleInvoke(inData);
             InvokeIsCompleteRx.OnNext(res);
         }
 
@@ -222,6 +227,7 @@ namespace Domain.Device.MiddleWares.Invokes
         public void Dispose()
         {
             _timerInvoke?.Dispose();
+            _middlewareOwner.Dispose();
         }
 
         #endregion

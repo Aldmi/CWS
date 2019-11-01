@@ -158,7 +158,7 @@ namespace WebApiSwc.Controllers
             //        {
             //            DeviceName = "Device_1",
             //            ExchangeName = "Exchange_1",
-            //            Data = new List<AdInputType>
+            //            ProcessedItemsInBatch = new List<AdInputType>
             //            {
             //                new AdInputType
             //                {

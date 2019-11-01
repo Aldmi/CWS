@@ -112,6 +112,8 @@ namespace WebApiSwc
                         builder.RegisterModule(new BlStorageAutofacModule<AdInputType>());
                         builder.RegisterModule(new BlActionsAutofacModule<AdInputType>());
                         builder.RegisterModule(new MediatorsAutofacModule<AdInputType>());
+                        builder.RegisterModule(new ExchangeAutofacModule<AdInputType>());
+                        builder.RegisterModule(new DeviceAutofacModule<AdInputType>());
                         builder.RegisterModule(new InputDataAutofacModule<AdInputType>(AppConfiguration.GetSection("MessageBrokerConsumer4InData")));
                         break;
 
@@ -243,9 +245,9 @@ namespace WebApiSwc
             var exchangeServices = scope.Resolve<ExchangeStorage<AdInputType>>();
             lifetimeApp.ApplicationStarted.Register(() =>
             {
-                foreach (var exchange in exchangeServices.Values.Where(exch=> exch.AutoStartCycleFunc))
+                foreach (var exchange in exchangeServices.Values.Select(owned => owned.Value).Where(exch=> exch.CycleBehavior.CycleFuncOption.AutoStartCycleFunc))
                 {
-                   exchange.StartCycleExchange();
+                   exchange.CycleBehavior.StartCycleExchange();
                 }
             });
 
@@ -253,12 +255,12 @@ namespace WebApiSwc
             var deviceServices = scope.Resolve<DeviceStorage<AdInputType>>();
             lifetimeApp.ApplicationStarted.Register(() =>
             {
-                foreach (var device in deviceServices.Values)
+                foreach (var device in deviceServices.Values.Select(owned => owned.Value))
                 {
                     //ПОДПИСКА НА СОБЫТИЯ ОТ ОБМЕНОВ.
                     device.SubscrubeOnExchangesEvents();
                     //СОБЫТИЯ СМЕНЫ СОСТОЯНИЯ ПОСТУПЛЕНИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ. ОБМЕНА.
-                    device.SubscrubeOnExchangesCycleDataEntryStateEvents();
+                    device.SubscrubeOnExchangesCycleBehaviorEvents();
                 }
             });
         }
@@ -295,9 +297,9 @@ namespace WebApiSwc
             var exchangeServices = scope.Resolve<ExchangeStorage<AdInputType>>();
             lifetimeApp.ApplicationStopping.Register(() =>
             {
-                foreach (var exchange in exchangeServices.Values.Where(exch => exch.CycleExchnageStatus != CycleExchnageStatus.Off))
+                foreach (var exchange in exchangeServices.Values.Select(owned => owned.Value).Where(exch => exch.CycleBehavior.CycleBehaviorState != CycleBehaviorState.Off))
                 {
-                     exchange.StopCycleExchange();
+                     exchange.CycleBehavior.StopCycleExchange();
                 }
             });
 
@@ -305,12 +307,12 @@ namespace WebApiSwc
             var deviceServices = scope.Resolve<DeviceStorage<AdInputType>>();
             lifetimeApp.ApplicationStopping.Register(() =>
             {
-                foreach (var device in deviceServices.Values)
+                foreach (var device in deviceServices.Values.Select(owned => owned.Value))
                 {
                     //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ ПУБЛИКУЕМЫХ НА ProduserUnion.
                     device.UnsubscrubeOnExchangesEvents();
                     //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ СМЕНЫ СОСТОЯНИЯ ПОСТУПЛЕНИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ. ОБМЕНА.
-                    device.UnsubscrubeOnExchangesCycleDataEntryStateEvents();
+                    device.UnsubscrubeOnExchangesCycleBehaviorEvents();
                 }
             });
         }

@@ -107,7 +107,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     //}
                     #endregion
 
-                    RequestTransfer request;
+                    RequestTransfer<TIn> request;
                     ResponseTransfer response;
                     try
                     {
@@ -124,9 +124,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
                     yield return new ProviderTransfer<TIn>
                     {
-                        StartItemIndex = startItemIndex,
-                        BatchSize = _option.BatchSize,
-                        BatchedData =  batch,    
                         Request = request,
                         Response = response,
                         Command = Command4Device.None
@@ -165,7 +162,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             SwitchFormatCheck2Hex(resDependencyStr, format, out var newStr, out var newFormat);
 
             //ФОРМИРОВАНИЕ ОБЪЕКТА ЗАПРОСА.------------------------------------------------------------------------------------------------
-            var request = new RequestTransfer(_option.RequestOption)
+            var request = new RequestTransfer<TIn>(_option.RequestOption)
             {
                 StrRepresentBase = new StringRepresentation(resDependencyStr, format),
                 StrRepresent = new StringRepresentation(newStr, newFormat)
@@ -176,7 +173,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
             return new ProviderTransfer<TIn>
             {
-                BatchedData = null,
                 Request = request,
                 Response = response,
                 Command = command
@@ -204,7 +200,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Создать строку Запроса (используя форматную строку RequestOption) из одного батча данных.
         /// </summary>
-        private RequestTransfer CreateStringRequest(IEnumerable<TIn> batch, int startItemIndex)
+        private RequestTransfer<TIn> CreateStringRequest(IEnumerable<TIn> batch, int startItemIndex)
         {
             var items = batch.ToList();
             var header = _option.RequestOption.Header;
@@ -215,15 +211,17 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
             //ЗАПОЛНИТЬ ТЕЛО ЗАПРОСА--------------------------------------------------------------------------------------------------------         
             var listBodyStr= new List<string>();
+            var processedItems = new List<ProcessedItem<TIn>>();
             for (var i = 0; i < items.Count; i++)
             {
                 //ВСТАВИТЬ НЕЗАВИСИМЫЕ ДАННЫЕ В ТЕЛО ЗАПРОСА---------------------------------------------------------------------------------
                 var item = items[i];
                 var currentRow = startItemIndex + i + 1;
-                var res = MakeBodySectionIndependentInserts(body, item, currentRow);
+                var (resultStr, resultDict) = MakeBodySectionIndependentInserts(body, item, currentRow);
+                processedItems.Add(new ProcessedItem<TIn>(item, resultDict));
 
                 //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ В ТЕЛО ЗАПРОСА--------------------------------------------------------------------------------------
-                var resBodyDependentStr = MakeBodyDependentInserts(res);
+                var resBodyDependentStr = MakeBodyDependentInserts(resultStr);
                 listBodyStr.Add(resBodyDependentStr);
             }
 
@@ -243,10 +241,11 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             //ПРОВЕРКА НЕОБХОДИМОСТИ СМЕНЫ ФОРМАТА СТРОКИ.-----------------------------------------------------------------------------------------
             SwitchFormatCheck2Hex(resDependencyStr, format, out var newStr, out var newFormat);
             //ФОРМИРОВАНИЕ ОБЪЕКТА ЗАПРОСА.------------------------------------------------------------------------------------------------
-            var request = new RequestTransfer(_option.RequestOption)
+            var request = new RequestTransfer<TIn>(_option.RequestOption)
             {
                 StrRepresentBase = new StringRepresentation(resDependencyStr, format),
-                StrRepresent = new StringRepresentation(newStr, newFormat)                
+                StrRepresent = new StringRepresentation(newStr, newFormat),
+                ProcessedItemsInBatch = new ProcessedItemsInBatch<TIn>(startItemIndex, _option.BatchSize, processedItems)
             };
             return request;
         }
@@ -281,7 +280,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Первоначальная вставка НЕЗАВИСИМЫХ переменных
         /// </summary>
-        private string MakeBodySectionIndependentInserts(string body, TIn uit, int currentRow)
+        private (string resultStr, Dictionary<string, object> resultDict) MakeBodySectionIndependentInserts(string body, TIn uit, int currentRow)
         {
             var dict= _independentInsertsService.CreateDictionary(uit);
             dict["rowNumber"] = currentRow;                     //TODO: rowNumber нужен не для всех входных типов. Может передавать currentRow в  CreateDictionary ???
@@ -383,8 +382,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 ["AddressDevice"] =  int.TryParse(_addressDevice, out var address) ? address : 0
             };
             //ВСТАВИТЬ ПЕРЕМЕННЫЕ ИЗ СЛОВАРЯ В body
-            var resStr = _helperStringTemplateInsert.StringTemplateInsert(str, dict);
-            return resStr;
+            var (resultStr, _) = _helperStringTemplateInsert.StringTemplateInsert(str, dict);
+            return resultStr;
         }
 
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Domain.InputDataModel.Base.InData;
@@ -8,7 +9,7 @@ using Infrastructure.Transport.Base.DataProvidert;
 
 namespace Domain.InputDataModel.Base.ProvidersAbstract
 {
-    public interface IDataProvider<TInput, TOutput>
+    public interface IDataProvider<TInput, TOutput> : IDisposable
     {
         string ProviderName { get;  }                                 //Название провайдера
         Dictionary<string, string> StatusDict{ get; }                 //Статус провайдера.

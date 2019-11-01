@@ -5,7 +5,9 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using Autofac.Features.OwnedInstances;
+using Domain.Exchange.Behaviors;
 using Domain.Exchange.Enums;
 using Domain.Exchange.Repository.Entities;
 using Domain.Exchange.RxModel;
@@ -27,37 +29,32 @@ using Shared.Types;
 
 namespace Domain.Exchange
 {
-    public class Exchange<TIn> : IExchange<TIn>
+    public class Exchange<TIn> : IExchange<TIn> where TIn : InputTypeBase
     {
         #region field
-        private const int MaxDataInQueue = 5;                         //In Behavior
-        protected readonly ExchangeOption ExchangeOption;
+        private readonly ExchangeOption _option;
         private readonly ITransport _transport;
-        private readonly ITransportBackground _transportBackground;  //In CycleBehavior
+        private readonly ITransportBackground _transportBackground;
         private IDataProvider<TIn, ResponseInfo> _dataProvider;                       //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
         private readonly IDisposable _dataProviderOwner;                              //управляет временем жизни _dataProvider
         private readonly ILogger _logger;
-        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _oneTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(QueueMode.QueueExtractLastItem, MaxDataInQueue);   //Очередь данных для SendOneTimeData(). In CycleBehavior
-        private readonly LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>> _cycleTimeDataQueue; //Очередь данных для SendCycleTimeData(). In CycleBehavior
-        private readonly InputCycleDataEntryCheker _inputCycleDataEntryCheker;      //таймер отсчитывает период от получения входных данных для цикл. обмена. In CycleBehavior
-        private readonly SkippingPeriodChecker _skippingPeriodChecker;              //таймер отсчитывает время пропуска периода опроса.  In CycleBehavior
         private readonly Stopwatch _sw = Stopwatch.StartNew();
+        private readonly List<IDisposable> _behaviorOwners;
         #endregion
 
 
 
         #region prop
-        public string KeyExchange => ExchangeOption.Key;
-        public bool AutoStartCycleFunc => ExchangeOption.CycleFuncOption.AutoStartCycleFunc;   //In CycleBehavior
-        public string ProviderName => ExchangeOption.Provider.Name;
-        public int NumberErrorTrying => ExchangeOption.NumberErrorTrying;
-        public int NumberTimeoutTrying => ExchangeOption.NumberTimeoutTrying;
-        public KeyTransport KeyTransport => ExchangeOption.KeyTransport;
+        public string KeyExchange => _option.Key;
+        public string DeviceName { get; }
+        public string ProviderName => _option.Provider.Name;
+        public int NumberErrorTrying => _option.NumberErrorTrying;
+        public int NumberTimeoutTrying => _option.NumberTimeoutTrying;
+        public KeyTransport KeyTransport => _option.KeyTransport;
 
         public bool IsOpen => _transport.IsOpen;
         public bool IsCycleReopened => _transport.IsCycleReopened;
         public bool IsStartedTransportBg => _transportBackground.IsStarted;
-        public CycleExchnageStatus CycleExchnageStatus { get; private set; }
 
         private bool _isConnect;
         public bool IsConnect
@@ -71,21 +68,24 @@ namespace Domain.Exchange
             }
         }
 
-        private InDataWrapper<TIn> _lastSendData;
-        public InDataWrapper<TIn> LastSendData
+        private LastSendPieceOfDataRxModel<TIn> _lastSendData;
+        /// <summary>
+        /// Актуальная отправленная информация через обмен.
+        /// </summary>
+        public LastSendPieceOfDataRxModel<TIn> LastSendData
         {
             get => _lastSendData;
             private set
             {
                 if (value == _lastSendData) return;
                 _lastSendData = value;
-                LastSendDataChangeRx.OnNext(new LastSendDataChangeRxModel<TIn> { KeyExchange = KeyExchange, LastSendData = LastSendData });
+                LastSendDataChangeRx.OnNext(_lastSendData);
             }
         }
 
-        public bool IsFullOneTimeDataQueue => _oneTimeDataQueue.IsFullLimit;    //In CycleBehavior
-        public bool IsFullCycleTimeDataQueue => _cycleTimeDataQueue.IsFullLimit;//In CycleBehavior
-        public bool IsNormalFrequencyCycleDataEntry { get; } = true;            //In CycleBehavior
+        public CycleBehavior<TIn> CycleBehavior { get; }
+        public OnceBehavior<TIn> OnceBehavior { get; }
+        public CommandBehavior<TIn> CommandBehavior { get; }
 
         public ProviderOption GetProviderOption => _dataProvider.GetCurrentOption();
         #endregion
@@ -93,41 +93,41 @@ namespace Domain.Exchange
 
 
         #region ctor
-
-        public Exchange(ExchangeOption exchangeOption,
+        public Exchange(string deviceName,
+                                 ExchangeOption option,
                                  ITransport transport,
-                                 ITransportBackground transportBackground, 
-                                 Owned<IDataProvider<TIn, ResponseInfo>> dataProviderOwner,
-                                 ILogger logger)
+                                 ITransportBackground transportBackground,
+                                 IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, ResponseInfo>>>> dataProviderFactory,
+                                 ILogger logger,
+                                 Func<string, ITransportBackground, CycleFuncOption, Func<DataAction, InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<CycleBehavior<TIn>>> cycleBehaviorFactory,
+                                 Func<string, ITransportBackground, Func<DataAction, InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<OnceBehavior<TIn>>> onceBehaviorFactory,
+                                 Func<string, ITransportBackground, Func<DataAction, InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<CommandBehavior<TIn>>> commandBehaviorFactory)
         {
-            ExchangeOption = exchangeOption;
+            DeviceName = deviceName;
+            _option = option;
             _transport = transport;
             _transportBackground = transportBackground;
-            _dataProviderOwner = dataProviderOwner;
-            _dataProvider = dataProviderOwner.Value;
+            var owner= dataProviderFactory[_option.Provider.Name](_option.Provider);
+            _dataProviderOwner = owner;
+            _dataProvider = owner.Value;
             _logger = logger;
-            _cycleTimeDataQueue = new LimitConcurrentQueueWithoutDuplicate<InDataWrapper<TIn>>(ExchangeOption.CycleFuncOption.CycleQueueMode, MaxDataInQueue);
-            _inputCycleDataEntryCheker= new InputCycleDataEntryCheker(KeyExchange, ExchangeOption.CycleFuncOption.NormalIntervalCycleDataEntry);
-            _skippingPeriodChecker= new SkippingPeriodChecker(ExchangeOption.CycleFuncOption.SkipInterval);
+            var cycleBehaviorOwner = cycleBehaviorFactory(KeyExchange, transportBackground, _option.CycleFuncOption, SendingPieceOfData);
+            var onceBehaviorOwner = onceBehaviorFactory(KeyExchange, transportBackground, SendingPieceOfData);
+            var commandBehaviorOwner = commandBehaviorFactory(KeyExchange, transportBackground, SendingPieceOfData);
+            _behaviorOwners = new List<IDisposable> {cycleBehaviorOwner, onceBehaviorOwner, commandBehaviorOwner};
+            CycleBehavior = cycleBehaviorOwner.Value;
+            OnceBehavior = onceBehaviorOwner.Value;
+            CommandBehavior = commandBehaviorOwner.Value;
         }
-
         #endregion
 
-
-        #region EventHandler
-        #endregion
-
-
-        #region InputDataChangeRx
-        public ISubject<InputDataStateRxModel> CycleDataEntryStateChangeRx =>_inputCycleDataEntryCheker.CycleDataEntryStateChangeRx;    //In CycleBehavior
-        #endregion
 
 
         #region ExchangeRx
         public ISubject<ConnectChangeRxModel> IsConnectChangeRx { get; } = new Subject<ConnectChangeRxModel>();
-        public ISubject<LastSendDataChangeRxModel<TIn>> LastSendDataChangeRx { get; } = new Subject<LastSendDataChangeRxModel<TIn>>();
-        public ISubject<ResponsePieceOfDataWrapper<TIn>> ResponseChangeRx { get; } = new Subject<ResponsePieceOfDataWrapper<TIn>>();
+        public ISubject<LastSendPieceOfDataRxModel<TIn>> LastSendDataChangeRx { get; } = new Subject<LastSendPieceOfDataRxModel<TIn>>();
         #endregion
+
 
 
         #region TransportRx
@@ -137,66 +137,18 @@ namespace Domain.Exchange
         #endregion
 
 
-        #region CycleExchange
-        /// <summary>
-        /// Добавление ЦИКЛ. функций на БГ
-        /// </summary>
-        public void StartCycleExchange()             //In CycleBehavior
-        {
-            Switch2NormalCycleExchange();
-            _inputCycleDataEntryCheker.StartChecking();
-        }
-
-        /// <summary>
-        /// Удаление ЦИКЛ. функций из БГ
-        /// </summary>
-        public void StopCycleExchange()            //In CycleBehavior
-        {
-            _transportBackground.RemoveCycleFunc(CycleTimeActionAsync);
-            _transportBackground.RemoveCycleFunc(CycleCommandEmergencyActionAsync);
-            CycleExchnageStatus = CycleExchnageStatus.Off;
-            _inputCycleDataEntryCheker.StopChecking();
-        }
-
-        /// <summary>
-        /// перевести в режим НОРМАЛЬНЫЙ цикл. обмен на БГ
-        /// </summary>
-        public void Switch2NormalCycleExchange()    //In CycleBehavior
-        {
-            _transportBackground.RemoveCycleFunc(CycleCommandEmergencyActionAsync);
-            _transportBackground.AddCycleAction(CycleTimeActionAsync);
-            CycleExchnageStatus = CycleExchnageStatus.Normal;
-        }
-
-        /// <summary>
-        /// перевести в режим АВАРИЙНЫЙ цикл. обмен на БГ
-        /// </summary>
-        public void Switch2CycleCommandEmergency()   //In CycleBehavior
-        {
-            _transportBackground.RemoveCycleFunc(CycleTimeActionAsync);
-            _transportBackground.AddCycleAction(CycleCommandEmergencyActionAsync);
-            CycleExchnageStatus = CycleExchnageStatus.Emergency;
-        }
-        #endregion
-
 
         #region SendData
-
         /// <summary>
         /// Отправить команду. аналог однократно выставляемой функции.
         /// </summary>
         /// <param name="command"></param>
         public void SendCommand(Command4Device command)
         {
-            if (command == Command4Device.None)
-                return;
-
             if (!_transport.IsOpen)
                 return;
 
-            var dataWrapper = new InDataWrapper<TIn> { Command = command };
-            _oneTimeDataQueue.Enqueue(dataWrapper);
-            _transportBackground.AddOneTimeAction(OneTimeActionAsync);
+            CommandBehavior.SendCommand(command);
         }
 
 
@@ -206,22 +158,10 @@ namespace Domain.Exchange
         /// </summary>
         public void SendOneTimeData(IEnumerable<TIn> inData, string directHandlerName)
         {
-            if (inData == null)
-                return;
-
             if (!_transport.IsOpen)
                 return;
 
-            var dataWrapper = new InDataWrapper<TIn> { Datas = inData.ToList(), DirectHandlerName = directHandlerName };
-            var result = _oneTimeDataQueue.Enqueue(dataWrapper);
-            if (result.IsSuccess)
-            {
-                _transportBackground.AddOneTimeAction(OneTimeActionAsync);
-            }
-            else
-            {
-                //_logger.Debug($"SendOneTimeData in Queue Error: {result.Error}");
-            }
+            OnceBehavior.SendData(inData, directHandlerName);
         }
 
 
@@ -230,117 +170,16 @@ namespace Domain.Exchange
         /// </summary>
         public void SendCycleTimeData(IEnumerable<TIn> inData, string directHandlerName)
         {
-            if (inData == null)
-                return;
-
             if (!_transport.IsOpen)
                 return;
 
-            //TODO: отправку данных делегировать поведению CycleBehavior
-            //CycleBehavior.SendData(inData, directHandlerName);
-
-            _inputCycleDataEntryCheker.InputDataEntry();
-
-            var dataWrapper = new InDataWrapper<TIn> { Datas = inData.ToList(), DirectHandlerName = directHandlerName };
-            var result = _cycleTimeDataQueue.Enqueue(dataWrapper);
-            if (result.IsSuccess) //Добавленны НОВЫЕ данные в очередь.
-            {
-                _skippingPeriodChecker.StopSkipping();
-            }
+            CycleBehavior.SendData(inData, directHandlerName);
         }
         #endregion
 
 
+
         #region Actions
-        /// <summary>
-        /// Однократно вызываемая функция.
-        /// </summary>
-        protected async Task OneTimeActionAsync(CancellationToken ct)      //In Behavior
-        {
-            if (!_transport.IsOpen)
-                return;
-
-            var result = _oneTimeDataQueue.Dequeue();
-            if (result.IsSuccess)
-            {
-                var inData = result.Value;
-                var transportResponseWrapper = await SendingPieceOfData(inData, ct);
-                transportResponseWrapper.KeyExchange = KeyExchange;
-                transportResponseWrapper.DataAction = (inData.Command == Command4Device.None) ? DataAction.OneTimeAction : DataAction.CommandAction;
-                ResponseChangeRx.OnNext(transportResponseWrapper);
-            }
-        }
-        
-
-        /// <summary>
-        /// Обработка отправки цикл. даных.
-        /// Если транспорт НЕ открыт, данные не отправляются
-        /// Если очередь ПУСТА, отправляется NULL.
-        /// Если ошибка извлечения из очереди, данные не отправляются
-        /// </summary>
-        protected async Task CycleTimeActionAsync(CancellationToken ct)      //In CycleBehavior
-        {
-            //TODO: IsOpen на транспорте заменить на StatusConnect(Open, Reconnect, StopedReconnect)
-            //if (!_transport.StatusConnecttus != Open)
-            //{
-            //    _logger.Warning($"Exchange/CycleTimeActionAsync Попытка отправить данные на не открытый тарнспорт {_transport.Status}");
-            //    return;
-            //}
-
-            if (_skippingPeriodChecker.IsSkip)
-            {
-                Debug.WriteLine("CycleTimeActionAsync SKIP ----------------------------------------");
-                return;
-            }
-
-            if (!_transport.IsOpen) 
-                return;
-
-            InDataWrapper<TIn> inData = null;
-            var result = _cycleTimeDataQueue.Dequeue();
-            if (result.IsSuccess)
-            {
-                inData = result.Value;
-            }
-            else
-            {
-                var errorResult = result.Error.DequeueResultError;
-                if (errorResult == DequeueResultError.FailTryDequeue || errorResult == DequeueResultError.FailTryPeek)
-                {
-                    _logger.Error("{Type} {KeyExchange}  {MessageShort}", "Ошибка извлечения данных из ЦИКЛ. очереди", KeyExchange, errorResult.ToString());
-                    return;
-                }
-            }
-            var transportResponseWrapper = await SendingPieceOfData(inData, ct);
-            transportResponseWrapper.KeyExchange = KeyExchange;
-            transportResponseWrapper.DataAction = DataAction.CycleAction;
-            if (transportResponseWrapper.IsValidAll)
-            {
-                _skippingPeriodChecker.StartSkipping(); //Если все ответы валидны - запустим отсчет пропуска вызовов CycleTimeAction.
-            }
-
-            ResponseChangeRx.OnNext(transportResponseWrapper);
-            await Task.Delay(1, ct); //TODO: Продумать как задвать скважность между выполнением цикл. функции на обмене.
-        }
-
-
-        /// <summary>
-        /// Выставить на циклический обмен команду InfoEmergency.
-        /// </summary>
-        protected async Task CycleCommandEmergencyActionAsync(CancellationToken ct)   //In CycleBehavior
-        {
-            if (!_transport.IsOpen)
-                return;
-
-            var inData = new InDataWrapper<TIn> {Command = Command4Device.InfoEmergency};        
-            var transportResponseWrapper = await SendingPieceOfData(inData, ct);
-            transportResponseWrapper.KeyExchange = KeyExchange;
-            transportResponseWrapper.DataAction = DataAction.CycleAction;
-            ResponseChangeRx.OnNext(transportResponseWrapper);
-            await Task.Delay(1, ct); //TODO: Продумать как задвать скважность между выполнением цикл. функции на обмене.
-        }
-
-
         /// <summary>
         /// Отправка порции данных.
         /// Провайдер подготавливает данные, транспорт осушетвляет обмен данными. 
@@ -348,9 +187,9 @@ namespace Domain.Exchange
         /// <returns>Ответ на отправку порции данных</returns>
         private int _countErrorTrying = 0;
         private int _countTimeoutTrying = 0;
-        private async Task<ResponsePieceOfDataWrapper<TIn>> SendingPieceOfData(InDataWrapper<TIn> inData, CancellationToken ct)
+        private async Task<ResponsePieceOfDataWrapper<TIn>> SendingPieceOfData(DataAction dataAction, InDataWrapper<TIn> inData, CancellationToken ct)
         {
-            var transportResponseWrapper = new ResponsePieceOfDataWrapper<TIn>();
+            var transportResponseWrapper = new ResponsePieceOfDataWrapper<TIn> {KeyExchange = KeyExchange, DeviceName = DeviceName, DataAction = dataAction};
             //ПОДПИСКА НА СОБЫТИЕ ОТПРАВКИ ПОРЦИИ ДАННЫХ
             var subscription = _dataProvider.RaiseSendDataRx.Subscribe(providerResult =>
             {
@@ -366,8 +205,8 @@ namespace Domain.Exchange
                             IsConnect = true;
                             _countErrorTrying = 0;
                             _countTimeoutTrying = 0;
-                            LastSendData = providerResult.InputData;
                             transportResp.ResponseInfo = providerResult.OutputData;
+                            transportResp.ProcessedItemsInBatch = providerResult.ProcessedItemsInBatch;
                             break;
 
                         //ТРАНСПОРТ НЕ ОТКРЫТ.
@@ -416,7 +255,6 @@ namespace Domain.Exchange
                 }
                 finally
                 {
-                    transportResp.RequestData = providerResult.InputData;
                     transportResp.ResponseInfo = providerResult.OutputData;
                     transportResp.Status = status;
                     transportResp.MessageDict = new Dictionary<string, string>(providerResult.StatusDict);
@@ -444,8 +282,14 @@ namespace Domain.Exchange
                 subscription.Dispose();
             }
 
-            //ВЫВОД ОТЧЕТА ОБ ОТПРАВКИ ПОРЦИИ ДАННЫХ.
+            //ОТЧЕТ ОБ ОТПРАВКИ ПОРЦИИ ДАННЫХ.
             LogedResponseInformation(transportResponseWrapper);
+            var processedItemsInBatches = transportResponseWrapper.ResponsesItems.Select(item => item.ProcessedItemsInBatch).ToList();
+            LastSendData = new LastSendPieceOfDataRxModel<TIn>(transportResponseWrapper.DeviceName,
+                transportResponseWrapper.KeyExchange,
+                transportResponseWrapper.DataAction,
+                transportResponseWrapper.TimeAction,
+                transportResponseWrapper.IsValidAll, processedItemsInBatches);
             return transportResponseWrapper;
         }
 
@@ -453,7 +297,7 @@ namespace Domain.Exchange
         /// <summary>
         /// Логирование информации.
         /// </summary>
-        private void LogedResponseInformation(ResponsePieceOfDataWrapper<TIn> response)
+        private void LogedResponseInformation(ResponsePieceOfDataWrapper<TIn> response)//TODO: Разнести обработку (выставить response.IsValidAll) и логирование данных.
         {
             try
             {
@@ -496,29 +340,25 @@ namespace Domain.Exchange
                 _logger.Error("{Type} {KeyExchange}  {Exception}", "ОШИБКА LogedResponseInformation", KeyExchange, ex);
             }
         }
-
         #endregion
 
 
-        #region dataProvider
 
+        #region dataProvider
         public void SetNewProvider(IDataProvider<TIn, ResponseInfo> provider)
         {
             _dataProvider = provider;
         }
-
         #endregion
 
         
-        #region Disposable
 
+        #region Disposable
         public void Dispose()
         {
-            _inputCycleDataEntryCheker.Dispose();
-            _skippingPeriodChecker.Dispose();
+            _behaviorOwners.ForEach(beh=> beh.Dispose());
             _dataProviderOwner.Dispose();
         }
-
         #endregion
     }
 }

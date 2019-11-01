@@ -15,7 +15,6 @@ namespace Infrastructure.Background.Concrete.HostingBackground
 
 
         #region prop
-
         public bool AutoStart { get; }
 
         /// <summary>
@@ -25,7 +24,6 @@ namespace Infrastructure.Background.Concrete.HostingBackground
                                    ExecutingTask.IsCanceled ||
                                    ExecutingTask.IsCompleted ||
                                    ExecutingTask.IsFaulted);
-
         #endregion
 
 
@@ -90,13 +88,14 @@ namespace Infrastructure.Background.Concrete.HostingBackground
 
 
         #region Disposable
-
         public virtual void Dispose()
         {
-            _stoppingCts.Cancel();
-            _stoppingCts.Dispose();
+            if (!_stoppingCts.IsCancellationRequested)
+            {
+                _stoppingCts.Cancel();
+                _stoppingCts.Dispose();
+            }
         }
-
         #endregion
     }
 }

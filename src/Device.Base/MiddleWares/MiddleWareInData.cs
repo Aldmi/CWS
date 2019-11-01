@@ -20,7 +20,7 @@ namespace Domain.Device.MiddleWares
     /// Сервис является иммутабельным. Он создается на базе MiddleWareInDataOption и его State не меняется
     /// </summary>
     /// <typeparam name="TIn">Входные данные для обработки</typeparam>
-    public class MiddleWareInData<TIn> : ISupportMiddlewareInvoke<TIn> where TIn : InputTypeBase
+    public class MiddleWareInData<TIn> : IMiddlewareInData<TIn> where TIn : InputTypeBase
     {
         #region fields
 

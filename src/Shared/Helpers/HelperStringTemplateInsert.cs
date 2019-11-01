@@ -36,8 +36,9 @@ namespace Shared.Helpers
         /// <param name="dict">словарь переменных key= название переменной val= значение</param>
         /// <param name="pattern">Как выдедить переменную и ее формат, по умолчанию {val:format}</param>
         /// <returns></returns>
-        public  string StringTemplateInsert(string template, Dictionary<string, object> dict, string pattern = @"\{(.*?)(:.+?)?\}")
+        public (string resultStr, Dictionary<string, object> resultDict) StringTemplateInsert(string template, Dictionary<string, object> dict, string pattern = @"\{(.*?)(:.+?)?\}")
         {
+            var resultDict = new Dictionary<string, object>(); // найденные в template переменные из dict и преобразованные по формату pattern
             string Evaluator(Match match)
             {
                 string res;
@@ -46,6 +47,7 @@ namespace Shared.Helpers
                 {
                     var replacement = dict[key];
                     var formatValue = match.Groups[2].Value;
+                    resultDict[key] = replacement;
                     switch (replacement)
                     {
                         case DateTime time:
@@ -79,7 +81,7 @@ namespace Shared.Helpers
             }
 
             var result = Regex.Replace(template, pattern, Evaluator);
-            return result;
+            return (result, resultDict);
         }
 
 

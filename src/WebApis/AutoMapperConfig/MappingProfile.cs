@@ -53,7 +53,7 @@ namespace WebApiSwc.AutoMapperConfig
             #endregion
 
 
-            #region AdInputType xml in Data mapping
+            #region AdInputType xml in ProcessedItemsInBatch mapping
             CreateMap<AdInputType4XmlDto, AdInputType>().ConstructUsing(src => new AdInputType(
                 src.Id,
                 ConvertString2Int(src.ScheduleId),
@@ -114,7 +114,7 @@ namespace WebApiSwc.AutoMapperConfig
             #endregion
 
 
-            #region AdInputType json in Data mapping
+            #region AdInputType json in ProcessedItemsInBatch mapping
             CreateMap<AdInputTypeDto, AdInputType>().ConstructUsing(src => new AdInputType(
                 src.Id,
                 src.ScheduleId,
@@ -150,7 +150,8 @@ namespace WebApiSwc.AutoMapperConfig
 
             CreateMap<IExchange<AdInputType>, ExchangeStateDto>()
                 .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.KeyExchange))
-                .ForMember(dest => dest.CycleExchnageStatus, opt => opt.MapFrom(src => src.CycleExchnageStatus.ToString()));
+                .ForMember(dest => dest.CycleExchnageStatus, opt => opt.MapFrom(src => src.CycleBehavior.CycleBehaviorState.ToString()))
+                .ForMember(dest => dest.AutoStartCycleFunc, opt => opt.MapFrom(src => src.CycleBehavior.CycleFuncOption.AutoStartCycleFunc));
             #endregion
         }
 
