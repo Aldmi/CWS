@@ -116,6 +116,38 @@ namespace WebApiSwc.Controllers
         }
 
 
+        // GET api/Devices/GetLastSendData/exchnageKey
+        [HttpGet("GetLastSendDataSimple/{exchnageKey}")]
+        public async Task<IActionResult> GetLastSendDataSimple([FromRoute] string exchnageKey)
+        {
+            var exchange = _mediatorForStorages.GetExchange(exchnageKey);
+            if (exchange == null)
+            {
+                return NotFound(exchnageKey);
+            }
+
+            var lastSendData = exchange.LastSendData;
+            var lastSendDataSimple = new
+            {
+                lastSendData.DeviceName,
+                lastSendData.KeyExchange,
+                lastSendData.DataAction, 
+                lastSendData.TimeAction,
+                lastSendData.IsValidAll,
+                lastSendData.Status,
+                ItemsInBatch= lastSendData.ProcessedItemsInBatch.Select(batch =>new
+                {
+                    batch.StartItemIndex,
+                    batch.BatchSize,
+                    UsingItems= batch.ProcessedItems.Select(item => item.ResultDict).ToList()
+
+                }).ToList()
+            };
+
+            await Task.CompletedTask;
+            return new JsonResult(lastSendDataSimple);
+        }
+
 
         // DELETE api/Devices/{deviceName}
         [HttpDelete("{deviceName}")]
