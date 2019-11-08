@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using MoreLinq;
 
 namespace Domain.InputDataModel.Base.Services
 {
@@ -31,7 +33,6 @@ namespace Domain.InputDataModel.Base.Services
         #endregion
 
 
-
         #region Methode
         public bool TryAddValue(string key, int value)
         {
@@ -58,6 +59,26 @@ namespace Domain.InputDataModel.Base.Services
         {
             return _dateTimeDict.TryGetValue(key, out value);
         }
+
+
+        public Dictionary<string, object> Map2BoxeDictionary()
+        {
+            var boxeDictionary = new Dictionary<string, object>();
+            foreach (var (key, value) in _strDict)
+            {
+                boxeDictionary[key] = value;
+            }
+            foreach (var (key, value) in _intDict)
+            {
+                boxeDictionary[key] = value;
+            }
+            foreach (var (key, value) in _dateTimeDict)
+            {
+                boxeDictionary[key] = value;
+            }
+            return boxeDictionary;
+        }
+
         #endregion
     }
 }

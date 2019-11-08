@@ -23,9 +23,9 @@ namespace Domain.InputDataModel.Base.Services
         /// <param name="inserts">словарь переменных key= название переменной val= значение</param>
         /// <param name="pattern">Как выдедить переменную и ее формат, по умолчанию {val:format}</param>
         /// <returns>возвращает  результирующую строку со всеми подстановками и словарь РЕАЛЬНО вставленных переменных</returns>
-        public static (string resultStr, Dictionary<string, object> resultDict) InsertByTemplate(string template, IndependentInserts inserts, string pattern = @"\{(.*?)(:.+?)?\}")
+        public static (string resultStr, IndependentInserts resultInsearts) InsertByTemplate(string template, IndependentInserts inserts, string pattern = @"\{(.*?)(:.+?)?\}")
         {
-            var resultDict = new Dictionary<string, object>(); // найденные в template переменные из inserts и преобразованные по формату pattern
+            var resultInsearts = new IndependentInserts(); // найденные в template переменные из inserts и преобразованные по формату pattern
             string Evaluator(Match match)
             {
                 string res = null;
@@ -34,28 +34,28 @@ namespace Domain.InputDataModel.Base.Services
                 if (inserts.TryGetValue(key, out string strVal))                 //обработка string значений
                 {
                     var formatValue = match.Groups[2].Value;
-                    resultDict[key] = strVal;
                     res = StringByFormatHandler(strVal, formatValue);
+                    resultInsearts.TryAddValue(key, strVal);
                 }
                 else
                 if (inserts.TryGetValue(key, out DateTime dateTimeVal))          //обработка DateTime значений
                 {
                     var formatValue = match.Groups[2].Value;
-                    resultDict[key] = dateTimeVal;
                     res = DateTimeStrHandler(dateTimeVal, formatValue);
+                    resultInsearts.TryAddValue(key, dateTimeVal);
                 }
                 else    
                 if (inserts.TryGetValue(key, out int intVal))                    //обработка int значений
                 {
                     var formatValue = match.Groups[2].Value;
-                    resultDict[key] = intVal;
                     var format = "{0" + formatValue + "}";
                     res = string.Format(format, intVal);
+                    resultInsearts.TryAddValue(key, intVal);
                 }
                 else
-                if (key.Contains("rowNumber"))                                  //обработка специфических значений
+                if (key.Contains("rowNumber"))                                  //обработка служебных значений
                 {
-                    if (inserts.TryGetValue("rowNumber", out int replacement))  //например rowNumber заданна как формула {(rowNumber+64):X1}
+                    if (inserts.TryGetValue("rowNumber", out int replacement))  //например rowNumber задан как формула {(rowNumber+64):X1}
                     {
                         var calcVal = CalculateMathematicFormat(key, (int) replacement);
                         var formatValue = match.Groups[2].Value;
@@ -71,7 +71,7 @@ namespace Domain.InputDataModel.Base.Services
             }
 
             var result = Regex.Replace(template, pattern, Evaluator);
-            return (result, resultDict);
+            return (result, resultInsearts);
         }
 
 

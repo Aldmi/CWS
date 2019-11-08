@@ -278,12 +278,12 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Первоначальная вставка НЕЗАВИСИМЫХ переменных
         /// </summary>
-        private (string resultStr, Dictionary<string, object> resultDict) MakeBodySectionIndependentInserts(string body, TIn uit, int currentRow)
+        private (string resultStr, IndependentInserts resultInsearts) MakeBodySectionIndependentInserts(string body, TIn uit, int currentRow)
         {
             var independentInserts= _independentInsertsService.CreateIndependentInserts(uit);
             independentInserts.TryAddValue("rowNumber", currentRow);
-            var resStr = StringTemplateInsertService.InsertByTemplate(body, independentInserts);
-            return resStr;
+            var resultInsearts = StringTemplateInsertService.InsertByTemplate(body, independentInserts);
+            return resultInsearts;
         }
 
 

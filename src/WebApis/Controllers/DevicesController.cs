@@ -139,7 +139,9 @@ namespace WebApiSwc.Controllers
                 {
                     batch.StartItemIndex,
                     batch.BatchSize,
-                    UsingItems= batch.ProcessedItems.Select(item => item.ResultDict).ToList()
+                    UsingItems= batch.ProcessedItems
+                        .Select(item => item.ResultDict.Map2BoxeDictionary())
+                        .ToList()
 
                 }).ToList()
             };

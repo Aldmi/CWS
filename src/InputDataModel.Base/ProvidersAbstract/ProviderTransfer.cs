@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.ProvidersOption;
+using Domain.InputDataModel.Base.Services;
 using KellermanSoftware.CompareNetObjects;
 using Shared.Types;
 
@@ -119,9 +120,9 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
     public class ProcessedItem<TIn>
     {
         public TIn InDataItem { get; set; }
-        public Dictionary<string, object> ResultDict { get; set; }  //Обработанные и выставленные в протокол данные из InDataItem
+        public IndependentInserts ResultDict { get; set; }  //Обработанные и выставленные в протокол данные из InDataItem
 
-        public ProcessedItem(TIn inDataItem, Dictionary<string, object> resultDict)
+        public ProcessedItem(TIn inDataItem, IndependentInserts resultDict)
         {
             InDataItem = inDataItem;
             ResultDict = resultDict;
