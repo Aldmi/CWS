@@ -131,5 +131,11 @@ namespace Shared.Helpers
         {
             return string.IsNullOrEmpty(str) ? str : Regex.Replace(str, @"\s+", " ").Trim();
         }
+
+
+        public static string GetSpaceOrString(this string str)
+        {
+            return string.IsNullOrEmpty(str) ? " " : str;
+        }
     }
 }
