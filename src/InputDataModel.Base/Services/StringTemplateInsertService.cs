@@ -4,74 +4,64 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using NCalc;
-using Serilog;
 
-namespace Shared.Helpers
+
+namespace Domain.InputDataModel.Base.Services
 {
-    public class HelperStringTemplateInsert
+    public static class StringTemplateInsertService
     {
         #region fields
-
-        private readonly ILogger _logger;
         private static readonly object LockerNCalc = new object();
-
         #endregion
 
-
-
-        #region ctor
-
-        public HelperStringTemplateInsert(ILogger _logger)
-        {
-            this._logger = _logger;
-        }
-
-        #endregion
 
 
         /// <summary>
         /// Вставка переменных (по формату) в строку по шаблону. 
         /// </summary>
         /// <param name="template">базовая строка с местозаполнителем</param>
-        /// <param name="dict">словарь переменных key= название переменной val= значение</param>
+        /// <param name="inserts">словарь переменных key= название переменной val= значение</param>
         /// <param name="pattern">Как выдедить переменную и ее формат, по умолчанию {val:format}</param>
-        /// <returns></returns>
-        public (string resultStr, Dictionary<string, object> resultDict) StringTemplateInsert(string template, Dictionary<string, object> dict, string pattern = @"\{(.*?)(:.+?)?\}")
+        /// <returns>возвращает  результирующую строку со всеми подстановками и словарь РЕАЛЬНО вставленных переменных</returns>
+        public static (string resultStr, IndependentInserts resultInsearts) InsertByTemplate(string template, IndependentInserts inserts, string pattern = @"\{(.*?)(:.+?)?\}")
         {
-            var resultDict = new Dictionary<string, object>(); // найденные в template переменные из dict и преобразованные по формату pattern
+            var resultInsearts = new IndependentInserts(); // найденные в template переменные из inserts и преобразованные по формату pattern
             string Evaluator(Match match)
             {
-                string res;
+                string res = null;
                 var key = match.Groups[1].Value;
-                if (dict.ContainsKey(key))
+
+                if (inserts.TryGetValue(key, out string strVal))                 //обработка string значений
                 {
-                    var replacement = dict[key];
                     var formatValue = match.Groups[2].Value;
-                    resultDict[key] = replacement;
-                    switch (replacement)
-                    {
-                        case DateTime time:
-                            res = DateTimeStrHandler(time, formatValue);
-                            break;
-
-                        case string str:
-                            res = StringByFormatHandler(str, formatValue);
-                            break;
-
-                        default:
-                            var format = "{0" + formatValue + "}";
-                            res = string.Format(format, replacement);
-                            break;
-                    }
+                    res = StringByFormatHandler(strVal, formatValue);
+                    resultInsearts.TryAddValue(key, strVal);
                 }
                 else
-                if (key.Contains("rowNumber"))
+                if (inserts.TryGetValue(key, out DateTime dateTimeVal))          //обработка DateTime значений
                 {
-                    var replacement = dict["rowNumber"];
-                    var calcVal = CalculateMathematicFormat(key, (int)replacement);
+                    var formatValue = match.Groups[2].Value;
+                    res = DateTimeStrHandler(dateTimeVal, formatValue);
+                    resultInsearts.TryAddValue(key, dateTimeVal);
+                }
+                else    
+                if (inserts.TryGetValue(key, out int intVal))                    //обработка int значений
+                {
                     var formatValue = match.Groups[2].Value;
                     var format = "{0" + formatValue + "}";
-                    res = string.Format(format, calcVal);
+                    res = string.Format(format, intVal);
+                    resultInsearts.TryAddValue(key, intVal);
+                }
+                else
+                if (key.Contains("rowNumber"))                                  //обработка служебных значений
+                {
+                    if (inserts.TryGetValue("rowNumber", out int replacement))  //например rowNumber задан как формула {(rowNumber+64):X1}
+                    {
+                        var calcVal = CalculateMathematicFormat(key, (int) replacement);
+                        var formatValue = match.Groups[2].Value;
+                        var format = "{0" + formatValue + "}";
+                        res = string.Format(format, calcVal);
+                    }
                 }
                 else
                 {
@@ -81,7 +71,7 @@ namespace Shared.Helpers
             }
 
             var result = Regex.Replace(template, pattern, Evaluator);
-            return (result, resultDict);
+            return (result, resultInsearts);
         }
 
 
@@ -96,7 +86,7 @@ namespace Shared.Helpers
         /// <param name="str">Строка</param>
         /// <param name="inseartFormat">Формат для вставки (для разных обработчиков может быть разный)</param>
         /// <returns></returns>
-        private  string StringByFormatHandler(string str, string inseartFormat)
+        private static string StringByFormatHandler(string str, string inseartFormat)
         {
             string resStr;
             switch (inseartFormat)
@@ -123,7 +113,7 @@ namespace Shared.Helpers
         }
 
 
-        private string ArrayCharInseart(string str, IEnumerable<string> options)
+        private static string ArrayCharInseart(string str, IEnumerable<string> options)
         {
             try
             {
@@ -151,7 +141,7 @@ namespace Shared.Helpers
         }
 
 
-        private string EndLineCharInseart(string str, string option)
+        private static string EndLineCharInseart(string str, string option)
         {
             try
             {
@@ -174,7 +164,7 @@ namespace Shared.Helpers
         }
 
 
-        private string EndLineCharInseartCalc(string str, int lenghtLine, string endLineChar)
+        private static string EndLineCharInseartCalc(string str, int lenghtLine, string endLineChar)
         {
             List<string> resultList = new List<string>();
             var wordChanks = str.Split(' ');
@@ -214,11 +204,10 @@ namespace Shared.Helpers
         }
 
 
-
         /// <summary>
         /// Обработчик времени по формату
         /// </summary>
-        private string DateTimeStrHandler(DateTime val, string formatValue)
+        private static string DateTimeStrHandler(DateTime val, string formatValue)
         {
             const string defaultStr = " ";
             if (val == DateTime.MinValue)
@@ -249,25 +238,17 @@ namespace Shared.Helpers
         /// Математическое вычисление формулы с участием переменной rowNumber
         /// Возможно CuncurrencyException при многопоточной работе с Expression.
         /// </summary>
-        private int CalculateMathematicFormat(string str, int row)
+        private static int CalculateMathematicFormat(string str, int row)
         {
-            try  //DEBUG (Отлов ошибки в Ncalc - многопоточный ошибка работы со словарем)
+            lock (LockerNCalc)
             {
-                lock (LockerNCalc)
+                var expr = new Expression(str)
                 {
-                    var expr = new Expression(str)
-                    {
-                        Parameters = { ["rowNumber"] = row }
-                    };
-                    var func = expr.ToLambda<int>();
-                    var arithmeticResult = func();
-                    return arithmeticResult;
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.Fatal($"ОШИБКА В CalculateMathematicFormat:   {e.Message}     {e.StackTrace}");
-                throw;
+                    Parameters = { ["rowNumber"] = row }
+                };
+                var func = expr.ToLambda<int>();
+                var arithmeticResult = func();
+                return arithmeticResult;
             }
         }
     }

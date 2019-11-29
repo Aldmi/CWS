@@ -27,7 +27,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         private readonly string _addressDevice;
         private readonly ViewRuleOption _option;
         private readonly ILogger _logger;
-        private readonly HelperStringTemplateInsert _helperStringTemplateInsert;  //TODO: нет смысла использовать отдельные экземпляры
         private readonly IIndependentInsertsService _independentInsertsService;
 
         #endregion
@@ -41,7 +40,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             _addressDevice = addressDevice;
             _option = option;
             _logger = logger;
-            _helperStringTemplateInsert= new HelperStringTemplateInsert(_logger);
             _independentInsertsService= independentInsertsService;
         }
 
@@ -280,12 +278,12 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Первоначальная вставка НЕЗАВИСИМЫХ переменных
         /// </summary>
-        private (string resultStr, Dictionary<string, object> resultDict) MakeBodySectionIndependentInserts(string body, TIn uit, int currentRow)
+        private (string resultStr, IndependentInserts resultInsearts) MakeBodySectionIndependentInserts(string body, TIn uit, int currentRow)
         {
-            var dict= _independentInsertsService.CreateDictionary(uit);
-            dict["rowNumber"] = currentRow;                     //TODO: rowNumber нужен не для всех входных типов. Может передавать currentRow в  CreateDictionary ???
-            var resStr = _helperStringTemplateInsert.StringTemplateInsert(body, dict);
-            return resStr;
+            var independentInserts= _independentInsertsService.CreateIndependentInserts(uit);
+            independentInserts.TryAddValue("rowNumber", currentRow);
+            var resultInsearts = StringTemplateInsertService.InsertByTemplate(body, independentInserts);
+            return resultInsearts;
         }
 
 
@@ -377,12 +375,10 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// </summary>
         private string MakeAddressDevice(string str)
         {
-            var dict = new Dictionary<string, object>
-            {
-                ["AddressDevice"] =  int.TryParse(_addressDevice, out var address) ? address : 0
-            };
+            var independentInserts = new IndependentInserts();
+            independentInserts.TryAddValue("AddressDevice", int.TryParse(_addressDevice, out var address) ? address : 0);
             //ВСТАВИТЬ ПЕРЕМЕННЫЕ ИЗ СЛОВАРЯ В body
-            var (resultStr, _) = _helperStringTemplateInsert.StringTemplateInsert(str, dict);
+            var (resultStr, _) = StringTemplateInsertService.InsertByTemplate(str, independentInserts);
             return resultStr;
         }
 
