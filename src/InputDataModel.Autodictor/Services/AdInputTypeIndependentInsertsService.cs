@@ -65,33 +65,6 @@ namespace Domain.InputDataModel.Autodictor.Services
             independentInseart.TryAddValue("Hour", DateTime.Now.Hour);
             independentInseart.TryAddValue("Minute", DateTime.Now.Minute);
             independentInseart.TryAddValue("Second", DateTime.Now.Second);
-
-            //var dict = new Dictionary<string, object>
-            //{
-            //    ["TypeName"] = typeTrain,
-            //    ["TypeAlias"] = typeAlias,
-            //    [nameof(uit.NumberOfTrain)] = numberOfTrain,
-            //    [nameof(uit.PathNumber)] = pathNumber,
-            //    [nameof(uit.Platform)] = platform,
-            //    [nameof(uit.Event)] = eventTrain,
-            //    [nameof(uit.Addition)] = addition,
-            //    ["Stations"] = stations,
-            //    ["StationsCut"] = stationsCutStr,
-            //    [nameof(uit.StationArrival)] = stationArrival,
-            //    [nameof(uit.StationDeparture)] = stationDeparture,
-            //    [nameof(uit.Note)] = note,
-            //    ["DaysFollowing"] =  daysFollowing,
-            //    ["DaysFollowingAlias"] = daysFollowingAlias,
-            //    ["TArrival"] = arrivalTime,
-            //    ["TDepart"] = departureTime,
-            //    [nameof(uit.DelayTime)] = delayTime,
-            //    ["Time"] = time,
-            //    ["ExpectedTime"] = expectedTime,
-            //    ["SyncTInSec"] = syncTInSec,
-            //    ["Hour"] = DateTime.Now.Hour,
-            //    ["Minute"] = DateTime.Now.Minute,
-            //    ["Second"] = DateTime.Now.Second,
-            //};
             return independentInseart;
         }
     }

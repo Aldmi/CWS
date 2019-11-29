@@ -120,12 +120,12 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
     public class ProcessedItem<TIn>
     {
         public TIn InDataItem { get; set; }
-        public IndependentInserts ResultDict { get; set; }  //Обработанные и выставленные в протокол данные из InDataItem
+        public IndependentInserts InseartedData { get; set; }  //Обработанные и выставленные в протокол данные из InDataItem
 
-        public ProcessedItem(TIn inDataItem, IndependentInserts resultDict)
+        public ProcessedItem(TIn inDataItem, IndependentInserts inseartedData)
         {
             InDataItem = inDataItem;
-            ResultDict = resultDict;
+            InseartedData = inseartedData;
         }
     }
 }
