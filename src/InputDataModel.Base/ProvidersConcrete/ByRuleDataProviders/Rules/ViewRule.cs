@@ -397,7 +397,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 if (HelpersBool.ContainsHexSubStr(matchString))
                 {
                     var buf = matchString.ConvertStringWithHexEscapeChars2ByteArray(format);
-                    var lenghtBody = buf.Count;            
+                    var lenghtBody = buf.Length;            
                     var lenghtAddress= 1;
                     var lenghtNByte = 1;
                     var lenghtCrc = 1;
