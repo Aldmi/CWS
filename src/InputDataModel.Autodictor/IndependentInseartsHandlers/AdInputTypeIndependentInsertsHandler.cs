@@ -15,50 +15,64 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsHandlers
                 return null;
 
             var lang = uit.Lang;
+            string str;
             switch (inseart.VarName)
             {
                 case "TypeName":
-                    return uit.TrainType?.GetName(lang).GetSpaceOrString();
+                    str = uit.TrainType?.GetName(lang);
+                    break;
 
                 case "TypeAlias":
-                    return uit.TrainType?.GetNameAlias(lang).GetSpaceOrString();
+                    str = uit.TrainType?.GetNameAlias(lang);
+                    break;
 
                 case nameof(uit.NumberOfTrain):
-                    return uit.NumberOfTrain.GetSpaceOrString();
-
+                    str = uit.NumberOfTrain;
+                    break;
+                
                 case nameof(uit.PathNumber):
-                    return uit.PathNumber.GetSpaceOrString();
+                    str = uit.PathNumber;
+                    break;
 
                 case nameof(uit.Platform):
-                    return uit.Platform.GetSpaceOrString();
-
+                    str = uit.Platform;
+                    break;
+                
                 case nameof(uit.Event):
-                    return uit.Event?.GetName(lang).GetSpaceOrString();
+                    str = uit.Event?.GetName(lang);
+                    break;
 
                 case nameof(uit.Addition):
-                    return uit.Addition?.GetName(lang).GetSpaceOrString();
-
+                    str = uit.Addition?.GetName(lang);
+                    break;
+                
                 case "Stations":
-                    return uit.Stations?.GetName(lang).GetSpaceOrString();
+                    str = uit.Stations?.GetName(lang);
+                    break;
 
                 case "StationsCut":
                     var stationsCut = uit.StationsСut?.GetName(lang);
                     return string.IsNullOrEmpty(stationsCut) ? "ПОСАДКИ НЕТ" : stationsCut;
 
                 case nameof(uit.StationArrival):
-                    return uit.StationArrival?.GetName(lang).GetSpaceOrString();
+                    str = uit.StationArrival?.GetName(lang);
+                    break;
 
                 case nameof(uit.StationDeparture):
-                    return uit.StationDeparture?.GetName(lang).GetSpaceOrString();
+                    str = uit.StationDeparture?.GetName(lang);
+                    break;
 
                 case nameof(uit.Note):
-                    return uit.Note?.GetName(lang).GetSpaceOrString();
+                    str = uit.Note?.GetName(lang);
+                    break;
 
                 case "DaysFollowing":
-                    return uit.DaysFollowing?.GetName(lang).GetSpaceOrString();
+                    str = uit.DaysFollowing?.GetName(lang);
+                    break;
 
                 case "DaysFollowingAlias":
-                    return uit.DaysFollowing?.GetNameAlias(lang).GetSpaceOrString();
+                    str = uit.DaysFollowing?.GetNameAlias(lang);
+                    break;
 
                 case "TArrival":
                     var arrivalTime = uit.ArrivalTime ?? DateTime.MinValue;
@@ -113,6 +127,7 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsHandlers
                 default:
                     return null;
             }
+            return str.GetSpaceOrString();
         }
 
 

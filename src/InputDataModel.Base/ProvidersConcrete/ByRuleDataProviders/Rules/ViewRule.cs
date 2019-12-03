@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Domain.InputDataModel.Base.Enums;
+using Domain.InputDataModel.Base.InseartServices.DependentInsearts;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;
-using Domain.InputDataModel.Base.Services;
 using Serilog;
 using Shared.CrcCalculate;
 using Shared.Extensions;
@@ -23,26 +25,43 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
     public class ViewRule<TIn>
     {
         #region fields
-
+        private const string Pattern = @"\{(.*?)(:.+?)?\}";
         private readonly string _addressDevice;
         private readonly ViewRuleOption _option;
         private readonly ILogger _logger;
-        private readonly IIndependentInsertsService _independentInsertsService;
 
+        private readonly IndependentInsertsService _requestHeaderParserModel;
+        private readonly IndependentInsertsService _requestBodyParserModel;
+        private readonly IndependentInsertsService _requesFooterParserModel;
+        private readonly DependentInseartsService _requestDependentInseartsService;
+
+        private readonly ResponseTransfer _responseTransfer;
+
+        private readonly StringBuilder _headerExecuteInseartsResult;
+        private readonly StringBuilder _footerExecuteInseartsResult;
         #endregion
 
 
 
         #region ctor
-
-        public ViewRule(string addressDevice, ViewRuleOption option, IIndependentInsertsService independentInsertsService, ILogger logger)
+        public ViewRule(string addressDevice, ViewRuleOption option, IIndependentInsertsHandler inTypeIndependentInsertsHandler, ILogger logger)
         {
             _addressDevice = addressDevice;
             _option = option;
             _logger = logger;
-            _independentInsertsService= independentInsertsService;
-        }
+            
+            _requestHeaderParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(_option.RequestOption.Header, Pattern);
+            _headerExecuteInseartsResult = _requestHeaderParserModel.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", _addressDevice } }).result;
+            _requestBodyParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(_option.RequestOption.Body, Pattern, inTypeIndependentInsertsHandler);
+            _requesFooterParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(_option.RequestOption.Footer, Pattern);
+            _footerExecuteInseartsResult = _requesFooterParserModel.ExecuteInsearts(null).result;
+            _requestDependentInseartsService = DependentInseartsService.DependentInseartsServiceFactory(_option.RequestOption.Header + _option.RequestOption.Body + _option.RequestOption.Footer);
 
+          
+    
+
+            _responseTransfer = CreateResponseTransfer();
+        }
         #endregion
 
 
@@ -64,7 +83,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// </summary>
         /// <param name="items">элементы прошедшие фильтрацию для правила</param>
         /// <returns>строку запроса и батч данных в обертке </returns>
-        public IEnumerable<ProviderTransfer<TIn>> GetDataRequestString(List<TIn> items)
+        public IEnumerable<ProviderTransfer<TIn>> GetProviderTransfer(List<TIn> items)
         {
             var viewedItems = GetViewedItems(items);
             if (viewedItems == null)
@@ -87,8 +106,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     //    var requestOption = sendingUnit.RequestOption;
                     //    var responseOption = sendingUnit.ResponseOption;
 
-                    //    var stringRequest = CreateStringRequest(batch, requestOption, startItemIndex); //requestOption передаем
-                    //    var stringResponse = CreateStringResponse(responseOption);//responseOption передаем
+                    //    var stringRequest = CreateRequestTransfer(batch, requestOption, startItemIndex); //requestOption передаем
+                    //    var stringResponse = CreateResponseTransfer(responseOption);//responseOption передаем
                     //    if (stringRequest == null)
                     //        continue;
 
@@ -106,13 +125,11 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     #endregion
 
                     RequestTransfer<TIn> request;
-                    ResponseTransfer response;
                     try
                     {
-                        request = CreateStringRequest(batch, startItemIndex);
+                        request = CreateRequestTransfer(batch, startItemIndex);
                         if (request == null)
                             continue;
-                        response = CreateStringResponse();
                     }
                     catch (Exception ex)
                     {
@@ -123,7 +140,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     yield return new ProviderTransfer<TIn>
                     {
                         Request = request,
-                        Response = response,
+                        Response = _responseTransfer,
                         Command = Command4Device.None
                     };
                 }
@@ -139,42 +156,44 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <returns></returns>
         public ProviderTransfer<TIn> GetCommandProviderTransfer(Command4Device command)
         {
-            //TODO: ФОРМИРОВАНИЕ ЗАПРОСА ДЛЯ КОНМАДЫ ВЫНЕСТИ В ОТДЕШЛЬНЫЙ МЕТОД, ПО АНАЛОГИИ С CreateStringRequest()
+            //TODO: ФОРМИРОВАНИЕ ЗАПРОСА ДЛЯ КОНМАДЫ ВЫНЕСТИ В ОТДЕШЛЬНЫЙ МЕТОД, ПО АНАЛОГИИ С CreateRequestTransfer()
 
-            var header = _option.RequestOption.Header;
-            var body = _option.RequestOption.Body;
-            var footer = _option.RequestOption.Footer;
-            var format = _option.RequestOption.Format;
+            return null;
 
-            //КОНКАТЕНИРОВАТЬ СТРОКИ В СУММАРНУЮ СТРОКУ-------------------------------------------------------------------------------------
-            //resSumStr содержит только ЗАВИСИМЫЕ данные: {AddressDevice} {NByte} {CRC}}
-            var resSumStr = header + body + footer;
+            //var header = _option.RequestOption.Header;
+            //var body = _option.RequestOption.Body;
+            //var footer = _option.RequestOption.Footer;
+            //var format = _option.RequestOption.Format;
 
-            //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ В ТЕЛО ЗАПРОСА--------------------------------------------------------------------------------------
-            var resBodyDependentStr = MakeBodyDependentInserts(resSumStr);
+            ////КОНКАТЕНИРОВАТЬ СТРОКИ В СУММАРНУЮ СТРОКУ-------------------------------------------------------------------------------------
+            ////resSumStr содержит только ЗАВИСИМЫЕ данные: {AddressDevice} {NByte} {CRC}}
+            //var resSumStr = header + body + footer;
 
-            //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})---------------------------------------------------------------------
-            var resDependencyStr = MakeDependentInserts(resBodyDependentStr, format);
+            ////ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ В ТЕЛО ЗАПРОСА--------------------------------------------------------------------------------------
+            //var resBodyDependentStr = MakeBodyDependentInserts(resSumStr);
 
-            //ПРОВЕРКА НЕОБХОДИМОСТИ СМЕНЫ ФОРМАТА СТРОКИ.----------------------------------------------------------------------------------
-            SwitchFormatCheck2Hex(resDependencyStr, format, out var newStr, out var newFormat);
+            ////ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})---------------------------------------------------------------------
+            //var resDependencyStr = MakeDependentInserts(resBodyDependentStr, format);
 
-            //ФОРМИРОВАНИЕ ОБЪЕКТА ЗАПРОСА.------------------------------------------------------------------------------------------------
-            var request = new RequestTransfer<TIn>(_option.RequestOption)
-            {
-                StrRepresentBase = new StringRepresentation(resDependencyStr, format),
-                StrRepresent = new StringRepresentation(newStr, newFormat)
-            };
+            ////ПРОВЕРКА НЕОБХОДИМОСТИ СМЕНЫ ФОРМАТА СТРОКИ.----------------------------------------------------------------------------------
+            //SwitchFormatCheck2Hex(resDependencyStr, format, out var newStr, out var newFormat);
 
-            //ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.-------------------------------------------------------------------------------
-            var response = CreateStringResponse();
+            ////ФОРМИРОВАНИЕ ОБЪЕКТА ЗАПРОСА.------------------------------------------------------------------------------------------------
+            //var request = new RequestTransfer<TIn>(_option.RequestOption)
+            //{
+            //    StrRepresentBase = new StringRepresentation(resDependencyStr, format),
+            //    StrRepresent = new StringRepresentation(newStr, newFormat)
+            //};
 
-            return new ProviderTransfer<TIn>
-            {
-                Request = request,
-                Response = response,
-                Command = command
-            };
+            ////ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.-------------------------------------------------------------------------------
+            //var response = CreateResponseTransfer();
+
+            //return new ProviderTransfer<TIn>
+            //{
+            //    Request = request,
+            //    Response = response,
+            //    Command = command
+            //};
         }
 
 
@@ -198,52 +217,48 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Создать строку Запроса (используя форматную строку RequestOption) из одного батча данных.
         /// </summary>
-        private RequestTransfer<TIn> CreateStringRequest(IEnumerable<TIn> batch, int startItemIndex)
+        private RequestTransfer<TIn> CreateRequestTransfer(IEnumerable<TIn> batch, int startItemIndex)
         {
             var items = batch.ToList();
-            var header = _option.RequestOption.Header;
-            var body = _option.RequestOption.Body;
-            var footer = _option.RequestOption.Footer;
             var format = _option.RequestOption.Format;
             var maxBodyLenght = _option.RequestOption.MaxBodyLenght;
 
-            //ЗАПОЛНИТЬ ТЕЛО ЗАПРОСА--------------------------------------------------------------------------------------------------------         
-            var listBodyStr= new List<string>();
+            //INDEPENDENT insearts-------------------------------------------------------------------------------
+            //var (sbHeaderResult, _) = _requestHeaderParserModel.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", _addressDevice } });
+            //var (sbFooterResult, _) = _requesFooterParserModel.ExecuteInsearts(null);
             var processedItems = new List<ProcessedItem<TIn>>();
+            var sbBodyResult = new StringBuilder();
             for (var i = 0; i < items.Count; i++)
             {
-                //ВСТАВИТЬ НЕЗАВИСИМЫЕ ДАННЫЕ В ТЕЛО ЗАПРОСА---------------------------------------------------------------------------------
                 var item = items[i];
                 var currentRow = startItemIndex + i + 1;
-                var (resultStr, resultDict) = MakeBodySectionIndependentInserts(body, item, currentRow);
-                processedItems.Add(new ProcessedItem<TIn>(item, resultDict));
+                var (result, inseartedDict) = _requestBodyParserModel.ExecuteInsearts(item, new Dictionary<string, string> { { "rowNumber", currentRow.ToString() } });
+                processedItems.Add(new ProcessedItem<TIn>(item, inseartedDict));
+                sbBodyResult.Append(result);
+            }
+            var sbAppendResult = new StringBuilder().Append(_headerExecuteInseartsResult).Append(sbBodyResult).Append(_footerExecuteInseartsResult);
+            var appendResultStr = sbAppendResult.ToString(); //TODO: Переход к старому коду зависимой вставки. Нужно его переделать на работу с StringBuilder
 
-                //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ В ТЕЛО ЗАПРОСА--------------------------------------------------------------------------------------
-                var resBodyDependentStr = MakeBodyDependentInserts(resultStr);
-                listBodyStr.Add(resBodyDependentStr);
+            //DEPENDENT insearts----------------------------------------------------------------------------------
+            var res = _requestDependentInseartsService?.ExecuteInseart(appendResultStr, format) ?? appendResultStr;
+
+            //CHECK LIMIT----------------------------------------------------------------------------------------
+            var limitRes = res.CheckLimitLenght(maxBodyLenght);
+            if (limitRes.res)
+            {
+                 _logger.Warning($"Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на {limitRes.OutOfLimit}");
+                return null;
             }
 
-            //ПРОВЕРИТЬ ДЛИНУ ТЕЛА ЗАПРОСА (если превышение, то строка запроса не формируется)---------------------------------------------------------------------------------------------
-            var listLimitBodyStr= CheckLimitBodySectionLenght(listBodyStr, maxBodyLenght);
-            if (listLimitBodyStr == null)
-               return null;
+            //FORMAT SWITCHER-------------------------------------------------------------------------------------
+            var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(res, format);
 
-            //КОНКАТЕНИРОВАТЬ СТРОКИ В СУММАРНУЮ СТРОКУ-----------------------------------------------------------------------------------------
-            //resSumStr содержит только ЗАВИСИМЫЕ данные: {AddressDevice} {NByte} {CRC}}
-            var limitBodyStr = listLimitBodyStr.Aggregate((i, j) => i + j);
-            var resSumStr = header + limitBodyStr + footer;
-
-            //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})-------------------------------------------------------------------------
-            var resDependencyStr = MakeDependentInserts(resSumStr, format);
-
-            //ПРОВЕРКА НЕОБХОДИМОСТИ СМЕНЫ ФОРМАТА СТРОКИ.-----------------------------------------------------------------------------------------
-            SwitchFormatCheck2Hex(resDependencyStr, format, out var newStr, out var newFormat);
             //ФОРМИРОВАНИЕ ОБЪЕКТА ЗАПРОСА.------------------------------------------------------------------------------------------------
             var request = new RequestTransfer<TIn>(_option.RequestOption)
             {
-                StrRepresentBase = new StringRepresentation(resDependencyStr, format),
+                StrRepresentBase = new StringRepresentation(res, format),
                 StrRepresent = new StringRepresentation(newStr, newFormat),
-                ProcessedItemsInBatch = new ProcessedItemsInBatch<TIn>(startItemIndex, _option.BatchSize, processedItems)
+                ProcessedItemsInBatch = new ProcessedItemsInBatch<TIn>(startItemIndex, items.Count, processedItems)
             };
             return request;
         }
@@ -252,265 +267,29 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Создать строку Ответа (используя форматную строку ResponseOption).
         /// </summary>
-        private ResponseTransfer CreateStringResponse()
-        {
-            var responseOption = _option.ResponseOption;
-            if(responseOption == null)
-                return null;
+        private ResponseTransfer CreateResponseTransfer()
+        { 
+            var format = _option.ResponseOption.Format;
+            var responseBodyParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(_option.ResponseOption.Body, Pattern);
+            var responseDependentInseartsService = DependentInseartsService.DependentInseartsServiceFactory(_option.RequestOption.Header + _option.RequestOption.Body + _option.RequestOption.Footer);
 
-            var body = responseOption.Body;
-            var format = responseOption.Format;
-            //ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})-------------------------------------------------------------------------
-            var resDependencyStr = MakeDependentInserts(body, format);
+            //INDEPENDENT insearts---------------------------------------------------------------------------------------------------------
+            var (sbBodyResult, _) = responseBodyParserModel.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", _addressDevice } });
+            var appendResultStr = sbBodyResult.ToString();
 
-            //ПРОВЕРКА НЕОБХОДИМОСТИ СМЕНЫ ФОРМАТА СТРОКИ.-----------------------------------------------------------------------------------------
-            SwitchFormatCheck2Hex(resDependencyStr, format, out var newStr, out var newFormat);
-            //ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.------------------------------------------------------------------------------------------------
-            var response = new ResponseTransfer(responseOption)
+            //DEPENDENT insearts-----------------------------------------------------------------------------------------------------------
+            var res = responseDependentInseartsService?.ExecuteInseart(appendResultStr, format) ?? appendResultStr;
+
+            //FORMAT SWITCHER--------------------------------------------------------------------------------------------------------------
+            var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(res, format);
+
+            //ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.--------------------------------------------------------------------------------------------------
+            var response = new ResponseTransfer(_option.ResponseOption)
             {
-                StrRepresentBase = new StringRepresentation(resDependencyStr, format),
+                StrRepresentBase = new StringRepresentation(res, format),
                 StrRepresent = new StringRepresentation(newStr, newFormat)
             };
             return response;
-        }
-
-
-        /// <summary>
-        /// Первоначальная вставка НЕЗАВИСИМЫХ переменных
-        /// </summary>
-        private (string resultStr, IndependentInserts resultInsearts) MakeBodySectionIndependentInserts(string body, TIn uit, int currentRow)
-        {
-            var independentInserts= _independentInsertsService.CreateIndependentInserts(uit);
-            independentInserts.TryAddValue("rowNumber", currentRow);
-            var resultInsearts = StringTemplateInsertService.InsertByTemplate(body, independentInserts);
-            return resultInsearts;
-        }
-
-
-        /// <summary>
-        /// Вставить зависимые (вычисляемые) данные в ТЕЛО запроса 
-        /// {NumberOfCharacters}
-        /// </summary>
-        /// <param name="str">входная строка тела в которой только ЗАВИСИМЫЕ данные</param>
-        /// <returns></returns>
-        private string MakeBodyDependentInserts(string str)
-        {
-            if (str.Contains("}"))                                                           //если указанны переменные подстановки
-            {
-                var subStr = str.Split('}');
-                StringBuilder resStr = new StringBuilder();
-                for (var index = 0; index < subStr.Length; index++)
-                {
-                    var s = subStr[index];
-                    var replaseStr = (s.Contains("{")) ? (s + "}") : s;
-                    //1. Подсчет кол-ва символов
-                    if (replaseStr.Contains("NumberOfCharacters"))
-                    {
-                        var targetStr = (subStr.Length > (index + 1)) ? subStr[index + 1] : string.Empty;
-                        if (Regex.Match(targetStr, "\\\"(.*)\"").Success) //
-                        {
-                            var matchString = Regex.Match(targetStr, "\\\"(.*)\\\"").Groups[1].Value;
-                            if (!string.IsNullOrEmpty(matchString))
-                            {
-                                var lenght = matchString.TrimEnd('\\').Length;
-                                var dateFormat = Regex.Match(replaseStr, "\\{NumberOfCharacters:(.*)\\}").Groups[1].Value;
-                                var formatStr = !string.IsNullOrEmpty(dateFormat) ?
-                                    string.Format(replaseStr.Replace("NumberOfCharacters", "0"), lenght.ToString(dateFormat)) :
-                                    string.Format(replaseStr.Replace("NumberOfCharacters", "0"), lenght);
-                                resStr.Append(formatStr);
-                            }
-                        }
-                        continue;
-                    }
-                    ////2. Вставка хххх
-                    //if (replaseStr.Contains("хххх"))
-                    //{
-                    //    continue;
-                    //}
-
-                    //Добавим в неизменном виде спецификаторы байтовой информации.
-                    resStr.Append(replaseStr);
-                }
-                return resStr.ToString().Replace("\\\"", string.Empty); //заменить \"
-            }
-            return str;
-        }
-
-
-        /// <summary>
-        /// Ограничить длинну строки
-        /// </summary>
-        private List<string> CheckLimitBodySectionLenght(List<string> bodyList, int maxBodyLenght)
-        {
-            double totalBodyCount= bodyList.Sum(s => s.Length);
-            if (totalBodyCount < maxBodyLenght)
-               return bodyList;
-
-            _logger.Warning($"Строка тела запроса СЛИШКОМ БОЛЬШАЯ {totalBodyCount} > {maxBodyLenght}. Превышение на  {totalBodyCount - maxBodyLenght}");
-            return null;
-        }
-
-
-        /// <summary>
-        /// Первоначальная вставка ЗАВИСИМЫХ переменных
-        ///  {AddressDevice} {NByte} {NumberOfCharacters} {CRC}
-        /// </summary>
-        private string MakeDependentInserts(string str, string format)
-        {
-            /*
-              1. Вставит AddressDevice и вставить.
-              2. Вычислить NByte (кол-во байт между {NByte} и {CRC}) и вставить.
-              3. Вычислить CRC и вставить
-            */
-            str = MakeAddressDevice(str);
-            str = MakeNByte(str, format);
-            str = MakeCrc(str, format); 
-            return str;
-        }
-
-
-        /// <summary>
-        /// Заменить все переменные NumberOfCharacters.
-        /// Вычислить N символов след. за NumberOfCharacters в кавычках
-        /// </summary>
-        private string MakeAddressDevice(string str)
-        {
-            var independentInserts = new IndependentInserts();
-            independentInserts.TryAddValue("AddressDevice", int.TryParse(_addressDevice, out var address) ? address : 0);
-            //ВСТАВИТЬ ПЕРЕМЕННЫЕ ИЗ СЛОВАРЯ В body
-            var (resultStr, _) = StringTemplateInsertService.InsertByTemplate(str, independentInserts);
-            return resultStr;
-        }
-
-
-        private string MakeNByte(string str, string format)
-        {
-            var requestFillBodyWithoutConstantCharacters = str.Replace("STX", string.Empty).Replace("ETX", string.Empty);
-
-            //ВЫЧИСЛЯЕМ NByte---------------------------------------------------------------------------
-            int lenght = 0;
-            string matchString = null;
-
-            if(Regex.Match(requestFillBodyWithoutConstantCharacters, "{NbyteFull(.*)}(.*){CRC(.*)}").Success)
-            {
-                matchString = Regex.Match(requestFillBodyWithoutConstantCharacters, "{Nbyte(.*)}(.*){CRC(.*)}").Groups[2].Value;          
-                if (HelpersBool.ContainsHexSubStr(matchString))
-                {
-                    var buf = matchString.ConvertStringWithHexEscapeChars2ByteArray(format);
-                    var lenghtBody = buf.Length;            
-                    var lenghtAddress= 1;
-                    var lenghtNByte = 1;
-                    var lenghtCrc = 1;
-                    lenght = lenghtBody + lenghtAddress + lenghtNByte + lenghtCrc;
-                }
-                else
-                {
-                    lenght = matchString.Length;
-                }
-            }
-            else
-            if (Regex.Match(requestFillBodyWithoutConstantCharacters, "{Nbyte(.*)}(.*){CRC(.*)}").Success) //вычислили длинну строки между Nbyte и CRC
-            {
-                matchString = Regex.Match(requestFillBodyWithoutConstantCharacters, "{Nbyte(.*)}(.*){CRC(.*)}").Groups[2].Value;
-                lenght = matchString.Length;
-            }
-            else if (Regex.Match(requestFillBodyWithoutConstantCharacters, "{Nbyte(.*)}(.*)").Success)//вычислили длинну строки от Nbyte до конца строки
-            {
-                matchString = Regex.Match(requestFillBodyWithoutConstantCharacters, "{Nbyte(.*)}(.*)").Groups[1].Value;
-                lenght = matchString.Length;
-            }
-
-
-            //ЗАПОНЯЕМ ВСЕ СЕКЦИИ ДО CRC
-            var subStr = requestFillBodyWithoutConstantCharacters.Split('}');
-            StringBuilder resStr = new StringBuilder();
-            foreach (var s in subStr)
-            {
-                var replaseStr = (s.Contains("{")) ? (s + "}") : s;
-                if (replaseStr.Contains("NbyteFull"))
-                {
-                    var formatStr = string.Format(replaseStr.Replace("NbyteFull", "0"), lenght);
-                    resStr.Append(formatStr);
-                }
-                else
-                if (replaseStr.Contains("Nbyte"))
-                {
-                    var formatStr = string.Format(replaseStr.Replace("Nbyte", "0"), lenght);
-                    resStr.Append(formatStr);
-                }
-                else
-                {
-                    resStr.Append(replaseStr);
-                }
-            }
-            return resStr.ToString();
-        }
-
-
-        private string MakeCrc(string str, string format)
-        {
-            var crcType = Regex.Match(str, "{CRC(.*):(.*)}").Groups[1].Value;
-            var crcOption= Regex.Match(crcType, "\\[(.*)\\]").Groups[1].Value;  //Xor[0x02-0x03]
-            var startEndChars = crcOption.Split('-');
-            var startChar = (startEndChars.Length >= 1) ? startEndChars[0] : String.Empty;
-            var endChar = (startEndChars.Length >= 2) ? startEndChars[1] : String.Empty;
-
-            string matchString;
-            if (string.IsNullOrEmpty(startChar) && string.IsNullOrEmpty(endChar))
-            {
-                //Не заданны симолы начала и конца подсчета строки CRC. Берем от начала строки до CRC.
-                matchString = Regex.Match(str, "(.*){CRC(.*)}").Groups[1].Value;
-            }
-            else
-            {
-                // Оба заданы.
-                var strTmp = str.Replace(crcOption, String.Empty);
-                var pattern = $"{startChar}(.*){endChar}";
-                matchString = Regex.Match(strTmp, pattern).Groups[1].Value;
-            }
-
-            //УБРАТЬ МАРКЕРНЫЕ СИМОЛЫ ИЗ ПОДСЧЕТА CRC
-            matchString = matchString.Replace("\u0002", string.Empty).Replace("\u0003", string.Empty);
-
-            //ВЫЧИСЛИТЬ МАССИВ БАЙТ ДЛЯ ПОДСЧЕТА CRC
-            var crcBytes = HelpersBool.ContainsHexSubStr(matchString) ?
-                matchString.ConvertStringWithHexEscapeChars2ByteArray(format).ToArray() :
-                matchString.ConvertString2ByteArray(format);
-
-            var replacement = $"CRC{crcType}";
-            byte crc = 0x00;
-            switch (crcType)
-            {
-                case string s when s.Contains("XorInverse"):
-                    crc = CrcCalc.CalcXorInverse(crcBytes);
-                    break;
-
-                case string s when s.Contains("Xor"):
-                    crc = CrcCalc.CalcXor(crcBytes);
-                    break;
-
-                case string s when s.Contains("Mod256"):
-                    crc = CrcCalc.CalcMod256(crcBytes);
-                    break;
-            }
-            str = string.Format(str.Replace(replacement, "0"), crc);
-            return str;
-        }
-
-
-        private bool SwitchFormatCheck2Hex(string str, string format, out string newStr, out string newFormat)
-        { 
-            if (str.Contains("0x"))
-            {
-                var buf = str.ConvertStringWithHexEscapeChars2ByteArray(format);
-                newStr = buf.ArrayByteToString("X2");
-                newFormat = "HEX";
-                return true;
-            }
-
-            newStr = str;
-            newFormat = format;
-            return false;
         }
 
         #endregion

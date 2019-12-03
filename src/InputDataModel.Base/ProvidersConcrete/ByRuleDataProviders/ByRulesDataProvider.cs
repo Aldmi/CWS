@@ -5,11 +5,11 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response;
-using Domain.InputDataModel.Base.Services;
 using Serilog;
 using Shared.Extensions;
 
@@ -32,7 +32,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         
 
         #region ctor
-        public ByRulesDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> providerResultFactory, ProviderOption providerOption, IIndependentInsertsService independentInsertsService, ILogger logger)
+        public ByRulesDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> providerResultFactory, ProviderOption providerOption, IIndependentInsertsHandler inTypeIndependentInsertsHandler, ILogger logger)
             : base(providerResultFactory, logger)
         {
             _option = providerOption.ByRulesProviderOption;
@@ -40,7 +40,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 throw new ArgumentNullException(providerOption.Name); //TODO: выбросы исключений пометсить в Shared ThrowIfNull(object obj)
 
             ProviderName = providerOption.Name;
-            _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, independentInsertsService, logger)).ToList();
+            _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, inTypeIndependentInsertsHandler, logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(_option.RuleName4DefaultHandle)
                 ? "DefaultHandler"
                 : _option.RuleName4DefaultHandle;
@@ -162,13 +162,12 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
                 foreach (var viewRule in rule.GetViewRules)
                 {
-                    foreach (var providerTransfer in viewRule.GetDataRequestString(takesItems))
+                    foreach (var providerTransfer in viewRule.GetProviderTransfer(takesItems))
                     {
                         if (providerTransfer == null) //правило отображения не подходит под ДАННЫЕ
                             continue;
 
                         StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption.Id}";
-                        StatusDict["Request.BodyLenght"] = $"{providerTransfer.Request.BodyLenght}";
                         var providerResult = ProviderResultFactory(providerTransfer, StatusDict);
                         RaiseSendDataRx.OnNext(providerResult);
                     }

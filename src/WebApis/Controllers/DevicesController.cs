@@ -140,7 +140,7 @@ namespace WebApiSwc.Controllers
                     batch.StartItemIndex,
                     batch.BatchSize,
                     UsingItems= batch.ProcessedItems
-                        .Select(item => item.InseartedData.Map2BoxeDictionary())
+                        .Select(item => item.InseartedData)
                         .ToList()
 
                 }).ToList()

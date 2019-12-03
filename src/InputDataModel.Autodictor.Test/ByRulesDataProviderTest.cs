@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Domain.InputDataModel.Autodictor.Entities;
+using Domain.InputDataModel.Autodictor.IndependentInseartsHandlers;
 using Domain.InputDataModel.Autodictor.Model;
-using Domain.InputDataModel.Autodictor.Services;
 using Domain.InputDataModel.Autodictor.StronglyTypedResponse;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response;
-using Domain.InputDataModel.Base.Services;
 using FluentAssertions;
 using Moq;
 using Serilog;
@@ -24,7 +24,7 @@ namespace InputDataModel.Autodictor.Test
         #region field
 
         private readonly ILogger _logger;
-        private readonly IIndependentInsertsService _independentInsertsService;
+        private readonly IIndependentInsertsHandler _independentInsertsHandler;
         private readonly IStronglyTypedResponseFactory _stronglyTypedResponseFactory;
 
         #endregion
@@ -41,7 +41,7 @@ namespace InputDataModel.Autodictor.Test
             mock.Setup(loger => loger.Warning(""));
             _logger = mock.Object;
 
-            _independentInsertsService= new AdInputTypeIndependentInsertsService();
+            _independentInsertsHandler= new AdInputTypeIndependentInsertsHandler();
             _stronglyTypedResponseFactory= new AdStronglyTypedResponseFactory();
         }
 
@@ -103,7 +103,7 @@ namespace InputDataModel.Autodictor.Test
                 {
                     return new ProviderResult<AdInputType>(transfer, dictionary, _stronglyTypedResponseFactory);
                 };
-            var btByRulesDataProvider= new ByRulesDataProvider<AdInputType>(providerResultFactory, option, _independentInsertsService, _logger);
+            var btByRulesDataProvider= new ByRulesDataProvider<AdInputType>(providerResultFactory, option, _independentInsertsHandler, _logger);
 
             // Act
             int countSetDataByte = 0;
