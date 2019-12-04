@@ -162,7 +162,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
                 foreach (var viewRule in rule.GetViewRules)
                 {
-                    foreach (var providerTransfer in viewRule.GetProviderTransfer(takesItems))
+                    foreach (var providerTransfer in viewRule.CreateProviderTransfer4Data(takesItems))
                     {
                         if (providerTransfer == null) //правило отображения не подходит под ДАННЫЕ
                             continue;
@@ -182,7 +182,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         private void ViewRuleSendCommand(Rule<TIn> rule, Command4Device command)
         {
             var commandViewRule = rule.GetViewRules.FirstOrDefault();
-            var providerTransfer = commandViewRule?.GetCommandProviderTransfer(command);
+            var providerTransfer = commandViewRule?.CreateProviderTransfer4Command(command);
             StatusDict["Command"] = $"{command}";
             StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
             StatusDict["viewRule.Id"] = $"{commandViewRule.GetCurrentOption.Id}";

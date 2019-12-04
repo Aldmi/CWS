@@ -10,7 +10,6 @@ using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Independent
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Serilog;
-using Shared.CrcCalculate;
 using Shared.Extensions;
 using Shared.Helpers;
 using Shared.Types;
@@ -30,15 +29,12 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         private readonly ViewRuleOption _option;
         private readonly ILogger _logger;
 
-        private readonly IndependentInsertsService _requestHeaderParserModel;
-        private readonly IndependentInsertsService _requestBodyParserModel;
-        private readonly IndependentInsertsService _requesFooterParserModel;
-        private readonly DependentInseartsService _requestDependentInseartsService;
+        private readonly StringBuilder _headerExecuteInseartsResult;                         //Строка Header после IndependentInserts
+        private readonly IndependentInsertsService _requestBodyParserModel;                  //модель вставки IndependentInserts в ТЕЛО ЗАПРОСА
+        private readonly StringBuilder _footerExecuteInseartsResult;                         //Строка Footer после IndependentInserts
+        private readonly DependentInseartsService _requestDependentInseartsService;          //Сервис вставки зависимых данных в общий ЗАПРОС (header+body+footer)
 
-        private readonly ResponseTransfer _responseTransfer;
-
-        private readonly StringBuilder _headerExecuteInseartsResult;
-        private readonly StringBuilder _footerExecuteInseartsResult;
+        private readonly ResponseTransfer _responseTransfer;                                 //Ответ после всех вставок
         #endregion
 
 
@@ -49,41 +45,32 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             _addressDevice = addressDevice;
             _option = option;
             _logger = logger;
-            
-            _requestHeaderParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(_option.RequestOption.Header, Pattern);
-            _headerExecuteInseartsResult = _requestHeaderParserModel.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", _addressDevice } }).result;
+
+            var requestHeaderParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(_option.RequestOption.Header, Pattern);
             _requestBodyParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(_option.RequestOption.Body, Pattern, inTypeIndependentInsertsHandler);
-            _requesFooterParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(_option.RequestOption.Footer, Pattern);
-            _footerExecuteInseartsResult = _requesFooterParserModel.ExecuteInsearts(null).result;
+            var requesFooterParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(_option.RequestOption.Footer, Pattern);
+            _headerExecuteInseartsResult = requestHeaderParserModel.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", _addressDevice } }).result;
+            _footerExecuteInseartsResult = requesFooterParserModel.ExecuteInsearts(null).result;
             _requestDependentInseartsService = DependentInseartsService.DependentInseartsServiceFactory(_option.RequestOption.Header + _option.RequestOption.Body + _option.RequestOption.Footer);
-
-          
-    
-
             _responseTransfer = CreateResponseTransfer();
         }
         #endregion
 
 
 
-
         #region prop
-
         public ViewRuleOption GetCurrentOption => _option;
-
         #endregion
 
 
 
-
         #region Methode
-
         /// <summary>
         /// Создать строку запроса ПОД ДАННЫЕ, подставив в форматную строку запроса значения переменных из списка items.
         /// </summary>
         /// <param name="items">элементы прошедшие фильтрацию для правила</param>
         /// <returns>строку запроса и батч данных в обертке </returns>
-        public IEnumerable<ProviderTransfer<TIn>> GetProviderTransfer(List<TIn> items)
+        public IEnumerable<ProviderTransfer<TIn>> CreateProviderTransfer4Data(List<TIn> items)
         {
             var viewedItems = GetViewedItems(items);
             if (viewedItems == null)
@@ -106,7 +93,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     //    var requestOption = sendingUnit.RequestOption;
                     //    var responseOption = sendingUnit.ResponseOption;
 
-                    //    var stringRequest = CreateRequestTransfer(batch, requestOption, startItemIndex); //requestOption передаем
+                    //    var stringRequest = CreateRequestTransfer4Data(batch, requestOption, startItemIndex); //requestOption передаем
                     //    var stringResponse = CreateResponseTransfer(responseOption);//responseOption передаем
                     //    if (stringRequest == null)
                     //        continue;
@@ -127,7 +114,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     RequestTransfer<TIn> request;
                     try
                     {
-                        request = CreateRequestTransfer(batch, startItemIndex);
+                        request = CreateRequestTransfer4Data(batch, startItemIndex);
                         if (request == null)
                             continue;
                     }
@@ -148,52 +135,25 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         }
 
 
-
         /// <summary>
         /// Создать строку запроса ПОД КОМАНДУ.
         /// Body содержит готовый запрос для команды.
         /// </summary>
         /// <returns></returns>
-        public ProviderTransfer<TIn> GetCommandProviderTransfer(Command4Device command)
+        public ProviderTransfer<TIn> CreateProviderTransfer4Command(Command4Device command)
         {
-            //TODO: ФОРМИРОВАНИЕ ЗАПРОСА ДЛЯ КОНМАДЫ ВЫНЕСТИ В ОТДЕШЛЬНЫЙ МЕТОД, ПО АНАЛОГИИ С CreateRequestTransfer()
+            //ФОРМИРОВАНИЕ ЗАПРОСА--------------------------------------------------------------------------------------
+            var requestCommand = CreateRequestTransfer4Command();
 
-            return null;
+            //ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.-------------------------------------------------------------------------------
+            var response = CreateResponseTransfer();
 
-            //var header = _option.RequestOption.Header;
-            //var body = _option.RequestOption.Body;
-            //var footer = _option.RequestOption.Footer;
-            //var format = _option.RequestOption.Format;
-
-            ////КОНКАТЕНИРОВАТЬ СТРОКИ В СУММАРНУЮ СТРОКУ-------------------------------------------------------------------------------------
-            ////resSumStr содержит только ЗАВИСИМЫЕ данные: {AddressDevice} {NByte} {CRC}}
-            //var resSumStr = header + body + footer;
-
-            ////ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ В ТЕЛО ЗАПРОСА--------------------------------------------------------------------------------------
-            //var resBodyDependentStr = MakeBodyDependentInserts(resSumStr);
-
-            ////ВСТАВИТЬ ЗАВИСИМЫЕ ДАННЫЕ ({AddressDevice} {NByte} {CRC})---------------------------------------------------------------------
-            //var resDependencyStr = MakeDependentInserts(resBodyDependentStr, format);
-
-            ////ПРОВЕРКА НЕОБХОДИМОСТИ СМЕНЫ ФОРМАТА СТРОКИ.----------------------------------------------------------------------------------
-            //SwitchFormatCheck2Hex(resDependencyStr, format, out var newStr, out var newFormat);
-
-            ////ФОРМИРОВАНИЕ ОБЪЕКТА ЗАПРОСА.------------------------------------------------------------------------------------------------
-            //var request = new RequestTransfer<TIn>(_option.RequestOption)
-            //{
-            //    StrRepresentBase = new StringRepresentation(resDependencyStr, format),
-            //    StrRepresent = new StringRepresentation(newStr, newFormat)
-            //};
-
-            ////ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.-------------------------------------------------------------------------------
-            //var response = CreateResponseTransfer();
-
-            //return new ProviderTransfer<TIn>
-            //{
-            //    Request = request,
-            //    Response = response,
-            //    Command = command
-            //};
+            return new ProviderTransfer<TIn>
+            {
+                Request = requestCommand,
+                Response = response,
+                Command = command
+            };
         }
 
 
@@ -211,21 +171,19 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             {
                 return null;
             }
-        }
+        }    //TODO: вставить в метод как Func
 
 
         /// <summary>
-        /// Создать строку Запроса (используя форматную строку RequestOption) из одного батча данных.
+        /// Создать Запрос (используя форматную строку RequestOption) из одного батча данных.
         /// </summary>
-        private RequestTransfer<TIn> CreateRequestTransfer(IEnumerable<TIn> batch, int startItemIndex)
+        private RequestTransfer<TIn> CreateRequestTransfer4Data(IEnumerable<TIn> batch, int startItemIndex)
         {
             var items = batch.ToList();
             var format = _option.RequestOption.Format;
             var maxBodyLenght = _option.RequestOption.MaxBodyLenght;
 
             //INDEPENDENT insearts-------------------------------------------------------------------------------
-            //var (sbHeaderResult, _) = _requestHeaderParserModel.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", _addressDevice } });
-            //var (sbFooterResult, _) = _requesFooterParserModel.ExecuteInsearts(null);
             var processedItems = new List<ProcessedItem<TIn>>();
             var sbBodyResult = new StringBuilder();
             for (var i = 0; i < items.Count; i++)
@@ -246,7 +204,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var limitRes = res.CheckLimitLenght(maxBodyLenght);
             if (limitRes.res)
             {
-                 _logger.Warning($"Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на {limitRes.OutOfLimit}");
+                _logger.Warning($"Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на {limitRes.OutOfLimit}");
                 return null;
             }
 
@@ -265,10 +223,40 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
 
         /// <summary>
+        /// Создать запрос для комманды.
+        /// </summary>
+        /// <returns></returns>
+        private RequestTransfer<TIn> CreateRequestTransfer4Command()
+        {
+            var format = _option.RequestOption.Format;
+
+            //INDEPENDENT insearts-------------------------------------------------------------------------------
+            var (sbBodyResult, _) = _requestBodyParserModel.ExecuteInsearts(null);
+            var sbAppendResult = new StringBuilder().Append(_headerExecuteInseartsResult).Append(sbBodyResult).Append(_footerExecuteInseartsResult);
+            var appendResultStr = sbAppendResult.ToString(); //TODO: Переход к старому коду зависимой вставки. Нужно его переделать на работу с StringBuilder
+
+            //DEPENDENT insearts----------------------------------------------------------------------------------
+            var res = _requestDependentInseartsService?.ExecuteInseart(appendResultStr, format) ?? appendResultStr;
+
+            //FORMAT SWITCHER-------------------------------------------------------------------------------------
+            var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(res, format);
+
+            //ФОРМИРОВАНИЕ ОБЪЕКТА ЗАПРОСА.------------------------------------------------------------------------------------------------
+            var request = new RequestTransfer<TIn>(_option.RequestOption)
+            {
+                StrRepresentBase = new StringRepresentation(res, format),
+                StrRepresent = new StringRepresentation(newStr, newFormat)
+            };
+
+            return request;
+        }
+
+
+        /// <summary>
         /// Создать строку Ответа (используя форматную строку ResponseOption).
         /// </summary>
         private ResponseTransfer CreateResponseTransfer()
-        { 
+        {
             var format = _option.ResponseOption.Format;
             var responseBodyParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(_option.ResponseOption.Body, Pattern);
             var responseDependentInseartsService = DependentInseartsService.DependentInseartsServiceFactory(_option.RequestOption.Header + _option.RequestOption.Body + _option.RequestOption.Footer);
@@ -291,7 +279,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             };
             return response;
         }
-
         #endregion
     }
 }

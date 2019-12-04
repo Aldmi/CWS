@@ -242,7 +242,7 @@
 
 
 //            //Act
-//            var transfers = viewRule.GetProviderTransfer(inTypes).ToList();
+//            var transfers = viewRule.CreateProviderTransfer4Data(inTypes).ToList();
 //            var firstTransfer = transfers.FirstOrDefault();
 
 //            var requestString = firstTransfer?.Request.StrRepresent.Str;
