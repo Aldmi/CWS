@@ -28,8 +28,8 @@ namespace WebApiSwc
 
         public static string GetVersion()
         {
-            const string version = "CWS Ver3.2";
-            return $"{version}  [13.09.2019]  [Reliz. Fix bug in Exchange.LogedResponseInformation]";
+            const string version = "CWS Ver4.0";
+            return $"{version}  [05.12.2019]  [Reliz. Refactoring ViewRules model]";
         }
 
 
