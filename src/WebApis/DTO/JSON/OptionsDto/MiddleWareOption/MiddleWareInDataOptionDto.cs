@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using DAL.Abstract.Entities.Options.MiddleWare;
+using Domain.Device.Enums;
+using Domain.Device.Repository.Entities.MiddleWareOption;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption

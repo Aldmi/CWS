@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-using DAL.Abstract.Entities.Options.MiddleWare;
-using DeviceForExchange.MiddleWares;
 using DeviceForExchnage.Test.Datas;
+using Domain.Device.MiddleWares;
+using Domain.Device.Repository.Entities.MiddleWareOption;
+using Domain.InputDataModel.Autodictor.Model;
 using FluentAssertions;
-using InputDataModel.Autodictor.Model;
 using Moq;
 using Serilog;
 using Xunit;
@@ -611,7 +611,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData_NumberOfTrain_Null(1);
-           // inData.Data.First().NumberOfTrain = null;
+           // inData.ProcessedItemsInBatch.First().NumberOfTrain = null;
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_LimitStringConverter("NumberOfTrain");
             var middleWareinData = new MiddleWareInData<AdInputType>(option, _logger);
 

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
-using DeviceForExchange.MiddleWares.Converters.Exceptions;
+using Domain.Device.MiddleWares.Converters.Exceptions;
 using Shared.Helpers;
+using SubStringMemConverterOption = Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption.SubStringMemConverterOption;
 
-namespace DeviceForExchange.MiddleWares.Converters.StringConverters
+namespace Domain.Device.MiddleWares.Converters.StringConverters
 {
     /// <summary>
     /// Выделяет подстроку из строки.

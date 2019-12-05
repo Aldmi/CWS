@@ -1,6 +1,6 @@
-﻿namespace InputDataModel.Autodictor.Entities
+﻿namespace Domain.InputDataModel.Autodictor.Entities
 {
-    public enum Lang
+    public enum Lang : byte
     {
         Ru,
         Eng,

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using DAL.Abstract.Entities.Options.ResponseProduser;
-using KafkaProduser.Options;
-using WebClientProduser.Options;
+using Domain.Device.Repository.Entities.ResponseProduser;
+using Infrastructure.Produser.KafkaProduser.Options;
+using Infrastructure.Produser.WebClientProduser.Options;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.ProduserUnionOption
 {

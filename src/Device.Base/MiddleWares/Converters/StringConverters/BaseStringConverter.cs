@@ -1,6 +1,6 @@
-﻿using DAL.Abstract.Entities.Options.MiddleWare.Converters;
+﻿using BaseConverterOption = Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.BaseConverterOption;
 
-namespace DeviceForExchange.MiddleWares.Converters.StringConverters
+namespace Domain.Device.MiddleWares.Converters.StringConverters
 {
     public abstract class BaseStringConverter : IConverterMiddleWare<string>
     {

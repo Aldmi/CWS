@@ -6,18 +6,19 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using App.Services.InputData;
 using Autofac.Features.Indexed;
 using AutoMapper;
-using BL.Services.InputData;
-using InputDataModel.Autodictor.Model;
-using InputDataModel.Base.InData;
+using Domain.InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Base.Enums;
+using Domain.InputDataModel.Base.InData;
+using Infrastructure.Background.Abstarct;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using WebApiSwc.DTO.JSON.InputTypesDto;
 using WebApiSwc.DTO.XML;
-using Worker.Background.Abstarct;
 
 namespace WebApiSwc.Controllers
 {

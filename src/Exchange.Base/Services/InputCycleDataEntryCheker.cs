@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Reactive.Subjects;
 using System.Timers;
-using Exchange.Base.RxModel;
+using Domain.Exchange.Enums;
+using Domain.Exchange.RxModel;
 using Timer = System.Timers.Timer;
 
-namespace Exchange.Base.Services
+namespace Domain.Exchange.Services
 {
-    public enum InputDataState { NormalEntry, ToLongNoEntry };
-
     /// <summary>
     /// Сервис проверки входных данных.
     /// Если за время checkInterval не будет вызванн метод InputDataEntry(), то InputDataState = ToLongNoEntry.
@@ -16,71 +15,58 @@ namespace Exchange.Base.Services
     public class InputCycleDataEntryCheker : IDisposable
     {
         #region fields
-
-        private readonly string _key;
         private readonly int _checkInterval;
         private readonly Timer _timerInputCycleDataCheck;
-
         #endregion
 
 
 
         #region prop
-
         /// <summary>
         /// Состояние получения входных данных
         /// true - нормальное состояние
         /// </summary>
-        public InputDataState InputDataState { get; private set; }
-
+        public InputDataStatus InputDataStatus { get; private set; }
         #endregion
 
 
 
         #region InputDataRx
-
         /// <summary>
         /// Событие смены состояния получения данных
         /// </summary>
-        public ISubject<InputDataStateRxModel> CycleDataEntryStateChangeRx { get; } = new Subject<InputDataStateRxModel>();
-
+        public ISubject<InputDataStatus> CycleDataEntryStateChangeRx { get; } = new Subject<InputDataStatus>();
         #endregion
 
 
 
         #region ctor
-
-        public InputCycleDataEntryCheker(string key, int checkInterval)
+        public InputCycleDataEntryCheker(int checkInterval)
         {
-            _key = key;
             _checkInterval = checkInterval;
             _timerInputCycleDataCheck = new Timer();
             _timerInputCycleDataCheck.Elapsed += TimerToLongNoEntryElapsed;
-            InputDataState = InputDataState.NormalEntry;
+            InputDataStatus = InputDataStatus.NormalEntry;
         }
-
         #endregion
 
 
 
         #region EventHandlers
-
         private void TimerToLongNoEntryElapsed(object sender, ElapsedEventArgs e)
         {
             //ПЕРЕХОД В СОСТОЯНИЕ ДОЛГОГО ОТСУТСВИЯ ДАННЫХ.
-            if (InputDataState == InputDataState.NormalEntry)
+            if (InputDataStatus == InputDataStatus.NormalEntry)
             {
-                InputDataState = InputDataState.ToLongNoEntry;
-                CycleDataEntryStateChangeRx.OnNext(new InputDataStateRxModel(_key, InputDataState));
+                InputDataStatus = InputDataStatus.ToLongNoEntry;
+                CycleDataEntryStateChangeRx.OnNext(InputDataStatus);
             }
         }
-
         #endregion
 
 
 
         #region Mehods
-
         public void StartChecking()
         {
             if (_checkInterval > 0)
@@ -108,24 +94,21 @@ namespace Exchange.Base.Services
                return;
 
             _timerInputCycleDataCheck.Interval = _checkInterval;
-            if (InputDataState == InputDataState.ToLongNoEntry)
+            if (InputDataStatus == InputDataStatus.ToLongNoEntry)
             {
-                InputDataState = InputDataState.NormalEntry;
-                CycleDataEntryStateChangeRx.OnNext(new InputDataStateRxModel(_key, InputDataState));
+                InputDataStatus = InputDataStatus.NormalEntry;
+                CycleDataEntryStateChangeRx.OnNext(InputDataStatus);
             }
         }
-
         #endregion
 
 
 
         #region Disposable
-
         public void Dispose()
         {
             _timerInputCycleDataCheck?.Dispose();
         }
-
         #endregion
     }
 }

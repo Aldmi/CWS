@@ -1,5 +1,5 @@
-﻿using Autofac;
-using BL.Services.Config;
+﻿using App.Services.Config;
+using Autofac;
 
 namespace WebApiSwc.AutofacModules
 {

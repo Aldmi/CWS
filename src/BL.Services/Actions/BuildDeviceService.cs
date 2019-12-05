@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BL.Services.Exceptions;
-using BL.Services.Mediators;
-using DeviceForExchange;
-using InputDataModel.Base;
-using InputDataModel.Base.InData;
+using App.Services.Exceptions;
+using App.Services.Mediators;
+using Domain.Device;
+using Domain.InputDataModel.Base.InData;
 
-namespace BL.Services.Actions
+namespace App.Services.Actions
 {
     /// <summary>
     /// Сервис делает БИЛД ус-ва. 

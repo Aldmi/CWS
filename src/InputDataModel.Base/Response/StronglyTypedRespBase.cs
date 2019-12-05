@@ -1,4 +1,4 @@
-﻿namespace InputDataModel.Base.Response
+﻿namespace Domain.InputDataModel.Base.Response
 {
     /// <summary>
     /// Базовый тип для создания строго типизированных ответов из строкового представления ответа.

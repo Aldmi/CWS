@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Services.Actions;
+using App.Services.Exceptions;
+using App.Services.Mediators;
+using Autofac.Features.Indexed;
 using AutoMapper;
-using BL.Services.Actions;
-using BL.Services.Exceptions;
-using BL.Services.Mediators;
-using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using DAL.Abstract.Entities.Options.MiddleWare;
-using InputDataModel.Autodictor.Model;
+using Domain.Device.Repository.Entities.MiddleWareOption;
+using Domain.InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Base.ProvidersAbstract;
+using Domain.InputDataModel.Base.ProvidersOption;
+using Domain.InputDataModel.Base.Response;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Shared.Types;
@@ -97,6 +100,56 @@ namespace WebApiSwc.Controllers
         }
 
 
+        // GET api/Devices/GetLastSendData/exchnageKey
+        [HttpGet("GetLastSendData/{exchnageKey}")]
+        public async Task<IActionResult> GetLastSendData([FromRoute] string exchnageKey)
+        {
+            var exchange = _mediatorForStorages.GetExchange(exchnageKey);
+            if (exchange == null)
+            {
+                return NotFound(exchnageKey);
+            }
+
+            var lastSendData = exchange.LastSendData;
+            await Task.CompletedTask;
+            return new JsonResult(lastSendData);
+        }
+
+
+        // GET api/Devices/GetLastSendData/exchnageKey
+        [HttpGet("GetLastSendDataSimple/{exchnageKey}")]
+        public async Task<IActionResult> GetLastSendDataSimple([FromRoute] string exchnageKey)
+        {
+            var exchange = _mediatorForStorages.GetExchange(exchnageKey);
+            if (exchange == null)
+            {
+                return NotFound(exchnageKey);
+            }
+
+            var lastSendData = exchange.LastSendData;
+            var lastSendDataSimple = new
+            {
+                lastSendData.DeviceName,
+                lastSendData.KeyExchange,
+                lastSendData.DataAction, 
+                lastSendData.TimeAction,
+                lastSendData.IsValidAll,
+                lastSendData.Status,
+                ItemsInBatch= lastSendData.ProcessedItemsInBatch.Select(batch =>new
+                {
+                    batch.StartItemIndex,
+                    batch.BatchSize,
+                    UsingItems= batch.ProcessedItems
+                        .Select(item => item.InseartedData)
+                        .ToList()
+
+                }).ToList()
+            };
+
+            await Task.CompletedTask;
+            return new JsonResult(lastSendDataSimple);
+        }
+
 
         // DELETE api/Devices/{deviceName}
         [HttpDelete("{deviceName}")]
@@ -118,7 +171,6 @@ namespace WebApiSwc.Controllers
                 throw;
             }
         }
-
 
 
         /// <summary>
@@ -152,7 +204,6 @@ namespace WebApiSwc.Controllers
         }
 
 
-
         /// <summary>
         /// Остановить обмен по ключу
         /// </summary>
@@ -182,7 +233,6 @@ namespace WebApiSwc.Controllers
                 throw;
             }
         }
-
 
 
         /// <summary>
@@ -304,23 +354,15 @@ namespace WebApiSwc.Controllers
         }
 
 
-
         // GET api/Devices/GetProviderOption/{deviceName}/{exchName}
         [HttpGet("GetProviderOption/{deviceName}/{exchName}")]
         public async Task<IActionResult> GetProviderOption([FromRoute] string deviceName, [FromRoute] string exchName)
         {
-            var device = _mediatorForStorages.GetDevice(deviceName);
-            if (device == null)
-            {
-                return NotFound(deviceName);
-            }
-            var exchange = device.Exchanges.FirstOrDefault(e => e.KeyExchange == exchName);
-            if (exchange == null)
-            {
-                return NotFound(exchName);
-            }
-            var providerOption = exchange.ProviderOptionRt;
-            var providerOptionDto = _mapper.Map<ProviderOptionDto>(providerOption);
+            var (_, isFailure, option, error) = _deviceActionService.GetProviderOption(deviceName, exchName);
+            if (isFailure)
+                return BadRequest(error);
+
+            var providerOptionDto = _mapper.Map<ProviderOptionDto>(option);
 
             await Task.CompletedTask;
             return new JsonResult(providerOptionDto);
@@ -334,29 +376,14 @@ namespace WebApiSwc.Controllers
             [FromRoute] string exchName,
             [FromBody] ProviderOptionDto providerOptionDto)
         {
-            var device = _mediatorForStorages.GetDevice(deviceName);
-            if (device == null)
-            {
-                return NotFound(deviceName);
-            }
-            var exchange = device.Exchanges.FirstOrDefault(e => e.KeyExchange == exchName);
-            if (exchange == null)
-            {
-                return NotFound(exchName);
-            }
 
             var providerOption = _mapper.Map<ProviderOption>(providerOptionDto);
-            try
-            {
-                exchange.ProviderOptionRt = providerOption;
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Исключение при установке ProviderOptionRt {ex}");
-            }
-   
+            var (_, isFailure, error) = _deviceActionService.SetProvider(deviceName, exchName, providerOption);
+            if (isFailure)
+                return BadRequest(error);
+
             await Task.CompletedTask;
-            return  Ok("Опции успешно приняты");
+            return Ok("Опции успешно приняты");
         }
 
 
@@ -370,7 +397,7 @@ namespace WebApiSwc.Controllers
                 return NotFound(deviceName);
             }
 
-            var middleWareInDataOption = device.GetMiddleWareInDataOption();
+            var middleWareInDataOption = device.MiddleWareInDataOption;
             var middleWareInDataOptionDto = _mapper.Map<MiddleWareInDataOptionDto>(middleWareInDataOption);
 
             await Task.CompletedTask;
@@ -391,7 +418,7 @@ namespace WebApiSwc.Controllers
             var middleWareInDataOption = _mapper.Map<MiddleWareInDataOption>(middleWareInDataOptionDto);
             try
             {
-                device.SetMiddleWareInDataOptionAndCreateNewMiddleWareInData(middleWareInDataOption);
+                device.MiddleWareInDataOption= middleWareInDataOption;
             }
             catch (Exception ex)
             {
@@ -401,7 +428,6 @@ namespace WebApiSwc.Controllers
             await Task.CompletedTask;
             return Ok("Опции успешно приняты");
         }
-
 
         #endregion
     }

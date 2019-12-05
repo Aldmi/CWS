@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BL.Services.Mediators;
+using App.Services.Mediators;
 using CSharpFunctionalExtensions;
-using DAL.Abstract.Entities.Options.ResponseProduser;
-using DeviceForExchange.Produser;
-using InputDataModel.Base.InData;
+using Domain.Device.Produser;
+using Domain.Device.Repository.Entities.ResponseProduser;
+using Domain.InputDataModel.Base.InData;
 using Shared.Enums;
 
-namespace BL.Services.Actions
+namespace App.Services.Actions
 {
     /// <summary>
     /// Создать коллекцию ProdusersUnion на базе опций и записать их в Storage.

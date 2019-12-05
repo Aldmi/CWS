@@ -1,4 +1,4 @@
-﻿namespace DeviceForExchange.MiddleWares.Converters
+﻿namespace Domain.Device.MiddleWares.Converters
 {
     public interface IConverterMiddleWare<T>
     {

@@ -4,24 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
-using DAL.Abstract.Entities.Options.MiddleWare;
-using DeviceForExchange.MiddleWares.Converters.Exceptions;
-using DeviceForExchange.MiddleWares.Handlers;
-using DeviceForExchange.MiddleWares.Invokes;
+using Domain.Device.MiddleWares.Converters.Exceptions;
+using Domain.Device.MiddleWares.Handlers;
+using Domain.Device.MiddleWares.Invokes;
+using Domain.InputDataModel.Base.InData;
 using FastDeepCloner;
-using InputDataModel.Base;
-using InputDataModel.Base.InData;
 using Serilog;
 using Shared.ReflectionServices;
+using MiddleWareInDataOption = Domain.Device.Repository.Entities.MiddleWareOption.MiddleWareInDataOption;
 
-namespace DeviceForExchange.MiddleWares
+namespace Domain.Device.MiddleWares
 {
     /// <summary>
     /// Промежуточный обработчик входных данных.
     /// Сервис является иммутабельным. Он создается на базе MiddleWareInDataOption и его State не меняется
     /// </summary>
     /// <typeparam name="TIn">Входные данные для обработки</typeparam>
-    public class MiddleWareInData<TIn> : ISupportMiddlewareInvoke<TIn> where TIn : InputTypeBase
+    public class MiddleWareInData<TIn> : IMiddlewareInData<TIn> where TIn : InputTypeBase
     {
         #region fields
 

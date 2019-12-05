@@ -1,14 +1,14 @@
-﻿using AbstractProduser.AbstractProduser;
-using Autofac;
-using DAL.Abstract.Entities.Options.ResponseProduser;
-using DeviceForExchange.Produser;
-using InputDataModel.Autodictor.Model;
-using KafkaProduser;
-using KafkaProduser.Options;
+﻿using Autofac;
+using Domain.Device.Produser;
+using Domain.Device.Repository.Entities.ResponseProduser;
+using Domain.InputDataModel.Autodictor.Model;
+using Infrastructure.Produser.AbstractProduser.AbstractProduser;
+using Infrastructure.Produser.KafkaProduser;
+using Infrastructure.Produser.KafkaProduser.Options;
+using Infrastructure.Produser.WebClientProduser;
+using Infrastructure.Produser.WebClientProduser.Options;
 using WebApiSwc.Produsers;
 using WebApiSwc.SignalRClients;
-using WebClientProduser;
-using WebClientProduser.Options;
 
 namespace WebApiSwc.AutofacModules
 {
@@ -18,23 +18,15 @@ namespace WebApiSwc.AutofacModules
     public class ProduserUnionAutofacModule<TIn> : Module
     {
         protected override void Load(ContainerBuilder builder)
-        {          
-            switch (typeof(TIn).Name)
-            {
-                case "AdInputType":
-                    builder.RegisterType<ProdusersUnionFactory<AdInputType>>().InstancePerDependency();
-                    builder.RegisterType<ProdusersUnion<AdInputType>>().InstancePerDependency();
+        {
+            builder.RegisterType<ProdusersUnionResponseConverter<TIn>>().SingleInstance();
+            builder.RegisterType<ProdusersUnionFactory<TIn>>().InstancePerDependency();
+            builder.RegisterType<ProdusersUnion<TIn>>().InstancePerDependency();
 
-                    builder.RegisterType<KafkaProduserWrapper>().As<IProduser<KafkaProduserOption>>().InstancePerDependency();
-                    builder.RegisterType<WebClientProduserWrapper>().As<IProduser<WebClientProduserOption>>().InstancePerDependency();
-
-                    builder.RegisterType<SignaRProduserClientsStorage<SignaRProdusserClientsInfo>>().SingleInstance();
-                    builder.RegisterType<SignalRProduserWrapper>().As<IProduser<SignalRProduserOption>>().InstancePerDependency();
-                    break;
-
-                case "OtherType":
-                    break;
-            }
+            builder.RegisterType<KafkaProduserWrapper>().As<IProduser<KafkaProduserOption>>().InstancePerDependency();
+            builder.RegisterType<WebClientProduserWrapper>().As<IProduser<WebClientProduserOption>>().InstancePerDependency();
+            builder.RegisterType<SignaRProduserClientsStorage<SignaRProdusserClientsInfo>>().SingleInstance();
+            builder.RegisterType<SignalRProduserWrapper>().As<IProduser<SignalRProduserOption>>().InstancePerDependency();
         }
     }
 }

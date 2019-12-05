@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +20,7 @@
     <PackageReference Include="Firewall" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.HealthChecks" Version="1.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.4.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
     <PackageReference Include="morelinq" Version="3.1.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
@@ -36,19 +38,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BL.Services\BL.Services.csproj" />
-    <ProjectReference Include="..\Communication.SerialPort\Transport.SerialPort.csproj" />
-    <ProjectReference Include="..\Communication.TcpIp\Transport.TcpIp.csproj" />
-    <ProjectReference Include="..\DAL.Abstract\DAL.Abstract.csproj" />
-    <ProjectReference Include="..\DAL.EFCore\DAL.EFCore.csproj" />
-    <ProjectReference Include="..\DAL.InMemory\DAL.InMemory.csproj" />
-    <ProjectReference Include="..\Device.Base\DeviceForExchange.csproj" />
-    <ProjectReference Include="..\Exchange.Base\Exchange.Base.csproj" />
+    <ProjectReference Include="..\BL.Services\App.Services.csproj" />
+    <ProjectReference Include="..\Device.Base\Domain.Device.csproj" />
+    <ProjectReference Include="..\Exchange.Base\Domain.Exchange.csproj" />
     <ProjectReference Include="..\Infrastructure.MessageBroker\Infrastructure.MessageBroker.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.EventBus.csproj" />
-    <ProjectReference Include="..\InputDataModel.Autodictor\InputDataModel.Autodictor.csproj" />
+    <ProjectReference Include="..\InputDataModel.Autodictor\Domain.InputDataModel.Autodictor.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
-    <ProjectReference Include="..\Worker.Background\Worker.Background.csproj" />
   </ItemGroup>
 
 </Project>

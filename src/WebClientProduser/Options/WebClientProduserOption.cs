@@ -1,6 +1,7 @@
-﻿using AbstractProduser.Options;
+﻿using Infrastructure.Produser.AbstractProduser.Options;
+using Shared.Enums;
 
-namespace WebClientProduser.Options
+namespace Infrastructure.Produser.WebClientProduser.Options
 {
     public class WebClientProduserOption : BaseProduserOption
     {
@@ -8,5 +9,4 @@ namespace WebClientProduser.Options
         public HttpMethode HttpMethode { get; set; }
     }
 
-    public enum HttpMethode { Get, Post, Put }
 }

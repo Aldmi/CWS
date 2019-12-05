@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
-using DeviceForExchange.MiddleWares.Converters.StringConverters;
+using Domain.Device.MiddleWares.Converters.StringConverters;
+using StringHandlerMiddleWareOption = Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption.StringHandlerMiddleWareOption;
 
-namespace DeviceForExchange.MiddleWares.Handlers
+namespace Domain.Device.MiddleWares.Handlers
 {
     /// <summary>
     /// Обработчик строковой переменной.
@@ -36,11 +36,24 @@ namespace DeviceForExchange.MiddleWares.Handlers
             {
                 Converters.Add(new SubStringMemConverter(option.SubStringMemConverterOption));
             }
+            if (option.InsertAtEndOfLineConverterOption != null)
+            {
+                Converters.Add(new InsertAtEndOfLineConverter(option.InsertAtEndOfLineConverterOption));
+            }
 
             var orderedConverters = Converters.OrderBy(c => c.Priority).ToList();
             Converters.Clear();
             Converters.AddRange(orderedConverters);
         }
+
+
+
+        //private bool AddConverter(BaseConverterOption converterOption)
+        //{
+        //    if (converterOption == null)
+        //        return false;
+
+        //}
 
         #endregion
     }

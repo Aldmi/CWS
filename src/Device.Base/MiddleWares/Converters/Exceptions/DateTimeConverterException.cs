@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace DeviceForExchange.MiddleWares.Converters.Exceptions
+namespace Domain.Device.MiddleWares.Converters.Exceptions
 {
     public class DateTimeConverterException : Exception
     {

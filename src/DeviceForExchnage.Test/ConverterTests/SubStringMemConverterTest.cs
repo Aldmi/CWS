@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
-using DeviceForExchange.MiddleWares.Converters.StringConverters;
+using Domain.Device.MiddleWares.Converters.StringConverters;
+using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption;
 using FluentAssertions;
 using Xunit;
 

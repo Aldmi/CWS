@@ -7,13 +7,13 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.11.5" />
-    <PackageReference Include="System.Reactive.Linq" Version="3.1.0" />
+    <PackageReference Include="System.Reactive.Linq" Version="4.1.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DAL.Abstract\DAL.Abstract.csproj" />
-    <ProjectReference Include="..\InputDataModel.Autodictor\InputDataModel.Autodictor.csproj" />
-    <ProjectReference Include="..\InputDataModel.Base\InputDataModel.Base.csproj" />
+    <ProjectReference Include="..\Device.Base\Domain.Device.csproj" />
+    <ProjectReference Include="..\InputDataModel.Autodictor\Domain.InputDataModel.Autodictor.csproj" />
+    <ProjectReference Include="..\InputDataModel.Base\Domain.InputDataModel.Base.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 

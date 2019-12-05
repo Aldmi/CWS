@@ -1,6 +1,5 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using WebClientProduser.Options;
+﻿using System.ComponentModel.DataAnnotations;
+using Shared.Enums;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.ProduserUnionOption
 {

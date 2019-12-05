@@ -4,15 +4,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using AbstractProduser.AbstractProduser;
-using AbstractProduser.Helpers;
-using AbstractProduser.Options;
 using CSharpFunctionalExtensions;
-using DAL.Abstract.Entities.Options.ResponseProduser;
-using InputDataModel.Base.Response;
+using Domain.InputDataModel.Base.Response;
+using Infrastructure.Produser.AbstractProduser.AbstractProduser;
+using Infrastructure.Produser.AbstractProduser.Helpers;
+using Infrastructure.Produser.AbstractProduser.Options;
 using Newtonsoft.Json;
+using Shared.Helpers;
+using ProduserUnionOption = Domain.Device.Repository.Entities.ResponseProduser.ProduserUnionOption;
 
-namespace DeviceForExchange.Produser
+namespace Domain.Device.Produser
 {
     /// <summary>
     /// Объединение продюссеров.
@@ -21,43 +22,49 @@ namespace DeviceForExchange.Produser
     public class ProdusersUnion<TIn> : IDisposable
     {
         #region fields
-
         private readonly ProduserUnionOption _unionOption;
+        private readonly ProdusersUnionResponseConverter<TIn> _responseConverter;
         private readonly ConcurrentDictionary<string, ProduserOwner> _produsersDict = new ConcurrentDictionary<string, ProduserOwner>();
-
         #endregion
 
 
 
         #region prop
-
         public ReadOnlyDictionary<string, IProduser<BaseProduserOption>> GetProduserDict => new ReadOnlyDictionary<string, IProduser<BaseProduserOption>>(_produsersDict.ToDictionary(d => d.Key, d => d.Value.Produser));
         public int GetProdusersCount => _produsersDict.Count;
         public string GetKey => _unionOption.Key;
-
         #endregion
 
 
 
         #region ctor
-
-        public ProdusersUnion(ProduserUnionOption unionOption)
+        public ProdusersUnion(ProduserUnionOption unionOption, ProdusersUnionResponseConverter<TIn> responseConverter)
         {
             _unionOption = unionOption;
+            _responseConverter = responseConverter;
         }
-
         #endregion
 
 
 
         #region Methods
-
+        /// <summary>
+        /// Дгобавить продюссера.
+        /// </summary>
+        /// <param name="key">ключ</param>
+        /// <param name="value">продюссер</param>
+        /// <param name="owner">объект для управления временем жизни продюссера</param>
         public void AddProduser(string key, IProduser<BaseProduserOption> value, IDisposable owner)
         {
-              _produsersDict[key] = new ProduserOwner {Produser = value, Owner = owner};
+            _produsersDict[key] = new ProduserOwner { Produser = value, Owner = owner };
         }
 
 
+        /// <summary>
+        /// Удалить продюссера по ключу
+        /// </summary>
+        /// <param name="key">ключ</param>
+        /// <returns></returns>
         public bool RemoveProduser(string key)
         {
             if (!_produsersDict.ContainsKey(key))
@@ -71,104 +78,40 @@ namespace DeviceForExchange.Produser
 
 
         /// <summary>
-        /// Отправить всем продюссерам
+        /// Отправить всем продюссерам ответ на обмен порцией данных.
         /// </summary>
-        public async Task<IList<Result<string, ErrorWrapper>>> SendAll(ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
+        public async Task<IList<Result<string, ErrorWrapper>>> SendResponseAll(ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
         {
-            var message = ConvertResponse(_unionOption.ConverterName, response);
-            var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(message, invokerName)).ToList();
+            var messageConverted = _responseConverter.Convert(_unionOption.ConverterName, response);
+            var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(messageConverted, invokerName)).ToList();
             var results = await Task.WhenAll(tasks);
             return results;
         }
 
 
         /// <summary>
-        /// Отправить продюсеру по ключу
+        /// Отправить продюсеру по ключу ответ на обмен порцией данных.
         /// </summary>
-        public async Task<Result<string, ErrorWrapper>> Send(string key, ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
+        public async Task<Result<string, ErrorWrapper>> SendResponse(string key, ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
         {
             if (!_produsersDict.ContainsKey(key))
                 throw new KeyNotFoundException(key);
 
-            var message = Convert2RawJson(response);
+            var message = HelpersJson.Serialize2RawJson(response);
             var result = await _produsersDict[key].Produser.Send(message, invokerName);
             return result;
         }
 
 
-        //TODO: ConvertResponse вынести в отдельный сервис. 
-        private static string ConvertResponse(string converterName, ResponsePieceOfDataWrapper<TIn> response)
-        {
-            object convertedResp = null;
-            switch (converterName)
-            {
-                case "Full":
-                    convertedResp = response;
-                    break;
-
-                case "Medium":
-                    convertedResp = new
-                    {
-                        response.DeviceName,
-                        response.DataAction,
-                        response.ExceptionExchangePipline,
-                        response.IsValidAll,
-                        response.TimeAction,
-                        ResponsesItems = response.ResponsesItems.Select(item => new
-                        {
-                            item.RequestId,
-                            item.Status,
-                            item.StatusStr,
-                            item.TransportException,
-                            item.ResponseInfo
-                        }).ToList()
-                    };
-                    break;
-
-                case "Lite":
-                    convertedResp = new
-                    {
-                        response.DeviceName,
-                        response.ExceptionExchangePipline,
-                        response.IsValidAll,
-                        response.TimeAction,
-                        ResponsesItems = response.ResponsesItems.Select(item => new
-                        {
-                            item.RequestId,
-                            item.StatusStr,
-                            item.TransportException,
-                            item.ResponseInfo.StronglyTypedResponse
-                        }).ToList()
-                    };
-                    break;
-            }
-
-            var message = Convert2RawJson(convertedResp);
-            return message;
-        }
-
-
-
         /// <summary>
-        ///Конвертировать в JSON. Raw -для машин, без отступов  
+        /// Отправить всем продюссерам сообщение об ошибки.
         /// </summary>
-        private static string Convert2RawJson(object response) //TODO: вынести в Shared
+        public async Task<IList<Result<string, ErrorWrapper>>> SendMessageAll(string objectName, string message, string invokerName = null)
         {
-            var settings = new JsonSerializerSettings
-            {
-                Formatting = Formatting.None,                     //Отступы дочерних элементов НЕТ
-                NullValueHandling = NullValueHandling.Ignore      //Игнорировать пустые теги
-            };
-            try
-            {
-                var jsonResp = JsonConvert.SerializeObject(response, settings);
-                return jsonResp;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            var messageConverted = _responseConverter.Convert(_unionOption.ConverterName, objectName, message);
+            var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(messageConverted, invokerName)).ToList();
+            var results = await Task.WhenAll(tasks);
+            return results;
         }
 
         #endregion
@@ -190,13 +133,11 @@ namespace DeviceForExchange.Produser
 
 
         #region NestedClasses
-
         private class ProduserOwner
         {
             public IProduser<BaseProduserOption> Produser { get; set; }
             public IDisposable Owner { get; set; }
         }
-
         #endregion
     }
 }

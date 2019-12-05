@@ -1,6 +1,6 @@
 ﻿using Infrastructure.Storages;
 
-namespace DeviceForExchange.Produser
+namespace Domain.Device.Produser
 {
     public class ProduserUnionStorage<TIn> : BaseStorage<string, ProdusersUnion<TIn>>
     {

@@ -1,9 +1,8 @@
 ﻿using System;
-using InputDataModel.Autodictor.StronglyTypedResponse.Types;
-using InputDataModel.Base.Response;
-using Shared.Types;
+using Domain.InputDataModel.Autodictor.StronglyTypedResponse.Types;
+using Domain.InputDataModel.Base.Response;
 
-namespace InputDataModel.Autodictor.StronglyTypedResponse
+namespace Domain.InputDataModel.Autodictor.StronglyTypedResponse
 {
     public class AdStronglyTypedResponseFactory : IStronglyTypedResponseFactory
     {

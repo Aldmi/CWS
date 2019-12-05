@@ -1,6 +1,6 @@
-﻿using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
+﻿using ReplaceEmptyStringConverterOption = Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption.ReplaceEmptyStringConverterOption;
 
-namespace DeviceForExchange.MiddleWares.Converters.StringConverters
+namespace Domain.Device.MiddleWares.Converters.StringConverters
 {
 
     /// <summary>

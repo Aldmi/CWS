@@ -1,6 +1,6 @@
 ﻿namespace Shared.Enums
 {
-    public enum TransportType
+    public enum TransportType : byte
     {
         None,
         SerialPort,

@@ -2,34 +2,46 @@
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using System.Timers;
+using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
-using DAL.Abstract.Entities.Options.MiddleWare;
-using InputDataModel.Base;
-using InputDataModel.Base.InData;
+using Domain.Device.Enums;
+using Domain.Device.Repository.Entities.MiddleWareOption;
+using Domain.InputDataModel.Base.InData;
 using KellermanSoftware.CompareNetObjects;
 using Serilog;
+using InvokerOutput = Domain.Device.Repository.Entities.MiddleWareOption.InvokerOutput;
 
-namespace DeviceForExchange.MiddleWares.Invokes
+namespace Domain.Device.MiddleWares.Invokes
 {
+    /// <summary>
+    /// Определяет способ запуска обработчика IMiddlewareInData.
+    /// "Instantly" - с приходом данных сразу запускается обработка.
+    /// "ByTimer" - Обработчик запускается по внутреннему таймеру.
+    /// Если приходят новые данные, то таймер перезапускается и обработчик вызывается сразу.
+    /// "FeedBackWaiting" - В этот режим система переходит САМА, если метод SetFeedBack (выставляет флаг обратной связи)
+    /// был вызван ПОЗЖЕ чем прошла обработка вызванная ByTimer (в режиме Instantly обратная связь не работает).
+    /// </summary>
     public class MiddlewareInvokeService<TIn> : IDisposable
     {
         #region fields
-
         private readonly InvokerOutput _option;
-        private readonly ISupportMiddlewareInvoke<TIn> _invoker;
+        private readonly IMiddlewareInData<TIn> _middleware;
+        private readonly IDisposable _middlewareOwner;
         private readonly ILogger _logger;
         private readonly Timer _timerInvoke;
         private InputData<TIn> _buferInData;
-
+        /// <summary>
+        /// Обратная связь
+        /// </summary>
+        private bool _feedBackEnable;
         #endregion
 
 
 
         #region prop
-
         /// <summary>
-        /// Заполнить ыходной буффер.
-        /// Если данные новые, то перезапускается таймер, перезаписывается буффер и сразу вызывается HandleInvoke
+        /// Заполнить входной буфер.
+        /// Если данные новые, то перезапускается таймер, перезаписывается буфер и сразу вызывается HandleInvoke
         /// </summary>
         private InputData<TIn> BuferInData
         {
@@ -39,49 +51,50 @@ namespace DeviceForExchange.MiddleWares.Invokes
                 var compareRes = Comparer(_buferInData, value);
                 if (compareRes.IsFailure)
                 {
-                    _timerInvoke.Stop();
-                    _buferInData = value;
-                    HandleInvoke(_buferInData);
-                    _timerInvoke.Interval = _option.Time;
-                    _timerInvoke.Start();
+                    RefreshData(value);
                 }
             }
         }
 
+        /// <summary>
+        /// Режим работы Инвокера.
+        /// </summary>
+        public InvokerOutputMode InvokerOutputMode { get; private set; }
         #endregion
 
 
 
         #region ctor
-
-        public MiddlewareInvokeService(InvokerOutput option, ISupportMiddlewareInvoke<TIn> invoker, ILogger logger)
+        public MiddlewareInvokeService(MiddleWareInDataOption option, Func<MiddleWareInDataOption, Owned<IMiddlewareInData<TIn>>> middlewareFactory, ILogger logger)
         {
-            _option = option;
-            _invoker = invoker;
+            _option = option.InvokerOutput;
+            var middlewareOwner = middlewareFactory(option);
+            _middlewareOwner = middlewareOwner;
+            _middleware = middlewareOwner.Value;
             _logger = logger;
+            InvokerOutputMode = _option.Mode;
 
             _timerInvoke = new Timer();
             _timerInvoke.Elapsed += TimerElapsed;
-            CheckStartTimer();
+            if (_option.Mode == InvokerOutputMode.ByTimer)
+            {
+                RestartTimer();
+            }
         }
-
         #endregion
 
 
 
         #region RxEvent
-
         /// <summary>
         /// СОБЫТИЕ Завершения вобработки данных
         /// </summary>
         public ISubject<Result<InputData<TIn>, ErrorResultMiddleWareInData>> InvokeIsCompleteRx { get; } = new Subject<Result<InputData<TIn>, ErrorResultMiddleWareInData>>();
-
         #endregion
 
 
 
         #region Methods
-
         /// <summary>
         /// Прием входных данных. InvokerOutputMode определяется опциями.
         /// </summary>
@@ -90,7 +103,7 @@ namespace DeviceForExchange.MiddleWares.Invokes
             switch (_option.Mode)
             {
                 case InvokerOutputMode.Instantly:
-                    HandleInvoke(inData);
+                    await InputSetInstantly(inData);
                     break;
 
                 case InvokerOutputMode.ByTimer:
@@ -111,34 +124,76 @@ namespace DeviceForExchange.MiddleWares.Invokes
         }
 
 
-        private void HandleInvoke(InputData<TIn> inData)
+        /// <summary>
+        /// Установить флаг обратной связи.
+        /// Если система находится в состоянии FeedBackWaiting,
+        /// то сбрасывается таймер и HandleInvoke вызывается сразу.
+        /// </summary>
+        public void SetFeedBack()
         {
-            //TODO: Можно кешировать результат res. По внешнему флагу IsСache выстваляемому в Device.
-            //IsСache == true => HandleInvoke не вызываем передаем предыдушший результат.
-            //IsСache == false => HandleInvoke вызываем переписываем результат.
-            //Device управляет IsСache след. образом: Если режим ByTimer, то пока все обмены не отправили предыдущую порцию данных IsСache = true (берем из кеша).
-            //Когда все обмены отправили данные IsСache = false (вычисляем новые данные).
-            //При обновлении данных на входе IsСache = false.
-            //Это зашита от потери данных при использовании Mem конверторов, которые при каждом вызове выдают новые данные и если система отправки (очередь обменов) медленнее чем время предобработки, то данные потеряются.
-            var res = _invoker.HandleInvoke(inData);
-            InvokeIsCompleteRx.OnNext(res);
-        }
-        
-
-        private void CheckStartTimer()
-        {
-            if (_option.Mode == InvokerOutputMode.ByTimer)
+            _feedBackEnable = true;
+            if (InvokerOutputMode == InvokerOutputMode.FeedBackWaiting)
             {
-                StartTimer();
+                RestartTimer();
+                HandleInvokeByFeedBack(_buferInData);
+                InvokerOutputMode = _option.Mode;
             }
         }
 
 
-        private void StartTimer()
+        /// <summary>
+        /// Обработчик с ожиданием обратной связи.
+        /// Если флаг обратной связи установлен, то вызывается обработчик HandleInvoke.
+        /// Если флаг обратной связи НЕ установлен, то перводится система в состоянии FeedBackWaiting. 
+        /// </summary>
+        private void HandleInvokeByFeedBack(InputData<TIn> inData)
         {
+            if (_feedBackEnable)
+            {
+                HandleInvoke(inData);
+                _feedBackEnable = false;
+            }
+            else
+            {
+                InvokerOutputMode = InvokerOutputMode.FeedBackWaiting;
+                _logger.Warning("Обратная связь НЕ выставленна при вызове обработчика. Переход в режим FeedBackWaiting. Подготовка данных ByTimer работатет быстрее чем поступает обратная связь об отправки подготовленных дангных транспортом. ");
+            }
+        }
+
+
+        /// <summary>
+        /// Обработчик
+        /// </summary>
+        private void HandleInvoke(InputData<TIn> inData)
+        {
+            var res = _middleware.HandleInvoke(inData);
+            InvokeIsCompleteRx.OnNext(res);
+        }
+
+
+        /// <summary>
+        /// Обновление данных. Сброс таймера и мгновенный вызов обработчика
+        /// </summary>
+        /// <param name="newData">Новые входны данные</param>
+        private void RefreshData(InputData<TIn> newData)
+        {
+            InvokerOutputMode = _option.Mode;
+            _buferInData = newData;
+            RestartTimer();
+            HandleInvoke(_buferInData);
+        }
+
+
+        /// <summary>
+        /// Перезапуск таймера.
+        /// </summary>
+        private void RestartTimer()
+        {
+            _timerInvoke.Stop();
             _timerInvoke.Interval = _option.Time;
             _timerInvoke.Start();
         }
+
 
         /// <summary>
         /// Сравнить 2 элемента.
@@ -149,7 +204,6 @@ namespace DeviceForExchange.MiddleWares.Invokes
             ComparisonResult result = compareLogic.Compare(obj1, obj2);
             return result.AreEqual ? Result.Ok(true) : Result.Fail<bool>(result.DifferencesString);
         }
-
         #endregion
 
 
@@ -161,7 +215,7 @@ namespace DeviceForExchange.MiddleWares.Invokes
             if(BuferInData?.Data == null)
                 return;
 
-            HandleInvoke(BuferInData);
+            HandleInvokeByFeedBack(BuferInData);
         }
 
         #endregion
@@ -173,6 +227,7 @@ namespace DeviceForExchange.MiddleWares.Invokes
         public void Dispose()
         {
             _timerInvoke?.Dispose();
+            _middlewareOwner.Dispose();
         }
 
         #endregion

@@ -1,6 +1,6 @@
-﻿using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
+﻿using LimitStringConverterOption = Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption.LimitStringConverterOption;
 
-namespace DeviceForExchange.MiddleWares.Converters.StringConverters
+namespace Domain.Device.MiddleWares.Converters.StringConverters
 {
     /// <summary>
     /// Обрезает строку

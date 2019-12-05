@@ -1,4 +1,4 @@
-﻿namespace InputDataModel.Base.InData
+﻿namespace Domain.InputDataModel.Base.InData
 {
     public abstract class InputTypeBase
     {

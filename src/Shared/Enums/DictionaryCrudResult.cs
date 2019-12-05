@@ -1,6 +1,6 @@
 ﻿namespace Shared.Enums
 {
-    public enum DictionaryCrudResult
+    public enum DictionaryCrudResult : byte
     {
         None,
         KeyAlredyExist,

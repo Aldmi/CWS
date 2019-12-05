@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using DAL.Abstract.Entities.Options.Exchange;
+using Domain.Exchange.Repository.Entities;
 using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using DAL.Abstract.Entities.Options.MiddleWare;
-using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
-using DAL.Abstract.Entities.Options.MiddleWare.Handlers;
+using Domain.Device.Enums;
+using Domain.Device.Repository.Entities.MiddleWareOption;
+using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption;
+using Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption;
 
 namespace DeviceForExchnage.Test.Datas
 {

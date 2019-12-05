@@ -1,12 +1,12 @@
 ﻿using System;
-using AbstractProduser.AbstractProduser;
 using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
-using DAL.Abstract.Entities.Options.ResponseProduser;
-using KafkaProduser.Options;
-using WebClientProduser.Options;
+using Domain.Device.Repository.Entities.ResponseProduser;
+using Infrastructure.Produser.AbstractProduser.AbstractProduser;
+using Infrastructure.Produser.KafkaProduser.Options;
+using Infrastructure.Produser.WebClientProduser.Options;
 
-namespace DeviceForExchange.Produser
+namespace Domain.Device.Produser
 {
     /// <summary>
     /// Фабрика по созданию объединения продюсеров.

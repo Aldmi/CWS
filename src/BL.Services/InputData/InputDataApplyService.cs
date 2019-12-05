@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BL.Services.Mediators;
-using InputDataModel.Base;
-using InputDataModel.Base.InData;
+using App.Services.Mediators;
+using Domain.InputDataModel.Base.Enums;
+using Domain.InputDataModel.Base.InData;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace BL.Services.InputData
+namespace App.Services.InputData
 {
     public class InputDataApplyService<TIn> where TIn : InputTypeBase
     {
@@ -85,13 +85,12 @@ namespace BL.Services.InputData
             };
             var infoObjsJson = JsonConvert.SerializeObject(infoObj, settings);
             _logger.Information($"ПРИНЯТЫ ДАННЫЕ ДЛЯ: {infoObjsJson}");
-            if (inData.Command != Command4Device.None)
+            if (inData.Command == Command4Device.None)
             {
                 var debugObjsJson = JsonConvert.SerializeObject(inData, settings);
-                _logger.Information($"ПРИНЯТЫ ДАННЫЕ ПОДРОБНО: {debugObjsJson}"); //TODO: поменять на DEBUG
+                _logger.Debug($"ПРИНЯТЫ ДАННЫЕ ПОДРОБНО: {debugObjsJson}"); 
             }
         }
-
 
         #endregion
     }

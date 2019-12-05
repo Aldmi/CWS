@@ -1,22 +1,21 @@
-﻿using Exchange.Base.Services;
+﻿using Domain.Exchange.Enums;
+using Domain.Exchange.Services;
 
-namespace Exchange.Base.RxModel
+namespace Domain.Exchange.RxModel
 {
-    public class InputDataStateRxModel
+    public class CycleBehaviorStateRxModel
     {
         public string KeyExchange { get;  }
-        public InputDataState InputDataState { get; }
+        public CycleBehaviorState CycleBehaviorState { get; }
 
 
 
         #region ctor
-
-        public InputDataStateRxModel(string keyExchange, InputDataState inputDataState)
+        public CycleBehaviorStateRxModel(string keyExchange, CycleBehaviorState cycleBehaviorState)
         {
             KeyExchange = keyExchange;
-            InputDataState = inputDataState;
+            CycleBehaviorState = cycleBehaviorState;
         }
-
         #endregion
     }
 }

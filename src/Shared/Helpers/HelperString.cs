@@ -131,5 +131,21 @@ namespace Shared.Helpers
         {
             return string.IsNullOrEmpty(str) ? str : Regex.Replace(str, @"\s+", " ").Trim();
         }
+
+
+        public static string GetSpaceOrString(this string str)
+        {
+            return string.IsNullOrEmpty(str) ? " " : str;
+        }
+
+
+        /// <summary>
+        /// Ограничить длинну строки
+        /// </summary>
+        public static (bool res, int OutOfLimit) CheckLimitLenght(this string str, int maxLenght)
+        {
+            var diff= maxLenght - str.Length;
+            return diff >= 0 ? (res: false, 0) : (res: true, diff * -1);
+        }
     }
 }

@@ -1,6 +1,6 @@
-﻿using DAL.Abstract.Entities.Options.MiddleWare.Converters.StringConvertersOption;
+﻿using InseartStringConverterOption = Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption.InseartStringConverterOption;
 
-namespace DeviceForExchange.MiddleWares.Converters.StringConverters
+namespace Domain.Device.MiddleWares.Converters.StringConverters
 {
     public class InseartStringConverter : BaseStringConverter
     {

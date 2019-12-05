@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using BL.Services.Exceptions;
-using BL.Services.Mediators;
-using Exchange.Base;
-using InputDataModel.Base;
-using InputDataModel.Base.InData;
+using App.Services.Exceptions;
+using App.Services.Mediators;
+using Autofac.Features.Indexed;
+using CSharpFunctionalExtensions;
+using Domain.Exchange;
+using Domain.Exchange.Enums;
+using Domain.InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.ProvidersAbstract;
+using Domain.InputDataModel.Base.ProvidersOption;
+using Domain.InputDataModel.Base.Response;
 using Shared.Types;
 
-
-namespace BL.Services.Actions
+namespace App.Services.Actions
 {
     /// <summary>
     /// Сервис для работы с текущим набором устройств
@@ -43,6 +48,14 @@ namespace BL.Services.Actions
 
 
 
+        #region prop
+
+        public IIndex<string, Func<ProviderOption, IDataProvider<TIn, ResponseInfo>>> DataProviderFactory { get; set; }  //внедряется через DI
+
+        #endregion
+
+
+
         #region Methode
 
         /// <summary>
@@ -55,10 +68,10 @@ namespace BL.Services.Actions
             if (exchange == null)
                 throw new ActionHandlerException($"Обмен с таким ключем Не найден: {exchnageKey}");
 
-            if (exchange.CycleExchnageStatus != CycleExchnageStatus.Off)
+            if (exchange.CycleBehavior.CycleBehaviorState != CycleBehaviorState.Off) 
                 throw new ActionHandlerException($"Цикл. обмен уже запущен: {exchnageKey}");
 
-            exchange.StartCycleExchange();
+            exchange.CycleBehavior.StartCycleExchange();
         }
 
 
@@ -72,10 +85,10 @@ namespace BL.Services.Actions
             if (exchange == null)
                 throw new ActionHandlerException($"Обмен с таким ключем Не найден: {exchnageKey}");
 
-            if (exchange.CycleExchnageStatus == CycleExchnageStatus.Off)
+            if (exchange.CycleBehavior.CycleBehaviorState == CycleBehaviorState.Off)
                 throw new ActionHandlerException($"Цикл. обмен уже остановлен: {exchnageKey}");
 
-            exchange.StopCycleExchange();
+            exchange.CycleBehavior.StopCycleExchange();
         }
 
 
@@ -248,6 +261,62 @@ namespace BL.Services.Actions
                 throw new ArgumentException();
 
             device.UnsubscrubeOnExchangesEvents();
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deviceName">Имя устройства</param>
+        /// <param name="exchName">Название обмена</param>
+        /// <returns>опции по которым был созданн провайдер данных в обмене.</returns>
+        public Result<ProviderOption> GetProviderOption(string deviceName, string exchName)
+        {
+            var device = _mediatorForStorages.GetDevice(deviceName);
+            if (device == null)
+            {
+                return Result.Fail<ProviderOption>($"устройство не найденно {deviceName}");
+            }
+            var exchange = device.Exchanges.FirstOrDefault(e => e.KeyExchange == exchName);
+            if (exchange == null)
+            {
+                return Result.Fail<ProviderOption>($"Обмен не найденн {exchName}");
+            }
+
+            var providerOption = exchange.GetProviderOption;
+            return Result.Ok(providerOption);
+        }
+
+
+        /// <summary>
+        /// Установить новый провайдер для обмена в устройстве.
+        /// </summary>
+        /// <param name="deviceName">Имя устройства</param>
+        /// <param name="exchName">Название обмена</param>
+        /// <param name="providerOption">Обции для создания провайдера</param>
+        /// <returns></returns>
+        public Result SetProvider(string deviceName, string exchName, ProviderOption providerOption)
+        {
+            var device = _mediatorForStorages.GetDevice(deviceName);
+            if (device == null)
+            {
+                return Result.Fail($"устройство не найденно {deviceName}");
+            }
+            var exchange = device.Exchanges.FirstOrDefault(e => e.KeyExchange == exchName);
+            if (exchange == null)
+            {
+                return Result.Fail($"Обмен не найденн {exchName}");
+            }
+            try
+            {
+                var dataProvider = DataProviderFactory[providerOption.Name](providerOption);
+                exchange.SetNewProvider(dataProvider);
+                return Result.Ok();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail($"Исключение при установке ProviderOptionRt {ex}");
+            }
         }
 
         #endregion

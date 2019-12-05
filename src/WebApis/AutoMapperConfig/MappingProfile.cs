@@ -1,14 +1,21 @@
 ﻿using System;
+using App.Services.Agregators;
 using AutoMapper;
-using DAL.Abstract.Entities.Options.Device;
-using DAL.Abstract.Entities.Options.Exchange;
-using DAL.Abstract.Entities.Options.MiddleWare;
-using DAL.Abstract.Entities.Options.ResponseProduser;
-using DAL.Abstract.Entities.Options.Transport;
-using DeviceForExchange;
-using Exchange.Base;
-using InputDataModel.Autodictor.Entities;
-using InputDataModel.Autodictor.Model;
+using Domain.Device;
+using Domain.Device.Repository.Entities;
+using Domain.Device.Repository.Entities.MiddleWareOption;
+using Domain.Device.Repository.Entities.ResponseProduser;
+using Domain.Exchange;
+using Domain.Exchange.Repository.Entities;
+using Domain.InputDataModel.Autodictor.Entities;
+using Domain.InputDataModel.Autodictor.Model;
+using Infrastructure.Dal.EfCore.Entities.Device;
+using Infrastructure.Dal.EfCore.Entities.Exchange;
+using Infrastructure.Dal.EfCore.Entities.ResponseProduser;
+using Infrastructure.Dal.EfCore.Entities.Transport;
+using Infrastructure.Transport.Http;
+using Infrastructure.Transport.SerialPort;
+using Infrastructure.Transport.TcpIp;
 using WebApiSwc.DTO.JSON.DevicesStateDto;
 using WebApiSwc.DTO.JSON.InputTypesDto;
 using WebApiSwc.DTO.JSON.OptionsDto.DeviceOption;
@@ -24,7 +31,7 @@ namespace WebApiSwc.AutoMapperConfig
     {
         public MappingProfile()
         {
-            #region Option mapping
+            #region Option 2 Dto mapping
             CreateMap<DeviceOption, DeviceOptionDto>().ReverseMap();
             CreateMap<ExchangeOption, ExchangeOptionDto>().ReverseMap();
             CreateMap<SerialOption, SerialOptionDto>().ReverseMap();
@@ -36,7 +43,17 @@ namespace WebApiSwc.AutoMapperConfig
             #endregion
 
 
-            #region AdInputType xml in Data mapping
+            #region Option 2 EfEntities mapping
+            CreateMap<SerialOption, EfSerialOption>().ReverseMap();
+            CreateMap<TcpIpOption, EfTcpIpOption>().ReverseMap();
+            CreateMap<HttpOption, EfHttpOption>().ReverseMap();
+            CreateMap<DeviceOption, EfDeviceOption>().ReverseMap();
+            CreateMap<ExchangeOption, EfExchangeOption>().ReverseMap();
+            CreateMap<ProduserUnionOption, EfProduserUnionOption>().ReverseMap();
+            #endregion
+
+
+            #region AdInputType xml in ProcessedItemsInBatch mapping
             CreateMap<AdInputType4XmlDto, AdInputType>().ConstructUsing(src => new AdInputType(
                 src.Id,
                 ConvertString2Int(src.ScheduleId),
@@ -46,7 +63,7 @@ namespace WebApiSwc.AutoMapperConfig
                 src.TrackNumber,
                 src.Platform,
                 new EventTrain(ConvertString2NullableInt(src.Direction)),
-                new TypeTrain(src.TypeName),
+                new TypeTrain(src.TypeName, src.TypeAlias, ConvertString2NullableInt(src.TrainType)),
                 new VagonDirection(src.VagonDirection),
                 new Station
                 {
@@ -75,7 +92,7 @@ namespace WebApiSwc.AutoMapperConfig
                 ConvertString2DataTime(src.RecDateTime),
                 ConvertString2DataTime(src.SndDateTime),
                 ConvertString2DataTime(src.LateTime),
-                ConvertString2DataTime(src.ExpectedTime) ?? DateTime.MinValue,  //TODO: выенсти в ctor
+                ConvertString2DataTime(src.ExpectedTime),
                 ConvertString2TimeSpan(src.HereDateTime),
                 new Addition
                 {
@@ -97,7 +114,7 @@ namespace WebApiSwc.AutoMapperConfig
             #endregion
 
 
-            #region AdInputType json in Data mapping
+            #region AdInputType json in ProcessedItemsInBatch mapping
             CreateMap<AdInputTypeDto, AdInputType>().ConstructUsing(src => new AdInputType(
                 src.Id,
                 src.ScheduleId,
@@ -133,7 +150,8 @@ namespace WebApiSwc.AutoMapperConfig
 
             CreateMap<IExchange<AdInputType>, ExchangeStateDto>()
                 .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.KeyExchange))
-                .ForMember(dest => dest.CycleExchnageStatus, opt => opt.MapFrom(src => src.CycleExchnageStatus.ToString()));
+                .ForMember(dest => dest.CycleExchnageStatus, opt => opt.MapFrom(src => src.CycleBehavior.CycleBehaviorState.ToString()))
+                .ForMember(dest => dest.AutoStartCycleFunc, opt => opt.MapFrom(src => src.CycleBehavior.CycleFuncOption.AutoStartCycleFunc));
             #endregion
         }
 

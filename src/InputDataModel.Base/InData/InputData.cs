@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Domain.InputDataModel.Base.Enums;
 
-namespace InputDataModel.Base.InData
+namespace Domain.InputDataModel.Base.InData
 {
     public class InputData<TIn>
     {
@@ -34,7 +35,4 @@ namespace InputDataModel.Base.InData
         /// </summary>
         public Command4Device Command { get; set; }
     }
-
-    public enum DataAction {OneTimeAction, CycleAction, CommandAction}
-    public enum Command4Device { None, On, Off, Restart, Clear, InfoEmergency }
 }

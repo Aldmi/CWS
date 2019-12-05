@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AbstractProduser.Helpers;
-using AbstractProduser.Options;
 using CSharpFunctionalExtensions;
+using Infrastructure.Produser.AbstractProduser.Enums;
+using Infrastructure.Produser.AbstractProduser.Helpers;
+using Infrastructure.Produser.AbstractProduser.Options;
 
-namespace AbstractProduser.AbstractProduser
+namespace Infrastructure.Produser.AbstractProduser.AbstractProduser
 {
     /// <summary>
     /// Базовый класс продюссера.

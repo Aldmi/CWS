@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using DAL.Abstract.Entities.Options.Device;
+using Domain.Device.Repository.Entities;
 
 namespace WebApiSwc.DTO.JSON.DevicesStateDto
 {

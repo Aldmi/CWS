@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Domain.InputDataModel.Base.Enums;
 
-namespace InputDataModel.Base.InData
+namespace Domain.InputDataModel.Base.InData
 {
     /// <summary>
     /// Контейнер-оболочка над входными данными для обменов

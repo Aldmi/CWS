@@ -1,15 +1,13 @@
 ﻿using System;
-using InputDataModel.Autodictor.Entities;
-using InputDataModel.Base;
-using InputDataModel.Base.InData;
+using Domain.InputDataModel.Autodictor.Entities;
+using Domain.InputDataModel.Base.InData;
 
-namespace InputDataModel.Autodictor.Model
+namespace Domain.InputDataModel.Autodictor.Model
 {
     public class AdInputType : InputTypeBase
     {
         #region prop
-
-        public int ScheduleId { get; private set;}                          //ID поезда в годовом расписании (из ЦИС)
+        public int ScheduleId { get; private set; }                          //ID поезда в годовом расписании (из ЦИС)
         public int TrnId { get; private set; }                               //уникальный ID отправления поезда из ЦИС
 
         public Lang Lang { get; private set; }                               //Язык вывода
@@ -26,7 +24,7 @@ namespace InputDataModel.Autodictor.Model
         public Station StationArrival { get; private set; }
         public Station Stations { get; private set; }                        //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
         public Station StationsСut { get; private set; }                     //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
-        public Station StationWhereFrom { get; private set; }               //ближайшая станция после текущей
+        public Station StationWhereFrom { get; private set; }                //ближайшая станция после текущей
         public Station StationWhereTo { get; private set; }                 //ближайшая станция после текущей
         public DirectionStation DirectionStation { get; private set; }       //Направление.
 
@@ -39,7 +37,6 @@ namespace InputDataModel.Autodictor.Model
         public Addition Addition { get; private set; }                       //Дополнение (свободная строка)
         public Note Note { get; private set; }                               //Примечание.
         public DaysFollowing DaysFollowing { get; private set; }             //Дни следования
-
         #endregion
 
 
@@ -49,7 +46,7 @@ namespace InputDataModel.Autodictor.Model
         public AdInputType(int id, int scheduleId, int trnId, Lang lang, string numberOfTrain, string pathNumber, string platform, EventTrain @event,
         TypeTrain trainType, VagonDirection vagonDirection, Station stationDeparture, Station stationArrival, Station stationWhereFrom,
         Station stationWhereTo, DirectionStation directionStation, DateTime? arrivalTime, DateTime? departureTime, DateTime? delayTime,
-        DateTime expectedTime, TimeSpan? stopTime, Addition addition, Note note, DaysFollowing daysFollowing) : base(id)
+        DateTime? expectedTime, TimeSpan? stopTime, Addition addition, Note note, DaysFollowing daysFollowing) : base(id)
         {
             ScheduleId = scheduleId;
             TrnId = trnId;
@@ -68,7 +65,7 @@ namespace InputDataModel.Autodictor.Model
             ArrivalTime = arrivalTime;
             DepartureTime = departureTime;
             DelayTime = delayTime;
-            ExpectedTime = expectedTime;
+            ExpectedTime = expectedTime ?? DateTime.MinValue;
             StopTime = stopTime;
             Addition = addition;
             Note = note;
@@ -92,7 +89,10 @@ namespace InputDataModel.Autodictor.Model
         private AdInputType() : base(0)
         {
         }
-        
+
+
+
+
         #endregion
 
 

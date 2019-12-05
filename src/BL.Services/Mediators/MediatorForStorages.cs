@@ -3,31 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using App.Services.Config;
+using App.Services.Exceptions;
 using Autofac.Features.Indexed;
-using BL.Services.Config;
-using BL.Services.Exceptions;
-using BL.Services.Storages;
-using DAL.Abstract.Entities.Options;
-using DAL.Abstract.Entities.Options.Exchange.ProvidersOption;
-using DeviceForExchange;
-using DeviceForExchange.Produser;
-using Exchange.Base;
-using Exchange.Base.DataProviderAbstract;
+using Autofac.Features.OwnedInstances;
+using Domain.Device;
+using Domain.Device.Produser;
+using Domain.Device.Repository.Entities;
+using Domain.Exchange;
+using Domain.Exchange.Behaviors;
+using Domain.Exchange.Enums;
+using Domain.Exchange.Repository.Entities;
+using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.ProvidersAbstract;
+using Domain.InputDataModel.Base.ProvidersOption;
+using Domain.InputDataModel.Base.Response;
+using Infrastructure.Background;
+using Infrastructure.Background.Abstarct;
+using Infrastructure.Background.Concrete.HostingBackground;
 using Infrastructure.EventBus.Abstract;
-using InputDataModel.Base.InData;
-using InputDataModel.Base.Response;
+using Infrastructure.Transport;
+using Infrastructure.Transport.Base.Abstract;
+using Infrastructure.Transport.Http;
+using Infrastructure.Transport.SerialPort;
+using Infrastructure.Transport.TcpIp;
 using Serilog;
 using Shared.Enums;
 using Shared.Types;
-using Transport.Base.Abstract;
-using Transport.Http.Concrete;
-using Transport.SerialPort.Concrete.SpWin;
-using Transport.TcpIp.Concrete;
-using Worker.Background.Abstarct;
-using Worker.Background.Concrete.HostingBackground;
+using OptionAgregator = App.Services.Agregators.OptionAgregator;
 
-
-namespace BL.Services.Mediators
+namespace App.Services.Mediators
 {
     /// <summary>
     /// Сервис объединяет работу со всеми Storage,
@@ -36,18 +41,16 @@ namespace BL.Services.Mediators
     public class MediatorForStorages<TIn> where TIn : InputTypeBase
     {
         #region fields
-
         private readonly DeviceStorage<TIn> _deviceStorage;
         private readonly ExchangeStorage<TIn> _exchangeStorage;
         private readonly BackgroundStorage _backgroundStorage;
         private readonly TransportStorage _transportStorage;
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
-        private readonly IEventBus _eventBus;
-        private readonly IIndex<string, Func<ProviderOption, IExchangeDataProvider<TIn, ResponseInfo>>> _dataProviderFactory;
+        private readonly Func<string, ExchangeOption, ITransport, ITransportBackground, Owned<IExchange<TIn>>> _exchangeFactory;
+        private readonly Func<DeviceOption, IEnumerable<IExchange<TIn>>, Owned<Device<TIn>>> _deviceFactory;
         private readonly AppConfigWrapper _appConfigWrapper;
         private readonly ILogger _logger;
         //опции для создания IProduser через фабрику
-
         #endregion
 
 
@@ -60,8 +63,8 @@ namespace BL.Services.Mediators
             BackgroundStorage backgroundStorage,
             TransportStorage transportStorage,
             ProduserUnionStorage<TIn> produserUnionStorage,
-            IEventBus eventBus,     
-            IIndex<string, Func<ProviderOption, IExchangeDataProvider<TIn, ResponseInfo>>> dataProviderFactory,
+            Func<string, ExchangeOption, ITransport, ITransportBackground, Owned<IExchange<TIn>>> exchangeFactory,
+            Func<DeviceOption, IEnumerable<IExchange<TIn>>,  Owned<Device<TIn>>> deviceFactory,
             AppConfigWrapper appConfigWrapper,
             ILogger logger)
         {
@@ -70,8 +73,8 @@ namespace BL.Services.Mediators
             _backgroundStorage = backgroundStorage;
             _exchangeStorage = exchangeStorage;
             _deviceStorage = deviceStorage;
-            _eventBus = eventBus;
-            _dataProviderFactory = dataProviderFactory;
+            _exchangeFactory = exchangeFactory;
+            _deviceFactory = deviceFactory;
             _appConfigWrapper = appConfigWrapper;
             _logger = logger;
         }
@@ -90,14 +93,14 @@ namespace BL.Services.Mediators
         /// <returns>Верунть ус-во</returns>
         public Device<TIn> GetDevice(string deviceName)
         {
-            var device = _deviceStorage.Get(deviceName);
+            var device = _deviceStorage.Get(deviceName)?.Value;
             return device;
         }
 
 
         public IReadOnlyList<Device<TIn>> GetDevices()
         {
-            return _deviceStorage.Values.ToList();
+            return _deviceStorage.Values.Select(owned=> owned.Value).ToList();
         }
 
 
@@ -108,7 +111,7 @@ namespace BL.Services.Mediators
         /// <returns></returns>
         public IReadOnlyList<Device<TIn>> GetDevicesUsingExchange(string exchnageKey)
         {
-            return _deviceStorage.Values.Where(dev=>dev.Option.ExchangeKeys.Contains(exchnageKey)).ToList();
+            return _deviceStorage.Values.Select(owned => owned.Value).Where(dev=>dev.Option.ExchangeKeys.Contains(exchnageKey)).ToList();
         }
 
 
@@ -119,13 +122,13 @@ namespace BL.Services.Mediators
         /// <returns></returns>
         public IReadOnlyList<IExchange<TIn>> GetExchangesUsingTransport(KeyTransport keyTransport)
         {
-           return _exchangeStorage.Values.Where(exch => exch.KeyTransport.Equals(keyTransport)).ToList();
+           return _exchangeStorage.Values.Select(owned => owned.Value).Where(exch => exch.KeyTransport.Equals(keyTransport)).ToList();
         }
 
 
         public IExchange<TIn> GetExchange(string exchnageKey)
         {
-            return _exchangeStorage.Get(exchnageKey);
+            return _exchangeStorage.Get(exchnageKey)?.Value;
         }
 
 
@@ -199,11 +202,9 @@ namespace BL.Services.Mediators
                 var keyTransport = exchOption.KeyTransport;
                 var bg = _backgroundStorage.Get(keyTransport);
                 var transport = _transportStorage.Get(keyTransport);
-
                 try
                 {
-                    var dataProvider = _dataProviderFactory[exchOption.Provider.Name](exchOption.Provider);
-                    exch = new ExchangeUniversal<TIn>(exchOption, transport, bg, dataProvider, _logger);
+                    exch= _exchangeFactory(deviceOption.Name, exchOption, transport, bg);
                     _exchangeStorage.AddNew(exchOption.Key, exch);
                 }
                 catch (Exception)
@@ -213,11 +214,10 @@ namespace BL.Services.Mediators
             }
 
             //ДОБАВИТЬ УСТРОЙСТВО--------------------------------------------------------------------------
-            var excanges = _exchangeStorage.GetMany(deviceOption.ExchangeKeys).ToList();
-            var device = new Device<TIn>(deviceOption, excanges, _eventBus, _produserUnionStorage, _logger);
-            _deviceStorage.AddNew(device.Option.Name, device);
-
-            return device;
+            var excanges = _exchangeStorage.GetMany(deviceOption.ExchangeKeys).Select(owned =>owned.Value).ToList();
+            var deviceOwner = _deviceFactory(deviceOption, excanges);
+            _deviceStorage.AddNew(deviceOwner.Value.Option.Name, deviceOwner);
+            return deviceOwner.Value;
         }
 
 
@@ -233,29 +233,26 @@ namespace BL.Services.Mediators
             if (device == null)
                 throw new StorageHandlerException($"Устройство с таким именем НЕ существует: {deviceName}");
 
-            var exchangeKeys = _deviceStorage.Values.SelectMany(dev => dev.Option.ExchangeKeys).ToList();
-            var keyTransports = _exchangeStorage.Values.Select(exc => exc.KeyTransport).ToList();
+            var exchangeKeys = _deviceStorage.Values.Select(owned => owned.Value).SelectMany(dev => dev.Option.ExchangeKeys).ToList();
+            var keyTransports = _exchangeStorage.Values.Select(owned => owned.Value.KeyTransport).ToList();
             foreach (var exchKey in device.Option.ExchangeKeys)
             {
                 if (exchangeKeys.Count(key => key == exchKey) == 1)
                 {
-                    var removingExch = _exchangeStorage.Get(exchKey);
-                    if (removingExch.CycleExchnageStatus != CycleExchnageStatus.Off)
+                    var removingExch = _exchangeStorage.Get(exchKey).Value;
+                    if (removingExch.CycleBehavior.CycleBehaviorState != CycleBehaviorState.Off)
                     {
-                        removingExch.StopCycleExchange();
+                        removingExch.CycleBehavior.StopCycleExchange();
                     }
                     if (keyTransports.Count(tr => tr == removingExch.KeyTransport) == 1)
                     {
                         await RemoveAndStopTransport(removingExch.KeyTransport);
                     }
                     _exchangeStorage.Remove(exchKey);
-                    removingExch.Dispose();
                 }
             }
-
             //УДАЛИМ УСТРОЙСТВО
             _deviceStorage.Remove(deviceName);
-            device.Dispose(); //???
             return device;
         }
 
@@ -278,9 +275,8 @@ namespace BL.Services.Mediators
             var bg = _backgroundStorage.Get(keyTransport);
             if (bg.IsStarted)
             {
-                _backgroundStorage.Remove(keyTransport);
                 await bg.StopAsync(CancellationToken.None);
-                bg.Dispose();
+                _backgroundStorage.Remove(keyTransport);
             }
 
             var transport = _transportStorage.Get(keyTransport);
@@ -289,7 +285,6 @@ namespace BL.Services.Mediators
                 transport.CycleReOpenedExecCancelation();
             }
             _transportStorage.Remove(keyTransport);
-            transport.Dispose();
         }
 
 
@@ -332,5 +327,4 @@ namespace BL.Services.Mediators
         }
         #endregion
     }
-
 }

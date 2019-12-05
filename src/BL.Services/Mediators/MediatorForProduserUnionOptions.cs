@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
-using DAL.Abstract.Concrete;
-using DAL.Abstract.Entities.Options.ResponseProduser;
+using Domain.Device.Repository.Abstract;
+using Domain.Device.Repository.Entities.ResponseProduser;
 
-namespace BL.Services.Mediators
+namespace App.Services.Mediators
 {
     /// <summary>
     /// Сервис объединяет работу с репозиотриями опций для устройств.

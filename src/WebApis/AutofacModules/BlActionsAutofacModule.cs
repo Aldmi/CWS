@@ -1,6 +1,6 @@
-﻿using Autofac;
-using BL.Services.Actions;
-using InputDataModel.Base.InData;
+﻿using App.Services.Actions;
+using Autofac;
+using Domain.InputDataModel.Base.InData;
 
 namespace WebApiSwc.AutofacModules
 {
@@ -8,7 +8,7 @@ namespace WebApiSwc.AutofacModules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<DeviceActionService<TIn>>().InstancePerDependency();    
+            builder.RegisterType<DeviceActionService<TIn>>().PropertiesAutowired().InstancePerDependency();
             builder.RegisterType<BuildDeviceService<TIn>>().InstancePerDependency();
             builder.RegisterType<BuildProdusersUnionService<TIn>>().InstancePerDependency();
             

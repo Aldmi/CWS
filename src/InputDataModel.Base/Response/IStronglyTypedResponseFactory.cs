@@ -1,4 +1,4 @@
-﻿namespace InputDataModel.Base.Response
+﻿namespace Domain.InputDataModel.Base.Response
 {
     public interface IStronglyTypedResponseFactory
     {

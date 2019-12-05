@@ -1,4 +1,4 @@
-﻿namespace AbstractProduser.Helpers
+﻿namespace Infrastructure.Produser.AbstractProduser.Helpers
 {
     /// <summary>
     /// Счетчик до наступления троттлинга

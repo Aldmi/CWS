@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
+using App.Services.Mediators;
 using Autofac;
 using AutoMapper;
-using BL.Services.Mediators;
-using BL.Services.Storages;
-using Exchange.Base;
-using InputDataModel.Autodictor.Model;
+using Domain.Exchange;
+using Domain.InputDataModel.Autodictor.Model;
+using Infrastructure.Background.Abstarct;
+using Infrastructure.Transport;
+using Infrastructure.Transport.Base.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Events;
-using Transport.SerialPort.Abstract;
 using WebApiSwc.DTO.JSON.InputTypesDto;
 using WebApiSwc.Extensions;
 using WebApiSwc.Settings;
-using Worker.Background.Abstarct;
+
 
 
 namespace WebApiSwc.Controllers
@@ -151,14 +152,13 @@ namespace WebApiSwc.Controllers
             //};
 
 
-            //TODO: заменить на РЕАЛЬНый тестовый запрос
             //var inData = new List<InputData<AdInputType>> //коллекция данных для уст-ва.
             //    {
             //        new InputData<AdInputType>
             //        {
             //            DeviceName = "Device_1",
             //            ExchangeName = "Exchange_1",
-            //            Data = new List<AdInputType>
+            //            ProcessedItemsInBatch = new List<AdInputType>
             //            {
             //                new AdInputType
             //                {

@@ -11,37 +11,30 @@ ENV LC_ALL ru_RU.UTF-8
 
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
-COPY WebApis/WebApiSwc.csproj WebApis/
-COPY Communication.TcpIp/Transport.TcpIp.csproj Communication.TcpIp/
-COPY Shared/Shared.csproj Shared/
-COPY Transport.Base/Transport.Base.csproj Transport.Base/
-COPY DAL.Abstract/DAL.Abstract.csproj DAL.Abstract/
-COPY InputDataModel.Autodictor/InputDataModel.Autodictor.csproj InputDataModel.Autodictor/
-COPY Exchange.Base/Exchange.Base.csproj Exchange.Base/
-COPY InputDataModel.Base/InputDataModel.Base.csproj InputDataModel.Base/
-COPY Worker.Background/Worker.Background.csproj Worker.Background/
-COPY Infrastructure.MessageBroker/Infrastructure.MessageBroker.csproj Infrastructure.MessageBroker/
-COPY DAL.EFCore/DAL.EFCore.csproj DAL.EFCore/
-COPY BL.Services/BL.Services.csproj BL.Services/
-COPY Transport.Http/Transport.Http.csproj Transport.Http/
-COPY Communication.SerialPort/Transport.SerialPort.csproj Communication.SerialPort/
-COPY Infrastructure/Infrastructure.EventBus.csproj Infrastructure/
-COPY Device.Base/DeviceForExchange.csproj Device.Base/
-COPY DAL.InMemory/DAL.InMemory.csproj DAL.InMemory/
-#COPY Option.Test/Option.Test.csproj Option.Test/
-
-RUN dotnet restore WebApis/WebApiSwc.csproj
-#RUN dotnet restore Option.Test/Option.Test.csproj
+COPY ["WebApis/WebApiSwc.csproj", "WebApis/"]
+COPY ["Shared/Shared.csproj", "Shared/"]
+COPY ["Infrastructure/Infrastructure.EventBus.csproj", "Infrastructure/"]
+COPY ["InputDataModel.Autodictor/Domain.InputDataModel.Autodictor.csproj", "InputDataModel.Autodictor/"]
+COPY ["Exchange.Base/Domain.Exchange.csproj", "Exchange.Base/"]
+COPY ["InputDataModel.Base/Domain.InputDataModel.Base.csproj", "InputDataModel.Base/"]
+COPY ["Infrastructure.Transport/Infrastructure.Transport.csproj", "Infrastructure.Transport/"]
+COPY ["Infrastructure.Dal.EfCore/Infrastructure.Dal.EfCore.csproj", "Infrastructure.Dal.EfCore/"]
+COPY ["Infrastructure.Dal.Abstract/Infrastructure.Dal.Abstract.csproj", "Infrastructure.Dal.Abstract/"]
+COPY ["Infrastructure.Background/Infrastructure.Background.csproj", "Infrastructure.Background/"]
+COPY ["Infrastructure.Storages/Infrastructure.Storages.csproj", "Infrastructure.Storages/"]
+COPY ["Device.Base/Domain.Device.csproj", "Device.Base/"]
+COPY ["WebClientProduser/Infrastructure.Produser.WebClientProduser.csproj", "WebClientProduser/"]
+COPY ["AbstractProduser/Infrastructure.Produser.AbstractProduser.csproj", "AbstractProduser/"]
+COPY ["KaffkaProduser/Infrastructure.Produser.KafkaProduser.csproj", "KaffkaProduser/"]
+COPY ["Infrastructure.MessageBroker/Infrastructure.MessageBroker.csproj", "Infrastructure.MessageBroker/"]
+COPY ["BL.Services/App.Services.csproj", "BL.Services/"]
+RUN dotnet restore "WebApis/WebApiSwc.csproj"
 COPY . .
-
-#WORKDIR /src/Option.Test
-#RUN dotnet test Option.Test.csproj
-
-WORKDIR /src/WebApis
-RUN dotnet build WebApiSwc.csproj -c Release -o /app
+WORKDIR "/src/WebApis"
+RUN dotnet build "WebApiSwc.csproj" -c Release -o /app
 
 FROM build AS publish
-RUN dotnet publish WebApiSwc.csproj -c Release -o /app
+RUN dotnet publish "WebApiSwc.csproj" -c Release -o /app
 
 FROM base AS final
 WORKDIR /app

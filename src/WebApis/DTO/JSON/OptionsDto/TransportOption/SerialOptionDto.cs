@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using DAL.Abstract.Entities.Options.Transport;
+using System.IO.Ports;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.TransportOption
 {

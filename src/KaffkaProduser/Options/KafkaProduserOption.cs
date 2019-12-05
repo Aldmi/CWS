@@ -1,6 +1,6 @@
-﻿using AbstractProduser.Options;
+﻿using Infrastructure.Produser.AbstractProduser.Options;
 
-namespace KafkaProduser.Options
+namespace Infrastructure.Produser.KafkaProduser.Options
 {
     public class KafkaProduserOption : BaseProduserOption
     {

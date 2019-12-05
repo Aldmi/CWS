@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Infrastructure.Produser.AbstractProduser.Enums;
 
-namespace AbstractProduser.Helpers
+namespace Infrastructure.Produser.AbstractProduser.Helpers
 {
 
     public class ErrorWrapper
@@ -49,13 +50,4 @@ namespace AbstractProduser.Helpers
         }
     }
 
-
-    public enum ResultError
-    {
-        Trottling,
-        SendException,
-        Timeout,
-        RespawnProduserError,
-        NoClientBySending
-    }
 }

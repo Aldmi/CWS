@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using App.Services.Actions;
+using App.Services.MessageBroker;
 using Autofac;
 using AutoMapper;
-using BL.Services.Actions;
-using BL.Services.MessageBroker;
-using BL.Services.Storages;
-using DAL.Abstract.Concrete;
-using Exchange.Base;
+using Domain.Device;
+using Domain.Exchange;
+using Domain.Exchange.Enums;
+using Domain.InputDataModel.Autodictor.Model;
 using Firewall;
-using InputDataModel.Autodictor.Model;
+using Infrastructure.Background;
+using Infrastructure.Background.Abstarct;
+using Infrastructure.Dal.Abstract;
+using Infrastructure.Produser.WebClientProduser;
+using Infrastructure.Transport;
+using Infrastructure.Transport.Repository.Abstract;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +25,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.HealthChecks;
 using Newtonsoft.Json;
 using Npgsql;
 using Serilog;
@@ -27,8 +32,6 @@ using WebApiSwc.AutofacModules;
 using WebApiSwc.Extensions;
 using WebApiSwc.Hubs;
 using WebApiSwc.Settings;
-using WebClientProduser;
-using Worker.Background.Abstarct;
 
 namespace WebApiSwc
 {
@@ -104,11 +107,13 @@ namespace WebApiSwc
                 switch (inputDataName)
                 {
                     case "AdInputType":
-                        builder.RegisterModule(new DataProviderExchangeAutofacModule<AdInputType>());
+                        builder.RegisterModule(new DataProviderAutofacModule<AdInputType>());
                         builder.RegisterModule(new ProduserUnionAutofacModule<AdInputType>());
                         builder.RegisterModule(new BlStorageAutofacModule<AdInputType>());
                         builder.RegisterModule(new BlActionsAutofacModule<AdInputType>());
                         builder.RegisterModule(new MediatorsAutofacModule<AdInputType>());
+                        builder.RegisterModule(new ExchangeAutofacModule<AdInputType>());
+                        builder.RegisterModule(new DeviceAutofacModule<AdInputType>());
                         builder.RegisterModule(new InputDataAutofacModule<AdInputType>(AppConfiguration.GetSection("MessageBrokerConsumer4InData")));
                         break;
 
@@ -128,7 +133,8 @@ namespace WebApiSwc
                               IHostingEnvironment env,
                               ILifetimeScope scope,
                               IConfiguration config,
-                              IMapper mapper)
+                              IMapper mapper,
+                              ILogger loger)
         {
             //Настрока выдачи ответа для HealthCheck
             var options = new HealthCheckOptions
@@ -175,6 +181,7 @@ namespace WebApiSwc
                         .ExceptFromIPAddresses(firewallConfig.AllowedIPs)
                 //.ExceptFromLocalhost()
                 );
+                loger.Information("Enable firewall !!!!");
             }
 
             //ПОДКЛЮЧЕНИЕ SignalR ХАБА
@@ -238,9 +245,9 @@ namespace WebApiSwc
             var exchangeServices = scope.Resolve<ExchangeStorage<AdInputType>>();
             lifetimeApp.ApplicationStarted.Register(() =>
             {
-                foreach (var exchange in exchangeServices.Values.Where(exch=> exch.AutoStartCycleFunc))
+                foreach (var exchange in exchangeServices.Values.Select(owned => owned.Value).Where(exch=> exch.CycleBehavior.CycleFuncOption.AutoStartCycleFunc))
                 {
-                   exchange.StartCycleExchange();
+                   exchange.CycleBehavior.StartCycleExchange();
                 }
             });
 
@@ -248,14 +255,12 @@ namespace WebApiSwc
             var deviceServices = scope.Resolve<DeviceStorage<AdInputType>>();
             lifetimeApp.ApplicationStarted.Register(() =>
             {
-                foreach (var device in deviceServices.Values)
+                foreach (var device in deviceServices.Values.Select(owned => owned.Value))
                 {
-                    // СОБЫТИЯ ПУБЛИКУЕМЫЕ НА ProduserUnion.
-                    if (!string.IsNullOrEmpty(device.ProduserUnionKey))
-                        device.SubscrubeOnExchangesEvents();
-
+                    //ПОДПИСКА НА СОБЫТИЯ ОТ ОБМЕНОВ.
+                    device.SubscrubeOnExchangesEvents();
                     //СОБЫТИЯ СМЕНЫ СОСТОЯНИЯ ПОСТУПЛЕНИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ. ОБМЕНА.
-                    device.SubscrubeOnExchangesCycleDataEntryStateEvents();
+                    device.SubscrubeOnExchangesCycleBehaviorEvents();
                 }
             });
         }
@@ -292,9 +297,9 @@ namespace WebApiSwc
             var exchangeServices = scope.Resolve<ExchangeStorage<AdInputType>>();
             lifetimeApp.ApplicationStopping.Register(() =>
             {
-                foreach (var exchange in exchangeServices.Values.Where(exch => exch.CycleExchnageStatus != CycleExchnageStatus.Off))
+                foreach (var exchange in exchangeServices.Values.Select(owned => owned.Value).Where(exch => exch.CycleBehavior.CycleBehaviorState != CycleBehaviorState.Off))
                 {
-                     exchange.StopCycleExchange();
+                     exchange.CycleBehavior.StopCycleExchange();
                 }
             });
 
@@ -302,12 +307,12 @@ namespace WebApiSwc
             var deviceServices = scope.Resolve<DeviceStorage<AdInputType>>();
             lifetimeApp.ApplicationStopping.Register(() =>
             {
-                foreach (var device in deviceServices.Values)
+                foreach (var device in deviceServices.Values.Select(owned => owned.Value))
                 {
                     //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ ПУБЛИКУЕМЫХ НА ProduserUnion.
                     device.UnsubscrubeOnExchangesEvents();
                     //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ СМЕНЫ СОСТОЯНИЯ ПОСТУПЛЕНИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ. ОБМЕНА.
-                    device.UnsubscrubeOnExchangesCycleDataEntryStateEvents();
+                    device.UnsubscrubeOnExchangesCycleBehaviorEvents();
                 }
             });
         }
@@ -329,7 +334,7 @@ namespace WebApiSwc
             //СОЗДАНИЕ БД----------------------------------------------------------------------------
             try
             {
-                await scope.Resolve<ISerialPortOptionRepository>().CreateDb(howCreateDb);
+                await scope.Resolve<IActionDb>().CreateDb(howCreateDb);
             }
             catch (PostgresException ex)
             {
