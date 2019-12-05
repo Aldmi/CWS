@@ -78,23 +78,38 @@ namespace ByRulesInseartedTest.Test
         [Fact]
         public void CreateStringRequestMaxBodyLenghtTest()
         {
-            ////Arrange
-            //string addressDevice = "5";
-            //RequestOption requestOption = new RequestOption
-            //{
-            //    Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
-            //    Body = "%00001032{(rowNumber*16):D3}3%10$12$00$60$t3{TDepart:t}%00033240{(rowNumber*16):D3}4%10$12$00$60$t3{StationArrival}%00241256{(rowNumber*16):D3}3%10$12$00$60$t1{PathNumber}%400012561451%000012561603%10$10$00$60$t2Московское время {Hour:D2}.{Minute:D2}",
-            //    Footer = "{CRCXorInverse:X2}\u0003",
-            //    Format = "Windows-1251",
-            //    MaxBodyLenght = 10
-            //};
-            //var viewRule = new ViewRule<AdInputType>(addressDevice, requestOption);
+            //Arrange
+            string addressDevice = "5";
+            var viewRuleOption = new ViewRuleOption()
+            {
+                Id = 1,
+                StartPosition = 0,
+                Count = 1,
+                BatchSize = 1,
+                RequestOption = new RequestOption
+                {
+                    Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                    Body = "%00001032{(rowNumber*16):D3}3%10$12$00$60$t3{TDepart:t}%00033240{(rowNumber*16):D3}4%10$12$00$60$t3{StationArrival}%00241256{(rowNumber*16):D3}3%10$12$00$60$t1{PathNumber}%400012561451%000012561603%10$10$00$60$t2Московское время {Hour:D2}.{Minute:D2}",
+                    Footer = "{CRCXorInverse:X2}\u0003",
+                    Format = "Windows-1251",
+                    MaxBodyLenght = 10
+                },
+                ResponseOption = new ResponseOption
+                {
+                    Format = "HEX",
+                    Lenght = 16,
+                    Body = "0246463038254130373741434B454103"
+                }
+            };
+            IIndependentInsertsHandler inTypeIndependentInsertsHandler = new AdInputTypeIndependentInsertsHandler();
+            var viewRule = new ViewRule<AdInputType>(addressDevice, viewRuleOption, inTypeIndependentInsertsHandler, _logger);
 
-            ////Act
-            //var requestTransfer = viewRule.CreateStringRequest(GetData4ViewRuleTest.InputTypesDefault, 0);
+            //Act
+            var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
+            var firstItem = requestTransfer?.FirstOrDefault();
 
-            ////Assert
-            //requestTransfer.Should().BeNull();
+            //Assert
+            firstItem.Should().BeNull();
         }
 
     }
