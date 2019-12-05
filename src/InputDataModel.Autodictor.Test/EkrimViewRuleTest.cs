@@ -153,7 +153,7 @@
 //            var viewRule = new ViewRule(address, option, _logger);
 
 //            //Act
-//            var requests = viewRule.GetDataRequestString(inTypes).ToList();
+//            var requests = viewRule.CreateProviderTransfer4Data(inTypes).ToList();
 //            for (int i = 0; i < requests.Count; i++)
 //            {
 //                var request = requests[i];
