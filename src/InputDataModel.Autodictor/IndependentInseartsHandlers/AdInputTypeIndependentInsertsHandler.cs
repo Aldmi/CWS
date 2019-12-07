@@ -115,12 +115,12 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsHandlers
                     return SharedHandlers.IntStrHandler(hour, format);
 
                 case "Minute":
-                    var minute = DateTime.Now.Hour;
+                    var minute = DateTime.Now.Minute;
                     format = inseart.Format;
                     return SharedHandlers.IntStrHandler(minute, format);
 
                 case "Second":
-                    var second = DateTime.Now.Hour;
+                    var second = DateTime.Now.Second;
                     format = inseart.Format;
                     return SharedHandlers.IntStrHandler(second, format);
 
