@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using WebApiSwc.DTO.JSON.InputTypesDto;
+using WebApiSwc.DTO.JSON.ResponseWebApiTypesDto;
 using WebApiSwc.DTO.XML;
 
 namespace WebApiSwc.Controllers
@@ -436,7 +437,7 @@ namespace WebApiSwc.Controllers
 
         private async Task<ActionResult> InputDataHandler(IReadOnlyList<InputData<AdInputType>> inputDatas)
         {
-            var errors = await _inputDataApplyService.ApplyInputData(inputDatas);
+            var errors =await _inputDataApplyService.ApplyInputData(inputDatas);
             if (errors.Any())
             {
                 var errorCompose = new StringBuilder("Error in sending data: ");
@@ -444,10 +445,10 @@ namespace WebApiSwc.Controllers
                 {
                     errorCompose.AppendLine(err);
                 }
-                ModelState.AddModelError("SendData4Devices", errorCompose.ToString());
-                return BadRequest(ModelState);
+                return Ok(new IndigoResponseDto(0, errorCompose.ToString())); //Запрос верный, НО при обработве данных возникли ошибки
             }
-            return Ok();
+            var resp = new IndigoResponseDto(1, "Ok");                       //Запрос верный, Обработано успешно
+            return Ok(resp);
         }
 
         #endregion
