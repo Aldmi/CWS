@@ -109,6 +109,21 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsHandlers
                     format = inseart.Format;
                     return SharedHandlers.IntStrHandler(syncTInSec, format);
 
+                case "Year":
+                    var year = DateTime.Now.Year;
+                    format = inseart.Format;
+                    return SharedHandlers.IntStrHandler(year, format);
+
+                case "Month":
+                    var month = DateTime.Now.Month;
+                    format = inseart.Format;
+                    return SharedHandlers.IntStrHandler(month, format);
+
+                case "Day":
+                    var day = DateTime.Now.Day;
+                    format = inseart.Format;
+                    return SharedHandlers.IntStrHandler(day, format);
+
                 case "Hour":
                     var hour = DateTime.Now.Hour;
                     format = inseart.Format;

@@ -17,7 +17,7 @@ namespace WebApiSwc.Controllers
         public IActionResult MemUsage()
         {
             var mem = GC.GetTotalMemory(false) / 1000000.0;
-            return new JsonResult(mem);
+            return new JsonResult("$MemUsage= {mem}Mb");
         }
 
         #endregion

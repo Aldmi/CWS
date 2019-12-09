@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Shared.Extensions
@@ -7,13 +8,19 @@ namespace Shared.Extensions
     {
         public static string ArrayByteToString(this IEnumerable<byte> source, string format)
         {
+            var buf = source.ToArray();
             format = (format == "HEX") ? "X2" : format;
-            var stringBuilder = new StringBuilder();
-            foreach (var item in source)
+            if (format == "X2")
             {
-                stringBuilder.Append(item.ToString(format));
+                var stringBuilder = new StringBuilder();
+                foreach (var item in buf)
+                {
+                    stringBuilder.Append(item.ToString(format));
+                }
+                return stringBuilder.ToString();
             }
-            return stringBuilder.ToString();
+            string converted = Encoding.GetEncoding(format).GetString(buf, 0, buf.Length);
+            return converted;
         }
     }
 }
