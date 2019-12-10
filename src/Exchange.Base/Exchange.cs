@@ -347,7 +347,16 @@ namespace Domain.Exchange
         #region dataProvider
         public void SetNewProvider(IDataProvider<TIn, ResponseInfo> provider)
         {
-            _dataProvider = provider;
+            try //DEBUG
+            {
+                _dataProviderOwner.Dispose();
+                //_dataProvider = provider;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
         #endregion
 

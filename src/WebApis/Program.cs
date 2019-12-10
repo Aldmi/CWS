@@ -28,8 +28,8 @@ namespace WebApiSwc
 
         public static string GetVersion()
         {
-            const string version = "CWS Ver4.2";
-            return $"{version}  [08.12.2019]  [Reliz. Add IndigoResponseDto in InputDataHandler]";
+            const string version = "CWS Ver4.4";
+            return $"{version}  [10.12.2019]  [Reliz. Remove StationsCut - ПОСАДКИ НЕТ]";
         }
 
 

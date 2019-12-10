@@ -51,8 +51,10 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsHandlers
                     break;
 
                 case "StationsCut":
-                    var stationsCut = uit.StationsСut?.GetName(lang);
-                    return string.IsNullOrEmpty(stationsCut) ? "ПОСАДКИ НЕТ" : stationsCut;
+                    str = uit.StationsСut?.GetName(lang);
+                    break;
+                    //var stationsCut = uit.StationsСut?.GetName(lang);
+                    //return string.IsNullOrEmpty(stationsCut) ? "ПОСАДКИ НЕТ" : stationsCut;
 
                 case nameof(uit.StationArrival):
                     str = uit.StationArrival?.GetName(lang);

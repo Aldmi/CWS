@@ -314,7 +314,9 @@ namespace Domain.Device
         private async Task SendWarningResult(string warningStr)
         {
             _logger.Warning(warningStr);
-            await Send2ProduderUnion(Option.Name, warningStr);
+            if (!string.IsNullOrEmpty(ProduserUnionKey)) 
+                await Send2ProduderUnion(Option.Name, warningStr);
+            
         }
 
 
@@ -361,7 +363,7 @@ namespace Domain.Device
                     _logger.Error($"Ошибки отправки сообщений для Устройства= {Option.Name} через ProduderUnion = {ProduserUnionKey}  {error}");
 
                 if (isSuccess)
-                    _logger.Information($"ОТПРАВКА ОТВЕТОВ УСПЕШНА для устройства {Option.Name} через ProduderUnion = {ProduserUnionKey}");
+                    _logger.Information($"ОТПРАВКА сообщений УСПЕШНА для устройства {Option.Name} через ProduderUnion = {ProduserUnionKey}");
             }
         }
         #endregion
@@ -445,7 +447,9 @@ namespace Domain.Device
         {
             var message = $"Переключился режим Циклического обмена.  {dataState.KeyExchange}  {dataState.CycleBehaviorState}";
             _logger.Information(message);
-            await Send2ProduderUnion(Option.Name, message);
+
+            if (!string.IsNullOrEmpty(ProduserUnionKey))
+                await Send2ProduderUnion(Option.Name, message);
         }
 
 
