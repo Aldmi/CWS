@@ -79,9 +79,11 @@ namespace Domain.InputDataModel.Autodictor.ProvidersSpecial
 
         public int CountGetDataByte { get; }
         public int CountSetDataByte { get; }
-        Task IDataProvider<AdInputType, ResponseInfo>.StartExchangePipeline(InDataWrapper<AdInputType> inData)
+
+
+        public Task StartExchangePipelineAsync(InDataWrapper<AdInputType> inData, CancellationToken ct)
         {
-            return StartExchangePipeline(inData);
+            throw new NotImplementedException();
         }
 
         Subject<ProviderResult<AdInputType>> IDataProvider<AdInputType, ResponseInfo>.RaiseSendDataRx => _raiseSendDataRx;

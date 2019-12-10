@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Subjects;
+using System.Threading;
 using System.Threading.Tasks;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
@@ -98,7 +99,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         /// <summary>
         /// Запуск конвеера обработки запрос-ответ для обмена
         /// </summary>
-        public async Task StartExchangePipeline(InDataWrapper<TIn> inData)
+        public async Task StartExchangePipelineAsync(InDataWrapper<TIn> inData, CancellationToken ct)
         {
             //ЕСЛИ ДАННЫХ ДЛЯ ОТПРАВКИ НЕТ (например для Цикл. обмена при старте)
             if (inData == null)
@@ -111,8 +112,9 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 };
             }
             foreach (var rule in GetRules)
-            {
-                StatusDict.Clear();
+            { 
+               ct.ThrowIfCancellationRequested();
+               StatusDict.Clear();
                 var ruleOption = rule.GetCurrentOption();
                 switch (SwitchInDataHandler(inData, ruleOption.Name))
                 {
@@ -127,7 +129,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                             ?.Order(ruleOption.OrderBy, _logger)
                             ?.TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
                             ?.ToList();
-                        ViewRuleSendData(rule, takesItems);
+                        await ViewRuleSendDataAsync(rule, takesItems, ct);
                         continue;
 
                     //ДАННЫЕ--------------------------------------------------------------  
@@ -139,7 +141,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                         takesItems = filtredItems.Order(ruleOption.OrderBy, _logger)
                             .TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
                             .ToList();
-                        ViewRuleSendData(rule, takesItems);
+                        await ViewRuleSendDataAsync(rule, takesItems, ct);
                         continue;
 
                     default:
@@ -155,7 +157,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         /// <summary>
         /// Отобразить данные через коллекцию ViewRules у правила.
         /// </summary>
-        private void ViewRuleSendData(Rule<TIn> rule, List<TIn> takesItems)
+        private async Task ViewRuleSendDataAsync(Rule<TIn> rule, List<TIn> takesItems, CancellationToken ct)
         {
             if (takesItems != null && takesItems.Any())
             {
@@ -164,6 +166,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 {
                     foreach (var providerTransfer in viewRule.CreateProviderTransfer4Data(takesItems))
                     {
+                        ct.ThrowIfCancellationRequested();
                         if (providerTransfer == null) //правило отображения не подходит под ДАННЫЕ
                             continue;
 
@@ -173,6 +176,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                     }
                 }
             }
+
+            await Task.CompletedTask;
         }
 
 

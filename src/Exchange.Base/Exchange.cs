@@ -41,6 +41,7 @@ namespace Domain.Exchange
         private readonly ILogger _logger;
         private readonly Stopwatch _sw = Stopwatch.StartNew();
         private readonly List<IDisposable> _behaviorOwners;
+        private CancellationTokenSource _ctsStartExchangePipeline; //источник прерывания выполнение конвеера отправки данных
         #endregion
 
 
@@ -120,6 +121,7 @@ namespace Domain.Exchange
             CycleBehavior = cycleBehaviorOwner.Value;
             OnceBehavior = onceBehaviorOwner.Value;
             CommandBehavior = commandBehaviorOwner.Value;
+            _ctsStartExchangePipeline = new CancellationTokenSource();
         }
         #endregion
 
@@ -265,11 +267,16 @@ namespace Domain.Exchange
             });
 
             try
-            {   //ЗАПУСК КОНВЕЕРА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ
+            {
+                //ЗАПУСК КОНВЕЕРА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ
                 _sw.Restart();
-                await _dataProvider.StartExchangePipeline(inData);
+                await _dataProvider.StartExchangePipelineAsync(inData, _ctsStartExchangePipeline.Token);
                 _sw.Stop();
-                transportResponseWrapper.TimeAction= _sw.ElapsedMilliseconds;
+                transportResponseWrapper.TimeAction = _sw.ElapsedMilliseconds;
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.Information("{Type} {KeyExchange}", "ОТМЕНА КОНВЕЕРА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ", KeyExchange);
             }
             catch (Exception ex)
             {
@@ -348,16 +355,15 @@ namespace Domain.Exchange
 
         #region dataProvider
 
-        private CancellationTokenSource _ctsStartExchangePipeline;
+        
         public void SetNewProvider(ProviderOption option)
         {
-            //TODO: StartExchangePipeline надо прерывать. 
-            _ctsStartExchangePipeline = new CancellationTokenSource();
             _ctsStartExchangePipeline.Cancel();
             _dataProviderOwner.Dispose();
             var owner= _dataProviderFactory[option.Name](option);
             _dataProviderOwner = owner;
             _dataProvider = owner.Value;
+            _ctsStartExchangePipeline = new CancellationTokenSource();
         }
         #endregion
 

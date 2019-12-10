@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.IndependentInseartsHandlers;
@@ -118,7 +119,7 @@ namespace InputDataModel.Autodictor.Test
                     countSetDataByte.Should().Be(5);
                 });
 
-            await btByRulesDataProvider.StartExchangePipeline(inDataWrapper);
+            await btByRulesDataProvider.StartExchangePipelineAsync(inDataWrapper, CancellationToken.None);
 
 
             // Asssert
