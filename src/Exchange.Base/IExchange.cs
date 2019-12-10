@@ -29,7 +29,7 @@ namespace Domain.Exchange
 
         #region dataProvider
         ProviderOption GetProviderOption { get; }
-        void SetNewProvider(IDataProvider<T, ResponseInfo> provider);
+        void SetNewProvider(ProviderOption option);
         #endregion
 
 

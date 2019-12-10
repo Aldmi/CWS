@@ -35,8 +35,9 @@ namespace Domain.Exchange
         private readonly ExchangeOption _option;
         private readonly ITransport _transport;
         private readonly ITransportBackground _transportBackground;
+        private readonly IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, ResponseInfo>>>> _dataProviderFactory;
         private IDataProvider<TIn, ResponseInfo> _dataProvider;                       //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
-        private readonly IDisposable _dataProviderOwner;                              //управляет временем жизни _dataProvider
+        private IDisposable _dataProviderOwner;                                       //управляет временем жизни _dataProvider
         private readonly ILogger _logger;
         private readonly Stopwatch _sw = Stopwatch.StartNew();
         private readonly List<IDisposable> _behaviorOwners;
@@ -107,6 +108,7 @@ namespace Domain.Exchange
             _option = option;
             _transport = transport;
             _transportBackground = transportBackground;
+            _dataProviderFactory = dataProviderFactory;
             var owner= dataProviderFactory[_option.Provider.Name](_option.Provider);
             _dataProviderOwner = owner;
             _dataProvider = owner.Value;
@@ -345,18 +347,17 @@ namespace Domain.Exchange
 
 
         #region dataProvider
-        public void SetNewProvider(IDataProvider<TIn, ResponseInfo> provider)
+
+        private CancellationTokenSource _ctsStartExchangePipeline;
+        public void SetNewProvider(ProviderOption option)
         {
-            try //DEBUG
-            {
-                _dataProviderOwner.Dispose();
-                //_dataProvider = provider;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            //TODO: StartExchangePipeline надо прерывать. 
+            _ctsStartExchangePipeline = new CancellationTokenSource();
+            _ctsStartExchangePipeline.Cancel();
+            _dataProviderOwner.Dispose();
+            var owner= _dataProviderFactory[option.Name](option);
+            _dataProviderOwner = owner;
+            _dataProvider = owner.Value;
         }
         #endregion
 
