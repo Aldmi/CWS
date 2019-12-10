@@ -160,11 +160,14 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
         public static string CrcInseartHandler(string str, string format)
         {
             var crcType = Regex.Match(str, "{CRC(.*):(.*)}").Groups[1].Value;
-            var crcOption = Regex.Match(crcType, "\\[(.*)\\]").Groups[1].Value;  //Xor[0x02-0x03]
+            var crcOptionInclude = Regex.Match(crcType, "\\[(.*)\\]").Groups[1].Value;  //Xor[0x02-0x03]
+            var crcOptionExclude = Regex.Match(crcType, "\\((.*)\\)").Groups[1].Value;  //Xor(0x02-0x03)
+            var includeBorder = !string.IsNullOrEmpty(crcOptionInclude);
+            var crcOption = includeBorder ? crcOptionInclude : crcOptionExclude;
             var startEndChars = crcOption.Split('-');
             var startChar = (startEndChars.Length >= 1) ? startEndChars[0] : String.Empty;
             var endChar = (startEndChars.Length >= 2) ? startEndChars[1] : String.Empty;
-
+            
             string matchString;
             if (string.IsNullOrEmpty(startChar) && string.IsNullOrEmpty(endChar))
             {
@@ -174,9 +177,7 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
             else
             {
                 // Оба заданы.
-                var strTmp = str.Replace(crcOption, String.Empty);
-                var pattern = $"{startChar}(.*){endChar}";
-                matchString = Regex.Match(strTmp, pattern).Groups[1].Value;
+                matchString = str.SubstringBetweenCharacters(startChar, endChar,includeBorder);
             }
 
             //УБРАТЬ МАРКЕРНЫЕ СИМОЛЫ ИЗ ПОДСЧЕТА CRC
@@ -195,6 +196,10 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
                     crc = CrcCalc.CalcXorInverse(crcBytes);
                     break;
 
+                case string s when s.Contains("8Bit"):
+                    crc = CrcCalc.Calc8Bit(crcBytes);
+                    break;
+
                 case string s when s.Contains("Xor"):
                     crc = CrcCalc.CalcXor(crcBytes);
                     break;
@@ -206,5 +211,8 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
             str = string.Format(str.Replace(replacement, "0"), crc);
             return str;
         }
+
+
+
     }
 }

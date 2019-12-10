@@ -28,8 +28,8 @@ namespace WebApiSwc
 
         public static string GetVersion()
         {
-            const string version = "CWS Ver4.4";
-            return $"{version}  [10.12.2019]  [Reliz. Remove StationsCut - ПОСАДКИ НЕТ]";
+            const string version = "CWS Ver4.5";
+            return $"{version}  [10.12.2019]  [Reliz. Add CrcCalc.Calc8Bit]";
         }
 
 

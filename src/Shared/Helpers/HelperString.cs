@@ -147,5 +147,27 @@ namespace Shared.Helpers
             var diff= maxLenght - str.Length;
             return diff >= 0 ? (res: false, 0) : (res: true, diff * -1);
         }
+
+
+        /// <summary>
+        /// Вернуть подстроку между символами.
+        /// </summary>
+        /// <param name="str">строка</param>
+        /// <param name="startCh">стартовый символ</param>
+        /// <param name="endCh">конечный символ</param>
+        /// <param name="includeBorder">включать ли стартовый и конечный символ в подстроку</param>
+        /// <returns></returns>
+        public static string SubstringBetweenCharacters(this string str, string startCh, string endCh, bool includeBorder = false)
+        {
+            var startIndex = str.IndexOf(startCh, StringComparison.Ordinal); 
+            var endIndex=str.IndexOf(endCh, StringComparison.Ordinal);
+            if (!includeBorder)
+            {
+                startIndex= ((startIndex + 1) >= str.Length) ? startIndex : startIndex + 1;
+                endIndex= ((endIndex -1) > str.Length) ? endIndex : endIndex - 1;
+            }
+            var subStr = str.Substring(startIndex, endIndex - startIndex + 1);
+            return subStr;
+        }
     }
 }
