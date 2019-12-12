@@ -176,7 +176,7 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
             }
             else
             {
-                // Оба заданы.
+                //Оба симолы начала и конца заданы.
                 matchString = str.SubstringBetweenCharacters(startChar, endChar,includeBorder);
             }
 

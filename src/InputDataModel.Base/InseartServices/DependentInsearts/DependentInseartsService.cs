@@ -51,7 +51,6 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
             {
                 str= handler(str, format);
             }
-
             return str;
         }
         #endregion

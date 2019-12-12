@@ -160,11 +160,22 @@ namespace Shared.Helpers
         public static string SubstringBetweenCharacters(this string str, string startCh, string endCh, bool includeBorder = false)
         {
             var startIndex = str.IndexOf(startCh, StringComparison.Ordinal); 
-            var endIndex=str.IndexOf(endCh, StringComparison.Ordinal);
-            if (!includeBorder)
+            var endIndex = str.IndexOf(endCh, StringComparison.Ordinal);
+
+            if(startIndex == -1)
+                throw new ArgumentOutOfRangeException($"Not Found startCh= {startCh}");  //TODO: zamenit na Result<T>
+
+            if(endIndex == -1)
+                throw new ArgumentOutOfRangeException($"Not Found endCh= {endCh}");      //TODO: zamenit na Result<T>
+
+            if (includeBorder)
             {
-                startIndex= ((startIndex + 1) >= str.Length) ? startIndex : startIndex + 1;
-                endIndex= ((endIndex -1) > str.Length) ? endIndex : endIndex - 1;
+                endIndex += endCh.Length-1;
+            }
+            else
+            {
+                startIndex += startCh.Length;
+                endIndex -= 1;
             }
             var subStr = str.Substring(startIndex, endIndex - startIndex + 1);
             return subStr;

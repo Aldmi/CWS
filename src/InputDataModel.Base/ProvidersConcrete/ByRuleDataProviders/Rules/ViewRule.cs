@@ -114,7 +114,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     RequestTransfer<TIn> request;
                     try
                     {
-                        request = CreateRequestTransfer4Data(batch, startItemIndex);
+                        request = CreateRequestTransfer4Data(batch, startItemIndex); //TODO: obrabotat Result<T>. Exception only for unhandled erros
                         if (request == null)
                             continue;
                     }
@@ -177,7 +177,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Создать Запрос (используя форматную строку RequestOption) из одного батча данных.
         /// </summary>
-        private RequestTransfer<TIn> CreateRequestTransfer4Data(IEnumerable<TIn> batch, int startItemIndex)
+        private RequestTransfer<TIn> CreateRequestTransfer4Data(IEnumerable<TIn> batch, int startItemIndex) //TODO: return Result<T>
         {
             var items = batch.ToList();
             var format = _option.RequestOption.Format;

@@ -80,5 +80,67 @@ namespace ByRulesInseartedTest.Test
             firstItem.Response.StrRepresent.Format.Should().Be("HEX");
         }
 
+
+
+        //"requestOption": {
+        //    "format": "Windows-1251",
+        //    "maxBodyLenght": 245,
+        //    "header": "0xFF0xFF0x020x1B0x57",
+        //    "body": "{StationsCut}0x09{NumberOfTrain}0x09",
+        //    "footer": "0x030x{CRCXor(0x02-0x03):X2}0x1F"
+        //},
+        //"responseOption": {
+        //    "format": "HEX",
+        //    "lenght": 2,
+        //    "timeRespone": 1000,
+        //    "body": "061F"
+
+        
+        [Fact]
+        public void EkrimTest()
+        {
+            //Arrange
+            string addressDevice = "4";
+            var viewRuleOption = new ViewRuleOption()
+            {
+                Id = 1,
+                StartPosition = 0,
+                Count = 1,
+                BatchSize = 1,
+                RequestOption = new RequestOption
+                {
+                    Header = "0xFF0xFF0x020x1B0x57",
+                    Body ="{StationsCut}0x09{NumberOfTrain}0x09",
+                    Footer = "0x030x{CRCXor(0x02-0x03):X2}0x1F",
+                    Format = "Windows-1251",
+                    MaxBodyLenght = 245
+                },
+                ResponseOption = new ResponseOption
+                {
+                    Format = "HEX",
+                    Lenght = 2,
+                    Body = "061F"
+                }
+            };
+
+            var viewRule = new ViewRule<AdInputType>(addressDevice, viewRuleOption, _inTypeIndependentInsertsHandler, _logger);
+
+            //Act
+            var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
+            var firstItem = requestTransfer.FirstOrDefault();
+
+            //Assert
+            requestTransfer.Should().NotBeNull();
+            requestTransfer.Length.Should().Be(1);
+            firstItem.Request.StrRepresent.Str.Should().Be("");
+            firstItem.Request.StrRepresent.Format.Should().Be("");
+            firstItem.Request.StrRepresentBase.Str.Should().Be("");
+            firstItem.Request.StrRepresentBase.Format.Should().Be(viewRuleOption.RequestOption.Format);
+            firstItem.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(1);
+
+            firstItem.Response.StrRepresent.Str.Should().Be("061F");
+            firstItem.Response.StrRepresent.Format.Should().Be("HEX");
+        }
+
     }
 }
