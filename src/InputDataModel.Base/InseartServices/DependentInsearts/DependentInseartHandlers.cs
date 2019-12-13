@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Text.RegularExpressions;
+using CSharpFunctionalExtensions;
 using Shared.CrcCalculate;
 using Shared.Helpers;
 
@@ -14,7 +15,7 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
         /// <param name="str">Входная строка</param>
         /// <param name="format">NOT USE</param>
         /// <returns></returns>
-        public static string NumberOfCharactersInseartHandler(string str, string format)
+        public static Result<string> NumberOfCharactersInseartHandler(string str, string format)
         {
             if (str.Contains("}"))                                                           //если указанны переменные подстановки
             {
@@ -43,13 +44,12 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
                         }
                         continue;
                     }
-
                     //Добавим в неизменном виде спецификаторы байтовой информации.
                     resStr.Append(replaseStr);
                 }
-                return resStr.ToString().Replace("\\\"", string.Empty); //заменить \"
+                return Result.Ok(resStr.ToString().Replace("\\\"", string.Empty));
             }
-            return str;
+            return Result.Ok(str);
         }
 
 
@@ -59,7 +59,7 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
         /// <param name="str">Входная строка</param>
         /// <param name="format">NOT USE</param>
         /// <returns></returns>
-        public static string NByteInseartHandler(string str, string format)
+        public static Result<string> NByteInseartHandler(string str, string format)
         {
             var requestFillBodyWithoutConstantCharacters = str.Replace("STX", string.Empty).Replace("ETX", string.Empty);
 
@@ -78,7 +78,6 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
                 lenght = matchString.Length;
             }
 
-
             //ЗАПОНЯЕМ ВСЕ СЕКЦИИ ДО CRC
             var subStr = requestFillBodyWithoutConstantCharacters.Split('}');
             StringBuilder resStr = new StringBuilder();
@@ -95,7 +94,7 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
                     resStr.Append(replaseStr);
                 }
             }
-            return resStr.ToString();
+            return Result.Ok(resStr.ToString());
         }
 
 
@@ -105,7 +104,7 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
         /// <param name="str">Входная строка</param>
         /// <param name="format">Кодировка строки для преобразования byte[]</param>
         /// <returns></returns>
-        public static string NByteFullInseartHandler(string str, string format)
+        public static Result<string> NByteFullInseartHandler(string str, string format)
         {
             var requestFillBodyWithoutConstantCharacters = str.Replace("STX", string.Empty).Replace("ETX", string.Empty);
 
@@ -146,7 +145,7 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
                     resStr.Append(replaseStr);
                 }
             }
-            return resStr.ToString();
+            return Result.Ok(resStr.ToString());
         }
 
 
@@ -157,7 +156,7 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
         /// <param name="str">Входная строка</param>
         /// <param name="format">Кодировка строки для преобразования byte[]</param>
         /// <returns></returns>
-        public static string CrcInseartHandler(string str, string format)
+        public static Result<string> CrcInseartHandler(string str, string format)
         {
             var crcType = Regex.Match(str, "{CRC(.*):(.*)}").Groups[1].Value;
             var crcOptionInclude = Regex.Match(crcType, "\\[(.*)\\]").Groups[1].Value;  //Xor[0x02-0x03]
@@ -177,7 +176,10 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
             else
             {
                 //Оба симолы начала и конца заданы.
-                matchString = str.SubstringBetweenCharacters(startChar, endChar,includeBorder);
+                var result= str.SubstringBetweenCharacters(startChar, endChar,includeBorder);
+                if (result.IsFailure)
+                    return result;
+                matchString = result.Value;
             }
 
             //УБРАТЬ МАРКЕРНЫЕ СИМОЛЫ ИЗ ПОДСЧЕТА CRC
@@ -209,10 +211,7 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
                     break;
             }
             str = string.Format(str.Replace(replacement, "0"), crc);
-            return str;
+            return Result.Ok(str);
         }
-
-
-
     }
 }

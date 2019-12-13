@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using CSharpFunctionalExtensions;
 
 namespace Shared.Helpers
 {
@@ -157,17 +158,17 @@ namespace Shared.Helpers
         /// <param name="endCh">конечный символ</param>
         /// <param name="includeBorder">включать ли стартовый и конечный символ в подстроку</param>
         /// <returns></returns>
-        public static string SubstringBetweenCharacters(this string str, string startCh, string endCh, bool includeBorder = false)
+        public static Result<string> SubstringBetweenCharacters(this string str, string startCh, string endCh, bool includeBorder = false)
         {
             var startIndex = str.IndexOf(startCh, StringComparison.Ordinal); 
             var endIndex = str.IndexOf(endCh, StringComparison.Ordinal);
 
-            if(startIndex == -1)
-                throw new ArgumentOutOfRangeException($"Not Found startCh= {startCh}");  //TODO: zamenit na Result<T>
+            if (startIndex == -1)
+                return Result.Fail<string>($"Not Found startCh= {startCh}");
 
             if(endIndex == -1)
-                throw new ArgumentOutOfRangeException($"Not Found endCh= {endCh}");      //TODO: zamenit na Result<T>
-
+                return Result.Fail<string>($"Not Found endCh= {endCh}");
+            
             if (includeBorder)
             {
                 endIndex += endCh.Length-1;
@@ -178,7 +179,8 @@ namespace Shared.Helpers
                 endIndex -= 1;
             }
             var subStr = str.Substring(startIndex, endIndex - startIndex + 1);
-            return subStr;
+
+            return Result.Ok(subStr);
         }
     }
 }

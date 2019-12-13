@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using CSharpFunctionalExtensions;
 
 namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
 {
     public class DependentInseartsService
     {
         #region fields
-        private readonly Func<string, string, string>[] _replacementHandlers;
+        private readonly Func<string, string, Result<string>>[] _replacementHandlers;
         #endregion
 
 
         #region ctor
-        public DependentInseartsService(params Func<string, string, string>[] replacementHandlers)
+        private DependentInseartsService(params Func<string, string, Result<string>>[] replacementHandlers)
         {
             if(replacementHandlers == null || !replacementHandlers.Any())
                 throw new ArgumentException("replacementHandlers не может быть пустым");
@@ -23,11 +24,10 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
         #endregion
 
 
-
         #region Methode
         public static DependentInseartsService DependentInseartsServiceFactory(string str)
         {
-            var replacementHandlers = new List<Func<string, string, string>>();
+            var replacementHandlers = new List<Func<string, string, Result<string>>>();
 
             if (Regex.Match(str, "{NumberOfCharacters:(.*)}").Success)
                 replacementHandlers.Add(DependentInseartHandlers.NumberOfCharactersInseartHandler);
@@ -45,13 +45,16 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
         }
 
 
-        public string ExecuteInseart(string str, string format)
+        public Result<string> ExecuteInseart(string str, string format)
         {
             foreach (var handler in _replacementHandlers)
             {
-                str= handler(str, format);
+               var res= handler(str, format);
+               if (res.IsFailure)
+                   return res;
+               str = res.Value;
             }
-            return str;
+            return Result.Ok(str);
         }
         #endregion
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InseartServices.DependentInsearts;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts;
@@ -114,13 +115,17 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     RequestTransfer<TIn> request;
                     try
                     {
-                        request = CreateRequestTransfer4Data(batch, startItemIndex); //TODO: obrabotat Result<T>. Exception only for unhandled erros
-                        if (request == null)
+                        var (_, isFailure, value, error) = CreateRequestTransfer4Data(batch, startItemIndex);
+                        if (isFailure)
+                        {
+                            _logger.Warning(error);
                             continue;
+                        }
+                        request = value;
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error($"Ошибка формирования запроса или ответа ViewRuleId= {_option.Id}    {ex}");
+                        _logger.Error($"neizvestnaya Ошибка формирования запроса или ответа ViewRuleId= {_option.Id}   {ex}"); //????
                         continue;
                     }
 
@@ -177,7 +182,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Создать Запрос (используя форматную строку RequestOption) из одного батча данных.
         /// </summary>
-        private RequestTransfer<TIn> CreateRequestTransfer4Data(IEnumerable<TIn> batch, int startItemIndex) //TODO: return Result<T>
+        private Result<RequestTransfer<TIn>> CreateRequestTransfer4Data(IEnumerable<TIn> batch, int startItemIndex) //TODO: return Result<T>
         {
             var items = batch.ToList();
             var format = _option.RequestOption.Format;
@@ -197,28 +202,36 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var sbAppendResult = new StringBuilder().Append(_headerExecuteInseartsResult).Append(sbBodyResult).Append(_footerExecuteInseartsResult);
             var appendResultStr = sbAppendResult.ToString(); //TODO: Переход к старому коду зависимой вставки. Нужно его переделать на работу с StringBuilder
 
-            //DEPENDENT insearts----------------------------------------------------------------------------------
-            var res = _requestDependentInseartsService?.ExecuteInseart(appendResultStr, format) ?? appendResultStr;
-
-            //CHECK LIMIT----------------------------------------------------------------------------------------
-            var limitRes = res.CheckLimitLenght(maxBodyLenght);
-            if (limitRes.res)
+            //DEPENDENT insearts------------------------------------------------------------------------------------------------------
+            string str = appendResultStr;
+            if (_requestDependentInseartsService != null)
             {
-                _logger.Warning($"Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на {limitRes.OutOfLimit}");
-                return null;
+                var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInseart(appendResultStr, format);
+                if (isFailure)
+                {
+                    return Result.Fail<RequestTransfer<TIn>>(error);
+                }
+                str = value;
             }
 
-            //FORMAT SWITCHER-------------------------------------------------------------------------------------
-            var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(res, format);
+            //CHECK LIMIT---------------------------------------------------------------------------------------------------------------
+            var (res, outOfLimit) = str.CheckLimitLenght(maxBodyLenght);
+            if (res)
+            {
+                return Result.Fail<RequestTransfer<TIn>>($"Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на {outOfLimit}");
+            }
+
+            //FORMAT SWITCHER------------------------------------------------------------------------------------------------------------
+            var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
 
             //ФОРМИРОВАНИЕ ОБЪЕКТА ЗАПРОСА.------------------------------------------------------------------------------------------------
             var request = new RequestTransfer<TIn>(_option.RequestOption)
             {
-                StrRepresentBase = new StringRepresentation(res, format),
+                StrRepresentBase = new StringRepresentation(str, format),
                 StrRepresent = new StringRepresentation(newStr, newFormat),
                 ProcessedItemsInBatch = new ProcessedItemsInBatch<TIn>(startItemIndex, items.Count, processedItems)
             };
-            return request;
+            return Result.Ok(request);
         }
 
 
@@ -236,15 +249,25 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var appendResultStr = sbAppendResult.ToString(); //TODO: Переход к старому коду зависимой вставки. Нужно его переделать на работу с StringBuilder
 
             //DEPENDENT insearts----------------------------------------------------------------------------------
-            var res = _requestDependentInseartsService?.ExecuteInseart(appendResultStr, format) ?? appendResultStr;
+            string str = appendResultStr;
+            if (_requestDependentInseartsService != null)
+            {
+                var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInseart(appendResultStr, format);
+                if (isFailure)
+                {
+                    _logger.Error(error);
+                    return null;
+                }
+                str = value;
+            }
 
             //FORMAT SWITCHER-------------------------------------------------------------------------------------
-            var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(res, format);
+            var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
 
-            //ФОРМИРОВАНИЕ ОБЪЕКТА ЗАПРОСА.------------------------------------------------------------------------------------------------
+            //ФОРМИРОВАНИЕ ОБЪЕКТА ЗАПРОСА.-----------------------------------------------------------------------
             var request = new RequestTransfer<TIn>(_option.RequestOption)
             {
-                StrRepresentBase = new StringRepresentation(res, format),
+                StrRepresentBase = new StringRepresentation(str, format),
                 StrRepresent = new StringRepresentation(newStr, newFormat)
             };
 
@@ -266,15 +289,25 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var appendResultStr = sbBodyResult.ToString();
 
             //DEPENDENT insearts-----------------------------------------------------------------------------------------------------------
-            var res = responseDependentInseartsService?.ExecuteInseart(appendResultStr, format) ?? appendResultStr;
+            string str = appendResultStr;
+            if (_requestDependentInseartsService != null)
+            {
+                var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInseart(appendResultStr, format);
+                if (isFailure)
+                {
+                    _logger.Error(error);
+                    return null;
+                }
+                str = value;
+            }
 
             //FORMAT SWITCHER--------------------------------------------------------------------------------------------------------------
-            var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(res, format);
+            var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
 
             //ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.--------------------------------------------------------------------------------------------------
             var response = new ResponseTransfer(_option.ResponseOption)
             {
-                StrRepresentBase = new StringRepresentation(res, format),
+                StrRepresentBase = new StringRepresentation(str, format),
                 StrRepresent = new StringRepresentation(newStr, newFormat)
             };
             return response;
