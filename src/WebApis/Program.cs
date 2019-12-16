@@ -11,11 +11,19 @@ namespace WebApiSwc
     {
         public static void Main(string[] args)
         {
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += CurrentDomain_UnhandledException; ;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             ViewVersionOnConsole();
             BuildWebHost(args).Run();
         }
 
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception) args.ExceptionObject;
+            Console.WriteLine("MyHandler caught : " + e.Message);
+            Console.WriteLine("Runtime terminating: {0}", args.IsTerminating);
+        }
 
         public static void ViewVersionOnConsole()
         {

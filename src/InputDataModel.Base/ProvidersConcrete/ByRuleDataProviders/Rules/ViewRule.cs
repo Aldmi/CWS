@@ -27,7 +27,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         #region fields
         private const string Pattern = @"\{(.*?)(:.+?)?\}";
         private readonly string _addressDevice;
-        private readonly ViewRuleOption _option;
         private readonly ILogger _logger;
 
         private readonly StringBuilder _headerExecuteInseartsResult;                         //Строка Header после IndependentInserts
@@ -44,23 +43,27 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         public ViewRule(string addressDevice, ViewRuleOption option, IIndependentInsertsHandler inTypeIndependentInsertsHandler, ILogger logger)
         {
             _addressDevice = addressDevice;
-            _option = option;
+            GetCurrentOption = option;
             _logger = logger;
 
-            var requestHeaderParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(_option.RequestOption.Header, Pattern);
-            _requestBodyParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(_option.RequestOption.Body, Pattern, inTypeIndependentInsertsHandler);
-            var requesFooterParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(_option.RequestOption.Footer, Pattern);
+            var requestHeaderParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(GetCurrentOption.RequestOption.Header, Pattern, logger);
+            _requestBodyParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(GetCurrentOption.RequestOption.Body, Pattern, logger, inTypeIndependentInsertsHandler);
+            var requesFooterParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(GetCurrentOption.RequestOption.Footer, Pattern, logger);
             _headerExecuteInseartsResult = requestHeaderParserModel.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", _addressDevice } }).result;
             _footerExecuteInseartsResult = requesFooterParserModel.ExecuteInsearts(null).result;
-            _requestDependentInseartsService = DependentInseartsService.DependentInseartsServiceFactory(_option.RequestOption.Header + _option.RequestOption.Body + _option.RequestOption.Footer);
-            _responseTransfer = CreateResponseTransfer();
+
+            _requestDependentInseartsService = DependentInseartsService.DependentInseartsServiceFactory(GetCurrentOption.RequestOption.Header + GetCurrentOption.RequestOption.Body + GetCurrentOption.RequestOption.Footer);
+
+           var (_, isFailure, responseTransfer, error) = CreateResponseTransfer();
+           if(isFailure) throw new ArgumentException(error);
+           _responseTransfer = responseTransfer;
         }
         #endregion
 
 
 
         #region prop
-        public ViewRuleOption GetCurrentOption => _option;
+        public ViewRuleOption GetCurrentOption { get; }
         #endregion
 
 
@@ -81,9 +84,9 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             else
             {
                 int numberOfBatch = 0;
-                foreach (var batch in viewedItems.Batch(_option.BatchSize))
+                foreach (var batch in viewedItems.Batch(GetCurrentOption.BatchSize))
                 {
-                    var startItemIndex = _option.StartPosition + (numberOfBatch++ * _option.BatchSize);
+                    var startItemIndex = GetCurrentOption.StartPosition + (numberOfBatch++ * GetCurrentOption.BatchSize);
 
                     #region РЕАЛИЗАЦИЯ СПИСКА ЗАПРОС/ОТВЕТ ДЛЯ КАЖДОГО ViewRule (SendingUnitList)
 
@@ -125,7 +128,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error($"neizvestnaya Ошибка формирования запроса или ответа ViewRuleId= {_option.Id}   {ex}"); //????
+                        _logger.Error($"neizvestnaya Ошибка формирования запроса или ответа ViewRuleId= {GetCurrentOption.Id}   {ex}"); //????
                         continue;
                     }
 
@@ -148,15 +151,17 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         public ProviderTransfer<TIn> CreateProviderTransfer4Command(Command4Device command)
         {
             //ФОРМИРОВАНИЕ ЗАПРОСА--------------------------------------------------------------------------------------
-            var requestCommand = CreateRequestTransfer4Command();
-
-            //ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.-------------------------------------------------------------------------------
-            var response = CreateResponseTransfer();
+            var (_, isFailureReq, request, error) = CreateRequestTransfer4Command();
+            if (isFailureReq)
+            {
+                _logger.Error($"CreateProviderTransfer4Command ERROR= {error}");
+                return null;
+            }
 
             return new ProviderTransfer<TIn>
             {
-                Request = requestCommand,
-                Response = response,
+                Request = request,
+                Response = _responseTransfer,
                 Command = command
             };
         }
@@ -170,7 +175,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         {
             try
             {
-                return items.GetRange(_option.StartPosition, _option.Count);
+                return items.GetRange(GetCurrentOption.StartPosition, GetCurrentOption.Count);
             }
             catch (Exception)
             {
@@ -185,8 +190,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         private Result<RequestTransfer<TIn>> CreateRequestTransfer4Data(IEnumerable<TIn> batch, int startItemIndex) //TODO: return Result<T>
         {
             var items = batch.ToList();
-            var format = _option.RequestOption.Format;
-            var maxBodyLenght = _option.RequestOption.MaxBodyLenght;
+            var format = GetCurrentOption.RequestOption.Format;
+            var maxBodyLenght = GetCurrentOption.RequestOption.MaxBodyLenght;
 
             //INDEPENDENT insearts-------------------------------------------------------------------------------
             var processedItems = new List<ProcessedItem<TIn>>();
@@ -221,11 +226,16 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 return Result.Fail<RequestTransfer<TIn>>($"Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на {outOfLimit}");
             }
 
+            //CHECK RESULT STRING--------------------------------------------------------------------------------
+            var (_, f, _, e) = CheckResultString(str);
+            if(f)
+                return Result.Fail<RequestTransfer<TIn>>(e);
+
             //FORMAT SWITCHER------------------------------------------------------------------------------------------------------------
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
 
             //ФОРМИРОВАНИЕ ОБЪЕКТА ЗАПРОСА.------------------------------------------------------------------------------------------------
-            var request = new RequestTransfer<TIn>(_option.RequestOption)
+            var request = new RequestTransfer<TIn>(GetCurrentOption.RequestOption)
             {
                 StrRepresentBase = new StringRepresentation(str, format),
                 StrRepresent = new StringRepresentation(newStr, newFormat),
@@ -239,9 +249,9 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// Создать запрос для комманды.
         /// </summary>
         /// <returns></returns>
-        private RequestTransfer<TIn> CreateRequestTransfer4Command()
+        private Result<RequestTransfer<TIn>>  CreateRequestTransfer4Command()
         {
-            var format = _option.RequestOption.Format;
+            var format = GetCurrentOption.RequestOption.Format;
 
             //INDEPENDENT insearts-------------------------------------------------------------------------------
             var (sbBodyResult, _) = _requestBodyParserModel.ExecuteInsearts(null);
@@ -255,34 +265,36 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInseart(appendResultStr, format);
                 if (isFailure)
                 {
-                    _logger.Error(error);
-                    return null;
+                    return Result.Fail<RequestTransfer<TIn>>(error);
                 }
                 str = value;
             }
+
+            //CHECK RESULT STRING--------------------------------------------------------------------------------
+            var (_, f, _, e) = CheckResultString(str);
+            if(f)
+                return Result.Fail<RequestTransfer<TIn>>(e);
 
             //FORMAT SWITCHER-------------------------------------------------------------------------------------
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
 
             //ФОРМИРОВАНИЕ ОБЪЕКТА ЗАПРОСА.-----------------------------------------------------------------------
-            var request = new RequestTransfer<TIn>(_option.RequestOption)
+            var request = new RequestTransfer<TIn>(GetCurrentOption.RequestOption)
             {
                 StrRepresentBase = new StringRepresentation(str, format),
                 StrRepresent = new StringRepresentation(newStr, newFormat)
             };
-
-            return request;
+            return Result.Ok(request);
         }
 
 
         /// <summary>
         /// Создать строку Ответа (используя форматную строку ResponseOption).
         /// </summary>
-        private ResponseTransfer CreateResponseTransfer()
+        private Result<ResponseTransfer> CreateResponseTransfer()
         {
-            var format = _option.ResponseOption.Format;
-            var responseBodyParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(_option.ResponseOption.Body, Pattern);
-            var responseDependentInseartsService = DependentInseartsService.DependentInseartsServiceFactory(_option.RequestOption.Header + _option.RequestOption.Body + _option.RequestOption.Footer);
+            var format = GetCurrentOption.ResponseOption.Format;
+            var responseBodyParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(GetCurrentOption.ResponseOption.Body, Pattern, _logger);
 
             //INDEPENDENT insearts---------------------------------------------------------------------------------------------------------
             var (sbBodyResult, _) = responseBodyParserModel.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", _addressDevice } });
@@ -295,23 +307,41 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInseart(appendResultStr, format);
                 if (isFailure)
                 {
-                    _logger.Error(error);
-                    return null;
+                    return Result.Fail<ResponseTransfer>(error);
                 }
                 str = value;
             }
+
+            //CHECK RESULT STRING---------------------------------------------------------------------------------------------------------
+            var (_, f, _, e) = CheckResultString(str);
+            if(f)
+                return Result.Fail<ResponseTransfer>(e);
 
             //FORMAT SWITCHER--------------------------------------------------------------------------------------------------------------
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
 
             //ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.--------------------------------------------------------------------------------------------------
-            var response = new ResponseTransfer(_option.ResponseOption)
+            var response = new ResponseTransfer(GetCurrentOption.ResponseOption)
             {
                 StrRepresentBase = new StringRepresentation(str, format),
                 StrRepresent = new StringRepresentation(newStr, newFormat)
             };
-            return response;
+            return Result.Ok(response);
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private Result<string> CheckResultString(string str)
+        {
+            if(str.Contains("{") || str.Contains("}"))
+            {
+                return Result.Fail<string>(@"str contains {  or  }!!!");
+            }
+            return Result.Ok(str);
+        }
+
         #endregion
     }
 }

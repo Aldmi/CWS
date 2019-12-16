@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Shared.Extensions;
+using Shared.Helpers;
 using Shared.Mathematic;
 
 namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers
 {
     public class RowNumberIndependentInsertsHandler : IIndependentInsertsHandler
     {
-        public string CalcInserts(IndependentInsertModel inseart, object inData)
+        public string CalcInserts(StringInsertModel inseart, object inData)
         {
             if (!(inData is Dictionary<string, string> dict))
                 return null;

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts;
+using Shared.Helpers;
 
 namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
 {
@@ -28,6 +30,13 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
         public static DependentInseartsService DependentInseartsServiceFactory(string str)
         {
             var replacementHandlers = new List<Func<string, string, Result<string>>>();
+
+            StringInsertModel inseart = null; //TODO:
+            if (inseart.VarName == "NumberOfCharacters")
+            {
+                replacementHandlers.Add(DependentInseartHandlers.NumberOfCharactersInseartHandler);
+            }
+
 
             if (Regex.Match(str, "{NumberOfCharacters:(.*)}").Success)
                 replacementHandlers.Add(DependentInseartHandlers.NumberOfCharactersInseartHandler);

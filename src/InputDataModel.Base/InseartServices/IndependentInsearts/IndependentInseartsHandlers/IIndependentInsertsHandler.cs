@@ -1,7 +1,9 @@
-﻿namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers
+﻿using Shared.Helpers;
+
+namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers
 {
     public interface IIndependentInsertsHandler
     {
-        string CalcInserts(IndependentInsertModel inseart, object inData);
+        string CalcInserts(StringInsertModel inseart, object inData);
     }
 }

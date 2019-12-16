@@ -120,7 +120,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 {
                     //КОМАНДА-------------------------------------------------------------
                     case RuleSwitcher4InData.CommandHanler:
-                        ViewRuleSendCommand(rule, inData.Command);
+                        SendCommand(rule, inData.Command);
                         continue;
 
                     //ДАННЫЕ ДЛЯ УКАЗАНОГО RULE--------------------------------------------
@@ -129,7 +129,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                             ?.Order(ruleOption.OrderBy, _logger)
                             ?.TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
                             ?.ToList();
-                        await ViewRuleSendDataAsync(rule, takesItems, ct);
+                        await SendDataAsync(rule, takesItems, ct);
                         continue;
 
                     //ДАННЫЕ--------------------------------------------------------------  
@@ -141,7 +141,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                         takesItems = filtredItems.Order(ruleOption.OrderBy, _logger)
                             .TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
                             .ToList();
-                        await ViewRuleSendDataAsync(rule, takesItems, ct);
+                        await SendDataAsync(rule, takesItems, ct);
                         continue;
 
                     default:
@@ -157,7 +157,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         /// <summary>
         /// Отобразить данные через коллекцию ViewRules у правила.
         /// </summary>
-        private async Task ViewRuleSendDataAsync(Rule<TIn> rule, List<TIn> takesItems, CancellationToken ct)
+        private async Task SendDataAsync(Rule<TIn> rule, List<TIn> takesItems, CancellationToken ct)
         {
             if (takesItems != null && takesItems.Any())
             {
@@ -184,10 +184,13 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         /// <summary>
         /// Отправить команду через первое ViewRule.
         /// </summary>
-        private void ViewRuleSendCommand(Rule<TIn> rule, Command4Device command)
+        private void SendCommand(Rule<TIn> rule, Command4Device command)
         {
             var commandViewRule = rule.GetViewRules.FirstOrDefault();
             var providerTransfer = commandViewRule?.CreateProviderTransfer4Command(command);
+            if(providerTransfer == null)
+                return;
+
             StatusDict["Command"] = $"{command}";
             StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
             StatusDict["viewRule.Id"] = $"{commandViewRule.GetCurrentOption.Id}";

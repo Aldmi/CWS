@@ -1,17 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers;
 using MoreLinq;
+using Serilog;
+using Shared.Helpers;
 
 namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts
 {
     public class IndependentInsertsService
     {
         #region field
-        private readonly string _baseString; 
-        private readonly Dictionary<string, IndependentInsertModel> _dict;          //Объектное преставление строки _baseString
+        private readonly string _baseString;
+        private readonly ILogger _logger;
+        private readonly Dictionary<string, StringInsertModel> _dict;          //Объектное преставление строки _baseString
         private readonly IIndependentInsertsHandler[] _independentInsertsHandler;   //Коллекция обработчиков для значений из _dict
         #endregion
 
@@ -20,28 +24,24 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts
         /// <summary>
         /// Конструктор только для Default вставок
         /// </summary>
-        public IndependentInsertsService(string baseString,
-            string pattern, 
-           params IIndependentInsertsHandler[] independentInsertsHandler) : this(baseString, pattern)
+        private IndependentInsertsService(string baseString, string pattern, ILogger logger, params IIndependentInsertsHandler[] independentInsertsHandler) : this(baseString, pattern, logger)
         {
             _independentInsertsHandler = independentInsertsHandler;
         }
 
-        private IndependentInsertsService(string baseString, string pattern)
+        private IndependentInsertsService(string baseString, string pattern, ILogger logger)
         {
             _baseString = baseString;
-            _dict = ConvertString2IndependentInseartCollection(baseString, pattern)
-                .DistinctBy(insert => insert.Replacement)
-                .ToDictionary(insert => insert.VarName, insert => insert);
+            _logger = logger;
+            _dict = HelperStringFormatInseart.CreateInseartDict(baseString, pattern);
         }
         #endregion
 
 
         #region Methode
-        public static IndependentInsertsService IndependentInsertsParserModelFactory(string str, string pattern, IIndependentInsertsHandler inTypeHandler = null)
+        public static IndependentInsertsService IndependentInsertsParserModelFactory(string str, string pattern, ILogger logger, IIndependentInsertsHandler inTypeHandler = null)
         {
             var independentInsertsHandlers = new List<IIndependentInsertsHandler>();
-
             if (inTypeHandler != null)
             {
                 independentInsertsHandlers.Add(inTypeHandler);
@@ -53,9 +53,7 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts
             if (str.Contains("rowNumber"))
                 independentInsertsHandlers.Add(new RowNumberIndependentInsertsHandler());
 
-           
-
-            return new IndependentInsertsService(str, pattern, independentInsertsHandlers.ToArray());
+            return new IndependentInsertsService(str, pattern, logger, independentInsertsHandlers.ToArray());
         }
 
 
@@ -79,7 +77,18 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts
                 {
                     foreach (var inData in inDatas)
                     {
-                        var replacementValue = handler.CalcInserts(insert, inData);
+                        string replacementValue;
+                        try
+                        {
+                            replacementValue = handler.CalcInserts(insert, inData);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Error(ex, "IndependentInsertsService.ExecuteInsearts Exception");
+                            replacementValue = null;
+                            // throw;
+                        }
+                        
                         if (replacementValue == null) continue;
                         sb.Replace(insert.Replacement, replacementValue);
                         inseartedDict.Add(insert.VarName, replacementValue);
@@ -91,15 +100,6 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts
             return (result: sb, inseartedDict: inseartedDict);
         }
 
-
-        private static IEnumerable<IndependentInsertModel> ConvertString2IndependentInseartCollection(string str, string pattern)
-        {
-            //var pattern = @"\{(.*?)(:.+?)?\}";
-            var matches = Regex.Matches(str, pattern)
-                .Select(match => new IndependentInsertModel(match.Groups[0].Value, match.Groups[1].Value, match.Groups[2].Value));
-
-            return matches;
-        }
         #endregion
     }
 }

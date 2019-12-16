@@ -158,60 +158,67 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
         /// <returns></returns>
         public static Result<string> CrcInseartHandler(string str, string format)
         {
-            var crcType = Regex.Match(str, "{CRC(.*):(.*)}").Groups[1].Value;
-            var crcOptionInclude = Regex.Match(crcType, "\\[(.*)\\]").Groups[1].Value;  //Xor[0x02-0x03]
-            var crcOptionExclude = Regex.Match(crcType, "\\((.*)\\)").Groups[1].Value;  //Xor(0x02-0x03)
-            var includeBorder = !string.IsNullOrEmpty(crcOptionInclude);
-            var crcOption = includeBorder ? crcOptionInclude : crcOptionExclude;
-            var startEndChars = crcOption.Split('-');
-            var startChar = (startEndChars.Length >= 1) ? startEndChars[0] : String.Empty;
-            var endChar = (startEndChars.Length >= 2) ? startEndChars[1] : String.Empty;
-            
-            string matchString;
-            if (string.IsNullOrEmpty(startChar) && string.IsNullOrEmpty(endChar))
+            try
             {
-                //Не заданны симолы начала и конца подсчета строки CRC. Берем от начала строки до CRC.
-                matchString = Regex.Match(str, "(.*){CRC(.*)}").Groups[1].Value;
+                var crcType = Regex.Match(str, "{CRC(.*):(.*)}").Groups[1].Value;
+                var crcOptionInclude = Regex.Match(crcType, "\\[(.*)\\]").Groups[1].Value;  //Xor[0x02-0x03]
+                var crcOptionExclude = Regex.Match(crcType, "\\((.*)\\)").Groups[1].Value;  //Xor(0x02-0x03)
+                var includeBorder = !string.IsNullOrEmpty(crcOptionInclude);
+                var crcOption = includeBorder ? crcOptionInclude : crcOptionExclude;
+                var startEndChars = crcOption.Split('-');
+                var startChar = (startEndChars.Length >= 1) ? startEndChars[0] : String.Empty;
+                var endChar = (startEndChars.Length >= 2) ? startEndChars[1] : String.Empty;
+
+                string matchString;
+                if (string.IsNullOrEmpty(startChar) && string.IsNullOrEmpty(endChar))
+                {
+                    //Не заданны симолы начала и конца подсчета строки CRC. Берем от начала строки до CRC.
+                    matchString = Regex.Match(str, "(.*){CRC(.*)}").Groups[1].Value;
+                }
+                else
+                {
+                    //Оба симолы начала и конца заданы.
+                    var result = str.SubstringBetweenCharacters(startChar, endChar, includeBorder);
+                    if (result.IsFailure)
+                        return result;
+                    matchString = result.Value;
+                }
+
+                //УБРАТЬ МАРКЕРНЫЕ СИМОЛЫ ИЗ ПОДСЧЕТА CRC
+                matchString = matchString.Replace("\u0002", string.Empty).Replace("\u0003", string.Empty);
+
+                //ВЫЧИСЛИТЬ МАССИВ БАЙТ ДЛЯ ПОДСЧЕТА CRC
+                var crcBytes = HelpersBool.ContainsHexSubStr(matchString) ?
+                    matchString.ConvertStringWithHexEscapeChars2ByteArray(format) :
+                    matchString.ConvertString2ByteArray(format);
+
+                var replacement = $"CRC{crcType}";
+                byte crc = 0x00;
+                switch (crcType)
+                {
+                    case string s when s.Contains("XorInverse"):
+                        crc = CrcCalc.CalcXorInverse(crcBytes);
+                        break;
+
+                    case string s when s.Contains("8Bit"):
+                        crc = CrcCalc.Calc8Bit(crcBytes);
+                        break;
+
+                    case string s when s.Contains("Xor"):
+                        crc = CrcCalc.CalcXor(crcBytes);
+                        break;
+
+                    case string s when s.Contains("Mod256"):
+                        crc = CrcCalc.CalcMod256(crcBytes);
+                        break;
+                }
+                str = string.Format(str.Replace(replacement, "0"), crc);
+                return Result.Ok(str);
             }
-            else
+            catch (Exception ex)
             {
-                //Оба симолы начала и конца заданы.
-                var result= str.SubstringBetweenCharacters(startChar, endChar,includeBorder);
-                if (result.IsFailure)
-                    return result;
-                matchString = result.Value;
+                return Result.Fail<string>($"Error CRC calc {ex}");
             }
-
-            //УБРАТЬ МАРКЕРНЫЕ СИМОЛЫ ИЗ ПОДСЧЕТА CRC
-            matchString = matchString.Replace("\u0002", string.Empty).Replace("\u0003", string.Empty);
-
-            //ВЫЧИСЛИТЬ МАССИВ БАЙТ ДЛЯ ПОДСЧЕТА CRC
-            var crcBytes = HelpersBool.ContainsHexSubStr(matchString) ?
-                matchString.ConvertStringWithHexEscapeChars2ByteArray(format) :
-                matchString.ConvertString2ByteArray(format);
-
-            var replacement = $"CRC{crcType}";
-            byte crc = 0x00;
-            switch (crcType)
-            {
-                case string s when s.Contains("XorInverse"):
-                    crc = CrcCalc.CalcXorInverse(crcBytes);
-                    break;
-
-                case string s when s.Contains("8Bit"):
-                    crc = CrcCalc.Calc8Bit(crcBytes);
-                    break;
-
-                case string s when s.Contains("Xor"):
-                    crc = CrcCalc.CalcXor(crcBytes);
-                    break;
-
-                case string s when s.Contains("Mod256"):
-                    crc = CrcCalc.CalcMod256(crcBytes);
-                    break;
-            }
-            str = string.Format(str.Replace(replacement, "0"), crc);
-            return Result.Ok(str);
         }
     }
 }

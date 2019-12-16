@@ -9,7 +9,7 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsHandlers
 {
     public class AdInputTypeIndependentInsertsHandler : IIndependentInsertsHandler
     {
-        public string CalcInserts(IndependentInsertModel inseart, object inData)
+        public string CalcInserts(StringInsertModel inseart, object inData)
         {
             if (!(inData is AdInputType uit))
                 return null;
@@ -148,7 +148,7 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsHandlers
         }
 
 
-        public static class SharedHandlers
+        private static class SharedHandlers
         {
             /// <summary>
             /// Вставка DateTime по формату
