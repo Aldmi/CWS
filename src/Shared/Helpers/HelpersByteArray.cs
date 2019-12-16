@@ -41,7 +41,7 @@ namespace Shared.Helpers
         /// <param name="str"></param>
         /// <param name="format"></param>
         /// <returns></returns>
-        public static List<byte> ConvertStringWithHexEscapeChars2ByteArray(this string str, string format)
+        public static byte[] ConvertStringWithHexEscapeChars2ByteArray(this string str, string format)
         {
             //УДАЛИТЬ "0x" С КОНЦА СТРОКИ
             if (str.EndsWith("0x"))
@@ -74,7 +74,7 @@ namespace Shared.Helpers
                 var encodedChars = Encoding.GetEncoding(format).GetBytes(new[] { ch });
                 resBufer.AddRange(encodedChars);
             }
-            return resBufer;
+            return resBufer.ToArray();
         }
     }
 }

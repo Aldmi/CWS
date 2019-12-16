@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.ProvidersOption;
-using Domain.InputDataModel.Base.Services;
 using KellermanSoftware.CompareNetObjects;
 using Shared.Types;
 
@@ -58,7 +57,6 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
     {
         #region prop
         public RequestOption Option { get; }
-        public int BodyLenght { get; set; }                   //Размер тела запроса todo: НЕ ИСПОЛЬЗУЕТСЯ ???
         public ProcessedItemsInBatch<TIn> ProcessedItemsInBatch { get; set; }
         #endregion
 
@@ -115,14 +113,14 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
 
 
     /// <summary>
-    /// Единица обработанного элемента входныз данных.
+    /// Единица обработанного элемента входных данных.
     /// </summary>
     public class ProcessedItem<TIn>
     {
         public TIn InDataItem { get; set; }
-        public IndependentInserts InseartedData { get; set; }  //Обработанные и выставленные в протокол данные из InDataItem
+        public Dictionary<string, string> InseartedData { get; set; }  //Обработанные и выставленные в протокол данные из InDataItem
 
-        public ProcessedItem(TIn inDataItem, IndependentInserts inseartedData)
+        public ProcessedItem(TIn inDataItem, Dictionary<string, string> inseartedData)
         {
             InDataItem = inDataItem;
             InseartedData = inseartedData;

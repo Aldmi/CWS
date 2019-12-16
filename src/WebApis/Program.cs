@@ -11,11 +11,19 @@ namespace WebApiSwc
     {
         public static void Main(string[] args)
         {
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += CurrentDomain_UnhandledException; ;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             ViewVersionOnConsole();
             BuildWebHost(args).Run();
         }
 
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception) args.ExceptionObject;
+            Console.WriteLine("MyHandler caught : " + e.Message);
+            Console.WriteLine("Runtime terminating: {0}", args.IsTerminating);
+        }
 
         public static void ViewVersionOnConsole()
         {
@@ -28,8 +36,8 @@ namespace WebApiSwc
 
         public static string GetVersion()
         {
-            const string version = "CWS Ver3.2";
-            return $"{version}  [13.09.2019]  [Reliz. Fix bug in Exchange.LogedResponseInformation]";
+            const string version = "CWS Ver4.5";
+            return $"{version}  [10.12.2019]  [Reliz. Add CrcCalc.Calc8Bit]";
         }
 
 

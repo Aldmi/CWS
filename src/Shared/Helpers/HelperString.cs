@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using CSharpFunctionalExtensions;
 
 namespace Shared.Helpers
 {
@@ -136,6 +137,50 @@ namespace Shared.Helpers
         public static string GetSpaceOrString(this string str)
         {
             return string.IsNullOrEmpty(str) ? " " : str;
+        }
+
+
+        /// <summary>
+        /// Ограничить длинну строки
+        /// </summary>
+        public static (bool res, int OutOfLimit) CheckLimitLenght(this string str, int maxLenght)
+        {
+            var diff= maxLenght - str.Length;
+            return diff >= 0 ? (res: false, 0) : (res: true, diff * -1);
+        }
+
+
+        /// <summary>
+        /// Вернуть подстроку между символами.
+        /// </summary>
+        /// <param name="str">строка</param>
+        /// <param name="startCh">стартовый символ</param>
+        /// <param name="endCh">конечный символ</param>
+        /// <param name="includeBorder">включать ли стартовый и конечный символ в подстроку</param>
+        /// <returns></returns>
+        public static Result<string> SubstringBetweenCharacters(this string str, string startCh, string endCh, bool includeBorder = false)
+        {
+            var startIndex = str.IndexOf(startCh, StringComparison.Ordinal); 
+            var endIndex = str.IndexOf(endCh, StringComparison.Ordinal);
+
+            if (startIndex == -1)
+                return Result.Fail<string>($"Not Found startCh= {startCh}");
+
+            if(endIndex == -1)
+                return Result.Fail<string>($"Not Found endCh= {endCh}");
+            
+            if (includeBorder)
+            {
+                endIndex += endCh.Length-1;
+            }
+            else
+            {
+                startIndex += startCh.Length;
+                endIndex -= 1;
+            }
+            var subStr = str.Substring(startIndex, endIndex - startIndex + 1);
+
+            return Result.Ok(subStr);
         }
     }
 }

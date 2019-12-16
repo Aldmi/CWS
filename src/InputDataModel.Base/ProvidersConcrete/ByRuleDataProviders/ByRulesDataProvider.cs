@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Subjects;
+using System.Threading;
 using System.Threading.Tasks;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response;
-using Domain.InputDataModel.Base.Services;
 using Serilog;
 using Shared.Extensions;
 
@@ -32,7 +33,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         
 
         #region ctor
-        public ByRulesDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> providerResultFactory, ProviderOption providerOption, IIndependentInsertsService independentInsertsService, ILogger logger)
+        public ByRulesDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> providerResultFactory, ProviderOption providerOption, IIndependentInsertsHandler inTypeIndependentInsertsHandler, ILogger logger)
             : base(providerResultFactory, logger)
         {
             _option = providerOption.ByRulesProviderOption;
@@ -40,7 +41,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 throw new ArgumentNullException(providerOption.Name); //TODO: выбросы исключений пометсить в Shared ThrowIfNull(object obj)
 
             ProviderName = providerOption.Name;
-            _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, independentInsertsService, logger)).ToList();
+            _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, inTypeIndependentInsertsHandler, logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(_option.RuleName4DefaultHandle)
                 ? "DefaultHandler"
                 : _option.RuleName4DefaultHandle;
@@ -98,7 +99,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         /// <summary>
         /// Запуск конвеера обработки запрос-ответ для обмена
         /// </summary>
-        public async Task StartExchangePipeline(InDataWrapper<TIn> inData)
+        public async Task StartExchangePipelineAsync(InDataWrapper<TIn> inData, CancellationToken ct)
         {
             //ЕСЛИ ДАННЫХ ДЛЯ ОТПРАВКИ НЕТ (например для Цикл. обмена при старте)
             if (inData == null)
@@ -111,14 +112,15 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 };
             }
             foreach (var rule in GetRules)
-            {
-                StatusDict.Clear();
+            { 
+               ct.ThrowIfCancellationRequested();
+               StatusDict.Clear();
                 var ruleOption = rule.GetCurrentOption();
                 switch (SwitchInDataHandler(inData, ruleOption.Name))
                 {
                     //КОМАНДА-------------------------------------------------------------
                     case RuleSwitcher4InData.CommandHanler:
-                        ViewRuleSendCommand(rule, inData.Command);
+                        SendCommand(rule, inData.Command);
                         continue;
 
                     //ДАННЫЕ ДЛЯ УКАЗАНОГО RULE--------------------------------------------
@@ -127,7 +129,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                             ?.Order(ruleOption.OrderBy, _logger)
                             ?.TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
                             ?.ToList();
-                        ViewRuleSendData(rule, takesItems);
+                        await SendDataAsync(rule, takesItems, ct);
                         continue;
 
                     //ДАННЫЕ--------------------------------------------------------------  
@@ -139,7 +141,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                         takesItems = filtredItems.Order(ruleOption.OrderBy, _logger)
                             .TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
                             .ToList();
-                        ViewRuleSendData(rule, takesItems);
+                        await SendDataAsync(rule, takesItems, ct);
                         continue;
 
                     default:
@@ -155,35 +157,40 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         /// <summary>
         /// Отобразить данные через коллекцию ViewRules у правила.
         /// </summary>
-        private void ViewRuleSendData(Rule<TIn> rule, List<TIn> takesItems)
+        private async Task SendDataAsync(Rule<TIn> rule, List<TIn> takesItems, CancellationToken ct)
         {
             if (takesItems != null && takesItems.Any())
             {
                 StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
                 foreach (var viewRule in rule.GetViewRules)
                 {
-                    foreach (var providerTransfer in viewRule.GetDataRequestString(takesItems))
+                    foreach (var providerTransfer in viewRule.CreateProviderTransfer4Data(takesItems))
                     {
+                        ct.ThrowIfCancellationRequested();
                         if (providerTransfer == null) //правило отображения не подходит под ДАННЫЕ
                             continue;
 
                         StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption.Id}";
-                        StatusDict["Request.BodyLenght"] = $"{providerTransfer.Request.BodyLenght}";
                         var providerResult = ProviderResultFactory(providerTransfer, StatusDict);
                         RaiseSendDataRx.OnNext(providerResult);
                     }
                 }
             }
+
+            await Task.CompletedTask;
         }
 
 
         /// <summary>
         /// Отправить команду через первое ViewRule.
         /// </summary>
-        private void ViewRuleSendCommand(Rule<TIn> rule, Command4Device command)
+        private void SendCommand(Rule<TIn> rule, Command4Device command)
         {
             var commandViewRule = rule.GetViewRules.FirstOrDefault();
-            var providerTransfer = commandViewRule?.GetCommandProviderTransfer(command);
+            var providerTransfer = commandViewRule?.CreateProviderTransfer4Command(command);
+            if(providerTransfer == null)
+                return;
+
             StatusDict["Command"] = $"{command}";
             StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
             StatusDict["viewRule.Id"] = $"{commandViewRule.GetCurrentOption.Id}";

@@ -48,14 +48,6 @@ namespace App.Services.Actions
 
 
 
-        #region prop
-
-        public IIndex<string, Func<ProviderOption, IDataProvider<TIn, ResponseInfo>>> DataProviderFactory { get; set; }  //внедряется через DI
-
-        #endregion
-
-
-
         #region Methode
 
         /// <summary>
@@ -309,8 +301,7 @@ namespace App.Services.Actions
             }
             try
             {
-                var dataProvider = DataProviderFactory[providerOption.Name](providerOption);
-                exchange.SetNewProvider(dataProvider);
+                exchange.SetNewProvider(providerOption);
                 return Result.Ok();
             }
             catch (Exception ex)

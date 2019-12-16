@@ -35,11 +35,13 @@ namespace Domain.Exchange
         private readonly ExchangeOption _option;
         private readonly ITransport _transport;
         private readonly ITransportBackground _transportBackground;
+        private readonly IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, ResponseInfo>>>> _dataProviderFactory;
         private IDataProvider<TIn, ResponseInfo> _dataProvider;                       //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
-        private readonly IDisposable _dataProviderOwner;                              //управляет временем жизни _dataProvider
+        private IDisposable _dataProviderOwner;                                       //управляет временем жизни _dataProvider
         private readonly ILogger _logger;
         private readonly Stopwatch _sw = Stopwatch.StartNew();
         private readonly List<IDisposable> _behaviorOwners;
+        private CancellationTokenSource _ctsStartExchangePipeline; //источник прерывания выполнение конвеера отправки данных
         #endregion
 
 
@@ -107,6 +109,7 @@ namespace Domain.Exchange
             _option = option;
             _transport = transport;
             _transportBackground = transportBackground;
+            _dataProviderFactory = dataProviderFactory;
             var owner= dataProviderFactory[_option.Provider.Name](_option.Provider);
             _dataProviderOwner = owner;
             _dataProvider = owner.Value;
@@ -118,6 +121,7 @@ namespace Domain.Exchange
             CycleBehavior = cycleBehaviorOwner.Value;
             OnceBehavior = onceBehaviorOwner.Value;
             CommandBehavior = commandBehaviorOwner.Value;
+            _ctsStartExchangePipeline = new CancellationTokenSource();
         }
         #endregion
 
@@ -263,11 +267,16 @@ namespace Domain.Exchange
             });
 
             try
-            {   //ЗАПУСК КОНВЕЕРА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ
+            {
+                //ЗАПУСК КОНВЕЕРА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ
                 _sw.Restart();
-                await _dataProvider.StartExchangePipeline(inData);
+                await _dataProvider.StartExchangePipelineAsync(inData, _ctsStartExchangePipeline.Token);
                 _sw.Stop();
-                transportResponseWrapper.TimeAction= _sw.ElapsedMilliseconds;
+                transportResponseWrapper.TimeAction = _sw.ElapsedMilliseconds;
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.Information("{Type} {KeyExchange}", "ОТМЕНА КОНВЕЕРА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ", KeyExchange);
             }
             catch (Exception ex)
             {
@@ -345,9 +354,16 @@ namespace Domain.Exchange
 
 
         #region dataProvider
-        public void SetNewProvider(IDataProvider<TIn, ResponseInfo> provider)
+
+        
+        public void SetNewProvider(ProviderOption option)
         {
-            _dataProvider = provider;
+            _ctsStartExchangePipeline.Cancel();
+            _dataProviderOwner.Dispose();
+            var owner= _dataProviderFactory[option.Name](option);
+            _dataProviderOwner = owner;
+            _dataProvider = owner.Value;
+            _ctsStartExchangePipeline = new CancellationTokenSource();
         }
         #endregion
 
