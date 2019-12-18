@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Domain.InputDataModel.Autodictor.IndependentInseartsHandlers;
+using Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Autodictor.Model;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
 using FluentAssertions;

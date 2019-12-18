@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;

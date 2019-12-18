@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Serilog;
 

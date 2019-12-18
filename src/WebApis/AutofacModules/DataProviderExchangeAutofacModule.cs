@@ -1,10 +1,10 @@
 ﻿using Autofac;
-using Domain.InputDataModel.Autodictor.IndependentInseartsHandlers;
+using Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Autodictor.ProvidersSpecial;
 using Domain.InputDataModel.Autodictor.StronglyTypedResponse;
 using Domain.InputDataModel.Base.InData;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;
 using Domain.InputDataModel.Base.Response;

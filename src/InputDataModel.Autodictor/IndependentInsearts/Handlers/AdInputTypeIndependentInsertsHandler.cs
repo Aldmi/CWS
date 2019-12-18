@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using Domain.InputDataModel.Autodictor.Model;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Shared.Helpers;
 
-namespace Domain.InputDataModel.Autodictor.IndependentInseartsHandlers
+namespace Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers
 {
     public class AdInputTypeIndependentInsertsHandler : IIndependentInsertsHandler
     {
         public string CalcInserts(StringInsertModel inseart, object inData)
         {
             if (!(inData is AdInputType uit))
-                return null;
+                return null; 
 
             var lang = uit.Lang;
             string str;
