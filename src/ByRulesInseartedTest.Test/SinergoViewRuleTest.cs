@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Domain.InputDataModel.Autodictor.IndependentInsearts.Factory;
 using Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
@@ -16,7 +18,7 @@ namespace ByRulesInseartedTest.Test
     public class SinergoViewRuleTest
     {
         private readonly ILogger _logger;
-        private IIndependentInsertsHandler _inTypeIndependentInsertsHandler;
+        private IIndependentInseartsHandlersFactory _inTypeIndependentInsertsHandlerFactory;
 
 
         #region ctor
@@ -28,7 +30,7 @@ namespace ByRulesInseartedTest.Test
             mock.Setup(loger => loger.Warning(""));
             _logger = mock.Object;
 
-            _inTypeIndependentInsertsHandler = new AdInputTypeIndependentInsertsHandler();
+            _inTypeIndependentInsertsHandlerFactory = new AdInputTypeIndependentInseartsHandlersFactory();
         }
         #endregion
 
@@ -61,7 +63,7 @@ namespace ByRulesInseartedTest.Test
                 }
             };
 
-            var viewRule = new ViewRule<AdInputType>(addressDevice, viewRuleOption, _inTypeIndependentInsertsHandler, _logger);
+            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, _inTypeIndependentInsertsHandlerFactory, _logger);
 
             //Act
             var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
@@ -123,7 +125,7 @@ namespace ByRulesInseartedTest.Test
                 }
             };
 
-            var viewRule = new ViewRule<AdInputType>(addressDevice, viewRuleOption, _inTypeIndependentInsertsHandler, _logger);
+            var viewRule = ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, _inTypeIndependentInsertsHandlerFactory, _logger);
 
             //Act
             var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();

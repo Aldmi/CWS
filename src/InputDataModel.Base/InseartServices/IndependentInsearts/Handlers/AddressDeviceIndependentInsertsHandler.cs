@@ -13,10 +13,6 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handler
         public AddressDeviceIndependentInsertsHandler(StringInsertModel insertModel)
         {
             this._insertModel = insertModel;
-
-
-            Result<ValueTuple<string, StringInsertModel>> j = Result.Ok<ValueTuple<string, StringInsertModel>>((null, insertModel));
-
         }
 
         /// <summary>

@@ -80,12 +80,12 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
 
 
-        public ViewRule<TIn> CreateViewRule(string addressDevice, ViewRuleOption option, IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory, ILogger logger)
+        public static ViewRule<TIn> Create(string addressDevice, ViewRuleOption option, IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory, ILogger logger)
         {
             const string pattern = @"\{(.*?)(:.+?)?\}";
-            var header = GetCurrentOption.RequestOption.Header;
-            var body = GetCurrentOption.RequestOption.Body;
-            var footer = GetCurrentOption.RequestOption.Footer;
+            var header = option.RequestOption.Header;
+            var body = option.RequestOption.Body;
+            var footer = option.RequestOption.Footer;
 
             var hRepDict=  HelperStringFormatInseart.CreateInseartDictDistinctByReplacement(header, pattern);
             var bRepDict=  HelperStringFormatInseart.CreateInseartDictDistinctByReplacement(body, pattern);
@@ -142,9 +142,9 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var bIndependentInsHandlers = CalcListIndependentInseartHandlers(bRepDict);
             var fIndependentInsHandlers = CalcListIndependentInseartHandlers(fRepDict);
 
-            var hIndependentInsertsService = new IndependentInsertsService(header, _logger, hIndependentInsHandlers.ToArray());
-            var bIndependentInsertsService = new IndependentInsertsService(body, _logger, bIndependentInsHandlers.ToArray());
-            var fIndependentInsertsService = new IndependentInsertsService(body, _logger, fIndependentInsHandlers.ToArray());
+            var hIndependentInsertsService = new IndependentInsertsService(header, logger, hIndependentInsHandlers.ToArray());
+            var bIndependentInsertsService = new IndependentInsertsService(body, logger, bIndependentInsHandlers.ToArray());
+            var fIndependentInsertsService = new IndependentInsertsService(body, logger, fIndependentInsHandlers.ToArray());
 
             var headerExecuteInseartsResult = hIndependentInsertsService.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } }).result;
             var footerExecuteInseartsResult = fIndependentInsertsService.ExecuteInsearts(null).result;

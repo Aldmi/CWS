@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Serilog;
@@ -27,11 +28,11 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
         #region ctor
 
-        public Rule(RuleOption option, IIndependentInsertsHandler inTypeIndependentInsertsHandler, ILogger logger)
+        public Rule(RuleOption option, IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory, ILogger logger)
         {
             Option = option;
             _logger = logger;
-            _viewRules= option.ViewRules.Select(viewRuleOption=> new ViewRule<TIn>(Option.AddressDevice, viewRuleOption, inTypeIndependentInsertsHandler, _logger)).ToList();
+            _viewRules= option.ViewRules.Select(viewRuleOption=> ViewRule<TIn>.Create(Option.AddressDevice, viewRuleOption, inputTypeInseartsHandlersFactory, _logger)).ToList();
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Shared.Helpers;
@@ -187,6 +188,11 @@ namespace Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers
                 var format = "{0" + formatValue + "}";
                 return string.Format(format, val);
             }
+        }
+
+        public Result<(string, StringInsertModel)> CalcInserts(object inData)
+        {
+            throw new NotImplementedException();
         }
     }
 }
