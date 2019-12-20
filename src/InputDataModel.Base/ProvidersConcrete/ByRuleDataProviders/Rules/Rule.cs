@@ -4,6 +4,7 @@ using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Serilog;
+using Shared.Services.StringInseartService;
 
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 {

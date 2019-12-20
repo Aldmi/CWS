@@ -10,6 +10,7 @@ using Domain.InputDataModel.Base.ProvidersOption;
 using FluentAssertions;
 using Moq;
 using Serilog;
+using Shared.Services.StringInseartService;
 using Xunit;
 
 namespace ByRulesInseartedTest.Test

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InseartServices.DependentInsearts;
@@ -14,6 +13,7 @@ using Domain.InputDataModel.Base.ProvidersOption;
 using Serilog;
 using Shared.Extensions;
 using Shared.Helpers;
+using Shared.Services.StringInseartService;
 using Shared.Types;
 
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
@@ -75,7 +75,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             _responseTransfer = responseTransfer;
             _logger = logger;
         }
-
         #endregion
 
 
@@ -87,64 +86,16 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var body = option.RequestOption.Body;
             var footer = option.RequestOption.Footer;
 
-            var hRepDict=  HelperStringFormatInseart.CreateInseartDictDistinctByReplacement(header, pattern);
-            var bRepDict=  HelperStringFormatInseart.CreateInseartDictDistinctByReplacement(body, pattern);
-            var fRepDict=  HelperStringFormatInseart.CreateInseartDictDistinctByReplacement(footer, pattern);
-
-            var baseHandlersFactory = new BaseIndependentInseartsHandlersFactory();
-            var creates= new List< Func<StringInsertModel, IIndependentInsertsHandler>>
+            //список фабрик по создающих нужные обработчики
+            var handlerFactorys= new List<Func<StringInsertModel, IIndependentInsertsHandler>>
             {
                 new BaseIndependentInseartsHandlersFactory().Create,
                 inputTypeInseartsHandlersFactory.Create
             };
 
-            List<IIndependentInsertsHandler> CalcListIndependentInseartHandlers(Dictionary<string, StringInsertModel> dict)
-            {
-                var handlers = new List<IIndependentInsertsHandler>();
-                foreach (var (_, value) in dict)
-                {
-                    foreach (var create in creates)
-                    {
-                        var handler = create(value);
-                        if (handler != null)
-                        {
-                            handlers.Add(handler);
-                            break;
-                        }
-                    }
-                }
-                return handlers;
-            }
-
-
-            //DEL
-            //List<IIndependentInsertsHandler> CalcListIndependentInseartHandlers(Dictionary<string, StringInsertModel> dict)
-            //{
-            //    var handlers = new List<IIndependentInsertsHandler>();
-            //    foreach (var (_, value) in dict)
-            //    {
-            //        var handler = baseHandlersFactory.Create(value);
-            //        if (handler != null)
-            //        {
-            //            handlers.Add(handler);
-            //            continue;
-            //        }
-            //        handler = inputTypeInseartsHandlersFactory.Create(value);
-            //        if (handler != null)
-            //        {
-            //            handlers.Add(handler);
-            //        }
-            //    }
-            //    return handlers;
-            //}
-
-            var hIndependentInsHandlers = CalcListIndependentInseartHandlers(hRepDict);
-            var bIndependentInsHandlers = CalcListIndependentInseartHandlers(bRepDict);
-            var fIndependentInsHandlers = CalcListIndependentInseartHandlers(fRepDict);
-
-            var hIndependentInsertsService = new IndependentInsertsService(header, logger, hIndependentInsHandlers.ToArray());
-            var bIndependentInsertsService = new IndependentInsertsService(body, logger, bIndependentInsHandlers.ToArray());
-            var fIndependentInsertsService = new IndependentInsertsService(body, logger, fIndependentInsHandlers.ToArray());
+            var hIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(header, pattern, handlerFactorys, logger);
+            var bIndependentInsertsService =IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, pattern, handlerFactorys, logger);
+            var fIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(footer, pattern, handlerFactorys, logger);
 
             var headerExecuteInseartsResult = hIndependentInsertsService.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } }).result;
             var footerExecuteInseartsResult = fIndependentInsertsService.ExecuteInsearts(null).result;
@@ -154,7 +105,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var viewRule= new ViewRule<TIn>(option, headerExecuteInseartsResult, bIndependentInsertsService, footerExecuteInseartsResult, requestDependentInseartsService, null, logger);
             return viewRule;
         }
-
 
 
 

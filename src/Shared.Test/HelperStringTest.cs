@@ -59,54 +59,54 @@ namespace Shared.Test
        #region TheoryData
         public static IEnumerable<object[]>  SubstringBetweenCharactersDatas => new[]
         {
-            //new object[]
-            //{
-            //    "0xFF0xFF0x020x1B0x57Москва0x094560x090x0x1F0x03",
-            //    "0x02",
-            //    "0x03",
-            //    "0x020x1B0x57Москва0x094560x090x0x1F0x03",
-            //    "0x1B0x57Москва0x094560x090x0x1F"
-            //},
-            //new object[]
-            //{
-            //    "0x02001122333440x03",
-            //    "0x02",
-            //    "0x03",
-            //    "0x02001122333440x03",
-            //    "00112233344"
-            //},
-            //new object[]
-            //{
-            //    "00112233340x0240x03",
-            //    "0x02",
-            //    "0x03",
-            //    "0x0240x03",
-            //    "4"
-            //},
-            //new object[]
-            //{
-            //    "00112233340x40x020x03",
-            //    "0x02",
-            //    "0x03",
-            //    "0x020x03",
-            //    ""
-            //},
-            //new object[]
-            //{
-            //    "0*12233340x40x02-0x03",
-            //    "*",
-            //    "-",
-            //    "*12233340x40x02-",
-            //    "12233340x40x02"
-            //},
-            //new object[]
-            //{
-            //    "0*12233340x40x02-",
-            //    "*",
-            //    "-",
-            //    "*12233340x40x02-",
-            //    "12233340x40x02"
-            //},
+            new object[]
+            {
+                "0xFF0xFF0x020x1B0x57Москва0x094560x090x0x1F0x03",
+                "0x02",
+                "0x03",
+                "0x020x1B0x57Москва0x094560x090x0x1F0x03",
+                "0x1B0x57Москва0x094560x090x0x1F"
+            },
+            new object[]
+            {
+                "0x02001122333440x03",
+                "0x02",
+                "0x03",
+                "0x02001122333440x03",
+                "00112233344"
+            },
+            new object[]
+            {
+                "00112233340x0240x03",
+                "0x02",
+                "0x03",
+                "0x0240x03",
+                "4"
+            },
+            new object[]
+            {
+                "00112233340x40x020x03",
+                "0x02",
+                "0x03",
+                "0x020x03",
+                ""
+            },
+            new object[]
+            {
+                "0*12233340x40x02-0x03",
+                "*",
+                "-",
+                "*12233340x40x02-",
+                "12233340x40x02"
+            },
+            new object[]
+            {
+                "0*12233340x40x02-",
+                "*",
+                "-",
+                "*12233340x40x02-",
+                "12233340x40x02"
+            },
             new object[]
             {
                 "00xffaa12233340x40xffbbx02-",
@@ -118,14 +118,14 @@ namespace Shared.Test
 
 
 
-            //new object[]                      // endCh Not found 
-            //{
-            //    "00112233340x40x02",
-            //    "0x02",
-            //    "0x03",
-            //    "0x020x03",
-            //    ""
-            //},
+            new object[]                      // endCh Not found 
+            {
+                "00112233340x40x02",
+                "0x02",
+                "0x03",
+                "0x020x03",
+                ""
+            },
             //new object[]                       // startCh Not found 
             //{ 
             //    "00112233340x40x03",
@@ -139,7 +139,6 @@ namespace Shared.Test
         #endregion
 
 
-
         [Theory]
         [MemberData(nameof(SubstringBetweenCharactersDatas))]
         public void SubstringBetweenCharactersTest(string str, string startCh, string endCh, string expectedStrIncludeBorder, string expectedStrExcludeBorder)
@@ -149,8 +148,54 @@ namespace Shared.Test
             var resExcludeBorder = str.SubstringBetweenCharacters(startCh, endCh, false);
 
             //Asert
-            resIncludeBorder.Should().Be(expectedStrIncludeBorder);
-            resExcludeBorder.Should().Be(expectedStrExcludeBorder);
+            resIncludeBorder.IsSuccess.Should().BeTrue();
+            resExcludeBorder.IsSuccess.Should().BeTrue();
+
+            resIncludeBorder.Value.Should().Be(expectedStrIncludeBorder);
+            resExcludeBorder.Value.Should().Be(expectedStrExcludeBorder);
+        }
+
+
+        [Fact]
+        public void SubstringBetweenCharactersEndChNotFoundTest()
+        {
+            //Arrange
+            var str = "00112233340x40x02";
+            string startCh = "0x02";
+            string endCh = "0x03";
+
+            //Act
+            var resIncludeBorder = str.SubstringBetweenCharacters(startCh, endCh, true);
+            var resExcludeBorder = str.SubstringBetweenCharacters(startCh, endCh, false);
+
+            //Asert
+            resIncludeBorder.IsFailure.Should().BeTrue();
+            resExcludeBorder.IsFailure.Should().BeTrue();
+
+            resIncludeBorder.Error.Should().Be($"Not Found endCh= {endCh}");
+            resExcludeBorder.Error.Should().Be($"Not Found endCh= {endCh}");
+        }
+
+
+        
+        [Fact]
+        public void SubstringBetweenCharactersStartChNotFoundTest()
+        {
+            //Arrange
+            var str = "00112233340x40x05hgh0x03";
+            string startCh = "0x02";
+            string endCh = "0x03";
+
+            //Act
+            var resIncludeBorder = str.SubstringBetweenCharacters(startCh, endCh, true);
+            var resExcludeBorder = str.SubstringBetweenCharacters(startCh, endCh, false);
+
+            //Asert
+            resIncludeBorder.IsFailure.Should().BeTrue();
+            resExcludeBorder.IsFailure.Should().BeTrue();
+
+            resIncludeBorder.Error.Should().Be($"Not Found startCh= {startCh}");
+            resExcludeBorder.Error.Should().Be($"Not Found startCh= {startCh}");
         }
 
     }

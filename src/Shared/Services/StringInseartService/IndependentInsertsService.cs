@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
-using MoreLinq;
 using Serilog;
 using Shared.Helpers;
 
-namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts
+namespace Shared.Services.StringInseartService
 {
     public class IndependentInsertsService
     {
@@ -30,26 +25,6 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts
 
 
         #region Methode
-        //DEL
-        //public static IndependentInsertsService IndependentInsertsParserModelFactory(string str, string pattern, ILogger logger, IIndependentInsertsHandler inTypeHandler = null)
-        //{
-        //    var independentInsertsHandlers = new List<IIndependentInsertsHandler>();
-        //    if (inTypeHandler != null)
-        //    {
-        //        independentInsertsHandlers.Add(inTypeHandler);
-        //    }
-
-        //    if (Regex.Match(str, "{AddressDevice(.*)}").Success)
-        //        independentInsertsHandlers.Add(new AddressDeviceIndependentInsertsHandler());
-
-        //    if (str.Contains("rowNumber"))
-        //        independentInsertsHandlers.Add(new RowNumberIndependentInsertsHandler());
-
-        //    return new IndependentInsertsService(str, pattern, logger, independentInsertsHandlers.ToArray());
-        //}
-
-
-
         /// <summary>
         ///  Для каждой выделенной {..} переменной из строки ищется обработчик (handler), которые сможеь найти замену этой переменной.
         /// </summary>
@@ -63,7 +38,7 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts
             if (_independentInsertsHandler == null || inDatas == null)
                 return (result: sb, inseartedDict: inseartedDict);
 
-            foreach (var handler in _independentInsertsHandler)                 //Обрабатываем подстановку 1-ым валидным способом
+            foreach (var handler in _independentInsertsHandler)                                                     //Обрабатываем подстановку 1-ым валидным способом
             {
                 foreach (var inData in inDatas)
                 {
@@ -76,10 +51,10 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts
 
                     var (replacement, insertModel) = value;
                     if (replacement == null)      
-                        continue;                                                                                  //inData НЕ подошла для handler 
+                        continue;                                                                                   //inData НЕ подошла для handler 
 
                     sb.Replace(insertModel.Replacement, replacement);
-                    inseartedDict.Add(insertModel.VarName, replacement);                                          //inData подошла для handler, handler вернул строку замены, выполнили замену в строке 
+                    inseartedDict.Add(insertModel.VarName, replacement);                                            //inData подошла для handler, handler вернул строку замены, выполнили замену в строке 
                 }
             }
             return (result: sb, inseartedDict: inseartedDict);

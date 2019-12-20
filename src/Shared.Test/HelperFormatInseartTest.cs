@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Shared.Helpers;
+using Shared.Services.StringInseartService;
 using Xunit;
 
 namespace Shared.Test
@@ -19,7 +20,7 @@ namespace Shared.Test
             //var str2 = "0x57{ fff {CRCXor[0x02-0x03]:X2}";            //replace {CRCXor[0x02-0x03]:X2}
 
             //Act
-            var res=  HelperStringFormatInseart.CreateInseartDictDistinctByReplacement(str, pattern);
+            var res=  IndependentInsertsServiceFactory.CreateInseartDictDistinctByReplacement(str, pattern);
 
             var existKey=  res.TryGetValue("CRCXor[0x02-0x03]", out var value);
             existKey.Should().BeTrue();

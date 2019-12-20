@@ -1,8 +1,7 @@
 ﻿using System;
 using CSharpFunctionalExtensions;
-using Shared.Helpers;
 
-namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers
+namespace Shared.Services.StringInseartService
 {
     public interface IIndependentInsertsHandler
     {

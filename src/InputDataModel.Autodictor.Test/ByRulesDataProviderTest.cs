@@ -18,6 +18,7 @@ using Domain.InputDataModel.Base.Response;
 using FluentAssertions;
 using Moq;
 using Serilog;
+using Shared.Services.StringInseartService;
 using Xunit;
 
 namespace InputDataModel.Autodictor.Test

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using Shared.Extensions;
 using Shared.Helpers;
+using Shared.Services.StringInseartService;
 
 namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers
 {

@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts;
 using Shared.Helpers;
+using Shared.Services.StringInseartService;
 
 namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
 {

@@ -4,6 +4,7 @@ using CSharpFunctionalExtensions;
 using Shared.Extensions;
 using Shared.Helpers;
 using Shared.Mathematic;
+using Shared.Services.StringInseartService;
 
 namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers
 {

@@ -4,6 +4,7 @@ using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Shared.Helpers;
+using Shared.Services.StringInseartService;
 
 namespace Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers
 {
