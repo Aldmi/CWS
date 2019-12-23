@@ -8,9 +8,9 @@ using Shared.Services.StringInseartService;
 
 namespace Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers
 {
-    public class TypeNameInseartHandler : BaseInseartHandler
+    public class TypeNameInsH : BaseInsH
     {
-        public TypeNameInseartHandler(StringInsertModel insertModel) : base(insertModel){ }
+        public TypeNameInsH(StringInsertModel insertModel) : base(insertModel){ }
 
         protected override string GetInseart(Lang lang, AdInputType uit)
         {

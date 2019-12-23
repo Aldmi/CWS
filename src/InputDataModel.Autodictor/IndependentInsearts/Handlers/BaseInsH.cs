@@ -8,23 +8,23 @@ using Shared.Services.StringInseartService;
 
 namespace Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers
 {
-    public abstract class BaseInseartHandler : IIndependentInsertsHandler
+    public abstract class BaseInsH : IIndependentInsertsHandler
     {
-        private readonly StringInsertModel _insertModel;
+        protected readonly StringInsertModel InsertModel;
 
-        protected BaseInseartHandler(StringInsertModel insertModel)
+        protected BaseInsH(StringInsertModel insertModel)
         {
-            _insertModel = insertModel;
+            InsertModel = insertModel;
         }
 
         public Result<(string, StringInsertModel)> CalcInserts(object inData)
         {
             if (!(inData is AdInputType uit))
-                return Result.Ok<ValueTuple<string, StringInsertModel>>((null, _insertModel));
+                return Result.Ok<ValueTuple<string, StringInsertModel>>((null, InsertModel));
 
             var lang = uit.Lang;
             var resStr= GetInseart(lang, uit);
-            return Result.Ok((resStr, _insertModel));
+            return Result.Ok((resStr, InsertModel));
         }
 
         protected abstract string GetInseart(Lang lang, AdInputType uit);
