@@ -28,6 +28,11 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
 
 
         #region Methode
+
+        /// <summary>
+        /// Порядок выполнения обработчиков СТРОГО заданн и не определяется порядком нахождения replacement в строке.
+        /// Например Nbyte и NbyteFull должно вычислятся строго после NumberOfCharacters
+        /// </summary>
         public static DependentInseartsService DependentInseartsServiceFactory(string str)
         {
             var replacementHandlers = new List<Func<string, string, Result<string>>>();

@@ -86,7 +86,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var body = option.RequestOption.Body;
             var footer = option.RequestOption.Footer;
 
-            //список фабрик по создающих нужные обработчики
+            //список фабрик, создающих нужные обработчики
             var handlerFactorys= new List<Func<StringInsertModel, IIndependentInsertsHandler>>
             {
                 new BaseIndependentInseartsHandlersFactory().Create,
