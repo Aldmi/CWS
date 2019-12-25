@@ -2,6 +2,7 @@
 using Domain.InputDataModel.Autodictor.Model;
 using Shared.Helpers;
 using Shared.Services.StringInseartService;
+using Shared.Services.StringInseartService.IndependentInseart;
 
 namespace Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers
 {

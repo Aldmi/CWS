@@ -1,5 +1,6 @@
 ﻿using Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers;
 using Shared.Services.StringInseartService;
+using Shared.Services.StringInseartService.IndependentInseart;
 
 namespace Domain.InputDataModel.Autodictor.IndependentInsearts.Factory
 {

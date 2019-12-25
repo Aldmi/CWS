@@ -15,6 +15,7 @@ using Domain.InputDataModel.Base.Response;
 using Serilog;
 using Shared.Extensions;
 using Shared.Services.StringInseartService;
+using Shared.Services.StringInseartService.IndependentInseart;
 
 
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders

@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using Domain.InputDataModel.Autodictor.IndependentInsearts.Factory;
+using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
+using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using FluentAssertions;
 using Shared.Helpers;
 using Shared.Services.StringInseartService;
+using Shared.Services.StringInseartService.IndependentInseart;
 using Xunit;
 
 namespace Shared.Test
 {
     public class CreateInseartDictTest
     {
-        private const string Pattern = @"\{([^\{\}:]+)(:[^\}\{]+)\}";
+        private const string Pattern =  ViewRule<AdInputType>.Pattern;
 
 
         #region TheoryData
@@ -54,9 +57,10 @@ namespace Shared.Test
             },
             new object[]
             {
-                "0x57{kkk}  {CRCXor[0x02-0x03]:X2}",
+                "0x57{NumberOfTrain}  {CRCXor[0x02-0x03]:X2}",
                 new List<StringInsertModel>
                 {
+                    new StringInsertModel("{NumberOfTrain}", "NumberOfTrain",String.Empty),
                     new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor[0x02-0x03]", ":X2")
                 }
             }
@@ -69,7 +73,7 @@ namespace Shared.Test
         public void NormalReplacementTest(string str, List<StringInsertModel> expectedInsertModels)
         {
             //Act
-            var dict=  IndependentInsertsServiceFactory.CreateInseartDictDistinctByReplacement(str, Pattern);
+            var dict=  InseartDictFactory.CreateDistinctByReplacement(str, Pattern);
 
             //Asert
             var moldels= dict.Values.ToArray();
@@ -91,7 +95,7 @@ namespace Shared.Test
             var str = "0x570xAA0xFF";
 
             //Act
-            var dict= IndependentInsertsServiceFactory.CreateInseartDictDistinctByReplacement(str, Pattern);
+            var dict= InseartDictFactory.CreateDistinctByReplacement(str, Pattern);
 
             //Asert
             dict.Count.Should().Be(0);
@@ -105,7 +109,7 @@ namespace Shared.Test
             var str = String.Empty;
 
             //Act
-            var dict=  IndependentInsertsServiceFactory.CreateInseartDictDistinctByReplacement(str, Pattern);
+            var dict=  InseartDictFactory.CreateDistinctByReplacement(str, Pattern);
 
             //Asert
             dict.Count.Should().Be(0);
@@ -119,7 +123,7 @@ namespace Shared.Test
             string str = null;
 
             //Act & Asert
-            var exception = Assert.Throws<ArgumentNullException>(() => IndependentInsertsServiceFactory.CreateInseartDictDistinctByReplacement(str, Pattern));
+            var exception = Assert.Throws<ArgumentNullException>(() => InseartDictFactory.CreateDistinctByReplacement(str, Pattern));
             exception.Message.Should().Contain("Невозможно создать словарь вставок из NULL строки");
         }
     }

@@ -19,6 +19,7 @@ using FluentAssertions;
 using Moq;
 using Serilog;
 using Shared.Services.StringInseartService;
+using Shared.Services.StringInseartService.IndependentInseart;
 using Xunit;
 
 namespace InputDataModel.Autodictor.Test

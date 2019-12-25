@@ -12,6 +12,7 @@ using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;
 using Domain.InputDataModel.Base.Response;
 using Infrastructure.Transport.Base.DataProvidert;
 using Shared.Services.StringInseartService;
+using Shared.Services.StringInseartService.IndependentInseart;
 
 namespace WebApiSwc.AutofacModules
 {

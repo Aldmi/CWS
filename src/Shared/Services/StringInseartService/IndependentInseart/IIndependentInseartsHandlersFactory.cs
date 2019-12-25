@@ -1,6 +1,4 @@
-﻿using Shared.Helpers;
-
-namespace Shared.Services.StringInseartService
+﻿namespace Shared.Services.StringInseartService.IndependentInseart
 {
     public interface IIndependentInseartsHandlersFactory
     {

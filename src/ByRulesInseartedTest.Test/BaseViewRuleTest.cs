@@ -11,13 +11,15 @@ using FluentAssertions;
 using Moq;
 using Serilog;
 using Shared.Services.StringInseartService;
+using Shared.Services.StringInseartService.IndependentInseart;
 using Xunit;
 
 namespace ByRulesInseartedTest.Test
 {
     public class BaseViewRuleTest
     {
-        private readonly ILogger _logger;
+        protected readonly ILogger Logger;
+        protected readonly IIndependentInseartsHandlersFactory InTypeIndependentInsertsHandlerFactory;
 
 
         #region ctor
@@ -27,8 +29,9 @@ namespace ByRulesInseartedTest.Test
             mock.Setup(loger => loger.Debug(""));
             mock.Setup(loger => loger.Error(""));
             mock.Setup(loger => loger.Warning(""));
-            _logger = mock.Object;
+            Logger = mock.Object;
 
+            InTypeIndependentInsertsHandlerFactory = new AdInputTypeIndependentInseartsHandlersFactory();
         }
         #endregion
 
@@ -62,7 +65,7 @@ namespace ByRulesInseartedTest.Test
             }; 
 
             IIndependentInseartsHandlersFactory inputTypeIndependentInsertsHandlersFactory = new AdInputTypeIndependentInseartsHandlersFactory();
-            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, _logger);
+            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, Logger);
 
             //Act
             var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
@@ -106,7 +109,7 @@ namespace ByRulesInseartedTest.Test
                 }
             };
             IIndependentInseartsHandlersFactory inputTypeIndependentInsertsHandlersFactory = new AdInputTypeIndependentInseartsHandlersFactory();
-            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, _logger);
+            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, Logger);
 
             //Act
             var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();

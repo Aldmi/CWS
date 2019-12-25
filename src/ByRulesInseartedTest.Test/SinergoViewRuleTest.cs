@@ -16,29 +16,11 @@ using Xunit;
 
 namespace ByRulesInseartedTest.Test
 {
-    public class SinergoViewRuleTest
+    public class SinergoViewRuleTest : BaseViewRuleTest
     {
-        private readonly ILogger _logger;
-        private IIndependentInseartsHandlersFactory _inTypeIndependentInsertsHandlerFactory;
-
-
-        #region ctor
-        public SinergoViewRuleTest()
-        {
-            var mock = new Mock<ILogger>();
-            mock.Setup(loger => loger.Debug(""));
-            mock.Setup(loger => loger.Error(""));
-            mock.Setup(loger => loger.Warning(""));
-            _logger = mock.Object;
-
-            _inTypeIndependentInsertsHandlerFactory = new AdInputTypeIndependentInseartsHandlersFactory();
-        }
-        #endregion
-
-
 
         [Fact]
-        public void CreateStringRequestEmptyRequestOptionTest()
+        public void NormalTest()
         {
             //Arrange
             string addressDevice = "4";
@@ -64,7 +46,7 @@ namespace ByRulesInseartedTest.Test
                 }
             };
 
-            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, _inTypeIndependentInsertsHandlerFactory, _logger);
+            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, InTypeIndependentInsertsHandlerFactory, Logger);
 
             //Act
             var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
@@ -73,6 +55,7 @@ namespace ByRulesInseartedTest.Test
             //Assert
             requestTransfer.Should().NotBeNull();
             requestTransfer.Length.Should().Be(1);
+
             firstItem.Request.StrRepresent.Str.Should().Be("3A30347273323D352C546573742A31440D");
             firstItem.Request.StrRepresent.Format.Should().Be("HEX");
             firstItem.Request.StrRepresentBase.Str.Should().Be(":04rs2=5,Test*1D0x0D");
@@ -85,65 +68,53 @@ namespace ByRulesInseartedTest.Test
 
 
 
-        //"requestOption": {
-        //    "format": "Windows-1251",
-        //    "maxBodyLenght": 245,
-        //    "header": "0xFF0xFF0x020x1B0x57",
-        //    "body": "{StationsCut}0x09{NumberOfTrain}0x09",
-        //    "footer": "0x030x{CRCXor(0x02-0x03):X2}0x1F"
-        //},
-        //"responseOption": {
-        //    "format": "HEX",
-        //    "lenght": 2,
-        //    "timeRespone": 1000,
-        //    "body": "061F"
 
         
-        [Fact]
-        public void EkrimTest()
-        {
-            //Arrange
-            string addressDevice = "4";
-            var viewRuleOption = new ViewRuleOption()
-            {
-                Id = 1,
-                StartPosition = 0,
-                Count = 1,
-                BatchSize = 1,
-                RequestOption = new RequestOption
-                {
-                    Header = "0xFF0xFF0x020x1B0x57",
-                    Body ="{StationsCut}0x09{NumberOfTrain}0x09",
-                    Footer = "0x030x{CRCXor(0x02-0x03):X2}0x1F",
-                    Format = "Windows-1251",
-                    MaxBodyLenght = 245
-                },
-                ResponseOption = new ResponseOption
-                {
-                    Format = "HEX",
-                    Lenght = 2,
-                    Body = "061F"
-                }
-            };
+        //[Fact]
+        //public void EkrimTest()
+        //{
+        //    //Arrange
+        //    string addressDevice = "4";
+        //    var viewRuleOption = new ViewRuleOption()
+        //    {
+        //        Id = 1,
+        //        StartPosition = 0,
+        //        Count = 1,
+        //        BatchSize = 1,
+        //        RequestOption = new RequestOption
+        //        {
+        //            Header = "0xFF0xFF0x020x1B0x57",
+        //            Body ="{StationsCut}0x09{NumberOfTrain}0x09",
+        //            Footer = "0x030x{CRCXor(0x02-0x03):X2}0x1F",
+        //            Format = "Windows-1251",
+        //            MaxBodyLenght = 245
+        //        },
+        //        ResponseOption = new ResponseOption
+        //        {
+        //            Format = "HEX",
+        //            Lenght = 2,
+        //            Body = "061F"
+        //        }
+        //    };
 
-            var viewRule = ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, _inTypeIndependentInsertsHandlerFactory, _logger);
+        //    var viewRule = ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, InTypeIndependentInsertsHandlerFactory, Logger);
 
-            //Act
-            var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
-            var firstItem = requestTransfer.FirstOrDefault();
+        //    //Act
+        //    var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
+        //    var firstItem = requestTransfer.FirstOrDefault();
 
-            //Assert
-            requestTransfer.Should().NotBeNull();
-            requestTransfer.Length.Should().Be(1);
-            firstItem.Request.StrRepresent.Str.Should().Be("");
-            firstItem.Request.StrRepresent.Format.Should().Be("");
-            firstItem.Request.StrRepresentBase.Str.Should().Be("");
-            firstItem.Request.StrRepresentBase.Format.Should().Be(viewRuleOption.RequestOption.Format);
-            firstItem.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(1);
+        //    //Assert
+        //    requestTransfer.Should().NotBeNull();
+        //    requestTransfer.Length.Should().Be(1);
+        //    firstItem.Request.StrRepresent.Str.Should().Be("");
+        //    firstItem.Request.StrRepresent.Format.Should().Be("");
+        //    firstItem.Request.StrRepresentBase.Str.Should().Be("");
+        //    firstItem.Request.StrRepresentBase.Format.Should().Be(viewRuleOption.RequestOption.Format);
+        //    firstItem.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(1);
 
-            firstItem.Response.StrRepresent.Str.Should().Be("061F");
-            firstItem.Response.StrRepresent.Format.Should().Be("HEX");
-        }
+        //    firstItem.Response.StrRepresent.Str.Should().Be("061F");
+        //    firstItem.Response.StrRepresent.Format.Should().Be("HEX");
+        //}
 
     }
 }

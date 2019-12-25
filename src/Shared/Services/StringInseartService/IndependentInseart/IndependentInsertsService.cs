@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using Serilog;
-using Shared.Helpers;
 
-namespace Shared.Services.StringInseartService
+namespace Shared.Services.StringInseartService.IndependentInseart
 {
     public class IndependentInsertsService
     {

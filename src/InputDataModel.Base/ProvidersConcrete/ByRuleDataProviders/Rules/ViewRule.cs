@@ -14,6 +14,8 @@ using Serilog;
 using Shared.Extensions;
 using Shared.Helpers;
 using Shared.Services.StringInseartService;
+using Shared.Services.StringInseartService.DependentInseart;
+using Shared.Services.StringInseartService.IndependentInseart;
 using Shared.Types;
 
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
@@ -26,6 +28,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
     public class ViewRule<TIn>
     {
         #region fields
+        public const string Pattern = @"\{([^:{]+)(:[^{}]+)?\}";
+
         private readonly ILogger _logger;
         private readonly StringBuilder _headerExecuteInseartsResult;                         //Строка Header после IndependentInserts
         private readonly IndependentInsertsService _requestBodyParserModel;                  //модель вставки IndependentInserts в ТЕЛО ЗАПРОСА
@@ -81,7 +85,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
         public static ViewRule<TIn> Create(string addressDevice, ViewRuleOption option, IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory, ILogger logger)
         {
-            const string pattern = @"\{(.*?)(:.+?)?\}";
             var header = option.RequestOption.Header;
             var body = option.RequestOption.Body;
             var footer = option.RequestOption.Footer;
@@ -92,17 +95,19 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 new BaseIndependentInseartsHandlersFactory().Create,
                 inputTypeInseartsHandlersFactory.Create
             };
-
-            var hIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(header, pattern, handlerFactorys, logger);
-            var bIndependentInsertsService =IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, pattern, handlerFactorys, logger);
-            var fIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(footer, pattern, handlerFactorys, logger);
+            var hIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(header, Pattern, handlerFactorys, logger);
+            var bIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, Pattern, handlerFactorys, logger);
+            var fIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(footer, Pattern, handlerFactorys, logger);
 
             var headerExecuteInseartsResult = hIndependentInsertsService.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } }).result;
             var footerExecuteInseartsResult = fIndependentInsertsService.ExecuteInsearts(null).result;
         
-            var requestDependentInseartsService = DependentInseartsService.DependentInseartsServiceFactory(header + body + footer);
+            var requestDependentInseartsService = DependentInseartsServiceFactory.Create(header + body + footer);
 
-            var viewRule= new ViewRule<TIn>(option, headerExecuteInseartsResult, bIndependentInsertsService, footerExecuteInseartsResult, requestDependentInseartsService, null, logger);
+            var (_, isFailure, responseTransfer, error) = CreateResponseTransfer(option.ResponseOption, addressDevice, logger);
+            if(isFailure) throw new ArgumentException(error); //???
+
+            var viewRule= new ViewRule<TIn>(option, headerExecuteInseartsResult, bIndependentInsertsService, footerExecuteInseartsResult, requestDependentInseartsService, responseTransfer, logger);
             return viewRule;
         }
 
@@ -194,7 +199,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// Body содержит готовый запрос для команды.
         /// </summary>
         /// <returns></returns>
-        public ProviderTransfer<TIn> CreateProviderTransfer4Command(Command4Device command)
+        public ProviderTransfer<TIn> CreateProviderTransfer4Command(Command4Device command)  //TODO: Когда будет отдельный список команд, нужно формировать Dictionary<Command,ProviderTransfer<TIn>>.
         {
             //ФОРМИРОВАНИЕ ЗАПРОСА--------------------------------------------------------------------------------------
             var (_, isFailureReq, request, error) = CreateRequestTransfer4Command();
@@ -233,7 +238,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Создать Запрос (используя форматную строку RequestOption) из одного батча данных.
         /// </summary>
-        private Result<RequestTransfer<TIn>> CreateRequestTransfer4Data(IEnumerable<TIn> batch, int startItemIndex) //TODO: return Result<T>
+        private Result<RequestTransfer<TIn>> CreateRequestTransfer4Data(IEnumerable<TIn> batch, int startItemIndex)
         {
             var items = batch.ToList();
             var format = GetCurrentOption.RequestOption.Format;
@@ -337,44 +342,48 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Создать строку Ответа (используя форматную строку ResponseOption).
         /// </summary>
-        private Result<ResponseTransfer> CreateResponseTransfer()
+        private static Result<ResponseTransfer> CreateResponseTransfer(ResponseOption responseOption, string addressDevice, ILogger logger)
         {
-            //var format = GetCurrentOption.ResponseOption.Format;
-            //var responseBodyParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(GetCurrentOption.ResponseOption.Body, Pattern, _logger);
+            var format = responseOption.Format;
+            var body = responseOption.Body;
+            var handlerFactorys= new List<Func<StringInsertModel, IIndependentInsertsHandler>>
+            {
+                new BaseIndependentInseartsHandlersFactory().Create,
+            };
+            var indInsServ = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, Pattern, handlerFactorys, logger);
 
-            ////INDEPENDENT insearts---------------------------------------------------------------------------------------------------------
-            //var (sbBodyResult, _) = responseBodyParserModel.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", _addressDevice } });
-            //var appendResultStr = sbBodyResult.ToString();
+            //INDEPENDENT insearts---------------------------------------------------------------------------------------------------------
+            var (sbBodyResult, _) = indInsServ.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } });
+            var appendResultStr = sbBodyResult.ToString();
 
-            ////DEPENDENT insearts-----------------------------------------------------------------------------------------------------------
-            //string str = appendResultStr;
-            //if (_requestDependentInseartsService != null)
-            //{
-            //    var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInseart(appendResultStr, format);
-            //    if (isFailure)
-            //    {
-            //        return Result.Fail<ResponseTransfer>(error);
-            //    }
-            //    str = value;
-            //}
+            //DEPENDENT insearts-----------------------------------------------------------------------------------------------------------
+            string str = appendResultStr;
+            var depInsServ = DependentInseartsServiceFactory.Create(body);
+            if (depInsServ != null)
+            {
+                var (_, isFailure, value, error) = depInsServ.ExecuteInseart(appendResultStr, format);
+                if (isFailure)
+                {
+                    return Result.Fail<ResponseTransfer>(error);
+                }
+                str = value;
+            }
 
             ////CHECK RESULT STRING---------------------------------------------------------------------------------------------------------
             //var (_, f, _, e) = CheckResultString(str);
-            //if(f)
+            //if (f)
             //    return Result.Fail<ResponseTransfer>(e);
 
-            ////FORMAT SWITCHER--------------------------------------------------------------------------------------------------------------
-            //var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
+            //FORMAT SWITCHER--------------------------------------------------------------------------------------------------------------
+            var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
 
-            ////ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.--------------------------------------------------------------------------------------------------
-            //var response = new ResponseTransfer(GetCurrentOption.ResponseOption)
-            //{
-            //    StrRepresentBase = new StringRepresentation(str, format),
-            //    StrRepresent = new StringRepresentation(newStr, newFormat)
-            //};
-            //return Result.Ok(response);
-
-            return Result.Ok<ResponseTransfer>(null); //DEBUG
+            //ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.--------------------------------------------------------------------------------------------------
+            var response = new ResponseTransfer(responseOption)
+            {
+                StrRepresentBase = new StringRepresentation(str, format),
+                StrRepresent = new StringRepresentation(newStr, newFormat)
+            };
+            return Result.Ok(response);
         }
 
 

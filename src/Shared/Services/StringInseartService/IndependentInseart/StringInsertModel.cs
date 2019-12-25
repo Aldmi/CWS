@@ -1,4 +1,4 @@
-﻿namespace Shared.Services.StringInseartService
+﻿namespace Shared.Services.StringInseartService.IndependentInseart
 {
     public class StringInsertModel
     {

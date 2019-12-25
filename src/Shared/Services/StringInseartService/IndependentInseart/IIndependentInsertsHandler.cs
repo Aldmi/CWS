@@ -1,7 +1,7 @@
 ﻿using System;
 using CSharpFunctionalExtensions;
 
-namespace Shared.Services.StringInseartService
+namespace Shared.Services.StringInseartService.IndependentInseart
 {
     public interface IIndependentInsertsHandler
     {

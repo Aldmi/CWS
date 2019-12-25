@@ -1,6 +1,7 @@
 ﻿using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Shared.Helpers;
 using Shared.Services.StringInseartService;
+using Shared.Services.StringInseartService.IndependentInseart;
 
 namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory
 {

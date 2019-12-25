@@ -64,8 +64,8 @@ namespace ByRulesInseartedTest.Test
             string expectedStrRepresentBase,
             int expectedCountInseartedData)
         {
-            ////Arrange
-            //var viewRule = new ViewRule<AdInputType>(addressDevice, requestOption);
+            //Arrange
+            //var viewRule =  ViewRule<AdInputType>.Create(addressDevice, );
 
             ////Act
             //var requestTransfer = viewRule.CreateStringRequest(inputTypes, 0);
