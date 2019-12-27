@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="Autofac" Version="4.9.4" />
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="CompareNETObjects" Version="4.65.0" />
     <PackageReference Include="CSharpFunctionalExtensions" Version="2.2.2" />
