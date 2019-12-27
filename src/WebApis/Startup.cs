@@ -72,7 +72,8 @@ namespace WebApiSwc
                 SetCompatibilityVersion(CompatibilityVersion.Version_2_2); ;
 
             services.AddOptions();
-            services.AddAutoMapper();
+            //services.AddAutoMapper();//OldVersion
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddSignalR();
             services.AddCors(options =>
