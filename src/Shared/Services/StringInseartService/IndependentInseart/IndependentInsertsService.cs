@@ -58,35 +58,6 @@ namespace Shared.Services.StringInseartService.IndependentInseart
             }
             return (result: sb, inseartedDict: inseartedDict);
         }
-
-        //DEL
-        //foreach (var (_, insert) in _dict)
-        //{
-        //    foreach (var handler in _independentInsertsHandler)                 //Обрабатываем подстановку 1-ым валидным способом
-        //    {
-        //        foreach (var inData in inDatas)
-        //        {
-        //            string replacementValue;
-        //            try
-        //            {
-        //                replacementValue = handler.CalcInserts(insert, inData);
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                _logger.Error(ex, "IndependentInsertsService.ExecuteInsearts Exception");
-        //                replacementValue = null;
-        //                // throw;
-        //            }
-                        
-        //            if (replacementValue == null) continue;
-        //            sb.Replace(insert.Replacement, replacementValue);
-        //            inseartedDict.Add(insert.VarName, replacementValue);
-        //            goto LoopEnd;                                             //handler подошел для данных и вернул результат, надо переходить к другой паре (выход из 2-ого цикла)
-        //        }
-        //    }
-        //    LoopEnd:;
-        //}
-
         #endregion
     }
 }

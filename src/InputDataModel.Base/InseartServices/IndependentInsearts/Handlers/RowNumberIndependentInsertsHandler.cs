@@ -40,30 +40,5 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handler
             //Нет базовой подстановки.
             return Result.Ok<ValueTuple<string, StringInsertModel>>((null, _insertModel));
         }
-
-
-        //DEL
-        //public  Result<string> CalcInserts(object inData)
-        //{
-        //    if (!(inData is Dictionary<string, string> dict))
-        //        return Result.Ok<string>(null);
-            
-        //    var varName = inseart.VarName;
-        //    if (varName.Contains("rowNumber"))                             //обработка сложных значений (формул например)
-        //    {
-        //        if (dict.TryGetValue("rowNumber", out var rowNumberStr))  //например rowNumber задан как формула {(rowNumber+64):X1}
-        //        {
-        //            if (int.TryParse(rowNumberStr, out int rowNumber))
-        //            {
-        //                var calcVal = MathematicFormat.CalculateMathematicFormat(varName, rowNumber);
-        //                var format = inseart.Format;
-        //                var res = calcVal.Convert2StrByFormat(format);
-        //                return res;
-        //            }
-        //        }
-        //    }
-        //    //Нет базовой подстановки.
-        //    return null;
-        //}
     }
 }

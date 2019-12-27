@@ -42,26 +42,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
 
         #region ctor
-        //DEL
-        //public ViewRule(string addressDevice, ViewRuleOption option, IIndependentInsertsHandler inTypeIndependentInsertsHandler, ILogger logger)
-        //{
-        //    _addressDevice = addressDevice;
-        //    GetCurrentOption = option;
-        //    _logger = logger;
-
-        //    var requestHeaderParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(GetCurrentOption.RequestOption.Header, Pattern, logger);
-        //    _requestBodyParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(GetCurrentOption.RequestOption.Body, Pattern, logger, inTypeIndependentInsertsHandler);
-        //    var requesFooterParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(GetCurrentOption.RequestOption.Footer, Pattern, logger);
-        //    _headerExecuteInseartsResult = requestHeaderParserModel.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", _addressDevice } }).result;
-        //    _footerExecuteInseartsResult = requesFooterParserModel.ExecuteInsearts(null).result;
-
-        //    _requestDependentInseartsService = DependentInseartsService.DependentInseartsServiceFactory(GetCurrentOption.RequestOption.Header + GetCurrentOption.RequestOption.Body + GetCurrentOption.RequestOption.Footer);
-
-        //   var (_, isFailure, responseTransfer, error) = CreateResponseTransfer();
-        //   if(isFailure) throw new ArgumentException(error);
-        //   _responseTransfer = responseTransfer;
-        //}
-
         private ViewRule(ViewRuleOption option,
             StringBuilder headerExecuteInseartsResult,
             IndependentInsertsService requestBodyParserModel,
