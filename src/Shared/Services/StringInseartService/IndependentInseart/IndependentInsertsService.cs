@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using CSharpFunctionalExtensions;
 using Serilog;
 
 namespace Shared.Services.StringInseartService.IndependentInseart

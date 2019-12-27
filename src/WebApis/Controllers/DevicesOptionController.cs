@@ -7,6 +7,7 @@ using App.Services.Agregators;
 using App.Services.Exceptions;
 using App.Services.Mediators;
 using AutoMapper;
+using CSharpFunctionalExtensions;
 using Domain.Device.Repository.Entities;
 using Domain.Exchange.Repository.Entities;
 using Domain.InputDataModel.Autodictor.Model;

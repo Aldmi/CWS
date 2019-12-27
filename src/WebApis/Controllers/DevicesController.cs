@@ -7,6 +7,7 @@ using App.Services.Exceptions;
 using App.Services.Mediators;
 using Autofac.Features.Indexed;
 using AutoMapper;
+using CSharpFunctionalExtensions;
 using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.ProvidersAbstract;

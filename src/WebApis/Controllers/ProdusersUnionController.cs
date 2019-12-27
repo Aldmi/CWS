@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using App.Services.Actions;
 using App.Services.Mediators;
 using AutoMapper;
+using CSharpFunctionalExtensions;
 using Domain.Device.Repository.Entities.ResponseProduser;
 using Domain.InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
