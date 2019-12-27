@@ -103,12 +103,8 @@ namespace InputDataModel.Autodictor.Test
                 }
             };
 
-            Func<ProviderTransfer<AdInputType>, IDictionary<string, string>, ProviderResult<AdInputType>> providerResultFactory =
-                (transfer, dictionary) =>
-                {
-                    return new ProviderResult<AdInputType>(transfer, dictionary, _stronglyTypedResponseFactory);
-                };
-            var btByRulesDataProvider= new ByRulesDataProvider<AdInputType>(providerResultFactory, option, _inputTypeIndependentInsertsHandlersFactory, _logger);
+            ProviderResult<AdInputType> ProviderResultFactory(ProviderTransfer<AdInputType> transfer, IDictionary<string, string> dictionary) => new ProviderResult<AdInputType>(transfer, dictionary, _stronglyTypedResponseFactory);
+            var btByRulesDataProvider= new ByRulesDataProvider<AdInputType>(ProviderResultFactory, option, _inputTypeIndependentInsertsHandlersFactory, _logger);
 
             // Act
             int countSetDataByte = 0;

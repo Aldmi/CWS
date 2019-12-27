@@ -682,7 +682,7 @@ namespace DeviceForExchnage.Test
 
 
             //Assert
-            valStep1Data1.Should().Be("Станция Отпр 0-Станция Пртб 0");
+            valStep1Data1.Should().Be("Станция Пртб 0-Станция Отпр 0");
         }
 
 

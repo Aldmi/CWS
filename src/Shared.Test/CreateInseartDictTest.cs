@@ -63,10 +63,19 @@ namespace Shared.Test
                     new StringInsertModel("{NumberOfTrain}", "NumberOfTrain",String.Empty),
                     new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor[0x02-0x03]", ":X2")
                 }
+            },
+            new object[]
+            {
+                "0x{(rowNumber+64):X1}0bb",
+                new List<StringInsertModel>
+                {
+                    new StringInsertModel("{(rowNumber+64):X1}", "(rowNumber+64)",":X1"),
+                }
             }
         };
         #endregion
 
+   
 
         [Theory]
         [MemberData(nameof(CreateInseartDictDatas))]

@@ -36,8 +36,11 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         
 
         #region ctor
-        public ByRulesDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> providerResultFactory, ProviderOption providerOption, IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory, ILogger logger)
-            : base(providerResultFactory, logger)
+        public ByRulesDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>,
+            ProviderResult<TIn>> providerResultFactory,
+            ProviderOption providerOption,
+            IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory,
+            ILogger logger) : base(providerResultFactory, logger)
         {
             _option = providerOption.ByRulesProviderOption;
             if (_option == null)

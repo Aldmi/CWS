@@ -114,27 +114,7 @@ namespace Shared.Test
                 "0xffbb",
                 "0xffaa12233340x40xffbb",
                 "12233340x4"
-            },
-
-
-
-            new object[]                      // endCh Not found 
-            {
-                "00112233340x40x02",
-                "0x02",
-                "0x03",
-                "0x020x03",
-                ""
-            },
-            //new object[]                       // startCh Not found 
-            //{ 
-            //    "00112233340x40x03",
-            //    "0x02",
-            //    "0x03",
-            //    "0x020x03",
-            //    ""
-            //},
-
+            }
         };
         #endregion
 
@@ -197,6 +177,5 @@ namespace Shared.Test
             resIncludeBorder.Error.Should().Be($"Not Found startCh= {startCh}");
             resExcludeBorder.Error.Should().Be($"Not Found startCh= {startCh}");
         }
-
     }
 }

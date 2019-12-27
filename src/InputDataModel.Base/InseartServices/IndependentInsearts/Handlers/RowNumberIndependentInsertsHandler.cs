@@ -23,7 +23,7 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handler
             if (!(inData is Dictionary<string, string> dict))
                 return Result.Ok<ValueTuple<string, StringInsertModel>>((null, _insertModel));
             
-            if (dict.TryGetValue(_insertModel.VarName, out var value))  //в данных ЕСТЬ нужное значение
+            if (dict.TryGetValue("rowNumber", out var value))  //в данных ЕСТЬ нужное значение
             {
                 try
                 {

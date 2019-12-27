@@ -277,10 +277,10 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 return Result.Fail<RequestTransfer<TIn>>($"Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на {outOfLimit}");
             }
 
-            //CHECK RESULT STRING--------------------------------------------------------------------------------
-            var (_, f, _, e) = CheckResultString(str);
-            if(f)
-                return Result.Fail<RequestTransfer<TIn>>(e);
+            ////CHECK RESULT STRING--------------------------------------------------------------------------------
+            //var (_, f, _, e) = CheckResultString(str);
+            //if(f)
+            //    return Result.Fail<RequestTransfer<TIn>>(e);
 
             //FORMAT SWITCHER------------------------------------------------------------------------------------------------------------
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);

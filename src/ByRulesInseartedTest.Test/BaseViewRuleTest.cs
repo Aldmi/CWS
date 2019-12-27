@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
+using ByRulesInseartedTest.Test.Datas;
 using Domain.InputDataModel.Autodictor.IndependentInsearts.Factory;
 using Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Autodictor.Model;
@@ -36,6 +38,14 @@ namespace ByRulesInseartedTest.Test
         #endregion
 
 
+        public string ReplaceFirstOccurrence (string Source, string Find, string Replace)
+        {
+            int Place = Source.IndexOf(Find);
+            string result = Source.Remove(Place, Find.Length).Insert(Place, Replace);
+            return result;
+        }
+
+        
 
         [Fact]
         public void CreateStringRequestEmptyRequestOptionTest()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
 
-namespace ByRulesInseartedTest.Test
+namespace ByRulesInseartedTest.Test.Datas
 {
     public static class GetData4ViewRuleTest
     {
@@ -13,7 +13,7 @@ namespace ByRulesInseartedTest.Test
                 "456",
                 "5",
                 null,
-                new EventTrain(1),
+                new EventTrain(2),
                 new TypeTrain("Скорый", "СКОР", 1),
                 new VagonDirection(), 
                 new Station {NameRu = "Питер"},
