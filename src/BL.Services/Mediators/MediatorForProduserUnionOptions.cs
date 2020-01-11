@@ -70,7 +70,7 @@ namespace App.Services.Mediators
         public async Task<Result> AddOrUpdateUnionOptionAsync(ProduserUnionOption produserUnionOption)
         {
             if (produserUnionOption == null)
-                return Result.Fail("produserUnionOption == null");
+                return Result.Failure("produserUnionOption == null");
 
             if (await IsExistProduserUnionAsyncById(produserUnionOption.Id))
             {
@@ -81,7 +81,7 @@ namespace App.Services.Mediators
                 //проверка уникальности ключа при добавлении.
                 if (await _produserUnionOptionRep.IsExistAsync(prod => prod.Key == produserUnionOption.Key))
                 {
-                    return Result.Fail($"Уже существует в репозитории Key= {produserUnionOption.Key}");
+                    return Result.Failure($"Уже существует в репозитории Key= {produserUnionOption.Key}");
                 }
                 await _produserUnionOptionRep.AddAsync(produserUnionOption);
             }

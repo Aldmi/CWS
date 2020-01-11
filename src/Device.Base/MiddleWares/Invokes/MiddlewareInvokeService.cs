@@ -202,7 +202,7 @@ namespace Domain.Device.MiddleWares.Invokes
         {
             var compareLogic = new CompareLogic { Config = { MaxMillisecondsDateDifference = 1000 } };
             ComparisonResult result = compareLogic.Compare(obj1, obj2);
-            return result.AreEqual ? Result.Ok(true) : Result.Fail<bool>(result.DifferencesString);
+            return result.AreEqual ? Result.Ok(true) : Result.Failure<bool>(result.DifferencesString);
         }
         #endregion
 

@@ -91,12 +91,12 @@ namespace Infrastructure.Produser.KafkaProduser
                 invokerName = invokerName ?? Option.TopicName;
                 var res = await ProduceAsync(invokerName, message);
                 return res.Error != null ? 
-                    Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.RespawnProduserError, res.Error.ToString())) 
+                    Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.RespawnProduserError, res.Error.ToString())) 
                     : Result.Ok<string, ErrorWrapper>(res.Value);
             }
             catch (KafkaException ex)
             {
-                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.RespawnProduserError, ex));
+                return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.RespawnProduserError, ex));
             }
         }
 

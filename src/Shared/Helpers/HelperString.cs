@@ -164,10 +164,10 @@ namespace Shared.Helpers
             var endIndex = str.IndexOf(endCh, StringComparison.Ordinal);
 
             if (startIndex == -1)
-                return Result.Fail<string>($"Not Found startCh= {startCh}");
+                return Result.Failure<string>($"Not Found startCh= {startCh}");
 
             if(endIndex == -1)
-                return Result.Fail<string>($"Not Found endCh= {endCh}");
+                return Result.Failure<string>($"Not Found endCh= {endCh}");
             
             if (includeBorder)
             {

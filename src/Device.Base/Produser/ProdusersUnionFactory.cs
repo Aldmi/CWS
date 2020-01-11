@@ -48,7 +48,7 @@ namespace Domain.Device.Produser
         public Result<ProdusersUnion<TIn>> CreateProduserUnion(ProduserUnionOption unionOption)
         {
             if (CheckEmptyStateAllProdussers(unionOption))
-                return Result.Fail<ProdusersUnion<TIn>>("Все Коллекции продюссеров пусты");
+                return Result.Failure<ProdusersUnion<TIn>>("Все Коллекции продюссеров пусты");
 
             var produsersUnion = _produsersUnionFactory(unionOption);
             foreach (var option in unionOption.KafkaProduserOptions)

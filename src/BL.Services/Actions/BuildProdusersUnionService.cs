@@ -68,7 +68,7 @@ namespace App.Services.Actions
             var addOrUpdateOptionResult = await _mediatorForProduserUnionOptions.AddOrUpdateUnionOptionAsync(produsersUnionOption);
             if (addOrUpdateOptionResult.IsFailure)
             {
-                return Result.Fail<ProdusersUnion<TIn>>($"{addOrUpdateOptionResult.Error}");
+                return Result.Failure<ProdusersUnion<TIn>>($"{addOrUpdateOptionResult.Error}");
             }
 
             //Если успешно обновили или добавили ProduserUnionOption в репозиторий, сбилдить ProduserUnion
@@ -82,7 +82,7 @@ namespace App.Services.Actions
             if (addOrUpdateProduserUnionResult == DictionaryCrudResult.Added || addOrUpdateProduserUnionResult == DictionaryCrudResult.Updated)
                 return Result.Ok(prodUnion);
 
-            return Result.Fail<ProdusersUnion<TIn>>($"ошибка добавления в Storage ProduserUnion res= {addOrUpdateProduserUnionResult}");
+            return Result.Failure<ProdusersUnion<TIn>>($"ошибка добавления в Storage ProduserUnion res= {addOrUpdateProduserUnionResult}");
         }
 
 

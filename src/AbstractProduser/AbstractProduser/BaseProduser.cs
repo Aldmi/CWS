@@ -51,7 +51,7 @@ namespace Infrastructure.Produser.AbstractProduser.AbstractProduser
         {
             TrottlingCounter++;
             if(TrottlingCounter.IsTrottle)
-               return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Trottling));
+               return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Trottling));
 
             var cts = new CancellationTokenSource(_timeRequest);
             try
@@ -61,11 +61,11 @@ namespace Infrastructure.Produser.AbstractProduser.AbstractProduser
             }
             catch (TaskCanceledException)
             {
-                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Timeout));
+                return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Timeout));
             }
             catch (Exception ex)
             {
-                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.SendException, ex));
+                return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.SendException, ex));
             }
             finally
             {
@@ -79,7 +79,7 @@ namespace Infrastructure.Produser.AbstractProduser.AbstractProduser
         {
             TrottlingCounter++;
             if (TrottlingCounter.IsTrottle)
-                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Trottling));
+                return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Trottling));
 
             var cts = new CancellationTokenSource(_timeRequest);
             try
@@ -89,11 +89,11 @@ namespace Infrastructure.Produser.AbstractProduser.AbstractProduser
             }
             catch (TaskCanceledException)
             {
-                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Timeout));
+                return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Timeout));
             }
             catch (Exception ex)
             {
-                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.SendException, ex));
+                return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.SendException, ex));
             }
             finally
             {

@@ -83,15 +83,15 @@ namespace Shared.Collections
                         _oneItem = item;
                         return Result.Ok(item);
                     }
-                    return Result.Fail<T>("Element already exist");
+                    return Result.Failure<T>("Element already exist");
 
                 case QueueMode.QueueExtractLastItem:
                 case QueueMode.QueueNotExtractLastItem:
                     if (IsFullLimit)
-                        return Result.Fail<T>("Max Limit fail");
+                        return Result.Failure<T>("Max Limit fail");
 
                     if (Contains(item))
-                        return Result.Fail<T>("Element already exist");
+                        return Result.Failure<T>("Element already exist");
 
                     _queue.Enqueue(item);
                     return Result.Ok(item);
@@ -112,7 +112,7 @@ namespace Shared.Collections
         {
             if (IsEmpty)
             {
-                return Result.Fail<T, DequeueResultErrorWrapper>(new DequeueResultErrorWrapper(DequeueResultError.Empty));
+                return Result.Failure<T, DequeueResultErrorWrapper>(new DequeueResultErrorWrapper(DequeueResultError.Empty));
             }
 
             if (_queueMode == QueueMode.OneItem)
@@ -127,15 +127,15 @@ namespace Shared.Collections
                 {
                     return _queue.TryDequeue(out res) ?
                         Result.Ok<T, DequeueResultErrorWrapper>(res) :
-                        Result.Fail<T, DequeueResultErrorWrapper>(new DequeueResultErrorWrapper(DequeueResultError.FailTryDequeue));
+                        Result.Failure<T, DequeueResultErrorWrapper>(new DequeueResultErrorWrapper(DequeueResultError.FailTryDequeue));
                 }
                 return _queue.TryPeek(out res) ?
                     Result.Ok<T, DequeueResultErrorWrapper>(res) :
-                    Result.Fail<T, DequeueResultErrorWrapper>(new DequeueResultErrorWrapper(DequeueResultError.FailTryPeek));
+                    Result.Failure<T, DequeueResultErrorWrapper>(new DequeueResultErrorWrapper(DequeueResultError.FailTryPeek));
             }
             return _queue.TryDequeue(out res) 
                 ? Result.Ok<T, DequeueResultErrorWrapper>(res) 
-                : Result.Fail<T, DequeueResultErrorWrapper>(new DequeueResultErrorWrapper(DequeueResultError.FailTryDequeue));
+                : Result.Failure<T, DequeueResultErrorWrapper>(new DequeueResultErrorWrapper(DequeueResultError.FailTryDequeue));
         }
 
 
@@ -158,7 +158,7 @@ namespace Shared.Collections
         {
             var compareLogic = new CompareLogic { Config = { MaxMillisecondsDateDifference = 1000 } };
             ComparisonResult result = compareLogic.Compare(obj1, obj2);
-            return result.AreEqual ? Result.Ok(true) : Result.Fail<bool>(result.DifferencesString);
+            return result.AreEqual ? Result.Ok(true) : Result.Failure<bool>(result.DifferencesString);
         }
 
         #endregion

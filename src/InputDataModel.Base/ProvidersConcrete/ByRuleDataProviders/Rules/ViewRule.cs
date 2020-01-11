@@ -245,7 +245,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInseart(appendResultStr, format);
                 if (isFailure)
                 {
-                    return Result.Fail<RequestTransfer<TIn>>(error);
+                    return Result.Failure<RequestTransfer<TIn>>(error);
                 }
                 str = value;
             }
@@ -254,13 +254,13 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var (res, outOfLimit) = str.CheckLimitLenght(maxBodyLenght);
             if (res)
             {
-                return Result.Fail<RequestTransfer<TIn>>($"Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на {outOfLimit}");
+                return Result.Failure<RequestTransfer<TIn>>($"Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на {outOfLimit}");
             }
 
             ////CHECK RESULT STRING--------------------------------------------------------------------------------
             //var (_, f, _, e) = CheckResultString(str);
             //if(f)
-            //    return Result.Fail<RequestTransfer<TIn>>(e);
+            //    return Result.Failure<RequestTransfer<TIn>>(e);
 
             //FORMAT SWITCHER------------------------------------------------------------------------------------------------------------
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
@@ -296,7 +296,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInseart(appendResultStr, format);
                 if (isFailure)
                 {
-                    return Result.Fail<RequestTransfer<TIn>>(error);
+                    return Result.Failure<RequestTransfer<TIn>>(error);
                 }
                 str = value;
             }
@@ -304,7 +304,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             //CHECK RESULT STRING--------------------------------------------------------------------------------
             var (_, f, _, e) = CheckResultString(str);
             if(f)
-                return Result.Fail<RequestTransfer<TIn>>(e);
+                return Result.Failure<RequestTransfer<TIn>>(e);
 
             //FORMAT SWITCHER-------------------------------------------------------------------------------------
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
@@ -344,7 +344,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 var (_, isFailure, value, error) = depInsServ.ExecuteInseart(appendResultStr, format);
                 if (isFailure)
                 {
-                    return Result.Fail<ResponseTransfer>(error);
+                    return Result.Failure<ResponseTransfer>(error);
                 }
                 str = value;
             }
@@ -352,7 +352,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             ////CHECK RESULT STRING---------------------------------------------------------------------------------------------------------
             //var (_, f, _, e) = CheckResultString(str);
             //if (f)
-            //    return Result.Fail<ResponseTransfer>(e);
+            //    return Result.Failure<ResponseTransfer>(e);
 
             //FORMAT SWITCHER--------------------------------------------------------------------------------------------------------------
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
@@ -374,7 +374,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         {
             if(str.Contains("{") || str.Contains("}"))
             {
-                return Result.Fail<string>(@"str contains {  or  }!!!");
+                return Result.Failure<string>(@"str contains {  or  }!!!");
             }
             return Result.Ok(str);
         }

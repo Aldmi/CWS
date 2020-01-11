@@ -47,18 +47,18 @@ namespace Infrastructure.Produser.WebClientProduser
                 switch (res.StatusCode)
                 {
                     case HttpStatusCode.RequestTimeout: 
-                        return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Timeout));                                   //Timeout ожидания ответа.
+                        return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Timeout));                                   //Timeout ожидания ответа.
 
                     case HttpStatusCode.NotFound:
-                        return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.NoClientBySending));                         //Нет соединения с сервером.
+                        return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.NoClientBySending));                         //Нет соединения с сервером.
 
                     default:
-                        return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.SendException, res.ToString()));     //Ошибка отправки
+                        return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.SendException, res.ToString()));     //Ошибка отправки
                 }
             }
             catch (Exception ex)
             {
-                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.RespawnProduserError, ex));                         //Неизвестная ошибка обмена
+                return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.RespawnProduserError, ex));                         //Неизвестная ошибка обмена
             }
         }
 

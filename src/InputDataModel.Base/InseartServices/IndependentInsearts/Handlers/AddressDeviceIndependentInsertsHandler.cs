@@ -21,7 +21,7 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handler
         /// Выполнить подстановку данных их inData
         /// </summary>
         /// <param name="inData">Данные для подстановки</param>
-        /// <returns>Result.Ok(null)- Входные данные не подходят для этого обработчика подстановки. Result.Fail - Данные подходяд для подстановки, но данные или формат данных НЕ верный</returns>
+        /// <returns>Result.Ok(null)- Входные данные не подходят для этого обработчика подстановки. Result.Failure - Данные подходяд для подстановки, но данные или формат данных НЕ верный</returns>
         public Result<ValueTuple<string, StringInsertModel>> CalcInserts(object inData)
         {
             if (!(inData is Dictionary<string, string> dict))
@@ -37,7 +37,7 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handler
                 }
                 catch (FormatException ex)
                 {
-                    return Result.Fail<ValueTuple<string, StringInsertModel>>($"AddressDeviceIndependentInsertsHandler.  value= {value}   format= {_insertModel.Format}    {ex.Message}");
+                    return Result.Failure<ValueTuple<string, StringInsertModel>>($"AddressDeviceIndependentInsertsHandler.  value= {value}   format= {_insertModel.Format}    {ex.Message}");
                 }
             }
             //Нет базовой подстановки.

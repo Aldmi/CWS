@@ -267,12 +267,12 @@ namespace App.Services.Actions
             var device = _mediatorForStorages.GetDevice(deviceName);
             if (device == null)
             {
-                return Result.Fail<ProviderOption>($"устройство не найденно {deviceName}");
+                return Result.Failure<ProviderOption>($"устройство не найденно {deviceName}");
             }
             var exchange = device.Exchanges.FirstOrDefault(e => e.KeyExchange == exchName);
             if (exchange == null)
             {
-                return Result.Fail<ProviderOption>($"Обмен не найденн {exchName}");
+                return Result.Failure<ProviderOption>($"Обмен не найденн {exchName}");
             }
 
             var providerOption = exchange.GetProviderOption;
@@ -292,12 +292,12 @@ namespace App.Services.Actions
             var device = _mediatorForStorages.GetDevice(deviceName);
             if (device == null)
             {
-                return Result.Fail($"устройство не найденно {deviceName}");
+                return Result.Failure($"устройство не найденно {deviceName}");
             }
             var exchange = device.Exchanges.FirstOrDefault(e => e.KeyExchange == exchName);
             if (exchange == null)
             {
-                return Result.Fail($"Обмен не найденн {exchName}");
+                return Result.Failure($"Обмен не найденн {exchName}");
             }
             try
             {
@@ -306,7 +306,7 @@ namespace App.Services.Actions
             }
             catch (Exception ex)
             {
-                return Result.Fail($"Исключение при установке ProviderOptionRt {ex}");
+                return Result.Failure($"Исключение при установке ProviderOptionRt {ex}");
             }
         }
 

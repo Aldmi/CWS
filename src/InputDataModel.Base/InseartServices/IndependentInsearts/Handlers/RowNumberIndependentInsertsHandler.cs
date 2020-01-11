@@ -34,7 +34,7 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handler
                 }
                 catch (FormatException ex)
                 {
-                    return Result.Fail<ValueTuple<string, StringInsertModel>>($"RowNumberIndependentInsertsHandler.  value= {value}   format= {_insertModel.Format}    {ex.Message}");
+                    return Result.Failure<ValueTuple<string, StringInsertModel>>($"RowNumberIndependentInsertsHandler.  value= {value}   format= {_insertModel.Format}    {ex.Message}");
                 }
             }
             //Нет базовой подстановки.
