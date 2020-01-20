@@ -1,20 +1,27 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
-using Domain.InputDataModel.Autodictor.IndependentInseartsHandlers;
+using ByRulesInseartedTest.Test.Datas;
+using Domain.InputDataModel.Autodictor.IndependentInsearts.Factory;
+using Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Autodictor.Model;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
 using FluentAssertions;
 using Moq;
 using Serilog;
+using Shared.Services.StringInseartService;
+using Shared.Services.StringInseartService.IndependentInseart;
 using Xunit;
 
 namespace ByRulesInseartedTest.Test
 {
     public class BaseViewRuleTest
     {
-        private readonly ILogger _logger;
+        protected readonly ILogger Logger;
+        protected readonly IIndependentInseartsHandlersFactory InTypeIndependentInsertsHandlerFactory;
 
 
         #region ctor
@@ -24,12 +31,21 @@ namespace ByRulesInseartedTest.Test
             mock.Setup(loger => loger.Debug(""));
             mock.Setup(loger => loger.Error(""));
             mock.Setup(loger => loger.Warning(""));
-            _logger = mock.Object;
+            Logger = mock.Object;
 
+            InTypeIndependentInsertsHandlerFactory = new AdInputTypeIndependentInseartsHandlersFactory();
         }
         #endregion
 
 
+        public string ReplaceFirstOccurrence (string Source, string Find, string Replace)
+        {
+            int Place = Source.IndexOf(Find);
+            string result = Source.Remove(Place, Find.Length).Insert(Place, Replace);
+            return result;
+        }
+
+        
 
         [Fact]
         public void CreateStringRequestEmptyRequestOptionTest()
@@ -56,9 +72,10 @@ namespace ByRulesInseartedTest.Test
                     Lenght = 16,
                     Body = "0246463038254130373741434B454103"
                 }
-            };
-            IIndependentInsertsHandler inTypeIndependentInsertsHandler = new AdInputTypeIndependentInsertsHandler();
-            var viewRule = new ViewRule<AdInputType>(addressDevice, viewRuleOption, inTypeIndependentInsertsHandler, _logger);
+            }; 
+
+            IIndependentInseartsHandlersFactory inputTypeIndependentInsertsHandlersFactory = new AdInputTypeIndependentInseartsHandlersFactory();
+            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, Logger);
 
             //Act
             var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
@@ -101,8 +118,8 @@ namespace ByRulesInseartedTest.Test
                     Body = "0246463038254130373741434B454103"
                 }
             };
-            IIndependentInsertsHandler inTypeIndependentInsertsHandler = new AdInputTypeIndependentInsertsHandler();
-            var viewRule = new ViewRule<AdInputType>(addressDevice, viewRuleOption, inTypeIndependentInsertsHandler, _logger);
+            IIndependentInseartsHandlersFactory inputTypeIndependentInsertsHandlersFactory = new AdInputTypeIndependentInseartsHandlersFactory();
+            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, Logger);
 
             //Act
             var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();

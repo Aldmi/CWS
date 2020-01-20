@@ -6,13 +6,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response;
 using Serilog;
 using Shared.Extensions;
+using Shared.Services.StringInseartService;
+using Shared.Services.StringInseartService.IndependentInseart;
 
 
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
@@ -33,15 +36,18 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         
 
         #region ctor
-        public ByRulesDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> providerResultFactory, ProviderOption providerOption, IIndependentInsertsHandler inTypeIndependentInsertsHandler, ILogger logger)
-            : base(providerResultFactory, logger)
+        public ByRulesDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>,
+            ProviderResult<TIn>> providerResultFactory,
+            ProviderOption providerOption,
+            IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory,
+            ILogger logger) : base(providerResultFactory, logger)
         {
             _option = providerOption.ByRulesProviderOption;
             if (_option == null)
                 throw new ArgumentNullException(providerOption.Name); //TODO: выбросы исключений пометсить в Shared ThrowIfNull(object obj)
 
             ProviderName = providerOption.Name;
-            _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, inTypeIndependentInsertsHandler, logger)).ToList();
+            _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, inputTypeInseartsHandlersFactory, logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(_option.RuleName4DefaultHandle)
                 ? "DefaultHandler"
                 : _option.RuleName4DefaultHandle;

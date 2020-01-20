@@ -118,7 +118,8 @@ namespace Domain.InputDataModel.Autodictor.Model
                         stations = stArrivalName;
                         break;
                     case 2:   //"СТОЯНКА"
-                        stations = $"{stDepartName}-{stArrivalName}";
+                        //stations = $"{stDepartName}-{stArrivalName}";
+                        stations = $"{stArrivalName}-{stDepartName}";
                         break;
                 }
                 return stations;

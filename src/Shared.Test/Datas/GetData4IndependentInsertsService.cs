@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
 
-namespace ByRulesInseartedTest.Test
+namespace Shared.Test.Datas
 {
-    public static class GetData4ViewRuleTest
+    public static class GetData4IndependentInsertsService
     {
-        public static List<AdInputType> InputTypesDefault => new List<AdInputType>
+        public static List<AdInputType> InputType => new List<AdInputType>
         {
             new AdInputType(1, 1, 1, Lang.Ru, 
                 "456",

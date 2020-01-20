@@ -111,7 +111,7 @@ namespace Domain.Device.MiddleWares
 
             var res = errorHandlerWrapper.IsEmpty ?
                 Result.Ok<InputData<TIn>, ErrorResultMiddleWareInData>(inDataClone) :
-                Result.Fail<InputData<TIn>, ErrorResultMiddleWareInData>(errorHandlerWrapper);
+                Result.Failure<InputData<TIn>, ErrorResultMiddleWareInData>(errorHandlerWrapper);
 
             return res;
         }

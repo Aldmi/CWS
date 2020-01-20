@@ -217,7 +217,7 @@ namespace Domain.InputDataModel.Base.InseartServices.DependentInsearts
             }
             catch (Exception ex)
             {
-                return Result.Fail<string>($"Error CRC calc {ex}");
+                return Result.Failure<string>($"Error CRC calc {ex}");
             }
         }
     }

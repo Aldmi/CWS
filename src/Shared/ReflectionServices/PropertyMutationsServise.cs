@@ -15,7 +15,7 @@ namespace Shared.ReflectionServices
 
             var props = propName.Split('.');
             if (props.Length == 0)
-                return Result.Fail<(PropertyInfo, object, T)>("propName Не задан");
+                return Result.Failure<(PropertyInfo, object, T)>("propName Не задан");
 
             //Поиск свойства (выставление состояния сервиса)------------------------------------
             PropertyInfo propInfo = null;           //свойство для изменения (например NameRu)
@@ -26,12 +26,12 @@ namespace Shared.ReflectionServices
                 var prop = props[i];
                 if (obj == null)
                 {
-                    return Result.Fail<(PropertyInfo, object, T)>($"Родительский объект == Null. {propName}. Невозможно обратится к свойству {prop}");
+                    return Result.Failure<(PropertyInfo, object, T)>($"Родительский объект == Null. {propName}. Невозможно обратится к свойству {prop}");
                 }
                 propInfo = GetPropertyInfo(obj, prop);
                 if (propInfo == null)
                 {
-                    return Result.Fail<(PropertyInfo, object, T)>($"метаданные для {prop} не найдены");
+                    return Result.Failure<(PropertyInfo, object, T)>($"метаданные для {prop} не найдены");
                 }
 
                 obj = propInfo.GetValue(obj);
@@ -44,7 +44,7 @@ namespace Shared.ReflectionServices
             //Валидация--------------------------------------------------------------------------------
             if (propInfo.PropertyType != typeof(T))
             {
-                return Result.Fail<(PropertyInfo, object, T)>($"Тип свойства {propName} не соответвует типу обработчика handler {typeof(T)}");
+                return Result.Failure<(PropertyInfo, object, T)>($"Тип свойства {propName} не соответвует типу обработчика handler {typeof(T)}");
             }
 
             //Возврат значениtе в кортеже----------------------------------------------------------------
@@ -61,7 +61,7 @@ namespace Shared.ReflectionServices
             var (propInfo, objParent, val) = tupleNewValue;
 
             if (propInfo == null || objParent == null)
-                return Result.Fail("Свойство объекта не переданно в КОРТЕЖЕ");
+                return Result.Failure("Свойство объекта не переданно в КОРТЕЖЕ");
 
             try
             {
@@ -70,7 +70,7 @@ namespace Shared.ReflectionServices
             }
             catch(Exception ex)
             {
-                return Result.Fail(ex.Message);
+                return Result.Failure(ex.Message);
             }
         }
 

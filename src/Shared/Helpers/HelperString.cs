@@ -164,10 +164,10 @@ namespace Shared.Helpers
             var endIndex = str.IndexOf(endCh, StringComparison.Ordinal);
 
             if (startIndex == -1)
-                return Result.Fail<string>($"Not Found startCh= {startCh}");
+                return Result.Failure<string>($"Not Found startCh= {startCh}");
 
             if(endIndex == -1)
-                return Result.Fail<string>($"Not Found endCh= {endCh}");
+                return Result.Failure<string>($"Not Found endCh= {endCh}");
             
             if (includeBorder)
             {
@@ -181,6 +181,36 @@ namespace Shared.Helpers
             var subStr = str.Substring(startIndex, endIndex - startIndex + 1);
 
             return Result.Ok(subStr);
+        }
+
+
+        /// <summary>
+        /// Замена первого вхождения подстроки в строке
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="find"></param>
+        /// <param name="replace"></param>
+        /// <returns></returns>
+        public static string ReplaceFirstOccurrence (this string source, string find, string replace)
+        {
+            int place = source.IndexOf(find, StringComparison.Ordinal);
+            string result = source.Remove(place, find.Length).Insert(place, replace);
+            return result;
+        }
+
+
+        /// <summary>
+        /// Замена последнего вхождения подстроки в строке
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="find"></param>
+        /// <param name="replace"></param>
+        /// <returns></returns>
+        public static string ReplaceLastOccurrence(this string source, string find, string replace)
+        {
+            int place = source.LastIndexOf(find, StringComparison.Ordinal);
+            string result = source.Remove(place, find.Length).Insert(place, replace);
+            return result;
         }
     }
 }

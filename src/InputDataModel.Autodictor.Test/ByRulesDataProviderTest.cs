@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain.InputDataModel.Autodictor.Entities;
-using Domain.InputDataModel.Autodictor.IndependentInseartsHandlers;
+using Domain.InputDataModel.Autodictor.IndependentInsearts.Factory;
+using Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Autodictor.StronglyTypedResponse;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;
 using Domain.InputDataModel.Base.ProvidersOption;
@@ -16,6 +18,8 @@ using Domain.InputDataModel.Base.Response;
 using FluentAssertions;
 using Moq;
 using Serilog;
+using Shared.Services.StringInseartService;
+using Shared.Services.StringInseartService.IndependentInseart;
 using Xunit;
 
 namespace InputDataModel.Autodictor.Test
@@ -25,7 +29,7 @@ namespace InputDataModel.Autodictor.Test
         #region field
 
         private readonly ILogger _logger;
-        private readonly IIndependentInsertsHandler _independentInsertsHandler;
+        private readonly IIndependentInseartsHandlersFactory _inputTypeIndependentInsertsHandlersFactory;
         private readonly IStronglyTypedResponseFactory _stronglyTypedResponseFactory;
 
         #endregion
@@ -42,7 +46,7 @@ namespace InputDataModel.Autodictor.Test
             mock.Setup(loger => loger.Warning(""));
             _logger = mock.Object;
 
-            _independentInsertsHandler= new AdInputTypeIndependentInsertsHandler();
+            _inputTypeIndependentInsertsHandlersFactory= new AdInputTypeIndependentInseartsHandlersFactory();
             _stronglyTypedResponseFactory= new AdStronglyTypedResponseFactory();
         }
 
@@ -99,12 +103,8 @@ namespace InputDataModel.Autodictor.Test
                 }
             };
 
-            Func<ProviderTransfer<AdInputType>, IDictionary<string, string>, ProviderResult<AdInputType>> providerResultFactory =
-                (transfer, dictionary) =>
-                {
-                    return new ProviderResult<AdInputType>(transfer, dictionary, _stronglyTypedResponseFactory);
-                };
-            var btByRulesDataProvider= new ByRulesDataProvider<AdInputType>(providerResultFactory, option, _independentInsertsHandler, _logger);
+            ProviderResult<AdInputType> ProviderResultFactory(ProviderTransfer<AdInputType> transfer, IDictionary<string, string> dictionary) => new ProviderResult<AdInputType>(transfer, dictionary, _stronglyTypedResponseFactory);
+            var btByRulesDataProvider= new ByRulesDataProvider<AdInputType>(ProviderResultFactory, option, _inputTypeIndependentInsertsHandlersFactory, _logger);
 
             // Act
             int countSetDataByte = 0;

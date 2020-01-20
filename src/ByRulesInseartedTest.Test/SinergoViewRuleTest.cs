@@ -1,145 +1,104 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Domain.InputDataModel.Autodictor.IndependentInseartsHandlers;
+using ByRulesInseartedTest.Test.Datas;
+using Domain.InputDataModel.Autodictor.IndependentInsearts.Factory;
+using Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Autodictor.Model;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
 using FluentAssertions;
 using Moq;
 using Serilog;
+using Shared.Services.StringInseartService;
 using Xunit;
 
 namespace ByRulesInseartedTest.Test
 {
-    public class SinergoViewRuleTest
+    public class SinergoViewRuleTest : BaseViewRuleTest
     {
-        private readonly ILogger _logger;
-        private IIndependentInsertsHandler _inTypeIndependentInsertsHandler;
-
-
-        #region ctor
-        public SinergoViewRuleTest()
+        #region TheoryData //Царицыно низкоуровнеквый протокол самих табло
+        public static IEnumerable<object[]> Datas => new[]
         {
-            var mock = new Mock<ILogger>();
-            mock.Setup(loger => loger.Debug(""));
-            mock.Setup(loger => loger.Error(""));
-            mock.Setup(loger => loger.Warning(""));
-            _logger = mock.Object;
+            new object[]
+            {
+                "4",                                          
+                new ViewRuleOption()
+                {
+                    Id = 1,
+                    StartPosition = 0,
+                    Count = 1,
+                    BatchSize = 1,
+                    RequestOption = new RequestOption
+                    {
+                        Header = ":{AddressDevice:X2}rs2=5,",
+                        Body ="Test",
+                        Footer = "*{CRC8Bit[:-*]:X2}0x0D",
+                        Format = "ascii",
+                        MaxBodyLenght = 245
+                    },
+                    ResponseOption = new ResponseOption
+                    {
+                        Format = "ascii",
+                        Lenght = 9,
+                        Body = ":{AddressDevice:X2}ok*{CRC8Bit[:-*]:X2}0x0D"
+                    }
+                },
 
-            _inTypeIndependentInsertsHandler = new AdInputTypeIndependentInsertsHandler();
-        }
+                GetData4ViewRuleTest.InputTypesDefault,   
+                //REQUEST
+                "3A30347273323D352C546573742A31440D",
+                "HEX",
+                ":04rs2=5,Test*1D0x0D",   
+                //RESPONSE
+                "3A30346F6B2A41320D",
+                "HEX",
+                0
+            }
+
+        };
         #endregion
 
 
-
-        [Fact]
-        public void CreateStringRequestEmptyRequestOptionTest()
-        {
-            //Arrange
-            string addressDevice = "4";
-            var viewRuleOption = new ViewRuleOption()
-            {
-                Id = 1,
-                StartPosition = 0,
-                Count = 1,
-                BatchSize = 1,
-                RequestOption = new RequestOption
-                {
-                    Header = ":{AddressDevice:X2}rs2=5,",
-                    Body ="Test",
-                    Footer = "*{CRC8Bit[:-*]:X2}0x0D",
-                    Format = "ascii",
-                    MaxBodyLenght = 245
-                },
-                ResponseOption = new ResponseOption
-                {
-                    Format = "ascii",
-                    Lenght = 9,
-                    Body = ":{AddressDevice:X2}ok*{CRC8Bit[:-*]:X2}0x0D"
-                }
-            };
-
-            var viewRule = new ViewRule<AdInputType>(addressDevice, viewRuleOption, _inTypeIndependentInsertsHandler, _logger);
-
-            //Act
-            var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
-            var firstItem = requestTransfer.FirstOrDefault();
-
-            //Assert
-            requestTransfer.Should().NotBeNull();
-            requestTransfer.Length.Should().Be(1);
-            firstItem.Request.StrRepresent.Str.Should().Be("3A30347273323D352C546573742A31440D");
-            firstItem.Request.StrRepresent.Format.Should().Be("HEX");
-            firstItem.Request.StrRepresentBase.Str.Should().Be(":04rs2=5,Test*1D0x0D");
-            firstItem.Request.StrRepresentBase.Format.Should().Be(viewRuleOption.RequestOption.Format);
-            firstItem.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(1);
-
-            firstItem.Response.StrRepresent.Str.Should().Be("3A30346F6B2A41320D");
-            firstItem.Response.StrRepresent.Format.Should().Be("HEX");
-        }
-
-
-
-        //"requestOption": {
-        //    "format": "Windows-1251",
-        //    "maxBodyLenght": 245,
-        //    "header": "0xFF0xFF0x020x1B0x57",
-        //    "body": "{StationsCut}0x09{NumberOfTrain}0x09",
-        //    "footer": "0x030x{CRCXor(0x02-0x03):X2}0x1F"
-        //},
-        //"responseOption": {
-        //    "format": "HEX",
-        //    "lenght": 2,
-        //    "timeRespone": 1000,
-        //    "body": "061F"
-
         
-        [Fact]
-        public void EkrimTest()
+        [Theory]
+        [MemberData(nameof(Datas))]
+        public void CreateStringRequestTest(
+            string addressDevice,
+            ViewRuleOption option,
+            List<AdInputType> inputTypes,
+            string expectedRequestStrRepresent,
+            string expectedRequestStrRepresentFormat,
+            string expectedRequestStrRepresentBase,
+
+            string expectedRespStrRepresent,
+            string expectedRespStrRepresentFormat,
+
+            int expectedCountInseartedData)
         {
             //Arrange
-            string addressDevice = "4";
-            var viewRuleOption = new ViewRuleOption()
-            {
-                Id = 1,
-                StartPosition = 0,
-                Count = 1,
-                BatchSize = 1,
-                RequestOption = new RequestOption
-                {
-                    Header = "0xFF0xFF0x020x1B0x57",
-                    Body ="{StationsCut}0x09{NumberOfTrain}0x09",
-                    Footer = "0x030x{CRCXor(0x02-0x03):X2}0x1F",
-                    Format = "Windows-1251",
-                    MaxBodyLenght = 245
-                },
-                ResponseOption = new ResponseOption
-                {
-                    Format = "HEX",
-                    Lenght = 2,
-                    Body = "061F"
-                }
-            };
-
-            var viewRule = new ViewRule<AdInputType>(addressDevice, viewRuleOption, _inTypeIndependentInsertsHandler, _logger);
+            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, Logger);
 
             //Act
-            var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
-            var firstItem = requestTransfer.FirstOrDefault();
+            var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
+            var rt = requestTransfers.FirstOrDefault();
 
             //Assert
-            requestTransfer.Should().NotBeNull();
-            requestTransfer.Length.Should().Be(1);
-            firstItem.Request.StrRepresent.Str.Should().Be("");
-            firstItem.Request.StrRepresent.Format.Should().Be("");
-            firstItem.Request.StrRepresentBase.Str.Should().Be("");
-            firstItem.Request.StrRepresentBase.Format.Should().Be(viewRuleOption.RequestOption.Format);
-            firstItem.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(1);
+            rt.Request.StrRepresent.Str.Should().Be(expectedRequestStrRepresent);
+            rt.Request.StrRepresent.Format.Should().Be(expectedRequestStrRepresentFormat);
+            rt.Request.StrRepresentBase.Str.Should().Be(expectedRequestStrRepresentBase);
+            rt.Request.StrRepresentBase.Format.Should().Be(option.RequestOption.Format);
+            rt.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(inputTypes.Count);
+            foreach (var processedItem in rt.Request.ProcessedItemsInBatch.ProcessedItems)
+            {
+                processedItem.InseartedData.Count.Should().Be(expectedCountInseartedData);
+            }
 
-            firstItem.Response.StrRepresent.Str.Should().Be("061F");
-            firstItem.Response.StrRepresent.Format.Should().Be("HEX");
+            rt.Response.StrRepresent.Str.Should().Be(expectedRespStrRepresent);
+            rt.Response.StrRepresent.Format.Should().Be(expectedRespStrRepresentFormat);
         }
 
     }

@@ -37,7 +37,7 @@ namespace WebApiSwc.Produsers
         protected override async Task<Result<string, ErrorWrapper>> SendConcrete(string message, string invokerName = null, CancellationToken ct = default(CancellationToken))
         {
             if(!_clientsStorage.Any)
-                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.NoClientBySending));
+                return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.NoClientBySending));
 
             try
             {                
@@ -47,7 +47,7 @@ namespace WebApiSwc.Produsers
             }
             catch (Exception ex)
             {
-                return Result.Fail<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.RespawnProduserError, ex));
+                return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.RespawnProduserError, ex));
             }
         }
 

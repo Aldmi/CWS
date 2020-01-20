@@ -8,7 +8,7 @@ namespace Shared.Extensions
         /// <summary>
         /// Вставка DateTime по формату
         /// </summary>
-        public static string DateTime2StrByFormat(this DateTime val, string formatValue)
+        public static string Convert2StrByFormat(this DateTime val, string formatValue)
         {
             const string defaultStr = " ";
             if (val == DateTime.MinValue)

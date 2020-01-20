@@ -241,7 +241,7 @@ namespace App.Services.Mediators
             }
             catch (Exception ex)
             {
-                return Result.Fail<string>($"ИСКЛЮЧЕНИЕ В EraseDeviceOptionAsync: {ex}");
+                return Result.Failure<string>($"ИСКЛЮЧЕНИЕ В EraseDeviceOptionAsync: {ex}");
             }
             return Result.Ok();
         }

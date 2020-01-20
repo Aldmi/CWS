@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InseartServices.DependentInsearts;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.IndependentInseartsHandlers;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
+using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Serilog;
 using Shared.Extensions;
 using Shared.Helpers;
+using Shared.Services.StringInseartService;
+using Shared.Services.StringInseartService.DependentInseart;
+using Shared.Services.StringInseartService.IndependentInseart;
 using Shared.Types;
 
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
@@ -25,10 +28,9 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
     public class ViewRule<TIn>
     {
         #region fields
-        private const string Pattern = @"\{(.*?)(:.+?)?\}";
-        private readonly string _addressDevice;
-        private readonly ILogger _logger;
+        public const string Pattern = @"\{([^:{]+)(:[^{}]+)?\}";
 
+        private readonly ILogger _logger;
         private readonly StringBuilder _headerExecuteInseartsResult;                         //Строка Header после IndependentInserts
         private readonly IndependentInsertsService _requestBodyParserModel;                  //модель вставки IndependentInserts в ТЕЛО ЗАПРОСА
         private readonly StringBuilder _footerExecuteInseartsResult;                         //Строка Footer после IndependentInserts
@@ -40,25 +42,54 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
 
         #region ctor
-        public ViewRule(string addressDevice, ViewRuleOption option, IIndependentInsertsHandler inTypeIndependentInsertsHandler, ILogger logger)
+        private ViewRule(ViewRuleOption option,
+            StringBuilder headerExecuteInseartsResult,
+            IndependentInsertsService requestBodyParserModel,
+            StringBuilder footerExecuteInseartsResult,
+            DependentInseartsService requestDependentInseartsService,
+            ResponseTransfer responseTransfer,
+            ILogger logger)
         {
-            _addressDevice = addressDevice;
+   
             GetCurrentOption = option;
+            _headerExecuteInseartsResult = headerExecuteInseartsResult;
+            _requestBodyParserModel = requestBodyParserModel;
+            _footerExecuteInseartsResult = footerExecuteInseartsResult;
+            _requestDependentInseartsService = requestDependentInseartsService;
+            _responseTransfer = responseTransfer;
             _logger = logger;
-
-            var requestHeaderParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(GetCurrentOption.RequestOption.Header, Pattern, logger);
-            _requestBodyParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(GetCurrentOption.RequestOption.Body, Pattern, logger, inTypeIndependentInsertsHandler);
-            var requesFooterParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(GetCurrentOption.RequestOption.Footer, Pattern, logger);
-            _headerExecuteInseartsResult = requestHeaderParserModel.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", _addressDevice } }).result;
-            _footerExecuteInseartsResult = requesFooterParserModel.ExecuteInsearts(null).result;
-
-            _requestDependentInseartsService = DependentInseartsService.DependentInseartsServiceFactory(GetCurrentOption.RequestOption.Header + GetCurrentOption.RequestOption.Body + GetCurrentOption.RequestOption.Footer);
-
-           var (_, isFailure, responseTransfer, error) = CreateResponseTransfer();
-           if(isFailure) throw new ArgumentException(error);
-           _responseTransfer = responseTransfer;
         }
         #endregion
+
+
+
+        public static ViewRule<TIn> Create(string addressDevice, ViewRuleOption option, IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory, ILogger logger)
+        {
+            var header = option.RequestOption.Header;
+            var body = option.RequestOption.Body;
+            var footer = option.RequestOption.Footer;
+
+            //список фабрик, создающих нужные обработчики
+            var handlerFactorys= new List<Func<StringInsertModel, IIndependentInsertsHandler>>
+            {
+                new BaseIndependentInseartsHandlersFactory().Create,
+                inputTypeInseartsHandlersFactory.Create
+            };
+            var hIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(header, Pattern, handlerFactorys, logger);
+            var bIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, Pattern, handlerFactorys, logger);
+            var fIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(footer, Pattern, handlerFactorys, logger);
+
+            var hExecuteInseartsResult = hIndependentInsertsService.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } }).result;
+            var fExecuteInseartsResult = fIndependentInsertsService.ExecuteInsearts(null).result;
+        
+            var requestDependentInseartsService = DependentInseartsServiceFactory.Create(header + body + footer);
+
+            var (_, isFailure, responseTransfer, error) = CreateResponseTransfer(option.ResponseOption, addressDevice, logger);
+            if(isFailure) throw new ArgumentException(error); //???
+
+            var viewRule= new ViewRule<TIn>(option, hExecuteInseartsResult, bIndependentInsertsService, fExecuteInseartsResult, requestDependentInseartsService, responseTransfer, logger);
+            return viewRule;
+        }
 
 
 
@@ -148,7 +179,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// Body содержит готовый запрос для команды.
         /// </summary>
         /// <returns></returns>
-        public ProviderTransfer<TIn> CreateProviderTransfer4Command(Command4Device command)
+        public ProviderTransfer<TIn> CreateProviderTransfer4Command(Command4Device command)  //TODO: Когда будет отдельный список команд, нужно формировать Dictionary<Command,ProviderTransfer<TIn>>.
         {
             //ФОРМИРОВАНИЕ ЗАПРОСА--------------------------------------------------------------------------------------
             var (_, isFailureReq, request, error) = CreateRequestTransfer4Command();
@@ -187,7 +218,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Создать Запрос (используя форматную строку RequestOption) из одного батча данных.
         /// </summary>
-        private Result<RequestTransfer<TIn>> CreateRequestTransfer4Data(IEnumerable<TIn> batch, int startItemIndex) //TODO: return Result<T>
+        private Result<RequestTransfer<TIn>> CreateRequestTransfer4Data(IEnumerable<TIn> batch, int startItemIndex)
         {
             var items = batch.ToList();
             var format = GetCurrentOption.RequestOption.Format;
@@ -214,7 +245,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInseart(appendResultStr, format);
                 if (isFailure)
                 {
-                    return Result.Fail<RequestTransfer<TIn>>(error);
+                    return Result.Failure<RequestTransfer<TIn>>(error);
                 }
                 str = value;
             }
@@ -223,13 +254,13 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var (res, outOfLimit) = str.CheckLimitLenght(maxBodyLenght);
             if (res)
             {
-                return Result.Fail<RequestTransfer<TIn>>($"Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на {outOfLimit}");
+                return Result.Failure<RequestTransfer<TIn>>($"Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на {outOfLimit}");
             }
 
-            //CHECK RESULT STRING--------------------------------------------------------------------------------
-            var (_, f, _, e) = CheckResultString(str);
-            if(f)
-                return Result.Fail<RequestTransfer<TIn>>(e);
+            ////CHECK RESULT STRING--------------------------------------------------------------------------------
+            //var (_, f, _, e) = CheckResultString(str);
+            //if(f)
+            //    return Result.Failure<RequestTransfer<TIn>>(e);
 
             //FORMAT SWITCHER------------------------------------------------------------------------------------------------------------
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
@@ -265,7 +296,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInseart(appendResultStr, format);
                 if (isFailure)
                 {
-                    return Result.Fail<RequestTransfer<TIn>>(error);
+                    return Result.Failure<RequestTransfer<TIn>>(error);
                 }
                 str = value;
             }
@@ -273,7 +304,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             //CHECK RESULT STRING--------------------------------------------------------------------------------
             var (_, f, _, e) = CheckResultString(str);
             if(f)
-                return Result.Fail<RequestTransfer<TIn>>(e);
+                return Result.Failure<RequestTransfer<TIn>>(e);
 
             //FORMAT SWITCHER-------------------------------------------------------------------------------------
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
@@ -291,37 +322,43 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Создать строку Ответа (используя форматную строку ResponseOption).
         /// </summary>
-        private Result<ResponseTransfer> CreateResponseTransfer()
+        private static Result<ResponseTransfer> CreateResponseTransfer(ResponseOption responseOption, string addressDevice, ILogger logger)
         {
-            var format = GetCurrentOption.ResponseOption.Format;
-            var responseBodyParserModel = IndependentInsertsService.IndependentInsertsParserModelFactory(GetCurrentOption.ResponseOption.Body, Pattern, _logger);
+            var format = responseOption.Format;
+            var body = responseOption.Body;
+            var handlerFactorys= new List<Func<StringInsertModel, IIndependentInsertsHandler>>
+            {
+                new BaseIndependentInseartsHandlersFactory().Create,
+            };
+            var indInsServ = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, Pattern, handlerFactorys, logger);
 
             //INDEPENDENT insearts---------------------------------------------------------------------------------------------------------
-            var (sbBodyResult, _) = responseBodyParserModel.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", _addressDevice } });
+            var (sbBodyResult, _) = indInsServ.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } });
             var appendResultStr = sbBodyResult.ToString();
 
             //DEPENDENT insearts-----------------------------------------------------------------------------------------------------------
             string str = appendResultStr;
-            if (_requestDependentInseartsService != null)
+            var depInsServ = DependentInseartsServiceFactory.Create(body);
+            if (depInsServ != null)
             {
-                var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInseart(appendResultStr, format);
+                var (_, isFailure, value, error) = depInsServ.ExecuteInseart(appendResultStr, format);
                 if (isFailure)
                 {
-                    return Result.Fail<ResponseTransfer>(error);
+                    return Result.Failure<ResponseTransfer>(error);
                 }
                 str = value;
             }
 
-            //CHECK RESULT STRING---------------------------------------------------------------------------------------------------------
-            var (_, f, _, e) = CheckResultString(str);
-            if(f)
-                return Result.Fail<ResponseTransfer>(e);
+            ////CHECK RESULT STRING---------------------------------------------------------------------------------------------------------
+            //var (_, f, _, e) = CheckResultString(str);
+            //if (f)
+            //    return Result.Failure<ResponseTransfer>(e);
 
             //FORMAT SWITCHER--------------------------------------------------------------------------------------------------------------
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
 
             //ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.--------------------------------------------------------------------------------------------------
-            var response = new ResponseTransfer(GetCurrentOption.ResponseOption)
+            var response = new ResponseTransfer(responseOption)
             {
                 StrRepresentBase = new StringRepresentation(str, format),
                 StrRepresent = new StringRepresentation(newStr, newFormat)
@@ -337,7 +374,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         {
             if(str.Contains("{") || str.Contains("}"))
             {
-                return Result.Fail<string>(@"str contains {  or  }!!!");
+                return Result.Failure<string>(@"str contains {  or  }!!!");
             }
             return Result.Ok(str);
         }
