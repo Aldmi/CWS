@@ -1,10 +1,6 @@
-﻿using System;
-using CSharpFunctionalExtensions;
-using Domain.InputDataModel.Autodictor.Entities;
+﻿using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Shared.Helpers;
-using Shared.Services.StringInseartService;
 using Shared.Services.StringInseartService.IndependentInseart;
 
 namespace Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers

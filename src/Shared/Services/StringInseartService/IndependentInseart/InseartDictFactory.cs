@@ -32,6 +32,9 @@ namespace Shared.Services.StringInseartService.IndependentInseart
         /// <returns></returns>
         public static Dictionary<string, StringInsertModel> Create(string str, string pattern)
         {
+            if (str == null)
+                throw new ArgumentNullException(nameof(str), "Невозможно создать словарь вставок из NULL строки");
+
             return ConvertString2StringInsertModels(str, pattern)
                 .ToDictionary(insert => insert.VarName, insert => insert);
         }

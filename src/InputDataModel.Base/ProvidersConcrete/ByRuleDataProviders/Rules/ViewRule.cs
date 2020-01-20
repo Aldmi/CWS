@@ -79,15 +79,15 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var bIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, Pattern, handlerFactorys, logger);
             var fIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(footer, Pattern, handlerFactorys, logger);
 
-            var headerExecuteInseartsResult = hIndependentInsertsService.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } }).result;
-            var footerExecuteInseartsResult = fIndependentInsertsService.ExecuteInsearts(null).result;
+            var hExecuteInseartsResult = hIndependentInsertsService.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } }).result;
+            var fExecuteInseartsResult = fIndependentInsertsService.ExecuteInsearts(null).result;
         
             var requestDependentInseartsService = DependentInseartsServiceFactory.Create(header + body + footer);
 
             var (_, isFailure, responseTransfer, error) = CreateResponseTransfer(option.ResponseOption, addressDevice, logger);
             if(isFailure) throw new ArgumentException(error); //???
 
-            var viewRule= new ViewRule<TIn>(option, headerExecuteInseartsResult, bIndependentInsertsService, footerExecuteInseartsResult, requestDependentInseartsService, responseTransfer, logger);
+            var viewRule= new ViewRule<TIn>(option, hExecuteInseartsResult, bIndependentInsertsService, fExecuteInseartsResult, requestDependentInseartsService, responseTransfer, logger);
             return viewRule;
         }
 
