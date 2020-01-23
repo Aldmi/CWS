@@ -33,7 +33,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         private readonly StringBuilder _headerExecuteInseartsResult;                         //Строка Header после IndependentInserts
         private readonly IndependentInsertsService _requestBodyParserModel;                  //модель вставки IndependentInserts в ТЕЛО ЗАПРОСА
         private readonly StringBuilder _footerExecuteInseartsResult;                         //Строка Footer после IndependentInserts
-        private readonly DependentInseartsService _requestDependentInseartsService;          //Сервис вставки зависимых данных в общий ЗАПРОС (header+body+footer)
+        private readonly DependentInseartService _requestDependentInseartsService;           //Сервис вставки зависимых данных в общий ЗАПРОС (header+body+footer)
 
         private readonly ResponseTransfer _responseTransfer;                                 //Ответ после всех вставок
         #endregion
@@ -81,12 +81,12 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var hExecuteInseartsResult = hIndependentInsertsService.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } }).result;
             var fExecuteInseartsResult = fIndependentInsertsService.ExecuteInsearts(null).result;
         
-            var requestDependentInseartsService = DependentInseartsServiceFactory.Create(header + body + footer);
+            var requestdepInsServ = DependentInseartsServiceFactory.Create(header + body + footer, Pattern);
 
             var (_, isFailure, responseTransfer, error) = CreateResponseTransfer(option.ResponseOption, addressDevice, logger);
             if(isFailure) throw new ArgumentException(error); //???
 
-            var viewRule= new ViewRule<TIn>(option, hExecuteInseartsResult, bIndependentInsertsService, fExecuteInseartsResult, requestDependentInseartsService, responseTransfer, logger);
+            var viewRule= new ViewRule<TIn>(option, hExecuteInseartsResult, bIndependentInsertsService, fExecuteInseartsResult, requestdepInsServ, responseTransfer, logger);
             return viewRule;
         }
 
@@ -235,20 +235,19 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 sbBodyResult.Append(result);
             }
             var sbAppendResult = new StringBuilder().Append(_headerExecuteInseartsResult).Append(sbBodyResult).Append(_footerExecuteInseartsResult);
-            var appendResultStr = sbAppendResult.ToString(); //TODO: Переход к старому коду зависимой вставки. Нужно его переделать на работу с StringBuilder
 
             //DEPENDENT insearts------------------------------------------------------------------------------------------------------
-            string str = appendResultStr;
             if (_requestDependentInseartsService != null)
             {
-                var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInseart(appendResultStr, format);
+                var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInsearts(sbAppendResult, format);
                 if (isFailure)
                 {
                     return Result.Failure<RequestTransfer<TIn>>(error);
                 }
-                str = value;
+                sbAppendResult = value;
             }
 
+            var str = sbAppendResult.ToString(); //TODO: Переход к старому коду зависимой вставки. Нужно его переделать на работу с StringBuilder
             //CHECK LIMIT---------------------------------------------------------------------------------------------------------------
             var (res, outOfLimit) = str.CheckLimitLenght(maxBodyLenght);
             if (res)
@@ -286,25 +285,24 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             //INDEPENDENT insearts-------------------------------------------------------------------------------
             var (sbBodyResult, _) = _requestBodyParserModel.ExecuteInsearts(null);
             var sbAppendResult = new StringBuilder().Append(_headerExecuteInseartsResult).Append(sbBodyResult).Append(_footerExecuteInseartsResult);
-            var appendResultStr = sbAppendResult.ToString(); //TODO: Переход к старому коду зависимой вставки. Нужно его переделать на работу с StringBuilder
-
+            
             //DEPENDENT insearts----------------------------------------------------------------------------------
-            string str = appendResultStr;
             if (_requestDependentInseartsService != null)
             {
-                var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInseart(appendResultStr, format);
+                var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInsearts(sbAppendResult, format);
                 if (isFailure)
                 {
                     return Result.Failure<RequestTransfer<TIn>>(error);
                 }
-                str = value;
+                sbAppendResult = value;
             }
 
             //CHECK RESULT STRING--------------------------------------------------------------------------------
-            var (_, f, _, e) = CheckResultString(str);
-            if(f)
-                return Result.Failure<RequestTransfer<TIn>>(e);
+            //var (_, f, _, e) = CheckResultString(str);
+            //if(f)
+            //    return Result.Failure<RequestTransfer<TIn>>(e);
 
+            var str = sbAppendResult.ToString(); //TODO: Переход к старому коду зависимой вставки. Нужно его переделать на работу с StringBuilder
             //FORMAT SWITCHER-------------------------------------------------------------------------------------
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
 
@@ -333,19 +331,17 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
             //INDEPENDENT insearts---------------------------------------------------------------------------------------------------------
             var (sbBodyResult, _) = indInsServ.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } });
-            var appendResultStr = sbBodyResult.ToString();
 
             //DEPENDENT insearts-----------------------------------------------------------------------------------------------------------
-            string str = appendResultStr;
-            var depInsServ = DependentInseartsServiceFactory.Create(body);
+            var depInsServ = DependentInseartsServiceFactory.Create(body, Pattern);
             if (depInsServ != null)
             {
-                var (_, isFailure, value, error) = depInsServ.ExecuteInseart(appendResultStr, format);
+                var (_, isFailure, value, error) = depInsServ.ExecuteInsearts(sbBodyResult, format);
                 if (isFailure)
                 {
                     return Result.Failure<ResponseTransfer>(error);
                 }
-                str = value;
+                sbBodyResult = value;
             }
 
             ////CHECK RESULT STRING---------------------------------------------------------------------------------------------------------
@@ -353,6 +349,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             //if (f)
             //    return Result.Failure<ResponseTransfer>(e);
 
+            var str = sbBodyResult.ToString(); //TODO: Переход к старому коду зависимой вставки. Нужно его переделать на работу с StringBuilder
             //FORMAT SWITCHER--------------------------------------------------------------------------------------------------------------
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
 

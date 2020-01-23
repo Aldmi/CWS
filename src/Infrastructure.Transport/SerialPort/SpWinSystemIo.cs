@@ -337,8 +337,9 @@ namespace Infrastructure.Transport.SerialPort
                     };
                     _port.DataReceived += handler;
 
-                    var buff = await tcs.Task.WithTimeout2HandleException(readTimeout, ct);
-                    return buff;
+                    //var buff = await tcs.Task.WithTimeout2HandleException(readTimeout, ct);
+                    //return buff;
+                    return null;//DEBUG
                 }
                 catch (TimeoutException)
                 {
