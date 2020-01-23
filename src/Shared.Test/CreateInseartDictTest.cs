@@ -82,7 +82,7 @@ namespace Shared.Test
         public void NormalReplacementTest(string str, List<StringInsertModel> expectedInsertModels)
         {
             //Act
-            var dict=  InseartDictFactory.CreateDistinctByReplacement(str, Pattern);
+            var dict=  StringInsertModelFactory.CreateDistinctByReplacement(str, Pattern);
 
             //Asert
             var moldels= dict.Values.ToArray();
@@ -104,7 +104,7 @@ namespace Shared.Test
             var str = "0x570xAA0xFF";
 
             //Act
-            var dict= InseartDictFactory.CreateDistinctByReplacement(str, Pattern);
+            var dict= StringInsertModelFactory.CreateDistinctByReplacement(str, Pattern);
 
             //Asert
             dict.Count.Should().Be(0);
@@ -118,7 +118,7 @@ namespace Shared.Test
             var str = String.Empty;
 
             //Act
-            var dict=  InseartDictFactory.CreateDistinctByReplacement(str, Pattern);
+            var dict=  StringInsertModelFactory.CreateDistinctByReplacement(str, Pattern);
 
             //Asert
             dict.Count.Should().Be(0);
@@ -132,7 +132,7 @@ namespace Shared.Test
             string str = null;
 
             //Act & Asert
-            var exception = Assert.Throws<ArgumentNullException>(() => InseartDictFactory.CreateDistinctByReplacement(str, Pattern));
+            var exception = Assert.Throws<ArgumentNullException>(() => StringInsertModelFactory.CreateDistinctByReplacement(str, Pattern));
             exception.Message.Should().Contain("Невозможно создать словарь вставок из NULL строки");
         }
     }

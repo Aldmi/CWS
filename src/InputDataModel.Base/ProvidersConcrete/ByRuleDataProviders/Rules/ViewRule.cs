@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.Enums;
-using Domain.InputDataModel.Base.InseartServices.DependentInsearts;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
@@ -46,7 +45,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             StringBuilder headerExecuteInseartsResult,
             IndependentInsertsService requestBodyParserModel,
             StringBuilder footerExecuteInseartsResult,
-            DependentInseartsService requestDependentInseartsService,
+            DependentInseartService requestDependentInseartsService,
             ResponseTransfer responseTransfer,
             ILogger logger)
         {

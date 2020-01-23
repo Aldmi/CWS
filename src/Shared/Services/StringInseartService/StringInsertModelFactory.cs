@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using MoreLinq.Extensions;
 
-namespace Shared.Services.StringInseartService.IndependentInseart
+namespace Shared.Services.StringInseartService
 {
-    public static class InseartDictFactory
+    public static class StringInsertModelFactory
     {
         /// <summary>
         /// Вернуть словарь вставок.
@@ -16,7 +16,7 @@ namespace Shared.Services.StringInseartService.IndependentInseart
         /// <returns></returns>
         public static Dictionary<string, StringInsertModel> CreateDistinctByReplacement(string str, string pattern)
         {
-            if(str == null)
+            if (str == null)
                 throw new ArgumentNullException(nameof(str), "Невозможно создать словарь вставок из NULL строки");
 
             return ConvertString2StringInsertModels(str, pattern)
@@ -30,13 +30,12 @@ namespace Shared.Services.StringInseartService.IndependentInseart
         /// <param name="str">строка</param>
         /// <param name="pattern">должно быть 2 местазаменителя * </param>
         /// <returns></returns>
-        public static Dictionary<string, StringInsertModel> Create(string str, string pattern)
+        public static List<StringInsertModel> CreateList(string str, string pattern)
         {
             if (str == null)
                 throw new ArgumentNullException(nameof(str), "Невозможно создать словарь вставок из NULL строки");
 
-            return ConvertString2StringInsertModels(str, pattern)
-                .ToDictionary(insert => insert.VarName, insert => insert);
+            return ConvertString2StringInsertModels(str, pattern).ToList();
         }
 
 

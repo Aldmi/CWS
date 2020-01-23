@@ -3,20 +3,23 @@ using System.Linq;
 
 namespace Shared.CrcCalculate
 {
+    /// <summary>
+    /// Алгоритмы вычисление CRC. 
+    /// </summary>
     public static class CrcCalc
     {
-        public static byte CalcXor(IReadOnlyList<byte> arr)
+        public static byte[] CalcXor(IReadOnlyList<byte> arr)
         {
             var xor = arr[0];
             for (var i = 1; i < arr.Count; i++)
             {
                 xor ^= arr[i];
             }
-            return xor;
+            return new[] { xor };
         }
 
 
-        public static byte CalcXorInverse(IReadOnlyList<byte> arr)
+        public static byte[] CalcXorInverse(IReadOnlyList<byte> arr)
         {
             var xor = arr[0];
             for (var i = 1; i < arr.Count; i++)
@@ -24,34 +27,35 @@ namespace Shared.CrcCalculate
                 xor ^= arr[i];
             }
             xor ^= 0xFF;
-            return xor;
+            return new[] { xor };
         }
 
 
-        public static byte CalcMod256(IReadOnlyList<byte> arr)
+        public static byte[] CalcMod256(IReadOnlyList<byte> arr)
         {
             var sum = arr.Aggregate(0, (current, a) => current + a);
-            return (byte)(sum % 256);
+            var mod256 = (byte)(sum % 256);
+            return new[] { mod256 };
         }
 
 
         /// <summary>
         /// Посчитать сумму и взять младший байт.
         /// </summary>
-        public static byte Calc8Bit(IReadOnlyList<byte> arr)
+        public static byte[] Calc8Bit(IReadOnlyList<byte> arr)
         {
             byte sum = 0;
             foreach (var b in arr)
             {
                 sum += b;
             }
-            return sum;
+            return new[] { sum };
         }
     }
 
 
 
-public static class Crc8
+    public static class Crc8
 {
     static readonly byte[] table = 
       {
