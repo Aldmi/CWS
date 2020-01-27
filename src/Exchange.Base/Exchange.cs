@@ -354,8 +354,6 @@ namespace Domain.Exchange
 
 
         #region dataProvider
-
-        
         public void SetNewProvider(ProviderOption option)
         {
             _ctsStartExchangePipeline.Cancel();

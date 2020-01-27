@@ -26,7 +26,7 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                        Header = "\u0002{AddressDevice:X2}{Nchar:X2}",
                         Body = "%000010320113%10$10$00$60$t2{Time:t}%000330940113%10$10$00$60$t3{Event}%000951920114%10$10$00$60$t1{StationsCut}%000011920183%10$10$00$60$t2 ",
                         Footer = "{CRCXorInverse:X2}\u0003",
                         Format = "Windows-1251",
@@ -62,7 +62,7 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                        Header = "\u0002{AddressDevice:X2}{Nchar:X2}",
                         Body = "%000011920304%10$10$00$60$t2{Note}%000011600483%10$10$00$60$t3Московское время%001611920483%10$10$00$60$t1",
                         Footer = "{CRCXorInverse:X2}\u0003",
                         Format = "Windows-1251",
@@ -98,7 +98,7 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                        Header = "\u0002{AddressDevice:X2}{Nchar:X2}",
                         Body = "%00001032{(rowNumber*16):D3}3%10$12$00$60$t3{TDepart:t}%00033240{(rowNumber*16):D3}4%10$12$00$60$t3{StationArrival}%00241256{(rowNumber*16):D3}3%10$12$00$60$t1{PathNumber}%400012561451%000012561603%10$10$00$60$t2Московское время",
                         Footer = "{CRCXorInverse:X2}\u0003",
                         Format = "Windows-1251",
@@ -134,7 +134,7 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                        Header = "\u0002{AddressDevice:X2}{Nchar:X2}",
                         Body = "%00001021{(rowNumber*11+16):D3}4%10$00$60$t3$13{NumberOfTrain}%00025144{(rowNumber*11+16):D3}4%10$00$60$t3$13{StationArrival}%00168199{(rowNumber*11+16):D3}4%10$00$60$t3$13{TDepart:t}%00202233{(rowNumber*11+16):D3}4%10$00$60$t3$13%00202233{(rowNumber*11+16):D3}4%10$00$60$t3$13%00241254{(rowNumber*11+16):D3}4%10$00$60$t3$13{PathNumber}",
                         Footer = "{CRCXorInverse:X2}\u0003",
                         Format = "Windows-1251",

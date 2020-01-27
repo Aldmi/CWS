@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Domain.InputDataModel.Autodictor.IndependentInsearts.Factory;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
@@ -14,7 +13,7 @@ using Shared.Services.StringInseartService.IndependentInseart;
 using Shared.Test.Datas;
 using Xunit;
 
-namespace Shared.Test
+namespace Shared.Test.IndependentInseartTest
 {
     public class IndependentInsertsServiceTest
     {

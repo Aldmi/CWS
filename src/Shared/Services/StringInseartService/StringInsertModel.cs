@@ -19,14 +19,21 @@ namespace Shared.Services.StringInseartService
             Options = ParseOptionOfVarName(varName);
             if (!string.IsNullOrEmpty(Options))
             {
-                //Удалить из varName опции
-                VarName = VarName.Replace(Options, String.Empty);
+                if (Options.Equals(VarName))  //НЕТ опций, заданно только имя
+                {
+                    Options = null;
+                }
+                else
+                {
+                    //Удалить из varName опции
+                    VarName = VarName.Replace(Options, String.Empty);
+                }
             }
         }
 
 
         /// <summary>
-        /// Опции после имени пекременной указанные в [] или () скобках
+        /// Опции после имени переменной указанные в [] или () скобках
         /// </summary>
         private static string ParseOptionOfVarName(string varName)
         {

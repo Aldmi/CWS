@@ -26,7 +26,7 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                        Header = "\u0002{AddressDevice:X2}{Nchar:X2}",
                         Body = "%30%010C60EF03B0470000001E%110406NNNNN%01000023{(rowNumber*24-23):X3}{(rowNumber*24-13):X3}0020001E%10{NumberOfCharacters:X2}01\\\"{NumberOfTrain}\\\"%01024030{(rowNumber*24-23):X3}{(rowNumber*24-13):X3}0000001E%10{NumberOfCharacters:X2}01\\\" \\\"%01062086{(rowNumber*24-23):X3}{(rowNumber*24-13):X3}0000001E%10{NumberOfCharacters:X2}01\\\"{TArrival:t}\\\"%010870AB{(rowNumber*24-23):X3}{(rowNumber*24-13):X3}0000001E%10{NumberOfCharacters:X2}01\\\"{TDepart:t}\\\"",
                         Footer = "{CRCXorInverse:X2}\u0003",
                         Format = "Windows-1251",
@@ -62,7 +62,7 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                        Header = "\u0002{AddressDevice:X2}{Nchar:X2}",
                         Body = "%010000F0{(rowNumber*24-11):X3}{(rowNumber*24-1):X3}0024001E%10{NumberOfCharacters:X2}01\\\"{Addition} {StationDeparture}-{StationArrival}\\\"%010AC0D5{(rowNumber*24-23):X3}{(rowNumber*24-13):X3}0000001E%10{NumberOfCharacters:X2}01\\\"{TypeAlias}\\\"%010D60F0{(rowNumber*24-23):X3}{(rowNumber*24-13):X3}0020001E%10{NumberOfCharacters:X2}01\\\"{DelayTime:Min}\\\"",
                         Footer = "{CRCXorInverse:X2}\u0003",
                         Format = "Windows-1251",
@@ -84,7 +84,7 @@ namespace ByRulesInseartedTest.Test
                 //RESPONSE
                 "0246463038254130373741434B454103",
                 "HEX",
-                9                                                                                                                                                                 
+                9
             }
         };
         #endregion

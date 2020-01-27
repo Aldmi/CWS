@@ -21,7 +21,7 @@ namespace Shared.Services.StringInseartService
 
             return ConvertString2StringInsertModels(str, pattern)
                 .DistinctBy(insert => insert.Replacement)
-                .ToDictionary(insert => insert.VarName, insert => insert);
+                .ToDictionary(insert => insert.Replacement, insert => insert);
         }
 
         /// <summary>

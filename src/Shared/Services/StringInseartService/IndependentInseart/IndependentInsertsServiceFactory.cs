@@ -7,7 +7,7 @@ namespace Shared.Services.StringInseartService.IndependentInseart
     public static class IndependentInsertsServiceFactory
     {
         /// <summary>
-        /// Фабрика созданет сервис независмых всавок в строку
+        /// Фабрика создает сервис независмых всавок в строку
         /// IndependentInsertsService
         /// </summary>
         /// <param name="str">строка для выполнения вставок</param>

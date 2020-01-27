@@ -182,7 +182,7 @@ namespace Domain.Device
                     case DataAction.OneTimeAction://однократные данные обрабатываем сразу.
                         await MiddlewareInvokeService.InputSetInstantly(inData);
                         break;
-                    case DataAction.CycleAction: //однократные данные обрабатываем сразу.
+                    case DataAction.CycleAction: //циклические данныепоступают в обработку MiddlewareInvokeService.
                         await MiddlewareInvokeService.InputSetByOptionMode(inData);
                         break;
                     case DataAction.CommandAction://Команды не проходят обработку через MiddlewareInvokeService
