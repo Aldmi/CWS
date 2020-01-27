@@ -19,12 +19,13 @@ namespace Domain.Device.MiddleWares.Invokes
     /// "ByTimer" - Обработчик запускается по внутреннему таймеру.
     /// Если приходят новые данные, то таймер перезапускается и обработчик вызывается сразу.
     /// "FeedBackWaiting" - В этот режим система переходит САМА, если метод SetFeedBack (выставляет флаг обратной связи)
-    /// был вызван ПОЗЖЕ чем прошла обработка вызванная ByTimer (в режиме Instantly обратная связь не работает).
+    /// был вызван ПОЗЖЕ, чем прошла обработка вызванная ByTimer (в режиме Instantly обратная связь не работает).
     /// </summary>
     public class MiddlewareInvokeService<TIn> : IDisposable
     {
         #region fields
         private readonly InvokerOutput _option;
+        private readonly string _description;
         private readonly IMiddlewareInData<TIn> _middleware;
         private readonly IDisposable _middlewareOwner;
         private readonly ILogger _logger;
@@ -68,6 +69,7 @@ namespace Domain.Device.MiddleWares.Invokes
         public MiddlewareInvokeService(MiddleWareInDataOption option, Func<MiddleWareInDataOption, Owned<IMiddlewareInData<TIn>>> middlewareFactory, ILogger logger)
         {
             _option = option.InvokerOutput;
+            _description = option.Description;
             var middlewareOwner = middlewareFactory(option);
             _middlewareOwner = middlewareOwner;
             _middleware = middlewareOwner.Value;
@@ -156,7 +158,7 @@ namespace Domain.Device.MiddleWares.Invokes
             else
             {
                 InvokerOutputMode = InvokerOutputMode.FeedBackWaiting;
-                _logger.Warning("Обратная связь НЕ выставленна при вызове обработчика. Переход в режим FeedBackWaiting. Подготовка данных ByTimer работатет быстрее чем поступает обратная связь об отправки подготовленных дангных транспортом. ");
+                _logger.Warning($"Обратная связь НЕ выставленна при вызове обработчика. Переход в режим FeedBackWaiting. Подготовка данных ByTimer работатет быстрее чем поступает обратная связь об отправки подготовленных данных транспортом. \"{_description}\"");
             }
         }
 
