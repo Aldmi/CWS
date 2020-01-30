@@ -41,7 +41,7 @@ namespace Shared.Services.StringInseartService.DependentInseart.DependentInseart
             var lenghtBody = buf.Length;
             var lenght = lenghtBody + LenghtAddressInBytes + LenghtNByteInbytes + LenghtCrcInbytes;
             var resStr = lenght.Convert2StrByFormat(RequiredModel.Format);
-            return Result.Ok<string>(resStr);
+            return Result.Ok(resStr);
         }
         
     }

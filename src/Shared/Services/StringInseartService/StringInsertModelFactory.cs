@@ -42,7 +42,7 @@ namespace Shared.Services.StringInseartService
         private static IEnumerable<StringInsertModel> ConvertString2StringInsertModels(string str, string pattern)
         {
             var matches = Regex.Matches(str, pattern)
-                .Select(match => new StringInsertModel(match.Groups[0].Value, match.Groups[1].Value, match.Groups[2].Value));
+                .Select(match => new StringInsertModel(match.Groups[0].Value, match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value));
 
             return matches;
         }

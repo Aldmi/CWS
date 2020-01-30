@@ -14,8 +14,8 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory
             {
                 case "AddressDevice":
                     return new AddressDeviceIndependentInsertsHandler(insertModel);
-                
-                case string s when s.Contains("rowNumber"):
+
+                case "MATH"://string s when s.Contains("rowNumber"):
                     return new RowNumberIndependentInsertsHandler(insertModel);
 
                 default:

@@ -8,6 +8,7 @@ using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using FluentAssertions;
 using Moq;
 using Serilog;
+using Shared.Extensions;
 using Shared.Services.StringInseartService;
 using Shared.Services.StringInseartService.IndependentInseart;
 using Shared.Test.Datas;
@@ -82,8 +83,13 @@ namespace Shared.Test.IndependentInseartTest
         {
             new object[]
             {
-                "0x03^{NumberOfTrain}^ {StationsCut}^{TArrival:t}^{TDepart:t}",
-                "0x03^456^ Москва^15:25^16:18"
+                "0x03^{NumberOfTrain}^ {StationsCut}^{TArrival:t}^{TDepart:t} 0x{MATH(rowNumber+64):X1}0bb",
+                "0x03^456^ Москва^15:25^16:18 0x420bb"
+            },
+            new object[]
+            {
+                "0x{MATH((rowNumber+64)-(rowNumber*2)):X1}0bb",
+                "0x3E0bb"
             },
             new object[]
             {
@@ -100,14 +106,13 @@ namespace Shared.Test.IndependentInseartTest
                 "0FF065564457657876867",
                 "0FF065564457657876867"
             },
-
         };
         #endregion
 
         [Theory]
         [MemberData(nameof(BoodyExecuteInseartsDatas))]
         public void BoodyExecuteInseartsTest(string str, string expectedStr)
-        {
+        { 
             //Arrage
             var independentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(str, Pattern, _handlerFactorys, _logger);
 

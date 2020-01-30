@@ -11,7 +11,7 @@ namespace Shared.Test.DependentInseartTest.DependentInseartHandlersTest
         private readonly NumberOfCharactersDepInsH handler;
         public NumberOfCharactersDepInsHTest()
         {
-            var m = new StringInsertModel("{NumberOfCharacters:X2}", "NumberOfCharacters", ":X2");
+            var m = new StringInsertModel("{NumberOfCharacters:X2}", "NumberOfCharacters", "", ":X2");
             handler = new NumberOfCharactersDepInsH(m);
         }
         

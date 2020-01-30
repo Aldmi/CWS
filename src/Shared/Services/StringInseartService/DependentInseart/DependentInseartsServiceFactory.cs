@@ -38,7 +38,7 @@ namespace Shared.Services.StringInseartService.DependentInseart
             handlers.AddRange(from model in array where model.VarName == "CRCXor" select new CrcXorDepInsH(model));
             handlers.AddRange(from model in array where model.VarName == "CRCXorInverse" select new CrcXorInverseDepInsH(model));
             handlers.AddRange(from model in array where model.VarName == "CRCMod256" select new CrcMod256DepInsH(model));
-            handlers.AddRange(from model in array where model.VarName == "8Bit" select new Crc8BitDepInsH(model));
+            handlers.AddRange(from model in array where model.VarName == "CRC8Bit" select new Crc8BitDepInsH(model));
             
             return handlers;
         }

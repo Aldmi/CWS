@@ -14,6 +14,7 @@ using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.Device.Services;
 using Domain.Exchange;
 using Domain.Exchange.Enums;
+using Domain.Exchange.Models;
 using Domain.Exchange.RxModel;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
@@ -194,6 +195,23 @@ namespace Domain.Device
             {
                 await ResiveInExchange(inData);
             }
+        }
+
+
+        /// <summary>
+        /// Получить текушее состояние обменов
+        /// </summary>
+        /// <param name="keyExchange">ключ обмена</param>
+        /// <returns></returns>
+        public IReadOnlyList<ExchangeInfoModel> GetExchnagesInfo(string keyExchange = null)
+        {
+            var infoListQuery = Exchanges.Select(exch => new ExchangeInfoModel(exch.KeyExchange, exch.IsConnect, exch.IsOpen));
+            if (string.IsNullOrEmpty(keyExchange))
+            {
+                return infoListQuery.ToList();
+            }
+            var info = infoListQuery.FirstOrDefault(ex => ex.keyExchange == keyExchange);
+            return new List<ExchangeInfoModel>{ info };
         }
 
 

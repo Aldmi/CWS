@@ -54,7 +54,7 @@ namespace Shared.Services.StringInseartService.IndependentInseart
                         continue;                                                                                   //inData НЕ подошла для handler 
 
                     sb.Replace(insertModel.Replacement, replacement);
-                    inseartedDict.Add(insertModel.VarName, replacement);                                            //inData подошла для handler, handler вернул строку замены, выполнили замену в строке 
+                    inseartedDict.TryAdd(insertModel.VarName, replacement);                                            //inData подошла для handler, handler вернул строку замены, выполнили замену в строке 
                 }
             }
             return (result: sb, inseartedDict: inseartedDict);

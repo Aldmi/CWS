@@ -28,7 +28,7 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handler
                 try
                 {
                     var rowNumber = int.Parse(value);
-                    var calcVal = MathematicFormat.CalculateMathematicFormat(_insertModel.VarName, rowNumber);
+                    var calcVal = MathematicFormat.CalculateMathematicFormat(_insertModel.Options, rowNumber);
                     var res = calcVal.Convert2StrByFormat(_insertModel.Format);
                     return Result.Ok((res, _insertModel));
                 }

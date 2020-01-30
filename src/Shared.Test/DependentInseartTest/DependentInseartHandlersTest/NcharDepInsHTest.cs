@@ -14,8 +14,8 @@ namespace Shared.Test.DependentInseartTest.DependentInseartHandlersTest
         private readonly NcharDepInsH _handler;
         public NcharDepInsHTest()
         {
-            var requiredModel = new StringInsertModel("{Nchar:X2}", "Nchar", ":D2");
-            var crcModel = new StringInsertModel("{CRCXorInverse:X2}", "CRCXorInverse", ":X2");
+            var requiredModel = new StringInsertModel("{Nchar:X2}", "Nchar","", ":D2");
+            var crcModel = new StringInsertModel("{CRCXorInverse:X2}", "CRCXorInverse", "", ":X2");
             _handler = new NcharDepInsH(requiredModel, crcModel);
         }
         
@@ -76,7 +76,7 @@ namespace Shared.Test.DependentInseartTest.DependentInseartHandlersTest
         public void Not_Crc_optionalModel_Test()
         {
             //Arrange
-            var requiredModel = new StringInsertModel("{Nchar:X2}", "Nchar", ":D2");
+            var requiredModel = new StringInsertModel("{Nchar:X2}", "Nchar", "", ":D2");
             StringInsertModel optionalModel = null;
 
             //Act & Asert

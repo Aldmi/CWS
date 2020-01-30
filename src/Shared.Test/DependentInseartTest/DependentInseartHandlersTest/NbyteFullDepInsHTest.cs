@@ -13,8 +13,8 @@ namespace Shared.Test.DependentInseartTest.DependentInseartHandlersTest
         private readonly NbyteFullDepInsH _handler;
         public NbyteFullDepInsHTest()
         {
-            var requiredModel = new StringInsertModel("{NbyteFull:X2}", "NbyteFull", ":X2");
-            var crcModel = new StringInsertModel("{CRCMod256:X2}", "CRCMod256", ":X2");
+            var requiredModel = new StringInsertModel("{NbyteFull:X2}", "NbyteFull", "", ":X2");
+            var crcModel = new StringInsertModel("{CRCMod256:X2}", "CRCMod256", "", ":X2");
             _handler = new NbyteFullDepInsH(requiredModel, crcModel);
         }
         
@@ -76,7 +76,7 @@ namespace Shared.Test.DependentInseartTest.DependentInseartHandlersTest
         public void Not_Crc_optionalModel_Test()
         {
             //Arrange
-            var requiredModel = new StringInsertModel("{NbyteFull:X2}", "NbyteFull", ":X2");
+            var requiredModel = new StringInsertModel("{NbyteFull:X2}", "NbyteFull", "", ":X2");
             StringInsertModel optionalModel = null;
             
             //Act & Asert

@@ -135,7 +135,7 @@ namespace ByRulesInseartedTest.Test
                     RequestOption = new RequestOption
                     {
                         Header = "0xFF0xFF0x020x1B0x57",
-                        Body = "0x{(rowNumber+64):X1}0x46{NumberOfTrain}0x09{TypeAlias}0x09{StationArrival}0x09{TDepart:t}0x09{PathNumber}0x09{DelayTime:t}0x09",
+                        Body = "0x{MATH(rowNumber+64):X1}0x46{NumberOfTrain}0x09{TypeAlias}0x09{StationArrival}0x09{TDepart:t}0x09{PathNumber}0x09{DelayTime:t}0x09",
                         Footer = "0x030x{CRCXor(0x02-0x03):X2}0x1F",
                         Format = "Windows-1251",
                         MaxBodyLenght = 230
@@ -156,7 +156,7 @@ namespace ByRulesInseartedTest.Test
                 //RESPONSE
                 "061F",
                 "HEX",
-                7
+                6
             }
 
         };
@@ -194,7 +194,7 @@ namespace ByRulesInseartedTest.Test
             rt.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(inputTypes.Count);
             foreach (var processedItem in rt.Request.ProcessedItemsInBatch.ProcessedItems)
             {
-                processedItem.InseartedData.Count.Should().Be(expectedCountInseartedData);
+                processedItem.InseartedData.Where(pair => pair.Key != "MATH").ToList().Count.Should().Be(expectedCountInseartedData);
             }
 
             rt.Response.StrRepresent.Str.Should().Be(expectedRespStrRepresent);

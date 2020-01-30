@@ -21,55 +21,63 @@ namespace Shared.Test
         #region TheoryData
         public static IEnumerable<object[]>  CreateInseartDictDatas => new[]
         {
-            //new object[]
-            //{
-            //    "\u0002{AddressDevice:X2} {Nbyte:D3}",
-            //    new List<StringInsertModel>
-            //    {
-            //        new StringInsertModel("{AddressDevice:X2}", "AddressDevice", ":X2"),
-            //        new StringInsertModel("{Nbyte:D3}", "Nbyte", ":D3")
-            //    }
-            //},
-            //new object[]
-            //{
-            //    "0x57{Nbyte:X2 fff {CRCXor[0x02-0x03]:X2}",
-            //    new List<StringInsertModel>
-            //    {
-            //        new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor[0x02-0x03]", ":X2")
-            //    }
-            //},
-            //new object[]
-            //{
-            //    "0x57{Nbyte:X2 {kkk:ff} {} {CRCXor[0x02-0x03]:X2}",
-            //    new List<StringInsertModel>
-            //    {
-            //        new StringInsertModel("{kkk:ff}", "kkk", ":ff"),
-            //        new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor[0x02-0x03]", ":X2")
-            //    }
-            //},
-            //new object[]
-            //{
-            //    "0x57{ fff {{{ {CRCXor[0x02-0x03]:X2} }gfgf:X2",
-            //    new List<StringInsertModel>
-            //    {
-            //        new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor[0x02-0x03]", ":X2")
-            //    }
-            //},
-            //new object[]
-            //{
-            //    "0x57{NumberOfTrain}  {CRCXor[0x02-0x03]:X2}",
-            //    new List<StringInsertModel>
-            //    {
-            //        new StringInsertModel("{NumberOfTrain}", "NumberOfTrain",String.Empty),
-            //        new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor[0x02-0x03]", ":X2")
-            //    }
-            //},
             new object[]
             {
-                "0x{(rowNumber+64):X1}0bb",
+                "\u0002{AddressDevice:X2} {Nbyte:D3}",
                 new List<StringInsertModel>
                 {
-                    new StringInsertModel("{(rowNumber+64):X1}", "(rowNumber+64)",":X1"),
+                    new StringInsertModel("{AddressDevice:X2}", "AddressDevice", "", ":X2"),
+                    new StringInsertModel("{Nbyte:D3}", "Nbyte","", ":D3")
+                }
+            },
+            new object[]
+            {
+                "0x57{Nbyte:X2 fff {CRCXor[0x02-0x03]:X2}",
+                new List<StringInsertModel>
+                {
+                    new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor", "[0x02-0x03]",":X2")
+                }
+            },
+            new object[]
+            {
+                "0x57{Nbyte:X2 {kkk:ff} {} {CRCXor[0x02-0x03]:X2}",
+                new List<StringInsertModel>
+                {
+                    new StringInsertModel("{kkk:ff}", "kkk", "",":ff"),
+                    new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor","[0x02-0x03]", ":X2")
+                }
+            },
+            new object[]
+            {
+                "0x57{ fff {{{ {CRCXor[0x02-0x03]:X2} }gfgf:X2",
+                new List<StringInsertModel>
+                {
+                    new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor", "[0x02-0x03]", ":X2")
+                }
+            },
+            new object[]
+            {
+                "0x57{NumberOfTrain}  {CRCXor[0x02-0x03]:X2}",
+                new List<StringInsertModel>
+                {
+                    new StringInsertModel("{NumberOfTrain}", "NumberOfTrain", "", String.Empty),
+                    new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor", "[0x02-0x03]", ":X2")
+                }
+            },
+            new object[]
+            {
+                "0x{MATH(rowNumber+64):X1}0bb",
+                new List<StringInsertModel>
+                {
+                    new StringInsertModel("{MATH(rowNumber+64):X1}", "MATH", "(rowNumber+64)", ":X1"),
+                }
+            },
+            new object[]
+            {
+                "0x{MATH((rowNumber+64)-(rowNumber*1)):X1}0bb",
+                new List<StringInsertModel>
+                {
+                    new StringInsertModel("{MATH((rowNumber+64)-(rowNumber*1)):X1}", "MATH", "((rowNumber+64)-(rowNumber*1))", ":X1"),
                 }
             },
             new object[]
@@ -77,7 +85,7 @@ namespace Shared.Test
                 "*{CRC8Bit[:-*]:X2}0x0D",
                 new List<StringInsertModel>
                 {
-                    new StringInsertModel("{CRC8Bit[:-*]:X2}", "(CRC8Bit)",":X2"),
+                    new StringInsertModel("{CRC8Bit[:-*]:X2}", "CRC8Bit", "[:-*]",":X2"),
                 }
             },
         };

@@ -27,7 +27,9 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
     public class ViewRule<TIn>
     {
         #region fields
-        public const string Pattern = @"\{([^:{]+)(:[^{}]+)?\}";
+        public const string Pattern = @"\{(\w+)(\([^{}]*\)|\[[^][{}]*])?(:[^{}]+)?}";
+        // \{([^:{]+)(:[^{}]+)?\}"
+        // 
 
         private readonly ILogger _logger;
         private readonly StringBuilder _headerExecuteInseartsResult;                         //Строка Header после IndependentInserts

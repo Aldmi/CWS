@@ -12,7 +12,7 @@ namespace Shared.Test.DependentInseartTest.DependentInseartHandlersTest
         private readonly CrcXorDepInsH _handler;
         public CrcXorDepInsHTest()
         {
-            var requiredModel = new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor[0x02-0x03]", ":X2");
+            var requiredModel = new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor", "[0x02-0x03]", ":X2");
             _handler = new CrcXorDepInsH(requiredModel);
         }
         
@@ -63,7 +63,7 @@ namespace Shared.Test.DependentInseartTest.DependentInseartHandlersTest
         public void Calc_Crc_WithOut_CrcOptions_Test()
         {
             //Arrange
-            var requiredModel = new StringInsertModel("{CRCXor:X2}", "CRCXor", ":X2");
+            var requiredModel = new StringInsertModel("{CRCXor:X2}", "CRCXor", "", ":X2");
             var handler = new CrcXorDepInsH(requiredModel);
             var sb = new StringBuilder("0xFF0xFF0x020x1B0x57дополнение0x09Москва-Питер0x0915:250x030x{CRCXor:X2}0x1F");
             var format = "cp866";
@@ -78,7 +78,7 @@ namespace Shared.Test.DependentInseartTest.DependentInseartHandlersTest
         public void Calc_Crc_WithOut_CrcOptions_WithOut_HexInStr_Test()
         {
             //Arrange
-            var requiredModel = new StringInsertModel("{CRCXor:X2}", "CRCXor", ":X2");
+            var requiredModel = new StringInsertModel("{CRCXor:X2}", "CRCXor", "", ":X2");
             var handler = new CrcXorDepInsH(requiredModel);
             var sb = new StringBuilder("\u000201BA%00001021дополнение4%10$00$60$t3$13Москва-Питер%10$00$615:254%10$00$60$t3$13{CRCXor:X2}\u0003");
             var format = "Windows-1251";

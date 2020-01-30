@@ -438,15 +438,15 @@ namespace WebApiSwc.Controllers
         private async Task<ActionResult> InputDataHandler(IReadOnlyList<InputData<AdInputType>> inputDatas)
         {
             var errors =await _inputDataApplyService.ApplyInputData(inputDatas);
-            if (errors.Any())
-            {
-                var errorCompose = new StringBuilder("Error in sending data: ");
-                foreach (var err in errors)
-                {
-                    errorCompose.AppendLine(err);
-                }
-                return Ok(new IndigoResponseDto(0, errorCompose.ToString())); //Запрос верный, НО при обработве данных возникли ошибки
-            }
+            //if (errors.Any())
+            //{
+            //    var errorCompose = new StringBuilder("Error in sending data: ");
+            //    foreach (var err in errors)
+            //    {
+            //        errorCompose.AppendLine(err);
+            //    }
+            //    return Ok(new IndigoResponseDto(0, errorCompose.ToString())); //Запрос верный, НО при обработве данных возникли ошибки
+            //}
             var resp = new IndigoResponseDto(1, "Ok");                       //Запрос верный, Обработано успешно
             return Ok(resp);
         }
