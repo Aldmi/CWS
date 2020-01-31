@@ -77,7 +77,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
 
         #region RtOptionsMethods
-
         /// <summary>
         /// Вернуть опции провайдера
         /// </summary>
@@ -85,17 +84,11 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         {
             var provideroption = new ProviderOption
             {
-                //Name = ProviderName,
-                //ByRulesProviderOption = new ByRulesProviderOption
-                //{
-                //    RuleName4DefaultHandle = RuleName4DefaultHandle,
-                //    Rules = GetRules.Select(r => r.GetCurrentOption()).ToList()
-                //}
+                Name = ProviderName,
                 ByRulesProviderOption = _option
             };
             return provideroption;
         }
-
         #endregion
 
 
