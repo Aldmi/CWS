@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Subjects;
+using CSharpFunctionalExtensions;
 using Domain.Exchange.Behaviors;
 using Domain.Exchange.Enums;
 using Domain.Exchange.RxModel;
@@ -29,7 +30,7 @@ namespace Domain.Exchange
 
         #region dataProvider
         ProviderOption GetProviderOption { get; }
-        void SetNewProvider(ProviderOption option);
+        Result SetNewProvider(ProviderOption option);
         #endregion
 
 
