@@ -210,7 +210,7 @@ namespace Domain.Device
             {
                 return infoListQuery.ToList();
             }
-            var info = infoListQuery.FirstOrDefault(ex => ex.keyExchange == keyExchange);
+            var info = infoListQuery.FirstOrDefault(ex => ex.KeyExchange == keyExchange);
             return new List<ExchangeInfoModel>{ info };
         }
 
@@ -253,7 +253,7 @@ namespace Domain.Device
             var exchange = Exchanges.FirstOrDefault(exch => exch.KeyExchange == keyExchange);
             if (exchange == null)
             {
-                //await Send2Produder(Option.TopicName4MessageBroker, $"Обмен не найденн для этого ус-ва {keyExchange}");
+                //await Send2Produder(Option.TopicName4MessageBroker, $"Обмен не найденн для этого ус-ва {KeyExchange}");
                 return;
             }
             await SendDataOrCommand(exchange, dataAction, inData, command4Device, directHandlerName);
