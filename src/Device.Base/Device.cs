@@ -14,6 +14,7 @@ using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.Device.Services;
 using Domain.Exchange;
 using Domain.Exchange.Enums;
+using Domain.Exchange.Models;
 using Domain.Exchange.RxModel;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
@@ -182,7 +183,7 @@ namespace Domain.Device
                     case DataAction.OneTimeAction://однократные данные обрабатываем сразу.
                         await MiddlewareInvokeService.InputSetInstantly(inData);
                         break;
-                    case DataAction.CycleAction: //однократные данные обрабатываем сразу.
+                    case DataAction.CycleAction: //циклические данныепоступают в обработку MiddlewareInvokeService.
                         await MiddlewareInvokeService.InputSetByOptionMode(inData);
                         break;
                     case DataAction.CommandAction://Команды не проходят обработку через MiddlewareInvokeService
@@ -194,6 +195,23 @@ namespace Domain.Device
             {
                 await ResiveInExchange(inData);
             }
+        }
+
+
+        /// <summary>
+        /// Получить текушее состояние обменов
+        /// </summary>
+        /// <param name="keyExchange">ключ обмена</param>
+        /// <returns></returns>
+        public IReadOnlyList<ExchangeInfoModel> GetExchnagesInfo(string keyExchange = null)
+        {
+            var infoListQuery = Exchanges.Select(exch => new ExchangeInfoModel(exch.KeyExchange, exch.IsConnect, exch.IsOpen));
+            if (string.IsNullOrEmpty(keyExchange))
+            {
+                return infoListQuery.ToList();
+            }
+            var info = infoListQuery.FirstOrDefault(ex => ex.KeyExchange == keyExchange);
+            return new List<ExchangeInfoModel>{ info };
         }
 
 
@@ -235,7 +253,7 @@ namespace Domain.Device
             var exchange = Exchanges.FirstOrDefault(exch => exch.KeyExchange == keyExchange);
             if (exchange == null)
             {
-                //await Send2Produder(Option.TopicName4MessageBroker, $"Обмен не найденн для этого ус-ва {keyExchange}");
+                //await Send2Produder(Option.TopicName4MessageBroker, $"Обмен не найденн для этого ус-ва {KeyExchange}");
                 return;
             }
             await SendDataOrCommand(exchange, dataAction, inData, command4Device, directHandlerName);

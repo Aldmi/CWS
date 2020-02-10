@@ -25,7 +25,7 @@ namespace Shared.Extensions
                         }
                         throw ex.InnerException;
                     }
-                   throw;
+                    throw;
                 }
             }, ct);
         }

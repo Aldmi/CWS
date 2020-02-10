@@ -1,10 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using App.Services.Mediators;
+using CSharpFunctionalExtensions;
+using Domain.Exchange.Models;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
+using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
 using Serilog;
+using Shared.Enums;
 
 namespace App.Services.InputData
 {
@@ -32,33 +38,36 @@ namespace App.Services.InputData
         /// Найти все ус-ва по имени и передать им данные.
         /// </summary>
         /// <param name="inputDatas">Данные для нескольких ус-в</param>
-        /// <returns>Список ОШИБОК</returns>
-        public async Task<IReadOnlyList<string>> ApplyInputData(IReadOnlyList<InputData<TIn>> inputDatas)
+        /// <returns>Словарь состояний обменов для устройств или ошибку</returns>
+        public async Task<Result<Dictionary<string, IReadOnlyList<ExchangeInfoModel>>>> ApplyInputData(IReadOnlyList<InputData<TIn>> inputDatas)
         {
             //найти Device по имени и передать ему данные 
-            var errors= new List<string>();
+            var errorsSb= new StringBuilder();
             var tasks = new List<Task>();
+            var dictResult= new Dictionary<string, IReadOnlyList<ExchangeInfoModel>>();
             foreach (var inData in inputDatas)
             {
                 var device = _mediatorForStorages.GetDevice(inData.DeviceName);
                 if (device == null)
                 {
-                    errors.Add($"устройство не найденно: {inData.DeviceName}");
+                    errorsSb.AppendLine($"устройство не найдено: {inData.DeviceName}");
                     continue;
                 }
 
                 if(!string.IsNullOrEmpty(inData.ExchangeName) && (_mediatorForStorages.GetExchange(inData.ExchangeName) == null))
-                {
-                  errors.Add($"Обмен не найденн: {inData.ExchangeName}");
+                { 
+                   errorsSb.AppendLine($"Обмен не найден: {inData.ExchangeName}");
                   continue;
                 }
 
-                LogingInData(inData);
                 tasks.Add(device.Resive(inData));
+                dictResult.Add(inData.DeviceName, device.GetExchnagesInfo(inData.ExchangeName));
+                LogingInData(inData);
             }
-
             await Task.WhenAll(tasks);
-            return errors;
+            return errorsSb.Length > 0 
+                ? Result.Failure<Dictionary<string, IReadOnlyList<ExchangeInfoModel>>>(errorsSb.ToString()) 
+                : Result.Ok(dictResult);
         }
 
 

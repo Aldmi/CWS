@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Autofac.Features.OwnedInstances;
+using CSharpFunctionalExtensions;
 using Domain.Exchange.Behaviors;
 using Domain.Exchange.Enums;
 using Domain.Exchange.Repository.Entities;
@@ -24,6 +25,7 @@ using Newtonsoft.Json;
 using Serilog;
 using Shared.Collections;
 using Shared.Enums;
+using Shared.Extensions;
 using Shared.Types;
 
 
@@ -265,7 +267,6 @@ namespace Domain.Exchange
                     transportResponseWrapper.ResponsesItems.Add(transportResp);
                 }
             });
-
             try
             {
                 //ЗАПУСК КОНВЕЕРА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ
@@ -354,16 +355,36 @@ namespace Domain.Exchange
 
 
         #region dataProvider
-
-        
-        public void SetNewProvider(ProviderOption option)
+        public Result SetNewProvider(ProviderOption option)
         {
+            var (_, isFailure, value, error) = TryCreateProvider(option);
+            if (isFailure)
+            {
+                _logger.Error(error);
+                return Result.Failure(error);
+            }
             _ctsStartExchangePipeline.Cancel();
             _dataProviderOwner.Dispose();
-            var owner= _dataProviderFactory[option.Name](option);
+            var owner = value;
             _dataProviderOwner = owner;
             _dataProvider = owner.Value;
             _ctsStartExchangePipeline = new CancellationTokenSource();
+            return Result.Ok();
+        }
+
+
+        private Result<Owned<IDataProvider<TIn, ResponseInfo>>> TryCreateProvider(ProviderOption option)
+        {
+            try
+            {
+                var owner = _dataProviderFactory[option.Name](option);
+                return Result.Ok(owner);
+            }
+            catch (Exception e)
+            {
+                var unionMessages = e.GetOriginalException().Message;
+                return Result.Failure<Owned<IDataProvider<TIn, ResponseInfo>>>($"Exception при УСТАНОВКИ НОВГО ПРОВАЙДЕРА \"{unionMessages}\"");
+            }
         }
         #endregion
 

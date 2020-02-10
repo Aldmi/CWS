@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using App.Services.InputData;
 using Autofac.Features.Indexed;
 using AutoMapper;
+using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
@@ -435,19 +436,29 @@ namespace WebApiSwc.Controllers
         }
 
 
+        /// <summary>
+        /// Возвращает СЛОВАРЬ состояний обменов для каждого устройства. (У каждого уст-тва список сотояний обменов)
+        ///ФОРМАТ ОТВЕТА
+        ///{
+        ///    "DeviceName": [
+        ///      {
+        ///        "keyExchange": "ExchnageName",
+        ///        "isConnect": true,
+        ///        "isOpen": true
+        ///      }
+        ///    ]
+        ///}
+        /// </summary>
+        /// <param name="inputDatas"></param>
+        /// <returns></returns>
         private async Task<ActionResult> InputDataHandler(IReadOnlyList<InputData<AdInputType>> inputDatas)
         {
-            var errors =await _inputDataApplyService.ApplyInputData(inputDatas);
-            if (errors.Any())
-            {
-                var errorCompose = new StringBuilder("Error in sending data: ");
-                foreach (var err in errors)
-                {
-                    errorCompose.AppendLine(err);
-                }
-                return Ok(new IndigoResponseDto(0, errorCompose.ToString())); //Запрос верный, НО при обработве данных возникли ошибки
-            }
-            var resp = new IndigoResponseDto(1, "Ok");                       //Запрос верный, Обработано успешно
+            var (_, isFailure, value, error) = await _inputDataApplyService.ApplyInputData(inputDatas);
+            if(isFailure)
+                return Ok(new IndigoResponseDto(0, error)); //Запрос верный, НО при обработве данных возникли ошибки
+
+            //var resp = value;                                                       //Запрос верный, Обработано успешно
+            var resp = new IndigoResponseDto(1, "Ok");                    //Запрос верный, Обработано успешно
             return Ok(resp);
         }
 

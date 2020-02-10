@@ -26,7 +26,7 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                        Header = "\u0002{AddressDevice:X2}{Nchar:X2}",
                         Body = "%000010320113%10$10$00$60$t2{Time:t}%000330940113%10$10$00$60$t3{Event}%000951920114%10$10$00$60$t1{StationsCut}%000011920183%10$10$00$60$t2 ",
                         Footer = "{CRCXorInverse:X2}\u0003",
                         Format = "Windows-1251",
@@ -62,7 +62,7 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                        Header = "\u0002{AddressDevice:X2}{Nchar:X2}",
                         Body = "%000011920304%10$10$00$60$t2{Note}%000011600483%10$10$00$60$t3Московское время%001611920483%10$10$00$60$t1",
                         Footer = "{CRCXorInverse:X2}\u0003",
                         Format = "Windows-1251",
@@ -98,8 +98,8 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
-                        Body = "%00001032{(rowNumber*16):D3}3%10$12$00$60$t3{TDepart:t}%00033240{(rowNumber*16):D3}4%10$12$00$60$t3{StationArrival}%00241256{(rowNumber*16):D3}3%10$12$00$60$t1{PathNumber}%400012561451%000012561603%10$10$00$60$t2Московское время",
+                        Header = "\u0002{AddressDevice:X2}{Nchar:X2}",
+                        Body = "%00001032{MATH(rowNumber*16):D3}3%10$12$00$60$t3{TDepart:t}%00033240{MATH(rowNumber*16):D3}4%10$12$00$60$t3{StationArrival}%00241256{MATH(rowNumber*16):D3}3%10$12$00$60$t1{PathNumber}%400012561451%000012561603%10$10$00$60$t2Московское время",
                         Footer = "{CRCXorInverse:X2}\u0003",
                         Format = "Windows-1251",
                         MaxBodyLenght = 245
@@ -120,7 +120,7 @@ namespace ByRulesInseartedTest.Test
                 //RESPONSE
                 "0230323030464403",
                 "HEX",
-               4
+               3
             },
             //Казанский Prib.Otpr.Double.6Str Data.Otpr Запрос 2
             new object[]
@@ -134,8 +134,8 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
-                        Body = "%00001021{(rowNumber*11+16):D3}4%10$00$60$t3$13{NumberOfTrain}%00025144{(rowNumber*11+16):D3}4%10$00$60$t3$13{StationArrival}%00168199{(rowNumber*11+16):D3}4%10$00$60$t3$13{TDepart:t}%00202233{(rowNumber*11+16):D3}4%10$00$60$t3$13%00202233{(rowNumber*11+16):D3}4%10$00$60$t3$13%00241254{(rowNumber*11+16):D3}4%10$00$60$t3$13{PathNumber}",
+                        Header = "\u0002{AddressDevice:X2}{Nchar:X2}",
+                        Body = "%00001021{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{NumberOfTrain}%00025144{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{StationArrival}%00168199{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{TDepart:t}%00202233{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13%00202233{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13%00241254{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{PathNumber}",
                         Footer = "{CRCXorInverse:X2}\u0003",
                         Format = "Windows-1251",
                         MaxBodyLenght = 245
@@ -151,12 +151,12 @@ namespace ByRulesInseartedTest.Test
                 //REQUEST
                 GetData4ViewRuleTest.InputTypesDefault,
                 "\u000205B7%000010210274%10$00$60$t3$13456%000251440274%10$00$60$t3$13Москва%001681990274%10$00$60$t3$1316:18%002022330274%10$00$60$t3$13%002022330274%10$00$60$t3$13%002412540274%10$00$60$t3$1358C\u0003",   //expectedStrRepresent
-                "Windows-1251",                                                                                                                                 
+                "Windows-1251",
                 "\u000205B7%000010210274%10$00$60$t3$13456%000251440274%10$00$60$t3$13Москва%001681990274%10$00$60$t3$1316:18%002022330274%10$00$60$t3$13%002022330274%10$00$60$t3$13%002412540274%10$00$60$t3$1358C\u0003",
                 //RESPONSE
                 "0230323030464403",
                 "HEX",
-                5                                                                                                                                                                 
+                4
             }
         };
         #endregion
@@ -193,7 +193,7 @@ namespace ByRulesInseartedTest.Test
             rt.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(inputTypes.Count);
             foreach (var processedItem in rt.Request.ProcessedItemsInBatch.ProcessedItems)
             {
-                processedItem.InseartedData.Count.Should().Be(expectedCountInseartedData);
+                processedItem.InseartedData.Where(pair =>pair.Key != "MATH").ToList().Count.Should().Be(expectedCountInseartedData);
             }
 
             rt.Response.StrRepresent.Str.Should().Be(expectedRespStrRepresent);

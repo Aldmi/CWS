@@ -183,10 +183,10 @@ namespace Infrastructure.Transport.TcpIp
                 {
                     var buffer = await dataReadTask;
                     var receivedBytes = buffer.Count;
-                    if (receivedBytes != nbytes)
-                    {
-                        Logger.Warning($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. КОЛ-ВО СЧИТАННЫХ БАЙТ НЕ ВЕРНОЕ. Принято/Ожидаем= \"{receivedBytes} / {nbytes}\"");
-                    }
+                    //if (receivedBytes != nbytes)
+                    //{
+                    //     Logger.Warning($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. КОЛ-ВО СЧИТАННЫХ БАЙТ НЕ ВЕРНОЕ. Принято/Ожидаем= \"{receivedBytes} / {nbytes}\"");
+                    //}
                     if (_netStream.DataAvailable)
                     {
                         Logger.Error($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. ПОСЛЕ ЧТЕНИЯ В БУФЕРЕ ОСТАЛИСЬ ДАННЫЕ. buferSize= \"{receivedBytes}\"");

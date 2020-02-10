@@ -299,17 +299,10 @@ namespace App.Services.Actions
             {
                 return Result.Failure($"Обмен не найденн {exchName}");
             }
-            try
-            {
-                exchange.SetNewProvider(providerOption);
-                return Result.Ok();
-            }
-            catch (Exception ex)
-            {
-                return Result.Failure($"Исключение при установке ProviderOptionRt {ex}");
-            }
+          
+            var res= exchange.SetNewProvider(providerOption);
+            return res;
         }
-
         #endregion
     }
 }

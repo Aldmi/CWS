@@ -7,7 +7,7 @@ namespace Shared.Services.StringInseartService.IndependentInseart
     public static class IndependentInsertsServiceFactory
     {
         /// <summary>
-        /// Фабрика созданет сервис независмых всавок в строку
+        /// Фабрика создает сервис независмых всавок в строку
         /// IndependentInsertsService
         /// </summary>
         /// <param name="str">строка для выполнения вставок</param>
@@ -16,7 +16,7 @@ namespace Shared.Services.StringInseartService.IndependentInseart
         /// <returns>сервис независимых вставок</returns>
         public static IndependentInsertsService CreateIndependentInsertsService(string str, string pattern, List<Func<StringInsertModel, IIndependentInsertsHandler>> handlerFactorys, ILogger logger)
         {
-            var repDict= InseartDictFactory.CreateDistinctByReplacement(str, pattern);
+            var repDict= StringInsertModelFactory.CreateDistinctByReplacement(str, pattern);
             var insHandlers = CreateListIndependentInseartHandlers(repDict.Values, handlerFactorys);
             var service = new IndependentInsertsService(str, logger, insHandlers.ToArray());
             return service;
