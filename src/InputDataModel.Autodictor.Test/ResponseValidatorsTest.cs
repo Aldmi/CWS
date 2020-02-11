@@ -1,8 +1,5 @@
-﻿using System;
-using Domain.InputDataModel.Base.Response.ResponseValidators;
+﻿using Domain.InputDataModel.Base.Response.ResponseValidators;
 using FluentAssertions;
-using Shared.Helpers;
-using Shared.Services.StringInseartService;
 using Shared.Types;
 using Xunit;
 
@@ -16,13 +13,13 @@ namespace InputDataModel.Autodictor.Test
             _inArray = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         }
 
-
+        #region LenghtResponseValidator
         [Fact]
-        public void ArrayLenghtResponseValidator_SuccsesfullValidate_Test()
+        public void LenghtResponseValidator_ByteArray_InData_Test()
         {
             //Arrange
             var v = new LenghtResponseValidator(10);
-            
+
             //Act
             var respInfo = v.Validate(_inArray);
             var logStr = respInfo.ToString();
@@ -33,22 +30,7 @@ namespace InputDataModel.Autodictor.Test
         }
 
         [Fact]
-        public void ArrayLenghtResponseValidator_String_SuccsesfullValidate_Test()
-        {
-            //Arrange
-            var v = new LenghtResponseValidator(10);
-
-            //Act
-            var respInfo = v.Validate("0123456789");
-            var logStr = respInfo.ToString();
-
-            //Asert
-            respInfo.IsOutDataValid.Should().BeTrue();
-            logStr.Should().Be("True   ArrayLenght=  10/10");
-        }
-
-        [Fact]
-        public void ArrayLenghtResponseValidator_ErroValidate_Test()
+        public void LenghtResponseValidator_ByteArray_ErroValidate_Test()
         {
             //Arrange
             var v = new LenghtResponseValidator(5);
@@ -64,7 +46,42 @@ namespace InputDataModel.Autodictor.Test
 
 
         [Fact]
-        public void EqualResponseValidator_SuccsesfullValidate_Test()
+        public void LenghtResponseValidator_String_InData_Test()
+        {
+            //Arrange
+            var v = new LenghtResponseValidator(10);
+
+            //Act
+            var respInfo = v.Validate("0123456789");      //Если ответ на массив байт, а строка.
+            var logStr = respInfo.ToString();
+
+            //Asert
+            respInfo.IsOutDataValid.Should().BeTrue();
+            logStr.Should().Be("True   ArrayLenght=  10/10");
+        }
+
+
+        [Fact]
+        public void LenghtResponseValidator_String_ErroValidate_Test()
+        {
+            //Arrange
+            var v = new LenghtResponseValidator(5);
+
+            //Act
+            var respInfo = v.Validate("as");
+            var logStr = respInfo.ToString();
+
+            //Asert
+            respInfo.IsOutDataValid.Should().BeFalse();
+            logStr.Should().Be("False   ArrayLenght=  2/5");
+        }
+        #endregion
+
+
+
+        #region EqualResponseValidator
+        [Fact]
+        public void EqualResponseValidator_ByteArray_Test()
         {
             //Arrange
             var v = new EqualResponseValidator(new StringRepresentation("0102030405060708090A", "HEX"));
@@ -80,7 +97,7 @@ namespace InputDataModel.Autodictor.Test
 
 
         [Fact]
-        public void EqualResponseValidator_ErroValidate_Test()
+        public void EqualResponseValidator_ByteArray_ErroValidate_Test()
         {
             //Arrange
             var v = new EqualResponseValidator(new StringRepresentation("FFFFFF", "HEX"));
@@ -99,7 +116,7 @@ namespace InputDataModel.Autodictor.Test
         public void EqualResponseValidator_Windows1251_Encoding_Test()
         {
             //Arrange
-            var inArray = new byte[] { 0x41, 0x42};
+            var inArray = new byte[] { 0x41, 0x42 };
             var expectedFormat = "Windows-1251";
             var v = new EqualResponseValidator(new StringRepresentation("AB", expectedFormat));
 
@@ -128,5 +145,6 @@ namespace InputDataModel.Autodictor.Test
             respInfo.IsOutDataValid.Should().BeTrue();
             logStr.Should().Be("True   EqualResponse= [Data1]:/[Data1]:");
         }
+        #endregion
     }
 }
