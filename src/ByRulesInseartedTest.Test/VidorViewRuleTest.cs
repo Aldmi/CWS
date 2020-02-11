@@ -193,12 +193,11 @@ namespace ByRulesInseartedTest.Test
             rt.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(inputTypes.Count);
             foreach (var processedItem in rt.Request.ProcessedItemsInBatch.ProcessedItems)
             {
-                processedItem.InseartedData.Where(pair =>pair.Key != "MATH").ToList().Count.Should().Be(expectedCountInseartedData);
+                processedItem.InseartedData.Where(pair=>pair.Key != "MATH").ToList().Count.Should().Be(expectedCountInseartedData);
             }
 
             rt.Response.StrRepresent.Str.Should().Be(expectedRespStrRepresent);
             rt.Response.StrRepresent.Format.Should().Be(expectedRespStrRepresentFormat);
         }
-
     }
 }

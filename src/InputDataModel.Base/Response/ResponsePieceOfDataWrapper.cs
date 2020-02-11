@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Domain.InputDataModel.Base.Enums;
-using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Shared.Enums;
+
 
 namespace Domain.InputDataModel.Base.Response
 {

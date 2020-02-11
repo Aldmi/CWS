@@ -7,6 +7,13 @@ namespace Shared.Extensions
 {
     public static class ByteArrayExtensions
     {
+        static ByteArrayExtensions()
+        {
+            //Добавить обработку кодировки Windows-1251
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
+
+
         public static string ArrayByteToString(this IEnumerable<byte> source, string format)
         {
             var buf = source.ToArray();
@@ -27,7 +34,7 @@ namespace Shared.Extensions
 
 
         /// <summary>
-        /// Преобразует массив байт к строке по целочисленному формату формату..
+        /// Преобразует массив байт к строке по целочисленному формату..
         /// </summary>
         public static string BitConverter2StrByFormat(this byte[] arr, string format)
         {

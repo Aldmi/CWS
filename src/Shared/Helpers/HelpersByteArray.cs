@@ -38,9 +38,6 @@ namespace Shared.Helpers
         /// Конвертор строки в массив байт, для строк в которых содержится
         /// hex escape последовательность вида 0xYY -> YY
         /// </summary>
-        /// <param name="str"></param>
-        /// <param name="format"></param>
-        /// <returns></returns>
         public static byte[] ConvertStringWithHexEscapeChars2ByteArray(this string str, string format)
         {
             //УДАЛИТЬ "0x" С КОНЦА СТРОКИ
