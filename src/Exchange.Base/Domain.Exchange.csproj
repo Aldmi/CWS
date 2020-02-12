@@ -1,12 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DataProviderAbstract\**" />
     <Compile Remove="Model\**" />
+    <EmbeddedResource Remove="DataProviderAbstract\**" />
     <EmbeddedResource Remove="Model\**" />
+    <None Remove="DataProviderAbstract\**" />
     <None Remove="Model\**" />
   </ItemGroup>
 
@@ -28,10 +31,6 @@
     <ProjectReference Include="..\Infrastructure.Transport\Infrastructure.Transport.csproj" />
     <ProjectReference Include="..\InputDataModel.Base\Domain.InputDataModel.Base.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DataProviderAbstract\" />
   </ItemGroup>
 
   <ItemGroup>

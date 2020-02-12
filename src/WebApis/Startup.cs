@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Services.Actions;
@@ -25,6 +27,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Npgsql;
 using Serilog;
@@ -33,11 +36,12 @@ using WebApiSwc.Extensions;
 using WebApiSwc.Hubs;
 using WebApiSwc.Settings;
 
+
 namespace WebApiSwc
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostEnvironment env)
         {
             Env = env;
             var builder = new ConfigurationBuilder()
@@ -48,7 +52,7 @@ namespace WebApiSwc
 
 
         public IConfiguration AppConfiguration { get; }
-        public IHostingEnvironment Env { get; }
+        public IHostEnvironment Env { get; }
 
 
         public void ConfigureServices(IServiceCollection services)
@@ -65,11 +69,15 @@ namespace WebApiSwc
                 .AddXmlSerializerFormatters()
                 .AddJsonOptions(o =>
                 {
-                    o.SerializerSettings.Formatting = Formatting.Indented;
-                    o.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
-                    o.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                }).
-                SetCompatibilityVersion(CompatibilityVersion.Version_2_2); ;
+                    o.JsonSerializerOptions.IgnoreNullValues = true;
+                    o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    o.JsonSerializerOptions.WriteIndented = true;
+
+                    //o.SerializerSettings.Formatting = Formatting.Indented;
+                    //o.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+                    //o.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                });
+              
 
             services.AddOptions();
             //services.AddAutoMapper();//OldVersion
@@ -81,8 +89,8 @@ namespace WebApiSwc
                 // задаём политику CORS, чтобы наше клиентское приложение могло отправить запрос на сервер API
                 options.AddPolicy("default", policy =>
                 {
-                    policy
-                        .AllowAnyOrigin()
+                    policy                               //TODO: задание политик
+                        //.AllowAnyOrigin()
                         .AllowCredentials()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
@@ -131,7 +139,7 @@ namespace WebApiSwc
 
 
         public void Configure(IApplicationBuilder app,
-                              IHostingEnvironment env,
+                              IHostEnvironment env,
                               ILifetimeScope scope,
                               IConfiguration config,
                               IMapper mapper,
@@ -189,25 +197,33 @@ namespace WebApiSwc
             app.UseCors("default");
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseSignalR(routes =>
+
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapHub<ProviderHub>("/providerHub");
+                endpoints.MapHub<ProviderHub>("/providerHub");
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
 
-            app.UseMvc();
+
+            //app.UseSignalR(routes =>
+            //{
+            //    routes.MapHub<ProviderHub>("/providerHub");
+            //});
+            //app.UseMvc();
         }
 
 
         private void ConfigurationBackgroundProcessAsync(IApplicationBuilder app, ILifetimeScope scope)
         {
-            var lifetimeApp = app.ApplicationServices.GetService<IApplicationLifetime>();
+            var lifetimeApp = app.ApplicationServices.GetService<IHostApplicationLifetime>();
             ApplicationStarted(lifetimeApp, scope);
             ApplicationStopping(lifetimeApp, scope);
             ApplicationStopped(lifetimeApp, scope);
         }
 
 
-        private void ApplicationStarted(IApplicationLifetime lifetimeApp, ILifetimeScope scope)
+        private void ApplicationStarted(IHostApplicationLifetime lifetimeApp, ILifetimeScope scope)
         {
             //ЗАПУСК БЕКГРАУНДА ОПРОСА ШИНЫ ДАННЫХ
             scope.Resolve<ConsumerMessageBroker4InputData<AdInputType>>();//перед запуском bg нужно создать ConsumerMessageBroker4InputData
@@ -267,7 +283,7 @@ namespace WebApiSwc
         }
 
 
-        private void ApplicationStopping(IApplicationLifetime lifetimeApp, ILifetimeScope scope)
+        private void ApplicationStopping(IHostApplicationLifetime lifetimeApp, ILifetimeScope scope)
         {
             //ОСТАНОВ БЕКГРАУНДА ОПРОСА ШИНЫ ДАННЫХ
             var backgroundName = AppConfiguration["MessageBrokerConsumer4InData:Name"];
@@ -319,7 +335,7 @@ namespace WebApiSwc
         }
 
 
-        private void ApplicationStopped(IApplicationLifetime lifetimeApp, ILifetimeScope scope)
+        private void ApplicationStopped(IHostApplicationLifetime lifetimeApp, ILifetimeScope scope)
         {
             lifetimeApp.ApplicationStopped.Register(() => { });
         }

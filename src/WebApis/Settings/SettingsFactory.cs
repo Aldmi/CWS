@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Linq;
-using System.Spatial;
 using Infrastructure.Dal.Abstract;
 using Infrastructure.Dal.Abstract.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Spatial;
 using Newtonsoft.Json;
 using Serilog.Events;
+
 
 namespace WebApiSwc.Settings
 {
     public static class SettingsFactory
     {
-        public static string GetDbConnectionString(IHostingEnvironment env, IConfiguration conf)
+        public static string GetDbConnectionString(IHostEnvironment env, IConfiguration conf)
         {
             var connectionStr = env.IsDevelopment() ? conf.GetConnectionString("OptionDbConnectionUseNpgsql")
                                                     : Environment.GetEnvironmentVariable("DbConnection");
@@ -24,7 +26,7 @@ namespace WebApiSwc.Settings
         }
 
 
-        public static HowCreateDb GetHowCreateDb(IHostingEnvironment env, IConfiguration conf)
+        public static HowCreateDb GetHowCreateDb(IHostEnvironment env, IConfiguration conf)
         {
             var howCreateDbStr = env.IsDevelopment()
                 ? conf["HowCreateDb"]
@@ -38,7 +40,7 @@ namespace WebApiSwc.Settings
 
 
 
-        public static FirewallSettings GetFirewallConfig(IHostingEnvironment env, IConfiguration conf)
+        public static FirewallSettings GetFirewallConfig(IHostEnvironment env, IConfiguration conf)
         {
             FirewallSettings firewallSettings;
 
@@ -75,7 +77,7 @@ namespace WebApiSwc.Settings
 
 
 
-        public static LoggerSettings GetLoggerConfig(IHostingEnvironment env, IConfiguration conf)
+        public static LoggerSettings GetLoggerConfig(IHostEnvironment env, IConfiguration conf)
         {
             LoggerSettings loggerSettings;
 

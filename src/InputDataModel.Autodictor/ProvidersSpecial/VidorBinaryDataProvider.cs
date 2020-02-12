@@ -124,7 +124,7 @@ namespace Domain.InputDataModel.Autodictor.ProvidersSpecial
         public int TimeRespone { get; }
         public CancellationTokenSource Cts { get; set; }
 
-        public void Dispose()
+        public override void Dispose()
         {
             _raiseSendDataRx?.Dispose();
             RaiseSendDataRx?.Dispose();
