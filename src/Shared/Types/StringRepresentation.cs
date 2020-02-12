@@ -1,5 +1,6 @@
 ﻿using System;
 using Shared.Extensions;
+using Shared.Helpers;
 
 namespace Shared.Types
 {
@@ -23,6 +24,11 @@ namespace Shared.Types
         {
            var strRes= arr.ArrayByteToString(dataFormat);
            return new StringRepresentation(strRes, dataFormat);
+        }
+
+        public byte[] Convert2ByteArray()
+        {
+            return Str.ConvertString2ByteArray(Format); //Преобразовываем КОНЕЧНУЮ строку в массив байт
         }
         #endregion
 
