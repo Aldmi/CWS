@@ -6,9 +6,11 @@ using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.Response;
+using Domain.InputDataModel.Base.Response.ResponseValidators;
 using Infrastructure.Transport.Base.DataProvidert;
 using Shared.Extensions;
 using Shared.Helpers;
+using Shared.Types;
 
 namespace Domain.InputDataModel.Base.ProvidersAbstract
 {
@@ -67,6 +69,16 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         {
             var stringResponseRef = _transfer.Response.StrRepresent.Str;
             var format = _transfer.Response.StrRepresent.Format;
+
+            //TEST----------
+            ////TODO: Пока не получаем ВАЛИДАТОР из transfer, использовать EqualResponseValidator.  OutputData будет типа BaseResponseInfo.
+            //var validator = new EqualResponseValidator(new StringRepresentation(stringResponseRef, format));
+            //var respInfo= validator.Validate(data);
+            ////OutputData = respInfo;
+            //StatusDict["SetDataByte.StringResponse"] = respInfo.ToString();
+            //return IsOutDataValid;
+            //TEST----------
+
             if (data == null)
             {
                 IsOutDataValid = false;

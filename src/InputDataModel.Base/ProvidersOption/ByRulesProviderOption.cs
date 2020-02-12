@@ -38,7 +38,7 @@ namespace Domain.InputDataModel.Base.ProvidersOption
     public abstract class RequestResonseOption
     {
         public string Format { get; set; }
-        public string Body { get; set; }                     // ТЕЛО (ТОЛЬКО НЕЗАВИСИМЫЕ ДАННЫЕ). Каждый элемент батча подставляет свои данные в Body, затем все элементы Конкатенируются.
+        public string Body { get; set; }                    
     }
 
 

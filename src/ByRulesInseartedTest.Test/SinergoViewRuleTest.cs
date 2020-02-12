@@ -100,6 +100,5 @@ namespace ByRulesInseartedTest.Test
             rt.Response.StrRepresent.Str.Should().Be(expectedRespStrRepresent);
             rt.Response.StrRepresent.Format.Should().Be(expectedRespStrRepresentFormat);
         }
-
     }
 }

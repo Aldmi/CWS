@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.ProvidersOption;
+using Domain.InputDataModel.Base.Response.ResponseValidators;
 using KellermanSoftware.CompareNetObjects;
 using Shared.Types;
 
@@ -20,11 +21,7 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
 
     public abstract class BaseTransfer
     {
-        private readonly RequestResonseOption _option;                          //Base опции.
-
-
-        #region prop
-
+        private readonly RequestResonseOption _option;                         //Base опции.
         public StringRepresentation StrRepresentBase { get; set; }             //Строковое представление данных, созданная по правилам Option (В ФОРМАТЕ ИЗ Option).
         public StringRepresentation StrRepresent { get; set; }                 //Строковое представление данных, созданная по правилам Option (ВОЗМОЖНО В ИЗМЕНЕННОМ ФОРМАТЕ)
 
@@ -38,57 +35,34 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
             }
         }
 
-        #endregion
-
-
-        #region ctor
-
         protected BaseTransfer(RequestResonseOption option)
         {
             _option = option;
         }
-
-        #endregion
     }
 
 
 
     public class RequestTransfer<TIn> : BaseTransfer
     {
-        #region prop
         public RequestOption Option { get; }
         public ProcessedItemsInBatch<TIn> ProcessedItemsInBatch { get; set; }
-        #endregion
-
-
-
-        #region ctor
         public RequestTransfer(RequestOption option) : base(option)
         {
             Option = option;
         }
-        #endregion
     }
 
 
     public class ResponseTransfer : BaseTransfer
     {
-        #region prop
-
+        // public BaseResponseValidator Validator { get; }
+        //TODO: BaseResponseValidator вместо ResponseOption
         public ResponseOption Option { get; }
-
-        #endregion
-
-
-
-        #region ctor
-
         public ResponseTransfer(ResponseOption option) : base(option)
         {
             Option = option;
         }
-
-        #endregion
     }
 
 
@@ -101,7 +75,6 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         public int StartItemIndex { get; set; }                      //Начальный индекс (в базовом массиве, после TakeItems) элемента после разбиения на батчи.
         public int BatchSize { get; set; }                           //Размер батча.
         public List<ProcessedItem<TIn>> ProcessedItems { get; set; } //Обработанные входные данные.
-
 
         public ProcessedItemsInBatch(int startItemIndex, int batchSize, List<ProcessedItem<TIn>> processedItems)
         {
