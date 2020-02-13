@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,12 +18,9 @@ using Infrastructure.Background.Abstarct;
 using Infrastructure.Dal.Abstract;
 using Infrastructure.Produser.WebClientProduser;
 using Infrastructure.Transport;
-using Infrastructure.Transport.Repository.Abstract;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -62,7 +58,7 @@ namespace WebApiSwc
             var loggerSettings = SettingsFactory.GetLoggerConfig(Env, AppConfiguration);
             services.AddSerilogServices(loggerSettings, Env.ApplicationName);
 
-            services.AddTransient<IConfiguration>(provider => AppConfiguration);
+            services.AddTransient(provider => AppConfiguration);
 
             services.AddMvc()
                 .AddControllersAsServices()
@@ -77,8 +73,7 @@ namespace WebApiSwc
                     //o.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                     //o.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 });
-              
-
+            
             services.AddOptions();
             //services.AddAutoMapper();//OldVersion
             services.AddAutoMapper(typeof(Startup));
@@ -89,8 +84,8 @@ namespace WebApiSwc
                 // задаём политику CORS, чтобы наше клиентское приложение могло отправить запрос на сервер API
                 options.AddPolicy("default", policy =>
                 {
-                    policy                               //TODO: задание политик
-                        //.AllowAnyOrigin()
+                    policy
+                        //.WithOrigins("https://localhost:44321")
                         .AllowCredentials()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
@@ -141,7 +136,6 @@ namespace WebApiSwc
         public void Configure(IApplicationBuilder app,
                               IHostEnvironment env,
                               ILifetimeScope scope,
-                              IConfiguration config,
                               IMapper mapper,
                               ILogger loger)
         {
@@ -193,7 +187,6 @@ namespace WebApiSwc
                 loger.Information("Enable firewall !!!!");
             }
 
-            //ПОДКЛЮЧЕНИЕ SignalR ХАБА
             app.UseCors("default");
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -202,15 +195,9 @@ namespace WebApiSwc
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<ProviderHub>("/providerHub");
-                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
+                //endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
-
-
-            //app.UseSignalR(routes =>
-            //{
-            //    routes.MapHub<ProviderHub>("/providerHub");
-            //});
-            //app.UseMvc();
         }
 
 

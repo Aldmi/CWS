@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Domain.Device.Produser;
 using Domain.Device.Repository.Entities.ResponseProduser;
-using Domain.InputDataModel.Autodictor.Model;
 using Infrastructure.Produser.AbstractProduser.AbstractProduser;
 using Infrastructure.Produser.KafkaProduser;
 using Infrastructure.Produser.KafkaProduser.Options;

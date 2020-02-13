@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Infrastructure.Dal.Abstract;
 using Infrastructure.Dal.Abstract.Enums;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Spatial;
 using Newtonsoft.Json;
 using Serilog.Events;
 
@@ -84,13 +81,13 @@ namespace WebApiSwc.Settings
             if (env.IsDevelopment())
             {
                 if (!Enum.TryParse<LogEventLevel>(conf["Logger:MinLevel"], out var minLevel))
-                    throw new ParseErrorException($"Logger:MinLevel не удалось преобразовать к bool. IsDevelopment= {env.IsDevelopment()}");
+                    throw new Exception($"Logger:MinLevel не удалось преобразовать к bool. IsDevelopment= {env.IsDevelopment()}"); //TODO:Исключение, возникающее при неудачном разборе сериализованного формата.
 
                 if (!bool.TryParse(conf["Logger:fileSinkSetting:enable"], out var fileSinkEnabel))
-                    throw new ParseErrorException($"Logger:fileSinkSetting:enable не удалось преобразовать к bool. IsDevelopment= {env.IsDevelopment()}");
+                    throw new Exception($"Logger:fileSinkSetting:enable не удалось преобразовать к bool. IsDevelopment= {env.IsDevelopment()}");
 
                 if (!bool.TryParse(conf["Logger:elasticsearchSinkSetting:enable"], out var elasticsearchSinkEnable))
-                    throw new ParseErrorException($"Logger:fileSinkSetting:enable не удалось преобразовать к bool. IsDevelopment= {env.IsDevelopment()}");
+                    throw new Exception($"Logger:fileSinkSetting:enable не удалось преобразовать к bool. IsDevelopment= {env.IsDevelopment()}");
 
                 var fileSinkSett = new FileSinkSetting(fileSinkEnabel);
                 var elasticsearchSinkSetting = new ElasticsearchSinkSetting(elasticsearchSinkEnable);

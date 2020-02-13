@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WebApiSwc.DTO.JSON.DevicesStateDto;
 
 namespace WebApiSwc.Controllers
 {
