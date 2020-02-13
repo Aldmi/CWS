@@ -137,7 +137,6 @@ namespace Infrastructure.Transport.Base.Abstract
             IsCycleReopened = false;
             return true;
         }
-
         #endregion
 
 
