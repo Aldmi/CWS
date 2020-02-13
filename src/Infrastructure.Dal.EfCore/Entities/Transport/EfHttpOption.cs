@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Innofactor.EfCoreJsonValueConverter;
 using Newtonsoft.Json;
 
 namespace Infrastructure.Dal.EfCore.Entities.Transport
@@ -22,12 +23,7 @@ namespace Infrastructure.Dal.EfCore.Entities.Transport
         public bool AutoStartBg { get; set; }
         public int DutyCycleTimeBg { get; set; }
 
-        private string _headersMetaData;
-        [NotMapped]
-        public Dictionary<string, string> Headers
-        {
-            get => string.IsNullOrEmpty(_headersMetaData) ? null : JsonConvert.DeserializeObject<Dictionary<string, string>>(_headersMetaData);
-            set => _headersMetaData = (value == null) ? null : JsonConvert.SerializeObject(value);
-        }
+        [JsonField]
+        public Dictionary<string, string> Headers { get; set; }
     }
 }

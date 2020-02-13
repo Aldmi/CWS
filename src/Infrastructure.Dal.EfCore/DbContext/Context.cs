@@ -33,7 +33,7 @@ namespace Infrastructure.Dal.EfCore.DbContext
         public Context(string connStr)
         {
             _connStr = connStr;
-            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;//Отключение Tracking для всего контекста
+           // ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;//Отключение Tracking для всего контекста
         }
 
         #endregion
