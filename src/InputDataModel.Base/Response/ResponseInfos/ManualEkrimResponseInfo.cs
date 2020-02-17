@@ -4,6 +4,10 @@ using Shared.Helpers;
 
 namespace Domain.InputDataModel.Base.Response.ResponseInfos
 {
+    /// <summary>
+    /// Интерпретатор ответа.
+    /// IsOutDataValid выставляется при точном соответвие протоколу Ekrim
+    /// </summary>
     public class ManualEkrimResponseInfo : BaseResponseInfo
     {
         public readonly int Address;
