@@ -16,7 +16,7 @@
         }
         public override string ToString()
         {
-            return $"{IsOutDataValid}   ArrayLenght=  {RealLenght}/{_expectedLenght}";
+            return $"{base.ToString()}  Info= {RealLenght} <---> {_expectedLenght}";
         }
     }
 }

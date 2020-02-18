@@ -18,6 +18,7 @@ namespace App.Services.MessageBroker
     /// Фоновый прлцесс получения даныых от брокера сообщений
     /// Входные данные поступают на нужные ус-ва.
     /// СТАРТ/СТОП сервиса происходит через background.
+    /// background - это отдельный сервис
     /// </summary>
     /// <typeparam name="TIn">Тип обрабатываемых входных данных</typeparam>
     public class ConsumerMessageBroker4InputData<TIn> : IDisposable where TIn : InputTypeBase

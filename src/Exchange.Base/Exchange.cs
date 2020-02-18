@@ -18,6 +18,7 @@ using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response;
+using Domain.InputDataModel.Base.Response.ResponseInfos;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.Transport.Base.Abstract;
 using Infrastructure.Transport.Base.RxModel;
@@ -37,8 +38,8 @@ namespace Domain.Exchange
         private readonly ExchangeOption _option;
         private readonly ITransport _transport;
         private readonly ITransportBackground _transportBackground;
-        private readonly IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, ResponseInfo>>>> _dataProviderFactory;
-        private IDataProvider<TIn, ResponseInfo> _dataProvider;                       //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
+        private readonly IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, BaseResponseInfo>>>> _dataProviderFactory;
+        private IDataProvider<TIn, BaseResponseInfo> _dataProvider;                       //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
         private IDisposable _dataProviderOwner;                                       //управляет временем жизни _dataProvider
         private readonly ILogger _logger;
         private readonly Stopwatch _sw = Stopwatch.StartNew();
@@ -101,7 +102,7 @@ namespace Domain.Exchange
                                  ExchangeOption option,
                                  ITransport transport,
                                  ITransportBackground transportBackground,
-                                 IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, ResponseInfo>>>> dataProviderFactory,
+                                 IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, BaseResponseInfo>>>> dataProviderFactory,
                                  ILogger logger,
                                  Func<string, ITransportBackground, CycleFuncOption, Func<DataAction, InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<CycleBehavior<TIn>>> cycleBehaviorFactory,
                                  Func<string, ITransportBackground, Func<DataAction, InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<OnceBehavior<TIn>>> onceBehaviorFactory,
@@ -328,7 +329,8 @@ namespace Domain.Exchange
                     StatusStr = item.StatusStr,
                     Request = item.MessageDict["GetDataByte.Request"],
                     RequestBase = item.MessageDict["GetDataByte.RequestBase"],
-                    StringResponseRef = item.MessageDict.ContainsKey("SetDataByte.StringResponse") ? item.MessageDict["SetDataByte.StringResponse"] : null,
+                    //Response = item.MessageDict.ContainsKey("SetDataByte.StringResponse") ? item.MessageDict["SetDataByte.StringResponse"] : null,
+                    Response = item.ResponseInfo?.ToString(),
                     TimeResponse = item.MessageDict["TimeResponse"],
                     StronglyTypedResponse = item.MessageDict.ContainsKey("SetDataByte.StronglyTypedResponse") ? item.MessageDict["SetDataByte.StronglyTypedResponse"] : null,
                 }).ToList();
@@ -373,7 +375,7 @@ namespace Domain.Exchange
         }
 
 
-        private Result<Owned<IDataProvider<TIn, ResponseInfo>>> TryCreateProvider(ProviderOption option)
+        private Result<Owned<IDataProvider<TIn, BaseResponseInfo>>> TryCreateProvider(ProviderOption option)
         {
             try
             {
@@ -383,7 +385,7 @@ namespace Domain.Exchange
             catch (Exception e)
             {
                 var unionMessages = e.GetOriginalException().Message;
-                return Result.Failure<Owned<IDataProvider<TIn, ResponseInfo>>>($"Exception при УСТАНОВКИ НОВГО ПРОВАЙДЕРА \"{unionMessages}\"");
+                return Result.Failure<Owned<IDataProvider<TIn, BaseResponseInfo>>>($"Exception при УСТАНОВКИ НОВГО ПРОВАЙДЕРА \"{unionMessages}\"");
             }
         }
         #endregion

@@ -6,6 +6,7 @@ using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;
 using Domain.InputDataModel.Base.Response;
+using Domain.InputDataModel.Base.Response.ResponseInfos;
 using Shared.Services.StringInseartService.IndependentInseart;
 
 namespace WebApiSwc.AutofacModules
@@ -23,8 +24,8 @@ namespace WebApiSwc.AutofacModules
                     builder.RegisterType<AdStronglyTypedResponseFactory>().As<IStronglyTypedResponseFactory>().SingleInstance();
                     builder.RegisterType<AdInputTypeIndependentInseartsHandlersFactory>().As<IIndependentInseartsHandlersFactory>().SingleInstance();
 
-                    builder.RegisterType<VidorBinaryDataProvider>().Named<IDataProvider<TIn, ResponseInfo>>("VidorBinary").InstancePerDependency();
-                    builder.RegisterType<ByRulesDataProvider<TIn>>().Named<IDataProvider<TIn, ResponseInfo>>("ByRules").InstancePerDependency();
+                    builder.RegisterType<VidorBinaryDataProvider>().Named<IDataProvider<TIn, BaseResponseInfo>>("VidorBinary").InstancePerDependency();
+                    builder.RegisterType<ByRulesDataProvider<TIn>>().Named<IDataProvider<TIn, BaseResponseInfo>>("ByRules").InstancePerDependency();
                     break;
 
                 case "OtherType":

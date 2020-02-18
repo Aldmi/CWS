@@ -6,6 +6,7 @@ using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.Response;
+using Domain.InputDataModel.Base.Response.ResponseInfos;
 using Domain.InputDataModel.Base.Response.ResponseValidators;
 using Infrastructure.Transport.Base.DataProvidert;
 using Shared.Extensions;
@@ -33,7 +34,7 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         public Dictionary<string, string> StatusDict { get; }
         public int TimeRespone => _transfer.Response.Option.TimeRespone;         //Время на ответ
         public int CountSetDataByte => _transfer.Response.Option.Lenght;        //Кол-во принимаемых байт в ответе
-        public ResponseInfo OutputData { get; private set; }
+        public BaseResponseInfo OutputData { get; private set; }
         public bool IsOutDataValid { get; private set; }
         /// <summary>
         /// Результат работы провайдера, обработанные и выставленные в протокол данные из InputData
@@ -67,42 +68,17 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
 
         public bool SetDataByte(byte[] data)
         {
+            //TODO: _transfer - должен вернуть ResponseValidator. ResponseValidator создаетеся в провайдере.
             var stringResponseRef = _transfer.Response.StrRepresent.Str;
             var format = _transfer.Response.StrRepresent.Format;
-
-            //TEST----------
-            ////TODO: Пока не получаем ВАЛИДАТОР из transfer, использовать EqualResponseValidator.  OutputData будет типа BaseResponseInfo.
             //var validator = new EqualResponseValidator(new StringRepresentation(stringResponseRef, format));
-            //var respInfo= validator.Validate(data);
-            ////OutputData = respInfo;
-            //StatusDict["SetDataByte.StringResponse"] = respInfo.ToString();
-            //return IsOutDataValid;
-            //TEST----------
+            //var validator = new LenghtResponseValidator(16);
+            var validator = new RequireResponseValidator();
 
-            if (data == null)
-            {
-                IsOutDataValid = false;
-                OutputData = new ResponseInfo
-                {
-                    ResponseData = null,
-                    Encoding = format,
-                    IsOutDataValid = IsOutDataValid
-                };
-                return false;
-            }
-            var stringResponse = data.ArrayByteToString(format);
-            //Создать строго типизитрованный ответ на базе строки сырого ответа
-            var stronglyTypedResponse = CreateStronglyTypedResponseByOption(_transfer.Response.Option.StronglyTypedName, stringResponse);
-            IsOutDataValid = (stringResponse == stringResponseRef); //TODO: как лутчше сравнивать строки???
-            OutputData = new ResponseInfo
-            {
-                ResponseData = stringResponse,
-                Encoding = format,
-                IsOutDataValid = IsOutDataValid,
-                StronglyTypedResponse = stronglyTypedResponse
-            };
-            var diffResp = (!IsOutDataValid) ? $"ПринятоБайт/ОжидаемБайт= {data.Length}/{_transfer.Response.Option.Lenght}" : string.Empty;
-            StatusDict["SetDataByte.StringResponse"] = $"{stringResponseRef} ?? {stringResponse}   diffResp=  {diffResp}";
+            //TODO: Пока не получаем ВАЛИДАТОР из transfer, использовать EqualResponseValidator.
+            var respInfo = validator.Validate(data);
+            IsOutDataValid = respInfo.IsOutDataValid;
+            OutputData = respInfo;
             return IsOutDataValid;
         }
         #endregion
@@ -119,29 +95,11 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         {
             var stringResponseRef = _transfer.Response.StrRepresent.Str;
             var format = _transfer.Response.StrRepresent.Format;
-            if (stringResponse == null)
-            {
-                IsOutDataValid = false;
-                OutputData = new ResponseInfo
-                {
-                    ResponseData = null,
-                    Encoding = format,
-                    IsOutDataValid = IsOutDataValid
-                };
-                return false;
-            }
-            //Создать строго типизитрованный ответ на базе строки сырого ответа
-            var stronglyTypedResponse = CreateStronglyTypedResponseByOption(_transfer.Response.Option.StronglyTypedName, stringResponse);
-            IsOutDataValid = (stringResponse == stringResponseRef); //TODO: как лутчше сравнивать строки???
-            OutputData = new ResponseInfo
-            {
-                ResponseData = stringResponse,
-                Encoding = format,
-                IsOutDataValid = IsOutDataValid,
-                StronglyTypedResponse = stronglyTypedResponse
-            };
-            var diffResp = (!IsOutDataValid) ? $"ПринятоСимволов/ОжидаемСимволов= {stringResponse.Length}/{_transfer.Response.Option.Lenght}" : string.Empty;
-            StatusDict["SetDataByte.StringResponse"] = $"{stringResponseRef} ?? {stringResponse}   diffResp=  {diffResp}";
+            var validator = new EqualResponseValidator(new StringRepresentation(stringResponseRef, format));
+            //TODO: Пока не получаем ВАЛИДАТОР из transfer, использовать EqualResponseValidator.
+            var respInfo = validator.Validate(stringResponse);
+            IsOutDataValid = respInfo.IsOutDataValid;
+            OutputData = respInfo;
             return IsOutDataValid;
         }
         #endregion

@@ -18,7 +18,7 @@ namespace Domain.InputDataModel.Base.Response.ResponseInfos
         }
         public override string ToString()
         {
-            return $"{IsOutDataValid}   EqualResponse= {RealData}/{_expectedData}";
+            return $"{base.ToString()}  Info= {RealData} <---> {_expectedData}";
         }
     }
 }

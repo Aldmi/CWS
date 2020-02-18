@@ -14,12 +14,12 @@ namespace Domain.InputDataModel.Base.Response.ResponseInfos
         public RequireResponseInfo(StringRepresentation realData)
         {
             RealData = realData;
-            IsOutDataValid= realData != null;
+            IsOutDataValid = RealData != null;
         }
 
         public override string ToString()
         {
-            return $"{IsOutDataValid}   RequireResponseInfo= {RealData}";
+            return $"{base.ToString()}  Info= {RealData}";
         }
     }
 }

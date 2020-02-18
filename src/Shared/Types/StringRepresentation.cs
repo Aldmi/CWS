@@ -34,16 +34,12 @@ namespace Shared.Types
 
 
         #region EqualsOperator
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((StringRepresentation)obj);
-        }
 
         protected bool Equals(StringRepresentation other)
         {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            if (other.GetType() != this.GetType()) return false;
             return Str == other.Str && Format == other.Format;
         }
 
