@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Domain.InputDataModel.Autodictor.IndependentInsearts.Factory;
 using Domain.InputDataModel.Autodictor.ProvidersSpecial;
-using Domain.InputDataModel.Autodictor.StronglyTypedResponse;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;
@@ -21,7 +20,6 @@ namespace WebApiSwc.AutofacModules
             switch (typeof(TIn).Name)
             {
                 case "AdInputType":
-                    builder.RegisterType<AdStronglyTypedResponseFactory>().As<IStronglyTypedResponseFactory>().SingleInstance();
                     builder.RegisterType<AdInputTypeIndependentInseartsHandlersFactory>().As<IIndependentInseartsHandlersFactory>().SingleInstance();
 
                     builder.RegisterType<VidorBinaryDataProvider>().Named<IDataProvider<TIn, BaseResponseInfo>>("VidorBinary").InstancePerDependency();

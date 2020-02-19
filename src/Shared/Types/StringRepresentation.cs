@@ -39,7 +39,6 @@ namespace Shared.Types
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            if (other.GetType() != this.GetType()) return false;
             return Str == other.Str && Format == other.Format;
         }
 

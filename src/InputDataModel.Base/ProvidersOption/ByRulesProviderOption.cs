@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using CSharpFunctionalExtensions;
+using Domain.InputDataModel.Base.Response.ResponseValidators;
+using Shared.Types;
 
 namespace Domain.InputDataModel.Base.ProvidersOption
 {
@@ -57,5 +60,39 @@ namespace Domain.InputDataModel.Base.ProvidersOption
         public int Lenght { get; set; }                      // Ожидаемое кол-во байт ОТВЕТА
         public int TimeRespone { get; set; }                 // Время ответа
         public string StronglyTypedName  { get; set; }       // Название типа в которое преобразуется Body. (Типизированный ответ)
+    }
+
+
+
+    //TEST----------------------------------------------------------------------------------
+    public class ResponseOption2
+    {
+        public int TimeRespone { get; set; }                                         //Время ответа
+        public string ValidatorName { get; set; }                                    //Если имя валидатора не указанно, то по умолчанию ставится RequireResponseValidator  
+        public LenghtResponseValidatorOption LenghtValidator { get; set; }
+        public EqualResponseValidatorOption EqualValidator { get; set; }
+
+
+        public Result<BaseResponseValidator> CreateValidator()
+        {
+            return ValidatorName switch
+            {
+                "LenghtValidator" when LenghtValidator != null => Result.Ok<BaseResponseValidator>(new LenghtResponseValidator(LenghtValidator.ExpectedLenght)),
+                "EqualValidator" when EqualValidator != null => Result.Ok<BaseResponseValidator>(new EqualResponseValidator(new StringRepresentation(EqualValidator.Body, EqualValidator.Format))),
+                "ManualEkrimValidator" when LenghtValidator != null => Result.Ok<BaseResponseValidator>(new ManualEkrimResponseValidator()),
+                _ => Result.Ok<BaseResponseValidator>(new RequireResponseValidator())
+            };
+        }
+    }
+
+    public class LenghtResponseValidatorOption
+    {
+        public int ExpectedLenght { get; set; }
+    }
+
+    public class EqualResponseValidatorOption
+    {
+        public string Format { get; set; }
+        public string Body { get; set; }
     }
 }

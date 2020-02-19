@@ -18,17 +18,10 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
     }
 
 
-
     public abstract class BaseTransfer
     {
-        private readonly RequestResonseOption _option;                         //Base опции.
         public StringRepresentation StrRepresentBase { get; set; }             //Строковое представление данных, созданная по правилам Option (В ФОРМАТЕ ИЗ Option).
         public StringRepresentation StrRepresent { get; set; }                 //Строковое представление данных, созданная по правилам Option (ВОЗМОЖНО В ИЗМЕНЕННОМ ФОРМАТЕ)
-
-        protected BaseTransfer(RequestResonseOption option)
-        {
-            _option = option;
-        }
 
         public bool EqualStrRepresent
         {
@@ -42,12 +35,11 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
     }
 
 
-
     public class RequestTransfer<TIn> : BaseTransfer
     {
         public RequestOption Option { get; }
         public ProcessedItemsInBatch<TIn> ProcessedItemsInBatch { get; set; }
-        public RequestTransfer(RequestOption option) : base(option)
+        public RequestTransfer(RequestOption option)
         {
             Option = option;
         }
@@ -59,7 +51,7 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
          public BaseResponseValidator Validator { get; }
          public ResponseOption Option { get; }
 
-        public ResponseTransfer(ResponseOption option, BaseResponseValidator validator) : base(option)
+        public ResponseTransfer(ResponseOption option, BaseResponseValidator validator)
         {
             Option = option;
             Validator = validator;

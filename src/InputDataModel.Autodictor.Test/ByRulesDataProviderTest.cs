@@ -6,7 +6,6 @@ using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.IndependentInsearts.Factory;
 using Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Autodictor.Model;
-using Domain.InputDataModel.Autodictor.StronglyTypedResponse;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
@@ -27,18 +26,14 @@ namespace InputDataModel.Autodictor.Test
     public class ByRulesDataProviderTest
     {
         #region field
-
         private readonly ILogger _logger;
         private readonly IIndependentInseartsHandlersFactory _inputTypeIndependentInsertsHandlersFactory;
-        private readonly IStronglyTypedResponseFactory _stronglyTypedResponseFactory;
-
         #endregion
          
 
 
          #region ctor
-
-        public ByRulesDataProviderTest()
+         public ByRulesDataProviderTest()
         {
             var mock = new Mock<ILogger>();
             mock.Setup(loger => loger.Debug(""));
@@ -47,10 +42,9 @@ namespace InputDataModel.Autodictor.Test
             _logger = mock.Object;
 
             _inputTypeIndependentInsertsHandlersFactory= new AdInputTypeIndependentInseartsHandlersFactory();
-            _stronglyTypedResponseFactory= new AdStronglyTypedResponseFactory();
-        }
 
-        #endregion
+        }
+         #endregion
 
 
 
@@ -103,7 +97,7 @@ namespace InputDataModel.Autodictor.Test
                 }
             };
 
-            ProviderResult<AdInputType> ProviderResultFactory(ProviderTransfer<AdInputType> transfer, IDictionary<string, string> dictionary) => new ProviderResult<AdInputType>(transfer, dictionary, _stronglyTypedResponseFactory);
+            ProviderResult<AdInputType> ProviderResultFactory(ProviderTransfer<AdInputType> transfer, IDictionary<string, string> dictionary) => new ProviderResult<AdInputType>(transfer, dictionary);
             var btByRulesDataProvider= new ByRulesDataProvider<AdInputType>(ProviderResultFactory, option, _inputTypeIndependentInsertsHandlersFactory, _logger);
 
             // Act

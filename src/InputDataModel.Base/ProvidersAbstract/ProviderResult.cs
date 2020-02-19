@@ -26,7 +26,6 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
     {
         #region field
         private readonly ProviderTransfer<TIn> _transfer;
-        private readonly IStronglyTypedResponseFactory _stronglyTypedResponseFactory;
         #endregion
 
 
@@ -44,11 +43,10 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
 
 
         #region ctor
-        public ProviderResult(ProviderTransfer<TIn> transfer, IDictionary<string, string> providerStatusDict, IStronglyTypedResponseFactory stronglyTypedResponseFactory)
+        public ProviderResult(ProviderTransfer<TIn> transfer, IDictionary<string, string> providerStatusDict)
         {
             _transfer = transfer;
             StatusDict = providerStatusDict == null ? new Dictionary<string, string>() : new Dictionary<string, string>(providerStatusDict);
-            _stronglyTypedResponseFactory = stronglyTypedResponseFactory;
         }
         #endregion
 
@@ -107,29 +105,5 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         }
         #endregion
 
-
-        #region OtherMethode
-        /// <summary>
-        ///Если указанно имя типа для ответоа, то мы его создаем через фабрику.
-        /// </summary>
-        private StronglyTypedRespBase CreateStronglyTypedResponseByOption(string stronglyTypedName, string stringResponse)
-        {
-            StronglyTypedRespBase stronglyTypedResponse = null;
-            StatusDict["SetDataByte.StronglyTypedResponse"] = null;
-            if (!string.IsNullOrEmpty(_transfer.Response.Option.StronglyTypedName))
-            {
-                try
-                {
-                    stronglyTypedResponse = _stronglyTypedResponseFactory.CreateStronglyTypedResponse(stronglyTypedName, stringResponse);
-                    StatusDict["SetDataByte.StronglyTypedResponse"] = stronglyTypedResponse.ToString();
-                }
-                catch (NotSupportedException ex)
-                {
-                    StatusDict["SetDataByte.StronglyTypedResponse"] = $"ОШИБКА= {ex}";
-                }
-            }
-            return stronglyTypedResponse;
-        }
-        #endregion
     }
 }
