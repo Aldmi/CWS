@@ -9,6 +9,7 @@ using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;
+using Domain.InputDataModel.Base.Response.ResponseValidators;
 using Serilog;
 using Shared.Extensions;
 using Shared.Helpers;
@@ -257,11 +258,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 return Result.Failure<RequestTransfer<TIn>>($"Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на {outOfLimit}");
             }
 
-            ////CHECK RESULT STRING--------------------------------------------------------------------------------
-            //var (_, f, _, e) = CheckResultString(str);
-            //if(f)
-            //    return Result.Failure<RequestTransfer<TIn>>(e);
-
             //FORMAT SWITCHER------------------------------------------------------------------------------------------------------------
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
 
@@ -298,11 +294,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 }
                 sbAppendResult = value;
             }
-
-            //CHECK RESULT STRING--------------------------------------------------------------------------------
-            //var (_, f, _, e) = CheckResultString(str);
-            //if(f)
-            //    return Result.Failure<RequestTransfer<TIn>>(e);
 
             var str = sbAppendResult.ToString(); //TODO: Переход к старому коду зависимой вставки. Нужно его переделать на работу с StringBuilder
             //FORMAT SWITCHER-------------------------------------------------------------------------------------
@@ -346,37 +337,21 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 sbBodyResult = value;
             }
 
-            ////CHECK RESULT STRING---------------------------------------------------------------------------------------------------------
-            //var (_, f, _, e) = CheckResultString(str);
-            //if (f)
-            //    return Result.Failure<ResponseTransfer>(e);
-
             var str = sbBodyResult.ToString(); //TODO: Переход к старому коду зависимой вставки. Нужно его переделать на работу с StringBuilder
             //FORMAT SWITCHER--------------------------------------------------------------------------------------------------------------
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
 
+            //СОЗДАТЬ ВАЛИДАТОР ОТВЕТА-------------------------------------------------------------------------------------------------------------
+            var validator = new EqualResponseValidator(new StringRepresentation(newStr, newFormat)); //TODO: создавать валидатор на базе ResponseOption
+
             //ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.--------------------------------------------------------------------------------------------------
-            var response = new ResponseTransfer(responseOption)
+            var response = new ResponseTransfer(responseOption, validator)
             {
                 StrRepresentBase = new StringRepresentation(str, format),
                 StrRepresent = new StringRepresentation(newStr, newFormat)
             };
             return Result.Ok(response);
         }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private Result<string> CheckResultString(string str)
-        {
-            if(str.Contains("{") || str.Contains("}"))
-            {
-                return Result.Failure<string>(@"str contains {  or  }!!!");
-            }
-            return Result.Ok(str);
-        }
-
         #endregion
     }
 }

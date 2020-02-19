@@ -232,10 +232,10 @@ namespace Infrastructure.Transport.TcpIp
                     throw new TimeoutException();
                 }
                 int nByteTake = _netStream.Read(bDataTemp, 0, buferSize);
-                if (nByteTake != nbytes)
-                {
-                    Logger.Warning($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. КОЛ-ВО СЧИТАННЫХ БАЙТ НЕ ВЕРНОЕ. Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");
-                }
+                //if (nByteTake != nbytes)
+                //{
+                //    Logger.Warning($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. КОЛ-ВО СЧИТАННЫХ БАЙТ НЕ ВЕРНОЕ. Принято/Ожидаем= \"{nByteTake} / {nbytes}\"");
+                //}
                 if (_netStream.DataAvailable)
                 {
                     Logger.Error($"TcpIpTransport/TakeDataConstPeriodAsync {KeyTransport}. ПОСЛЕ ЧТЕНИЯ В БУФЕРЕ ОСТАЛИСЬ ДАННЫЕ. buferSize= \"{buferSize}\"");

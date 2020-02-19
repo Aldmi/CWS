@@ -68,14 +68,7 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
 
         public bool SetDataByte(byte[] data)
         {
-            //TODO: _transfer - должен вернуть ResponseValidator. ResponseValidator создаетеся в провайдере.
-            var stringResponseRef = _transfer.Response.StrRepresent.Str;
-            var format = _transfer.Response.StrRepresent.Format;
-            //var validator = new EqualResponseValidator(new StringRepresentation(stringResponseRef, format));
-            //var validator = new LenghtResponseValidator(16);
-            var validator = new RequireResponseValidator();
-
-            //TODO: Пока не получаем ВАЛИДАТОР из transfer, использовать EqualResponseValidator.
+            var validator = _transfer.Response.Validator;
             var respInfo = validator.Validate(data);
             IsOutDataValid = respInfo.IsOutDataValid;
             OutputData = respInfo;
@@ -93,10 +86,7 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
 
         public bool SetString(string stringResponse)
         {
-            var stringResponseRef = _transfer.Response.StrRepresent.Str;
-            var format = _transfer.Response.StrRepresent.Format;
-            var validator = new EqualResponseValidator(new StringRepresentation(stringResponseRef, format));
-            //TODO: Пока не получаем ВАЛИДАТОР из transfer, использовать EqualResponseValidator.
+            var validator = _transfer.Response.Validator;
             var respInfo = validator.Validate(stringResponse);
             IsOutDataValid = respInfo.IsOutDataValid;
             OutputData = respInfo;

@@ -25,6 +25,11 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         public StringRepresentation StrRepresentBase { get; set; }             //Строковое представление данных, созданная по правилам Option (В ФОРМАТЕ ИЗ Option).
         public StringRepresentation StrRepresent { get; set; }                 //Строковое представление данных, созданная по правилам Option (ВОЗМОЖНО В ИЗМЕНЕННОМ ФОРМАТЕ)
 
+        protected BaseTransfer(RequestResonseOption option)
+        {
+            _option = option;
+        }
+
         public bool EqualStrRepresent
         {
             get
@@ -33,11 +38,6 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
                 var result = compareLogic.Compare(StrRepresentBase, StrRepresent);
                 return result.AreEqual;
             }
-        }
-
-        protected BaseTransfer(RequestResonseOption option)
-        {
-            _option = option;
         }
     }
 
@@ -56,12 +56,13 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
 
     public class ResponseTransfer : BaseTransfer
     {
-        // public BaseResponseValidator Validator { get; }
-        //TODO: BaseResponseValidator вместо ResponseOption
-        public ResponseOption Option { get; }
-        public ResponseTransfer(ResponseOption option) : base(option)
+         public BaseResponseValidator Validator { get; }
+         public ResponseOption Option { get; }
+
+        public ResponseTransfer(ResponseOption option, BaseResponseValidator validator) : base(option)
         {
             Option = option;
+            Validator = validator;
         }
     }
 
