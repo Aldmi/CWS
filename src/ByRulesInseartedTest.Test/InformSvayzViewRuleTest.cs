@@ -34,9 +34,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 4,
-                        Body = "0x{AddressDevice:X2}0x040x830x{CRCMod256:X2}"
+                        //Format = "HEX",
+                        //Lenght = 4,
+                        //Body = "0x{AddressDevice:X2}0x040x830x{CRCMod256:X2}"
                     }
                 },
 
@@ -70,9 +70,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 4,
-                        Body = "0x{AddressDevice:X2}0x040x830x{CRCMod256:X2}"
+                        //Format = "HEX",
+                        //Lenght = 4,
+                        //Body = "0x{AddressDevice:X2}0x040x830x{CRCMod256:X2}"
                     }
                 },
 

@@ -34,9 +34,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 8,
-                        Body = "0230323030464403"
+                        //Format = "HEX",
+                        //Lenght = 8,
+                        //Body = "0230323030464403"
                     }
                 },
 
@@ -70,9 +70,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 8,
-                        Body = "0230323030464403"
+                        //Format = "HEX",
+                        //Lenght = 8,
+                        //Body = "0230323030464403"
                     }
                 },
 
@@ -106,9 +106,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 8,
-                        Body = "0230323030464403"
+                        //Format = "HEX",
+                        //Lenght = 8,
+                        //Body = "0230323030464403"
                     }
                 },
 
@@ -142,9 +142,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 8,
-                        Body = "0230323030464403"
+                        //Format = "HEX",
+                        //Lenght = 8,
+                        //Body = "0230323030464403"
                     }
                 },
 

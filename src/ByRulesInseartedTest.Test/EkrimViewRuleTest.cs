@@ -34,9 +34,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 2,
-                        Body = "061F"
+                        //Format = "HEX",
+                        //Lenght = 2,
+                        //Body = "061F"
                     }
                 },
 
@@ -70,9 +70,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 2,
-                        Body = "061F"
+                        //Format = "HEX",
+                        //Lenght = 2,
+                        //Body = "061F"
                     }
                 },
 
@@ -106,9 +106,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 2,
-                        Body = "061F"
+                        //Format = "HEX",
+                        //Lenght = 2,
+                        //Body = "061F"
                     }
                 },
 
@@ -142,9 +142,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 2,
-                        Body = "061F"
+                        //Format = "HEX",
+                        //Lenght = 2,
+                        //Body = "061F"
                     }
                 },
 

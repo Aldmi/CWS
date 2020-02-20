@@ -32,7 +32,6 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         #region prop
         public Dictionary<string, string> StatusDict { get; }
         public int TimeRespone => _transfer.Response.Option.TimeRespone;         //Время на ответ
-        public int CountSetDataByte => _transfer.Response.Option.Lenght;        //Кол-во принимаемых байт в ответе
         public BaseResponseInfo OutputData { get; private set; }
         public bool IsOutDataValid { get; private set; }
         /// <summary>

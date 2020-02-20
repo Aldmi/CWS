@@ -68,9 +68,9 @@ namespace ByRulesInseartedTest.Test
                 },
                 ResponseOption = new ResponseOption
                 {
-                    Format = "HEX",
-                    Lenght = 16,
-                    Body = "0246463038254130373741434B454103"
+                    //Format = "HEX",
+                    //Lenght = 16,
+                    //Body = "0246463038254130373741434B454103"
                 }
             }; 
 
@@ -113,9 +113,9 @@ namespace ByRulesInseartedTest.Test
                 },
                 ResponseOption = new ResponseOption
                 {
-                    Format = "HEX",
-                    Lenght = 16,
-                    Body = "0246463038254130373741434B454103"
+                    //Format = "HEX",
+                    //Lenght = 16,
+                    //Body = "0246463038254130373741434B454103"
                 }
             };
             var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, InTypeIndependentInsertsHandlerFactory, Logger);

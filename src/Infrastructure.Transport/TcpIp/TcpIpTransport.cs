@@ -85,7 +85,7 @@ namespace Infrastructure.Transport.TcpIp
                 try
                 {
 
-                    var data = await TakeDataConstPeriodAsync(dataProvider.CountSetDataByte, dataProvider.TimeRespone, ct);
+                    var data = await TakeDataConstPeriodAsync(dataProvider.TimeRespone, ct);
                     //var data = await TakeDataInstantlyAsync(dataProvider.CountSetDataByte, timeRespoune, ct);
                     var res = dataProvider.SetDataByte(data);
                     if (!res)
@@ -213,7 +213,7 @@ namespace Infrastructure.Transport.TcpIp
         /// <summary>
         /// Прием данных с постоянным периодом.
         /// </summary>
-        private async Task<byte[]> TakeDataConstPeriodAsync(int nbytes, int timeOut, CancellationToken ct)
+        private async Task<byte[]> TakeDataConstPeriodAsync(int timeOut, CancellationToken ct)
         {
             int buferSize = 256;// читаем всегда весь буфер
             byte[] bDataTemp = new byte[buferSize];
