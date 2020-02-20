@@ -80,40 +80,40 @@ namespace InputDataModel.Autodictor.Test
         [MemberData(nameof(GetInDataWrapper))]
         public async Task StartExchangePipelineTest(InDataWrapper<AdInputType> inDataWrapper)
         {
-            // Arrange
-            var option = new ProviderOption
-            {
-                ByRulesProviderOption = new ByRulesProviderOption
-                {
+            //// Arrange
+            //var option = new ProviderOption
+            //{
+            //    ByRulesProviderOption = new ByRulesProviderOption
+            //    {
                     
-                    Rules = new List<RuleOption>
-                    {
-                        new RuleOption
-                        {
-                            Name = "ProcessedItemsInBatch",
-                            AddressDevice = "1"
-                        }
-                    }
-                }
-            };
+            //        Rules = new List<RuleOption>
+            //        {
+            //            new RuleOption
+            //            {
+            //                Name = "ProcessedItemsInBatch",
+            //                AddressDevice = "1"
+            //            }
+            //        }
+            //    }
+            //};
 
-            ProviderResult<AdInputType> ProviderResultFactory(ProviderTransfer<AdInputType> transfer, IDictionary<string, string> dictionary) => new ProviderResult<AdInputType>(transfer, dictionary);
-            var btByRulesDataProvider= new ByRulesDataProvider<AdInputType>(ProviderResultFactory, option, _inputTypeIndependentInsertsHandlersFactory, _logger);
+            //ProviderResult<AdInputType> ProviderResultFactory(ProviderTransfer<AdInputType> transfer, IDictionary<string, string> dictionary) => new ProviderResult<AdInputType>(transfer, dictionary);
+            //var btByRulesDataProvider= new ByRulesDataProvider<AdInputType>(ProviderResultFactory, option, _inputTypeIndependentInsertsHandlersFactory, _logger);
 
-            // Act
-            int countSetDataByte = 0;
-            byte[] getDataByte = null;
-            var subscription = btByRulesDataProvider.RaiseSendDataRx.Subscribe(provider =>
-                {
+            //// Act
+            //int countSetDataByte = 0;
+            //byte[] getDataByte = null;
+            //var subscription = btByRulesDataProvider.RaiseSendDataRx.Subscribe(provider =>
+            //    {
 
 
 
-                    countSetDataByte = provider.CountSetDataByte; //Сколько байт ожидаем в ответ87
-                    getDataByte = provider.GetDataByte(); // ByRulesDataProvider выставляет массив байт для транспорта
-                    countSetDataByte.Should().Be(5);
-                });
+            //        countSetDataByte = provider.CountSetDataByte; //Сколько байт ожидаем в ответ87
+            //        getDataByte = provider.GetDataByte(); // ByRulesDataProvider выставляет массив байт для транспорта
+            //        countSetDataByte.Should().Be(5);
+            //    });
 
-            await btByRulesDataProvider.StartExchangePipelineAsync(inDataWrapper, CancellationToken.None);
+            //await btByRulesDataProvider.StartExchangePipelineAsync(inDataWrapper, CancellationToken.None);
 
 
             // Asssert

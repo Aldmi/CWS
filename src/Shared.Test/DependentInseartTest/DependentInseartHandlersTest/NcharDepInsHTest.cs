@@ -82,7 +82,7 @@ namespace Shared.Test.DependentInseartTest.DependentInseartHandlersTest
             //Act & Asert
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new NcharDepInsH(requiredModel, optionalModel));
             exception.Should().BeOfType<ArgumentNullException>();
-            exception.Message.Should().Contain("Value cannot be null.\r\nParameter name: crcModel");
+            exception.Message.Should().Contain("Value cannot be null. (Parameter 'crcModel')");
         }
     }
 }
