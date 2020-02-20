@@ -19,11 +19,7 @@ namespace Domain.Device.Produser
         private readonly Func<WebClientProduserOption, Owned<IProduser<WebClientProduserOption>>> _webClientFactory;
 
 
-
-
         #region ctor
-
-
         public ProdusersUnionFactory(Func<ProduserUnionOption, ProdusersUnion<TIn>> produsersUnionFactory,
             Func<SignalRProduserOption, Owned<IProduser<SignalRProduserOption>>> signalRFactory,
             Func<KafkaProduserOption, Owned<IProduser<KafkaProduserOption>>> kafkaFactory,
@@ -34,9 +30,7 @@ namespace Domain.Device.Produser
             _kafkaFactory = kafkaFactory;
             _webClientFactory = webClientFactory;
         }
-
         #endregion
-
 
 
         #region Methode

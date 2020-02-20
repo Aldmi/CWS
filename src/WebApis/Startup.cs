@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,7 +33,7 @@ using WebApiSwc.AutofacModules;
 using WebApiSwc.Extensions;
 using WebApiSwc.Hubs;
 using WebApiSwc.Settings;
-
+using TimeSpanConverter = WebApiSwc.JsonConverters.TimeSpanConverter;
 
 namespace WebApiSwc
 {
@@ -68,10 +70,7 @@ namespace WebApiSwc
                     o.JsonSerializerOptions.IgnoreNullValues = true;
                     o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     o.JsonSerializerOptions.WriteIndented = true;
-
-                    //o.SerializerSettings.Formatting = Formatting.Indented;
-                    //o.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
-                    //o.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    o.JsonSerializerOptions.Converters.Add(new TimeSpanConverter());
                 });
             
             services.AddOptions();
