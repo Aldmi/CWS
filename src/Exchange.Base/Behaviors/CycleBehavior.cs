@@ -187,6 +187,24 @@ namespace Domain.Exchange.Behaviors
             ResponseReadyRx.OnNext(transportResponseWrapper);
             await Task.Delay(1, ct); //TODO: Продумать как задвать скважность между выполнением цикл. функции на обмене.
         }
+
+
+        /// <summary>
+        /// Выставить на циклический обмен запросы инициализации.
+        /// </summary>
+        private async Task CycleInitActionAsync(CancellationToken ct)
+        {
+            //TODO:в InDataWrapper добавить опции выбора "списка" запросов: Init, Normal, Emergency, Command
+            var inData = new InDataWrapper<TIn> { Command = Command4Device.InfoEmergency };
+            var transportResponseWrapper = await PieceOfDataSender(DataAction.CycleAction, inData, ct);
+            if (transportResponseWrapper.IsValidAll)
+            {
+                //TODO:Все ответы на команды инициализации вылидны. Нужно переключится на нормальный режим работы.
+            }
+            ResponseReadyRx.OnNext(transportResponseWrapper);
+
+            await Task.Delay(1, ct); //TODO: Продумать как задавать скважность между выполнением цикл. функции на обмене.
+        }
         #endregion
 
 
