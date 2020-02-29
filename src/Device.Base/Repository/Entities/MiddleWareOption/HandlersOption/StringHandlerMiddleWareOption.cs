@@ -9,6 +9,7 @@ namespace Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption
         public InseartStringConverterOption InseartStringConverterOption { get; set; }
         public LimitStringConverterOption LimitStringConverterOption { get; set; }
         public ReplaceEmptyStringConverterOption ReplaceEmptyStringConverterOption { get; set; }
+        public ReplaceSpecStringConverterOption ReplaceSpecStringConverterOption { get; set; }
         public SubStringMemConverterOption SubStringMemConverterOption { get; set; }
         public InseartEndLineMarkerConverterOption InseartEndLineMarkerConverterOption { get; set; }
         public InsertAtEndOfLineConverterOption InsertAtEndOfLineConverterOption { get; set; }

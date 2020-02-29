@@ -28,6 +28,10 @@ namespace Domain.Device.MiddleWares.Handlers
             {
                 Converters.Add(new ReplaceEmptyStringConverter(option.ReplaceEmptyStringConverterOption));
             }
+            if (option.ReplaceSpecStringConverterOption != null)
+            {
+                Converters.Add(new ReplaceSpecStringConverter(option.ReplaceSpecStringConverterOption));
+            }
             if (option.InseartEndLineMarkerConverterOption != null)
             {
                 Converters.Add(new InseartEndLineMarkerConverter(option.InseartEndLineMarkerConverterOption));

@@ -11,31 +11,41 @@ namespace Shared.Extensions
 {
     public static class EnumerableExtensions
     {
-        public static IEnumerable<TInput> Filter<TInput>(this IEnumerable<TInput> inData, AgregateFilter whereFilter, string defaultItemJson, ILogger logger = null)
+        /// <summary>
+        /// Выполняет последовательно над коллекцией операции указанные в AgregateFilter.
+        ///  Where->OredBy->Take с дополнением
+        /// Полученные коллекции объединяются в один список.
+        /// </summary>
+        /// <typeparam name="TInput"></typeparam>
+        /// <param name="inData"></param>
+        /// <param name="filter"></param>
+        /// <param name="defaultItemJson"></param>
+        /// <param name="logger"></param>
+        /// <returns></returns>
+        public static IEnumerable<TInput> Filter<TInput>(this IEnumerable<TInput> inData, AgregateFilter filter, string defaultItemJson, ILogger logger = null)
         {
             if (inData == null)
                 return new List<TInput>();
 
             var agregateList = new List<TInput>();
-            foreach (var filter in whereFilter.Filters)
+            foreach (var p in filter.Filters)
             {
-                var where = filter.Where;
-                var oredBy = filter.OrderBy;
-                var take = filter.Take ?? 1000;
+                var where = p.Where;
+                var oredBy = p.OrderBy;
+                var take = p.Take ?? 1000;
                 //1. Where
-                var items= inData.Filter(filter.Where, logger);
+                var items= inData.Filter(where, logger);
                 //2. OredBy
                 if (!string.IsNullOrEmpty(oredBy))
                 {
                     items=items.Order(oredBy, logger);
                 }
-                //3. Take
+                //3. Take с дополнением
                 items = items.TakeItems(take, defaultItemJson, logger);
                 agregateList.AddRange(items);
             }
-            return agregateList;//DEBUG
+            return agregateList;
         }
-
 
 
         /// <summary>
@@ -135,7 +145,6 @@ namespace Shared.Extensions
                 return null;
             }
         }
-
 
 
         /// <summary>

@@ -112,14 +112,14 @@ namespace Domain.InputDataModel.Autodictor.Model
                 switch (ev.Num)
                 {
                     case 0: //"ПРИБ"
-                        stations = stDepartName;
-                        break;
-                    case 1:  //"ОТПР"
                         stations = stArrivalName;
                         break;
+                    case 1:  //"ОТПР"
+                        stations = stDepartName;
+                        break;
                     case 2:   //"СТОЯНКА"
-                        //stations = $"{stDepartName}-{stArrivalName}";
-                        stations = $"{stArrivalName}-{stDepartName}";
+                        stations = $"{stDepartName}-{stArrivalName}";
+                        //stations = $"{stArrivalName}-{stDepartName}";
                         break;
                 }
                 return stations;

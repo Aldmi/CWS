@@ -1,4 +1,5 @@
-﻿using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConvertersOption;
+﻿using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption;
+using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConvertersOption;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers
 {
@@ -9,6 +10,7 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers
         public InseartStringConverterOptionDto InseartStringConverterOption { get; set; }
         public LimitStringConverterOptionDto LimitStringConverterOption { get; set; }
         public ReplaceEmptyStringConverterOptionDto ReplaceEmptyStringConverterOption { get; set; }
+        public ReplaceSpecStringConverterOptionDto ReplaceSpecStringConverterOption { get; set; }
         public SubStringMemConverterOptionDto SubStringMemConverterOption { get; set; }
         public InseartEndLineMarkerConverterOptionDto InseartEndLineMarkerConverterOption { get; set; }
         public InsertAtEndOfLineConverterOptionDto InsertAtEndOfLineConverterOption { get; set; }
