@@ -134,7 +134,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
                     //ДАННЫЕ--------------------------------------------------------------  
                     case RuleSwitcher4InData.InDataHandler:
-                        var filtredItems = inData.Datas?.Filter(ruleOption.WhereFilter, _logger);
+                        var filtredItems = inData.Datas?.Filter(ruleOption.AgregateFilter, _logger);
                         if (filtredItems == null || !filtredItems.Any())
                             continue;
 
