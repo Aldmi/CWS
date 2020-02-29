@@ -95,6 +95,27 @@ namespace ByRulesInseartedTest.Test.Datas
                 null,
                 new Addition{NameRu = String.Empty},
                 new Note {NameRu = "Станция 1,Станция 2,Станция 3,Станция 4,Станция 5,Станция 6,Станция 7"},
+                null),
+
+            new AdInputType(4, 1, 1, Lang.Ru,
+                "563",
+                "8",
+                null,
+                new EventTrain(0),
+                new TypeTrain("Скорый", "СКОР", 1),
+                new VagonDirection(),
+                new Station {NameRu = "Новосибирск"},
+                new Station {NameRu = "Питер"},
+                null,
+                null,
+                null,
+                DateTime.Parse("11:22"),
+                DateTime.Parse("20:20"),
+                DateTime.Parse("00:15"),
+                DateTime.Parse("15:40"),
+                null,
+                new Addition{NameRu = String.Empty},
+                new Note {NameRu = "Станция 1,Станция 2,Станция 3,Станция 4,Станция 5,Станция 6,Станция 7"},
                 null)
         };
 

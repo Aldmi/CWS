@@ -2,45 +2,25 @@
 using System.Text;
 using CSharpFunctionalExtensions;
 using Shared.CrcCalculate;
+using Shared.Enums;
 using Shared.Extensions;
 
 namespace Shared.Services.StringInseartService.DependentInseart.DependentInseartHandlers
 {
-    public class Crc16CcittDepInsH : BaseDepInsH
+    public class Crc16CcittDepInsH : BaseCrcDepInsH
     {
-        private readonly (string startCh, string endCh, bool includeBorder) _border;
-        private readonly ByteHexDelemiter _hexDelemiter;
-
-
-        public Crc16CcittDepInsH(StringInsertModel requiredModel) : base(requiredModel)
-        {
-            var partsOptions = requiredModel.FindPartsOptions();
-            switch (partsOptions.Count)
-            {
-                case 1:
-                    _border = CrcHelper.CalcBorderSubString(partsOptions[0]);
-                    break;
-
-                case 2:
-                    _border = CrcHelper.CalcBorderSubString(partsOptions[0]);
-                    Enum.TryParse(partsOptions[1], out _hexDelemiter);
-                    break;
-            }
-        }
+        public Crc16CcittDepInsH(StringInsertModel requiredModel) : base(requiredModel){}
 
 
         protected override Result<string> GetInseart(StringBuilder sb, string format)
         {
             var crc16Ccitt = new CrcCalc.Crc16Ccitt(0xFFFF, 0x1021);
-            var (_, isFailure, arr, error) = CrcHelper.CalcCrc(sb, _border, format, RequiredModel.Replacement, crc16Ccitt.Calc);
+            var (_, isFailure, arr, error) = CrcHelper.CalcCrc(sb, Border, format, RequiredModel.Replacement, crc16Ccitt.Calc);
             if (isFailure)
                 return Result.Failure<string>(error);
            
-            var resStr = arr.BitConverter2StrByFormat(RequiredModel.Format, _hexDelemiter);
+            var resStr = arr.BitConverter2StrByFormat(RequiredModel.Format, HexDelemiter);
             return Result.Ok(resStr);
         }
     }
-
-
-    public enum ByteHexDelemiter { None, Hex}
 }
