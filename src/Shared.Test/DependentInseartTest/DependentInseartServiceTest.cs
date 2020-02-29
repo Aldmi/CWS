@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using CSharpFunctionalExtensions;
+using Domain.InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using FluentAssertions;
 using Shared.Services.StringInseartService.DependentInseart;
 using Xunit;
@@ -10,8 +12,8 @@ namespace Shared.Test.DependentInseartTest
 {
     public class DependentInseartServiceTest
     {
-        public const string Pattern = @"\{([^:{]+)(:[^{}]+)?\}";
-        
+        public const string Pattern = ViewRule<AdInputType>.Pattern;
+
         #region TheoryData
         public static IEnumerable<object[]> ExecuteInseartsDatas => new[]
         {
@@ -111,7 +113,7 @@ namespace Shared.Test.DependentInseartTest
             //Act & Asert
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => DependentInseartsServiceFactory.Create(strInit, Pattern));
             exception.Should().BeOfType<ArgumentNullException>();
-            exception.Message.Should().Contain("Value cannot be null.\r\nParameter name: crcModel");
+            exception.Message.Should().Contain("Value cannot be null. (Parameter 'crcModel')");
         }
         
         

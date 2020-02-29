@@ -51,8 +51,7 @@ namespace Domain.Device.Produser
                         {
                             item.RequestId,
                             item.StatusStr,
-                            item.TransportException,
-                            item.ResponseInfo?.StronglyTypedResponse
+                            Info = item.ResponseInfo?.ToString()
                         }).ToList()
                     };
                     break;
@@ -63,7 +62,7 @@ namespace Domain.Device.Produser
                         item.RequestId,
                         item.StatusStr,
                         item.TransportException,
-                        item.ResponseInfo?.StronglyTypedResponse
+                        Info = item.ResponseInfo?.ToString()
                     }).ToList();
                     convertedResp = new
                     {

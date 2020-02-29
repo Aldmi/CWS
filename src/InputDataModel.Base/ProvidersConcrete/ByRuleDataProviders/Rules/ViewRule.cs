@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.Enums;
@@ -9,6 +10,7 @@ using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;
+using Domain.InputDataModel.Base.Response.ResponseValidators;
 using Serilog;
 using Shared.Extensions;
 using Shared.Helpers;
@@ -51,7 +53,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             ResponseTransfer responseTransfer,
             ILogger logger)
         {
-   
+
             GetCurrentOption = option;
             _headerExecuteInseartsResult = headerExecuteInseartsResult;
             _requestBodyParserModel = requestBodyParserModel;
@@ -71,7 +73,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var footer = option.RequestOption.Footer;
 
             //список фабрик, создающих нужные обработчики
-            var handlerFactorys= new List<Func<StringInsertModel, IIndependentInsertsHandler>>
+            var handlerFactorys = new List<Func<StringInsertModel, IIndependentInsertsHandler>>
             {
                 new BaseIndependentInseartsHandlersFactory().Create,
                 inputTypeInseartsHandlersFactory.Create
@@ -82,13 +84,13 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
             var hExecuteInseartsResult = hIndependentInsertsService.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } }).result;
             var fExecuteInseartsResult = fIndependentInsertsService.ExecuteInsearts(null).result;
-        
+
             var requestdepInsServ = DependentInseartsServiceFactory.Create(header + body + footer, Pattern);
 
             var (_, isFailure, responseTransfer, error) = CreateResponseTransfer(option.ResponseOption, addressDevice, logger);
-            if(isFailure) throw new ArgumentException(error); //???
+            if (isFailure) throw new ArgumentException(error); //???
 
-            var viewRule= new ViewRule<TIn>(option, hExecuteInseartsResult, bIndependentInsertsService, fExecuteInseartsResult, requestdepInsServ, responseTransfer, logger);
+            var viewRule = new ViewRule<TIn>(option, hExecuteInseartsResult, bIndependentInsertsService, fExecuteInseartsResult, requestdepInsServ, responseTransfer, logger);
             return viewRule;
         }
 
@@ -257,11 +259,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 return Result.Failure<RequestTransfer<TIn>>($"Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на {outOfLimit}");
             }
 
-            ////CHECK RESULT STRING--------------------------------------------------------------------------------
-            //var (_, f, _, e) = CheckResultString(str);
-            //if(f)
-            //    return Result.Failure<RequestTransfer<TIn>>(e);
-
             //FORMAT SWITCHER------------------------------------------------------------------------------------------------------------
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
 
@@ -280,14 +277,14 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// Создать запрос для комманды.
         /// </summary>
         /// <returns></returns>
-        private Result<RequestTransfer<TIn>>  CreateRequestTransfer4Command()
+        private Result<RequestTransfer<TIn>> CreateRequestTransfer4Command()
         {
             var format = GetCurrentOption.RequestOption.Format;
 
             //INDEPENDENT insearts-------------------------------------------------------------------------------
             var (sbBodyResult, _) = _requestBodyParserModel.ExecuteInsearts(null);
             var sbAppendResult = new StringBuilder().Append(_headerExecuteInseartsResult).Append(sbBodyResult).Append(_footerExecuteInseartsResult);
-            
+
             //DEPENDENT insearts----------------------------------------------------------------------------------
             if (_requestDependentInseartsService != null)
             {
@@ -298,11 +295,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 }
                 sbAppendResult = value;
             }
-
-            //CHECK RESULT STRING--------------------------------------------------------------------------------
-            //var (_, f, _, e) = CheckResultString(str);
-            //if(f)
-            //    return Result.Failure<RequestTransfer<TIn>>(e);
 
             var str = sbAppendResult.ToString(); //TODO: Переход к старому коду зависимой вставки. Нужно его переделать на работу с StringBuilder
             //FORMAT SWITCHER-------------------------------------------------------------------------------------
@@ -323,60 +315,55 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// </summary>
         private static Result<ResponseTransfer> CreateResponseTransfer(ResponseOption responseOption, string addressDevice, ILogger logger)
         {
-            var format = responseOption.Format;
-            var body = responseOption.Body;
-            var handlerFactorys= new List<Func<StringInsertModel, IIndependentInsertsHandler>>
-            {
-                new BaseIndependentInseartsHandlersFactory().Create,
-            };
-            var indInsServ = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, Pattern, handlerFactorys, logger);
+            //СОЗДАТЬ ВАЛИДАТОР ОТВЕТА-------------------------------------------------------------------------------------------------------------
+            var (_, isFail, validator, err) = responseOption.CreateValidator();
+            if (isFail)
+                return Result.Failure<ResponseTransfer>(err);
 
-            //INDEPENDENT insearts---------------------------------------------------------------------------------------------------------
-            var (sbBodyResult, _) = indInsServ.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } });
-
-            //DEPENDENT insearts-----------------------------------------------------------------------------------------------------------
-            var depInsServ = DependentInseartsServiceFactory.Create(body, Pattern);
-            if (depInsServ != null)
+            switch (validator)
             {
-                var (_, isFailure, value, error) = depInsServ.ExecuteInsearts(sbBodyResult, format);
-                if (isFailure)
-                {
-                    return Result.Failure<ResponseTransfer>(error);
-                }
-                sbBodyResult = value;
+                //ДЛЯ equalValidator ВЫПОЛНИМ ВСТАВКИ В СТРОКУ И ВОЗМОЖНУЮ СМЕНУ ФОРМАТА
+                case EqualResponseValidator equalValidator:
+                    var format = equalValidator.ExpectedData.Format;
+                    var body = equalValidator.ExpectedData.Str;
+                    var handlerFactorys = new List<Func<StringInsertModel, IIndependentInsertsHandler>>
+                    {
+                       new BaseIndependentInseartsHandlersFactory().Create,
+                    };
+                    var indInsServ = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, Pattern, handlerFactorys, logger);
+
+                    //INDEPENDENT insearts---------------------------------------------------------------------------------------------------------
+                    var (sbBodyResult, _) = indInsServ.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } });
+
+                    //DEPENDENT insearts-----------------------------------------------------------------------------------------------------------
+                    var depInsServ = DependentInseartsServiceFactory.Create(body, Pattern);
+                    if (depInsServ != null)
+                    {
+                        var (_, isFailure, value, error) = depInsServ.ExecuteInsearts(sbBodyResult, format);
+                        if (isFailure)
+                        {
+                            return Result.Failure<ResponseTransfer>(error);
+                        }
+                        sbBodyResult = value;
+                    }
+
+                    var str = sbBodyResult.ToString(); //TODO: Переход к старому коду зависимой вставки. Нужно его переделать на работу с StringBuilder
+                    //FORMAT SWITCHER--------------------------------------------------------------------------------------------------------------
+                    var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
+
+                    //ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.--------------------------------------------------------------------------------------------------
+                    validator = new EqualResponseValidator(new StringRepresentation(newStr, newFormat)); //пересоздать валидатор, с измененной строкой и форматом
+                    var response = new ResponseTransfer(responseOption, validator)
+                    {
+                        StrRepresentBase = new StringRepresentation(str, format),
+                        StrRepresent = new StringRepresentation(newStr, newFormat)
+                    };
+                    return Result.Ok(response);
+
+                default:
+                    return Result.Ok(new ResponseTransfer(responseOption, validator));
             }
-
-            ////CHECK RESULT STRING---------------------------------------------------------------------------------------------------------
-            //var (_, f, _, e) = CheckResultString(str);
-            //if (f)
-            //    return Result.Failure<ResponseTransfer>(e);
-
-            var str = sbBodyResult.ToString(); //TODO: Переход к старому коду зависимой вставки. Нужно его переделать на работу с StringBuilder
-            //FORMAT SWITCHER--------------------------------------------------------------------------------------------------------------
-            var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
-
-            //ФОРМИРОВАНИЕ ОБЪЕКТА ОТВЕТА.--------------------------------------------------------------------------------------------------
-            var response = new ResponseTransfer(responseOption)
-            {
-                StrRepresentBase = new StringRepresentation(str, format),
-                StrRepresent = new StringRepresentation(newStr, newFormat)
-            };
-            return Result.Ok(response);
         }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private Result<string> CheckResultString(string str)
-        {
-            if(str.Contains("{") || str.Contains("}"))
-            {
-                return Result.Failure<string>(@"str contains {  or  }!!!");
-            }
-            return Result.Ok(str);
-        }
-
         #endregion
     }
 }

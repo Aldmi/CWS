@@ -2,6 +2,9 @@
 
 namespace Domain.InputDataModel.Base.Response.ResponseValidators
 {
+    /// <summary>
+    /// Создает Валидатор, для протокола Ekrim.
+    /// </summary>
     public class ManualEkrimResponseValidator : BaseResponseValidator
     {
         public override BaseResponseInfo Validate(byte[] arr)

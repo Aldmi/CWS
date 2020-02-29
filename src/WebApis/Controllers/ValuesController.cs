@@ -4,12 +4,14 @@ using Autofac;
 using AutoMapper;
 using Domain.Exchange;
 using Domain.InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Base.ProvidersOption;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.Transport;
 using Infrastructure.Transport.Base.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Events;
 using WebApiSwc.DTO.JSON.InputTypesDto;
+using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption;
 using WebApiSwc.Extensions;
 using WebApiSwc.Settings;
 
@@ -41,174 +43,24 @@ namespace WebApiSwc.Controllers
         }
 
 
-        //public ValuesController(MediatorForStorages<AdInputType> mediatorForStorages)
-        //{
-        //    _mediatorForStorages = mediatorForStorages;
-        //}
-
-        //public ValuesController(IEnumerable<ISerailPort> spServices, IEnumerable<IBackgroundService> backgroundServices)
-        //{
-
-        //}
-
-        //public ValuesController(IEnumerable<IExchange> excBehaviors, IEnumerable<IBackground> backgroundServices)
-        //{
-        //    _excBehaviors = excBehaviors;
-        //    _backgroundServices = backgroundServices;
-        //}
-
-
-
-
-        //public ValuesController(ILifetimeScope scope)
-        //{
-        //    _scope = scope;
-
-        //    var com=_scope.ResolveNamed<ISpService>("COM1");
-        //    _scope.Disposer.Dispose();
-        //}
-
-
 
 
         // GET api/values
         [HttpGet]
-        
         // public IEnumerable<InputData<AdInputType>> Get()
-        public LoggerSettings Get()
+        public ResponseOptionDto Get()
         {
-            var loggerSett = new LoggerSettings(LogEventLevel.Debug, new FileSinkSetting(true), new ElasticsearchSinkSetting(true));
-           
-
-            return loggerSett;
-
-
-            //var adInputType= new AdInputType
-            //{
-            //    PathNumber = "5",
-            //    Note = new Note { NameRu = "Примечание" },
-            //    Event = new EventTrain() {NameRu = "Прибытие", Num = 0}
-            //};
-
-      
-
-            //return adInputType;
-
-
-            //var user = new User() {Name = "dsfdsdfsfsdgdfgh"};
-            //var userDto=  _mapper.Map<UserDto>(user);
-
-            //var exchangesDto= new List<ExchangeOptionDto>
-            //{
-            //    new ExchangeOptionDto
-            //    {
-            //        Id = 1, 
-            //        KeyTransport = new KeyTransportDto {Key = "COM1", TransportType = "Sp"},
-            //        Key = "Exch_1",
-            //        AutoStartCycleFunc = true,
-            //        Provider = new ProviderOptionDto
-            //        {
-            //            Name = "VidorBase",
-            //            ManualProviderOptionDto = new ManualProviderOptionDto
-            //            {
-            //                TimeRespone = 1000,
-            //                Address = "1"
-            //            }
-            //        }
-            //    },
-            //    new ExchangeOptionDto
-            //    {
-            //        Id = 1, 
-            //        KeyTransport = new KeyTransportDto {Key = "COM1", TransportType = "Sp"},
-            //        Key = "Exch_2",
-            //        AutoStartCycleFunc = true,
-            //        Provider = new ProviderOptionDto
-            //        {
-            //            Name = "ByRules",
-            //            ByRulesProviderOptionDto = new ByRulesProviderOptionDto
-            //            {
-            //                RulesDto = new List<RuleDto>
-            //                {
-            //                    new RuleDto
-            //                    {
-            //                        Name = "Rule_1",
-            //                        Format = "utf8",
-            //                        Request = new RequestDto
-            //                        {
-            //                            Body = "sdgsfsgdfgdfdgfg",
-            //                            MaxLenght = 500
-            //                        },
-            //                        Response = new ResponseDto
-            //                        {
-            //                            Body = "ttttttttttttt",
-            //                            TimeRespone = 500,
-            //                            MaxLenght = 500
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //};
-
-
-            //var inData = new List<InputData<AdInputType>> //коллекция данных для уст-ва.
-            //    {
-            //        new InputData<AdInputType>
-            //        {
-            //            DeviceName = "Device_1",
-            //            ExchangeName = "Exchange_1",
-            //            ProcessedItemsInBatch = new List<AdInputType>
-            //            {
-            //                new AdInputType
-            //                {
-            //                    Id = 1,
-            //                    Event = "ПРИБ",
-            //                    NumberOfTrain = "562",
-            //                    PathNumber = "2",
-            //                    StationArrival = new Station
-            //                    {
-            //                        CodeEsr = 521,
-            //                        CodeExpress = 100,
-            //                        NameRu = "Москва",
-            //                    },
-            //                    DaysFollowing = "ЕЖ",
-            //                    TrainType = TrainType.Passenger,
-            //                    VagonDirection = VagonDirection.FromTheHead,
-            //                    ExpectedTime = DateTime.Now.AddHours(10),
-            //                    DelayTime = DateTime.Now.AddHours(8),
-            //                    StopTime = TimeSpan.FromHours(10)
-            //                },
-            //                new AdInputType
-            //                {
-            //                    Id = 2,
-            //                    Event = "СТОЯНКА",
-            //                    NumberOfTrain = "685",
-            //                    PathNumber = "2",
-            //                    StationArrival = new Station
-            //                    {
-            //                        CodeEsr = 521,
-            //                        CodeExpress = 100,
-            //                        NameRu = "Рязань",
-            //                    },
-            //                    StationDeparture = new Station
-            //                    {
-            //                        CodeEsr = 530,
-            //                        CodeExpress = 101,
-            //                        NameRu = "Питер",
-            //                    },
-            //                    TrainType = TrainType.Suburban,
-            //                    VagonDirection = VagonDirection.FromTheTail,
-            //                    ExpectedTime = DateTime.Now.AddHours(36),
-            //                    DelayTime = DateTime.Now.AddHours(8),
-            //                    StopTime = TimeSpan.FromHours(10)
-            //                }
-            //            }
-            //        }
-            //    };
-
-            //var inData = new List<InputData<AdInputType>>();
-            //return inData;
+            ResponseOptionDto responseOptionDto = new ResponseOptionDto()
+            {
+                ValidatorName = "EqualValidator",
+                TimeRespone = 500,
+                EqualValidator = new EqualResponseValidatorOption
+                {
+                    Body = "0246463038254130373741434B454103",
+                    Format = "HEX"
+                }
+            };
+            return responseOptionDto;
         }
 
         // GET api/values/5

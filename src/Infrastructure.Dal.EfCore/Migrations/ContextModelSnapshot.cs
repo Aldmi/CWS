@@ -14,29 +14,36 @@ namespace Infrastructure.Dal.EfCore.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Infrastructure.Dal.EfCore.Entities.Device.EfDeviceOption", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
 
-                    b.Property<bool>("AutoBuild");
+                    b.Property<bool>("AutoBuild")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Description")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<string>("ExchangeKeysCollection");
+                    b.Property<string>("ExchangeKeys")
+                        .HasColumnType("text");
 
-                    b.Property<string>("MiddleWareInDataMetaData");
+                    b.Property<string>("MiddleWareInData")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("ProduserUnionKey")
                         .IsRequired()
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -46,23 +53,27 @@ namespace Infrastructure.Dal.EfCore.Migrations
 
             modelBuilder.Entity("Infrastructure.Dal.EfCore.Entities.Exchange.EfExchangeOption", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("CycleFuncOptionMetaData")
-                        .IsRequired();
+                    b.Property<string>("CycleFuncOption")
+                        .HasColumnType("text");
 
                     b.Property<string>("Key")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<string>("KeyTransportMetaData")
-                        .IsRequired();
+                    b.Property<string>("KeyTransport")
+                        .HasColumnType("text");
 
-                    b.Property<int>("NumberErrorTrying");
+                    b.Property<int>("NumberErrorTrying")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("NumberTimeoutTrying");
+                    b.Property<int>("NumberTimeoutTrying")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("ProviderOptionMetaData")
-                        .IsRequired();
+                    b.Property<string>("Provider")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -71,17 +82,23 @@ namespace Infrastructure.Dal.EfCore.Migrations
 
             modelBuilder.Entity("Infrastructure.Dal.EfCore.Entities.ResponseProduser.EfProduserUnionOption", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("ConverterName");
+                    b.Property<string>("ConverterName")
+                        .HasColumnType("text");
 
-                    b.Property<string>("KafkaProduserOptionsMetaData");
+                    b.Property<string>("KafkaProduserOptions")
+                        .HasColumnType("text");
 
-                    b.Property<string>("Key");
+                    b.Property<string>("Key")
+                        .HasColumnType("text");
 
-                    b.Property<string>("SignalRProduserOptionsMetaData");
+                    b.Property<string>("SignalRProduserOptions")
+                        .HasColumnType("text");
 
-                    b.Property<string>("WebClientProduserOptionsMetaData");
+                    b.Property<string>("WebClientProduserOptions")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -90,20 +107,26 @@ namespace Infrastructure.Dal.EfCore.Migrations
 
             modelBuilder.Entity("Infrastructure.Dal.EfCore.Entities.Transport.EfHttpOption", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Address")
                         .IsRequired()
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
-                    b.Property<bool>("AutoStartBg");
+                    b.Property<bool>("AutoStartBg")
+                        .HasColumnType("boolean");
 
-                    b.Property<int>("DutyCycleTimeBg");
+                    b.Property<int>("DutyCycleTimeBg")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("HeadersCollection");
+                    b.Property<string>("Headers")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -113,27 +136,37 @@ namespace Infrastructure.Dal.EfCore.Migrations
 
             modelBuilder.Entity("Infrastructure.Dal.EfCore.Entities.Transport.EfSerialOption", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
 
-                    b.Property<bool>("AutoStartBg");
+                    b.Property<bool>("AutoStartBg")
+                        .HasColumnType("boolean");
 
-                    b.Property<int>("BaudRate");
+                    b.Property<int>("BaudRate")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("DataBits");
+                    b.Property<int>("DataBits")
+                        .HasColumnType("integer");
 
-                    b.Property<bool>("DtrEnable");
+                    b.Property<bool>("DtrEnable")
+                        .HasColumnType("boolean");
 
-                    b.Property<int>("DutyCycleTimeBg");
+                    b.Property<int>("DutyCycleTimeBg")
+                        .HasColumnType("integer");
 
-                    b.Property<byte>("Parity");
+                    b.Property<byte>("Parity")
+                        .HasColumnType("smallint");
 
                     b.Property<string>("Port")
                         .IsRequired()
+                        .HasColumnType("character varying(10)")
                         .HasMaxLength(10);
 
-                    b.Property<bool>("RtsEnable");
+                    b.Property<bool>("RtsEnable")
+                        .HasColumnType("boolean");
 
-                    b.Property<byte>("StopBits");
+                    b.Property<byte>("StopBits")
+                        .HasColumnType("smallint");
 
                     b.HasKey("Id");
 
@@ -142,19 +175,25 @@ namespace Infrastructure.Dal.EfCore.Migrations
 
             modelBuilder.Entity("Infrastructure.Dal.EfCore.Entities.Transport.EfTcpIpOption", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
 
-                    b.Property<bool>("AutoStartBg");
+                    b.Property<bool>("AutoStartBg")
+                        .HasColumnType("boolean");
 
-                    b.Property<int>("DutyCycleTimeBg");
+                    b.Property<int>("DutyCycleTimeBg")
+                        .HasColumnType("integer");
 
                     b.Property<string>("IpAddress")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<int>("IpPort");
+                    b.Property<int>("IpPort")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");

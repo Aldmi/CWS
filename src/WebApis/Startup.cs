@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Services.Actions;
@@ -17,14 +20,12 @@ using Infrastructure.Background.Abstarct;
 using Infrastructure.Dal.Abstract;
 using Infrastructure.Produser.WebClientProduser;
 using Infrastructure.Transport;
-using Infrastructure.Transport.Repository.Abstract;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Npgsql;
 using Serilog;
@@ -32,12 +33,13 @@ using WebApiSwc.AutofacModules;
 using WebApiSwc.Extensions;
 using WebApiSwc.Hubs;
 using WebApiSwc.Settings;
+using TimeSpanConverter = WebApiSwc.JsonConverters.TimeSpanConverter;
 
 namespace WebApiSwc
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostEnvironment env)
         {
             Env = env;
             var builder = new ConfigurationBuilder()
@@ -48,7 +50,7 @@ namespace WebApiSwc
 
 
         public IConfiguration AppConfiguration { get; }
-        public IHostingEnvironment Env { get; }
+        public IHostEnvironment Env { get; }
 
 
         public void ConfigureServices(IServiceCollection services)
@@ -58,19 +60,19 @@ namespace WebApiSwc
             var loggerSettings = SettingsFactory.GetLoggerConfig(Env, AppConfiguration);
             services.AddSerilogServices(loggerSettings, Env.ApplicationName);
 
-            services.AddTransient<IConfiguration>(provider => AppConfiguration);
+            services.AddTransient(provider => AppConfiguration);
 
             services.AddMvc()
                 .AddControllersAsServices()
                 .AddXmlSerializerFormatters()
                 .AddJsonOptions(o =>
                 {
-                    o.SerializerSettings.Formatting = Formatting.Indented;
-                    o.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
-                    o.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                }).
-                SetCompatibilityVersion(CompatibilityVersion.Version_2_2); ;
-
+                    o.JsonSerializerOptions.IgnoreNullValues = true;
+                    o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    o.JsonSerializerOptions.WriteIndented = true;
+                    o.JsonSerializerOptions.Converters.Add(new TimeSpanConverter());
+                });
+            
             services.AddOptions();
             //services.AddAutoMapper();//OldVersion
             services.AddAutoMapper(typeof(Startup));
@@ -82,7 +84,7 @@ namespace WebApiSwc
                 options.AddPolicy("default", policy =>
                 {
                     policy
-                        .AllowAnyOrigin()
+                        //.WithOrigins("https://localhost:44321")
                         .AllowCredentials()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
@@ -131,9 +133,8 @@ namespace WebApiSwc
 
 
         public void Configure(IApplicationBuilder app,
-                              IHostingEnvironment env,
+                              IHostEnvironment env,
                               ILifetimeScope scope,
-                              IConfiguration config,
                               IMapper mapper,
                               ILogger loger)
         {
@@ -185,29 +186,30 @@ namespace WebApiSwc
                 loger.Information("Enable firewall !!!!");
             }
 
-            //ПОДКЛЮЧЕНИЕ SignalR ХАБА
             app.UseCors("default");
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<ProviderHub>("/providerHub");
-            });
 
-            app.UseMvc();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<ProviderHub>("/providerHub");
+                endpoints.MapControllers();
+                //endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
         }
 
 
         private void ConfigurationBackgroundProcessAsync(IApplicationBuilder app, ILifetimeScope scope)
         {
-            var lifetimeApp = app.ApplicationServices.GetService<IApplicationLifetime>();
+            var lifetimeApp = app.ApplicationServices.GetService<IHostApplicationLifetime>();
             ApplicationStarted(lifetimeApp, scope);
             ApplicationStopping(lifetimeApp, scope);
             ApplicationStopped(lifetimeApp, scope);
         }
 
 
-        private void ApplicationStarted(IApplicationLifetime lifetimeApp, ILifetimeScope scope)
+        private void ApplicationStarted(IHostApplicationLifetime lifetimeApp, ILifetimeScope scope)
         {
             //ЗАПУСК БЕКГРАУНДА ОПРОСА ШИНЫ ДАННЫХ
             scope.Resolve<ConsumerMessageBroker4InputData<AdInputType>>();//перед запуском bg нужно создать ConsumerMessageBroker4InputData
@@ -267,7 +269,7 @@ namespace WebApiSwc
         }
 
 
-        private void ApplicationStopping(IApplicationLifetime lifetimeApp, ILifetimeScope scope)
+        private void ApplicationStopping(IHostApplicationLifetime lifetimeApp, ILifetimeScope scope)
         {
             //ОСТАНОВ БЕКГРАУНДА ОПРОСА ШИНЫ ДАННЫХ
             var backgroundName = AppConfiguration["MessageBrokerConsumer4InData:Name"];
@@ -319,7 +321,7 @@ namespace WebApiSwc
         }
 
 
-        private void ApplicationStopped(IApplicationLifetime lifetimeApp, ILifetimeScope scope)
+        private void ApplicationStopped(IHostApplicationLifetime lifetimeApp, ILifetimeScope scope)
         {
             lifetimeApp.ApplicationStopped.Register(() => { });
         }

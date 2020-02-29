@@ -33,13 +33,11 @@ namespace WebApiSwc
             Console.WriteLine($"{version}");
         }
 
-
         public static string GetVersion()
         {
-            const string version = "CWS Ver4.5";
-            return $"{version}  [10.12.2019]  [Reliz. Add CrcCalc.Calc8Bit]";
+            const string version = "CWS Ver5.0";
+            return $"{version}  [26.02.2020]  [Reliz. Add template for Init requests.]";
         }
-
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)

@@ -5,23 +5,18 @@ using Shared.Extensions;
 
 namespace Shared.Services.StringInseartService.DependentInseart.DependentInseartHandlers
 {
-    public class CrcMod256DepInsH : BaseDepInsH
+    public class CrcMod256DepInsH : BaseCrcDepInsH
     {
-        private readonly (string startCh, string endCh, bool includeBorder) _border;
-        
-        public CrcMod256DepInsH(StringInsertModel requiredModel) : base(requiredModel)
-        {
-            var crcOption = requiredModel.Options;
-            _border = CrcHelper.CalcBorderSubString(crcOption);
-        }
+        public CrcMod256DepInsH(StringInsertModel requiredModel) : base(requiredModel) { }
+
 
         protected override Result<string> GetInseart(StringBuilder sb, string format)
         { 
-            var (_, isFailure, arr, error) = CrcHelper.CalcCrc(sb, _border, format, RequiredModel.Replacement, CrcCalc.CalcMod256);
+            var (_, isFailure, arr, error) = CrcHelper.CalcCrc(sb, Border, format, RequiredModel.Replacement, CrcCalc.CalcMod256);
             if (isFailure)
                 return Result.Failure<string>(error);
            
-            var resStr = arr.BitConverter2StrByFormat(RequiredModel.Format);
+            var resStr = arr.BitConverter2StrByFormat(RequiredModel.Format, HexDelemiter);
             return Result.Ok(resStr);
         }
     }

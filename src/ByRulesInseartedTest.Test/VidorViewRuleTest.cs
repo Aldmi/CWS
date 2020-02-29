@@ -34,9 +34,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 8,
-                        Body = "0230323030464403"
+                        //Format = "HEX",
+                        //Lenght = 8,
+                        //Body = "0230323030464403"
                     }
                 },
 
@@ -70,9 +70,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 8,
-                        Body = "0230323030464403"
+                        //Format = "HEX",
+                        //Lenght = 8,
+                        //Body = "0230323030464403"
                     }
                 },
 
@@ -106,9 +106,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 8,
-                        Body = "0230323030464403"
+                        //Format = "HEX",
+                        //Lenght = 8,
+                        //Body = "0230323030464403"
                     }
                 },
 
@@ -142,9 +142,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 8,
-                        Body = "0230323030464403"
+                        //Format = "HEX",
+                        //Lenght = 8,
+                        //Body = "0230323030464403"
                     }
                 },
 
@@ -196,8 +196,8 @@ namespace ByRulesInseartedTest.Test
                 processedItem.InseartedData.Where(pair=>pair.Key != "MATH").ToList().Count.Should().Be(expectedCountInseartedData);
             }
 
-            rt.Response.StrRepresent.Str.Should().Be(expectedRespStrRepresent);
-            rt.Response.StrRepresent.Format.Should().Be(expectedRespStrRepresentFormat);
+            //rt.Response.StrRepresent.Str.Should().Be(expectedRespStrRepresent);
+            //rt.Response.StrRepresent.Format.Should().Be(expectedRespStrRepresentFormat);
         }
     }
 }

@@ -68,7 +68,7 @@ namespace Shared.Test.DependentInseartTest.DependentInseartHandlersTest
             var (isSuccess, _, _, error) = _handler.CalcInsert(sb);
             //Assert
             isSuccess.Should().BeFalse();
-            error.Should().Be( "Невозможно выделить подстроку использую паттерн {NbyteFull:X2}(.*){CRCMod256:X2}"); 
+            error.Should().Be("Невозможно выделить подстроку из строки \u000201{NbyteFull:X2}%010C60EF03B0470000001E%110\u0003 используя паттерн {NbyteFull:X2}(.*){CRCMod256:X2}"); 
         }
         
         
@@ -82,7 +82,7 @@ namespace Shared.Test.DependentInseartTest.DependentInseartHandlersTest
             //Act & Asert
             ArgumentNullException exception = Assert.Throws<ArgumentNullException>(()=> new NbyteFullDepInsH(requiredModel, optionalModel));
             exception.Should().BeOfType<ArgumentNullException>();
-            exception.Message.Should().Contain("Value cannot be null.\r\nParameter name: crcModel");
+            exception.Message.Should().Contain("Value cannot be null. (Parameter 'crcModel')");
         }
     }
 }

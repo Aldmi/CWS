@@ -42,9 +42,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "ascii",
-                        Lenght = 9,
-                        Body = ":{AddressDevice:X2}ok*{CRC8Bit[:-*]:X2}0x0D"
+                        //Format = "ascii",
+                        //Lenght = 9,
+                        //Body = ":{AddressDevice:X2}ok*{CRC8Bit[:-*]:X2}0x0D"
                     }
                 },
 

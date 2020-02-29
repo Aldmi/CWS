@@ -248,7 +248,7 @@ namespace Infrastructure.Transport.SerialPort
                 if (writeBuffer != null && writeBuffer.Any())
                 {
                     StatusDataExchange = StatusDataExchange.Process;
-                    var readBuff = await RequestAndRespawnConstPeriodAsync(writeBuffer, dataProvider.CountSetDataByte, dataProvider.TimeRespone, ct);
+                    var readBuff = new byte[100];//await RequestAndRespawnConstPeriodAsync(writeBuffer, dataProvider.CountSetDataByte, dataProvider.TimeRespone, ct);
                     dataProvider.SetDataByte(readBuff);
                 }
             }

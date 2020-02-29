@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Infrastructure.Dal.EfCore.Entities.MiddleWare;
+using Innofactor.EfCoreJsonValueConverter;
 using Newtonsoft.Json;
 
 namespace Infrastructure.Dal.EfCore.Entities.Device
@@ -36,20 +37,10 @@ namespace Infrastructure.Dal.EfCore.Entities.Device
         public bool AutoBuild { get; set; }                         //Автоматичекое создание Deivice на базе DeviceOption, при запуске сервиса.
        // public bool AutoStart { get; set; }                       //Автоматичекий запук Deivice в работу (после AutoBuild), при запуске сервиса.
 
-        private string _exchangeKeysMetaData;
-        [NotMapped]
-        public string[] ExchangeKeys
-        {
-            get => _exchangeKeysMetaData.Split(';');
-            set => _exchangeKeysMetaData = string.Join($"{';'}", value);
-        }
+        [JsonField]
+        public string[] ExchangeKeys { get; set; }
 
-        private string _middleWareInDataMetaData;
-        [NotMapped]
-        public EfMiddleWareInDataOption MiddleWareInData
-        {
-            get => string.IsNullOrEmpty(_middleWareInDataMetaData) ? null : JsonConvert.DeserializeObject<EfMiddleWareInDataOption>(_middleWareInDataMetaData);
-            set => _middleWareInDataMetaData = (value == null) ? null : JsonConvert.SerializeObject(value);
-        }
+        [JsonField]
+        public EfMiddleWareInDataOption MiddleWareInData { get; set; }
     }
 }

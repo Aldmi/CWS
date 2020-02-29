@@ -26,7 +26,7 @@ namespace InputDataModel.Autodictor.Test
 
             //Asert
             respInfo.IsOutDataValid.Should().BeTrue();
-            logStr.Should().Be("True   ArrayLenght=  10/10");
+            logStr.Should().Be("Valid: True  Type: LenghtResponseInfo  Info= 10 <---> 10");
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace InputDataModel.Autodictor.Test
 
             //Asert
             respInfo.IsOutDataValid.Should().BeFalse();
-            logStr.Should().Be("False   ArrayLenght=  10/5");
+            logStr.Should().Be("Valid: False  Type: LenghtResponseInfo  Info= 10 <---> 5");
         }
 
 
@@ -57,7 +57,7 @@ namespace InputDataModel.Autodictor.Test
 
             //Asert
             respInfo.IsOutDataValid.Should().BeTrue();
-            logStr.Should().Be("True   ArrayLenght=  10/10");
+            logStr.Should().Be("Valid: True  Type: LenghtResponseInfo  Info= 10 <---> 10");
         }
 
 
@@ -73,7 +73,7 @@ namespace InputDataModel.Autodictor.Test
 
             //Asert
             respInfo.IsOutDataValid.Should().BeFalse();
-            logStr.Should().Be("False   ArrayLenght=  2/5");
+            logStr.Should().Be("Valid: False  Type: LenghtResponseInfo  Info= 2 <---> 5");
         }
         #endregion
 
@@ -92,7 +92,7 @@ namespace InputDataModel.Autodictor.Test
 
             //Asert
             respInfo.IsOutDataValid.Should().BeTrue();
-            logStr.Should().Be("True   EqualResponse= [0102030405060708090A]:HEX/[0102030405060708090A]:HEX");
+            logStr.Should().Be("Valid: True  Type: EqualResponseInfo  Info= [0102030405060708090A]:HEX <---> [0102030405060708090A]:HEX");
         }
 
 
@@ -108,7 +108,7 @@ namespace InputDataModel.Autodictor.Test
 
             //Asert
             respInfo.IsOutDataValid.Should().BeFalse();
-            logStr.Should().Be("False   EqualResponse= [0102030405060708090A]:HEX/[FFFFFF]:HEX");
+            logStr.Should().Be("Valid: False  Type: EqualResponseInfo  Info= [0102030405060708090A]:HEX <---> [FFFFFF]:HEX");
         }
 
 
@@ -126,7 +126,7 @@ namespace InputDataModel.Autodictor.Test
 
             //Asert
             respInfo.IsOutDataValid.Should().BeTrue();
-            logStr.Should().Be("True   EqualResponse= [AB]:Windows-1251/[AB]:Windows-1251");
+            logStr.Should().Be("Valid: True  Type: EqualResponseInfo  Info= [AB]:Windows-1251 <---> [AB]:Windows-1251");
         }
 
 
@@ -143,7 +143,7 @@ namespace InputDataModel.Autodictor.Test
 
             //Asert
             respInfo.IsOutDataValid.Should().BeTrue();
-            logStr.Should().Be("True   EqualResponse= [Data1]:/[Data1]:");
+            logStr.Should().Be("Valid: True  Type: EqualResponseInfo  Info= [Data1]: <---> [Data1]:");
         }
         #endregion
     }

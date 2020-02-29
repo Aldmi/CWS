@@ -55,11 +55,23 @@ namespace Infrastructure.MessageBroker.Consumer
                     }
                 }
             };
-            _consumer = new Consumer<Null, string>(config, new NullDeserializer(), new StringDeserializer(Encoding.UTF8));
-            _consumer.OnLog += OnLog;
-            _consumer.OnError += OnError;
-            _consumer.OnConsumeError += OnConsumeError;
-            _consumer.OnPartitionEOF += OnPartitionEof;
+
+            //TODO: обновить версию kaffka до core3.1
+            //try//DEBUG
+            //{
+            //    _consumer = new Consumer<Null, string>(config, new NullDeserializer(), new StringDeserializer(Encoding.UTF8));
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //    throw;
+            //}
+
+
+            //_consumer.OnLog += OnLog;
+            //_consumer.OnError += OnError;
+            //_consumer.OnConsumeError += OnConsumeError;
+            //_consumer.OnPartitionEOF += OnPartitionEof;
         }
 
         #endregion

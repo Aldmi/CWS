@@ -9,7 +9,6 @@ namespace Infrastructure.Transport.Base.DataProvidert
 
         byte[] GetDataByte();            //сформировать буфер для отправки.
         bool SetDataByte(byte[] data);   //получить принятый буфер.
-        int CountSetDataByte { get; }    //кол-во байт для приема.
 
         Stream GetStream();              // получить поток отправляемых данных
         bool SetStream(Stream stream);   // получить поток принимаемых данных

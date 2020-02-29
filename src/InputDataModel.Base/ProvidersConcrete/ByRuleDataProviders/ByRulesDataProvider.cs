@@ -12,6 +12,7 @@ using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response;
+using Domain.InputDataModel.Base.Response.ResponseInfos;
 using Serilog;
 using Shared.Extensions;
 using Shared.Services.StringInseartService;
@@ -25,7 +26,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
     /// Задает провайдер конфигурируемый правилами.
     /// </summary>
     /// <typeparam name="TIn">тип входных данных для провайдера.</typeparam>
-    public class ByRulesDataProvider<TIn> : BaseDataProvider<TIn>, IDataProvider<TIn, ResponseInfo> where TIn : InputTypeBase
+    public class ByRulesDataProvider<TIn> : BaseDataProvider<TIn>, IDataProvider<TIn, BaseResponseInfo> where TIn : InputTypeBase
     {
         #region field
         private readonly List<Rule<TIn>> _rules;        // Набор правил, для обработки данных.

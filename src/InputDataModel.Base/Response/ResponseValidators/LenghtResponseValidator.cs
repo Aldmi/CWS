@@ -2,7 +2,9 @@
 
 namespace Domain.InputDataModel.Base.Response.ResponseValidators
 {
-
+    /// <summary>
+    /// Создает Валидатор, проверяющий длинну входных данных на соответие  Ожилаемой длинне.
+    /// </summary>
     public class LenghtResponseValidator : BaseResponseValidator
     {
         private readonly int _expectedLenght;                            //Ожидаемая длинна массива

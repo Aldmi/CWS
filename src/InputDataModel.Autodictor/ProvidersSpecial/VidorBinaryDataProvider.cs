@@ -10,10 +10,11 @@ using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response;
+using Domain.InputDataModel.Base.Response.ResponseInfos;
 
 namespace Domain.InputDataModel.Autodictor.ProvidersSpecial
 {
-    public class VidorBinaryDataProvider : BaseDataProvider<AdInputType>, IDataProvider<AdInputType, ResponseInfo>
+    public class VidorBinaryDataProvider : BaseDataProvider<AdInputType>, IDataProvider<AdInputType, BaseResponseInfo>
     {
         #region field
 
@@ -86,9 +87,9 @@ namespace Domain.InputDataModel.Autodictor.ProvidersSpecial
             throw new NotImplementedException();
         }
 
-        Subject<ProviderResult<AdInputType>> IDataProvider<AdInputType, ResponseInfo>.RaiseSendDataRx => _raiseSendDataRx;
+        Subject<ProviderResult<AdInputType>> IDataProvider<AdInputType, BaseResponseInfo>.RaiseSendDataRx => _raiseSendDataRx;
 
-        public Subject<IDataProvider<AdInputType, ResponseInfo>> RaiseSendDataRx { get; }
+        public Subject<IDataProvider<AdInputType, BaseResponseInfo>> RaiseSendDataRx { get; }
 
         public void SendDataIsCompleted()
         {
@@ -97,7 +98,7 @@ namespace Domain.InputDataModel.Autodictor.ProvidersSpecial
 
         public InDataWrapper<AdInputType> InputData { get; set; }
 
-        public ResponseInfo OutputData { get; set; }
+        public BaseResponseInfo OutputData { get; set; }
         public bool IsOutDataValid { get; }
         public Subject<ResponseDataItem<AdInputType>> OutputDataChangeRx { get; }
         public string ProviderName { get; set; }
@@ -124,7 +125,7 @@ namespace Domain.InputDataModel.Autodictor.ProvidersSpecial
         public int TimeRespone { get; }
         public CancellationTokenSource Cts { get; set; }
 
-        public void Dispose()
+        public override void Dispose()
         {
             _raiseSendDataRx?.Dispose();
             RaiseSendDataRx?.Dispose();

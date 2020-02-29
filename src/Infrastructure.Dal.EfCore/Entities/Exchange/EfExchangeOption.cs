@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption;
+using Innofactor.EfCoreJsonValueConverter;
 using Newtonsoft.Json;
 using Shared.Collections;
 using Shared.Enums;
@@ -19,29 +20,14 @@ namespace Infrastructure.Dal.EfCore.Entities.Exchange
         public int NumberErrorTrying { get; set; }
         public int NumberTimeoutTrying { get; set; }
 
-        private string _keyTransportMetaData;
-        [NotMapped]
-        public EfKeyTransport KeyTransport
-        {
-            get => string.IsNullOrEmpty(_keyTransportMetaData) ? null : JsonConvert.DeserializeObject<EfKeyTransport>(_keyTransportMetaData);
-            set => _keyTransportMetaData = (value == null) ? null : JsonConvert.SerializeObject(value);
-        }
+        [JsonField]
+        public EfKeyTransport KeyTransport { get; set; }
 
-        private string _providerOptionMetaData;
-        [NotMapped]
-        public EfProviderOption Provider
-        {
-            get => string.IsNullOrEmpty(_providerOptionMetaData) ? null : JsonConvert.DeserializeObject<EfProviderOption>(_providerOptionMetaData);
-            set => _providerOptionMetaData = (value == null) ? null : JsonConvert.SerializeObject(value);
-        }
+        [JsonField]
+        public EfProviderOption Provider { get; set; }
 
-        private string _cycleFuncOptionMetaData;
-        [NotMapped]
-        public EfCycleFuncOption CycleFuncOption
-        {
-            get => string.IsNullOrEmpty(_cycleFuncOptionMetaData) ? null : JsonConvert.DeserializeObject<EfCycleFuncOption>(_cycleFuncOptionMetaData);
-            set => _cycleFuncOptionMetaData = (value == null) ? null : JsonConvert.SerializeObject(value);
-        }
+        [JsonField]
+        public EfCycleFuncOption CycleFuncOption { get; set; }
     }
 
     public class EfKeyTransport

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Shared.Enums;
+using Shared.Services.StringInseartService.DependentInseart.DependentInseartHandlers;
 
 namespace Shared.Extensions
 {
@@ -36,34 +38,48 @@ namespace Shared.Extensions
         /// <summary>
         /// Преобразует массив байт к строке по целочисленному формату..
         /// </summary>
-        public static string BitConverter2StrByFormat(this byte[] arr, string format)
+        public static string BitConverter2StrByFormat(this byte[] arr, string format, ByteHexDelemiter hexDelemiter = ByteHexDelemiter.None)
         {
             if (arr == null)
                 throw new ArgumentNullException(nameof(arr));
 
-            Int64 value = 0; //64 разрадное число. чтобы вместить 8 байтное число
+            string resStr = string.Empty;
             switch (arr.Length)
             {
                 case 0:
                     return string.Empty;
 
                 case 1:
-                    value = arr[0];
+                    var byteVal = arr[0];
+                    resStr = byteVal.Convert2StrByFormat(format);
                     break;
 
                 case 2:
-                    value = BitConverter.ToInt16(arr);
+                    var int16Val = BitConverter.ToInt16(arr);
+                    resStr= int16Val.Convert2StrByFormat(format);
                     break;
-
+                
                 case 4:
-                    value = BitConverter.ToInt32(arr);
+                    var int32Val = BitConverter.ToInt32(arr);
+                    resStr = int32Val.Convert2StrByFormat(format);
                     break;
 
                 case 8:
-                    value = BitConverter.ToInt64(arr);
+                    var int64Val = BitConverter.ToInt64(arr);
+                    resStr = int64Val.Convert2StrByFormat(format);
                     break;
             }
-            return value.Convert2StrByFormat(format);
+
+            //вставить разделитель байт в получившуюся строку.
+            if (hexDelemiter == ByteHexDelemiter.Hex)
+            {
+                var inseartVal = "0x";
+                for (var i = 0; i < resStr.Length; i += 2 + inseartVal.Length)
+                {
+                    resStr = resStr.Insert(i, inseartVal);
+                }
+            }
+            return resStr;
         }
     }
 }

@@ -1,18 +1,22 @@
 ﻿namespace Domain.InputDataModel.Base.Response.ResponseInfos
 {
+    /// <summary>
+    /// Интерпретатор ответа.
+    /// IsOutDataValid выставляется при realLenght == expectedLenght
+    /// </summary>
     public class LenghtResponseInfo : BaseResponseInfo
     {
         public readonly int RealLenght;
-        public readonly int ExpectedLenght;                //Ожидаемые (верные) данные
+        private readonly int _expectedLenght;                //Ожидаемые (верные) данные
         public LenghtResponseInfo(int realLenght, int expectedLenght)
         {
             RealLenght = realLenght;
-            ExpectedLenght = expectedLenght;
-            IsOutDataValid = RealLenght == ExpectedLenght;
+            _expectedLenght = expectedLenght;
+            IsOutDataValid = RealLenght == _expectedLenght;
         }
         public override string ToString()
         {
-            return $"{IsOutDataValid}   ArrayLenght=  {RealLenght}/{ExpectedLenght}";
+            return $"{base.ToString()}  Info= {RealLenght} <---> {_expectedLenght}";
         }
     }
 }

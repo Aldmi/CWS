@@ -1,12 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DataProviderAbstract\**" />
     <Compile Remove="Model\**" />
+    <EmbeddedResource Remove="DataProviderAbstract\**" />
     <EmbeddedResource Remove="Model\**" />
+    <None Remove="DataProviderAbstract\**" />
     <None Remove="Model\**" />
   </ItemGroup>
 
@@ -14,7 +17,7 @@
     <PackageReference Include="Autofac" Version="4.9.4" />
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="CompareNETObjects" Version="4.65.0" />
-    <PackageReference Include="CSharpFunctionalExtensions" Version="2.2.2" />
+    <PackageReference Include="CSharpFunctionalExtensions" Version="2.3.0" />
     <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
     <PackageReference Include="System.Reactive" Version="4.3.2" />
@@ -28,10 +31,6 @@
     <ProjectReference Include="..\Infrastructure.Transport\Infrastructure.Transport.csproj" />
     <ProjectReference Include="..\InputDataModel.Base\Domain.InputDataModel.Base.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DataProviderAbstract\" />
   </ItemGroup>
 
   <ItemGroup>

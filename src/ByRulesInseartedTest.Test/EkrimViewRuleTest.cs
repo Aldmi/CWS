@@ -34,9 +34,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 2,
-                        Body = "061F"
+                        //Format = "HEX",
+                        //Lenght = 2,
+                        //Body = "061F"
                     }
                 },
 
@@ -70,9 +70,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 2,
-                        Body = "061F"
+                        //Format = "HEX",
+                        //Lenght = 2,
+                        //Body = "061F"
                     }
                 },
 
@@ -106,9 +106,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 2,
-                        Body = "061F"
+                        //Format = "HEX",
+                        //Lenght = 2,
+                        //Body = "061F"
                     }
                 },
 
@@ -142,9 +142,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 2,
-                        Body = "061F"
+                        //Format = "HEX",
+                        //Lenght = 2,
+                        //Body = "061F"
                     }
                 },
 
@@ -197,8 +197,8 @@ namespace ByRulesInseartedTest.Test
                 processedItem.InseartedData.Where(pair => pair.Key != "MATH").ToList().Count.Should().Be(expectedCountInseartedData);
             }
 
-            rt.Response.StrRepresent.Str.Should().Be(expectedRespStrRepresent);
-            rt.Response.StrRepresent.Format.Should().Be(expectedRespStrRepresentFormat);
+            //rt.Response.StrRepresent.Str.Should().Be(expectedRespStrRepresent);
+            //rt.Response.StrRepresent.Format.Should().Be(expectedRespStrRepresentFormat);
         }
     }
 }

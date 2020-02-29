@@ -457,9 +457,12 @@ namespace WebApiSwc.Controllers
             if(isFailure)
                 return Ok(new IndigoResponseDto(0, error)); //Запрос верный, НО при обработве данных возникли ошибки
 
-            //var resp = value;                                                       //Запрос верный, Обработано успешно
-            var resp = new IndigoResponseDto(1, "Ok");                    //Запрос верный, Обработано успешно
-            return Ok(resp);
+            var respThisDevice = value.Values.First();                                                         
+            var notConnectExch = respThisDevice.Where(model => !model.IsConnect).ToList();   //Объединяет по И IsConnect от всех обменов этого устройства.
+            var flag = notConnectExch.Any() ? 0 : 1;
+            var message = flag == 1 ? "Ok" : "Not connect";
+            var resp =  new IndigoResponseDto(flag,  message);                  
+            return Ok(resp);                                    //Запрос верный, Обработано успешно
         }
 
         #endregion

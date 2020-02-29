@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using CSharpFunctionalExtensions;
+using Domain.InputDataModel.Base.Response.ResponseValidators;
+using Shared.Types;
 
 namespace Domain.InputDataModel.Base.ProvidersOption
 {
@@ -48,14 +52,44 @@ namespace Domain.InputDataModel.Base.ProvidersOption
         public int MaxBodyLenght { get; set; }               // Максимальная длина тела запроса
         public string Header { get; set; }                   // НАЧАЛО запроса (ТОЛЬКО ЗАВИСИМЫЕ ДАННЫЕ).
         public string Footer { get; set; }                   // КОНЕЦ ЗАПРОСА (ТОЛЬКО ЗАВИСИМЫЕ ДАННЫЕ).
-
     }
 
 
-    public class ResponseOption : RequestResonseOption
+    public class ResponseOption
     {
-        public int Lenght { get; set; }                      // Ожидаемое кол-во байт ОТВЕТА
-        public int TimeRespone { get; set; }                 // Время ответа
-        public string StronglyTypedName  { get; set; }       // Название типа в которое преобразуется Body. (Типизированный ответ)
+        public int TimeRespone { get; set; }                                         //Время ответа
+        public string ValidatorName { get; set; }                                    //Если имя валидатора не указанно, то по умолчанию ставится RequireResponseValidator  
+        public LenghtResponseValidatorOption LenghtValidator { get; set; }           //      
+        public EqualResponseValidatorOption EqualValidator { get; set; }             //
+
+        public Result<BaseResponseValidator> CreateValidator()
+        {
+            try
+            {
+                return ValidatorName switch
+                {
+                    "LenghtValidator" when LenghtValidator != null => Result.Ok<BaseResponseValidator>(new LenghtResponseValidator(LenghtValidator.ExpectedLenght)),
+                    "EqualValidator" when EqualValidator != null => Result.Ok<BaseResponseValidator>(new EqualResponseValidator(new StringRepresentation(EqualValidator.Body, EqualValidator.Format))),
+                    "ManualEkrimValidator" when LenghtValidator != null => Result.Ok<BaseResponseValidator>(new ManualEkrimResponseValidator()),
+                    _ => Result.Ok<BaseResponseValidator>(new RequireResponseValidator())
+                };
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure<BaseResponseValidator>($"Исключение при создании ВАЛИДАТОРА ответа {ex.Message}");
+            }
+
+        }
+    }
+
+    public class LenghtResponseValidatorOption
+    {
+        public int ExpectedLenght { get; set; }
+    }
+
+    public class EqualResponseValidatorOption
+    {
+        public string Format { get; set; }
+        public string Body { get; set; }
     }
 }

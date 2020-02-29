@@ -64,7 +64,7 @@ namespace Shared.CrcCalculate
             //     matchString.ConvertString2ByteArray(format);
 
             var crcBytes = matchString.ConvertStringWithHexEscapeChars2ByteArray(format);
-            return Result.Ok(crcBytes);//DEBUG
+            return Result.Ok(crcBytes);
         }
 
         

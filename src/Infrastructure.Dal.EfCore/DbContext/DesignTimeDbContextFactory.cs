@@ -12,9 +12,7 @@ namespace Infrastructure.Dal.EfCore.DbContext
     {
         public Context CreateDbContext(string[] args)
         {
-            Console.WriteLine(args.Length);//DEBUG
-
-            var path = @"F:\\Git\\CWS\\src\\WebApis";
+            var path = @"D:\\Git\\CWS\\src\\WebApis";
             var config = JsonConfigLib.GetConfiguration(path);
             var connectionString = config.GetConnectionString("OptionDbConnectionUseNpgsql");
             return new Context(connectionString);

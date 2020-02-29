@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Domain.InputDataModel.Base.ProvidersOption;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption
 {
@@ -46,11 +47,10 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption
 
     public class ResponseOptionDto
     {
-        public string Format { get; set; }
-        public int Lenght { get; set; }                     
-        public int TimeRespone { get; set; }
-        public string Body { get; set; }
-        public string StronglyTypedName { get; set; }
+        public int TimeRespone { get; set; }                                         
+        public string ValidatorName { get; set; }                         
+        public LenghtResponseValidatorOption LenghtValidator { get; set; }            
+        public EqualResponseValidatorOption EqualValidator { get; set; }           
     }
 
 }

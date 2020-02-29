@@ -34,9 +34,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 16,
-                        Body = "0246463038254130373741434B454103"
+                        //Format = "HEX",
+                        //Lenght = 16,
+                        //Body = "0246463038254130373741434B454103"
                     }
                 },
 
@@ -70,9 +70,9 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        Format = "HEX",
-                        Lenght = 16,
-                        Body = "0246463038254130373741434B454103"
+                        //Format = "HEX",
+                        //Lenght = 16,
+                        //Body = "0246463038254130373741434B454103"
                     }
                 },
 
@@ -124,8 +124,8 @@ namespace ByRulesInseartedTest.Test
                 processedItem.InseartedData.Where(pair => pair.Key != "MATH").ToList().Count.Should().Be(expectedCountInseartedData);
             }
 
-            rt.Response.StrRepresent.Str.Should().Be(expectedRespStrRepresent);
-            rt.Response.StrRepresent.Format.Should().Be(expectedRespStrRepresentFormat);
+            //rt.Response.StrRepresent.Str.Should().Be(expectedRespStrRepresent);
+            //rt.Response.StrRepresent.Format.Should().Be(expectedRespStrRepresentFormat);
         }
 
     }

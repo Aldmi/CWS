@@ -106,8 +106,8 @@ namespace WebApiSwc.Extensions
                         EmitEventFailure = EmitEventFailureHandling.WriteToSelfLog |
                                        EmitEventFailureHandling.WriteToFailureSink |
                                        EmitEventFailureHandling.RaiseCallback,
-                        FailureSink = new FileSink("./failures.txt", new JsonFormatter(), null),
 
+                        FailureSink = new FileSink("./failures.txt", new JsonFormatter(), null)
                     });
             }
             return loggerConf;

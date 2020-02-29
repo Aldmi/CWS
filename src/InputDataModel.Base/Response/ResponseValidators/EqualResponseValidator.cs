@@ -3,6 +3,9 @@ using Shared.Types;
 
 namespace Domain.InputDataModel.Base.Response.ResponseValidators
 {
+    /// <summary>
+    /// Создает Валидатор, проверяющий входные данные на точное соответствие Ожидаемым данным
+    /// </summary>
     public class EqualResponseValidator : BaseResponseValidator
     {
         public readonly StringRepresentation ExpectedData;                  //Ожидаемые (верные) данные
