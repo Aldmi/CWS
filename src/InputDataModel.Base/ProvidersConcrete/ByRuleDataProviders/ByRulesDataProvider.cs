@@ -126,21 +126,18 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                     //ДАННЫЕ ДЛЯ УКАЗАНОГО RULE--------------------------------------------
                     case RuleSwitcher4InData.InDataDirectHandler:
                         var takesItems = inData.Datas
-                            ?.Order(ruleOption.OrderBy, _logger)
-                            ?.TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
+                            ?.Filter(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger)
                             ?.ToList();
                         await SendDataAsync(rule, takesItems, ct);
                         continue;
 
                     //ДАННЫЕ--------------------------------------------------------------  
                     case RuleSwitcher4InData.InDataHandler:
-                        var filtredItems = inData.Datas?.Filter(ruleOption.AgregateFilter, _logger);
+                        var filtredItems = inData.Datas?.Filter(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger);
                         if (filtredItems == null || !filtredItems.Any())
                             continue;
 
-                        takesItems = filtredItems.Order(ruleOption.OrderBy, _logger)
-                            .TakeItems(ruleOption.TakeItems, ruleOption.DefaultItemJson, _logger)
-                            .ToList();
+                        takesItems = filtredItems.ToList();
                         await SendDataAsync(rule, takesItems, ct);
                         continue;
 

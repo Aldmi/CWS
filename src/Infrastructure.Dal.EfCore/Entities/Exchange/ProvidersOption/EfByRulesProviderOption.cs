@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Shared.Extensions;
+using Shared.Types;
 
 namespace Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption
 {
@@ -15,8 +16,6 @@ namespace Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption
         public string Name { get; set; }
         public string AddressDevice { get; set; }
         public AgregateFilter AgregateFilter { get; set; }
-        public string OrderBy { get; set; }                 
-        public int TakeItems { get; set; }       
         public string DefaultItemJson { get; set; } 
         public List<EfViewRuleOption> ViewRules { get; set; }  
     }

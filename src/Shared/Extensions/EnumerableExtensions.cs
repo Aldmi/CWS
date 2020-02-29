@@ -5,25 +5,13 @@ using System.Linq.Dynamic.Core;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Serilog;
+using Shared.Types;
 
 namespace Shared.Extensions
 {
-
-    //TODO: Вынести в отдельный файл
-    public class AgregateFilter
-    {
-        public List<Predicate> Filters { get; set; }
-    }
-
-    public class Predicate
-    {
-        public string Where { get; set; }             //Булевое выражение для фильтрации (например "(ArrivalTime > DateTime.Now.AddMinute(-100) && ArrivalTime < DateTime.Now.AddMinute(100)) || ((EventTrain == \"Transit\") && (ArrivalTime > DateTime.Now))")
-        public int? Take { get; set; }
-    }
-
     public static class EnumerableExtensions
     {
-        public static IEnumerable<TInput> Filter<TInput>(this IEnumerable<TInput> inData, AgregateFilter whereFilter, ILogger logger = null)
+        public static IEnumerable<TInput> Filter<TInput>(this IEnumerable<TInput> inData, AgregateFilter whereFilter, string defaultItemJson, ILogger logger = null)
         {
             if (inData == null)
                 return new List<TInput>();
@@ -32,8 +20,17 @@ namespace Shared.Extensions
             foreach (var filter in whereFilter.Filters)
             {
                 var where = filter.Where;
+                var oredBy = filter.OrderBy;
                 var take = filter.Take ?? 1000;
-                var items= inData.Filter(filter.Where, logger).Take(take);
+                //1. Where
+                var items= inData.Filter(filter.Where, logger);
+                //2. OredBy
+                if (!string.IsNullOrEmpty(oredBy))
+                {
+                    items=items.Order(oredBy, logger);
+                }
+                //3. Take
+                items = items.TakeItems(take, defaultItemJson, logger);
                 agregateList.AddRange(items);
             }
             return agregateList;//DEBUG

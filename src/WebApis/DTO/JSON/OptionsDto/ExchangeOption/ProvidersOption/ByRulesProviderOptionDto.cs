@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Shared.Extensions;
+using Shared.Types;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption
 {
@@ -17,8 +18,6 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption
         public string Name { get; set; }                       
         public string AddressDevice { get; set; }
         public AgregateFilter AgregateFilter { get; set; }
-        public string OrderBy { get; set; }                 
-        public int TakeItems { get; set; }                  
         public string DefaultItemJson { get; set; }         
         public List<ViewRuleOptionDto> ViewRules { get; set; }  
     }
