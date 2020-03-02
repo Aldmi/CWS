@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Domain.Device.MiddleWares.Converters.StringConverters;
+using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption;
 using StringHandlerMiddleWareOption = Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption.StringHandlerMiddleWareOption;
 
 namespace Domain.Device.MiddleWares.Handlers
@@ -43,6 +44,10 @@ namespace Domain.Device.MiddleWares.Handlers
             if (option.InsertAtEndOfLineConverterOption != null)
             {
                 Converters.Add(new InsertAtEndOfLineConverter(option.InsertAtEndOfLineConverterOption));
+            }
+            if (option.PadRightStringConverterOption != null)
+            {
+                Converters.Add(new PadRightStringConverter(option.PadRightStringConverterOption));
             }
 
             var orderedConverters = Converters.OrderBy(c => c.Priority).ToList();

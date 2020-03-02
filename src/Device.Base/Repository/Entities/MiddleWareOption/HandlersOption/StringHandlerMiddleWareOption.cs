@@ -13,5 +13,6 @@ namespace Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption
         public SubStringMemConverterOption SubStringMemConverterOption { get; set; }
         public InseartEndLineMarkerConverterOption InseartEndLineMarkerConverterOption { get; set; }
         public InsertAtEndOfLineConverterOption InsertAtEndOfLineConverterOption { get; set; }
+        public PadRightStringConverterOption PadRightStringConverterOption { get; set; }
     }
 }
