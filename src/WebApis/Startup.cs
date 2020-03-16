@@ -81,11 +81,11 @@ namespace WebApiSwc
             services.AddCors(options =>
             {
                 // задаём политику CORS, чтобы наше клиентское приложение могло отправить запрос на сервер API
-                options.AddPolicy("default", policy =>
+                options.AddPolicy("WebApp", policy =>
                 {
                     policy
-                        //.WithOrigins("https://localhost:44321")
-                        .AllowCredentials()
+                        .WithOrigins("http://localhost:3000")
+                        //.AllowCredentials()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
@@ -186,11 +186,11 @@ namespace WebApiSwc
                 loger.Information("Enable firewall !!!!");
             }
 
-            app.UseCors("default");
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseCors("WebApp");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<ProviderHub>("/providerHub");
