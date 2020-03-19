@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption
 {
