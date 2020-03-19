@@ -24,7 +24,7 @@ namespace WebApiSwc.Controllers
     /// </summary>
     [Produces("application/json")]
     [Route("api/[controller]")]
-    public class ValuesController: Controller
+    public class ValuesController : Controller
     {
         private readonly MediatorForStorages<AdInputType> _mediatorForStorages;
         private readonly TransportStorage _spSrStorage;
@@ -77,15 +77,14 @@ namespace WebApiSwc.Controllers
                     SerilogExtensions.ChangeLogEventLevel(LogEventLevel.Error);
                     break;
             }
-    
-            return new List<string>{"str1", "str2"};
+
+            return new List<string> { "str1", "str2" };
         }
 
         //POST api/values
-       [HttpPost]
-        public void Post([FromBody]AdInputTypeDto value)
+        [HttpPost]
+        public void Post([FromBody]Dictionary<string,int> value)
         {
-            var res= _mapper.Map<AdInputType>(value);
 
         }
 
