@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Domain.Device.MiddleWares.Converters.DateTimeConverters;
 using DateTimeHandlerMiddleWareOption = Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption.DateTimeHandlerMiddleWareOption;
 
@@ -6,14 +7,20 @@ namespace Domain.Device.MiddleWares.Handlers
 {
     public class DateTimeHandlerMiddleWare : BaseHandlerMiddleWare<DateTime>
     {
-        public DateTimeHandlerMiddleWare(DateTimeHandlerMiddleWareOption option)
+        public DateTimeHandlerMiddleWare(string propName, params DateTimeHandlerMiddleWareOption[] options)
         {
-            PropName = option.PropName;
-
-            if (option.TimeZoneConverterOption != null)
+            PropName = propName;
+            foreach (var option in options)
             {
-                Converters.Add(new TimeZoneConverter(option.TimeZoneConverterOption));
+
+                if (option.TimeZoneConverterOption != null)
+                {
+                    Converters.Add(new TimeZoneConverter(option.TimeZoneConverterOption));
+                }
             }
+            var orderedConverters = Converters.OrderBy(c => c.Priority).ToList();
+            Converters.Clear();
+            Converters.AddRange(orderedConverters);
         }
     }
 }

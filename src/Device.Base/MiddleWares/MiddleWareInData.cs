@@ -47,16 +47,19 @@ namespace Domain.Device.MiddleWares
 
 
         #region ctor
-
         public MiddleWareInData(MiddleWareInDataOption option, ILogger logger)
         {
             _option = option;
             _logger = logger;
 
-            _stringHandlers= option.StringHandlers?.Select(handlerOption => new StringHandlerMiddleWare(handlerOption)).ToList();
-            _dateTimeHandlers = option.DateTimeHandlers?.Select(handlerOption => new DateTimeHandlerMiddleWare(handlerOption)).ToList();
-        }
+            _stringHandlers = option.StringHandlers?.
+                GroupBy(handlerOption => handlerOption.PropName, handlerOption => handlerOption).
+                Select(gr => new StringHandlerMiddleWare(gr.Key, gr.ToArray())).ToList();
 
+            _dateTimeHandlers = option.DateTimeHandlers?.
+                  GroupBy(handlerOption => handlerOption.PropName, handlerOption => handlerOption).
+                  Select(gr => new DateTimeHandlerMiddleWare(gr.Key, gr.ToArray())).ToList();
+        }
         #endregion
 
 
@@ -65,14 +68,14 @@ namespace Domain.Device.MiddleWares
 
         /// <summary>
         /// Вызов обработчиков для преобразования данных.
+        /// Паралельно обрабатываются входные данные и парллельно свойства внутри единицы данных.
         /// </summary>
         public Result<InputData<TIn>, ErrorResultMiddleWareInData> HandleInvoke(InputData<TIn> inData)
         {
             var inDataClone = inData.Clone(FieldType.Both);
             string error;
-            var errorHandlerWrapper= new ErrorResultMiddleWareInData();
-
-            foreach (var data in inDataClone.Data)
+            var errorHandlerWrapper = new ErrorResultMiddleWareInData();
+            Parallel.ForEach(inDataClone.Data, (data) =>
             {
                 Parallel.ForEach(_stringHandlers, (stringHandler) =>
                 {
@@ -83,12 +86,12 @@ namespace Domain.Device.MiddleWares
                         var tuple = resultGet.Value;
                         try
                         {
-                            var newValue= stringHandler.Convert(tuple.val, data.Id);
+                            var newValue = stringHandler.Convert(tuple.val, data.Id);
                             tuple.val = newValue;
                             var resultSet = _mutationsServiseStr.SetPropValue(tuple);
                             if (resultSet.IsFailure)
                             {
-                                error =$"MiddlewareInvokeService.HandleInvoke.StringConvert. Ошибка установки свойства:  {resultSet.Error}";
+                                error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. Ошибка установки свойства:  {resultSet.Error}";
                                 errorHandlerWrapper.AddError(error);
                             }
                         }
@@ -105,11 +108,11 @@ namespace Domain.Device.MiddleWares
                     }
                     else
                     {
-                        error =$"MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  {resultGet.Error}";
+                        error = $"MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  {resultGet.Error}";
                         errorHandlerWrapper.AddError(error);
                     }
                 });
-            }
+            });
 
             var res = errorHandlerWrapper.IsEmpty ?
                 Result.Ok<InputData<TIn>, ErrorResultMiddleWareInData>(inDataClone) :
@@ -117,59 +120,6 @@ namespace Domain.Device.MiddleWares
 
             return res;
         }
-
-        //СТАРАЯ ВЕРСИЯ ПАРАЛЛЕЛЬНОЙ ОБРАБОТКИ
-        //public Result<InputData<TIn>, ErrorResultMiddleWareInData> HandleInvoke(InputData<TIn> inData)
-        //{
-        //    var inDataClone = inData.Clone(FieldType.Both);
-        //    string error;
-        //    var errorHandlerWrapper = new ErrorResultMiddleWareInData();
-        //    Parallel.ForEach(inDataClone.Data, (data) =>
-        //    {
-        //        Parallel.ForEach(_stringHandlers, (stringHandler) =>
-        //        {
-        //            var propName = stringHandler.PropName;
-        //            var resultGet = _mutationsServiseStr.GetPropValue(data, propName);
-        //            if (resultGet.IsSuccess)
-        //            {
-        //                var tuple = resultGet.Value;
-        //                try
-        //                {
-        //                    var newValue = stringHandler.Convert(tuple.val, data.Id);
-        //                    tuple.val = newValue;
-        //                    var resultSet = _mutationsServiseStr.SetPropValue(tuple);
-        //                    if (resultSet.IsFailure)
-        //                    {
-        //                        error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. Ошибка установки свойства:  {resultSet.Error}";
-        //                        errorHandlerWrapper.AddError(error);
-        //                    }
-        //                }
-        //                catch (StringConverterException ex)
-        //                {
-        //                    error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. Exception в конверторе:  {ex}";
-        //                    errorHandlerWrapper.AddError(error);
-        //                }
-        //                catch (Exception e)
-        //                {
-        //                    error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
-        //                    errorHandlerWrapper.AddError(error);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                error = $"MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  {resultGet.Error}";
-        //                errorHandlerWrapper.AddError(error);
-        //            }
-        //        });
-        //    });
-
-        //    var res = errorHandlerWrapper.IsEmpty ?
-        //        Result.Ok<InputData<TIn>, ErrorResultMiddleWareInData>(inDataClone) :
-        //        Result.Failure<InputData<TIn>, ErrorResultMiddleWareInData>(errorHandlerWrapper);
-
-        //    return res;
-        //}
-
         #endregion
     }
 
