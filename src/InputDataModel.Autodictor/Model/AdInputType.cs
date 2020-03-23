@@ -33,7 +33,7 @@ namespace Domain.InputDataModel.Autodictor.Model
         public DateTime? DelayTime { get; private set; }                     //Время задержки (прибытия или отправления поезда)
         public DateTime ExpectedTime { get; private set; }                   //Ожидаемое время (Время + Время задержки)
         public TimeSpan? StopTime { get; private set; }                      //время стоянки (для транзитов: Время отпр - время приб)
-
+         
         public Addition Addition { get; private set; }                       //Дополнение (свободная строка)
         public Note Note { get; private set; }                               //Примечание.
         public DaysFollowing DaysFollowing { get; private set; }             //Дни следования
@@ -90,9 +90,6 @@ namespace Domain.InputDataModel.Autodictor.Model
         {
         }
 
-
-
-
         #endregion
 
 
@@ -106,22 +103,15 @@ namespace Domain.InputDataModel.Autodictor.Model
                 if (!ev.Num.HasValue)
                     return string.Empty;
 
-                stArrivalName = stArrivalName ?? string.Empty;
-                stDepartName = stDepartName ?? string.Empty;
-                var stations = string.Empty;
-                switch (ev.Num)
+                stArrivalName ??= string.Empty;
+                stDepartName ??= string.Empty;
+                var stations = ev.Num switch
                 {
-                    case 0: //"ПРИБ"
-                        stations = stArrivalName;
-                        break;
-                    case 1:  //"ОТПР"
-                        stations = stDepartName;
-                        break;
-                    case 2:   //"СТОЯНКА"
-                        stations = $"{stDepartName}-{stArrivalName}";
-                        //stations = $"{stArrivalName}-{stDepartName}";
-                        break;
-                }
+                    0 => stArrivalName,//"ПРИБ"
+                    1 => stDepartName,//"ОТПР"
+                    2 => $"{stDepartName}-{stArrivalName}",//"СТОЯНКА"
+                    _ => string.Empty
+                };
                 return stations;
             }
 
@@ -139,8 +129,8 @@ namespace Domain.InputDataModel.Autodictor.Model
         {
             string CreateStationName(string stArrivalName, string stDepartName)
             {
-                stArrivalName = stArrivalName ?? string.Empty;
-                stDepartName = stDepartName ?? string.Empty;
+                stArrivalName ??= string.Empty;
+                stDepartName ??= string.Empty;
 
                 var stations = string.Empty;
                 if (!string.IsNullOrEmpty(stArrivalName) && !string.IsNullOrEmpty(stDepartName))

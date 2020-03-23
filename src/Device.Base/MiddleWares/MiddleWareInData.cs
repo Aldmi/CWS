@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
@@ -70,7 +71,8 @@ namespace Domain.Device.MiddleWares
             var inDataClone = inData.Clone(FieldType.Both);
             string error;
             var errorHandlerWrapper= new ErrorResultMiddleWareInData();
-            Parallel.ForEach(inDataClone.Data, (data) =>
+
+            foreach (var data in inDataClone.Data)
             {
                 Parallel.ForEach(_stringHandlers, (stringHandler) =>
                 {
@@ -107,7 +109,7 @@ namespace Domain.Device.MiddleWares
                         errorHandlerWrapper.AddError(error);
                     }
                 });
-            });
+            }
 
             var res = errorHandlerWrapper.IsEmpty ?
                 Result.Ok<InputData<TIn>, ErrorResultMiddleWareInData>(inDataClone) :
@@ -115,6 +117,58 @@ namespace Domain.Device.MiddleWares
 
             return res;
         }
+
+        //СТАРАЯ ВЕРСИЯ ПАРАЛЛЕЛЬНОЙ ОБРАБОТКИ
+        //public Result<InputData<TIn>, ErrorResultMiddleWareInData> HandleInvoke(InputData<TIn> inData)
+        //{
+        //    var inDataClone = inData.Clone(FieldType.Both);
+        //    string error;
+        //    var errorHandlerWrapper = new ErrorResultMiddleWareInData();
+        //    Parallel.ForEach(inDataClone.Data, (data) =>
+        //    {
+        //        Parallel.ForEach(_stringHandlers, (stringHandler) =>
+        //        {
+        //            var propName = stringHandler.PropName;
+        //            var resultGet = _mutationsServiseStr.GetPropValue(data, propName);
+        //            if (resultGet.IsSuccess)
+        //            {
+        //                var tuple = resultGet.Value;
+        //                try
+        //                {
+        //                    var newValue = stringHandler.Convert(tuple.val, data.Id);
+        //                    tuple.val = newValue;
+        //                    var resultSet = _mutationsServiseStr.SetPropValue(tuple);
+        //                    if (resultSet.IsFailure)
+        //                    {
+        //                        error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. Ошибка установки свойства:  {resultSet.Error}";
+        //                        errorHandlerWrapper.AddError(error);
+        //                    }
+        //                }
+        //                catch (StringConverterException ex)
+        //                {
+        //                    error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. Exception в конверторе:  {ex}";
+        //                    errorHandlerWrapper.AddError(error);
+        //                }
+        //                catch (Exception e)
+        //                {
+        //                    error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
+        //                    errorHandlerWrapper.AddError(error);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                error = $"MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  {resultGet.Error}";
+        //                errorHandlerWrapper.AddError(error);
+        //            }
+        //        });
+        //    });
+
+        //    var res = errorHandlerWrapper.IsEmpty ?
+        //        Result.Ok<InputData<TIn>, ErrorResultMiddleWareInData>(inDataClone) :
+        //        Result.Failure<InputData<TIn>, ErrorResultMiddleWareInData>(errorHandlerWrapper);
+
+        //    return res;
+        //}
 
         #endregion
     }
