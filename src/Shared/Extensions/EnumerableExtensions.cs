@@ -15,6 +15,7 @@ namespace Shared.Extensions
         /// Выполняет последовательно над коллекцией операции указанные в AgregateFilter.
         ///  Where->OredBy->Take с дополнением
         /// Полученные коллекции объединяются в один список.
+        /// Если inData пустой список, то  Where->OredBy не РАБОТАЕТ, только дополнение Take.
         /// </summary>
         /// <typeparam name="TInput"></typeparam>
         /// <param name="inData"></param>
@@ -27,20 +28,30 @@ namespace Shared.Extensions
             if (inData == null)
                 return new List<TInput>();
 
+            var items = inData;
             var agregateList = new List<TInput>();
             foreach (var p in filter.Filters)
             {
-                var where = p.Where;
-                var oredBy = p.OrderBy;
-                var take = p.Take ?? 1000;
-                //1. Where
-                var items= inData.Filter(where, logger);
-                //2. OredBy
-                if (!string.IsNullOrEmpty(oredBy))
+                if (inData.Any())
                 {
-                    items=items.Order(oredBy, logger);
+                    //1. Where-------------------------------------
+                    var where = p.Where;
+                    var whereLenghtConditionFunc = p.WhereLenght.HasValue 
+                        ? new Func<bool>(() => items.Count() == p.WhereLenght.Value) 
+                        : () => true;
+                    items = inData.Filter(where, logger);
+                    var filterConditions = items.Any() && whereLenghtConditionFunc();
+                    if (!filterConditions)
+                        continue;
+                    //2. OredBy------------------------------------
+                    var oredBy = p.OrderBy;
+                    if (!string.IsNullOrEmpty(oredBy))
+                    {
+                        items = items.Order(oredBy, logger);
+                    }
                 }
-                //3. Take с дополнением
+                //3. Take с дополнением-----------------------------
+                var take = p.Take ?? 1000;
                 items = items.TakeItems(take, defaultItemJson, logger);
                 agregateList.AddRange(items);
             }

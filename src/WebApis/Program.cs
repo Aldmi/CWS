@@ -35,8 +35,8 @@ namespace WebApiSwc
 
         public static string GetVersion()
         {
-            const string version = "CWS Ver5.4";
-            return $"{version}  [19.03.2020]  [Reliz. Add PadRighCharWeightStringConverterOption]";
+            const string version = "CWS Ver5.6";
+            return $"{version}  [23.03.2020]  [Reliz. Add WhereLenght in AgregateFilter]";
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
