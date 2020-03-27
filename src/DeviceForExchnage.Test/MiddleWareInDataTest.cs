@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DeviceForExchnage.Test.Datas;
 using Domain.Device.MiddleWares;
@@ -43,15 +44,35 @@ namespace DeviceForExchnage.Test
         [Fact]
         public void NormalUse_EnumerateConverter_Lang_1Step()
         {
-            //DEBUG--------
-            var l= Lang.Ru;
-            var type = l.GetType();
-            var j = type.BaseType;
+           // var l = Lang.Ru;
+           // Enum inProp = l;
+           // var dictChain = new Dictionary<string, int>
+           // {
+           //     {"Ru", 1},
+           //     {"Eng", 2}
+           // };
+           // //Словарь после преобразования
+           // var dictChainLang = new Dictionary<Lang, int>
+           // {
+           //     {Lang.Ru, 1},
+           //     {Lang.Eng, 2}
+           // };
+           // //DEBUG--------
+           // var t= typeof(Lang).AssemblyQualifiedName; //"Domain.InputDataModel.Autodictor.Entities.Lang, Domain.InputDataModel.Autodictor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
 
-            
+           ////1. Извлекли тип объекта из сборки
+           //const string objectToInstantiate = "Domain.InputDataModel.Autodictor.Entities.Lang, Domain.InputDataModel.Autodictor";
+           //var objectType = Type.GetType(objectToInstantiate);
 
-            var h = l is byte;
-            //DEBUG--------
+           // //2. Получили варианты перчисления как строки
+           // var names = Enum.GetNames(objectType);
+
+           // //3. Получили текущее состояние inProp как строку
+           // var currentStateStr = inProp.ToString();
+
+           // //3.Работа конвертора и запись нового (string) значения.
+           //var newValue= (Enum)Enum.Parse(objectType, currentState);
+           //DEBUG--------
 
 
             //Arrage
