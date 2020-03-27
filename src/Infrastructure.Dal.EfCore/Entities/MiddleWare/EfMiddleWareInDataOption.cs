@@ -9,6 +9,7 @@ namespace Infrastructure.Dal.EfCore.Entities.MiddleWare
 
         public List<EfStringHandlerMiddleWareOption> StringHandlers { get; set; }
         public List<EfDateTimeHandlerMiddleWareOption> DateTimeHandlers { get; set; }
+        public List<EfEnumHandlerMiddleWareOption> EnumHandlers { get; set; }
 
         public EfInvokerOutput InvokerOutput { get; set; }
     }

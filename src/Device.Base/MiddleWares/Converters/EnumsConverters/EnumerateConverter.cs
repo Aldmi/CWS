@@ -22,7 +22,7 @@ namespace Domain.Device.MiddleWares.Converters.EnumsConverters
 
            var hh= inProp is Lang;
            var lang = (Lang)inProp;
-           lang = Lang.Ch;
+           lang = Lang.Eng;
            return lang;
         }
     }
