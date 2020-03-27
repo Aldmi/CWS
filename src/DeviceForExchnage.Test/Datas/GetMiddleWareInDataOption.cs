@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Domain.Device.Enums;
 using Domain.Device.Repository.Entities.MiddleWareOption;
+using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.EnumsConvertersOption;
 using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption;
 using Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption;
 
@@ -8,6 +9,37 @@ namespace DeviceForExchnage.Test.Datas
 {
     public static class GetMiddleWareInDataOption
     {
+        public static MiddleWareInDataOption GetMiddleWareInDataOption_EnumHandlers_EnumerateConverter(string propName)
+        {
+            var middleWareInDataOption = new MiddleWareInDataOption
+            {
+                Description = "перебор Lang",
+                EnumHandlers = new List<EnumHandlerMiddleWareOption>
+                {
+                    new EnumHandlerMiddleWareOption
+                    {
+                        PropName = propName,
+                        EnumerateConverterOption = new EnumerateConverterOption
+                        {
+                            Priority = 1,
+                            DictChain = new Dictionary<string, int>
+                            {
+                                { "Ru", 1},
+                                { "Eng", 2}
+                            }
+                        }
+                    }
+                },
+                InvokerOutput = new InvokerOutput
+                {
+                    Mode = InvokerOutputMode.Instantly
+                }
+            };
+
+            return middleWareInDataOption;
+        }
+
+
         public static MiddleWareInDataOption GetMiddleWareInDataOption_LimitStringConverter(string propName)
         {
             MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption

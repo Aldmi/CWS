@@ -22,7 +22,7 @@ namespace Shared.Extensions
         /// <param name="filter"></param>
         /// <param name="defaultItemJson"></param>
         /// <param name="logger"></param>
-        /// <returns></returns>
+        /// <returns>Возвращает объединенный список всех, после всех фильтров</returns>
         public static IEnumerable<TInput> Filter<TInput>(this IEnumerable<TInput> inData, AgregateFilter filter, string defaultItemJson, ILogger logger = null)
         {
             if (inData == null)

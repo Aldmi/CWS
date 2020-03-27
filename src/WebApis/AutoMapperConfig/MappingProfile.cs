@@ -58,7 +58,7 @@ namespace WebApiSwc.AutoMapperConfig
                 src.Id,
                 ConvertString2Int(src.ScheduleId),
                 ConvertString2Int(src.TrnId),
-                Lang.Ru,
+                Lang.Ru,                             //DEBUG
                 src.TrainNumber,
                 src.TrackNumber,
                 src.Platform,

@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using DeviceForExchnage.Test.Datas;
 using Domain.Device.MiddleWares;
 using Domain.Device.Repository.Entities.MiddleWareOption;
+using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
 using FluentAssertions;
 using Moq;
@@ -12,9 +14,12 @@ namespace DeviceForExchnage.Test
 {
     public class MiddleWareInDataTest
     {
-         private readonly MiddleWareInDataOption _optionLimitStringHandler;
+        private readonly MiddleWareInDataOption _optionLimitStringHandler;
         private readonly MiddleWareInDataOption _optionTwoStringHandler;
         private readonly MiddleWareInDataOption _optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter;
+
+        private readonly MiddleWareInDataOption _optionEnumHandlerLangEnumerable;
+
         private readonly ILogger _logger;
 
 
@@ -23,15 +28,45 @@ namespace DeviceForExchnage.Test
              _optionLimitStringHandler = GetMiddleWareInDataOption.GetMiddleWareInDataOption_LimitStringConverter("Note.NameRu");
              _optionTwoStringHandler = GetMiddleWareInDataOption.GetMiddleWareInDataOption_TwoStringHandlers("Note.NameRu", "StationsСut.NameRu");
              _optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu");
+             _optionEnumHandlerLangEnumerable = GetMiddleWareInDataOption.GetMiddleWareInDataOption_EnumHandlers_EnumerateConverter("Lang");
 
-            //Loger Moq-----------------------------------------------
-            var mock = new Mock<ILogger>();
+           //Loger Moq-----------------------------------------------
+           var mock = new Mock<ILogger>();
              mock.Setup(loger => loger.Debug(""));
              mock.Setup(loger => loger.Error(""));
              mock.Setup(loger => loger.Warning(""));
              _logger = mock.Object;
         }
 
+
+
+        [Fact]
+        public void NormalUse_EnumerateConverter_Lang_1Step()
+        {
+            //DEBUG--------
+            var l= Lang.Ru;
+            var type = l.GetType();
+            var j = type.BaseType;
+
+            
+
+            var h = l is byte;
+            //DEBUG--------
+
+
+            //Arrage
+            var inData = InDataSourse.GetData(1, Lang.Eng);
+            var middleWareinData = new MiddleWareInData<AdInputType>(_optionEnumHandlerLangEnumerable, _logger);
+
+            //Act
+            var resStep1 = middleWareinData.HandleInvoke(inData);
+            var langStep1 = resStep1.Value?.Data?.FirstOrDefault()?.Lang;
+
+
+            //Asert
+            resStep1.IsSuccess.Should().BeTrue();
+            langStep1.ToString().Should().Be("Ch");
+        }
 
 
         [Fact]

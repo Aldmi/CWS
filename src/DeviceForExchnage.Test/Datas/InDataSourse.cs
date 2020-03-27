@@ -9,7 +9,7 @@ namespace DeviceForExchnage.Test.Datas
 {
     public static class InDataSourse
     {
-        public static InputData<AdInputType> GetData(int countData)
+        public static InputData<AdInputType> GetData(int countData,  Lang lang= Lang.Ru)
         {
             var datas = Enumerable.Range(0, countData).Select(i => new AdInputType(
                 i+1,
@@ -27,7 +27,8 @@ namespace DeviceForExchnage.Test.Datas
                 },
                 null,
                 null,
-                null
+                null,
+                lang
             )).ToList();
 
 

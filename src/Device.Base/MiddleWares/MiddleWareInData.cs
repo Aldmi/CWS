@@ -8,6 +8,7 @@ using CSharpFunctionalExtensions;
 using Domain.Device.MiddleWares.Converters.Exceptions;
 using Domain.Device.MiddleWares.Handlers;
 using Domain.Device.MiddleWares.Invokes;
+using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Base.InData;
 using FastDeepCloner;
 using Serilog;
@@ -30,9 +31,11 @@ namespace Domain.Device.MiddleWares
 
         private readonly PropertyMutationsServise<string> _mutationsServiseStr = new PropertyMutationsServise<string>();    //Сервис изменения совойства типа string, по имени, через рефлексию.
         private readonly PropertyMutationsServise<DateTime> _mutationsServiseDt = new PropertyMutationsServise<DateTime>(); //Сервис изменения совойства типа DateTime, по имени, через рефлексию.
+        private readonly PropertyMutationsServise<Enum> _mutationsServiseEnum = new PropertyMutationsServise<Enum>();      //Сервис изменения совойства типа enum(byte), по имени, через рефлексию.
 
         private readonly List<StringHandlerMiddleWare> _stringHandlers;
         private readonly List<DateTimeHandlerMiddleWare> _dateTimeHandlers;
+        private readonly List<EnumHandlerMiddleWare> _enumHandlers;
 
         #endregion
 
@@ -59,6 +62,10 @@ namespace Domain.Device.MiddleWares
             _dateTimeHandlers = option.DateTimeHandlers?.
                   GroupBy(handlerOption => handlerOption.PropName, handlerOption => handlerOption).
                   Select(gr => new DateTimeHandlerMiddleWare(gr.Key, gr.ToArray())).ToList();
+
+            _enumHandlers = option.EnumHandlers?.
+                GroupBy(handlerOption => handlerOption.PropName, handlerOption => handlerOption).
+                Select(gr => new EnumHandlerMiddleWare(gr.Key, gr.ToArray())).ToList();
         }
         #endregion
 
@@ -76,43 +83,93 @@ namespace Domain.Device.MiddleWares
             string error;
             var errorHandlerWrapper = new ErrorResultMiddleWareInData();
             Parallel.ForEach(inDataClone.Data, (data) =>
-            {
-                Parallel.ForEach(_stringHandlers, (stringHandler) =>
                 {
-                    var propName = stringHandler.PropName;
-                    var resultGet = _mutationsServiseStr.GetPropValue(data, propName);
-                    if (resultGet.IsSuccess)
+                    if (_stringHandlers != null)
                     {
-                        var tuple = resultGet.Value;
-                        try
+                        Parallel.ForEach(_stringHandlers, (stringHandler) =>
                         {
-                            var newValue = stringHandler.Convert(tuple.val, data.Id);
-                            tuple.val = newValue;
-                            var resultSet = _mutationsServiseStr.SetPropValue(tuple);
-                            if (resultSet.IsFailure)
+                            var propName = stringHandler.PropName;
+                            var resultGet = _mutationsServiseStr.GetPropValue(data, propName);
+                            if (resultGet.IsSuccess)
                             {
-                                error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. Ошибка установки свойства:  {resultSet.Error}";
+                                var tuple = resultGet.Value;
+                                try
+                                {
+                                    var newValue = stringHandler.Convert(tuple.val, data.Id);
+                                    tuple.val = newValue;
+                                    var resultSet = _mutationsServiseStr.SetPropValue(tuple);
+                                    if (resultSet.IsFailure)
+                                    {
+                                        error =
+                                            $"MiddlewareInvokeService.HandleInvoke.StringConvert. Ошибка установки свойства:  {resultSet.Error}";
+                                        errorHandlerWrapper.AddError(error);
+                                    }
+                                }
+                                catch (StringConverterException ex)
+                                {
+                                    error =
+                                        $"MiddlewareInvokeService.HandleInvoke.StringConvert. Exception в конверторе:  {ex}";
+                                    errorHandlerWrapper.AddError(error);
+                                }
+                                catch (Exception e)
+                                {
+                                    error =
+                                        $"MiddlewareInvokeService.HandleInvoke.StringConvert. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
+                                    errorHandlerWrapper.AddError(error);
+                                }
+                            }
+                            else
+                            {
+                                error =
+                                    $"MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  {resultGet.Error}";
                                 errorHandlerWrapper.AddError(error);
                             }
-                        }
-                        catch (StringConverterException ex)
-                        {
-                            error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. Exception в конверторе:  {ex}";
-                            errorHandlerWrapper.AddError(error);
-                        }
-                        catch (Exception e)
-                        {
-                            error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
-                            errorHandlerWrapper.AddError(error);
-                        }
+                        });
                     }
-                    else
+
+                    if (_enumHandlers != null)
                     {
-                        error = $"MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  {resultGet.Error}";
-                        errorHandlerWrapper.AddError(error);
+                        Parallel.ForEach(_enumHandlers, (enumHandler) =>
+                        {
+                            var propName = enumHandler.PropName;
+                            var resultGet = _mutationsServiseEnum.GetPropValue(data, propName);
+                            if (resultGet.IsSuccess)
+                            {
+                                var tuple = resultGet.Value;
+                                try
+                                {
+                                    var newValue = enumHandler.Convert(tuple.val, data.Id);
+                                    tuple.val = newValue;
+                                    var resultSet = _mutationsServiseEnum.SetPropValue(tuple);
+                                    if (resultSet.IsFailure)
+                                    {
+                                        error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. Ошибка установки свойства:  {resultSet.Error}";
+                                        errorHandlerWrapper.AddError(error);
+                                    }
+                                }
+                                catch (StringConverterException ex)
+                                {
+                                    error =
+                                        $"MiddlewareInvokeService.HandleInvoke.StringConvert. Exception в конверторе:  {ex}";
+                                    errorHandlerWrapper.AddError(error);
+                                }
+                                catch (Exception e)
+                                {
+                                    error =
+                                        $"MiddlewareInvokeService.HandleInvoke.StringConvert. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
+                                    errorHandlerWrapper.AddError(error);
+                                }
+                            }
+                            else
+                            {
+                                error =
+                                    $"MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  {resultGet.Error}";
+                                errorHandlerWrapper.AddError(error);
+                            }
+                        });
                     }
-                });
-            });
+                }
+            );
 
             var res = errorHandlerWrapper.IsEmpty ?
                 Result.Ok<InputData<TIn>, ErrorResultMiddleWareInData>(inDataClone) :

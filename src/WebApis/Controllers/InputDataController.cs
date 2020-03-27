@@ -233,7 +233,7 @@ namespace WebApiSwc.Controllers
             {
                 var fileName = values[0];
                 dataAction = values[1];
-                deviceName = deviceName ?? fileName;//Если deviceName не переданн в заголовке 
+                deviceName ??= fileName;//Если deviceName не переданн в заголовке 
                 var str = fileName != null ? $"FileName= {fileName}" : "FileName= NULL";
                 _logger.Information("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", str);
             }
@@ -260,36 +260,33 @@ namespace WebApiSwc.Controllers
             {
                 if (xmlFile.Length > 0)
                 {
-                    using (var memoryStream = new MemoryStream())
-                    {    
-                        await xmlFile.CopyToAsync(memoryStream);
-                        memoryStream.Position = 0;
-                        const string encoding = "utf-8";
-                        #region Debug
-                        //System.IO.File.WriteAllBytes(@"D:\\InDataXml_NewAd.xml", memoryStream.ToArray());
-                        var xmlContent = Encoding.GetEncoding(encoding).GetString(memoryStream.ToArray()); //utf-8   "Windows-1251"
-                        _logger.Debug($"{xmlContent}");
-                        #endregion
-                        using (var reader = new StreamReader(memoryStream, Encoding.GetEncoding(encoding), true))
-                        {
-                            var serializer = new XmlSerializer(typeof(AdInputType4XmlDtoContainer));
-                            var adInputType4XmlList = (AdInputType4XmlDtoContainer)serializer.Deserialize(reader);
-                            var trains = adInputType4XmlList.Trains;
-                            InitDataId(trains);
-                            var data = _mapper.Map<List<AdInputType>>(adInputType4XmlList.Trains); //TODO: выставить язык из запроса для всех данных AdInputType
-                            var inputData = new InputData<AdInputType>
-                            {
-                                DeviceName = deviceName,
-                                ExchangeName = exchangeName,
-                                DirectHandlerName = directHandlerName,
-                                DataAction = dataActionParsed,
-                                Command = commandParse,
-                                Data = data
-                            };
-                            var res = await InputDataHandler(new List<InputData<AdInputType>> { inputData });
-                            return res;
-                        }
-                    }
+                    await using var memoryStream = new MemoryStream();
+                    await xmlFile.CopyToAsync(memoryStream);
+                    memoryStream.Position = 0;
+                    const string encoding = "utf-8";
+                    #region Debug
+                    //System.IO.File.WriteAllBytes(@"D:\\InDataXml_NewAd.xml", memoryStream.ToArray());
+                    var xmlContent = Encoding.GetEncoding(encoding).GetString(memoryStream.ToArray()); //utf-8   "Windows-1251"
+                    _logger.Debug($"{xmlContent}");
+                    #endregion
+
+                    using var reader = new StreamReader(memoryStream, Encoding.GetEncoding(encoding), true);
+                    var serializer = new XmlSerializer(typeof(AdInputType4XmlDtoContainer));
+                    var adInputType4XmlList = (AdInputType4XmlDtoContainer)serializer.Deserialize(reader);
+                    var trains = adInputType4XmlList.Trains;
+                    InitDataId(trains);
+                    var data = _mapper.Map<List<AdInputType>>(adInputType4XmlList.Trains); //TODO: выставить язык из запроса для всех данных AdInputType
+                    var inputData = new InputData<AdInputType>
+                    {
+                        DeviceName = deviceName,
+                        ExchangeName = exchangeName,
+                        DirectHandlerName = directHandlerName,
+                        DataAction = dataActionParsed,
+                        Command = commandParse,
+                        Data = data
+                    };
+                    var res = await InputDataHandler(new List<InputData<AdInputType>> { inputData });
+                    return res;
                 }
 
                 _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "Размер XML файла равен 0");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.InteropServices.ComTypes;
 using CSharpFunctionalExtensions;
 
 namespace Shared.ReflectionServices
@@ -42,7 +43,10 @@ namespace Shared.ReflectionServices
             }
 
             //Валидация--------------------------------------------------------------------------------
-            if (propInfo.PropertyType != typeof(T))
+            var strictTypeEquality = propInfo.PropertyType == typeof(T);   //Строгое равенство типов
+            var hierarchyEquality = obj is T;                              //Если типы из одной иерархии и возможно приведение к тип T;
+            var notMatchType = !(strictTypeEquality || hierarchyEquality); //Если 2 условиея не выполнились, то переменная НЕ верного типа.
+            if (notMatchType)
             {
                 return Result.Failure<(PropertyInfo, object, T)>($"Тип свойства {propName} не соответвует типу обработчика handler {typeof(T)}");
             }
