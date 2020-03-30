@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
 using Domain.Device.MiddleWares;
+using Domain.Device.MiddleWares.Converters;
 using Domain.Device.MiddleWares.Invokes;
 using Domain.Device.Produser;
 using Domain.Device.Repository.Entities.MiddleWareOption;
@@ -19,7 +17,6 @@ using Domain.Exchange.RxModel;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.Response;
-using Infrastructure.EventBus.Abstract;
 using Infrastructure.Transport.Base.RxModel;
 using Newtonsoft.Json;
 using Serilog;
@@ -57,7 +54,7 @@ namespace Domain.Device
 
         public string ProduserUnionKey => Option.ProduserUnionKey;
         /// <summary>
-        /// Настройки MiddleWareInData сервиса.
+        /// Настройки MiddleWareInvoke сервиса.
         /// </summary>
         public MiddleWareInDataOption MiddleWareInDataOption
         {
@@ -109,7 +106,7 @@ namespace Domain.Device
             MiddlewareInvokeService = null;
             if (option != null)
             {
-               // var middleWareInData = new MiddleWareInData<TIn>(option, _logger); //TODO: Создавать внутри MiddlewareInvokeService
+               // var middleWareInData = new MiddleWareInvoke<TIn>(option, _logger); //TODO: Создавать внутри MiddlewareInvokeService
                 var owner = _middlewareInvokeServiceFactory(option);
                 MiddlewareInvokeService = owner.Value;
                 _middlewareInvokeServiceOwner = owner;
@@ -183,7 +180,7 @@ namespace Domain.Device
                     case DataAction.OneTimeAction://однократные данные обрабатываем сразу.
                         await MiddlewareInvokeService.InputSetInstantly(inData);
                         break;
-                    case DataAction.CycleAction: //циклические данныепоступают в обработку MiddlewareInvokeService.
+                    case DataAction.CycleAction: //циклические данные поступают в обработку MiddlewareInvokeService.
                         await MiddlewareInvokeService.InputSetByOptionMode(inData);
                         break;
                     case DataAction.CommandAction://Команды не проходят обработку через MiddlewareInvokeService

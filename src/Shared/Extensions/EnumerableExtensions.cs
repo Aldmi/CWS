@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Text.RegularExpressions;
@@ -185,6 +186,23 @@ namespace Shared.Extensions
                     yield return chunk;
                 }
             }
+        }
+
+        /// <summary>
+        /// Возвращает следующий за item элемент коллекции items.
+        /// Если item  - последний элемент коллекции, то вернуть первый элемент.
+        /// </summary>
+        /// <param name="items">Коллекция</param>
+        /// <param name="item">Элемент</param>
+        /// <returns>Следующий элемент коллекции</returns>
+        public static T GetSecondItemInCycle<T>(this ReadOnlyCollection<T> items, T item)
+        {
+            var i = items.IndexOf(item);
+            if (++i >= items.Count)
+            {
+                return items[0];
+            }
+            return items[i];
         }
     }
 }

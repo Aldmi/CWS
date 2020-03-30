@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Domain.Device.MiddleWares.Converters.DateTimeConverters;
 using Domain.Device.MiddleWares.Converters.Exceptions;
 using Shared.Helpers;
 using SubStringMemConverterOption = Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption.SubStringMemConverterOption;
@@ -12,7 +13,7 @@ namespace Domain.Device.MiddleWares.Converters.StringConverters
     /// StateFull - хранит начало подстроки между вызовами.
     /// Длинна подстроки вычисляется с учетом константной фразы.
     /// </summary>
-    public class SubStringMemConverter : BaseStringConverter
+    public class SubStringMemConverter : BaseStringConverter, IMemConverterMiddleWare
     {
         private readonly SubStringMemConverterOption _option;     //Хранит длину подстроки
         private readonly ConcurrentDictionary<int, SubStringState> _subStringDict= new ConcurrentDictionary<int, SubStringState>();
@@ -62,6 +63,11 @@ namespace Domain.Device.MiddleWares.Converters.StringConverters
             }
 
             throw new StringConverterException($"SubStringMemConverter НЕ СМОГ ИЗВЛЕЧЬ РЕЗУЛЬТАТ ОБРАБОТКИ ИЗ СЛОВАРЯ {inProp}");
+        }
+
+        public void SendCommand(MemConverterCommand command)
+        {
+            //NotImplemented
         }
     }
 

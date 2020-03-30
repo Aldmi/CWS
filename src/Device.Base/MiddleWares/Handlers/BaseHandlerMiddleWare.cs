@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Domain.Device.MiddleWares.Converters;
+using Domain.Device.MiddleWares.Converters.DateTimeConverters;
+using MoreLinq.Extensions;
 
 namespace Domain.Device.MiddleWares.Handlers
 {
@@ -22,6 +25,17 @@ namespace Domain.Device.MiddleWares.Handlers
             return inProp;
         }
 
+        /// <summary>
+        /// Команда Сброс State в IMemConverterMiddleWare.
+        /// </summary>
+        /// <param name="command"></param>
+        public void SendCommand4MemConverters(MemConverterCommand command)
+        { 
+            Converters
+                .Where(c=>c is IMemConverterMiddleWare)
+                .Cast<IMemConverterMiddleWare>()
+                .ForEach(c=>c.SendCommand(command));
+        }
         #endregion
     }
 }

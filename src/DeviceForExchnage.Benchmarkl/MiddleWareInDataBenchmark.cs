@@ -12,7 +12,7 @@ namespace DeviceForExchnage.Benchmark
         //    var middleWareInDataOption = InDataSourse.GetmiddleWareInDataOption();
         //    var inData = InDataSourse.GetData();
 
-        //    var middleWareinData = new ParallelHandlers.MiddleWareInData<AdInputType>(middleWareInDataOption, null);
+        //    var middleWareinData = new ParallelHandlers.MiddleWareInvoke<AdInputType>(middleWareInDataOption, null);
         //    middleWareinData.InputSet(inData).Wait();
         //}
 
@@ -23,7 +23,7 @@ namespace DeviceForExchnage.Benchmark
         //    var middleWareInDataOption = InDataSourse.GetmiddleWareInDataOption();
         //    var inData = InDataSourse.GetData();
 
-        //    var middleWareinData = new MiddleWareInData<AdInputType>(middleWareInDataOption, null);
+        //    var middleWareinData = new MiddleWareInvoke<AdInputType>(middleWareInDataOption, null);
         //    middleWareinData.InputSet(inData).Wait();
         //}
 
@@ -34,7 +34,7 @@ namespace DeviceForExchnage.Benchmark
         //    var middleWareInDataOption = InDataSourse.GetmiddleWareInDataOption();
         //    var inData = InDataSourse.GetData();
 
-        //    var middleWareinData = new ParallelData.MiddleWareInData<AdInputType>(middleWareInDataOption, null);
+        //    var middleWareinData = new ParallelData.MiddleWareInvoke<AdInputType>(middleWareInDataOption, null);
         //    middleWareinData.InputSet(inData).Wait();
         //}
 
@@ -45,7 +45,7 @@ namespace DeviceForExchnage.Benchmark
         //    var middleWareInDataOption = InDataSourse.GetmiddleWareInDataOption();
         //    var inData = InDataSourse.GetData();
 
-        //    var middleWareinData = new ParallelDataAndHandlers.MiddleWareInData<AdInputType>(middleWareInDataOption, null);
+        //    var middleWareinData = new ParallelDataAndHandlers.MiddleWareInvoke<AdInputType>(middleWareInDataOption, null);
         //    middleWareinData.InputSet(inData).Wait();
         //}
 

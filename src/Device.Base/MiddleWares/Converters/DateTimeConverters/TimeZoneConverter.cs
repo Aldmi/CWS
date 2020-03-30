@@ -1,4 +1,5 @@
 ﻿using System;
+using Domain.Device.MiddleWares.Handlers;
 using TimeZoneConverterOption = Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.DateTimeConverterOption.TimeZoneConverterOption;
 
 namespace Domain.Device.MiddleWares.Converters.DateTimeConverters
@@ -19,6 +20,17 @@ namespace Domain.Device.MiddleWares.Converters.DateTimeConverters
         {
             //DEBUG
             return inProp.AddHours(10);
+        }
+
+
+        public void SendCommand(MemConverterCommand command)
+        {
+            //NOT IMPLEMENTED
+        }
+
+        public void Mem()
+        {
+            throw new NotImplementedException();
         }
     }
 }

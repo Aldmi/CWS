@@ -1,8 +1,11 @@
-﻿namespace Domain.Device.MiddleWares.Converters
+﻿using Domain.Device.MiddleWares.Handlers;
+
+namespace Domain.Device.MiddleWares.Converters
 {
     public interface IConverterMiddleWare<T>
     {
         int Priority { get; }
-        T Convert(T inProp, int dataId);
+        T Convert(T inProp, int dataId); 
+
     }
 }

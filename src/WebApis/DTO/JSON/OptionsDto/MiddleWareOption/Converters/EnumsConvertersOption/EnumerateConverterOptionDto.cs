@@ -5,5 +5,6 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.EnumsConvert
     public class EnumerateConverterOptionDto: BaseConverterOptionDto
     {
         public Dictionary<string, int> DictChain { get; set; }
+        public string Path2Type { get; set; }
     }
 }

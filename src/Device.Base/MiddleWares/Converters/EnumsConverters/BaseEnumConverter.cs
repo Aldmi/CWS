@@ -1,19 +1,16 @@
 ﻿using System;
-using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption;
+using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.EnumsConvertersOption;
 
 namespace Domain.Device.MiddleWares.Converters.EnumsConverters
 {
     public abstract class BaseEnumConverter : IConverterMiddleWare<Enum>
     {
         public int Priority { get; }
-        protected Type objectType { get; }
-        protected BaseEnumConverter(BaseConverterOption baseOption)
+        protected Type ObjectType { get; }
+        protected BaseEnumConverter(EnumerateConverterOption baseOption)
         {
             Priority = baseOption.Priority;
-
-            //Извлекли тип объекта из сборки
-            const string objectToInstantiate = "Domain.InputDataModel.Autodictor.Entities.Lang, Domain.InputDataModel.Autodictor";
-            objectType = Type.GetType(objectToInstantiate);
+            ObjectType = Type.GetType(baseOption.Path2Type);      //Извлекли тип объекта из сборки
         }
 
         public abstract Enum Convert(Enum inProp, int dataId);

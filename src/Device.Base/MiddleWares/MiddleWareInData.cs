@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
+using Domain.Device.MiddleWares.Converters;
 using Domain.Device.MiddleWares.Converters.Exceptions;
 using Domain.Device.MiddleWares.Handlers;
 using Domain.Device.MiddleWares.Invokes;
-using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Base.InData;
 using FastDeepCloner;
 using Serilog;
@@ -22,7 +21,7 @@ namespace Domain.Device.MiddleWares
     /// Сервис является иммутабельным. Он создается на базе MiddleWareInDataOption и его State не меняется
     /// </summary>
     /// <typeparam name="TIn">Входные данные для обработки</typeparam>
-    public class MiddleWareInData<TIn> : IMiddlewareInData<TIn> where TIn : InputTypeBase
+    public class MiddleWareInvoke<TIn> : ISupportMiddlewareInvoke<TIn> where TIn : InputTypeBase
     {
         #region fields
 
@@ -50,7 +49,7 @@ namespace Domain.Device.MiddleWares
 
 
         #region ctor
-        public MiddleWareInData(MiddleWareInDataOption option, ILogger logger)
+        public MiddleWareInvoke(MiddleWareInDataOption option, ILogger logger)
         {
             _option = option;
             _logger = logger;
@@ -143,27 +142,27 @@ namespace Domain.Device.MiddleWares
                                     var resultSet = _mutationsServiseEnum.SetPropValue(tuple);
                                     if (resultSet.IsFailure)
                                     {
-                                        error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. Ошибка установки свойства:  {resultSet.Error}";
+                                        error = $"MiddlewareInvokeService.HandleInvoke.EnumConvert. Ошибка установки свойства:  {resultSet.Error}";
                                         errorHandlerWrapper.AddError(error);
                                     }
                                 }
                                 catch (StringConverterException ex)
                                 {
                                     error =
-                                        $"MiddlewareInvokeService.HandleInvoke.StringConvert. Exception в конверторе:  {ex}";
+                                        $"MiddlewareInvokeService.HandleInvoke.EnumConvert. Exception в конверторе:  {ex}";
                                     errorHandlerWrapper.AddError(error);
                                 }
                                 catch (Exception e)
                                 {
                                     error =
-                                        $"MiddlewareInvokeService.HandleInvoke.StringConvert. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
+                                        $"MiddlewareInvokeService.HandleInvoke.EnumConvert. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
                                     errorHandlerWrapper.AddError(error);
                                 }
                             }
                             else
                             {
                                 error =
-                                    $"MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  {resultGet.Error}";
+                                    $"MiddlewareInvokeService.HandleInvoke.EnumConvert.  Ошибка получения стркового свойства:  {resultGet.Error}";
                                 errorHandlerWrapper.AddError(error);
                             }
                         });
@@ -176,6 +175,23 @@ namespace Domain.Device.MiddleWares
                 Result.Failure<InputData<TIn>, ErrorResultMiddleWareInData>(errorHandlerWrapper);
 
             return res;
+        }
+
+
+        public void SendCommand4MemConverters(MemConverterCommand command)
+        {
+            if (_stringHandlers != null)
+            {
+                Parallel.ForEach(_stringHandlers, (h) => { h.SendCommand4MemConverters(command); });
+            }
+            if (_dateTimeHandlers != null)
+            {
+                Parallel.ForEach(_dateTimeHandlers, (h) => { h.SendCommand4MemConverters(command); });
+            }
+            if (_enumHandlers != null)
+            {
+                Parallel.ForEach(_enumHandlers, (h) => { h.SendCommand4MemConverters(command); });
+            }
         }
         #endregion
     }
@@ -195,5 +211,4 @@ namespace Domain.Device.MiddleWares
             _errorsDict.TryAdd(Guid.NewGuid(), error);
         }
     }
-
 }

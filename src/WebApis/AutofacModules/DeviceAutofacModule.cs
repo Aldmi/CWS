@@ -15,7 +15,7 @@ namespace WebApiSwc.AutofacModules
             builder.RegisterType<AllExchangesResponseAnaliticService>().AsSelf().InstancePerDependency();
             builder.RegisterType<MiddlewareInvokeService<T>>().AsSelf().InstancePerDependency();
 
-            builder.RegisterType<MiddleWareInData<T>>().As<IMiddlewareInData<T>>().InstancePerDependency();
+            builder.RegisterType<MiddleWareInvoke<T>>().As<ISupportMiddlewareInvoke<T>>().InstancePerDependency();
             
         }
     }

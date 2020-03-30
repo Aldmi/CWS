@@ -5,6 +5,7 @@ using System.Timers;
 using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
 using Domain.Device.Enums;
+using Domain.Device.MiddleWares.Converters;
 using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.InputDataModel.Base.InData;
 using KellermanSoftware.CompareNetObjects;
@@ -14,7 +15,7 @@ using InvokerOutput = Domain.Device.Repository.Entities.MiddleWareOption.Invoker
 namespace Domain.Device.MiddleWares.Invokes
 {
     /// <summary>
-    /// Определяет способ запуска обработчика IMiddlewareInData.
+    /// Определяет способ запуска обработчика IMiddlewareInvoke.
     /// "Instantly" - с приходом данных сразу запускается обработка.
     /// "ByTimer" - Обработчик запускается по внутреннему таймеру.
     /// Если приходят новые данные, то таймер перезапускается и обработчик вызывается сразу.
@@ -26,7 +27,7 @@ namespace Domain.Device.MiddleWares.Invokes
         #region fields
         private readonly InvokerOutput _option;
         private readonly string _description;
-        private readonly IMiddlewareInData<TIn> _middleware;
+        private readonly ISupportMiddlewareInvoke<TIn> _supportMiddleware;
         private readonly IDisposable _middlewareOwner;
         private readonly ILogger _logger;
         private readonly Timer _timerInvoke;
@@ -66,13 +67,13 @@ namespace Domain.Device.MiddleWares.Invokes
 
 
         #region ctor
-        public MiddlewareInvokeService(MiddleWareInDataOption option, Func<MiddleWareInDataOption, Owned<IMiddlewareInData<TIn>>> middlewareFactory, ILogger logger)
+        public MiddlewareInvokeService(MiddleWareInDataOption option, Func<MiddleWareInDataOption, Owned<ISupportMiddlewareInvoke<TIn>>> middlewareFactory, ILogger logger)
         {
             _option = option.InvokerOutput;
             _description = option.Description;
             var middlewareOwner = middlewareFactory(option);
             _middlewareOwner = middlewareOwner;
-            _middleware = middlewareOwner.Value;
+            _supportMiddleware = middlewareOwner.Value;
             _logger = logger;
             InvokerOutputMode = _option.Mode;
 
@@ -144,6 +145,16 @@ namespace Domain.Device.MiddleWares.Invokes
 
 
         /// <summary>
+        /// Отправить команду всем Mem конверторам
+        /// </summary>
+        /// <param name="command"></param>
+        public void SendCommand4MemConverters(MemConverterCommand command)
+        {
+            _supportMiddleware.SendCommand4MemConverters(command);
+        }
+
+
+        /// <summary>
         /// Обработчик с ожиданием обратной связи.
         /// Если флаг обратной связи установлен, то вызывается обработчик HandleInvoke.
         /// Если флаг обратной связи НЕ установлен, то перводится система в состоянии FeedBackWaiting. 
@@ -168,19 +179,21 @@ namespace Domain.Device.MiddleWares.Invokes
         /// </summary>
         private void HandleInvoke(InputData<TIn> inData)
         {
-            var res = _middleware.HandleInvoke(inData);
+            var res = _supportMiddleware.HandleInvoke(inData);
             InvokeIsCompleteRx.OnNext(res);
         }
 
 
         /// <summary>
-        /// Обновление данных. Сброс таймера и мгновенный вызов обработчика
+        /// Обновление данных.
+        /// Команда сброса на все MEM конверторы, Сброс таймера и мгновенный вызов обработчика.
         /// </summary>
         /// <param name="newData">Новые входны данные</param>
         private void RefreshData(InputData<TIn> newData)
         {
             InvokerOutputMode = _option.Mode;
             _buferInData = newData;
+            SendCommand4MemConverters(MemConverterCommand.Reset);
             RestartTimer();
             HandleInvoke(_buferInData);
         }
