@@ -38,15 +38,15 @@ namespace Domain.Device.MiddleWares.Converters.EnumsConverters
             }
             if (--_currentDictionary[_currentKey] == 0)
             {
-               _currentDictionary[_currentKey] = _option.DictChain[_currentKey]; // установили Дефолтное состояние счетчика
-               _currentKey= GetSecondKeyCycled(keys, _currentKey);               // след значение ключа
+               _currentDictionary[_currentKey] = _option.DictChain[_currentKey];   // установили Дефолтное состояние счетчика
+               _currentKey= GetSecondKeyInCycle(keys, _currentKey);               // след значение ключа
             }
             return newValue;
         }
 
 
 
-        private string GetSecondKeyCycled(IReadOnlyList<string> keys, string key)
+        private T GetSecondKeyInCycle<T>(IReadOnlyList<T> keys, T key)
         {
             var index = keys.IndexOf(key);
             if (++index >= keys.Count)
