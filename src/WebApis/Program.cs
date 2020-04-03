@@ -36,7 +36,7 @@ namespace WebApiSwc
         public static string GetVersion()
         {
             const string version = "CWS Ver5.7";
-            return $"{version}  [02.04.2020]  [Reliz. Add SendCommand4MemConverters in MiddleWareInvoke]";
+            return $"{version}  [03.04.2020]  [Reliz. Add EnumMemConverterOption Name]";
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
