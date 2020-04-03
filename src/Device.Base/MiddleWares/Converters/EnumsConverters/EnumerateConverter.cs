@@ -13,10 +13,10 @@ namespace Domain.Device.MiddleWares.Converters.EnumsConverters
 {
     public class EnumerateConverter : BaseEnumConverter, IMemConverterMiddleWare
     {
-        private readonly EnumerateConverterOption _option;
+        private readonly EnumMemConverterOption _option;
         private readonly ConcurrentDictionary<int, EnumState> _enumStateDict = new ConcurrentDictionary<int, EnumState>();
 
-        public EnumerateConverter(EnumerateConverterOption option)
+        public EnumerateConverter(EnumMemConverterOption option)
             : base(option)
         {
             _option = option;

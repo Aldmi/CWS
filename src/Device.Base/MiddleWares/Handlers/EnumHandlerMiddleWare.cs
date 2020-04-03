@@ -17,9 +17,9 @@ namespace Domain.Device.MiddleWares.Handlers
             PropName = propName;
             foreach (var option in options)
             {
-                if (option.EnumerateConverterOption != null)
+                if (option.EnumMemConverterOption != null)
                 {
-                    Converters.Add(new EnumerateConverter(option.EnumerateConverterOption));
+                    Converters.Add(new EnumerateConverter(option.EnumMemConverterOption));
                 }
             }
             var orderedConverters = Converters.OrderBy(c => c.Priority).ToList();

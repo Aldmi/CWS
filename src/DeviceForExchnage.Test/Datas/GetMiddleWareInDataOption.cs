@@ -19,7 +19,7 @@ namespace DeviceForExchnage.Test.Datas
                     new EnumHandlerMiddleWareOption
                     {
                         PropName = propName,
-                        EnumerateConverterOption = new EnumerateConverterOption
+                        EnumMemConverterOption = new EnumMemConverterOption
                         {
                             Priority = 1,
                             DictChain = new Dictionary<string, int>

@@ -2,7 +2,7 @@
 
 namespace Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.EnumsConvertersOption
 {
-    public class EnumerateConverterOption : BaseConverterOption
+    public class EnumMemConverterOption : EnumConverterOption
     {
         /// <summary>
         /// Цепочка значений для enum.
@@ -10,11 +10,5 @@ namespace Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.En
         /// Value= кол-во вызовов, до смены этого варианта.
         /// </summary>
         public Dictionary<string, int> DictChain { get; set; }
-
-        /// <summary>
-        /// Полный путь до типа в сборки.
-        /// Вида: "Domain.InputDataModel.Autodictor.Entities.Lang, Domain.InputDataModel.Autodictor"
-        /// </summary>
-        public string Path2Type { get; set; }
     }
 }

@@ -11,13 +11,13 @@ namespace DeviceForExchnage.Test.ConverterTests
 {
     public class EnumerateMemConverterTest
     {
-        private EnumerateConverterOption Option { get; }
+        private EnumMemConverterOption Option { get; }
         public Lang InLang => Lang.Ru;
 
 
         public EnumerateMemConverterTest()
         {
-            Option = new EnumerateConverterOption()
+            Option = new EnumMemConverterOption()
             {
                 DictChain = new Dictionary<string, int>
                  {
@@ -86,7 +86,7 @@ namespace DeviceForExchnage.Test.ConverterTests
         public void Exception_DictChain_Key()
         {
             //Arrage
-            var option = new EnumerateConverterOption()
+            var option = new EnumMemConverterOption()
             {
                 DictChain = new Dictionary<string, int>
                 {

@@ -7,7 +7,7 @@ namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers
     {
         public string PropName { get; set; }                       //Имя свойства для обработки
 
-        public EfEnumerateConverterOption EnumerateConverterOption { get; set; }
+        public EfEnumMemConverterOption EnumMemConverterOption { get; set; }
 
     }
 }

@@ -5,9 +5,7 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers
 {
     public class EnumHandlerMiddleWareOptionDto
     {
-        public string PropName { get; set; }    
-
-        public EnumerateConverterOptionDto EnumerateConverterOption { get; set; }
-
+        public string PropName { get; set; }
+        public EnumMemConverterOptionDto EnumMemConverterOption { get; set; }
     }
 }

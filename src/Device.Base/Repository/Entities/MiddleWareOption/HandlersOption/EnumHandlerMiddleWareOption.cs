@@ -7,6 +7,6 @@ namespace Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption
     {
         public string PropName { get; set; }                       //Имя свойства для обработки
 
-        public EnumerateConverterOption EnumerateConverterOption { get; set; }
+        public EnumMemConverterOption EnumMemConverterOption { get; set; }
     }
 }

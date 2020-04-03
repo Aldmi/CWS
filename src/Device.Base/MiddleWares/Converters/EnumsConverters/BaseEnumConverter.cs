@@ -7,7 +7,7 @@ namespace Domain.Device.MiddleWares.Converters.EnumsConverters
     {
         public int Priority { get; }
         protected Type ObjectType { get; }
-        protected BaseEnumConverter(EnumerateConverterOption baseOption)
+        protected BaseEnumConverter(EnumConverterOption baseOption)
         {
             Priority = baseOption.Priority;
             ObjectType = Type.GetType(baseOption.Path2Type);      //Извлекли тип объекта из сборки

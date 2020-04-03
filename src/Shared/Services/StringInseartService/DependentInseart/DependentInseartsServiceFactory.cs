@@ -25,7 +25,7 @@ namespace Shared.Services.StringInseartService.DependentInseart
             var array = insertModels as StringInsertModel[] ?? insertModels.ToArray();
             //1. Вставки NumberOfCharacters
             var handlers = (from model in array where model.VarName == "NumberOfCharacters" select new NumberOfCharactersDepInsH(model)).Cast<BaseDepInsH>().ToList();
-            //2. Вставки NbyteFull и Nbyte
+            //2. Вставки NbyteFull и Nchar
             handlers.AddRange(from model in array
                 where model.VarName == "Nchar"
                 let crcModel = array.FirstOrDefault(m => m.VarName.Contains("CRC")) //передать доп модель. содержащую CRC
