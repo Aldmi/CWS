@@ -6,9 +6,9 @@ namespace Domain.Device.MiddleWares.Converters.EnumsConverters
     public abstract class BaseEnumConverter : IConverterMiddleWare<Enum>
     {
         protected Type ObjectType { get; }
-        protected BaseEnumConverter(EnumConverterOption baseOption)
+        protected BaseEnumConverter(string path2Type)
         {
-            ObjectType = Type.GetType(baseOption.Path2Type);      //Извлекли тип объекта из сборки
+            ObjectType = Type.GetType(path2Type);      //Извлекли тип объекта из сборки
         }
 
         public abstract Enum Convert(Enum inProp, int dataId);

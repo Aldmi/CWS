@@ -5,7 +5,7 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConver
     /// <summary>
     /// Обрезка строки, если превышает Limit
     /// </summary>
-    public class LimitStringConverterOptionDto : BaseConverterOptionDto
+    public class LimitStringConverterOptionDto
     {
         [Range(1, 1000)]
         public int Limit { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Domain.Device.MiddleWares.Converters;
 using Domain.Device.MiddleWares.Converters.StringConverters;
 using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption;
@@ -13,6 +14,11 @@ namespace Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption
     {
         public string PropName { get; set; }                       //Имя свойства для обработки
         public List<UnitStringConverterOption> Converters { get; set; }
+
+        public IList<IConverterMiddleWare<string>> CreateConverters()
+        {
+            return Converters.Select(c => c.CreateConverter()).ToList();
+        }
     }
 
     /// <summary>
@@ -30,7 +36,7 @@ namespace Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption
         public PadRightStringConverterOption PadRightStringConverterOption { get; set; }
         public PadRighCharWeightStringConverterOption PadRighCharWeightStringConverterOption { get; set; }
 
-        public IConverterMiddleWare<string> CreateStringConverter()
+        public IConverterMiddleWare<string> CreateConverter()
         {
             if (InseartStringConverterOption != null) return new InseartStringConverter(InseartStringConverterOption);
             if (LimitStringConverterOption != null) return new LimitStringConverter(LimitStringConverterOption);
@@ -42,7 +48,7 @@ namespace Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption
             if (PadRightStringConverterOption != null) return new PadRightStringConverter(PadRightStringConverterOption);
             if (PadRighCharWeightStringConverterOption != null) return new PadRightCharWeightStringConverter(PadRighCharWeightStringConverterOption);
 
-            throw new NotSupportedException("В UnitStringConverterOption необходимо указать хотябы одну опцию");
+            throw new NotSupportedException("В UnitStringConverterOption необходимо указать хотя бы одну опцию");
         }
     }
 }

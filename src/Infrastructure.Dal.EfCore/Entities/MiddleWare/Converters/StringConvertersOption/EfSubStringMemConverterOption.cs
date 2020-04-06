@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Converters.StringConvertersOption
 {
-    public class EfSubStringMemConverterOption : EfBaseConverterOption
+    public class EfSubStringMemConverterOption
     {
         public int Lenght { get; set; }                 // Длина подстроки которую нужно вернуть
         public List<string> InitPharases { get; set; }  // Список фраз (подстрок), которые выделяются из базовой строки и при разбиении на подстроки найденная фраза аключается в начале каждой подстроки

@@ -1,12 +1,18 @@
-﻿using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConvertersOption;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers
 {
-    public class StringHandlerMiddleWareOptionDto
+    public class StringMiddleWareOptionDto
     {
-        public string PropName { get; set; }                       //Имя свойства для обработки
+        [Required(ErrorMessage = "Укажите PropName")]
+        public string PropName { get; set; }             
+        public List<UnitStringConverterOptionDto> Converters { get; set; }
+    }
 
+    public class UnitStringConverterOptionDto
+    {
         public InseartStringConverterOptionDto InseartStringConverterOption { get; set; }
         public LimitStringConverterOptionDto LimitStringConverterOption { get; set; }
         public ReplaceEmptyStringConverterOptionDto ReplaceEmptyStringConverterOption { get; set; }

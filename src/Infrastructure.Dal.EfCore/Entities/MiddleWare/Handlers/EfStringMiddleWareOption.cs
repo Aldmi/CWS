@@ -1,11 +1,16 @@
-﻿using Infrastructure.Dal.EfCore.Entities.MiddleWare.Converters.StringConvertersOption;
+﻿using System.Collections.Generic;
+using Infrastructure.Dal.EfCore.Entities.MiddleWare.Converters.StringConvertersOption;
 
 namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers
 {
-    public class EfStringHandlerMiddleWareOption
+    public class EfStringMiddleWareOption
     {
-        public string PropName { get; set; }                       //Имя свойства для обработки
+        public string PropName { get; set; }               
+        public List<EfUnitStringConverterOption> Converters { get; set; }
+    }
 
+    public class EfUnitStringConverterOption
+    {
         public EfInseartStringConverterOption InseartStringConverterOption { get; set; }
         public EfLimitStringConverterOption LimitStringConverterOption { get; set; }
         public EfReplaceEmptyStringConverterOption ReplaceEmptyStringConverterOption { get; set; }

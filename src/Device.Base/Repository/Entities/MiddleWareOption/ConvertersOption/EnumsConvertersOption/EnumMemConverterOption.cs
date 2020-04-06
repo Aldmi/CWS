@@ -2,7 +2,7 @@
 
 namespace Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.EnumsConvertersOption
 {
-    public class EnumMemConverterOption : EnumConverterOption
+    public class EnumMemConverterOption
     {
         /// <summary>
         /// Цепочка значений для enum.

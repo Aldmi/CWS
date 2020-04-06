@@ -5,7 +5,7 @@ namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Converters.StringConvert
     /// <summary>
     /// Вставка подстрок по указаныым индексам в строку.
     /// </summary>
-    public class EfInseartStringConverterOption : EfBaseConverterOption
+    public class EfInseartStringConverterOption
     {
         public Dictionary<int, string> InseartDict { get; set; }
     }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Domain.Device.MiddleWares.Converters.StringConverters;
+﻿using System.Linq;
 using Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption;
 
 namespace Domain.Device.MiddleWares.Handlers
@@ -12,14 +10,10 @@ namespace Domain.Device.MiddleWares.Handlers
     public class StringHandlerMiddleWare : BaseHandlerMiddleWare<string>
     {
         #region ctor
-
         public StringHandlerMiddleWare(StringMiddleWareOption option)
         {
             PropName = option.PropName;
-            foreach (var c in option.Converters)
-            {
-                Converters.Add(c.CreateStringConverter());
-            }
+            Converters.AddRange(option.CreateConverters());
         }
         #endregion
     }

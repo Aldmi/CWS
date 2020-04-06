@@ -14,7 +14,7 @@ namespace DeviceForExchnage.Test.ConverterTests
         private EnumMemConverterOption Option { get; }
         public Lang InLang => Lang.Ru;
 
-
+        public const string Path2Type ="Domain.InputDataModel.Autodictor.Entities.Lang, Domain.InputDataModel.Autodictor";
         public EnumerateMemConverterTest()
         {
             Option = new EnumMemConverterOption()
@@ -34,7 +34,7 @@ namespace DeviceForExchnage.Test.ConverterTests
         public void NormalUse_20Step()
         {
             //Arrage
-            var converer = new EnumerateConverter(Option);
+            var converer = new EnumerateConverter(Option, Path2Type);
 
             //Act
             var resStep1 = converer.Convert(InLang, 1);
@@ -95,7 +95,7 @@ namespace DeviceForExchnage.Test.ConverterTests
                     {"Fin", 1}
                 }
             };
-            var converer = new EnumerateConverter(option);
+            var converer = new EnumerateConverter(option, Path2Type);
 
             //Act & Asert
             var exception = Assert.Throws<ParseException>(() => converer.Convert(InLang, 1));

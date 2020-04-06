@@ -5,7 +5,7 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConver
     /// <summary>
     /// Вставка подстрок по указаныым индексам в строку.
     /// </summary>
-    public class InseartStringConverterOptionDto : BaseConverterOptionDto
+    public class InseartStringConverterOptionDto
     {
         public Dictionary<int, string> InseartDict { get; set; }
     }

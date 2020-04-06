@@ -3,7 +3,7 @@
     /// <summary>
     /// корректировка DateTime по часовому поясу TimeZone
     /// </summary>
-    public class EfTimeZoneConverterOption : EfBaseConverterOption
+    public class EfTimeZoneConverterOption
     {
         public string TimeZone { get; set; }
     }

@@ -3,7 +3,7 @@
     /// <summary>
     /// корректировка DateTime по часовому поясу TimeZone
     /// </summary>
-    public class TimeZoneConverterOptionDto : BaseConverterOptionDto
+    public class TimeZoneConverterOptionDto
     {
         public string TimeZone { get; set; }
     }

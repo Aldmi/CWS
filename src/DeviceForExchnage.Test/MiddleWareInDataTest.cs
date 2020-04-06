@@ -42,7 +42,7 @@ namespace DeviceForExchnage.Test
 
 
         [Fact]
-        public void NormalUse_EnumerateConverter_Lang_1Step()
+        public void NormalUse_EnumerateConverter_Set_Default_Lang_1Step()
         {
             //Arrage
             var inData = InDataSourse.GetData(1, Lang.Eng);
@@ -55,7 +55,7 @@ namespace DeviceForExchnage.Test
 
             //Asert
             resStep1.IsSuccess.Should().BeTrue();
-            langStep1.ToString().Should().Be("Ch");
+            langStep1.ToString().Should().Be("Ru");
         }
 
 

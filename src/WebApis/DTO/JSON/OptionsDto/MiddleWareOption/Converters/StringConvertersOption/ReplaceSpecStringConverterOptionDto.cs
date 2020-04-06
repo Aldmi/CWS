@@ -2,7 +2,7 @@
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConvertersOption
 {
-    public class ReplaceSpecStringConverterOptionDto : BaseConverterOptionDto
+    public class ReplaceSpecStringConverterOptionDto
     {
         [Required(ErrorMessage = "ReplaceSpecStringConverterOptionDto. SpecString не может быть NULL")]
         public string SpecString { get; set; } 

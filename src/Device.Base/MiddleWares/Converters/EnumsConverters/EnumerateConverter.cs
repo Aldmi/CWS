@@ -16,8 +16,8 @@ namespace Domain.Device.MiddleWares.Converters.EnumsConverters
         private readonly EnumMemConverterOption _option;
         private readonly ConcurrentDictionary<int, EnumState> _enumStateDict = new ConcurrentDictionary<int, EnumState>();
 
-        public EnumerateConverter(EnumMemConverterOption option)
-            : base(option)
+        public EnumerateConverter(EnumMemConverterOption option, string path2Type)
+            : base(path2Type)
         {
             _option = option;
         }

@@ -58,12 +58,10 @@ namespace Domain.Device.MiddleWares
                 Select(h => new StringHandlerMiddleWare(h)).ToList();
 
             _dateTimeHandlers = option.DateTimeHandlers?.
-                  GroupBy(handlerOption => handlerOption.PropName, handlerOption => handlerOption).
-                  Select(gr => new DateTimeHandlerMiddleWare(gr.Key, gr.ToArray())).ToList();
+                Select(h => new DateTimeHandlerMiddleWare(h)).ToList();
 
             _enumHandlers = option.EnumHandlers?.
-                GroupBy(handlerOption => handlerOption.PropName, handlerOption => handlerOption).
-                Select(gr => new EnumHandlerMiddleWare(gr.Key, gr.ToArray())).ToList();
+                Select(h => new EnumHandlerMiddleWare(h)).ToList();
         }
         #endregion
 

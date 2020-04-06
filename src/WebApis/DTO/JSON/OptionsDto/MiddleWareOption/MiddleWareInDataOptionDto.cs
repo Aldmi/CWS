@@ -9,9 +9,9 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption
     {
         public string Description { get; set; }
 
-        public List<StringHandlerMiddleWareOptionDto> StringHandlers { get; set; }
-        public List<DateTimeHandlerMiddleWareOptionDto> DateTimeHandlers { get; set; }
-        public List<EnumHandlerMiddleWareOptionDto> EnumHandlers { get; set; }
+        public List<StringMiddleWareOptionDto> StringHandlers { get; set; }
+        public List<DateTimeMiddleWareOptionDto> DateTimeHandlers { get; set; }
+        public List<EnumMiddleWareOptionDto> EnumHandlers { get; set; }
 
         [Required(ErrorMessage = "Укажите InvokerOutput")]
         public InvokerOutputDto InvokerOutput { get; set; }

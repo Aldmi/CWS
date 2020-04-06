@@ -12,16 +12,10 @@ namespace Domain.Device.MiddleWares.Handlers
     public class EnumHandlerMiddleWare : BaseHandlerMiddleWare<Enum>
     {
         #region ctor
-        public EnumHandlerMiddleWare(string propName, params EnumHandlerMiddleWareOption[] options)
+        public EnumHandlerMiddleWare(EnumMiddleWareOption option)
         {
-            PropName = propName;
-            foreach (var option in options)
-            {
-                if (option.EnumMemConverterOption != null)
-                {
-                    Converters.Add(new EnumerateConverter(option.EnumMemConverterOption));
-                }
-            }
+            PropName = option.PropName;
+            Converters.AddRange(option.CreateConverters());
         }
         #endregion
     }

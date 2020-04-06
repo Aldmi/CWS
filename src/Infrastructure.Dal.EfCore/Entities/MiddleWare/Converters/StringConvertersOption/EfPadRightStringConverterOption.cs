@@ -1,6 +1,6 @@
 ﻿namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Converters.StringConvertersOption
 {
-    public class EfPadRightStringConverterOption : EfBaseConverterOption
+    public class EfPadRightStringConverterOption
     {
         public int Lenght { get; set; }
     }

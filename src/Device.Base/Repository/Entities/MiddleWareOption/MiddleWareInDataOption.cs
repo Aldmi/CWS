@@ -9,8 +9,8 @@ namespace Domain.Device.Repository.Entities.MiddleWareOption
         public string Description { get; set; }
 
         public List<StringMiddleWareOption> StringHandlers { get; set; }
-        public List<DateTimeHandlerMiddleWareOption> DateTimeHandlers { get; set; }
-        public List<EnumHandlerMiddleWareOption> EnumHandlers { get; set; }
+        public List<DateTimeMiddleWareOption> DateTimeHandlers { get; set; }
+        public List<EnumMiddleWareOption> EnumHandlers { get; set; }
 
         public InvokerOutput InvokerOutput { get; set; }
     }

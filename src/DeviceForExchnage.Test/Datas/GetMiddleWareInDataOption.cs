@@ -14,18 +14,24 @@ namespace DeviceForExchnage.Test.Datas
             var middleWareInDataOption = new MiddleWareInDataOption
             {
                 Description = "перебор Lang",
-                EnumHandlers = new List<EnumHandlerMiddleWareOption>
+                EnumHandlers = new List<EnumMiddleWareOption>
                 {
-                    new EnumHandlerMiddleWareOption
+                    new EnumMiddleWareOption
                     {
                         PropName = propName,
-                        EnumMemConverterOption = new EnumMemConverterOption
+                        Path2Type = "Domain.InputDataModel.Autodictor.Entities.Lang, Domain.InputDataModel.Autodictor",
+                        Converters = new List<UnitEnumConverterOption>
                         {
-                            //Priority = 1,
-                            DictChain = new Dictionary<string, int>
+                            new UnitEnumConverterOption
                             {
-                                { "Ru", 1},
-                                { "Eng", 2}
+                                EnumMemConverterOption = new EnumMemConverterOption
+                                {
+                                    DictChain = new Dictionary<string, int>
+                                    {
+                                        { "Ru", 1},
+                                        { "Eng", 2}
+                                    }
+                                }
                             }
                         }
                     }

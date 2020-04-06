@@ -3,7 +3,7 @@
     /// <summary>
     /// Обрезка строки, если превышает Limit
     /// </summary>
-    public class EfLimitStringConverterOption : EfBaseConverterOption
+    public class EfLimitStringConverterOption
     {
         public int Limit { get; set; }
     }
