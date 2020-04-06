@@ -44,37 +44,6 @@ namespace DeviceForExchnage.Test
         [Fact]
         public void NormalUse_EnumerateConverter_Lang_1Step()
         {
-           // var l = Lang.Ru;
-           // Enum inProp = l;
-           // var dictChain = new Dictionary<string, int>
-           // {
-           //     {"Ru", 1},
-           //     {"Eng", 2}
-           // };
-           // //Словарь после преобразования
-           // var dictChainLang = new Dictionary<Lang, int>
-           // {
-           //     {Lang.Ru, 1},
-           //     {Lang.Eng, 2}
-           // };
-           // //DEBUG--------
-           // var t= typeof(Lang).AssemblyQualifiedName; //"Domain.InputDataModel.Autodictor.Entities.Lang, Domain.InputDataModel.Autodictor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
-
-           ////1. Извлекли тип объекта из сборки
-           //const string objectToInstantiate = "Domain.InputDataModel.Autodictor.Entities.Lang, Domain.InputDataModel.Autodictor";
-           //var objectType = Type.GetType(objectToInstantiate);
-
-           // //2. Получили варианты перчисления как строки
-           // var names = Enum.GetNames(objectType);
-
-           // //3. Получили текущее состояние inProp как строку
-           // var currentStateStr = inProp.ToString();
-
-           // //3.Работа конвертора и запись нового (string) значения.
-           //var newValue= (Enum)Enum.Parse(objectType, currentState);
-           //DEBUG--------
-
-
             //Arrage
             var inData = InDataSourse.GetData(1, Lang.Eng);
             var middleWareinData = new MiddleWareInvoke<AdInputType>(_optionEnumHandlerLangEnumerable, _logger);
@@ -349,7 +318,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var inData = InDataSourse.GetData(1);
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu");
-            option.StringHandlers[0].SubStringMemConverterOption.Lenght = 500;
+            option.StringHandlers[0].Converters[0].SubStringMemConverterOption.Lenght = 500;
             var middleWareinData = new MiddleWareInvoke<AdInputType>(option, _logger);
 
             //Act
@@ -738,7 +707,7 @@ namespace DeviceForExchnage.Test
 
 
             //Assert
-            valStep1Data1.Should().Be("Станция Пртб 0-Станция Отпр 0");
+            valStep1Data1.Should().Be("Станция Отпр 0-Станция Пртб 0");
         }
 
 

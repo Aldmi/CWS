@@ -21,7 +21,7 @@ namespace DeviceForExchnage.Test.Datas
                         PropName = propName,
                         EnumMemConverterOption = new EnumMemConverterOption
                         {
-                            Priority = 1,
+                            //Priority = 1,
                             DictChain = new Dictionary<string, int>
                             {
                                 { "Ru", 1},
@@ -42,18 +42,23 @@ namespace DeviceForExchnage.Test.Datas
 
         public static MiddleWareInDataOption GetMiddleWareInDataOption_LimitStringConverter(string propName)
         {
-            MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
+            var middleWareInDataOption = new MiddleWareInDataOption
             {
                 Description = "Преобразование Note",
-                StringHandlers = new List<StringHandlerMiddleWareOption>
+                StringHandlers = new List<StringMiddleWareOption>
                 {
-                    new StringHandlerMiddleWareOption
+                    new StringMiddleWareOption()
                     {
                         PropName = propName,
-                        LimitStringConverterOption = new LimitStringConverterOption
+                        Converters = new List<UnitStringConverterOption>
                         {
-                            Priority = 1,
-                            Limit = 80
+                            new UnitStringConverterOption
+                            {
+                                LimitStringConverterOption = new LimitStringConverterOption
+                                {
+                                    Limit = 80
+                                }
+                            }
                         }
                     }
                 },
@@ -72,31 +77,44 @@ namespace DeviceForExchnage.Test.Datas
             MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
             {
                 Description = "Преобразование Note",
-                StringHandlers = new List<StringHandlerMiddleWareOption>
+                StringHandlers = new List<StringMiddleWareOption>
                 {
-                    new StringHandlerMiddleWareOption
+                    new StringMiddleWareOption
                     {
                         PropName = propNames[0],
-                        SubStringMemConverterOption = new SubStringMemConverterOption
+                        Converters = new List<UnitStringConverterOption>
                         {
-                            Priority = 1,
-                            Lenght = 120,
-                            InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
-                            Separator = ','
-                        },
-                        InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
-                        {
-                            Priority = 2,
-                            LenghtLine = 40,
-                            Marker = "0x09"
+                            new UnitStringConverterOption
+                            {
+                                SubStringMemConverterOption = new SubStringMemConverterOption
+                                {
+                                    Lenght = 120,
+                                    InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
+                                    Separator = ','
+                                }
+                            },
+                            new UnitStringConverterOption
+                            {
+                                InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
+                                {
+                                    LenghtLine = 40,
+                                    Marker = "0x09"
+                                }
+                            }
                         }
                     },
-                    new StringHandlerMiddleWareOption
+                    new StringMiddleWareOption
                     {
                         PropName = propNames[1],
-                        ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOption
+                        Converters = new List<UnitStringConverterOption>
                         {
-                            ReplacementString = "Посадки нет"
+                            new UnitStringConverterOption
+                            {
+                                ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOption
+                                {
+                                    ReplacementString = "Посадки нет"
+                                }
+                            }
                         }
                     }
                 },
@@ -115,23 +133,30 @@ namespace DeviceForExchnage.Test.Datas
             MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
             {
                 Description = "Преобразование Note",
-                StringHandlers = new List<StringHandlerMiddleWareOption>
+                StringHandlers = new List<StringMiddleWareOption>
                 {
-                    new StringHandlerMiddleWareOption
+                    new StringMiddleWareOption
                     {
                         PropName = propName,
-                        SubStringMemConverterOption = new SubStringMemConverterOption
+                        Converters = new List<UnitStringConverterOption>
                         {
-                            Priority = 1,
-                            Lenght = 120,
-                            InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
-                            Separator = ','
-                        },
-                        InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
-                        {
-                            Priority = 2,
-                            LenghtLine = 40,
-                            Marker = "0x09"
+                            new UnitStringConverterOption
+                            {
+                                SubStringMemConverterOption = new SubStringMemConverterOption
+                                {
+                                    Lenght = 120,
+                                    InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
+                                    Separator = ','
+                                },
+                            },
+                            new UnitStringConverterOption
+                            {
+                                InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
+                                {
+                                    LenghtLine = 40,
+                                    Marker = "0x09"
+                                }
+                            }
                         }
                     }
                 },
@@ -151,23 +176,30 @@ namespace DeviceForExchnage.Test.Datas
             MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
             {
                 Description = "Преобразование Note",
-                StringHandlers = new List<StringHandlerMiddleWareOption>
+                StringHandlers = new List<StringMiddleWareOption>
                 {
-                    new StringHandlerMiddleWareOption
+                    new StringMiddleWareOption
                     {
                         PropName = propName,
-                        SubStringMemConverterOption = new SubStringMemConverterOption
+                        Converters = new List<UnitStringConverterOption>
                         {
-                            Priority = 1,
-                            Lenght = 120,
-                            InitPharases = null,
-                            Separator = ','
-                        },
-                        InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
-                        {
-                            Priority = 2,
-                            LenghtLine = 40,
-                            Marker = "0x09"
+                            new UnitStringConverterOption
+                            {
+                                SubStringMemConverterOption = new SubStringMemConverterOption
+                                {
+                                    Lenght = 120,
+                                    InitPharases = null,
+                                    Separator = ','
+                                },
+                            },
+                            new UnitStringConverterOption
+                            {
+                                InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
+                                {
+                                    LenghtLine = 40,
+                                    Marker = "0x09"
+                                }
+                            }
                         }
                     }
                 },
@@ -187,23 +219,30 @@ namespace DeviceForExchnage.Test.Datas
             MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
             {
                 Description = "Преобразование Note",
-                StringHandlers = new List<StringHandlerMiddleWareOption>
+                StringHandlers = new List<StringMiddleWareOption>
                 {
-                    new StringHandlerMiddleWareOption
+                    new StringMiddleWareOption
                     {
                         PropName = propName,
-                        SubStringMemConverterOption = new SubStringMemConverterOption
+                        Converters = new List<UnitStringConverterOption>
                         {
-                            Priority = 1,
-                            Lenght = 90,
-                            InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
-                            Separator = ','
-                        },
-                        InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
-                        {
-                            Priority = 2,
-                            LenghtLine = 25,
-                            Marker = "0x09"
+                            new UnitStringConverterOption
+                            {
+                                SubStringMemConverterOption = new SubStringMemConverterOption
+                                {
+                                    Lenght = 90,
+                                    InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
+                                    Separator = ','
+                                }
+                            },
+                            new UnitStringConverterOption
+                            {
+                                InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
+                                {
+                                    LenghtLine = 25,
+                                    Marker = "0x09"
+                                }
+                            }
                         }
                     }
                 },
@@ -224,33 +263,45 @@ namespace DeviceForExchnage.Test.Datas
             MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
             {
                 Description = "Преобразование Note",
-                StringHandlers = new List<StringHandlerMiddleWareOption>
+                StringHandlers = new List<StringMiddleWareOption>
                 {
-                    new StringHandlerMiddleWareOption
+                    new StringMiddleWareOption
                     {
                         PropName = propNames[0],
-                        SubStringMemConverterOption = new SubStringMemConverterOption
+                        Converters = new List<UnitStringConverterOption>
                         {
-                            Priority = 1,
-                            Lenght = 100,
-                            InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
-                            Separator = ','
-                        },
-                        InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
-                        {
-                            Priority = 2,
-                            LenghtLine = 40,
-                            Marker = "0x09"
+                            new UnitStringConverterOption
+                            {
+                                SubStringMemConverterOption = new SubStringMemConverterOption
+                                {
+                                    Lenght = 100,
+                                    InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
+                                    Separator = ','
+                                }
+                            },
+                            new UnitStringConverterOption
+                            {
+                                InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
+                                {
+                                    LenghtLine = 40,
+                                    Marker = "0x09"
+                                }
+                            }
                         }
                     },
-                    new StringHandlerMiddleWareOption
+                    new StringMiddleWareOption
                     {
                         PropName = propNames[1],
-                        InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
+                        Converters = new List<UnitStringConverterOption>
                         {
-                            Priority = 1,
-                            LenghtLine = 7,
-                            Marker = "0x09"
+                            new UnitStringConverterOption
+                            {
+                                InseartEndLineMarkerConverterOption = new InseartEndLineMarkerConverterOption
+                                {
+                                    LenghtLine = 7,
+                                    Marker = "0x09"
+                                }
+                            }
                         }
                     }
                 },
@@ -270,15 +321,20 @@ namespace DeviceForExchnage.Test.Datas
             MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
             {
                 Description = "Преобразование Note",
-                StringHandlers = new List<StringHandlerMiddleWareOption>
+                StringHandlers = new List<StringMiddleWareOption>
                 {
-                    new StringHandlerMiddleWareOption
+                    new StringMiddleWareOption
                     {
                         PropName = propNames[0],
-                        ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOption
+                        Converters = new List<UnitStringConverterOption>
                         {
-                            Priority = 1,
-                            ReplacementString = "ПОСАДКИ НЕТ"
+                            new UnitStringConverterOption
+                            {
+                                ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOption
+                                {
+                                    ReplacementString = "ПОСАДКИ НЕТ"
+                                }
+                            }
                         }
                     }
                 },
@@ -290,7 +346,5 @@ namespace DeviceForExchnage.Test.Datas
 
             return middleWareInDataOption;
         }
-
-
     }
 }

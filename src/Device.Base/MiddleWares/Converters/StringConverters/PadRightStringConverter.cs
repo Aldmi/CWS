@@ -11,7 +11,6 @@ namespace Domain.Device.MiddleWares.Converters.StringConverters
     {
         private readonly PadRightStringConverterOption _option;
         public PadRightStringConverter(PadRightStringConverterOption option)
-            : base(option)
         {
             _option = option;
         }

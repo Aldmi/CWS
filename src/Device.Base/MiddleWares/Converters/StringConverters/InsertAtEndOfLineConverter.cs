@@ -9,7 +9,7 @@ namespace Domain.Device.MiddleWares.Converters.StringConverters
     {
         private readonly InsertAtEndOfLineConverterOption _option;
 
-        public InsertAtEndOfLineConverter(InsertAtEndOfLineConverterOption option) : base(option)
+        public InsertAtEndOfLineConverter(InsertAtEndOfLineConverterOption option)
         {
             _option = option;
         }

@@ -8,7 +8,7 @@ namespace Domain.Device.Repository.Entities.MiddleWareOption
     {
         public string Description { get; set; }
 
-        public List<StringHandlerMiddleWareOption> StringHandlers { get; set; }
+        public List<StringMiddleWareOption> StringHandlers { get; set; }
         public List<DateTimeHandlerMiddleWareOption> DateTimeHandlers { get; set; }
         public List<EnumHandlerMiddleWareOption> EnumHandlers { get; set; }
 
@@ -21,5 +21,4 @@ namespace Domain.Device.Repository.Entities.MiddleWareOption
         public InvokerOutputMode Mode { get; set; }
         public int Time { get; set; }                        //Время сработки события отправки данных
     }
-
 }

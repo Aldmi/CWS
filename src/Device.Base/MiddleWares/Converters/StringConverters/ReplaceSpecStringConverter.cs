@@ -11,7 +11,6 @@ namespace Domain.Device.MiddleWares.Converters.StringConverters
         private readonly ReplaceSpecStringConverterOption _option;
 
         public ReplaceSpecStringConverter(ReplaceSpecStringConverterOption option)
-            : base(option)
         {
             _option = option;
         }

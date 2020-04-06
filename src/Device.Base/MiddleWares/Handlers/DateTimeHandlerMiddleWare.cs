@@ -18,9 +18,6 @@ namespace Domain.Device.MiddleWares.Handlers
                     Converters.Add(new TimeZoneConverter(option.TimeZoneConverterOption));
                 }
             }
-            var orderedConverters = Converters.OrderBy(c => c.Priority).ToList();
-            Converters.Clear();
-            Converters.AddRange(orderedConverters);
         }
     }
 }

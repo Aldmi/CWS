@@ -13,8 +13,7 @@ namespace Domain.Device.MiddleWares.Converters.StringConverters
         private readonly InseartEndLineMarkerConverterOption _option;
 
 
-        public InseartEndLineMarkerConverter(InseartEndLineMarkerConverterOption option) 
-            : base(option)
+        public InseartEndLineMarkerConverter(InseartEndLineMarkerConverterOption option)
         {
             _option = option;
         }

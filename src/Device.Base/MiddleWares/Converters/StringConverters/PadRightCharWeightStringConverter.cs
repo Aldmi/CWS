@@ -12,7 +12,6 @@ namespace Domain.Device.MiddleWares.Converters.StringConverters
     {
         private readonly PadRighCharWeightStringConverterOption _option;
         public PadRightCharWeightStringConverter(PadRighCharWeightStringConverterOption option)
-            : base(option)
         {
             _option = option;
         }

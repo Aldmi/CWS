@@ -21,7 +21,6 @@ namespace Domain.Device.MiddleWares.Converters.StringConverters
 
 
         public SubStringMemConverter(SubStringMemConverterOption option)
-            : base(option)
         {
             _option = option;
         }

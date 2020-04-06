@@ -8,7 +8,6 @@ namespace Domain.Device.MiddleWares.Converters.StringConverters
 
 
         public InseartStringConverter(InseartStringConverterOption option)
-            : base(option)
         {
             _option = option;
         }

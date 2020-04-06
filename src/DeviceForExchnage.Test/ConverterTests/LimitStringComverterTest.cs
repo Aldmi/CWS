@@ -24,7 +24,7 @@ namespace DeviceForExchnage.Test.ConverterTests
         public void NormalUse()
         {
             //Arrage
-            var converer = new LimitStringComverter(Option);
+            var converer = new LimitStringConverter(Option);
             var str = "Со всеми остановками кроме: серпухово, балаково, Свободное";
 
             //Act
@@ -40,7 +40,7 @@ namespace DeviceForExchnage.Test.ConverterTests
         public void SmallString()
         {
             //Arrage
-            var converer = new LimitStringComverter(Option);
+            var converer = new LimitStringConverter(Option);
             var str = "Привет";
 
             //Act
@@ -57,7 +57,7 @@ namespace DeviceForExchnage.Test.ConverterTests
         public void EmptyString()
         {
             //Arrage
-            var converer = new LimitStringComverter(Option);
+            var converer = new LimitStringConverter(Option);
             var str = String.Empty;
 
             //Act
@@ -73,7 +73,7 @@ namespace DeviceForExchnage.Test.ConverterTests
         public void NullString()
         {
             //Arrage
-            var converer = new LimitStringComverter(Option);
+            var converer = new LimitStringConverter(Option);
             string str = null;
 
             //Act

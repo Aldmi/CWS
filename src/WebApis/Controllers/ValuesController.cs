@@ -2,6 +2,8 @@
 using App.Services.Mediators;
 using Autofac;
 using AutoMapper;
+using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption;
+using Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption;
 using Domain.Exchange;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.ProvidersOption;
@@ -83,7 +85,7 @@ namespace WebApiSwc.Controllers
 
         //POST api/values
         [HttpPost]
-        public void Post([FromBody]Dictionary<string,int> value)
+        public void Post([FromBody]List<StringHandlerMiddleWareOption111> handlers)
         {
 
         }
@@ -99,5 +101,22 @@ namespace WebApiSwc.Controllers
         public void Delete(int id)
         {
         }
+
+
+
+
+        //-----------------------------------------
+        public class StringHandlerMiddleWareOption111
+        {
+            public string PropName { get; set; }                       //Имя свойства для обработки
+
+            public List<UnitStringConverterOption> Converters { get; set; }
+        }
+
+
+
+
+
+        //------------------------------------------
     }
 }

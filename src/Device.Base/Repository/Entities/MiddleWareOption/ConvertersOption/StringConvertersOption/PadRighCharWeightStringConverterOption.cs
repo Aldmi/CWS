@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption
 {
-    public class PadRighCharWeightStringConverterOption : BaseConverterOption
+    public class PadRighCharWeightStringConverterOption
     {
         public PadRighCharWeightStringConverterOption()
         {

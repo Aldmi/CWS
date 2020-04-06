@@ -5,12 +5,11 @@ namespace Domain.Device.MiddleWares.Converters.StringConverters
     /// <summary>
     /// Обрезает строку
     /// </summary>
-    public class LimitStringComverter : BaseStringConverter
+    public class LimitStringConverter : BaseStringConverter
     {
         private readonly LimitStringConverterOption _option;
 
-        public LimitStringComverter(LimitStringConverterOption option)
-            : base(option)
+        public LimitStringConverter(LimitStringConverterOption option)
         {
             _option = option;
         }

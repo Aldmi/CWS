@@ -3,7 +3,7 @@
     /// <summary>
     /// Базовый класс опций для всех конверторов
     /// </summary>
-    public class EnumConverterOption : BaseConverterOption
+    public class EnumConverterOption
     {
         /// <summary>
         /// Полный путь до типа в сборки.

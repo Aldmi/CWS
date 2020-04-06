@@ -55,8 +55,7 @@ namespace Domain.Device.MiddleWares
             _logger = logger;
 
             _stringHandlers = option.StringHandlers?.
-                GroupBy(handlerOption => handlerOption.PropName, handlerOption => handlerOption).
-                Select(gr => new StringHandlerMiddleWare(gr.Key, gr.ToArray())).ToList();
+                Select(h => new StringHandlerMiddleWare(h)).ToList();
 
             _dateTimeHandlers = option.DateTimeHandlers?.
                   GroupBy(handlerOption => handlerOption.PropName, handlerOption => handlerOption).

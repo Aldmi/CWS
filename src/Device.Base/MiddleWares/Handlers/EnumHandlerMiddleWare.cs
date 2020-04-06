@@ -22,9 +22,6 @@ namespace Domain.Device.MiddleWares.Handlers
                     Converters.Add(new EnumerateConverter(option.EnumMemConverterOption));
                 }
             }
-            var orderedConverters = Converters.OrderBy(c => c.Priority).ToList();
-            Converters.Clear();
-            Converters.AddRange(orderedConverters);
         }
         #endregion
     }
