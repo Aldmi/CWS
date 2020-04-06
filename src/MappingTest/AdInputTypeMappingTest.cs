@@ -65,7 +65,7 @@ namespace MappingTest
             res.StationArrival.NameEng.Should().Be("Kislovodsk");
             res.StationDeparture.NameEng.Should().Be("Moscow");
 
-            res.StationsСut.NameRu.Should().Be("Кисловодск");
+            res.StationsCut.NameRu.Should().Be("Кисловодск");
             res.Stations.NameRu.Should().Be("Москва-Кисловодск");
 
             res.PathNumber.Should().Be("5");

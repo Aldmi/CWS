@@ -23,7 +23,7 @@ namespace Domain.InputDataModel.Autodictor.Model
         public Station StationDeparture { get; private set; }
         public Station StationArrival { get; private set; }
         public Station Stations { get; private set; }                        //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
-        public Station StationsСut { get; private set; }                     //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
+        public Station StationsCut { get; private set; }                     //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
         public Station StationWhereFrom { get; private set; }                //ближайшая станция после текущей
         public Station StationWhereTo { get; private set; }                 //ближайшая станция после текущей
         public DirectionStation DirectionStation { get; private set; }       //Направление.
@@ -70,7 +70,7 @@ namespace Domain.InputDataModel.Autodictor.Model
             Addition = addition;
             Note = note;
             DaysFollowing = daysFollowing;
-            StationsСut = CreateStationsCut(StationArrival, StationDeparture, Event);
+            StationsCut = CreateStationsCut(StationArrival, StationDeparture, Event);
             Stations = CreateStations(StationArrival, StationDeparture);
         }
 

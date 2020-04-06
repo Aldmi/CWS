@@ -14,7 +14,7 @@ namespace Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers
         {
             //var stationsCut = uit.StationsСut?.GetName(lang);
             //return string.IsNullOrEmpty(stationsCut) ? "ПОСАДКИ НЕТ" : stationsCut;
-            var str = uit.StationsСut?.GetName(lang);
+            var str = uit.StationsCut?.GetName(lang);
             return str.GetSpaceOrString();
         }
     }

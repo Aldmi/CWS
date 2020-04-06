@@ -44,6 +44,10 @@ namespace DeviceForExchnage.Test
         [Fact]
         public void NormalUse_EnumerateConverter_Set_Default_Lang_1Step()
         {
+            DateTime dt= DateTime.Parse("20:11");
+            var h=  dt.ToString("mm");
+
+
             //Arrage
             var inData = InDataSourse.GetData(1, Lang.Eng);
             var middleWareinData = new MiddleWareInvoke<AdInputType>(_optionEnumHandlerLangEnumerable, _logger);
@@ -603,7 +607,7 @@ namespace DeviceForExchnage.Test
                             break;
                     }
 
-                    data.StationsСut.NameRu.Should().Be("Посадки нет");
+                    data.StationsCut.NameRu.Should().Be("Посадки нет");
                 }
             }
 
@@ -703,7 +707,7 @@ namespace DeviceForExchnage.Test
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);
-            var valStep1Data1 = resStep1.Value?.Data[0].StationsСut.NameRu;
+            var valStep1Data1 = resStep1.Value?.Data[0].StationsCut.NameRu;
 
 
             //Assert
@@ -721,7 +725,7 @@ namespace DeviceForExchnage.Test
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);
-            var valStep1Data1 = resStep1.Value?.Data[0].StationsСut.NameRu;
+            var valStep1Data1 = resStep1.Value?.Data[0].StationsCut.NameRu;
 
             //Assert
             valStep1Data1.Should().Be("ПОСАДКИ НЕТ");
