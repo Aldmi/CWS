@@ -13,8 +13,9 @@
         public TypeTrain(string nameRu, string nameRuAlias, int? num)
         {
             NameRu = nameRu;
+            NameAliasRu = nameRuAlias;
+            Num = num;
         }
-
 
         public TypeTrain()
         {
