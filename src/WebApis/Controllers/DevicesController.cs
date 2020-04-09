@@ -114,7 +114,7 @@ namespace WebApiSwc.Controllers
         }
 
 
-        // GET api/Devices/GetLastSendData/exchnageKey
+        // GET api/Devices/GetLastSendDataSimple/exchnageKey
         [HttpGet("GetLastSendDataSimple/{exchnageKey}")]
         public async Task<IActionResult> GetLastSendDataSimple([FromRoute] string exchnageKey)
         {
@@ -125,6 +125,21 @@ namespace WebApiSwc.Controllers
             }
 
             var lastSendData = exchange.LastSendData;
+            if(lastSendData ==null)
+                return new JsonResult("LastSendData == null. возможно обмен работает через транспорт, с состоянием IsConnect=false");
+            
+            var itemsInBatch = lastSendData.ProcessedItemsInBatch
+                .Where(batch => batch!= null)
+                .Select(batch => new
+                {
+                    batch.StartItemIndex,
+                    batch.BatchSize,
+                    UsingItems = batch.ProcessedItems
+                        .Select(item => item.InseartedData)
+                        .ToList()
+
+                }).ToList();
+            var status = itemsInBatch.Any() ? lastSendData.Status : "Данные не поступилп в обработку. Проверте соединение трансопрта";
             var lastSendDataSimple = new
             {
                 lastSendData.DeviceName,
@@ -132,17 +147,9 @@ namespace WebApiSwc.Controllers
                 lastSendData.DataAction, 
                 lastSendData.TimeAction,
                 lastSendData.IsValidAll,
-                lastSendData.Status,
-                ItemsInBatch= lastSendData.ProcessedItemsInBatch.Select(batch =>new
-                {
-                    batch.StartItemIndex,
-                    batch.BatchSize,
-                    UsingItems= batch.ProcessedItems
-                        .Select(item => item.InseartedData)
-                        .ToList()
-
-                }).ToList()
-            };
+                status,
+                ItemsInBatch = itemsInBatch
+             };
 
             await Task.CompletedTask;
             return new JsonResult(lastSendDataSimple);
