@@ -212,5 +212,14 @@ namespace Shared.Helpers
             string result = source.Remove(place, find.Length).Insert(place, replace);
             return result;
         }
+
+
+        /// <summary>
+        /// Конкатенирует строку str count раз
+        /// </summary>
+        public static string Repeat(string str, int count)
+        {
+            return new StringBuilder(str.Length * count).Insert(0, str, count).ToString();
+        }
     }
 }

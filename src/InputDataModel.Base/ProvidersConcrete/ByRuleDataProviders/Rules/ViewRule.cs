@@ -85,7 +85,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var hExecuteInseartsResult = hIndependentInsertsService.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } }).result;
             var fExecuteInseartsResult = fIndependentInsertsService.ExecuteInsearts(null).result;
 
-            var requestdepInsServ = DependentInseartsServiceFactory.Create(header + body + footer, Pattern);
+            var batchedBody = HelperString.Repeat(body, option.BatchSize);
+            var requestdepInsServ = DependentInseartsServiceFactory.Create(header + batchedBody + footer, Pattern);
 
             var (_, isFailure, responseTransfer, error) = CreateResponseTransfer(option.ResponseOption, addressDevice, logger);
             if (isFailure) throw new ArgumentException(error); //???
