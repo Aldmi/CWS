@@ -221,5 +221,31 @@ namespace Shared.Helpers
         {
             return new StringBuilder(str.Length * count).Insert(0, str, count).ToString();
         }
+
+
+        /// <summary> 
+        /// Конкатенирует str саму с собой count раз, разбивая на группы по batchSize.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="count">общее кол-во</param>
+        /// <param name="batchSize">размер батча</param>
+        public static string[] CalcBatchedSequence(string str, int count, int batchSize)
+        {
+            var resList = new List<string>();
+            string repeatedStr;
+            var batchNumber = count / batchSize;
+            for (var i = 0; i < batchNumber; i++)
+            {
+                repeatedStr = Repeat(str, batchSize);
+                resList.Add(repeatedStr);
+            }
+            var fractionBatch = count % batchSize;
+            if (fractionBatch != 0)
+            {
+                repeatedStr = HelperString.Repeat(str, fractionBatch);
+                resList.Add(repeatedStr);
+            }
+            return resList.ToArray();
+        }
     }
 }

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.Enums;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts;
 using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response.ResponseValidators;
@@ -31,15 +28,18 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         #region fields
         public const string Pattern = @"\{(\w+)(\([^{}]*\)|\[[^][{}]*])?(:[^{}]+)?}";
         // \{([^:{]+)(:[^{}]+)?\}"
-        // 
 
         private readonly ILogger _logger;
-        private readonly StringBuilder _headerExecuteInseartsResult;                         //Строка Header после IndependentInserts
-        private readonly IndependentInsertsService _requestBodyParserModel;                  //модель вставки IndependentInserts в ТЕЛО ЗАПРОСА
-        private readonly StringBuilder _footerExecuteInseartsResult;                         //Строка Footer после IndependentInserts
-        private readonly DependentInseartService _requestDependentInseartsService;           //Сервис вставки зависимых данных в общий ЗАПРОС (header+body+footer)
-
-        private readonly ResponseTransfer _responseTransfer;                                 //Ответ после всех вставок
+        private readonly StringBuilder _headerExecuteInseartsResult;                                              //Строка Header после IndependentInserts
+        private readonly IndependentInsertsService _requestBodyParserModel;                                       //модель вставки IndependentInserts в ТЕЛО ЗАПРОСА
+        private readonly StringBuilder _footerExecuteInseartsResult;                                              //Строка Footer после IndependentInserts
+        /// <summary>
+        /// Массив сервисов вставки зависимых данных в общий ЗАПРОС (header+body+footer).
+        /// Для каждого батча -> своя строка (склееное body) -> из склееной строки выделяем все обработчики DependentInseart.
+        /// Т.е. для кажого батча будет свой DependentInseartService (с разным кол-вом DependentInseart обработчиков). 
+        /// </summary>
+        private readonly  DependentInseartService[] _requestdepInsServCollection;
+        private readonly ResponseTransfer _responseTransfer;                                                      //Ответ после всех вставок
         #endregion
 
 
@@ -49,16 +49,15 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             StringBuilder headerExecuteInseartsResult,
             IndependentInsertsService requestBodyParserModel,
             StringBuilder footerExecuteInseartsResult,
-            DependentInseartService requestDependentInseartsService,
+            DependentInseartService[] requestdepInsServCollection,
             ResponseTransfer responseTransfer,
             ILogger logger)
         {
-
             GetCurrentOption = option;
             _headerExecuteInseartsResult = headerExecuteInseartsResult;
             _requestBodyParserModel = requestBodyParserModel;
             _footerExecuteInseartsResult = footerExecuteInseartsResult;
-            _requestDependentInseartsService = requestDependentInseartsService;
+            _requestdepInsServCollection = requestdepInsServCollection;
             _responseTransfer = responseTransfer;
             _logger = logger;
         }
@@ -85,13 +84,12 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var hExecuteInseartsResult = hIndependentInsertsService.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } }).result;
             var fExecuteInseartsResult = fIndependentInsertsService.ExecuteInsearts(null).result;
 
-            var batchedBody = HelperString.Repeat(body, option.BatchSize);
-            var requestdepInsServ = DependentInseartsServiceFactory.Create(header + batchedBody + footer, Pattern);
+            var requestdepInsServCollection = CreateDependentInseartServiceCollection(option.BatchSize, option.Count, header, body, footer);
 
             var (_, isFailure, responseTransfer, error) = CreateResponseTransfer(option.ResponseOption, addressDevice, logger);
             if (isFailure) throw new ArgumentException(error); //???
 
-            var viewRule = new ViewRule<TIn>(option, hExecuteInseartsResult, bIndependentInsertsService, fExecuteInseartsResult, requestdepInsServ, responseTransfer, logger);
+            var viewRule = new ViewRule<TIn>(option, hExecuteInseartsResult, bIndependentInsertsService, fExecuteInseartsResult, requestdepInsServCollection, responseTransfer, logger);
             return viewRule;
         }
 
@@ -104,6 +102,25 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
 
         #region Methode
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="batchSize"></param>
+        /// <param name="count"></param>
+        /// <param name="header"></param>
+        /// <param name="body"></param>
+        /// <param name="footer"></param>
+        /// <returns></returns>
+        private static DependentInseartService[] CreateDependentInseartServiceCollection(int batchSize, int count, string header, string body, string footer)
+        {
+            var requestdepInsServCollection = HelperString.CalcBatchedSequence(body, count, batchSize)
+                .Select(item => DependentInseartsServiceFactory.Create(header + item + footer, Pattern))
+                .ToArray();
+            return requestdepInsServCollection;
+        }
+
+
         /// <summary>
         /// Создать строку запроса ПОД ДАННЫЕ, подставив в форматную строку запроса значения переменных из списка items.
         /// </summary>
@@ -153,7 +170,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     RequestTransfer<TIn> request;
                     try
                     {
-                        var (_, isFailure, value, error) = CreateRequestTransfer4Data(batch, startItemIndex);
+                        var (_, isFailure, value, error) = CreateRequestTransfer4Data(batch, startItemIndex, numberOfBatch);
                         if (isFailure)
                         {
                             _logger.Warning(error);
@@ -222,7 +239,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Создать Запрос (используя форматную строку RequestOption) из одного батча данных.
         /// </summary>
-        private Result<RequestTransfer<TIn>> CreateRequestTransfer4Data(IEnumerable<TIn> batch, int startItemIndex)
+        private Result<RequestTransfer<TIn>> CreateRequestTransfer4Data(IEnumerable<TIn> batch, int startItemIndex, int numberOfBatch)
         {
             var items = batch.ToList();
             var format = GetCurrentOption.RequestOption.Format;
@@ -242,9 +259,10 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var sbAppendResult = new StringBuilder().Append(_headerExecuteInseartsResult).Append(sbBodyResult).Append(_footerExecuteInseartsResult);
 
             //DEPENDENT insearts------------------------------------------------------------------------------------------------------
-            if (_requestDependentInseartsService != null)
+            if (_requestdepInsServCollection != null)
             {
-                var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInsearts(sbAppendResult, format);
+                var requestDependentInseartsService=_requestdepInsServCollection[numberOfBatch-1];
+                var (_, isFailure, value, error) = requestDependentInseartsService.ExecuteInsearts(sbAppendResult, format);  
                 if (isFailure)
                 {
                     return Result.Failure<RequestTransfer<TIn>>(error);
@@ -287,9 +305,10 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var sbAppendResult = new StringBuilder().Append(_headerExecuteInseartsResult).Append(sbBodyResult).Append(_footerExecuteInseartsResult);
 
             //DEPENDENT insearts----------------------------------------------------------------------------------
-            if (_requestDependentInseartsService != null)
+            if (_requestdepInsServCollection != null)
             {
-                var (_, isFailure, value, error) = _requestDependentInseartsService.ExecuteInsearts(sbAppendResult, format);
+                var requestDependentInseartsService = _requestdepInsServCollection[0];//Всегда только 1 элемент, т.к. для команд нет данных.
+                var (_, isFailure, value, error) = requestDependentInseartsService.ExecuteInsearts(sbAppendResult, format);
                 if (isFailure)
                 {
                     return Result.Failure<RequestTransfer<TIn>>(error);
