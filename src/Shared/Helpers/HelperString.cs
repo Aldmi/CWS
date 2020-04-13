@@ -242,7 +242,7 @@ namespace Shared.Helpers
             var fractionBatch = count % batchSize;
             if (fractionBatch != 0)
             {
-                repeatedStr = HelperString.Repeat(str, fractionBatch);
+                repeatedStr = Repeat(str, fractionBatch);
                 resList.Add(repeatedStr);
             }
             return resList.ToArray();

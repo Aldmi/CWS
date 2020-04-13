@@ -27,8 +27,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
     {
         #region fields
         public const string Pattern = @"\{(\w+)(\([^{}]*\)|\[[^][{}]*])?(:[^{}]+)?}";
-        // \{([^:{]+)(:[^{}]+)?\}"
-
         private readonly ILogger _logger;
         private readonly StringBuilder _headerExecuteInseartsResult;                                              //Строка Header после IndependentInserts
         private readonly IndependentInsertsService _requestBodyParserModel;                                       //модель вставки IndependentInserts в ТЕЛО ЗАПРОСА
@@ -102,18 +100,19 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
 
         #region Methode
-
         /// <summary>
-        /// 
+        /// Создает массив из сервисов Зависимой вставки.
+        /// Ко-во сервисов определяется как разбивается строка на батчи исходя из опций option.BatchSize, option.Count
+        /// Для каждого сервиса DependentInseartsServiceFactory определяет свой набор обработчиков.
+        /// Номер батча является индексом этого массива. Для выбора нужного серовиса.
         /// </summary>
-        /// <param name="batchSize"></param>
-        /// <param name="count"></param>
-        /// <param name="header"></param>
-        /// <param name="body"></param>
-        /// <param name="footer"></param>
-        /// <returns></returns>
         private static DependentInseartService[] CreateDependentInseartServiceCollection(int batchSize, int count, string header, string body, string footer)
         {
+            //TODO:  Для Command не нужна логика обработки вх. данных. batchSize,  count, agregateFilter отсутствуют. Возможно сделать иерархию типов Rule и ViewRule для разных спиосков (список данных, комманд, Запросы инициализации, Аварийный список.)
+            //Для Command.
+            batchSize = batchSize == 0 ? 1 : batchSize;
+            count = count == 0 ? 1 : count;
+
             var requestdepInsServCollection = HelperString.CalcBatchedSequence(body, count, batchSize)
                 .Select(item => DependentInseartsServiceFactory.Create(header + item + footer, Pattern))
                 .ToArray();

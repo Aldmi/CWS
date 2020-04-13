@@ -117,8 +117,6 @@ namespace Shared.Test
             }
         };
         #endregion
-
-
         [Theory]
         [MemberData(nameof(SubstringBetweenCharactersDatas))]
         public void SubstringBetweenCharactersTest(string str, string startCh, string endCh, string expectedStrIncludeBorder, string expectedStrExcludeBorder)
@@ -176,6 +174,82 @@ namespace Shared.Test
 
             resIncludeBorder.Error.Should().Be($"Not Found startCh= {startCh}");
             resExcludeBorder.Error.Should().Be($"Not Found startCh= {startCh}");
+        }
+
+
+
+        #region TheoryData
+        public static IEnumerable<object[]> CalcBatchedSequenceDatas => new[]
+        {
+            new object[]
+            {
+                7,
+                3,
+                new[]
+                {
+                    "aaa aaa aaa ",
+                    "aaa aaa aaa ",
+                    "aaa ",
+                }
+            },
+            new object[]
+            {
+                1,
+                1,
+                new[]
+                {
+                    "aaa "
+                }
+            },
+            new object[]
+            {
+                10,
+                2,
+                new[]
+                {
+                    "aaa aaa ",
+                    "aaa aaa ",
+                    "aaa aaa ",
+                    "aaa aaa ",
+                    "aaa aaa "
+                }
+            },
+            new object[]
+            {
+                3,
+                3,
+                new[]
+                {
+                    "aaa aaa aaa "
+                }
+            },
+            new object[]
+            {
+                1,
+                1000,
+                new[]
+                {
+                    "aaa "
+                }
+            }
+        };
+        #endregion
+        [Theory]
+        [MemberData(nameof(CalcBatchedSequenceDatas))]
+        public void CalcBatchedSequenceTest(int count, int batchSize, string[] expectedSeq)
+        {
+            //Arrange
+            string str = "aaa ";
+
+            //Act
+            var batchedSequence = HelperString.CalcBatchedSequence(str, count, batchSize);
+
+            //Assert
+            batchedSequence.Length.Should().Be(batchedSequence.Length);
+            for (var i = 0; i < batchedSequence.Length; i++)
+            {
+                batchedSequence[i].Should().Be(expectedSeq[i]);
+            }
         }
     }
 }

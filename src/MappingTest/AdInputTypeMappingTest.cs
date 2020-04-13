@@ -75,27 +75,5 @@ namespace MappingTest
 
             res.StopTime.Should().Be(TimeSpan.Parse("00:14:00"));
         }
-
-
-
-        [Fact]
-        public void tttt()
-        {
-            string str = "aaa ";
-
-            // int count = 7;
-            // int batchSize = 3;
-
-            //int count = 1;
-            // int batchSize = 1;
-
-            int count = 10;
-            int batchSize = 2;
-
-            //int count = 3;
-            //int batchSize = 3;
-
-            var res = HelperString.CalcBatchedSequence(str, count, batchSize);
-        }
     }
 }
