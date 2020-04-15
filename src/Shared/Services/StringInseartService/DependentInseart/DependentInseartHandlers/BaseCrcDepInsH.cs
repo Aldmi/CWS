@@ -13,17 +13,20 @@ namespace Shared.Services.StringInseartService.DependentInseart.DependentInseart
 
         protected BaseCrcDepInsH(StringInsertModel requiredModel) : base(requiredModel)
         {
-            var partsOptions = requiredModel.FindPartsOptions();
-            switch (partsOptions.Count)
+            var partsOptions = requiredModel.Options;
+            if (partsOptions != null)
             {
-                case 1:
-                    Border = CrcHelper.CalcBorderSubString(partsOptions[0]);
-                    break;
+                switch (partsOptions.Count)
+                {
+                    case 1:
+                        Border = CrcHelper.CalcBorderSubString(partsOptions[0]);
+                        break;
 
-                case 2:
-                    Border = CrcHelper.CalcBorderSubString(partsOptions[0]);
-                    Enum.TryParse(partsOptions[1], out HexDelemiter);
-                    break;
+                    case 2:
+                        Border = CrcHelper.CalcBorderSubString(partsOptions[0]);
+                        Enum.TryParse(partsOptions[1], out HexDelemiter);
+                        break;
+                }
             }
         }
     }

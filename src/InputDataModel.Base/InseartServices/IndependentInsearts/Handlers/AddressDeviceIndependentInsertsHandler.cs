@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
+using Shared.Enums;
 using Shared.Extensions;
-using Shared.Helpers;
 using Shared.Services.StringInseartService;
 using Shared.Services.StringInseartService.IndependentInseart;
 
@@ -11,10 +11,15 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handler
     public class AddressDeviceIndependentInsertsHandler : IIndependentInsertsHandler
     {
         private readonly StringInsertModel _insertModel;
+        private readonly ByteHexDelemiter HexDelemiter;
 
         public AddressDeviceIndependentInsertsHandler(StringInsertModel insertModel)
         {
-            this._insertModel = insertModel;
+            _insertModel = insertModel;
+            if (_insertModel.Options != null)
+            {
+                Enum.TryParse(_insertModel.Options[0], out HexDelemiter);
+            }
         }
 
         /// <summary>
@@ -32,7 +37,7 @@ namespace Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handler
                 try
                 {
                     var address = int.Parse(value);
-                    var res = address.Convert2StrByFormat(_insertModel.Format);
+                    var res = address.Convert2StrByFormat(_insertModel.Format, HexDelemiter);
                     return Result.Ok((res, _insertModel));
                 }
                 catch (FormatException ex)

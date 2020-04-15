@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CompareNETObjects" Version="4.65.0" />
     <PackageReference Include="CoreCLR-NCalc" Version="2.2.70" />
     <PackageReference Include="CSharpFunctionalExtensions" Version="2.3.0" />
@@ -17,10 +23,6 @@
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.20" />
     <PackageReference Include="System.Reactive" Version="4.3.2" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>

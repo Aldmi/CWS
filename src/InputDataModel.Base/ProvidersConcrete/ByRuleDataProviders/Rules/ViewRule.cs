@@ -26,7 +26,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
     public class ViewRule<TIn>
     {
         #region fields
-        public const string Pattern = @"\{(\w+)(\([^{}]*\)|\[[^][{}]*])?(:[^{}]+)?}";
+        public const string Pattern = @"\{(\w+)(\([^{}]*\))?(:[^{}]+)?\}"; //Исключили из опций квадр. скобки  @"\{(\w+)(\([^{}]*\)|\[[^][{}]*])?(:[^{}]+)?}";
         private readonly ILogger _logger;
         private readonly StringBuilder _headerExecuteInseartsResult;                                              //Строка Header после IndependentInserts
         private readonly IndependentInsertsService _requestBodyParserModel;                                       //модель вставки IndependentInserts в ТЕЛО ЗАПРОСА
@@ -140,7 +140,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     var startItemIndex = GetCurrentOption.StartPosition + (numberOfBatch++ * GetCurrentOption.BatchSize);
 
                     #region РЕАЛИЗАЦИЯ СПИСКА ЗАПРОС/ОТВЕТ ДЛЯ КАЖДОГО ViewRule (SendingUnitList)
-
                     //1. requestOption и responseOption обернуть в тип SendingUnit
                     //2. ViewRule хранит List<SendingUnit> SendingUnitList
                     //foreach (var sendingUnit in _option.SendingUnitList)

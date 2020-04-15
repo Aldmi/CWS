@@ -51,33 +51,23 @@ namespace Shared.Extensions
 
                 case 1:
                     var byteVal = arr[0];
-                    resStr = byteVal.Convert2StrByFormat(format);
+                    resStr = byteVal.Convert2StrByFormat(format, hexDelemiter);
                     break;
 
                 case 2:
                     var int16Val = BitConverter.ToInt16(arr);
-                    resStr= int16Val.Convert2StrByFormat(format);
+                    resStr= int16Val.Convert2StrByFormat(format, hexDelemiter);
                     break;
                 
                 case 4:
                     var int32Val = BitConverter.ToInt32(arr);
-                    resStr = int32Val.Convert2StrByFormat(format);
+                    resStr = int32Val.Convert2StrByFormat(format, hexDelemiter);
                     break;
 
                 case 8:
                     var int64Val = BitConverter.ToInt64(arr);
-                    resStr = int64Val.Convert2StrByFormat(format);
+                    resStr = int64Val.Convert2StrByFormat(format, hexDelemiter);
                     break;
-            }
-
-            //вставить разделитель байт в получившуюся строку.
-            if (hexDelemiter == ByteHexDelemiter.Hex)
-            {
-                var inseartVal = "0x";
-                for (var i = 0; i < resStr.Length; i += 2 + inseartVal.Length)
-                {
-                    resStr = resStr.Insert(i, inseartVal);
-                }
             }
             return resStr;
         }
