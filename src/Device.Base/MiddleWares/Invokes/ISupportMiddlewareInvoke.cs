@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using Domain.Device.MiddleWares.Converters;
 using Domain.InputDataModel.Base.InData;
+using Shared.MiddleWares.Converters;
 
 namespace Domain.Device.MiddleWares.Invokes
 {

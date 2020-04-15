@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
 using Domain.Device.MiddleWares;
-using Domain.Device.MiddleWares.Converters;
 using Domain.Device.MiddleWares.Invokes;
 using Domain.Device.Produser;
 using Domain.Device.Repository.Entities.MiddleWareOption;

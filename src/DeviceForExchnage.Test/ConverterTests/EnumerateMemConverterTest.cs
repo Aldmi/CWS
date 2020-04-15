@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Dynamic.Core.Exceptions;
-using Domain.Device.MiddleWares.Converters.EnumsConverters;
-using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.EnumsConvertersOption;
 using Domain.InputDataModel.Autodictor.Entities;
 using FluentAssertions;
+using Shared.MiddleWares.Converters.EnumsConverters;
+using Shared.MiddleWares.ConvertersOption.EnumsConvertersOption;
 using Xunit;
 
 namespace DeviceForExchnage.Test.ConverterTests

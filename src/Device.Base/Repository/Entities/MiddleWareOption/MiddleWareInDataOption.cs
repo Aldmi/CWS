@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Domain.Device.Enums;
-using Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption;
+using Shared.MiddleWares.HandlersOption;
 
 namespace Domain.Device.Repository.Entities.MiddleWareOption
 {

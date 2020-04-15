@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Domain.Device.Enums;
 using Domain.Device.Repository.Entities.MiddleWareOption;
-using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.EnumsConvertersOption;
-using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption;
-using Domain.Device.Repository.Entities.MiddleWareOption.HandlersOption;
+using Shared.MiddleWares.ConvertersOption.EnumsConvertersOption;
+using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
+using Shared.MiddleWares.HandlersOption;
 
 namespace DeviceForExchnage.Test.Datas
 {

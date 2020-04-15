@@ -5,11 +5,11 @@ using System.Timers;
 using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
 using Domain.Device.Enums;
-using Domain.Device.MiddleWares.Converters;
 using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.InputDataModel.Base.InData;
 using KellermanSoftware.CompareNetObjects;
 using Serilog;
+using Shared.MiddleWares.Converters;
 using InvokerOutput = Domain.Device.Repository.Entities.MiddleWareOption.InvokerOutput;
 
 namespace Domain.Device.MiddleWares.Invokes

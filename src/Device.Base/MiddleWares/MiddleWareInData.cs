@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
-using Domain.Device.MiddleWares.Converters;
-using Domain.Device.MiddleWares.Converters.Exceptions;
-using Domain.Device.MiddleWares.Handlers;
 using Domain.Device.MiddleWares.Invokes;
 using Domain.InputDataModel.Base.InData;
 using FastDeepCloner;
 using Serilog;
+using Shared.MiddleWares.Converters;
+using Shared.MiddleWares.Converters.Exceptions;
+using Shared.MiddleWares.Handlers;
 using Shared.ReflectionServices;
 using MiddleWareInDataOption = Domain.Device.Repository.Entities.MiddleWareOption.MiddleWareInDataOption;
 

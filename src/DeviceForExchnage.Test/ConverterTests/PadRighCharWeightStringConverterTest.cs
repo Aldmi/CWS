@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Domain.Device.MiddleWares.Converters.StringConverters;
-using Domain.Device.Repository.Entities.MiddleWareOption.ConvertersOption.StringConvertersOption;
 using Domain.InputDataModel.Base.ProvidersOption;
 using FluentAssertions;
 using Shared.Helpers;
+using Shared.MiddleWares.Converters.StringConverters;
+using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 using Xunit;
 
 namespace DeviceForExchnage.Test.ConverterTests
