@@ -19,7 +19,7 @@ namespace Shared.Services.StringInseartService
             Replacement = replacement;
             VarName = varName;
             Format = format;
-            Options = FindPartsOptions(options, ',');
+            Options = FindPartsOptions(options, '|');
         }
 
 

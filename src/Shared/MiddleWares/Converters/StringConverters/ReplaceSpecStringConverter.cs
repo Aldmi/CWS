@@ -4,7 +4,7 @@ using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 namespace Shared.MiddleWares.Converters.StringConverters
 {
     /// <summary>
-    /// Заменяет SpecString на строку на ReplacementString.
+    /// Заменяет SpecString на строку ReplacementString.
     /// </summary>
     public class ReplaceSpecStringConverter : BaseStringConverter
     {

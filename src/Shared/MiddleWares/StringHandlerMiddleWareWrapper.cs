@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 using Shared.MiddleWares.Handlers;
 using Shared.MiddleWares.HandlersOption;
@@ -16,22 +18,19 @@ namespace Shared.MiddleWares
 
         public StringHandlerMiddleWareWrapper(IReadOnlyList<string> options)
         {
-            var converters = new List<UnitStringConverterOption>();
-            if (int.TryParse(options[0], out var lenght))
+            try
             {
-                converters.Add(new UnitStringConverterOption
-                {
-                    PadRightStringConverterOption = new PadRightStringConverterOption { Lenght = lenght }
-                });
+                var option = JsonConvert.DeserializeObject<StringMiddleWareOption>(options[0]);
+                _middleWare = new StringHandlerMiddleWare(option);
             }
-            else
+            catch (Exception ex)
             {
-                //TODO: Этот Exception перекрываетвся Exception  при вызове   var owner= dataProviderFactory[_option.Provider.Name](_option.Provider); в Exchange.
-                throw new ArgumentException("Опции для StringHandlerMiddleWareWrapper указанны не верно");
+                //TODO: вывод ошибки  в консоль убрать отсюда.
+                Console.BackgroundColor = ConsoleColor.Blue;
+                Console.WriteLine($"Ошибка DeserializeObject StringMiddleWareOption для строки {options[0]}"); 
+                Console.BackgroundColor = ConsoleColor.Black;
+                throw;
             }
-
-            var option = new StringMiddleWareOption { Converters = converters };
-            _middleWare = new StringHandlerMiddleWare(option);
         }
 
 

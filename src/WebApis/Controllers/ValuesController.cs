@@ -10,6 +10,7 @@ using Infrastructure.Transport;
 using Infrastructure.Transport.Base.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Events;
+using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 using Shared.MiddleWares.HandlersOption;
 using WebApiSwc.DTO.JSON.InputTypesDto;
 using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption;
@@ -49,19 +50,13 @@ namespace WebApiSwc.Controllers
         // GET api/values
         [HttpGet]
         // public IEnumerable<InputData<AdInputType>> Get()
-        public ResponseOptionDto Get()
+        public UnitStringConverterOption Get()
         {
-            ResponseOptionDto responseOptionDto = new ResponseOptionDto()
+            UnitStringConverterOption p= new UnitStringConverterOption
             {
-                ValidatorName = "EqualValidator",
-                TimeRespone = 500,
-                EqualValidator = new EqualResponseValidatorOption
-                {
-                    Body = "0246463038254130373741434B454103",
-                    Format = "HEX"
-                }
+                PadRightStringConverterOption = new PadRightStringConverterOption { Lenght = 10}
             };
-            return responseOptionDto;
+            return p;
         }
 
         // GET api/values/5

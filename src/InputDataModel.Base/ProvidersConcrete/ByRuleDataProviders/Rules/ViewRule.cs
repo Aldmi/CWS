@@ -26,7 +26,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
     public class ViewRule<TIn>
     {
         #region fields
-        public const string Pattern = @"\{(\w+)(\([^{}]*\))?(:[^{}]+)?\}"; //Исключили из опций квадр. скобки  @"\{(\w+)(\([^{}]*\)|\[[^][{}]*])?(:[^{}]+)?}";
+        //@"\{(\w+)(\([\w\{\}\:\\\""\""\[\]\s\-\|\<\>\u0002\u0003]+\))?(:[^{}]+)?\}" //рабочий вариант
+        public const string Pattern = @"\{(\w+)(\([^()]+\))?(:[^{}]+)?\}"; // в блоке опций
         private readonly ILogger _logger;
         private readonly StringBuilder _headerExecuteInseartsResult;                                              //Строка Header после IndependentInserts
         private readonly IndependentInsertsService _requestBodyParserModel;                                       //модель вставки IndependentInserts в ТЕЛО ЗАПРОСА
