@@ -1,13 +1,15 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using CSharpFunctionalExtensions;
 using Shared.Extensions;
+using Shared.MiddleWares;
 
 namespace Shared.Services.StringInseartService.DependentInseart.DependentInseartHandlers
 {
     public abstract  class BaseDepInsH
     {
         protected readonly StringInsertModel RequiredModel;
-        
+
         protected BaseDepInsH(StringInsertModel requiredModel)
         {
             RequiredModel = requiredModel;

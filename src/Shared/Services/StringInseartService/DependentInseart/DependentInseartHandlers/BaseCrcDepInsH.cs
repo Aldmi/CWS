@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Text;
-using CSharpFunctionalExtensions;
 using Shared.CrcCalculate;
 using Shared.Enums;
 
@@ -9,7 +7,7 @@ namespace Shared.Services.StringInseartService.DependentInseart.DependentInseart
     public abstract class BaseCrcDepInsH : BaseDepInsH
     {
         protected readonly (string startCh, string endCh, bool includeBorder) Border;
-        protected readonly ByteHexDelemiter HexDelemiter;
+        protected readonly ByteHexDelemiter HexDelemiter; //TODO: убрать
 
         protected BaseCrcDepInsH(StringInsertModel requiredModel) : base(requiredModel)
         {

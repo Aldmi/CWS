@@ -16,7 +16,7 @@ namespace Shared.CrcCalculate
                 return (null, null, false);
             
             var crcOptionInclude = Regex.Match(crcOption, "\\[(.*)\\]").Groups[1].Value;  //Xor[0x02-0x03]
-            var crcOptionExclude = Regex.Match(crcOption, "\\((.*)\\)").Groups[1].Value;  //Xor(0x02-0x03)
+            var crcOptionExclude = Regex.Match(crcOption, "\\<(.*)\\>").Groups[1].Value;  //Xor<0x02-0x03>
             var includeBorder = !string.IsNullOrEmpty(crcOptionInclude);
             crcOption = includeBorder ? crcOptionInclude : crcOptionExclude;
             var startEndChars = crcOption.Split('-');
