@@ -30,7 +30,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         public const string Pattern = @"\{(\w+)(\([^()]+\))?(:[^{}]+)?\}"; // в блоке опций
         private readonly ILogger _logger;
         private readonly StringBuilder _headerExecuteInseartsResult;                                              //Строка Header после IndependentInserts
-        private readonly IndependentInsertsService _requestBodyParserModel;                                       //модель вставки IndependentInserts в ТЕЛО ЗАПРОСА
+        private readonly IndependentInsertsService _bodyIndependentInsertsService;                                       //модель вставки IndependentInserts в ТЕЛО ЗАПРОСА
         private readonly StringBuilder _footerExecuteInseartsResult;                                              //Строка Footer после IndependentInserts
         /// <summary>
         /// Массив сервисов вставки зависимых данных в общий ЗАПРОС (header+body+footer).
@@ -46,7 +46,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         #region ctor
         private ViewRule(ViewRuleOption option,
             StringBuilder headerExecuteInseartsResult,
-            IndependentInsertsService requestBodyParserModel,
+            IndependentInsertsService bodyIndependentInsertsService,
             StringBuilder footerExecuteInseartsResult,
             DependentInseartService[] requestdepInsServCollection,
             ResponseTransfer responseTransfer,
@@ -54,7 +54,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         {
             GetCurrentOption = option;
             _headerExecuteInseartsResult = headerExecuteInseartsResult;
-            _requestBodyParserModel = requestBodyParserModel;
+            _bodyIndependentInsertsService = bodyIndependentInsertsService;
             _footerExecuteInseartsResult = footerExecuteInseartsResult;
             _requestdepInsServCollection = requestdepInsServCollection;
             _responseTransfer = responseTransfer;
@@ -244,14 +244,14 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var format = GetCurrentOption.RequestOption.Format;
             var maxBodyLenght = GetCurrentOption.RequestOption.MaxBodyLenght;
 
-            //INDEPENDENT insearts-------------------------------------------------------------------------------
+            //INDEPENDENT insearts-----------------------------------------------------------------------------------------------------
             var processedItems = new List<ProcessedItem<TIn>>();
             var sbBodyResult = new StringBuilder();
             for (var i = 0; i < items.Count; i++)
             {
                 var item = items[i];
                 var currentRow = startItemIndex + i + 1;
-                var (result, inseartedDict) = _requestBodyParserModel.ExecuteInsearts(item, new Dictionary<string, string> { { "rowNumber", currentRow.ToString() } });
+                var (result, inseartedDict) = _bodyIndependentInsertsService.ExecuteInsearts(item, new Dictionary<string, string> { { "rowNumber", currentRow.ToString() } });
                 processedItems.Add(new ProcessedItem<TIn>(item, inseartedDict));
                 sbBodyResult.Append(result);
             }
@@ -300,7 +300,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var format = GetCurrentOption.RequestOption.Format;
 
             //INDEPENDENT insearts-------------------------------------------------------------------------------
-            var (sbBodyResult, _) = _requestBodyParserModel.ExecuteInsearts(null);
+            var (sbBodyResult, _) = _bodyIndependentInsertsService.ExecuteInsearts(null);
             var sbAppendResult = new StringBuilder().Append(_headerExecuteInseartsResult).Append(sbBodyResult).Append(_footerExecuteInseartsResult);
 
             //DEPENDENT insearts----------------------------------------------------------------------------------

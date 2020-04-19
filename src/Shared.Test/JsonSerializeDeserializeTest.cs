@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using FluentAssertions;
 using Newtonsoft.Json;
+using Shared.Extensions;
 using Shared.Helpers;
 using Shared.MiddleWares.HandlersOption;
 using Shared.Services.StringInseartService;
@@ -42,21 +43,60 @@ namespace Shared.Test
         [Fact]
         public void Test()
         {
-            //Arrage
-            var header = "\u0002{AddressDevice:X2} {Nchar:X2}";
-            var body = "{StationsCut({\"converters\":[{\"PadRightStringConverterOption\":{\"Lenght\": 10}}]})}";
-            //var footer = "0x10{CRCMod256(10):X2}0x03";
-            var footer = "0x10\u0003{CRCMod256([\u0002-\u0003]|Hex):X2}";
-            var str = header + body + footer;
+            int data = 10;
+            ConvertByFormat(data);
 
-
-            //Act
-            var matches = Regex.Matches(str, ViewRule<int>.Pattern)
-                .Select(match => new StringInsertModel(match.Groups[0].Value, match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value)).ToList();
-
-            //Asert
-            //res.Should().Be("Строка вот такая то 555 69");
+            DateTime data2 = DateTime.Now;
+            ConvertByFormat(data2);
         }
+
+
+
+        public string ConvertByFormat(ValueType data)
+        {
+            var format = ":t";
+
+            return data switch
+            {
+                //int intVal => intVal.Convert2StrByFormat(format),
+                DateTime dateTimeVal => dateTimeVal.Convert2StrByFormat(format),
+                _ => data.Convert2StrByFormat(format) //Должно быть поведение по умолчанию
+            };
+
+            // throw new InvalidCastException("Тип переданного значнеия не соответсвует ни одному обработчику");
+        }
+
+
+        //Обрабатывает строки 
+        public string Convert(string data)
+        {
+            return StartMiddleWarePipline(data);
+        }
+
+        //Обрабатывает ValueRupe
+        public string Convert(ValueType data)
+        {
+            var formatVal= ConvertByFormat(data);
+            return StartMiddleWarePipline(formatVal);
+        }
+
+        //Конечный конвеер обработки
+        public string StartMiddleWarePipline(string data)
+        {
+            return data + "newData";
+        }
+
+      
+
+        //public  string Convert2StrByFormat111<T>(T val, string formatValue) where T : struct
+        //{
+        //    var format = "{0" + formatValue + "}";
+        //    var formatStr = string.Format(format, val);
+        //    return formatStr;
+        //}
+
+
+
 
     }
 }

@@ -14,7 +14,7 @@ namespace Shared.Extensions
             return formatStr;
         }
 
-
+        //TODO: УБРАТЬ!!!
         /// <summary>
         /// Конвертировать Int по формату. Для HEX представления указать строковый ращзделитель байт строку 0x.
         /// </summary>

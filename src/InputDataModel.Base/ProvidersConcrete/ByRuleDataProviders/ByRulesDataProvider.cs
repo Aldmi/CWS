@@ -37,10 +37,10 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         
 
         #region ctor
-        public ByRulesDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>,
-            ProviderResult<TIn>> providerResultFactory,
+        public ByRulesDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> providerResultFactory,
             ProviderOption providerOption,
             IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory,
+            //TODO: Получать StorageStringInseartModelExt и передавать его во ViewRule преобразовав к ReadOnlyDictionary
             ILogger logger) : base(providerResultFactory, logger)
         {
             _option = providerOption.ByRulesProviderOption;
