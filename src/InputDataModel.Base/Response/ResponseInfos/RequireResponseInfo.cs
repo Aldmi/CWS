@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Shared.Types;
+﻿using Shared.Types;
 
 namespace Domain.InputDataModel.Base.Response.ResponseInfos
 {

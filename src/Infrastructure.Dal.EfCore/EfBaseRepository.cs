@@ -5,8 +5,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.Extensions.ExpressionMapping;
-using Infrastructure.Dal.Abstract;
-using Infrastructure.Dal.Abstract.Enums;
 using Infrastructure.Dal.EfCore.DbContext;
 using Infrastructure.Dal.EfCore.Entities;
 using Microsoft.EntityFrameworkCore;

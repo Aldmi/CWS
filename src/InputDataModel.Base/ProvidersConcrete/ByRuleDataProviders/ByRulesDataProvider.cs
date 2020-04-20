@@ -6,17 +6,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
-using Domain.InputDataModel.Base.Response;
 using Domain.InputDataModel.Base.Response.ResponseInfos;
+using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
 using Serilog;
 using Shared.Extensions;
-using Shared.Services.StringInseartService;
-using Shared.Services.StringInseartService.IndependentInseart;
 
 
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders

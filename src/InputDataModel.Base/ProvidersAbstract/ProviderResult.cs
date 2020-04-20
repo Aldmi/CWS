@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Domain.InputDataModel.Base.Enums;
-using Domain.InputDataModel.Base.InData;
-using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
-using Domain.InputDataModel.Base.Response;
 using Domain.InputDataModel.Base.Response.ResponseInfos;
-using Domain.InputDataModel.Base.Response.ResponseValidators;
 using Infrastructure.Transport.Base.DataProvidert;
 using Shared.Extensions;
 using Shared.Helpers;
-using Shared.Types;
 
 namespace Domain.InputDataModel.Base.ProvidersAbstract
 {

@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Infrastructure.Dal.Abstract;
 using Infrastructure.Dal.Abstract.Enums;
 using Infrastructure.Dal.EfCore.DbContext.EntitiConfiguration;
 using Infrastructure.Dal.EfCore.Entities.Device;

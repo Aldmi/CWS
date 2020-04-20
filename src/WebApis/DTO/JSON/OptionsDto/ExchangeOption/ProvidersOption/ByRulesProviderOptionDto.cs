@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Domain.InputDataModel.Base.ProvidersOption;
-using Shared.Extensions;
 using Shared.Types;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
 using CSharpFunctionalExtensions;
 
 namespace Shared.ReflectionServices

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Domain.InputDataModel.Autodictor.IndependentInsearts.Factory;
 using Domain.InputDataModel.Autodictor.Model;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
+using Domain.InputDataModel.Shared.StringInseartService.Model;
 using FluentAssertions;
-using Shared.Helpers;
-using Shared.Services.StringInseartService;
-using Shared.Services.StringInseartService.IndependentInseart;
 using Xunit;
 
 namespace Shared.Test

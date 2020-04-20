@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Innofactor.EfCoreJsonValueConverter;
-using Newtonsoft.Json;
 
 namespace Infrastructure.Dal.EfCore.Entities.Transport
 {

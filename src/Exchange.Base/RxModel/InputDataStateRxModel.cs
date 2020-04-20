@@ -1,5 +1,4 @@
 ﻿using Domain.Exchange.Enums;
-using Domain.Exchange.Services;
 
 namespace Domain.Exchange.RxModel
 {

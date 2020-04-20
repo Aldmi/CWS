@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Text;
 using CSharpFunctionalExtensions;
+using Domain.InputDataModel.Shared.StringInseartService.DependentInseart.DependentInseartHandlers;
+using Domain.InputDataModel.Shared.StringInseartService.Model;
 using FluentAssertions;
-using Shared.Extensions;
-using Shared.Services.StringInseartService;
-using Shared.Services.StringInseartService.DependentInseart.DependentInseartHandlers;
 using Xunit;
 
 namespace Shared.Test.DependentInseartTest.DependentInseartHandlersTest

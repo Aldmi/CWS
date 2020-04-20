@@ -1,12 +1,11 @@
 ﻿using Autofac;
-using Domain.InputDataModel.Autodictor.IndependentInsearts.Factory;
+using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory;
 using Domain.InputDataModel.Autodictor.ProvidersSpecial;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;
-using Domain.InputDataModel.Base.Response;
 using Domain.InputDataModel.Base.Response.ResponseInfos;
-using Shared.Services.StringInseartService.IndependentInseart;
+using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
 
 namespace WebApiSwc.AutofacModules
 {

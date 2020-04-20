@@ -4,7 +4,6 @@ using Autofac;
 using AutoMapper;
 using Domain.Exchange;
 using Domain.InputDataModel.Autodictor.Model;
-using Domain.InputDataModel.Base.ProvidersOption;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.Transport;
 using Infrastructure.Transport.Base.Abstract;
@@ -12,11 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog.Events;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 using Shared.MiddleWares.HandlersOption;
-using WebApiSwc.DTO.JSON.InputTypesDto;
-using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption;
 using WebApiSwc.Extensions;
-using WebApiSwc.Settings;
-
 
 
 namespace WebApiSwc.Controllers

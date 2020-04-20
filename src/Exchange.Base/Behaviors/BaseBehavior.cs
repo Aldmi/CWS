@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
-using Domain.Exchange.Repository.Entities;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.Response;
 using Infrastructure.Background.Abstarct;
 using Serilog;
 using Shared.Collections;
-using Shared.Enums;
-using Shared.Types;
 
 namespace Domain.Exchange.Behaviors
 {

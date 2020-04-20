@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Shared.Extensions;
 using Shared.Types;
 
 namespace Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption

@@ -1,24 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Domain.InputDataModel.Autodictor.Entities;
-using Domain.InputDataModel.Autodictor.IndependentInsearts.Factory;
-using Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers;
+using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
-using Domain.InputDataModel.Base.ProvidersAbstract;
-using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;
-using Domain.InputDataModel.Base.ProvidersOption;
-using Domain.InputDataModel.Base.Response;
-using FluentAssertions;
+using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
 using Moq;
 using Serilog;
-using Shared.Services.StringInseartService;
-using Shared.Services.StringInseartService.IndependentInseart;
 using Xunit;
 
 namespace InputDataModel.Autodictor.Test

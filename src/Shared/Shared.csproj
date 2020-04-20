@@ -34,4 +34,9 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="Services\StringInseartService\IndependentInseart\" />
+  </ItemGroup>
+
 </Project>

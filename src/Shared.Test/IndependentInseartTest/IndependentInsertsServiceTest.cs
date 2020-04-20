@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Domain.InputDataModel.Autodictor.IndependentInsearts.Factory;
+using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory;
 using Domain.InputDataModel.Autodictor.Model;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
+using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart;
+using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
+using Domain.InputDataModel.Shared.StringInseartService.Model;
 using FluentAssertions;
 using Moq;
 using Serilog;
-using Shared.Extensions;
-using Shared.Services.StringInseartService;
-using Shared.Services.StringInseartService.IndependentInseart;
 using Shared.Test.Datas;
 using Xunit;
 
@@ -27,7 +26,7 @@ namespace Shared.Test.IndependentInseartTest
             IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory = new AdInputTypeIndependentInseartsHandlersFactory(); //TODO: попробовать внедрять через DI
             _handlerFactorys = new List<Func<StringInsertModel, IIndependentInsertsHandler>>
             {
-                new BaseIndependentInseartsHandlersFactory().Create,
+                new DefaultIndependentInseartsHandlersFactory().Create,
                 inputTypeInseartsHandlersFactory.Create
             };
 
