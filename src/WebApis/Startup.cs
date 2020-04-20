@@ -111,7 +111,7 @@ namespace WebApiSwc
                         builder.RegisterModule(new DataProviderAutofacModule<AdInputType>());
                         builder.RegisterModule(new ProduserUnionAutofacModule<AdInputType>());
                         builder.RegisterModule(new BlStorageAutofacModule<AdInputType>());
-                        builder.RegisterModule(new BlActionsAutofacModule<AdInputType>());
+                        builder.RegisterModule(new BlBuildAutofacModule<AdInputType>());
                         builder.RegisterModule(new MediatorsAutofacModule<AdInputType>());
                         builder.RegisterModule(new ExchangeAutofacModule<AdInputType>());
                         builder.RegisterModule(new DeviceAutofacModule<AdInputType>());
@@ -357,6 +357,17 @@ namespace WebApiSwc
             catch (Exception ex) 
             {
                 logger.Error( $"ОШИБКА СОЗДАНИЕ СПИСКА ПРОДЮССЕРОВ НА БАЗЕ ОПЦИЙ  {ex}");
+            }
+
+            //СОЗДАНИЕ СПИСКА ОПЦИЙ ДЛЯ ВСТАВОК В СТРОКУ-------------------------------------------------
+            try
+            {
+               // var buildStringInsertModelExt = scope.Resolve<BuildStringInsertModelExt>();
+               // await buildStringInsertModelExt.BuildAll();
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"ОШИБКА СОЗДАНИЕ СПИСКА ПРОДЮССЕРОВ НА БАЗЕ ОПЦИЙ  {ex}");
             }
 
             //СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ--------------------------------------------------
