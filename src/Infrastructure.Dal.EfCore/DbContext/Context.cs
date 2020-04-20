@@ -55,7 +55,7 @@ namespace Infrastructure.Dal.EfCore.DbContext
            modelBuilder.ApplyConfiguration(new EfHttpOptionConfig());
            modelBuilder.ApplyConfiguration(new EfProduserUnionOptionConfig());
            modelBuilder.ApplyConfiguration(new EfStringInseartModelExtConfig());
-            base.OnModelCreating(modelBuilder);
+           base.OnModelCreating(modelBuilder);
         }
 
         #endregion

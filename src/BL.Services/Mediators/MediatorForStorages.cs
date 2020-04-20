@@ -13,6 +13,7 @@ using Domain.Exchange;
 using Domain.Exchange.Enums;
 using Domain.Exchange.Repository.Entities;
 using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Infrastructure.Background;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.Background.Concrete.HostingBackground;
@@ -57,6 +58,7 @@ namespace App.Services.Mediators
             BackgroundStorage backgroundStorage,
             TransportStorage transportStorage,
             ProduserUnionStorage<TIn> produserUnionStorage,
+            StringInsertModelExtStorage stringInsertModelExtStorage,
             Func<string, ExchangeOption, ITransport, ITransportBackground, Owned<IExchange<TIn>>> exchangeFactory,
             Func<DeviceOption, IEnumerable<IExchange<TIn>>,  Owned<Device<TIn>>> deviceFactory,
             AppConfigWrapper appConfigWrapper,

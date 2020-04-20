@@ -362,8 +362,8 @@ namespace WebApiSwc
             //СОЗДАНИЕ СПИСКА ОПЦИЙ ДЛЯ ВСТАВОК В СТРОКУ-------------------------------------------------
             try
             {
-               // var buildStringInsertModelExt = scope.Resolve<BuildStringInsertModelExt>();
-               // await buildStringInsertModelExt.BuildAll();
+                var buildStringInsertModelExt = scope.Resolve<BuildStringInsertModelExt>();
+                await buildStringInsertModelExt.BuildAll();
             }
             catch (Exception ex)
             {

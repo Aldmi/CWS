@@ -12,6 +12,7 @@ namespace WebApiSwc.AutofacModules
             builder.RegisterType<MediatorForStorages<TIn>>().InstancePerDependency();
             builder.RegisterType<MediatorForDeviceOptions>().InstancePerDependency();
             builder.RegisterType<MediatorForProduserUnionOptions>().InstancePerDependency();
+            builder.RegisterType<MediatorForStringInseartModelExt>().InstancePerDependency();
         }
     }
 }
