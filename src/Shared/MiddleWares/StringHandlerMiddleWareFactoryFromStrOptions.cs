@@ -15,7 +15,7 @@ namespace Shared.MiddleWares
             try
             {
                 var option = JsonConvert.DeserializeObject<StringMiddleWareOption>(optionStr);
-               var middleWare = new StringHandlerMiddleWare(option);
+                var middleWare = new StringHandlerMiddleWare(option);
                 return middleWare;
             }
             catch (Exception)

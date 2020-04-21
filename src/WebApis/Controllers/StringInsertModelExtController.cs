@@ -124,9 +124,9 @@ namespace WebApiSwc.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            //Проверить на дублирование VarName
+            //Проверить на дублирование Key
             var duplicateVarNames = listDto
-                .GroupBy(g => g.VarName)
+                .GroupBy(g => g.Key)
                 .Where(g => g.Count() > 1)
                 .Select(g => g.Key)
                 .ToArray();
@@ -134,7 +134,7 @@ namespace WebApiSwc.Controllers
            if (duplicateVarNames.Any())
            {
                var agr= duplicateVarNames.Aggregate((current, next) => current + ", " + next);
-               ModelState.AddModelError("StringInsertModelExt", $"VarName Не может повторятся {agr}");
+               ModelState.AddModelError("StringInsertModelExt", $"Key Не может повторятся {agr}");
                return BadRequest(ModelState);
             }
 

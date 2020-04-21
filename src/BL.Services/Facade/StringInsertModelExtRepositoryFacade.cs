@@ -32,9 +32,9 @@ namespace App.Services.Facade
         /// Вернуть продюсер по ключу.
         /// </summary>
         /// <returns></returns>
-        public async Task<StringInsertModelExt> GetAsync(string varName)
+        public async Task<StringInsertModelExt> GetAsync(string key)
         {
-            return await _stringInsertModelExtRepository.GetSingleAsync(m => m.VarName == varName);
+            return await _stringInsertModelExtRepository.GetSingleAsync(m => m.Key == key);
         }
 
 
@@ -51,9 +51,9 @@ namespace App.Services.Facade
         /// <summary>
         /// Проверка наличия продюссера по ключу и по Id.
         /// </summary>
-        public async Task<bool> IsExistByVarNameAsync(string varName)
+        public async Task<bool> IsExistByVarNameAsync(string key)
         {
-            return await _stringInsertModelExtRepository.IsExistAsync(m => m.VarName == varName);
+            return await _stringInsertModelExtRepository.IsExistAsync(m => m.Key == key);
         }
 
 
@@ -65,16 +65,16 @@ namespace App.Services.Facade
             if (model == null)
                 return Result.Failure("model == null");
 
-            if (await IsExistByVarNameAsync(model.VarName))
+            if (await IsExistByVarNameAsync(model.Key))
             {
                 await _stringInsertModelExtRepository.EditAsync(model);
             }
             else
             {
                 //проверка уникальности ключа при добавлении.
-                if (await _stringInsertModelExtRepository.IsExistAsync(prod => prod.VarName == model.VarName))
+                if (await _stringInsertModelExtRepository.IsExistAsync(prod => prod.Key == model.Key))
                 {
-                    return Result.Failure($"Уже существует в репозитории VarName= {model.VarName}");
+                    return Result.Failure($"Уже существует в репозитории Key= {model.Key}");
                 }
                 await _stringInsertModelExtRepository.AddAsync(model);
             }

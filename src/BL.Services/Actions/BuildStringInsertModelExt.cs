@@ -58,7 +58,7 @@ namespace App.Services.Actions
             // 2. _storage записывает полученный ProduserUnion
             foreach (var m in models)
             {
-                AddOrUpdateInStorage(m.VarName, m);
+                AddOrUpdateInStorage(m.Key, m);
             }
 
             return GetValuesFromStorage();
@@ -95,7 +95,7 @@ namespace App.Services.Actions
 
             //Успешно добавили или обновили данные в репозитории.
             //Обновить или добавить в Storage
-            var addOrUpdateResult = AddOrUpdateInStorage(model.VarName, model);
+            var addOrUpdateResult = AddOrUpdateInStorage(model.Key, model);
             if (addOrUpdateResult == DictionaryCrudResult.Added || addOrUpdateResult == DictionaryCrudResult.Updated)
                 return Result.Ok(model);
 
@@ -109,7 +109,7 @@ namespace App.Services.Actions
         public async Task<StringInsertModelExt> RemoveAsync(StringInsertModelExt model)
         {
             var removed = await _stringInsertModelExtRepositoryFacade.RemoveAsync(model);
-            var res = RemoveInStorage(removed.VarName);
+            var res = RemoveInStorage(removed.Key);
             return res != DictionaryCrudResult.KeyNotExist ? removed : null;
         }
 
