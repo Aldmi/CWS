@@ -9,9 +9,11 @@ using Domain.Exchange;
 using Domain.Exchange.Repository.Entities;
 using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Infrastructure.Dal.EfCore.Entities.Device;
 using Infrastructure.Dal.EfCore.Entities.Exchange;
 using Infrastructure.Dal.EfCore.Entities.ResponseProduser;
+using Infrastructure.Dal.EfCore.Entities.StringInsertModelExt;
 using Infrastructure.Dal.EfCore.Entities.Transport;
 using Infrastructure.Transport.Http;
 using Infrastructure.Transport.SerialPort;
@@ -156,6 +158,14 @@ namespace WebApiSwc.AutoMapperConfig
                 .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.KeyExchange))
                 .ForMember(dest => dest.CycleExchnageStatus, opt => opt.MapFrom(src => src.CycleBehavior.CycleBehaviorState.ToString()))
                 .ForMember(dest => dest.AutoStartCycleFunc, opt => opt.MapFrom(src => src.CycleBehavior.CycleFuncOption.AutoStartCycleFunc));
+            #endregion
+
+
+            #region StringInsertModelExtDto  mapping
+            CreateMap<StringInsertModelExt, StringInsertModelExtDto>().ReverseMap();
+
+            CreateMap<StringInsertModelExt, EfStringInseartModelExt>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => 0));
             #endregion
         }
 

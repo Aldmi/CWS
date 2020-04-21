@@ -4,32 +4,25 @@ using CSharpFunctionalExtensions;
 using Domain.Device.Repository.Abstract;
 using Domain.Device.Repository.Entities.ResponseProduser;
 
-namespace App.Services.Mediators
+namespace App.Services.Facade
 {
     /// <summary>
-    /// Сервис объединяет работу с репозиотриями опций для устройств.
-    /// DeviceOption + ExchangeOption + TransportOption.
+    /// Фасад на слоем доступа к БД через репозиторий для  ProduserUnionOptionRepository
     /// </summary>
-    public class MediatorForProduserUnionOptions
+    public class ProduserUnionOptionRepositoryFacade
     {
         #region fields
-
         private readonly IProduserUnionOptionRepository _produserUnionOptionRep;
-
         #endregion
-
 
 
 
         #region ctor
-
-        public MediatorForProduserUnionOptions(IProduserUnionOptionRepository produserUnionOptionRep)
+        public ProduserUnionOptionRepositoryFacade(IProduserUnionOptionRepository produserUnionOptionRep)
         {
             _produserUnionOptionRep = produserUnionOptionRep;
         }
-
         #endregion
-
 
 
 

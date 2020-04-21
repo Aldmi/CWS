@@ -1,8 +1,9 @@
-﻿using Domain.InputDataModel.Shared.StringInseartService.Model;
+﻿using System;
+using Domain.InputDataModel.Shared.StringInseartService.Model;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using App.Services.Mediators;
+using App.Services.Facade;
 using CSharpFunctionalExtensions;
 using Shared.Enums;
 
@@ -11,15 +12,15 @@ namespace App.Services.Actions
     public class BuildStringInsertModelExt
     {
         #region field
-        private readonly MediatorForStringInseartModelExt _mediatorForStringInseartModelExt;
+        private readonly StringInsertModelExtRepositoryFacade _stringInsertModelExtRepositoryFacade;
         private readonly StringInsertModelExtStorage _storage;
         #endregion
 
 
         #region ctor
-        public BuildStringInsertModelExt(MediatorForStringInseartModelExt mediatorForStringInseartModelExt, StringInsertModelExtStorage storage)
+        public BuildStringInsertModelExt(StringInsertModelExtRepositoryFacade stringInsertModelExtRepositoryFacade, StringInsertModelExtStorage storage)
         {
-            _mediatorForStringInseartModelExt = mediatorForStringInseartModelExt;
+            _stringInsertModelExtRepositoryFacade = stringInsertModelExtRepositoryFacade;
             _storage = storage;
         }
         #endregion
@@ -27,13 +28,32 @@ namespace App.Services.Actions
 
 
         #region Methode
+
+        /// <summary>
+        /// Вернуть все StringInsertModelExt из Storage
+        /// </summary>
+        public IReadOnlyList<StringInsertModelExt> GetValuesFromStorage()
+        {
+            return _storage.Values.ToList();
+        }
+
+
+        /// <summary>
+        /// Вернуть все StringInsertModelExt из Storage
+        /// </summary>
+        public StringInsertModelExt GetValuesFromStorageByVarName(string key)
+        {
+            return _storage.Get(key);
+        }
+
+
         /// <summary>
         /// Создать на базе опций ProdusersUnion и добавить в Storage.
         /// </summary>
         public async Task<IReadOnlyList<StringInsertModelExt>> BuildAll()
         {
             // 1. _mediatorForOptions вытаскивает из базы список StringInseartModelExt
-            var models = await _mediatorForStringInseartModelExt.GetListAsync();
+            var models = await _stringInsertModelExtRepositoryFacade.GetListAsync();
 
             // 2. _storage записывает полученный ProduserUnion
             foreach (var m in models)
@@ -41,17 +61,33 @@ namespace App.Services.Actions
                 AddOrUpdateInStorage(m.VarName, m);
             }
 
-            return GetValuesByStorage();
+            return GetValuesFromStorage();
         }
 
 
         /// <summary>
-        /// Сохранить или обновить ProdusersUnion в репозитории и сразу сделать билд новго продюссера в Storage
+        /// Сохранить или обновить StringInsertModelExt в репозитории и сразу сделать билд нового продюссера в Storage
         /// </summary>
-        public async Task<Result<StringInsertModelExt>> AddOrUpdateAndBuildProduserAsync(StringInsertModelExt model)
+        public async Task<Result> AddOrUpdateAndBuildListAsync(IReadOnlyList<StringInsertModelExt> models)
+        {
+            var listResults= new List<Result<StringInsertModelExt>>();
+            foreach (var m in models)
+            {
+                var res = await AddOrUpdateAndBuildAsync(m);
+                listResults.Add(res);
+            }
+            var combineRes= Result.Combine(listResults, "  ");
+            return combineRes;
+        }
+
+
+        /// <summary>
+        /// Сохранить или обновить StringInsertModelExt в репозитории и сразу сделать билд нового продюссера в Storage
+        /// </summary>
+        public async Task<Result<StringInsertModelExt>> AddOrUpdateAndBuildAsync(StringInsertModelExt model)
         {
             //Обновить или добавить в Репозиторий model
-            var addOrUpdateOptionResult = await _mediatorForStringInseartModelExt.AddOrUpdateAsync(model);
+            var addOrUpdateOptionResult = await _stringInsertModelExtRepositoryFacade.AddOrUpdateAsync(model);
             if (addOrUpdateOptionResult.IsFailure)
             {
                 return Result.Failure<StringInsertModelExt>($"{addOrUpdateOptionResult.Error}");
@@ -70,20 +106,25 @@ namespace App.Services.Actions
         /// <summary>
         /// удалить из Репозитория и из Хранилища StringInsertModelExt.
         /// </summary>
-        public async Task<StringInsertModelExt> RemoveProduserAsync(StringInsertModelExt model)
+        public async Task<StringInsertModelExt> RemoveAsync(StringInsertModelExt model)
         {
-            var removed = await _mediatorForStringInseartModelExt.RemoveAsync(model);
+            var removed = await _stringInsertModelExtRepositoryFacade.RemoveAsync(model);
             var res = RemoveInStorage(removed.VarName);
             return res != DictionaryCrudResult.KeyNotExist ? removed : null;
         }
 
 
         /// <summary>
-        /// Вернуть всех StringInsertModelExt из Storage
+        /// удалить все StringInsertModelExt из хранилища и БД
         /// </summary>
-        private IReadOnlyList<StringInsertModelExt> GetValuesByStorage()
+        public async Task<Result> EraseAsync()
         {
-            return _storage.Values.ToList();
+           var (_, isFailure, error) = await _stringInsertModelExtRepositoryFacade.EraseAsync();
+           if(isFailure)
+               return Result.Failure($"{error}");
+
+           _storage.EraseAll();
+           return Result.Ok();
         }
 
 

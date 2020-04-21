@@ -1,4 +1,5 @@
-﻿using App.Services.Mediators;
+﻿using App.Services.Facade;
+using App.Services.Mediators;
 using Autofac;
 using Domain.InputDataModel.Base.InData;
 using Module = Autofac.Module;
@@ -11,8 +12,8 @@ namespace WebApiSwc.AutofacModules
         {
             builder.RegisterType<MediatorForStorages<TIn>>().InstancePerDependency();
             builder.RegisterType<MediatorForDeviceOptions>().InstancePerDependency();
-            builder.RegisterType<MediatorForProduserUnionOptions>().InstancePerDependency();
-            builder.RegisterType<MediatorForStringInseartModelExt>().InstancePerDependency();
+            builder.RegisterType<ProduserUnionOptionRepositoryFacade>().InstancePerDependency();
+            builder.RegisterType<StringInsertModelExtRepositoryFacade>().InstancePerDependency();
         }
     }
 }

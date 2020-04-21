@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using App.Services.Facade;
 using App.Services.Mediators;
 using CSharpFunctionalExtensions;
 using Domain.Device.Produser;
@@ -16,7 +17,7 @@ namespace App.Services.Actions
     {
         #region field
 
-        private readonly MediatorForProduserUnionOptions _mediatorForProduserUnionOptions;
+        private readonly ProduserUnionOptionRepositoryFacade _produserUnionOptionRepositoryFacade;
         private readonly MediatorForStorages<TIn> _mediatorForStorages;
         private readonly ProdusersUnionFactory<TIn> _factory;
 
@@ -26,9 +27,9 @@ namespace App.Services.Actions
 
         #region ctor
 
-        public BuildProdusersUnionService(MediatorForProduserUnionOptions mediatorForProduserUnionOptions, MediatorForStorages<TIn> mediatorForStorages, ProdusersUnionFactory<TIn> factory)
+        public BuildProdusersUnionService(ProduserUnionOptionRepositoryFacade produserUnionOptionRepositoryFacade, MediatorForStorages<TIn> mediatorForStorages, ProdusersUnionFactory<TIn> factory)
         {
-            _mediatorForProduserUnionOptions = mediatorForProduserUnionOptions;
+            _produserUnionOptionRepositoryFacade = produserUnionOptionRepositoryFacade;
             _mediatorForStorages = mediatorForStorages;
             _factory = factory;
         }
@@ -45,7 +46,7 @@ namespace App.Services.Actions
         public async Task<IReadOnlyList<ProdusersUnion<TIn>>> BuildAllProdusers()
         {
             // 1. _mediatorForOptions вытаскивает из базы список ProduserUnionOption
-            var produsersUnionOptions = await _mediatorForProduserUnionOptions.GetProduserUnionOptionsAsync();
+            var produsersUnionOptions = await _produserUnionOptionRepositoryFacade.GetProduserUnionOptionsAsync();
 
             // 2. _factory создает по 1 на базе ProduserUnionOption ProduserUnion
             //   _mediatorForStorages записывает в storage полученный ProduserUnion
@@ -65,7 +66,7 @@ namespace App.Services.Actions
         public async Task<Result<ProdusersUnion<TIn>>> AddOrUpdateAndBuildProduserAsync(ProduserUnionOption produsersUnionOption)
         {
             //Обновить или добавить в Репозиторий produsersUnionOption
-            var addOrUpdateOptionResult = await _mediatorForProduserUnionOptions.AddOrUpdateUnionOptionAsync(produsersUnionOption);
+            var addOrUpdateOptionResult = await _produserUnionOptionRepositoryFacade.AddOrUpdateUnionOptionAsync(produsersUnionOption);
             if (addOrUpdateOptionResult.IsFailure)
             {
                 return Result.Failure<ProdusersUnion<TIn>>($"{addOrUpdateOptionResult.Error}");
@@ -91,7 +92,7 @@ namespace App.Services.Actions
         /// </summary>
         public async Task<ProduserUnionOption> RemoveProduserAsync(ProduserUnionOption produserUnionOption)
         {
-            var removed = await _mediatorForProduserUnionOptions.RemoveProduserUnionOptionAsync(produserUnionOption);
+            var removed = await _produserUnionOptionRepositoryFacade.RemoveProduserUnionOptionAsync(produserUnionOption);
             var res = _mediatorForStorages.RemoveProduserUnion(removed.Key);
             return res != DictionaryCrudResult.KeyNotExist ? removed : null;
         }

@@ -5,7 +5,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
 {
     public class StringInsertModelExt : IDisposable
     {
-         public int Id { get; set; }
+         // public int Id { get; set; }
          public string VarName { get; set; }
          public string Format { get; set; }
          public BorderSubString BorderSubString { get; set; }

@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Shared.Repository.Abstract;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 
-namespace App.Services.Mediators
+namespace App.Services.Facade
 {
-    public class MediatorForStringInseartModelExt
+    /// <summary>
+    /// Фасад на слоем доступа к БД через репозиторий для StringInsertModelExt
+    /// </summary>
+    public class StringInsertModelExtRepositoryFacade
     {
         #region fields
         private readonly IStringInsertModelExtRepository _stringInsertModelExtRepository;
@@ -15,7 +19,7 @@ namespace App.Services.Mediators
 
 
         #region ctor
-        public MediatorForStringInseartModelExt(IStringInsertModelExtRepository stringInsertModelExtRepository)
+        public StringInsertModelExtRepositoryFacade(IStringInsertModelExtRepository stringInsertModelExtRepository)
         {
             _stringInsertModelExtRepository = stringInsertModelExtRepository;
         }
@@ -28,9 +32,9 @@ namespace App.Services.Mediators
         /// Вернуть продюсер по ключу.
         /// </summary>
         /// <returns></returns>
-        public async Task<StringInsertModelExt> GetAsync(int id)
+        public async Task<StringInsertModelExt> GetAsync(string varName)
         {
-            return await _stringInsertModelExtRepository.GetSingleAsync(m => m.Id == id);
+            return await _stringInsertModelExtRepository.GetSingleAsync(m => m.VarName == varName);
         }
 
 
@@ -47,9 +51,9 @@ namespace App.Services.Mediators
         /// <summary>
         /// Проверка наличия продюссера по ключу и по Id.
         /// </summary>
-        public async Task<bool> IsExistByIdAsync(int id)
+        public async Task<bool> IsExistByVarNameAsync(string varName)
         {
-            return await _stringInsertModelExtRepository.IsExistAsync(m => m.Id == id);
+            return await _stringInsertModelExtRepository.IsExistAsync(m => m.VarName == varName);
         }
 
 
@@ -61,7 +65,7 @@ namespace App.Services.Mediators
             if (model == null)
                 return Result.Failure("model == null");
 
-            if (await IsExistByIdAsync(model.Id))
+            if (await IsExistByVarNameAsync(model.VarName))
             {
                 await _stringInsertModelExtRepository.EditAsync(model);
             }
@@ -85,6 +89,23 @@ namespace App.Services.Mediators
         {
             await _stringInsertModelExtRepository.DeleteAsync(model);
             return model;
+        }
+
+
+        /// <summary>
+        /// удалить все StringInsertModelExt из хранилища и БД
+        /// </summary>
+        public async Task<Result> EraseAsync()
+        {
+            try
+            {
+                await _stringInsertModelExtRepository.DeleteAsync(option => true);
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure<string>($"ИСКЛЮЧЕНИЕ В StringInsertModelExt EraseAsync: {ex}");
+            }
+            return Result.Ok();
         }
 
         #endregion
