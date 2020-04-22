@@ -24,7 +24,6 @@ COPY ["Infrastructure.Dal.EfCore/Infrastructure.Dal.EfCore.csproj", "Infrastruct
 COPY ["Infrastructure.Dal.Abstract/Infrastructure.Dal.Abstract.csproj", "Infrastructure.Dal.Abstract/"]
 COPY ["Infrastructure.Background/Infrastructure.Background.csproj", "Infrastructure.Background/"]
 COPY ["Infrastructure.Storages/Infrastructure.Storages.csproj", "Infrastructure.Storages/"]
-COPY ["Domain.InputDataModel.Shared/Domain.InputDataModel.Shared.csproj", "Domain.InputDataModel.Shared/"]
 COPY ["Device.Base/Domain.Device.csproj", "Device.Base/"]
 COPY ["WebClientProduser/Infrastructure.Produser.WebClientProduser.csproj", "WebClientProduser/"]
 COPY ["AbstractProduser/Infrastructure.Produser.AbstractProduser.csproj", "AbstractProduser/"]
