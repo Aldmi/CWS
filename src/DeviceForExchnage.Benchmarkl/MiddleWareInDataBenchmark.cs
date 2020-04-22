@@ -1,5 +1,4 @@
 ﻿using BenchmarkDotNet.Attributes;
-using Domain.InputDataModel.Autodictor.Model;
 
 namespace DeviceForExchnage.Benchmark
 {

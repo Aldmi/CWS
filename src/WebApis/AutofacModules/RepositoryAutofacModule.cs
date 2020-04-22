@@ -5,8 +5,11 @@ using Domain.Device.Repository.Abstract;
 using Domain.Device.Repository.Concrete.EF;
 using Domain.Exchange.Repository.Abstract;
 using Domain.Exchange.Repository.Concrete;
+using Domain.InputDataModel.Shared.Repository.Abstract;
+using Domain.InputDataModel.Shared.Repository.Concrete.EF;
 using Infrastructure.Dal.Abstract;
 using Infrastructure.Dal.EfCore;
+using Infrastructure.Dal.EfCore.Entities.StringInsertModelExt;
 using Infrastructure.Transport.Repository.Abstract;
 using Infrastructure.Transport.Repository.Concrete.EF;
 
@@ -79,6 +82,14 @@ namespace WebApiSwc.AutofacModules
                     new NamedParameter("connectionString", _connectionString),
                 })
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<EfStringInseartModelExtRepository>().As<IStringInsertModelExtRepository>()
+                .WithParameters(new List<Parameter>
+                {
+                    new NamedParameter("connectionString", _connectionString),
+                })
+                .InstancePerLifetimeScope();
+
         }
     }
 }

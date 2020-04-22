@@ -4,8 +4,8 @@ using System.Text;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
+using Domain.InputDataModel.Shared.StringInseartService.DependentInseart;
 using FluentAssertions;
-using Shared.Services.StringInseartService.DependentInseart;
 using Xunit;
 
 namespace Shared.Test.DependentInseartTest

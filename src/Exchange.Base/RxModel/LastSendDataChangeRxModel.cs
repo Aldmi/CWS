@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Domain.InputDataModel.Base.Enums;
-using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 
 namespace Domain.Exchange.RxModel

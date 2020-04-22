@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption;
 using Innofactor.EfCoreJsonValueConverter;
-using Newtonsoft.Json;
 using Shared.Collections;
 using Shared.Enums;
 

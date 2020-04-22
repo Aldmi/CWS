@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.Response.ResponseValidators;
-using Shared.Extensions;
 using Shared.Types;
 
 namespace Domain.InputDataModel.Base.ProvidersOption

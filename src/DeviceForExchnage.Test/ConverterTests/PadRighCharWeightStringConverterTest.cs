@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Domain.InputDataModel.Base.ProvidersOption;
+﻿using System.Collections.Generic;
 using FluentAssertions;
-using Shared.Helpers;
 using Shared.MiddleWares.Converters.StringConverters;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 using Xunit;

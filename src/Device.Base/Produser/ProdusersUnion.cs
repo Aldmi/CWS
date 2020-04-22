@@ -9,7 +9,6 @@ using Domain.InputDataModel.Base.Response;
 using Infrastructure.Produser.AbstractProduser.AbstractProduser;
 using Infrastructure.Produser.AbstractProduser.Helpers;
 using Infrastructure.Produser.AbstractProduser.Options;
-using Newtonsoft.Json;
 using Shared.Helpers;
 using ProduserUnionOption = Domain.Device.Repository.Entities.ResponseProduser.ProduserUnionOption;
 

@@ -5,23 +5,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using App.Services.Config;
 using App.Services.Exceptions;
-using Autofac.Features.Indexed;
 using Autofac.Features.OwnedInstances;
 using Domain.Device;
 using Domain.Device.Produser;
 using Domain.Device.Repository.Entities;
 using Domain.Exchange;
-using Domain.Exchange.Behaviors;
 using Domain.Exchange.Enums;
 using Domain.Exchange.Repository.Entities;
 using Domain.InputDataModel.Base.InData;
-using Domain.InputDataModel.Base.ProvidersAbstract;
-using Domain.InputDataModel.Base.ProvidersOption;
-using Domain.InputDataModel.Base.Response;
+using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Infrastructure.Background;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.Background.Concrete.HostingBackground;
-using Infrastructure.EventBus.Abstract;
 using Infrastructure.Transport;
 using Infrastructure.Transport.Base.Abstract;
 using Infrastructure.Transport.Http;
@@ -63,6 +58,7 @@ namespace App.Services.Mediators
             BackgroundStorage backgroundStorage,
             TransportStorage transportStorage,
             ProduserUnionStorage<TIn> produserUnionStorage,
+            StringInsertModelExtStorage stringInsertModelExtStorage,
             Func<string, ExchangeOption, ITransport, ITransportBackground, Owned<IExchange<TIn>>> exchangeFactory,
             Func<DeviceOption, IEnumerable<IExchange<TIn>>,  Owned<Device<TIn>>> deviceFactory,
             AppConfigWrapper appConfigWrapper,

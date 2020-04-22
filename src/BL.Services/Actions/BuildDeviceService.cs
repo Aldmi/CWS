@@ -25,7 +25,6 @@ namespace App.Services.Actions
 
 
 
-
         #region ctor
 
         public BuildDeviceService(MediatorForDeviceOptions mediatorForDeviceOptions, MediatorForStorages<TIn> mediatorForStorages)
@@ -35,6 +34,7 @@ namespace App.Services.Actions
         }
 
         #endregion
+
 
 
 

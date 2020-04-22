@@ -75,6 +75,16 @@ namespace Infrastructure.Storages
            return Storage.ContainsKey(key);
         }
 
+
+        public DictionaryCrudResult EraseAll()
+        {
+            foreach (var s in Storage)
+            {
+                Remove(s.Key);
+            }
+            return DictionaryCrudResult.Removed;
+        }
+
         #endregion
     }
 }

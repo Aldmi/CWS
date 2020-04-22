@@ -5,8 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersOption;
-using Domain.InputDataModel.Base.Response;
-using Infrastructure.Transport.Base.DataProvidert;
 
 namespace Domain.InputDataModel.Base.ProvidersAbstract
 {

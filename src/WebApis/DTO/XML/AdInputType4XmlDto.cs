@@ -52,6 +52,7 @@ namespace WebApiSwc.DTO.XML
         public string EmergencySituation { get; set; }                //Нештатки
         public string TypeName { get; set; }                          //Тип поезда СТРОКА
         public string TypeAlias { get; set; }                         //Тип поезда СТРОКА алиас
+        public string TypeAliasEng { get; set; }                      //Тип поезда СТРОКА алиас ENG
         public string Addition { get; set; }                         //Дополнение
         public string AdditionENG { get; set; }                      //Дополнение ENG
         public string Note { get; set; }                            //Остановки

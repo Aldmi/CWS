@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
-using FluentAssertions;
 using Newtonsoft.Json;
 using Shared.Extensions;
-using Shared.Helpers;
 using Shared.MiddleWares.HandlersOption;
-using Shared.Services.StringInseartService;
 using Xunit;
 
 namespace Shared.Test
@@ -58,9 +50,9 @@ namespace Shared.Test
 
             return data switch
             {
-                //int intVal => intVal.Convert2StrByFormat(format),
+                //int intVal => intVal.Convert2StrByFormat(format),//Убрать
                 DateTime dateTimeVal => dateTimeVal.Convert2StrByFormat(format),
-                _ => data.Convert2StrByFormat(format) //Должно быть поведение по умолчанию
+                //   _ => data.Convert2StrByFormat(format) //Должно быть поведение по умолчанию
             };
 
             // throw new InvalidCastException("Тип переданного значнеия не соответсвует ни одному обработчику");

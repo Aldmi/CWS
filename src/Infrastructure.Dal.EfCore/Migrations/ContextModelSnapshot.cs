@@ -105,6 +105,29 @@ namespace Infrastructure.Dal.EfCore.Migrations
                     b.ToTable("ProduserUnionOptions");
                 });
 
+            modelBuilder.Entity("Infrastructure.Dal.EfCore.Entities.StringInsertModelExt.EfStringInseartModelExt", b =>
+                {
+                    b.Property<string>("Key")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BorderSubString")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Format")
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("StringMiddleWareOption")
+                        .HasColumnType("text");
+
+                    b.HasKey("Key");
+
+                    b.ToTable("StringInseartModelExt");
+                });
+
             modelBuilder.Entity("Infrastructure.Dal.EfCore.Entities.Transport.EfHttpOption", b =>
                 {
                     b.Property<int>("Id")

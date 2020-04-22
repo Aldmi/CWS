@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json;
-using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 using Shared.MiddleWares.Handlers;
 using Shared.MiddleWares.HandlersOption;
 
@@ -18,7 +15,7 @@ namespace Shared.MiddleWares
             try
             {
                 var option = JsonConvert.DeserializeObject<StringMiddleWareOption>(optionStr);
-               var middleWare = new StringHandlerMiddleWare(option);
+                var middleWare = new StringHandlerMiddleWare(option);
                 return middleWare;
             }
             catch (Exception)

@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using Infrastructure.Dal.Abstract;
 using Infrastructure.Dal.Abstract.Enums;
 using Infrastructure.Dal.EfCore.DbContext.EntitiConfiguration;
 using Infrastructure.Dal.EfCore.Entities.Device;
 using Infrastructure.Dal.EfCore.Entities.Exchange;
 using Infrastructure.Dal.EfCore.Entities.ResponseProduser;
+using Infrastructure.Dal.EfCore.Entities.StringInsertModelExt;
 using Infrastructure.Dal.EfCore.Entities.Transport;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +23,7 @@ namespace Infrastructure.Dal.EfCore.DbContext
         public DbSet<EfDeviceOption> DeviceOptions { get; set; }
         public DbSet<EfExchangeOption> ExchangeOptions { get; set; }
         public DbSet<EfProduserUnionOption> ProduserUnionOptions { get; set; }
+        public DbSet<EfStringInseartModelExt> StringInseartModelExt { get; set; }
 
         #endregion
 
@@ -53,6 +54,7 @@ namespace Infrastructure.Dal.EfCore.DbContext
            modelBuilder.ApplyConfiguration(new EfExchangeOptionConfig());
            modelBuilder.ApplyConfiguration(new EfHttpOptionConfig());
            modelBuilder.ApplyConfiguration(new EfProduserUnionOptionConfig());
+           modelBuilder.ApplyConfiguration(new EfStringInseartModelExtConfig());
            base.OnModelCreating(modelBuilder);
         }
 

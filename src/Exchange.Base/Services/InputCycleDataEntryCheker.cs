@@ -2,7 +2,6 @@
 using System.Reactive.Subjects;
 using System.Timers;
 using Domain.Exchange.Enums;
-using Domain.Exchange.RxModel;
 using Timer = System.Timers.Timer;
 
 namespace Domain.Exchange.Services

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using App.Services.Mediators;
@@ -7,10 +6,8 @@ using CSharpFunctionalExtensions;
 using Domain.Exchange.Models;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
-using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
 using Serilog;
-using Shared.Enums;
 
 namespace App.Services.InputData
 {

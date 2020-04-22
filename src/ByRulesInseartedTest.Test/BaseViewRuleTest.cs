@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using ByRulesInseartedTest.Test.Datas;
-using Domain.InputDataModel.Autodictor.IndependentInsearts.Factory;
-using Domain.InputDataModel.Autodictor.IndependentInsearts.Handlers;
+using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory;
 using Domain.InputDataModel.Autodictor.Model;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Handlers;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
+using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
 using FluentAssertions;
 using Moq;
 using Serilog;
-using Shared.Services.StringInseartService;
-using Shared.Services.StringInseartService.IndependentInseart;
 using Xunit;
 
 namespace ByRulesInseartedTest.Test

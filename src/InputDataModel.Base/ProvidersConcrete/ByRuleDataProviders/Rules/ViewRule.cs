@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.Enums;
-using Domain.InputDataModel.Base.InseartServices.IndependentInsearts.Factory;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response.ResponseValidators;
+using Domain.InputDataModel.Shared.StringInseartService.DependentInseart;
+using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart;
+using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
+using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Serilog;
 using Shared.Extensions;
 using Shared.Helpers;
-using Shared.Services.StringInseartService;
-using Shared.Services.StringInseartService.DependentInseart;
-using Shared.Services.StringInseartService.IndependentInseart;
 using Shared.Types;
 
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
@@ -73,7 +73,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             //список фабрик, создающих нужные обработчики
             var handlerFactorys = new List<Func<StringInsertModel, IIndependentInsertsHandler>>
             {
-                new BaseIndependentInseartsHandlersFactory().Create,
+                new DefaultIndependentInseartsHandlersFactory().Create,
                 inputTypeInseartsHandlersFactory.Create
             };
             var hIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(header, Pattern, handlerFactorys, logger);
@@ -347,7 +347,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     var body = equalValidator.ExpectedData.Str;
                     var handlerFactorys = new List<Func<StringInsertModel, IIndependentInsertsHandler>>
                     {
-                       new BaseIndependentInseartsHandlersFactory().Create,
+                       new DefaultIndependentInseartsHandlersFactory().Create,
                     };
                     var indInsServ = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, Pattern, handlerFactorys, logger);
 

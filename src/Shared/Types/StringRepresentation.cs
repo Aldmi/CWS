@@ -1,5 +1,4 @@
-﻿using System;
-using Shared.Extensions;
+﻿using Shared.Extensions;
 using Shared.Helpers;
 
 namespace Shared.Types

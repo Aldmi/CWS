@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Infrastructure.Dal.EfCore.Entities.MiddleWare;
 using Innofactor.EfCoreJsonValueConverter;
-using Newtonsoft.Json;
 
 namespace Infrastructure.Dal.EfCore.Entities.Device
 {

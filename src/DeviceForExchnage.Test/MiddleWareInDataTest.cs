@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using DeviceForExchnage.Test.Datas;
 using Domain.Device.MiddleWares;
