@@ -402,7 +402,7 @@ namespace WebApiSwc.Controllers
                 return NotFound(deviceName);
             }
 
-            var middleWareInDataOption = device.MiddleWareInDataOption;
+            var middleWareInDataOption = device.MiddleWareMediatorOption;
             var middleWareInDataOptionDto = _mapper.Map<MiddleWareInDataOptionDto>(middleWareInDataOption);
 
             await Task.CompletedTask;
@@ -420,10 +420,10 @@ namespace WebApiSwc.Controllers
                 return NotFound(deviceName);
             }
 
-            var middleWareInDataOption = _mapper.Map<MiddleWareInDataOption>(middleWareInDataOptionDto);
+            var middleWareInDataOption = _mapper.Map<MiddleWareMediatorOption>(middleWareInDataOptionDto);
             try
             {
-                device.MiddleWareInDataOption= middleWareInDataOption;
+                device.MiddleWareMediatorOption= middleWareInDataOption;
             }
             catch (Exception ex)
             {

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
-using Domain.Device.MiddleWares;
-using Domain.Device.MiddleWares.Invokes;
+using Domain.Device.MiddleWares4InData;
+using Domain.Device.MiddleWares4InData.Invokes;
 using Domain.Device.Produser;
 using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.Device.Services;
@@ -33,7 +33,7 @@ namespace Domain.Device
     public class Device<TIn> : IDisposable where TIn : InputTypeBase
     {
         #region field
-        private readonly Func<MiddleWareInDataOption, Owned<MiddlewareInvokeService<TIn>>> _middlewareInvokeServiceFactory;  //MiddlewareInvokeService пересоздается динамически, поэтому стару версию нужно уничтожать через Owned
+        private readonly Func<MiddleWareMediatorOption, Owned<MiddlewareInvokeService<TIn>>> _middlewareInvokeServiceFactory;  //MiddlewareInvokeService пересоздается динамически, поэтому стару версию нужно уничтожать через Owned
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
         private readonly ILogger _logger;
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
@@ -53,15 +53,15 @@ namespace Domain.Device
 
         public string ProduserUnionKey => Option.ProduserUnionKey;
         /// <summary>
-        /// Настройки MiddleWareInvoke сервиса.
+        /// Настройки MiddleWareMediator сервиса.
         /// </summary>
-        public MiddleWareInDataOption MiddleWareInDataOption
+        public MiddleWareMediatorOption MiddleWareMediatorOption
         {
-            get => Option.MiddleWareInData;
+            get => Option.MiddleWareMediator;
             set
             {
-                Option.MiddleWareInData = value;
-                CreateMiddleWareInDataByOption(Option.MiddleWareInData);
+                Option.MiddleWareMediator = value;
+                CreateMiddleWareInDataByOption(Option.MiddleWareMediator);
             }
         }
         #endregion
@@ -73,7 +73,7 @@ namespace Domain.Device
                       IEnumerable<IExchange<TIn>> exchanges,
                       ProduserUnionStorage<TIn> produserUnionStorage,
                       ILogger logger,
-                      Func<MiddleWareInDataOption, Owned<MiddlewareInvokeService<TIn>>> middlewareInvokeServiceFactory,
+                      Func<MiddleWareMediatorOption, Owned<MiddlewareInvokeService<TIn>>> middlewareInvokeServiceFactory,
                       Func<IEnumerable<string>, Owned<AllExchangesResponseAnaliticService>> allExchangesResponseAnaliticServiceFactory)
         {
             Option = option;
@@ -87,7 +87,7 @@ namespace Domain.Device
             _allCycleBehaviorResponseAnalitic.AllExchangeAnaliticDoneRx.Subscribe(AllExhangeAnaliticDoneRxEventHandler);
             _allCycleBehaviorResponseAnaliticOwner = owner;
 
-            CreateMiddleWareInDataByOption(Option.MiddleWareInData);
+            CreateMiddleWareInDataByOption(Option.MiddleWareMediator);
         }
         #endregion
 
@@ -98,14 +98,14 @@ namespace Domain.Device
         /// Создать MiddlewareInvokeService из опций.
         /// </summary>
         /// <param name="option">Опции. Если option == null, то ранее созданный MiddlewareInvokeService уничтожается</param>
-        private void CreateMiddleWareInDataByOption(MiddleWareInDataOption option)
+        private void CreateMiddleWareInDataByOption(MiddleWareMediatorOption option)
         {
             _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler?.Dispose();
             _middlewareInvokeServiceOwner?.Dispose();
             MiddlewareInvokeService = null;
             if (option != null)
             {
-               // var middleWareInData = new MiddleWareInvoke<TIn>(option, _logger); //TODO: Создавать внутри MiddlewareInvokeService
+               // var middleWareInData = new MiddleWareMediator<TIn>(option, _logger); //TODO: Создавать внутри MiddlewareInvokeService
                 var owner = _middlewareInvokeServiceFactory(option);
                 MiddlewareInvokeService = owner.Value;
                 _middlewareInvokeServiceOwner = owner;

@@ -80,7 +80,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Dal.EfCore",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ByRulesInseartedTest.Test", "ByRulesInseartedTest.Test\ByRulesInseartedTest.Test.csproj", "{998C9964-8691-42C8-A5D3-3E8F0271606E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.InputDataModel.Shared", "..\Domain.InputDataModel.Shared\Domain.InputDataModel.Shared.csproj", "{B579A04E-887A-4153-B44C-6937F62BD7B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.InputDataModel.Shared", "Domain.InputDataModel.Shared\Domain.InputDataModel.Shared.csproj", "{B579A04E-887A-4153-B44C-6937F62BD7B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

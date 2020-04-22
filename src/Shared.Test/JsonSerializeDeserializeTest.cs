@@ -19,7 +19,7 @@ namespace Shared.Test
             //Act
             try
             {
-                var converters = JsonConvert.DeserializeObject<StringMiddleWareOption>(str);
+                var converters = JsonConvert.DeserializeObject<StringHandlerMiddleWareOption>(str);
             }
             catch (Exception ex)
             {

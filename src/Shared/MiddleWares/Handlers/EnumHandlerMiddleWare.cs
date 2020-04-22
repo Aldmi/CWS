@@ -10,9 +10,8 @@ namespace Shared.MiddleWares.Handlers
     public class EnumHandlerMiddleWare : BaseHandlerMiddleWare<Enum>
     {
         #region ctor
-        public EnumHandlerMiddleWare(EnumMiddleWareOption option)
+        public EnumHandlerMiddleWare(EnumHandlerMiddleWareOption option)
         {
-            PropName = option.PropName;
             Converters.AddRange(option.CreateConverters());
         }
         #endregion

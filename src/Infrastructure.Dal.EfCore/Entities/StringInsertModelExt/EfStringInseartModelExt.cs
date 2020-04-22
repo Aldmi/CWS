@@ -21,6 +21,6 @@ namespace Infrastructure.Dal.EfCore.Entities.StringInsertModelExt
         public BorderSubString BorderSubString { get; set; }
 
         [JsonField]
-        public EfStringMiddleWareOption StringMiddleWareOption { get; set; }
+        public EfStringHandlerMiddleWareOption StringHandlerMiddleWareOption { get; set; }
     }
 }

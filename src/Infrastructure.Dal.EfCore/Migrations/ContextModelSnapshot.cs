@@ -120,7 +120,7 @@ namespace Infrastructure.Dal.EfCore.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("integer");
 
-                    b.Property<string>("StringMiddleWareOption")
+                    b.Property<string>("StringHandlerMiddleWareOption")
                         .HasColumnType("text");
 
                     b.HasKey("Key");

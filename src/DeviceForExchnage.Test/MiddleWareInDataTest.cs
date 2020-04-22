@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using DeviceForExchnage.Test.Datas;
-using Domain.Device.MiddleWares;
+using Domain.Device.MiddleWares4InData;
 using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
@@ -14,11 +14,11 @@ namespace DeviceForExchnage.Test
 {
     public class MiddleWareInDataTest
     {
-        private readonly MiddleWareInDataOption _optionLimitStringHandler;
-        private readonly MiddleWareInDataOption _optionTwoStringHandler;
-        private readonly MiddleWareInDataOption _optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter;
+        private readonly MiddleWareMediatorOption _optionLimitStringHandler;
+        private readonly MiddleWareMediatorOption _optionTwoStringHandler;
+        private readonly MiddleWareMediatorOption _optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter;
 
-        private readonly MiddleWareInDataOption _optionEnumHandlerLangEnumerable;
+        private readonly MiddleWareMediatorOption _optionEnumHandlerLangEnumerable;
 
         private readonly ILogger _logger;
 
@@ -49,7 +49,7 @@ namespace DeviceForExchnage.Test
 
             //Arrage
             var inData = InDataSourse.GetData(1, Lang.Eng);
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(_optionEnumHandlerLangEnumerable, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(_optionEnumHandlerLangEnumerable, _logger);
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);
@@ -67,7 +67,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1);
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);
@@ -116,7 +116,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var inData = InDataSourse.GetData(1);
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter_withoutPhrases("Note.NameRu");
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(option, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(option, _logger);
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);
@@ -164,7 +164,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(2);
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);
@@ -235,7 +235,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var inData = InDataSourse.GetData(2);
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_TwoStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu", "StationDeparture.NameRu");
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(option, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(option, _logger);
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);
@@ -322,7 +322,7 @@ namespace DeviceForExchnage.Test
             var inData = InDataSourse.GetData(1);
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter("Note.NameRu");
             option.StringHandlers[0].Converters[0].SubStringMemConverterOption.Lenght = 500;
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(option, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(option, _logger);
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);
@@ -372,7 +372,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData(1);
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);
@@ -423,7 +423,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var inData = InDataSourse.GetData(1);
             inData.Data[0].Note.NameRu = string.Empty;
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);
@@ -453,7 +453,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData_WithoutNote(1);
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(_optionOneStringHandlerSubStringMemConverterInseartEndLineMarkerConverter, _logger);
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);
@@ -485,7 +485,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var inData = InDataSourse.GetData(1);
             _optionLimitStringHandler.StringHandlers[0].PropName = "Note.xxxx";
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(_optionLimitStringHandler, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(_optionLimitStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -505,7 +505,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var inData = InDataSourse.GetData(1);
             _optionLimitStringHandler.StringHandlers[0].PropName = "ZZZ.xxxx";
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(_optionLimitStringHandler, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(_optionLimitStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -525,7 +525,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var countData = 9;
             var inData = InDataSourse.GetData(countData);
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(_optionLimitStringHandler, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(_optionLimitStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -549,7 +549,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var inData = InDataSourse.GetData(1000);
             _optionLimitStringHandler.StringHandlers[0].PropName = "Note.xxxx";
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(_optionLimitStringHandler, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(_optionLimitStringHandler, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -572,7 +572,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var numberOfData =4;
             var inData = InDataSourse.GetData_Stations_Null(numberOfData);
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(_optionTwoStringHandler, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(_optionTwoStringHandler, _logger);
 
             for (int step = 0; step < 5; step++)
             {
@@ -619,7 +619,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var inData = InDataSourse.GetData_WithoutNote(1);
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_LimitStringConverter("Note");
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(option, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(option, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -641,7 +641,7 @@ namespace DeviceForExchnage.Test
             var inData = InDataSourse.GetData_NumberOfTrain_Null(1);
            // inData.ProcessedItemsInBatch.First().NumberOfTrain = null;
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_LimitStringConverter("NumberOfTrain");
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(option, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(option, _logger);
 
             //Act
             var result = middleWareinData.HandleInvoke(inData);
@@ -660,7 +660,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var inData = InDataSourse.GetData_Note_LongWord(3); //3
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter_Khazanskiy("Note.NameRu");
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(option, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(option, _logger);
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);
@@ -702,7 +702,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var inData = InDataSourse.GetData_StationCut(1); //3
             var option =GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_ReplaceEmptyStringConverterTest("StationsСut.NameRu");
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(option, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(option, _logger);
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);
@@ -720,7 +720,7 @@ namespace DeviceForExchnage.Test
             //Arrage
             var inData = InDataSourse.GetData_Stations_Null(1); //3
             var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_ReplaceEmptyStringConverterTest("StationsСut.NameRu");
-            var middleWareinData = new MiddleWareInvoke<AdInputType>(option, _logger);
+            var middleWareinData = new MiddleWareMediator<AdInputType>(option, _logger);
 
             //Act
             var resStep1 = middleWareinData.HandleInvoke(inData);

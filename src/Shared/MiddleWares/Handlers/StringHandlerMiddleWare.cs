@@ -9,9 +9,8 @@ namespace Shared.MiddleWares.Handlers
     public class StringHandlerMiddleWare : BaseHandlerMiddleWare<string>
     {
         #region ctor
-        public StringHandlerMiddleWare(StringMiddleWareOption option)
+        public StringHandlerMiddleWare(StringHandlerMiddleWareOption option)
         {
-            PropName = option.PropName;
             Converters.AddRange(option.CreateConverters());
         }
         #endregion

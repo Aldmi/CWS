@@ -10,7 +10,7 @@ namespace WebApiSwc.DTO.JSON.InputTypesDto
         public string Key { get; set; }
         public string Format { get; set; }
 
-        public StringMiddleWareOptionDto StringMiddleWareOption { get; set; }
+        public StringHandlerMiddleWareOptionDto StringHandlerMiddleWareOption { get; set; }
 
         public BorderSubString BorderSubString { get; set; }
     }

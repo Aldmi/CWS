@@ -40,6 +40,6 @@ namespace Infrastructure.Dal.EfCore.Entities.Device
         public string[] ExchangeKeys { get; set; }
 
         [JsonField]
-        public EfMiddleWareInDataOption MiddleWareInData { get; set; }
+        public EfMiddleWareMediatorOption MiddleWareMediator { get; set; }
     }
 }
