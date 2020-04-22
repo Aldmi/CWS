@@ -3,13 +3,13 @@ using Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers;
 
 namespace Infrastructure.Dal.EfCore.Entities.MiddleWare
 {
-    public class EfMiddleWareInDataOption
+    public class EfMiddleWareMediatorOption
     {
         public string Description { get; set; }
 
-        public List<EfStringMiddleWareOption> StringHandlers { get; set; }
-        public List<EfDateTimeMiddleWareOption> DateTimeHandlers { get; set; }
-        public List<EfEnumMiddleWareOption> EnumHandlers { get; set; }
+        public List<EfStringHandlerMiddleWare4InDataOption> StringHandlers { get; set; }
+        public List<EfDateTimeHandlerMiddleWare4InDataOption> DateTimeHandlers { get; set; }
+        public List<EfEnumHandlerMiddleWare4InDataOption> EnumHandlers { get; set; }
 
         public EfInvokerOutput InvokerOutput { get; set; }
     }

@@ -22,7 +22,7 @@ namespace Infrastructure.Dal.EfCore.DbContext.EntitiConfiguration
                 .HasJsonValueConversion();
 
             builder
-                .Property(p => p.MiddleWareInData)
+                .Property(p => p.MiddleWareMediator)
                 .HasJsonValueConversion();
         }
     }

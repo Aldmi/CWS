@@ -6,9 +6,8 @@ namespace Shared.MiddleWares.Handlers
     public class DateTimeHandlerMiddleWare : BaseHandlerMiddleWare<DateTime>
     {
         #region ctor
-        public DateTimeHandlerMiddleWare(DateTimeMiddleWareOption option)
+        public DateTimeHandlerMiddleWare(DateTimeHandlerMiddleWareOption option)
         {
-            PropName = option.PropName;
             Converters.AddRange(option.CreateConverters());
         }
         #endregion

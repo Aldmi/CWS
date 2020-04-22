@@ -10,9 +10,8 @@ namespace Shared.MiddleWares.HandlersOption
     /// <summary>
     /// Цепочка конверторов для обработки одного св-ва.
     /// </summary>
-    public class StringMiddleWareOption
+    public class StringHandlerMiddleWareOption
     {
-        public string PropName { get; set; }                       //Имя свойства для обработки
         public List<UnitStringConverterOption> Converters { get; set; }
 
         public IList<IConverterMiddleWare<string>> CreateConverters()

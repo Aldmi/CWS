@@ -7,7 +7,6 @@ namespace Shared.MiddleWares.Handlers
 {
     public abstract class BaseHandlerMiddleWare<T>
     {
-        public string PropName { get; protected set; }
         protected readonly List<IConverterMiddleWare<T>> Converters = new List<IConverterMiddleWare<T>>();
 
 

@@ -8,21 +8,21 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
     public class StringInsertModelExt : IDisposable
     {
         #region fields
-        public readonly StringMiddleWareOption StringMiddleWareOption;
+        public readonly StringHandlerMiddleWareOption StringHandlerMiddleWareOption;
         #endregion
 
 
         #region ctor
-        public StringInsertModelExt(string key, string format, BorderSubString borderSubString, StringMiddleWareOption stringMiddleWareOption)
+        public StringInsertModelExt(string key, string format, BorderSubString borderSubString, StringHandlerMiddleWareOption stringHandlerMiddleWareOption)
         {
             Key = key;
             Format = format;
             BorderSubString = borderSubString;
-            StringMiddleWareOption = stringMiddleWareOption;
+            StringHandlerMiddleWareOption = stringHandlerMiddleWareOption;
             LazyStringMiddleWare = new Lazy<StringHandlerMiddleWare>(() =>
             {
-                if (StringMiddleWareOption == null) return null;
-                var middleWare = new StringHandlerMiddleWare(StringMiddleWareOption);
+                if (StringHandlerMiddleWareOption == null) return null;
+                var middleWare = new StringHandlerMiddleWare(StringHandlerMiddleWareOption);
                 return middleWare;
             });
         }

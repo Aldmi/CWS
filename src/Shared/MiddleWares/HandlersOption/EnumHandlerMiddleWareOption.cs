@@ -7,10 +7,8 @@ using Shared.MiddleWares.ConvertersOption.EnumsConvertersOption;
 
 namespace Shared.MiddleWares.HandlersOption
 {
-    public class EnumMiddleWareOption
+    public class EnumHandlerMiddleWareOption
     {
-        public string PropName { get; set; }                       //Имя свойства для обработки
-
         /// <summary>
         /// Полный путь до типа в сборки.
         /// Вида: "Domain.InputDataModel.Autodictor.Entities.Lang, Domain.InputDataModel.Autodictor"

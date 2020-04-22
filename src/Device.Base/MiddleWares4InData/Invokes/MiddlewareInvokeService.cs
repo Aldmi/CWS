@@ -12,7 +12,7 @@ using Serilog;
 using Shared.MiddleWares.Converters;
 using InvokerOutput = Domain.Device.Repository.Entities.MiddleWareOption.InvokerOutput;
 
-namespace Domain.Device.MiddleWares.Invokes
+namespace Domain.Device.MiddleWares4InDatas.Invokes
 {
     /// <summary>
     /// Определяет способ запуска обработчика IMiddlewareInvoke.
@@ -67,7 +67,7 @@ namespace Domain.Device.MiddleWares.Invokes
 
 
         #region ctor
-        public MiddlewareInvokeService(MiddleWareInDataOption option, Func<MiddleWareInDataOption, Owned<ISupportMiddlewareInvoke<TIn>>> middlewareFactory, ILogger logger)
+        public MiddlewareInvokeService(MiddleWareMediatorOption option, Func<MiddleWareMediatorOption, Owned<ISupportMiddlewareInvoke<TIn>>> middlewareFactory, ILogger logger)
         {
             _option = option.InvokerOutput;
             _description = option.Description;

@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
-using Domain.Device.MiddleWares.Invokes;
+using Domain.Device.MiddleWares4InDatas.Handlers;
+using Domain.Device.MiddleWares4InDatas.Invokes;
+using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.InputDataModel.Base.InData;
 using FastDeepCloner;
 using Serilog;
@@ -12,29 +14,28 @@ using Shared.MiddleWares.Converters;
 using Shared.MiddleWares.Converters.Exceptions;
 using Shared.MiddleWares.Handlers;
 using Shared.ReflectionServices;
-using MiddleWareInDataOption = Domain.Device.Repository.Entities.MiddleWareOption.MiddleWareInDataOption;
 
-namespace Domain.Device.MiddleWares
+namespace Domain.Device.MiddleWares4InDatas
 {
     /// <summary>
     /// Промежуточный обработчик входных данных.
     /// Сервис является иммутабельным. Он создается на базе MiddleWareInDataOption и его State не меняется
     /// </summary>
     /// <typeparam name="TIn">Входные данные для обработки</typeparam>
-    public class MiddleWareInvoke<TIn> : ISupportMiddlewareInvoke<TIn> where TIn : InputTypeBase
+    public class MiddleWareMediator<TIn> : ISupportMiddlewareInvoke<TIn> where TIn : InputTypeBase
     {
         #region fields
 
-        private readonly MiddleWareInDataOption _option;
+        private readonly MiddleWareMediatorOption _option;
         private readonly ILogger _logger;
 
         private readonly PropertyMutationsServise<string> _mutationsServiseStr = new PropertyMutationsServise<string>();    //Сервис изменения совойства типа string, по имени, через рефлексию.
         private readonly PropertyMutationsServise<DateTime> _mutationsServiseDt = new PropertyMutationsServise<DateTime>(); //Сервис изменения совойства типа DateTime, по имени, через рефлексию.
         private readonly PropertyMutationsServise<Enum> _mutationsServiseEnum = new PropertyMutationsServise<Enum>();      //Сервис изменения совойства типа enum(byte), по имени, через рефлексию.
 
-        private readonly List<StringHandlerMiddleWare> _stringHandlers;
-        private readonly List<DateTimeHandlerMiddleWare> _dateTimeHandlers;
-        private readonly List<EnumHandlerMiddleWare> _enumHandlers;
+        private readonly List<StringHandlerMiddleWare4InData> _stringHandlers;
+        private readonly List<DateTimeHandlerMiddleWare4InData> _dateTimeHandlers;
+        private readonly List<EnumHandlerMiddleWare4InData> _enumHandlers;
 
         #endregion
 
@@ -49,19 +50,19 @@ namespace Domain.Device.MiddleWares
 
 
         #region ctor
-        public MiddleWareInvoke(MiddleWareInDataOption option, ILogger logger)
+        public MiddleWareMediator(MiddleWareMediatorOption option, ILogger logger)
         {
             _option = option;
             _logger = logger;
 
             _stringHandlers = option.StringHandlers?.
-                Select(h => new StringHandlerMiddleWare(h)).ToList();
+                Select(h => new StringHandlerMiddleWare4InData(h)).ToList();
 
             _dateTimeHandlers = option.DateTimeHandlers?.
-                Select(h => new DateTimeHandlerMiddleWare(h)).ToList();
+                Select(h => new DateTimeHandlerMiddleWare4InData(h)).ToList();
 
             _enumHandlers = option.EnumHandlers?.
-                Select(h => new EnumHandlerMiddleWare(h)).ToList();
+                Select(h => new EnumHandlerMiddleWare4InData(h)).ToList();
         }
         #endregion
 

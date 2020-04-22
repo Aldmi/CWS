@@ -42,7 +42,7 @@ namespace WebApiSwc.AutoMapperConfig
             CreateMap<TcpIpOption, TcpIpOptionDto>().ReverseMap();
             CreateMap<HttpOption, HttpOptionDto>().ReverseMap();
             CreateMap<TransportOption, TransportOptionsDto>().ReverseMap();
-            CreateMap<MiddleWareInDataOption, MiddleWareInDataOptionDto>().ReverseMap();
+            CreateMap<MiddleWareMediatorOption, MiddleWareInDataOptionDto>().ReverseMap();
             CreateMap<ProduserUnionOption, ProduserUnionOptionDto>().ReverseMap();
             #endregion
 
@@ -173,14 +173,14 @@ namespace WebApiSwc.AutoMapperConfig
                 .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.Key))
                 .ForMember(dest => dest.Format, opt => opt.MapFrom(src => src.Format))
                 .ForMember(dest => dest.BorderSubString, opt => opt.MapFrom(src => src.BorderSubString))
-                .ForMember(dest => dest.StringMiddleWareOption, opt => opt.MapFrom(src => src.StringMiddleWareOption));
+                .ForMember(dest => dest.StringHandlerMiddleWareOption, opt => opt.MapFrom(src => src.StringHandlerMiddleWareOption));
 
             CreateMap<EfStringInseartModelExt, StringInsertModelExt>()
               .ConstructUsing((src, context) => new StringInsertModelExt(
                   src.Key,
                   src.Format,
                   src.BorderSubString,
-                 context.Mapper.Map<StringMiddleWareOption>(src.StringMiddleWareOption)
+                 context.Mapper.Map<StringHandlerMiddleWareOption>(src.StringHandlerMiddleWareOption)
               )).ForAllMembers(opt => opt.Ignore());
 
             CreateMap<StringInsertModelExtDto, StringInsertModelExt>()
@@ -188,7 +188,7 @@ namespace WebApiSwc.AutoMapperConfig
                     src.Key,
                     src.Format,
                     src.BorderSubString,
-                    context.Mapper.Map<StringMiddleWareOption>(src.StringMiddleWareOption)
+                    context.Mapper.Map<StringHandlerMiddleWareOption>(src.StringMiddleWareOption)
                 )).ForAllMembers(opt => opt.Ignore());
             #endregion
         }

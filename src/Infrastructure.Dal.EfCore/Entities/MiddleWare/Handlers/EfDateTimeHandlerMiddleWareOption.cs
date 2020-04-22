@@ -3,9 +3,8 @@ using Infrastructure.Dal.EfCore.Entities.MiddleWare.Converters.DateTimeConverter
 
 namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers
 {
-    public class EfDateTimeMiddleWareOption
+    public class EfDateTimeHandlerMiddleWareOption
     {
-        public string PropName { get; set; }
         public List<EfUnitDateTimeConverterOption> Converters { get; set; }
     }
 

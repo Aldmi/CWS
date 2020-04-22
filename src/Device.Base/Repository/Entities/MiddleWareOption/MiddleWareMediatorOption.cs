@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using Domain.Device.Enums;
-using Shared.MiddleWares.HandlersOption;
 
 namespace Domain.Device.Repository.Entities.MiddleWareOption
 {
-    public class MiddleWareInDataOption
+    public class MiddleWareMediatorOption
     {
         public string Description { get; set; }
 
-        public List<StringMiddleWareOption> StringHandlers { get; set; }
-        public List<DateTimeMiddleWareOption> DateTimeHandlers { get; set; }
-        public List<EnumMiddleWareOption> EnumHandlers { get; set; }
+        public List<StringHandlerHandlerMiddleWare4InDataOption> StringHandlers { get; set; }
+        public List<DateTimeHandlerHandlerMiddleWare4InDataOption> DateTimeHandlers { get; set; }
+        public List<EnumHandlerHandlerMiddleWare4InDataOption> EnumHandlers { get; set; }
 
         public InvokerOutput InvokerOutput { get; set; }
     }

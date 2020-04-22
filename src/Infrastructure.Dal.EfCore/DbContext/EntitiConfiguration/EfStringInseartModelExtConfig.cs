@@ -13,7 +13,7 @@ namespace Infrastructure.Dal.EfCore.DbContext.EntitiConfiguration
             builder.Property(p => p.BorderSubString)
                 .HasJsonValueConversion();
 
-            builder.Property(p => p.StringMiddleWareOption)
+            builder.Property(p => p.StringHandlerMiddleWareOption)
                 .HasJsonValueConversion();
         }
     }

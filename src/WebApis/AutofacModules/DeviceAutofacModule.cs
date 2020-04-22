@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Domain.Device;
-using Domain.Device.MiddleWares;
-using Domain.Device.MiddleWares.Invokes;
+using Domain.Device.MiddleWares4InDatas;
+using Domain.Device.MiddleWares4InDatas.Invokes;
 using Domain.Device.Services;
 using Domain.InputDataModel.Base.InData;
 
@@ -15,7 +15,7 @@ namespace WebApiSwc.AutofacModules
             builder.RegisterType<AllExchangesResponseAnaliticService>().AsSelf().InstancePerDependency();
             builder.RegisterType<MiddlewareInvokeService<T>>().AsSelf().InstancePerDependency();
 
-            builder.RegisterType<MiddleWareInvoke<T>>().As<ISupportMiddlewareInvoke<T>>().InstancePerDependency();
+            builder.RegisterType<MiddleWareMediator<T>>().As<ISupportMiddlewareInvoke<T>>().InstancePerDependency();
             
         }
     }

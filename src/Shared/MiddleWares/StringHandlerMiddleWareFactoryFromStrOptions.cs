@@ -6,7 +6,7 @@ using Shared.MiddleWares.HandlersOption;
 namespace Shared.MiddleWares
 {
     /// <summary>
-    /// StringMiddleWareOption - десериализуются из строки
+    /// StringHandlerMiddleWareOption - десериализуются из строки
     /// </summary>
     public static class StringHandlerMiddleWareFactoryFromStrOptions
     {
@@ -14,7 +14,7 @@ namespace Shared.MiddleWares
         {
             try
             {
-                var option = JsonConvert.DeserializeObject<StringMiddleWareOption>(optionStr);
+                var option = JsonConvert.DeserializeObject<StringHandlerMiddleWareOption>(optionStr);
                 var middleWare = new StringHandlerMiddleWare(option);
                 return middleWare;
             }
@@ -22,7 +22,7 @@ namespace Shared.MiddleWares
             {
                 //TODO: вывод ошибки  в консоль убрать отсюда.
                 Console.BackgroundColor = ConsoleColor.Blue;
-                Console.WriteLine($"Ошибка DeserializeObject StringMiddleWareOption для строки {optionStr}"); 
+                Console.WriteLine($"Ошибка DeserializeObject StringHandlerMiddleWareOption для строки {optionStr}"); 
                 Console.BackgroundColor = ConsoleColor.Black;
                 throw;
             }

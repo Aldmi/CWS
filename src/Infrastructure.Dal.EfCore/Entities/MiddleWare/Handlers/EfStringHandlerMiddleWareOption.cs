@@ -3,9 +3,8 @@ using Infrastructure.Dal.EfCore.Entities.MiddleWare.Converters.StringConvertersO
 
 namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers
 {
-    public class EfStringMiddleWareOption
+    public class EfStringHandlerMiddleWareOption
     {
-        public string PropName { get; set; }               
         public List<EfUnitStringConverterOption> Converters { get; set; }
     }
 

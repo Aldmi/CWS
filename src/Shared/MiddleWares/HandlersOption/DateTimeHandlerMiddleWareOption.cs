@@ -7,9 +7,8 @@ using Shared.MiddleWares.ConvertersOption.DateTimeConverterOption;
 
 namespace Shared.MiddleWares.HandlersOption
 {
-    public class DateTimeMiddleWareOption
+    public class DateTimeHandlerMiddleWareOption
     {
-        public string PropName { get; set; }                       //Имя свойства для обработки
         public List<UnitDateTimeConverterOption> Converters { get; set; }
 
         public IList<IConverterMiddleWare<DateTime>> CreateConverters()

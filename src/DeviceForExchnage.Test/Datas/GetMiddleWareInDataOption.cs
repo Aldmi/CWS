@@ -9,14 +9,14 @@ namespace DeviceForExchnage.Test.Datas
 {
     public static class GetMiddleWareInDataOption
     {
-        public static MiddleWareInDataOption GetMiddleWareInDataOption_EnumHandlers_EnumerateConverter(string propName)
+        public static MiddleWareMediatorOption GetMiddleWareInDataOption_EnumHandlers_EnumerateConverter(string propName)
         {
-            var middleWareInDataOption = new MiddleWareInDataOption
+            var middleWareInDataOption = new MiddleWareMediatorOption
             {
                 Description = "перебор Lang",
-                EnumHandlers = new List<EnumMiddleWareOption>
+                EnumHandlers = new List<EnumHandlerHandlerMiddleWare4InDataOption>
                 {
-                    new EnumMiddleWareOption
+                    new EnumHandlerHandlerMiddleWare4InDataOption
                     {
                         PropName = propName,
                         Path2Type = "Domain.InputDataModel.Autodictor.Entities.Lang, Domain.InputDataModel.Autodictor",
@@ -46,14 +46,14 @@ namespace DeviceForExchnage.Test.Datas
         }
 
 
-        public static MiddleWareInDataOption GetMiddleWareInDataOption_LimitStringConverter(string propName)
+        public static MiddleWareMediatorOption GetMiddleWareInDataOption_LimitStringConverter(string propName)
         {
-            var middleWareInDataOption = new MiddleWareInDataOption
+            var middleWareInDataOption = new MiddleWareMediatorOption
             {
                 Description = "Преобразование Note",
-                StringHandlers = new List<StringMiddleWareOption>
+                StringHandlers = new List<StringHandlerHandlerMiddleWare4InDataOption>
                 {
-                    new StringMiddleWareOption()
+                    new StringHandlerHandlerMiddleWare4InDataOption()
                     {
                         PropName = propName,
                         Converters = new List<UnitStringConverterOption>
@@ -78,14 +78,14 @@ namespace DeviceForExchnage.Test.Datas
         }
 
 
-        public static MiddleWareInDataOption GetMiddleWareInDataOption_TwoStringHandlers(params string[] propNames)
+        public static MiddleWareMediatorOption GetMiddleWareInDataOption_TwoStringHandlers(params string[] propNames)
         {
-            MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
+            MiddleWareMediatorOption middleWareMediatorOption = new MiddleWareMediatorOption
             {
                 Description = "Преобразование Note",
-                StringHandlers = new List<StringMiddleWareOption>
+                StringHandlers = new List<StringHandlerHandlerMiddleWare4InDataOption>
                 {
-                    new StringMiddleWareOption
+                    new StringHandlerHandlerMiddleWare4InDataOption
                     {
                         PropName = propNames[0],
                         Converters = new List<UnitStringConverterOption>
@@ -109,7 +109,7 @@ namespace DeviceForExchnage.Test.Datas
                             }
                         }
                     },
-                    new StringMiddleWareOption
+                    new StringHandlerHandlerMiddleWare4InDataOption
                     {
                         PropName = propNames[1],
                         Converters = new List<UnitStringConverterOption>
@@ -130,18 +130,18 @@ namespace DeviceForExchnage.Test.Datas
                 }
             };
 
-            return middleWareInDataOption;
+            return middleWareMediatorOption;
         }
 
 
-        public static MiddleWareInDataOption GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter(string propName)
+        public static MiddleWareMediatorOption GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter(string propName)
         {
-            MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
+            MiddleWareMediatorOption middleWareMediatorOption = new MiddleWareMediatorOption
             {
                 Description = "Преобразование Note",
-                StringHandlers = new List<StringMiddleWareOption>
+                StringHandlers = new List<StringHandlerHandlerMiddleWare4InDataOption>
                 {
-                    new StringMiddleWareOption
+                    new StringHandlerHandlerMiddleWare4InDataOption
                     {
                         PropName = propName,
                         Converters = new List<UnitStringConverterOption>
@@ -172,19 +172,19 @@ namespace DeviceForExchnage.Test.Datas
                 }
             };
 
-            return middleWareInDataOption;
+            return middleWareMediatorOption;
         }
 
 
 
-        public static MiddleWareInDataOption GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter_withoutPhrases(string propName)
+        public static MiddleWareMediatorOption GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter_withoutPhrases(string propName)
         {
-            MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
+            MiddleWareMediatorOption middleWareMediatorOption = new MiddleWareMediatorOption
             {
                 Description = "Преобразование Note",
-                StringHandlers = new List<StringMiddleWareOption>
+                StringHandlers = new List<StringHandlerHandlerMiddleWare4InDataOption>
                 {
-                    new StringMiddleWareOption
+                    new StringHandlerHandlerMiddleWare4InDataOption
                     {
                         PropName = propName,
                         Converters = new List<UnitStringConverterOption>
@@ -215,19 +215,19 @@ namespace DeviceForExchnage.Test.Datas
                 }
             };
 
-            return middleWareInDataOption;
+            return middleWareMediatorOption;
         }
 
 
 
-        public static MiddleWareInDataOption GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter_Khazanskiy(string propName)
+        public static MiddleWareMediatorOption GetMiddleWareInDataOption_OneStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter_Khazanskiy(string propName)
         {
-            MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
+            MiddleWareMediatorOption middleWareMediatorOption = new MiddleWareMediatorOption
             {
                 Description = "Преобразование Note",
-                StringHandlers = new List<StringMiddleWareOption>
+                StringHandlers = new List<StringHandlerHandlerMiddleWare4InDataOption>
                 {
-                    new StringMiddleWareOption
+                    new StringHandlerHandlerMiddleWare4InDataOption
                     {
                         PropName = propName,
                         Converters = new List<UnitStringConverterOption>
@@ -258,20 +258,20 @@ namespace DeviceForExchnage.Test.Datas
                 }
             };
 
-            return middleWareInDataOption;
+            return middleWareMediatorOption;
         }
 
 
 
 
-        public static MiddleWareInDataOption GetMiddleWareInDataOption_TwoStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter(params string[] propNames)
+        public static MiddleWareMediatorOption GetMiddleWareInDataOption_TwoStringHandler_SubStringMemConverter_InseartEndLineMarkerConverter(params string[] propNames)
         {
-            MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
+            MiddleWareMediatorOption middleWareMediatorOption = new MiddleWareMediatorOption
             {
                 Description = "Преобразование Note",
-                StringHandlers = new List<StringMiddleWareOption>
+                StringHandlers = new List<StringHandlerHandlerMiddleWare4InDataOption>
                 {
-                    new StringMiddleWareOption
+                    new StringHandlerHandlerMiddleWare4InDataOption
                     {
                         PropName = propNames[0],
                         Converters = new List<UnitStringConverterOption>
@@ -295,7 +295,7 @@ namespace DeviceForExchnage.Test.Datas
                             }
                         }
                     },
-                    new StringMiddleWareOption
+                    new StringHandlerHandlerMiddleWare4InDataOption
                     {
                         PropName = propNames[1],
                         Converters = new List<UnitStringConverterOption>
@@ -317,19 +317,19 @@ namespace DeviceForExchnage.Test.Datas
                 }
             };
 
-            return middleWareInDataOption;
+            return middleWareMediatorOption;
         }
 
 
 
-        public static MiddleWareInDataOption GetMiddleWareInDataOption_OneStringHandler_ReplaceEmptyStringConverterTest(params string[] propNames)
+        public static MiddleWareMediatorOption GetMiddleWareInDataOption_OneStringHandler_ReplaceEmptyStringConverterTest(params string[] propNames)
         {
-            MiddleWareInDataOption middleWareInDataOption = new MiddleWareInDataOption
+            MiddleWareMediatorOption middleWareMediatorOption = new MiddleWareMediatorOption
             {
                 Description = "Преобразование Note",
-                StringHandlers = new List<StringMiddleWareOption>
+                StringHandlers = new List<StringHandlerHandlerMiddleWare4InDataOption>
                 {
-                    new StringMiddleWareOption
+                    new StringHandlerHandlerMiddleWare4InDataOption
                     {
                         PropName = propNames[0],
                         Converters = new List<UnitStringConverterOption>
@@ -350,7 +350,7 @@ namespace DeviceForExchnage.Test.Datas
                 }
             };
 
-            return middleWareInDataOption;
+            return middleWareMediatorOption;
         }
     }
 }
