@@ -4,10 +4,8 @@ using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.DateTimeConverte
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers
 {
-    public class DateTimeMiddleWareOptionDto
+    public class DateTimeHandlerMiddleWareOptionDto
     {
-        [Required(ErrorMessage = "Укажите PropName")]
-        public string PropName { get; set; }
         public List<UnitDateTimeConverterOptionDto> Converters { get; set; }
     }
 

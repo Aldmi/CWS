@@ -1,8 +1,7 @@
 ﻿using System;
 using Domain.Device.Repository.Entities.MiddleWareOption;
 
-
-namespace Domain.Device.MiddleWares4InDatas.Handlers
+namespace Domain.Device.MiddleWares4InData.Handlers4InData
 {
     public class EnumHandlerMiddleWare4InData : BaseHandlerMiddleWare4InData<Enum>
     {

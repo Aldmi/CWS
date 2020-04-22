@@ -188,7 +188,7 @@ namespace WebApiSwc.AutoMapperConfig
                     src.Key,
                     src.Format,
                     src.BorderSubString,
-                    context.Mapper.Map<StringHandlerMiddleWareOption>(src.StringMiddleWareOption)
+                    context.Mapper.Map<StringHandlerMiddleWareOption>(src.StringHandlerMiddleWareOption)
                 )).ForAllMembers(opt => opt.Ignore());
             #endregion
         }

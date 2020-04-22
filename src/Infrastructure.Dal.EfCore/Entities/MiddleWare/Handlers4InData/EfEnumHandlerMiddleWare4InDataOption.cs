@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Infrastructure.Dal.EfCore.Entities.MiddleWare.Converters.EnumsConvertersOption;
+﻿using Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers;
 
-namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers
+namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers4InData
 {
     public class EfEnumHandlerMiddleWare4InDataOption : EfEnumHandlerMiddleWareOption
     {

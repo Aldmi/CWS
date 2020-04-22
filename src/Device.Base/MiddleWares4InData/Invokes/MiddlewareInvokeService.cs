@@ -12,7 +12,7 @@ using Serilog;
 using Shared.MiddleWares.Converters;
 using InvokerOutput = Domain.Device.Repository.Entities.MiddleWareOption.InvokerOutput;
 
-namespace Domain.Device.MiddleWares4InDatas.Invokes
+namespace Domain.Device.MiddleWares4InData.Invokes
 {
     /// <summary>
     /// Определяет способ запуска обработчика IMiddlewareInvoke.

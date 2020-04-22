@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers;
+using Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers4InData;
 
 namespace Infrastructure.Dal.EfCore.Entities.MiddleWare
 {

@@ -4,18 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
-using Domain.Device.MiddleWares4InDatas.Handlers;
-using Domain.Device.MiddleWares4InDatas.Invokes;
+using Domain.Device.MiddleWares4InData.Handlers4InData;
+using Domain.Device.MiddleWares4InData.Invokes;
 using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.InputDataModel.Base.InData;
 using FastDeepCloner;
 using Serilog;
 using Shared.MiddleWares.Converters;
 using Shared.MiddleWares.Converters.Exceptions;
-using Shared.MiddleWares.Handlers;
 using Shared.ReflectionServices;
 
-namespace Domain.Device.MiddleWares4InDatas
+namespace Domain.Device.MiddleWares4InData
 {
     /// <summary>
     /// Промежуточный обработчик входных данных.

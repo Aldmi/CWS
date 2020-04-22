@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Domain.Device.Enums;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers;
+using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers4InData;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption
 {
@@ -9,9 +10,9 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption
     {
         public string Description { get; set; }
 
-        public List<StringMiddleWareOptionDto> StringHandlers { get; set; }
-        public List<DateTimeMiddleWareOptionDto> DateTimeHandlers { get; set; }
-        public List<EnumMiddleWareOptionDto> EnumHandlers { get; set; }
+        public List<StringHandlerMiddleWare4InDataOptionDto> StringHandlers { get; set; }
+        public List<DateTimeHandlerMiddleWare4InDataOptionDto> DateTimeHandlers { get; set; }
+        public List<EnumHandlerMiddleWare4InDataOptionDto> EnumHandlers { get; set; }
 
         [Required(ErrorMessage = "Укажите InvokerOutput")]
         public InvokerOutputDto InvokerOutput { get; set; }

@@ -18,6 +18,6 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.DeviceOption
 
         [Required(ErrorMessage = "Список ключей ExchangeKeys не может быть пуст")]
         public List<string> ExchangeKeys { get; set; }
-        public MiddleWareInDataOptionDto MiddleWareInData { get; set; }
+        public MiddleWareInDataOptionDto MiddleWareMediator { get; set; }
     }
 }

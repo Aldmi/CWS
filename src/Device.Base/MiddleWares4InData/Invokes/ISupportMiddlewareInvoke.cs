@@ -2,7 +2,7 @@
 using Domain.InputDataModel.Base.InData;
 using Shared.MiddleWares.Converters;
 
-namespace Domain.Device.MiddleWares4InDatas.Invokes
+namespace Domain.Device.MiddleWares4InData.Invokes
 {
     public interface ISupportMiddlewareInvoke<TIn>
     {

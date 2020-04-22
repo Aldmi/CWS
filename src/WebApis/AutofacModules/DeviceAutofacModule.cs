@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Domain.Device;
-using Domain.Device.MiddleWares4InDatas;
-using Domain.Device.MiddleWares4InDatas.Invokes;
+using Domain.Device.MiddleWares4InData;
+using Domain.Device.MiddleWares4InData.Invokes;
 using Domain.Device.Services;
 using Domain.InputDataModel.Base.InData;
 

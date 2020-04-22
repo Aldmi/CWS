@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using DeviceForExchnage.Test.Datas;
-using Domain.Device.MiddleWares4InDatas;
+using Domain.Device.MiddleWares4InData;
 using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;

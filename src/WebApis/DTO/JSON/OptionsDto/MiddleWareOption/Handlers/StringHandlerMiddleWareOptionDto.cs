@@ -4,10 +4,8 @@ using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConverters
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers
 {
-    public class StringMiddleWareOptionDto
+    public class StringHandlerMiddleWareOptionDto
     {
-        [Required(ErrorMessage = "Укажите PropName")]
-        public string PropName { get; set; }             
         public List<UnitStringConverterOptionDto> Converters { get; set; }
     }
 
