@@ -124,20 +124,6 @@ namespace WebApiSwc.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            //Проверить на дублирование Key
-            var duplicateVarNames = listDto
-                .GroupBy(g => g.Key)
-                .Where(g => g.Count() > 1)
-                .Select(g => g.Key)
-                .ToArray();
-           
-           if (duplicateVarNames.Any())
-           {
-               var agr= duplicateVarNames.Aggregate((current, next) => current + ", " + next);
-               ModelState.AddModelError("StringInsertModelExt", $"Key Не может повторятся {agr}");
-               return BadRequest(ModelState);
-            }
-
             try
             {
                 var listModels = _mapper.Map<List<StringInsertModelExt>>(listDto);

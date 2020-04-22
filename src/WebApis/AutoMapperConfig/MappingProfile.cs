@@ -70,6 +70,8 @@ namespace WebApiSwc.AutoMapperConfig
                 new TypeTrain(
                     src.TypeName,
                     src.TypeAlias,
+                    String.Empty,
+                    src.TypeAliasEng,
                     ConvertString2NullableInt(src.TrainType)
                     ),
                 new VagonDirection(src.VagonDirection),

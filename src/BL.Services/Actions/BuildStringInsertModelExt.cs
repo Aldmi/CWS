@@ -70,7 +70,20 @@ namespace App.Services.Actions
         /// </summary>
         public async Task<Result> AddOrUpdateAndBuildListAsync(IReadOnlyList<StringInsertModelExt> models)
         {
-            var listResults= new List<Result<StringInsertModelExt>>();
+            //Проверить на дублирование Key
+            var duplicateVarNames = models
+                .GroupBy(g => g.Key)
+                .Where(g => g.Count() > 1)
+                .Select(g => g.Key)
+                .ToArray();
+
+            if (duplicateVarNames.Any())
+            {
+                var agr = duplicateVarNames.Aggregate((current, next) => current + ", " + next);
+                return Result.Failure($"Key Не может повторятся {agr}");
+            }
+
+            var listResults = new List<Result<StringInsertModelExt>>();
             foreach (var m in models)
             {
                 var res = await AddOrUpdateAndBuildAsync(m);
