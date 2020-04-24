@@ -18,8 +18,8 @@ namespace Domain.InputDataModel.Shared.StringInseartService.IndependentInseart
         /// <returns>сервис независимых вставок</returns>
         public static IndependentInsertsService CreateIndependentInsertsService(string str, string pattern, List<Func<StringInsertModel, IIndependentInsertsHandler>> handlerFactorys, ILogger logger)
         {
-            var repDict= StringInsertModelFactory.CreateDistinctByReplacement(str, pattern);
-            var insHandlers = CreateListIndependentInseartHandlers(repDict.Values, handlerFactorys);
+            var list= StringInsertModelFactory.CreateListDistinctByReplacement(str, pattern);
+            var insHandlers = CreateListIndependentInseartHandlers(list, handlerFactorys);
             var service = new IndependentInsertsService(str, logger, insHandlers.ToArray());
             return service;
         }

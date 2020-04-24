@@ -8,12 +8,22 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
 {
     public class StringInsertModel
     {
+        #region field
+        private readonly StringInsertModelExt _ext;
+        #endregion
+
+
+
+        #region prop
         public string Replacement { get; }
         public string VarName { get; }
-        public string Format { get; }
-        public IReadOnlyList<string> Options { get; }
+        public string Format { get; }                  //УБРАТЬ!!!
+        public IReadOnlyList<string> Options { get; } //УБРАТЬ!!!
+        #endregion
 
 
+
+        #region ctor
         public StringInsertModel(string replacement, string varName, string options, string format)
         {
             Replacement = replacement;
@@ -21,8 +31,11 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
             Format = format;
             Options = FindPartsOptions(options, '|');
         }
+        #endregion
 
 
+
+        #region Methode
         public static Result<string> CalcSubStringBeetween2Models(string str, StringInsertModel startModel, StringInsertModel endModel)
         {
             var pattern = $"{startModel.Replacement}(.*){endModel.Replacement}";
@@ -36,6 +49,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         }
 
 
+        //УБРАТЬ!!!
         /// <summary>
         /// Выделить из Options части.
         /// Части отделены partSeparator.
@@ -44,10 +58,11 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         {
             if (string.IsNullOrEmpty(options))
                 return null;
-            
+
             options = options.ReplaceFirstOccurrence("(", String.Empty).ReplaceLastOccurrence(")", String.Empty);
             var split = options.Split(partSeparator);
             return split;
         }
+        #endregion
     }
 }
