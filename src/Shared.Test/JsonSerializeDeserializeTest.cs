@@ -1,4 +1,5 @@
 ﻿using System;
+using Domain.InputDataModel.Autodictor.Entities;
 using Newtonsoft.Json;
 using Shared.Extensions;
 using Shared.MiddleWares.HandlersOption;
@@ -31,6 +32,11 @@ namespace Shared.Test
         }
 
 
+        struct Gg
+        {
+            
+        }
+
 
         [Fact]
         public void Test()
@@ -40,6 +46,15 @@ namespace Shared.Test
 
             DateTime data2 = DateTime.Now;
             ConvertByFormat(data2);
+
+            Lang l = Lang.Eng;
+            ConvertByFormat(l);
+
+            //???
+            ConvertByFormat(null);
+
+            var res=  ConvertByFormat(new Gg());
+
         }
 
 
@@ -48,14 +63,17 @@ namespace Shared.Test
         {
             var format = ":t";
 
+
+           // return Convert2StrByFormat111(data, "");
+
             return data switch
             {
-                //int intVal => intVal.Convert2StrByFormat(format),//Убрать
+                int intVal => intVal.Convert2StrByFormat(format),//Убрать
                 DateTime dateTimeVal => dateTimeVal.Convert2StrByFormat(format),
-                //   _ => data.Convert2StrByFormat(format) //Должно быть поведение по умолчанию
+                //_ => data.Convert2StrByFormat(format) //Должно быть поведение по умолчанию
             };
 
-            // throw new InvalidCastException("Тип переданного значнеия не соответсвует ни одному обработчику");
+            throw new InvalidCastException("Тип переданного значнеия не соответсвует ни одному обработчику");
         }
 
 
@@ -78,9 +96,9 @@ namespace Shared.Test
             return data + "newData";
         }
 
-      
 
-        //public  string Convert2StrByFormat111<T>(T val, string formatValue) where T : struct
+
+        //public string Convert2StrByFormat111<T>(T val, string formatValue) where T : struct
         //{
         //    var format = "{0" + formatValue + "}";
         //    var formatStr = string.Format(format, val);
