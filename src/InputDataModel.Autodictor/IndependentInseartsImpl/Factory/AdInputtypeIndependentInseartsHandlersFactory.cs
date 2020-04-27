@@ -28,6 +28,9 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory
                 case "Event":
                     return new EventInsH(insertModel);
 
+                case "EventAlias":
+                    return new EventAliasInsH(insertModel);
+
                 case "Addition":
                     return new AdditionInsH(insertModel);
 
