@@ -30,14 +30,14 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         public const string Pattern = @"\{(\w+)(\([^()]+\))?(:[^{}]+)?\}"; // в блоке опций
         private readonly ILogger _logger;
         private readonly StringBuilder _headerExecuteInseartsResult;                                              //Строка Header после IndependentInserts
-        private readonly IndependentInsertsService _bodyIndependentInsertsService;                                       //модель вставки IndependentInserts в ТЕЛО ЗАПРОСА
+        private readonly IndependentInsertsService _bodyIndependentInsertsService;                                //модель вставки IndependentInserts в ТЕЛО ЗАПРОСА
         private readonly StringBuilder _footerExecuteInseartsResult;                                              //Строка Footer после IndependentInserts
         /// <summary>
         /// Массив сервисов вставки зависимых данных в общий ЗАПРОС (header+body+footer).
         /// Для каждого батча -> своя строка (склееное body) -> из склееной строки выделяем все обработчики DependentInseart.
         /// Т.е. для кажого батча будет свой DependentInseartService (с разным кол-вом DependentInseart обработчиков). 
         /// </summary>
-        private readonly  DependentInseartService[] _requestdepInsServCollection;
+        private readonly DependentInseartService[] _requestdepInsServCollection;
         private readonly ResponseTransfer _responseTransfer;                                                      //Ответ после всех вставок
         #endregion
 
@@ -64,7 +64,12 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
 
 
-        public static ViewRule<TIn> Create(string addressDevice, ViewRuleOption option, IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory, ILogger logger)
+        public static ViewRule<TIn> Create(
+            string addressDevice,
+            ViewRuleOption option,
+            IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory,
+            IReadOnlyDictionary<string, StringInsertModelExt> stringInsertModelExtDict,
+            ILogger logger)
         {
             var header = option.RequestOption.Header;
             var body = option.RequestOption.Body;
@@ -76,16 +81,16 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 new DefaultIndependentInseartsHandlersFactory().Create,
                 inputTypeInseartsHandlersFactory.Create
             };
-            var hIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(header, Pattern, handlerFactorys, logger);
-            var bIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, Pattern, handlerFactorys, logger);
-            var fIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(footer, Pattern, handlerFactorys, logger);
+            var hIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(header, Pattern, handlerFactorys, stringInsertModelExtDict, logger);
+            var bIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, Pattern, handlerFactorys, stringInsertModelExtDict, logger);
+            var fIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(footer, Pattern, handlerFactorys, stringInsertModelExtDict, logger);
 
             var hExecuteInseartsResult = hIndependentInsertsService.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } }).result;
             var fExecuteInseartsResult = fIndependentInsertsService.ExecuteInsearts(null).result;
 
             var requestdepInsServCollection = CreateDependentInseartServiceCollection(option.BatchSize, option.Count, header, body, footer);
 
-            var (_, isFailure, responseTransfer, error) = CreateResponseTransfer(option.ResponseOption, addressDevice, logger);
+            var (_, isFailure, responseTransfer, error) = CreateResponseTransfer(option.ResponseOption, addressDevice, stringInsertModelExtDict, logger);
             if (isFailure) throw new ArgumentException(error); //???
 
             var viewRule = new ViewRule<TIn>(option, hExecuteInseartsResult, bIndependentInsertsService, fExecuteInseartsResult, requestdepInsServCollection, responseTransfer, logger);
@@ -260,8 +265,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             //DEPENDENT insearts------------------------------------------------------------------------------------------------------
             if (_requestdepInsServCollection != null)
             {
-                var requestDependentInseartsService=_requestdepInsServCollection[numberOfBatch-1];
-                var (_, isFailure, value, error) = requestDependentInseartsService.ExecuteInsearts(sbAppendResult, format);  
+                var requestDependentInseartsService = _requestdepInsServCollection[numberOfBatch - 1];
+                var (_, isFailure, value, error) = requestDependentInseartsService.ExecuteInsearts(sbAppendResult, format);
                 if (isFailure)
                 {
                     return Result.Failure<RequestTransfer<TIn>>(error);
@@ -332,7 +337,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Создать строку Ответа (используя форматную строку ResponseOption).
         /// </summary>
-        private static Result<ResponseTransfer> CreateResponseTransfer(ResponseOption responseOption, string addressDevice, ILogger logger)
+        private static Result<ResponseTransfer> CreateResponseTransfer(ResponseOption responseOption, string addressDevice, IReadOnlyDictionary<string, StringInsertModelExt> stringInsertModelExtDict, ILogger logger)
         {
             //СОЗДАТЬ ВАЛИДАТОР ОТВЕТА-------------------------------------------------------------------------------------------------------------
             var (_, isFail, validator, err) = responseOption.CreateValidator();
@@ -349,7 +354,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     {
                        new DefaultIndependentInseartsHandlersFactory().Create,
                     };
-                    var indInsServ = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, Pattern, handlerFactorys, logger);
+                    var indInsServ = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, Pattern, handlerFactorys, stringInsertModelExtDict, logger);
 
                     //INDEPENDENT insearts---------------------------------------------------------------------------------------------------------
                     var (sbBodyResult, _) = indInsServ.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } });
