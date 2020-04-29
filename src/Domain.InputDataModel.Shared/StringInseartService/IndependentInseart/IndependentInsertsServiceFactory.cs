@@ -14,6 +14,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.IndependentInseart
         /// </summary>
         /// <param name="str">строка для выполнения вставок</param>
         /// <param name="handlerFactorys">список фабрик по созданию нужные обработчиков</param>
+        /// <param name="stringInsertModelExtDict">словарь расширений для stringInsertModel</param>
         /// <returns>сервис независимых вставок</returns>
         public static IndependentInsertsService CreateIndependentInsertsService(
             string str,
@@ -22,7 +23,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.IndependentInseart
             IReadOnlyDictionary<string, StringInsertModelExt> stringInsertModelExtDict,
             ILogger logger)
         {
-            var list= StringInsertModelFactory.CreateListDistinctByReplacement(str);
+            var list= StringInsertModelFactory.CreateListDistinctByReplacement(str, stringInsertModelExtDict);
             var insHandlers = CreateListIndependentInseartHandlers(list, handlerFactorys);
             var service = new IndependentInsertsService(str, logger, insHandlers.ToArray());
             return service;

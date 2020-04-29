@@ -41,7 +41,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
             var buf = subStr.ConvertStringWithHexEscapeChars2ByteArray(format);
             var lenghtBody = buf.Length;
             var lenght = lenghtBody + LenghtAddressInBytes + LenghtNByteInbytes + LenghtCrcInbytes;
-            var resStr = lenght.Convert2StrByFormat(RequiredModel.Format);
+            var resStr = RequiredModel.Ext.CalcFinishValue(lenght);
             return Result.Ok(resStr);
         }
         

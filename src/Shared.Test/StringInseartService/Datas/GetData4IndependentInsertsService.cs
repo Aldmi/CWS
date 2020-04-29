@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
 
-namespace Shared.Test.Datas
+namespace Shared.Test.StringInseartService.Datas
 {
     public static class GetData4IndependentInsertsService
     {

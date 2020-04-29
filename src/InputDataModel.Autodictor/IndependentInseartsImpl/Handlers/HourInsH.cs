@@ -13,8 +13,8 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
         protected override string GetInseart(Lang lang, AdInputType uit)
         {
             var hour = DateTime.Now.Hour;
-            var format = InsertModel.Format;
-            return hour.Convert2StrByFormat(format);
+            var res = InsertModel.Ext.CalcFinishValue(hour);
+            return res;
         }
     }
 }

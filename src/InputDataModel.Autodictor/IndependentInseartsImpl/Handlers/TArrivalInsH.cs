@@ -3,6 +3,7 @@ using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Shared.Extensions;
+using Shared.Helpers;
 
 namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
 {
@@ -13,8 +14,8 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
         protected override string GetInseart(Lang lang, AdInputType uit)
         {
             var arrivalTime = uit.ArrivalTime ?? DateTime.MinValue;
-            var format = InsertModel.Format;
-            return arrivalTime.Convert2StrByFormat(format);
+            var res = InsertModel.Ext.CalcFinishValue(arrivalTime);
+            return res.GetSpaceOrString();
         }
     }
 }

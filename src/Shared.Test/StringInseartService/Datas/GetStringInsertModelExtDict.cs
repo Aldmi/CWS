@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Domain.InputDataModel.Autodictor.Entities;
-using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 
-namespace Shared.Test.Datas
+namespace Shared.Test.StringInseartService.Datas
 {
     public static class GetStringInsertModelExtDict
     {

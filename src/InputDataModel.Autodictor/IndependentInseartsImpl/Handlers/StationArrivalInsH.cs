@@ -12,7 +12,8 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
         protected override string GetInseart(Lang lang, AdInputType uit)
         {
             var str = uit.StationArrival?.GetName(lang);
-            return str.GetSpaceOrString();
+            var res = InsertModel.Ext.CalcFinishValue(str);
+            return res.GetSpaceOrString();
         }
     }
 }

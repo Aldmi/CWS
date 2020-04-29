@@ -1,5 +1,6 @@
 ﻿using System;
 using Domain.InputDataModel.Autodictor.Entities;
+using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Newtonsoft.Json;
 using Shared.Extensions;
 using Shared.MiddleWares.HandlersOption;
@@ -41,19 +42,23 @@ namespace Shared.Test
         [Fact]
         public void Test()
         {
+            var ext= new StringInsertModelExt("ss", ":t", null, null);
+
+            string res;
             int data = 10;
-            ConvertByFormat(data);
+            //res= ext.CalcFinishValue(data);
 
             DateTime data2 = DateTime.Now;
-            ConvertByFormat(data2);
+            res = ext.CalcFinishValue(data2);
 
             Lang l = Lang.Eng;
-            ConvertByFormat(l);
+            res = ext.CalcFinishValue(l);
+   
 
             //???
-            ConvertByFormat(null);
+           // ConvertByFormat(null);
 
-            var res=  ConvertByFormat(new Gg());
+           // res=  ConvertByFormat(new Gg());
 
         }
 

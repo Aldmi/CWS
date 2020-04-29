@@ -11,7 +11,5 @@ namespace ByRulesInseartedTest.Test.Datas
             { "Stations", new StringInsertModelExt("Stations", ":X2", null, null)}
         });
 
-
-
     }
 }

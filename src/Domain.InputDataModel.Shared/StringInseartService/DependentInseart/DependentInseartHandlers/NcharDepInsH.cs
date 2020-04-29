@@ -29,7 +29,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
             var startIndex = nByteIndex + RequiredModel.Replacement.Length;
             var endIndex = crcIndex;
             var delta = endIndex - startIndex;
-            var resStr = delta.Convert2StrByFormat(RequiredModel.Format);
+            var resStr = RequiredModel.Ext.CalcFinishValue(delta);
             return Result.Ok(resStr);
         }
     }

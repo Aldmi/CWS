@@ -37,7 +37,7 @@ namespace Shared.Extensions
         /// <summary>
         /// Преобразует массив байт к строке по целочисленному формату..
         /// </summary>
-        public static string BitConverter2StrByFormat(this byte[] arr, string format, ByteHexDelemiter hexDelemiter = ByteHexDelemiter.None)
+        public static string BitConverter2StrByFormat(this byte[] arr, string format)
         {
             if (arr == null)
                 throw new ArgumentNullException(nameof(arr));
@@ -50,22 +50,22 @@ namespace Shared.Extensions
 
                 case 1:
                     var byteVal = arr[0];
-                    resStr = byteVal.Convert2StrByFormat(format, hexDelemiter);
+                    resStr = byteVal.Convert2StrByFormat(format);
                     break;
 
                 case 2:
                     var int16Val = BitConverter.ToInt16(arr);
-                    resStr= int16Val.Convert2StrByFormat(format, hexDelemiter);
+                    resStr= int16Val.Convert2StrByFormat(format);
                     break;
                 
                 case 4:
                     var int32Val = BitConverter.ToInt32(arr);
-                    resStr = int32Val.Convert2StrByFormat(format, hexDelemiter);
+                    resStr = int32Val.Convert2StrByFormat(format);
                     break;
 
                 case 8:
                     var int64Val = BitConverter.ToInt64(arr);
-                    resStr = int64Val.Convert2StrByFormat(format, hexDelemiter);
+                    resStr = int64Val.Convert2StrByFormat(format);
                     break;
             }
             return resStr;

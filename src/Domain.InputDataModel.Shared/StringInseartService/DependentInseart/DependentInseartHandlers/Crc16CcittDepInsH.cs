@@ -17,8 +17,8 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
             var (_, isFailure, arr, error) = CrcHelper.CalcCrc(sb, Border, format, RequiredModel.Replacement, crc16Ccitt.Calc);
             if (isFailure)
                 return Result.Failure<string>(error);
-           
-            var resStr = arr.BitConverter2StrByFormat(RequiredModel.Format, HexDelemiter);
+
+            var resStr = RequiredModel.Ext.CalcFinishValue(arr);
             return Result.Ok(resStr);
         }
     }

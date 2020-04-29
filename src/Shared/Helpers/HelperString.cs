@@ -140,6 +140,12 @@ namespace Shared.Helpers
         }
 
 
+        public static string GetEmptyOrString(this string str)
+        {
+            return str ?? string.Empty;
+        }
+
+
         /// <summary>
         /// Ограничить длинну строки
         /// </summary>

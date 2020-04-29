@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart;
@@ -9,10 +8,10 @@ using Domain.InputDataModel.Shared.StringInseartService.Model;
 using FluentAssertions;
 using Moq;
 using Serilog;
-using Shared.Test.Datas;
+using Shared.Test.StringInseartService.Datas;
 using Xunit;
 
-namespace Shared.Test.IndependentInseartTest
+namespace Shared.Test.StringInseartService.IndependentInseartTest
 {
     public class IndependentInsertsServiceTest
     {

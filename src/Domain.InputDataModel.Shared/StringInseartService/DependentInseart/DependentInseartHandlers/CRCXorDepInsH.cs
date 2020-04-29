@@ -16,8 +16,8 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
            if (isFailure)
                 return Result.Failure<string>(error);
 
-           var resStr = arr.BitConverter2StrByFormat(RequiredModel.Format, HexDelemiter);
-           return Result.Ok<string>(resStr);
+            var resStr = RequiredModel.Ext.CalcFinishValue(arr);
+            return Result.Ok<string>(resStr);
         }
     }
 }

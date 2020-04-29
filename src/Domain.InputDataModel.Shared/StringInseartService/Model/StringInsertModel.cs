@@ -1,41 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
-using Shared.Helpers;
 
 namespace Domain.InputDataModel.Shared.StringInseartService.Model
 {
+    /// <summary>
+    /// Модель вставки значения в строку.
+    /// Replacement - весь блок замены в строке
+    /// VarName - Имя переменной значение которой будет вставленно вместо Replacement.
+    /// Ext - Расширение, которое принимает занчение на вход и преобразует его к строке. Значение на вход переменной находит внешний сервис.
+    /// </summary>
     public class StringInsertModel
     {
-        #region field
-        private readonly StringInsertModelExt _ext;
-        #endregion
-
-
-
         #region prop
         public string Replacement { get; }
         public string VarName { get; }
-        public string Format { get; }                  //УБРАТЬ!!!
-        public IReadOnlyList<string> Options { get; } //УБРАТЬ!!!
+        public StringInsertModelExt Ext { get; }
         #endregion
 
 
-
         #region ctor
-        public StringInsertModel(string replacement, string varName, string options, string format)
+        /// <summary>
+        /// Конструктор.
+        /// </summary>
+        /// <param name="replacement">весь блок замены в строке</param>
+        /// <param name="varName">имя переменной выделенной из replacement</param>
+        /// <param name="ext">расширение. НЕ МОЖЕТ быть NULL</param>
+        public StringInsertModel(string replacement, string varName, StringInsertModelExt ext)
         {
             Replacement = replacement;
             VarName = varName;
-            Format = format;
-            Options = FindPartsOptions(options, '|');
+            Ext = ext ?? throw new ArgumentNullException(nameof(ext));
         }
         #endregion
 
 
+        #region StaticMethode
 
-        #region Methode
         public static Result<string> CalcSubStringBeetween2Models(string str, StringInsertModel startModel, StringInsertModel endModel)
         {
             var pattern = $"{startModel.Replacement}(.*){endModel.Replacement}";
@@ -48,21 +49,6 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
             return Result.Failure<string>($"Невозможно выделить подстроку из строки {str} используя паттерн {pattern}");
         }
 
-
-        //УБРАТЬ!!!
-        /// <summary>
-        /// Выделить из Options части.
-        /// Части отделены partSeparator.
-        /// </summary>
-        private IReadOnlyList<string> FindPartsOptions(string options, char partSeparator)
-        {
-            if (string.IsNullOrEmpty(options))
-                return null;
-
-            options = options.ReplaceFirstOccurrence("(", String.Empty).ReplaceLastOccurrence(")", String.Empty);
-            var split = options.Split(partSeparator);
-            return split;
-        }
         #endregion
     }
 }

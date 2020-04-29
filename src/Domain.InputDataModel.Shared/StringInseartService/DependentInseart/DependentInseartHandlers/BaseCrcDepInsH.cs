@@ -5,6 +5,7 @@ using Shared.Enums;
 
 namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.DependentInseartHandlers
 {
+    //TODO: ????? УБРАТЬ 
     public abstract class BaseCrcDepInsH : BaseDepInsH
     {
         protected readonly (string startCh, string endCh, bool includeBorder) Border;
@@ -12,21 +13,21 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
 
         protected BaseCrcDepInsH(StringInsertModel requiredModel) : base(requiredModel)
         {
-            var partsOptions = requiredModel.Options;
-            if (partsOptions != null)
-            {
-                switch (partsOptions.Count)
-                {
-                    case 1:
-                        Border = CrcHelper.CalcBorderSubString(partsOptions[0]);
-                        break;
+            //var partsOptions = requiredModel.Options;
+            //if (partsOptions != null)
+            //{
+            //    switch (partsOptions.Count)
+            //    {
+            //        case 1:
+            //            Border = CrcHelper.CalcBorderSubString(partsOptions[0]);
+            //            break;
 
-                    case 2:
-                        Border = CrcHelper.CalcBorderSubString(partsOptions[0]);
-                        Enum.TryParse(partsOptions[1], out HexDelemiter);
-                        break;
-                }
-            }
+            //        case 2:
+            //            Border = CrcHelper.CalcBorderSubString(partsOptions[0]);
+            //            Enum.TryParse(partsOptions[1], out HexDelemiter);
+            //            break;
+            //    }
+            //}
         }
     }
 }

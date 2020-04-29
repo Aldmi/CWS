@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using CSharpFunctionalExtensions;
-using Domain.InputDataModel.Autodictor.Model;
-using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Shared.StringInseartService.DependentInseart;
 using FluentAssertions;
-using Shared.Test.Datas;
+using Shared.Test.StringInseartService.Datas;
 using Xunit;
 
-namespace Shared.Test.DependentInseartTest
+namespace Shared.Test.StringInseartService.DependentInseartTest
 {
     public class DependentInseartServiceTest
     {

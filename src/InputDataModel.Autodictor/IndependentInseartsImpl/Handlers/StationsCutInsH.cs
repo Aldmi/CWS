@@ -11,10 +11,9 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
 
         protected override string GetInseart(Lang lang, AdInputType uit)
         {
-            //var stationsCut = uit.StationsСut?.GetName(lang);
-            //return string.IsNullOrEmpty(stationsCut) ? "ПОСАДКИ НЕТ" : stationsCut;
             var str = uit.StationsCut?.GetName(lang);
-            return str.GetSpaceOrString();
+            var res = InsertModel.Ext.CalcFinishValue(str);
+            return res.GetSpaceOrString();
         }
     }
 }
