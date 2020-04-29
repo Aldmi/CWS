@@ -10,9 +10,9 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart
         /// <summary>
         /// фабрика 
         /// </summary>
-        public static DependentInseartService Create(string str, string pattern)
+        public static DependentInseartService Create(string str, IReadOnlyDictionary<string, StringInsertModelExt> stringInsertModelExtDict)
         {
-            var insertModels= StringInsertModelFactory.CreateList(str, pattern);
+            var insertModels= StringInsertModelFactory.CreateList(str);
             var insHandlers = CreateListDependentInseartHandlers(insertModels);
             var service = new DependentInseartService(insHandlers.ToArray());
             return service;

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using ByRulesInseartedTest.Test.Datas;
 using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory;
@@ -6,6 +8,7 @@ using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
+using Domain.InputDataModel.Shared.StringInseartService.Model;
 using FluentAssertions;
 using Moq;
 using Serilog;
@@ -17,7 +20,7 @@ namespace ByRulesInseartedTest.Test
     {
         protected readonly ILogger Logger;
         protected readonly IIndependentInseartsHandlersFactory InTypeIndependentInsertsHandlerFactory;
-
+        protected readonly IReadOnlyDictionary<string, StringInsertModelExt> StringInsertModelExtDictionary;
 
         #region ctor
         public BaseViewRuleTest()
@@ -29,6 +32,7 @@ namespace ByRulesInseartedTest.Test
             Logger = mock.Object;
 
             InTypeIndependentInsertsHandlerFactory = new AdInputTypeIndependentInseartsHandlersFactory();
+            StringInsertModelExtDictionary = GetStringInsertModelExtDict.SimpleDictionary;
         }
         #endregion
 
@@ -70,7 +74,7 @@ namespace ByRulesInseartedTest.Test
             }; 
 
             IIndependentInseartsHandlersFactory inputTypeIndependentInsertsHandlersFactory = new AdInputTypeIndependentInseartsHandlersFactory();
-            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, Logger);
+            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, StringInsertModelExtDictionary, Logger);
 
             //Act
             var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
@@ -113,7 +117,7 @@ namespace ByRulesInseartedTest.Test
                     //Body = "0246463038254130373741434B454103"
                 }
             };
-            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, InTypeIndependentInsertsHandlerFactory, Logger);
+            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, Logger);
 
             //Act
             var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();

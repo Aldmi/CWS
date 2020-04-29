@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory;
-using Domain.InputDataModel.Autodictor.Model;
-using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
@@ -17,13 +16,15 @@ namespace Shared.Test.IndependentInseartTest
 {
     public class IndependentInsertsServiceTest
     {
-        private const string Pattern =  ViewRule<AdInputType>.Pattern;
         private readonly ILogger _logger;
 
         private readonly List<Func<StringInsertModel, IIndependentInsertsHandler>> _handlerFactorys;
+   
+
         public IndependentInsertsServiceTest()
         {
             IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory = new AdInputTypeIndependentInseartsHandlersFactory(); //TODO: попробовать внедрять через DI
+
             _handlerFactorys = new List<Func<StringInsertModel, IIndependentInsertsHandler>>
             {
                 new DefaultIndependentInseartsHandlersFactory().Create,
@@ -45,7 +46,7 @@ namespace Shared.Test.IndependentInseartTest
             //Arrage
             //var str = "\u0002{AddressDevice:X2} {Nbyte:D3}";
             var str = "\u0002{AddressDevice:X2} {Nbyte:D3}";
-            var independentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(str, Pattern, _handlerFactorys, _logger);
+            var independentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(str,  _handlerFactorys, GetStringInsertModelExtDict.SimpleDictionary, _logger);
 
             //Act
             var headerExecuteInseartsResult = independentInsertsService.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", "5" } }).result;
@@ -63,7 +64,7 @@ namespace Shared.Test.IndependentInseartTest
         
             //var str = "\u0002{AddressDevice:X2} {Nbyte:D3}";
             var str = "{CRCXorInverse:X2}\u0003";
-            var independentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(str, Pattern, _handlerFactorys, _logger);
+            var independentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(str,  _handlerFactorys, GetStringInsertModelExtDict.SimpleDictionary, _logger);
 
             //Act
             var headerExecuteInseartsResult = independentInsertsService.ExecuteInsearts(null).result;
@@ -113,7 +114,7 @@ namespace Shared.Test.IndependentInseartTest
         public void BoodyExecuteInseartsTest(string str, string expectedStr)
         { 
             //Arrage
-            var independentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(str, Pattern, _handlerFactorys, _logger);
+            var independentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(str,  _handlerFactorys, GetStringInsertModelExtDict.SimpleDictionary, _logger);
 
             //Act
             var adInputType = GetData4IndependentInsertsService.InputType.First();
@@ -135,7 +136,7 @@ namespace Shared.Test.IndependentInseartTest
             string str = null;
 
             //Act & Asert
-            var exception = Assert.Throws<ArgumentNullException>(() => IndependentInsertsServiceFactory.CreateIndependentInsertsService(str, Pattern, _handlerFactorys, _logger));
+            var exception = Assert.Throws<ArgumentNullException>(() => IndependentInsertsServiceFactory.CreateIndependentInsertsService(str, _handlerFactorys, GetStringInsertModelExtDict.SimpleDictionary, _logger));
             exception.Message.Should().Contain("Невозможно создать словарь вставок из NULL строки");
         }
     }

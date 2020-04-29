@@ -13,18 +13,16 @@ namespace Domain.InputDataModel.Shared.StringInseartService.IndependentInseart
         /// IndependentInsertsService
         /// </summary>
         /// <param name="str">строка для выполнения вставок</param>
-        /// <param name="pattern">паттерн выделения переменной для замены в строке</param>
         /// <param name="handlerFactorys">список фабрик по созданию нужные обработчиков</param>
         /// <returns>сервис независимых вставок</returns>
         public static IndependentInsertsService CreateIndependentInsertsService(
             string str,
-            string pattern,
             List<Func<StringInsertModel,
             IIndependentInsertsHandler>> handlerFactorys,
             IReadOnlyDictionary<string, StringInsertModelExt> stringInsertModelExtDict,
             ILogger logger)
         {
-            var list= StringInsertModelFactory.CreateListDistinctByReplacement(str, pattern);
+            var list= StringInsertModelFactory.CreateListDistinctByReplacement(str);
             var insHandlers = CreateListIndependentInseartHandlers(list, handlerFactorys);
             var service = new IndependentInsertsService(str, logger, insHandlers.ToArray());
             return service;

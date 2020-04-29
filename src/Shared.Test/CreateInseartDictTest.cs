@@ -11,7 +11,6 @@ namespace Shared.Test
 {
     public class CreateInseartDictTest
     {
-        private const string Pattern =  ViewRule<AdInputType>.Pattern;
 
 
         #region TheoryData
@@ -94,7 +93,7 @@ namespace Shared.Test
         public void NormalReplacementTest(string str, List<StringInsertModel> expectedInsertModels)
         {
             //Act
-            var list=  StringInsertModelFactory.CreateListDistinctByReplacement(str, Pattern);
+            var list=  StringInsertModelFactory.CreateListDistinctByReplacement(str);
 
             //Asert
             var moldels= list.ToArray();
@@ -116,7 +115,7 @@ namespace Shared.Test
             var str = "0x570xAA0xFF";
 
             //Act
-            var dict= StringInsertModelFactory.CreateListDistinctByReplacement(str, Pattern);
+            var dict= StringInsertModelFactory.CreateListDistinctByReplacement(str);
 
             //Asert
             dict.Count.Should().Be(0);
@@ -130,7 +129,7 @@ namespace Shared.Test
             var str = String.Empty;
 
             //Act
-            var dict=  StringInsertModelFactory.CreateListDistinctByReplacement(str, Pattern);
+            var dict=  StringInsertModelFactory.CreateListDistinctByReplacement(str);
 
             //Asert
             dict.Count.Should().Be(0);
@@ -144,7 +143,7 @@ namespace Shared.Test
             string str = null;
 
             //Act & Asert
-            var exception = Assert.Throws<ArgumentNullException>(() => StringInsertModelFactory.CreateListDistinctByReplacement(str, Pattern));
+            var exception = Assert.Throws<ArgumentNullException>(() => StringInsertModelFactory.CreateListDistinctByReplacement(str));
             exception.Message.Should().Contain("Невозможно создать словарь вставок из NULL строки");
         }
     }

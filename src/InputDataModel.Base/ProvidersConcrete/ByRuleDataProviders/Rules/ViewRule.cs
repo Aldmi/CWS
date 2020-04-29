@@ -26,8 +26,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
     public class ViewRule<TIn>
     {
         #region fields
-        //@"\{(\w+)(\([\w\{\}\:\\\""\""\[\]\s\-\|\<\>\u0002\u0003]+\))?(:[^{}]+)?\}" //рабочий вариант
-        public const string Pattern = @"\{(\w+)(\([^()]+\))?(:[^{}]+)?\}"; // в блоке опций
         private readonly ILogger _logger;
         private readonly StringBuilder _headerExecuteInseartsResult;                                              //Строка Header после IndependentInserts
         private readonly IndependentInsertsService _bodyIndependentInsertsService;                                //модель вставки IndependentInserts в ТЕЛО ЗАПРОСА
@@ -81,14 +79,14 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 new DefaultIndependentInseartsHandlersFactory().Create,
                 inputTypeInseartsHandlersFactory.Create
             };
-            var hIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(header, Pattern, handlerFactorys, stringInsertModelExtDict, logger);
-            var bIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, Pattern, handlerFactorys, stringInsertModelExtDict, logger);
-            var fIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(footer, Pattern, handlerFactorys, stringInsertModelExtDict, logger);
+            var hIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(header, handlerFactorys, stringInsertModelExtDict, logger);
+            var bIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body,  handlerFactorys, stringInsertModelExtDict, logger);
+            var fIndependentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(footer, handlerFactorys, stringInsertModelExtDict, logger);
 
             var hExecuteInseartsResult = hIndependentInsertsService.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } }).result;
             var fExecuteInseartsResult = fIndependentInsertsService.ExecuteInsearts(null).result;
 
-            var requestdepInsServCollection = CreateDependentInseartServiceCollection(option.BatchSize, option.Count, header, body, footer);
+            var requestdepInsServCollection = CreateDependentInseartServiceCollection(option.BatchSize, option.Count, header, body, footer, stringInsertModelExtDict);
 
             var (_, isFailure, responseTransfer, error) = CreateResponseTransfer(option.ResponseOption, addressDevice, stringInsertModelExtDict, logger);
             if (isFailure) throw new ArgumentException(error); //???
@@ -112,15 +110,15 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// Для каждого сервиса DependentInseartsServiceFactory определяет свой набор обработчиков.
         /// Номер батча является индексом этого массива. Для выбора нужного серовиса.
         /// </summary>
-        private static DependentInseartService[] CreateDependentInseartServiceCollection(int batchSize, int count, string header, string body, string footer)
+        private static DependentInseartService[] CreateDependentInseartServiceCollection(int batchSize, int count, string header, string body, string footer, IReadOnlyDictionary<string, StringInsertModelExt> stringInsertModelExtDict)
         {
-            //TODO:  Для Command не нужна логика обработки вх. данных. batchSize,  count, agregateFilter отсутствуют. Возможно сделать иерархию типов Rule и ViewRule для разных спиосков (список данных, комманд, Запросы инициализации, Аварийный список.)
+            //TODO:  Для Command не нужна логика обработки вх. данных. batchSize,  count, agregateFilter отсутствуют. Возможно сделать иерархию типов Rule и ViewRule для разных списков (список данных, комманд, Запросы инициализации, Аварийный список.)
             //Для Command.
             batchSize = batchSize == 0 ? 1 : batchSize;
             count = count == 0 ? 1 : count;
 
             var requestdepInsServCollection = HelperString.CalcBatchedSequence(body, count, batchSize)
-                .Select(item => DependentInseartsServiceFactory.Create(header + item + footer, Pattern))
+                .Select(item => DependentInseartsServiceFactory.Create(header + item + footer, stringInsertModelExtDict))
                 .ToArray();
             return requestdepInsServCollection;
         }
@@ -354,13 +352,13 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     {
                        new DefaultIndependentInseartsHandlersFactory().Create,
                     };
-                    var indInsServ = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, Pattern, handlerFactorys, stringInsertModelExtDict, logger);
+                    var indInsServ = IndependentInsertsServiceFactory.CreateIndependentInsertsService(body, handlerFactorys, stringInsertModelExtDict, logger);
 
                     //INDEPENDENT insearts---------------------------------------------------------------------------------------------------------
                     var (sbBodyResult, _) = indInsServ.ExecuteInsearts(new Dictionary<string, string> { { "AddressDevice", addressDevice } });
 
                     //DEPENDENT insearts-----------------------------------------------------------------------------------------------------------
-                    var depInsServ = DependentInseartsServiceFactory.Create(body, Pattern);
+                    var depInsServ = DependentInseartsServiceFactory.Create(body, stringInsertModelExtDict);
                     if (depInsServ != null)
                     {
                         var (_, isFailure, value, error) = depInsServ.ExecuteInsearts(sbBodyResult, format);

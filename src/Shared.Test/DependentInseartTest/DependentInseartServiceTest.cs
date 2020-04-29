@@ -6,14 +6,13 @@ using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Shared.StringInseartService.DependentInseart;
 using FluentAssertions;
+using Shared.Test.Datas;
 using Xunit;
 
 namespace Shared.Test.DependentInseartTest
 {
     public class DependentInseartServiceTest
     {
-        public const string Pattern = ViewRule<AdInputType>.Pattern;
-
         #region TheoryData
         public static IEnumerable<object[]> ExecuteInseartsDatas => new[]
         {
@@ -90,7 +89,7 @@ namespace Shared.Test.DependentInseartTest
         {
             //Arrange
             string strInit = header+body+footer;
-            var depServ = DependentInseartsServiceFactory.Create(strInit, Pattern);
+            var depServ = DependentInseartsServiceFactory.Create(strInit, GetStringInsertModelExtDict.SimpleDictionary);
             
             //Act
             var (_, isFailure, value) = depServ.ExecuteInsearts(strAfterIndepIns, format);
@@ -111,7 +110,7 @@ namespace Shared.Test.DependentInseartTest
             var strInit = header+body+footer;
             
             //Act & Asert
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => DependentInseartsServiceFactory.Create(strInit, Pattern));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => DependentInseartsServiceFactory.Create(strInit, GetStringInsertModelExtDict.SimpleDictionary));
             exception.Should().BeOfType<ArgumentNullException>();
             exception.Message.Should().Contain("Value cannot be null. (Parameter 'crcModel')");
         }
@@ -125,7 +124,7 @@ namespace Shared.Test.DependentInseartTest
             string body= "";
             string footer= "";
             string strInit = header+body+footer;
-            var depServ = DependentInseartsServiceFactory.Create(strInit, Pattern);
+            var depServ = DependentInseartsServiceFactory.Create(strInit, GetStringInsertModelExtDict.SimpleDictionary);
             
             //Act
             StringBuilder strAfterIndepIns= new StringBuilder(strInit);
@@ -147,7 +146,7 @@ namespace Shared.Test.DependentInseartTest
             var body= "%30{SyncTInSec:X5}%010C60EF03B0470000001E%110406NNNNN%01000023{(rowNumber*24-23){NumberOfCharacters01\\\"78\\\"{CRCXorInverse";
             var footer= "{CRCXorInverse:X2}\u0003";
             string strInit = header+body+footer;
-            var depServ = DependentInseartsServiceFactory.Create(strInit, Pattern);
+            var depServ = DependentInseartsServiceFactory.Create(strInit, GetStringInsertModelExtDict.SimpleDictionary);
             
             //Act
             StringBuilder strAfterIndepIns= new StringBuilder(strInit);
@@ -169,7 +168,7 @@ namespace Shared.Test.DependentInseartTest
             var body= "%30{SyncTInSec:X5}%010C60EF03B0470000{NumberOfCharacters:X2}0178";
             var footer= "{CRCXorInverse:X2}\u0003";
             string strInit = header+body+footer;
-            var depServ = DependentInseartsServiceFactory.Create(strInit, Pattern);
+            var depServ = DependentInseartsServiceFactory.Create(strInit, GetStringInsertModelExtDict.SimpleDictionary);
             
             //Act
             StringBuilder strAfterIndepIns= new StringBuilder("\u000205{Nchar:X2}%3000025%010C60EF03B0470000{NumberOfCharacters:X2}0178{CRCXorInverse:X2}\u0003");
