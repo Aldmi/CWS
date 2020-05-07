@@ -36,6 +36,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BL.Services\App.Services.csproj" />
     <ProjectReference Include="..\Device.Base\Domain.Device.csproj" />
+    <ProjectReference Include="..\Domain.InputDataModel.Shared\Domain.InputDataModel.Shared.csproj" />
     <ProjectReference Include="..\Exchange.Base\Domain.Exchange.csproj" />
     <ProjectReference Include="..\Infrastructure.MessageBroker\Infrastructure.MessageBroker.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.EventBus.csproj" />

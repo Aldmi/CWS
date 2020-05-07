@@ -13,9 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Domain.InputDataModel.Shared\Domain.InputDataModel.Shared.csproj" />
     <ProjectReference Include="..\AbstractProduser\Infrastructure.Produser.AbstractProduser.csproj" />
     <ProjectReference Include="..\Device.Base\Domain.Device.csproj" />
+    <ProjectReference Include="..\Domain.InputDataModel.Shared\Domain.InputDataModel.Shared.csproj" />
     <ProjectReference Include="..\Exchange.Base\Domain.Exchange.csproj" />
     <ProjectReference Include="..\Infrastructure.Background\Infrastructure.Background.csproj" />
     <ProjectReference Include="..\Infrastructure.MessageBroker\Infrastructure.MessageBroker.csproj" />

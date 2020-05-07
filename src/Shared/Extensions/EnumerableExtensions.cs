@@ -18,11 +18,6 @@ namespace Shared.Extensions
         /// Полученные коллекции объединяются в один список.
         /// Если inData пустой список, то  Where->OredBy не РАБОТАЕТ, только дополнение Take.
         /// </summary>
-        /// <typeparam name="TInput"></typeparam>
-        /// <param name="inData"></param>
-        /// <param name="filter"></param>
-        /// <param name="defaultItemJson"></param>
-        /// <param name="logger"></param>
         /// <returns>Возвращает объединенный список всех, после всех фильтров</returns>
         public static IEnumerable<TInput> Filter<TInput>(this IEnumerable<TInput> inData, AgregateFilter filter, string defaultItemJson, ILogger logger = null)
         {
@@ -33,27 +28,45 @@ namespace Shared.Extensions
             var agregateList = new List<TInput>();
             foreach (var p in filter.Filters)
             {
-                if (inData.Any())
+                //1. Where-------------------------------------
+                var where = p.Where;
+                var whereLenghtConditionFunc = p.WhereLenght.HasValue
+                    ? new Func<bool>(() => items.Count() == p.WhereLenght.Value)
+                    : () => true;
+                items = inData.Filter(where, logger);
+                var filterConditions = items.Any() && whereLenghtConditionFunc();
+                if (!filterConditions)
+                    continue;
+                //2. OredBy------------------------------------
+                var oredBy = p.OrderBy;
+                if (!string.IsNullOrEmpty(oredBy))
                 {
-                    //1. Where-------------------------------------
-                    var where = p.Where;
-                    var whereLenghtConditionFunc = p.WhereLenght.HasValue 
-                        ? new Func<bool>(() => items.Count() == p.WhereLenght.Value) 
-                        : () => true;
-                    items = inData.Filter(where, logger);
-                    var filterConditions = items.Any() && whereLenghtConditionFunc();
-                    if (!filterConditions)
-                        continue;
-                    //2. OredBy------------------------------------
-                    var oredBy = p.OrderBy;
-                    if (!string.IsNullOrEmpty(oredBy))
-                    {
-                        items = items.Order(oredBy, logger);
-                    }
+                    items = items.Order(oredBy, logger);
                 }
                 //3. Take с дополнением-----------------------------
                 var take = p.Take ?? 1000;
                 items = items.TakeItems(take, defaultItemJson, logger);
+                agregateList.AddRange(items);
+            }
+            return agregateList;
+        }
+
+
+        /// <summary>
+        /// Если inData пустой список, то Take в каждом фильтре формируеут список из defaultItemJson элементов.
+        /// </summary>
+        /// <returns>Созданный список</returns>
+        public static IEnumerable<TInput> TakeItemIfEmpty<TInput>(this IEnumerable<TInput> inData, AgregateFilter filter, string defaultItemJson, ILogger logger = null)
+        {
+            if (inData.Any())
+                return inData;
+
+            var agregateList = new List<TInput>();
+            foreach (var p in filter.Filters)
+            {
+                //1. Take с дополнением-----------------------------
+                var take = p.Take ?? 1000;
+                var items = inData.TakeItems(take, defaultItemJson, logger);
                 agregateList.AddRange(items);
             }
             return agregateList;

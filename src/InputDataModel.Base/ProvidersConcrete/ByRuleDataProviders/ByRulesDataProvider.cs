@@ -105,7 +105,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 {
                     Datas = new List<TIn>(),
                     Command = Command4Device.None,
-                    DirectHandlerName = RuleName4DefaultHandle
+                    //DirectHandlerName = RuleName4DefaultHandle
                 };
             }
             foreach (var rule in GetRules)
@@ -122,20 +122,20 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
                     //ДАННЫЕ ДЛЯ УКАЗАНОГО RULE--------------------------------------------
                     case RuleSwitcher4InData.InDataDirectHandler:
-                        var takesItems = inData.Datas
-                            ?.Filter(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger)
-                            ?.ToList();
-                        await SendDataAsync(rule, takesItems, ct);
+                        var takesItems = inData.Datas.TakeItemIfEmpty(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger);
+                        var resultItems = takesItems.ToList();
+                        await SendDataAsync(rule, resultItems, ct);
                         continue;
 
                     //ДАННЫЕ--------------------------------------------------------------  
                     case RuleSwitcher4InData.InDataHandler:
-                        var filtredItems = inData.Datas?.Filter(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger);
+                        takesItems = inData.Datas.TakeItemIfEmpty(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger);           //Позволяет применять Filter для Default данных (inData.Datas пустой)
+                        var filtredItems = takesItems.Filter(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger);
                         if (filtredItems == null || !filtredItems.Any())
                             continue;
 
-                        takesItems = filtredItems.ToList();
-                        await SendDataAsync(rule, takesItems, ct);
+                        resultItems = filtredItems.ToList();
+                        await SendDataAsync(rule, resultItems, ct);
                         continue;
 
                     default:
