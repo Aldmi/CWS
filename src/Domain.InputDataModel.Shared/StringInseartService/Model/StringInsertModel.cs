@@ -15,6 +15,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         #region prop
         public string Replacement { get; }
         public string VarName { get; }
+        public string Option { get; }
         public StringInsertModelExt Ext { get; }
         #endregion
 
@@ -26,17 +27,17 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         /// <param name="replacement">весь блок замены в строке</param>
         /// <param name="varName">имя переменной выделенной из replacement</param>
         /// <param name="ext">расширение. НЕ МОЖЕТ быть NULL</param>
-        public StringInsertModel(string replacement, string varName, StringInsertModelExt ext)
+        public StringInsertModel(string replacement, string varName, string option, StringInsertModelExt ext)
         {
             Replacement = replacement;
             VarName = varName;
             Ext = ext ?? throw new ArgumentNullException(nameof(ext));
+            Option = option;
         }
         #endregion
 
 
         #region StaticMethode
-
         public static Result<string> CalcSubStringBeetween2Models(string str, StringInsertModel startModel, StringInsertModel endModel)
         {
             var pattern = $"{startModel.Replacement}(.*){endModel.Replacement}";
@@ -48,7 +49,6 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
             }
             return Result.Failure<string>($"Невозможно выделить подстроку из строки {str} используя паттерн {pattern}");
         }
-
         #endregion
     }
 }

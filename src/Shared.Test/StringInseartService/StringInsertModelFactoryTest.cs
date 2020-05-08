@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 using FluentAssertions;
 using Shared.Test.StringInseartService.Datas;
+using Shared.Types;
 using Xunit;
 
 namespace Shared.Test.StringInseartService
 {
-    //TODO: все имена переменных задать здесь и все варианты Key для StringInsertModelExt
-
     public class StringInsertModelFactoryTest
     {   
         #region TheoryData
@@ -19,68 +18,60 @@ namespace Shared.Test.StringInseartService
                 "\u0002{AddressDevice:X2} {Nbyte:D3}",
                 new List<StringInsertModel>
                 {
-                    new StringInsertModel("{AddressDevice:X2}", "AddressDevice", new StringInsertModelExt("X2", ":X2", null, null)),
-                    new StringInsertModel("{Nbyte:D3}", "Nbyte", new StringInsertModelExt("D3", ":D3", null, null)),
+                    new StringInsertModel("{AddressDevice:X2}", "AddressDevice", String.Empty, new StringInsertModelExt("X2", ":X2", null, null)),
+                    new StringInsertModel("{Nbyte:D3}", "Nbyte", String.Empty , new StringInsertModelExt("D3", ":D3", null, null)),
                 }
             },
-            //new object[]
-            //{
-            //    "0x57{Nbyte:X2 fff {CRCXor[0x02-0x03]:X2}",
-            //    new List<StringInsertModel>
-            //    {
-            //        new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor", "[0x02-0x03]",":X2")
-            //    }
-            //},
-            //new object[]
-            //{
-            //    "0x57{Nbyte:X2 {kkk:ff} {} {CRCXor[0x02-0x03]:X2}",
-            //    new List<StringInsertModel>
-            //    {
-            //        new StringInsertModel("{kkk:ff}", "kkk", "",":ff"),
-            //        new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor","[0x02-0x03]", ":X2")
-            //    }
-            //},
-            //new object[]
-            //{
-            //    "0x57{ fff {{{ {CRCXor[0x02-0x03]:X2} }gfgf:X2",
-            //    new List<StringInsertModel>
-            //    {
-            //        new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor", "[0x02-0x03]", ":X2")
-            //    }
-            //},
-            //new object[]
-            //{
-            //    "0x57{NumberOfTrain}  {CRCXor[0x02-0x03]:X2}",
-            //    new List<StringInsertModel>
-            //    {
-            //        new StringInsertModel("{NumberOfTrain}", "NumberOfTrain", "", String.Empty),
-            //        new StringInsertModel("{CRCXor[0x02-0x03]:X2}", "CRCXor", "[0x02-0x03]", ":X2")
-            //    }
-            //},
-            //new object[]
-            //{
-            //    "0x{MATH(rowNumber+64):X1}0bb",
-            //    new List<StringInsertModel>
-            //    {
-            //        new StringInsertModel("{MATH(rowNumber+64):X1}", "MATH", "(rowNumber+64)", ":X1"),
-            //    }
-            //},
-            //new object[]
-            //{
-            //    "0x{MATH((rowNumber+64)-(rowNumber*1)):X1}0bb",
-            //    new List<StringInsertModel>
-            //    {
-            //        new StringInsertModel("{MATH((rowNumber+64)-(rowNumber*1)):X1}", "MATH", "((rowNumber+64)-(rowNumber*1))", ":X1"),
-            //    }
-            //},
-            //new object[]
-            //{
-            //    "*{CRC8Bit[:-*]:X2}0x0D",
-            //    new List<StringInsertModel>
-            //    {
-            //        new StringInsertModel("{CRC8Bit[:-*]:X2}", "CRC8Bit", "[:-*]",":X2"),
-            //    }
-            //},
+            new object[]
+            {
+                "\u0002{Stations} {ArrivalTime:t}",
+                new List<StringInsertModel>
+                {
+                    new StringInsertModel("{Stations}", "Stations", String.Empty, new StringInsertModelExt("default", string.Empty, null, null)),
+                    new StringInsertModel("{ArrivalTime:t}", "ArrivalTime", String.Empty , new StringInsertModelExt("t", ":t", null, null)),
+                }
+            },
+            new object[]
+            {
+                "0x57{Nbyte:X2 fff {CRCXor:X2}",
+                new List<StringInsertModel>
+                {
+                    new StringInsertModel("{CRCXor:X2}", "CRCXor", String.Empty, new StringInsertModelExt("X2", ":X2", null, null))
+                }
+            },
+            new object[]
+            {
+                "0x57{Nbyte:X2 fff {CRCXor:X2_Border}",
+                new List<StringInsertModel>
+                {
+                    new StringInsertModel("{CRCXor:X2_Border}", "CRCXor", String.Empty, new StringInsertModelExt("X2_Border", ":X2", new BorderSubString{StartCh = "0x02", EndCh = "0x03", IncludeBorder = true}, null))
+                }
+            },
+            new object[]
+            {
+                "0x57{Nbyte:X2 {} {CRCXor:X2_Border}",
+                new List<StringInsertModel>
+                {
+                    new StringInsertModel("{CRCXor:X2_Border}", "CRCXor", String.Empty, new StringInsertModelExt("X2_Border", ":X2", new BorderSubString{StartCh = "0x02", EndCh = "0x03", IncludeBorder = true}, null))
+                }
+            },
+            new object[]
+            {
+                "0x57{ fff {{{ {Nbyte:D3} }gfgf:X2",
+                new List<StringInsertModel>
+                {
+                    new StringInsertModel("{Nbyte:D3}", "Nbyte", String.Empty , new StringInsertModelExt("D3", ":D3", null, null))
+                }
+            },
+            new object[]
+            {
+                "0x{MATH((rowNumber+64)-(rowNumber*1)):X1}0bb",
+                new List<StringInsertModel>
+                {
+                    new StringInsertModel("{MATH((rowNumber+64)-(rowNumber*1)):X1}", "MATH", "((rowNumber+64)-(rowNumber*1))", new StringInsertModelExt("X1", ":X1", null, null)),
+                }
+            },
+
         };
         #endregion
 
@@ -102,7 +93,9 @@ namespace Shared.Test.StringInseartService
                 var expectedModel = expectedInsertModels[i];
                 model.Replacement.Should().Be(expectedModel.Replacement);
                 model.VarName.Should().Be(expectedModel.VarName);
-                //model.Format.Should().Be(expectedModel.Format);
+                model.Option.Should().Be(expectedModel.Option);
+
+                model.Ext.Key.Should().Be(expectedModel.Ext.Key);
             }
         }
 

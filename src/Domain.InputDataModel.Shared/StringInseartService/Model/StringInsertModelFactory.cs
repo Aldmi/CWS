@@ -9,7 +9,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
     public static class StringInsertModelFactory
     {
         //@"\{(\w+)(\([\w\{\}\:\\\""\""\[\]\s\-\|\<\>\u0002\u0003]+\))?(:[^{}]+)?\}" //рабочий вариант
-        private const string Pattern = @"\{(\w+)(\([^()]+\))?(:[^{}]+)?\}"; // в блоке опций
+        private const string Pattern = @"\{(\w+)(\([^{}:]+\))?(:[^{}]+)?\}"; // в блоке опций
 
 
         /// <summary>
@@ -39,7 +39,8 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
                 .Select(match => new StringInsertModel(
                       match.Groups[0].Value,
                          match.Groups[1].Value,
-                            FindExtenstion(extDict, match.Groups[2].Value)));
+                          match.Groups[2].Value,
+                            FindExtenstion(extDict, match.Groups[3].Value)));
 
             return matches;
         }
@@ -50,6 +51,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         /// </summary>
         private static StringInsertModelExt FindExtenstion (IReadOnlyDictionary<string, StringInsertModelExt> dictExt, string keyExt)
         {
+            keyExt = keyExt.TrimStart(':');
             var defaultExt= new StringInsertModelExt("default", string.Empty, null, null);
             return dictExt.TryGetValue(keyExt, out var ext) ? ext : defaultExt;
         }

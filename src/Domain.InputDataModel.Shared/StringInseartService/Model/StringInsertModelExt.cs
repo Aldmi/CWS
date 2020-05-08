@@ -21,7 +21,6 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         private readonly Lazy<StringHandlerMiddleWare> _lazyStringMiddleWare;
         #endregion
 
-        //TODO: что делать с блоком MATH
 
         #region ctor
         public StringInsertModelExt(string key, string format, BorderSubString borderSubString, StringHandlerMiddleWareOption stringHandlerMiddleWareOption)
@@ -61,7 +60,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         /// <summary>
         /// ОПЦИИ цепочки конвеера обработки строки.
         /// </summary>
-        public  StringHandlerMiddleWareOption StringHandlerMiddleWareOption { get; }
+        public StringHandlerMiddleWareOption StringHandlerMiddleWareOption { get; }
         #endregion
 
 
