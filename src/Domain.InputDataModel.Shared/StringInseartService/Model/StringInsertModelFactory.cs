@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using MoreLinq.Extensions;
+using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
+using Shared.MiddleWares.HandlersOption;
 
 namespace Domain.InputDataModel.Shared.StringInseartService.Model
 {
@@ -47,13 +49,25 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
 
 
         /// <summary>
-        /// Ищет расширение в словаре. Если расштрение не найденно, вставляется дефолтное значение. 
+        /// Ищет расширение в словаре. Если расштрение не найдено, вставляется дефолтное значение. 
         /// </summary>
         private static StringInsertModelExt FindExtenstion (IReadOnlyDictionary<string, StringInsertModelExt> dictExt, string keyExt)
         {
             keyExt = keyExt.TrimStart(':');
-            var defaultExt= new StringInsertModelExt("default", string.Empty, null, null);
-            return dictExt.TryGetValue(keyExt, out var ext) ? ext : defaultExt;
+            if (string.IsNullOrEmpty(keyExt))
+            {
+                var defaultExt = new StringInsertModelExt("default", string.Empty, null, null);
+                return defaultExt;
+            }
+
+            var keyNotFoundExt = new StringInsertModelExt("default", string.Empty, null, new StringHandlerMiddleWareOption
+            {
+                Converters = new List<UnitStringConverterOption>
+                {
+                    new UnitStringConverterOption {LimitStringConverterOption = new LimitStringConverterOption{Limit = 2}}  //TODO добавить конвертор с заменой вставки на строковый литерал "!!!ExtKeyNotFoumd!!!"
+                }
+            });
+            return dictExt.TryGetValue(keyExt, out var ext) ? ext : keyNotFoundExt;
         }
     }
 }

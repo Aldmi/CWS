@@ -78,18 +78,6 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         }
 
 
-        ///// <summary>
-        ///// Обрабатывает ValueType.
-        ///// ValueType->string используя Format.
-        ///// string->string (конвеер обработки заданный StringHandlerMiddleWareOption)
-        ///// </summary>
-        //public string CalcFinishValue(ValueType data)
-        //{
-        //    var formatVal = ConvertByFormat(data);
-        //    return StartMiddleWarePipline(formatVal);
-        //}
-
-
         /// <summary>
         /// Обрабатывает ValueType.
         /// ValueType->string используя Format.
@@ -112,34 +100,16 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         }
 
 
-        ///// <summary>
-        ///// ValueType->string используя Format.
-        ///// Первоначальное преобразование ValueType к строке по формату.
-        ///// </summary>
-        //private string ConvertByFormat(ValueType data)
-        //{
-        //    return data switch
-        //    {
-        //        int intVal => intVal.Convert2StrByFormat(Format),//TODO: перенести в блок default
-        //        DateTime dateTimeVal => dateTimeVal.Convert2StrByFormat(Format),
-        //        //_ => data.Convert2StrByFormat(format) //Должно быть поведение по умолчанию
-        //    };
-
-        //   // throw new InvalidCastException("Тип переданного значнеия не соответсвует ни одному обработчику");
-        //}
-
-
-
         private string ConvertByFormat<T>(T data)
         {
             return data switch
             {
-                int intVal => intVal.Convert2StrByFormat(Format),//TODO: перенести в блок default
+                int intVal => intVal.Convert2StrByFormat(Format),
                 DateTime dateTimeVal => dateTimeVal.Convert2StrByFormat(Format),
                 byte[] byteArray => byteArray.BitConverter2StrByFormat(Format),
-                //_ => data.Convert2StrByFormat(format) //Должно быть поведение по умолчанию
+                Enum e => e.ToString(), 
+                _ => data.ToString()
             };
-
             // throw new InvalidCastException("Тип переданного значнеия не соответсвует ни одному обработчику");
         }
 
