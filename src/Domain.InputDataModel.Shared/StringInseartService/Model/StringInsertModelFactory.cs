@@ -60,7 +60,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
                 return defaultExt;
             }
 
-            var keyNotFoundExt = new StringInsertModelExt("default", string.Empty, null, new StringHandlerMiddleWareOption
+            var keyNotFoundExt = new StringInsertModelExt("keyNotFound", string.Empty, null, new StringHandlerMiddleWareOption
             {
                 Converters = new List<UnitStringConverterOption>
                 {

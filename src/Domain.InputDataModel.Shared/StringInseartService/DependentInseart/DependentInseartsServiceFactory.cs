@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Domain.InputDataModel.Shared.StringInseartService.DependentInseart.DependentInseartHandlers;
+using Domain.InputDataModel.Shared.StringInseartService.DependentInseart.DependentInseartHandlers.Crc;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 
 namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart

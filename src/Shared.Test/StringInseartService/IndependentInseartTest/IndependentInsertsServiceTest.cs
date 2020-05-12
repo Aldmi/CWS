@@ -129,24 +129,24 @@ namespace Shared.Test.StringInseartService.IndependentInseartTest
         #region TheoryData
         public static IEnumerable<object[]> BoodyExecuteInseartsDatasWithStringMiddleware => new[]
         {
-            ////конвертор LimitStringConverterOption.
-            //new object[]
-            //{
-            //    "0x03^{NumberOfTrain:MW_Limit(2)}^",
-            //    "0x03^45^"
-            //},
-            ////конвертор LimitStringConverterOption и PadRightStringConverterOption.
-            //new object[]
-            //{
-            //    "0x03^{NumberOfTrain:MW_Limit(2)}^ {StationsCut:MW_PadR(6)}^{TArrival:t_MW_PadR(10)}^{TDepart:t_MW_PadR(11)}0x{MATH(rowNumber+64):X1}0bb",
-            //    "0x03^45^ Питер ^15:25     ^16:18      0x420bb"
-            //},
-            ////Цепочка конверторов.
-            //new object[]
-            //{
-            //    "0x03^{NumberOfTrain:MW_Limit(2)->PadR(6)}",
-            //    "0x03^45    "
-            //},
+            //конвертор LimitStringConverterOption.
+            new object[]
+            {
+                "0x03^{NumberOfTrain:MW_Limit(2)}^",
+                "0x03^45^"
+            },
+            //конвертор LimitStringConverterOption и PadRightStringConverterOption.
+            new object[]
+            {
+                "0x03^{NumberOfTrain:MW_Limit(2)}^ {StationsCut:MW_PadR(6)}^{TArrival:t_MW_PadR(10)}^{TDepart:t_MW_PadR(11)}0x{MATH(rowNumber+64):X1}0bb",
+                "0x03^45^ Питер ^15:25     ^16:18      0x420bb"
+            },
+            //Цепочка конверторов.
+            new object[]
+            {
+                "0x03^{NumberOfTrain:MW_Limit(2)->PadR(6)}",
+                "0x03^45    "
+            },
             //НЕ верный ключ для Ext.
             new object[]
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using Shared.Extensions;
 using Shared.MiddleWares.Handlers;
@@ -91,11 +92,17 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
 
 
         /// <summary>
-        /// Вернуть подстроку обозначенную границами BorderSubString
+        /// Вернуть подстроку обозначенную границами BorderSubString.
+        /// Если BorderSubString == null. то подстрока выделяется от начала до nativeBorder.
         /// </summary>
-        public Result<string> CalcBorderSubString(string str )
+        public Result<string> CalcBorderSubString(string str, string nativeBorder)
         {
-            var (_, isFailure, value, error) = str.SubstringBetweenCharacters(BorderSubString.StartCh, BorderSubString.EndCh, BorderSubString.IncludeBorder);
+            if (BorderSubString == null)
+            {
+               var matchString = Regex.Match(str, $"(.*){nativeBorder}").Groups[1].Value;
+               return Result.Ok(matchString);
+            }
+            var (_, isFailure, value, error) = BorderSubString.Calc(str);
             return isFailure ? Result.Failure<string>(error) : Result.Ok(value);
         }
 
