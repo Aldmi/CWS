@@ -37,14 +37,6 @@ namespace ByRulesInseartedTest.Test
         #endregion
 
 
-        public string ReplaceFirstOccurrence (string Source, string Find, string Replace)
-        {
-            int Place = Source.IndexOf(Find);
-            string result = Source.Remove(Place, Find.Length).Insert(Place, Replace);
-            return result;
-        }
-
-        
 
         [Fact]
         public void CreateStringRequestEmptyRequestOptionTest()
@@ -105,7 +97,7 @@ namespace ByRulesInseartedTest.Test
                 RequestOption = new RequestOption
                 {
                     Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
-                    Body = "%00001032{(rowNumber*16):D3}3%10$12$00$60$t3{TDepart:t}%00033240{(rowNumber*16):D3}4%10$12$00$60$t3{StationArrival}%00241256{(rowNumber*16):D3}3%10$12$00$60$t1{PathNumber}%400012561451%000012561603%10$10$00$60$t2Московское время {Hour:D2}.{Minute:D2}",
+                    Body = "%00001032{MATH(rowNumber*16):D3}3%10$12$00$60$t3{TDepart:t}%00033240{MATH(rowNumber*16):D3}4%10$12$00$60$t3{StationArrival}%00241256{MATH(rowNumber*16):D3}3%10$12$00$60$t1{PathNumber}%400012561451%000012561603%10$10$00$60$t2Московское время {Hour:D2}.{Minute:D2}",
                     Footer = "{CRCXorInverse:X2}\u0003",
                     Format = "Windows-1251",
                     MaxBodyLenght = 10

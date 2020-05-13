@@ -34,20 +34,23 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        //Format = "HEX",
-                        //Lenght = 8,
-                        //Body = "0230323030464403"
+                        ValidatorName = "EqualValidator",
+                        EqualValidator = new EqualResponseValidatorOption
+                        {
+                            Body = "0230323030464403",
+                            Format ="HEX"
+                        }
                     }
                 },
 
                 //REQUEST
                 GetData4ViewRuleTest.InputTypesDefault,
-                "\u00020589%000010320113%10$10$00$60$t216:18%000330940113%10$10$00$60$t3Транзит%000951920114%10$10$00$60$t1Москва-Питер%000011920183%10$10$00$60$t2 E7\u0003",
+                "\u00020589%000010320113%10$10$00$60$t216:18%000330940113%10$10$00$60$t3Транзит%000951920114%10$10$00$60$t1Питер-Москва%000011920183%10$10$00$60$t2 E7\u0003",
                 "Windows-1251",
-                "\u00020589%000010320113%10$10$00$60$t216:18%000330940113%10$10$00$60$t3Транзит%000951920114%10$10$00$60$t1Москва-Питер%000011920183%10$10$00$60$t2 E7\u0003",   
+                "\u00020589%000010320113%10$10$00$60$t216:18%000330940113%10$10$00$60$t3Транзит%000951920114%10$10$00$60$t1Питер-Москва%000011920183%10$10$00$60$t2 E7\u0003",   
                 //RESPONSE
-                "0230323030464403",
-                "HEX",
+                new byte[]{0x02, 0x30, 0x32, 0x30, 0x30, 0x46, 0x44, 0x03},
+
                 3
             },
             //Павелецкий Peron.vidor.P8 запрос 2
@@ -70,9 +73,12 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        //Format = "HEX",
-                        //Lenght = 8,
-                        //Body = "0230323030464403"
+                        ValidatorName = "EqualValidator",
+                        EqualValidator = new EqualResponseValidatorOption
+                        {
+                            Body = "0230323030464403",
+                            Format ="HEX"
+                        }
                     }
                 },
 
@@ -82,8 +88,8 @@ namespace ByRulesInseartedTest.Test
                 "Windows-1251",
                 "\u000205A9%000011920304%10$10$00$60$t2Станция 1,Станция 2,Станция 3,Станция 4,Станция 5,Станция 6,Станция 7%000011600483%10$10$00$60$t3Московское время%001611920483%10$10$00$60$t1F8\u0003",  
                 //RESPONSE
-                "0230323030464403",
-                "HEX",
+                new byte[]{0x02, 0x30, 0x32, 0x30, 0x30, 0x46, 0x44, 0x03},
+
                 1
             },
             //Павелецкий Prigorod.9Str
@@ -106,9 +112,12 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        //Format = "HEX",
-                        //Lenght = 8,
-                        //Body = "0230323030464403"
+                        ValidatorName = "EqualValidator",
+                        EqualValidator = new EqualResponseValidatorOption
+                        {
+                            Body = "0230323030464403",
+                            Format ="HEX"
+                        }
                     }
                 },
 
@@ -118,8 +127,8 @@ namespace ByRulesInseartedTest.Test
                 "Windows-1251",
                 "\u00020599%000010320163%10$12$00$60$t316:18%000332400164%10$12$00$60$t3Москва%002412560163%10$12$00$60$t15%400012561451%000012561603%10$10$00$60$t2Московское время07\u0003",   
                 //RESPONSE
-                "0230323030464403",
-                "HEX",
+                new byte[]{0x02, 0x30, 0x32, 0x30, 0x30, 0x46, 0x44, 0x03},
+
                3
             },
             //Казанский Prib.Otpr.Double.6Str Data.Otpr Запрос 2
@@ -142,9 +151,12 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        //Format = "HEX",
-                        //Lenght = 8,
-                        //Body = "0230323030464403"
+                        ValidatorName = "EqualValidator",
+                        EqualValidator = new EqualResponseValidatorOption
+                        {
+                            Body = "0230323030464403",
+                            Format ="HEX"
+                        }
                     }
                 },
 
@@ -154,8 +166,8 @@ namespace ByRulesInseartedTest.Test
                 "Windows-1251",
                 "\u000205B7%000010210274%10$00$60$t3$13456%000251440274%10$00$60$t3$13Москва%001681990274%10$00$60$t3$1316:18%002022330274%10$00$60$t3$13%002022330274%10$00$60$t3$13%002412540274%10$00$60$t3$1358C\u0003",
                 //RESPONSE
-                "0230323030464403",
-                "HEX",
+                new byte[]{0x02, 0x30, 0x32, 0x30, 0x30, 0x46, 0x44, 0x03},
+
                 4
             }
         };
@@ -173,8 +185,7 @@ namespace ByRulesInseartedTest.Test
             string expectedRequestStrRepresentFormat,
             string expectedRequestStrRepresentBase,
 
-            string expectedRespStrRepresent,
-            string expectedRespStrRepresentFormat,
+            byte[] expectedRespAray,
 
             int expectedCountInseartedData)
         {
@@ -184,20 +195,22 @@ namespace ByRulesInseartedTest.Test
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
             var rt = requestTransfers.FirstOrDefault();
+            var responseInfo = rt.Response.Validator.Validate(expectedRespAray);
 
             //Assert
-            rt.Request.StrRepresent.Str.Should().Be(expectedRequestStrRepresent);
-            rt.Request.StrRepresent.Format.Should().Be(expectedRequestStrRepresentFormat);
             rt.Request.StrRepresentBase.Str.Should().Be(expectedRequestStrRepresentBase);
             rt.Request.StrRepresentBase.Format.Should().Be(option.RequestOption.Format);
+
+            rt.Request.StrRepresent.Str.Should().Be(expectedRequestStrRepresent);
+            rt.Request.StrRepresent.Format.Should().Be(expectedRequestStrRepresentFormat);
+
             rt.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(inputTypes.Count);
             foreach (var processedItem in rt.Request.ProcessedItemsInBatch.ProcessedItems)
             {
                 processedItem.InseartedData.Where(pair=>pair.Key != "MATH").ToList().Count.Should().Be(expectedCountInseartedData);
             }
 
-            //rt.Response.StrRepresent.Str.Should().Be(expectedRespStrRepresent);
-            //rt.Response.StrRepresent.Format.Should().Be(expectedRespStrRepresentFormat);
+            responseInfo.IsOutDataValid.Should().BeTrue();
         }
     }
 }

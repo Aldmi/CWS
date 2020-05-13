@@ -30,10 +30,10 @@
                     break;
 
                 case 2:
-                    NameRu = "Стоянка";         //Транзит
-                    NameAliasRu = "СТОЯН.";
-                    NameEng = "Parking";
-                    NameAliasEng = "PARK.";
+                    NameRu = "Транзит";      
+                    NameAliasRu = "ТРАН.";
+                    NameEng = "Transit";
+                    NameAliasEng = "TRAN.";
                     break;
             }
         }
