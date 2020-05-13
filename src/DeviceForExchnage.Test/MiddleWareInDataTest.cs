@@ -701,7 +701,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData_StationCut(1); //3
-            var option =GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_ReplaceEmptyStringConverterTest("StationsСut.NameRu");
+            var option =GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_ReplaceEmptyStringConverterTest("StationsCut.NameRu");
             var middleWareinData = new MiddleWareMediator<AdInputType>(option, _logger);
 
             //Act
@@ -719,7 +719,7 @@ namespace DeviceForExchnage.Test
         {
             //Arrage
             var inData = InDataSourse.GetData_Stations_Null(1); //3
-            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_ReplaceEmptyStringConverterTest("StationsСut.NameRu");
+            var option = GetMiddleWareInDataOption.GetMiddleWareInDataOption_OneStringHandler_ReplaceEmptyStringConverterTest("StationsCut.NameRu");
             var middleWareinData = new MiddleWareMediator<AdInputType>(option, _logger);
 
             //Act

@@ -108,20 +108,6 @@ namespace DeviceForExchnage.Test.Datas
                                 }
                             }
                         }
-                    },
-                    new StringHandlerHandlerMiddleWare4InDataOption
-                    {
-                        PropName = propNames[1],
-                        Converters = new List<UnitStringConverterOption>
-                        {
-                            new UnitStringConverterOption
-                            {
-                                ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOption
-                                {
-                                    ReplacementString = "Посадки нет"
-                                }
-                            }
-                        }
                     }
                 },
                 InvokerOutput = new InvokerOutput
@@ -336,9 +322,12 @@ namespace DeviceForExchnage.Test.Datas
                         {
                             new UnitStringConverterOption
                             {
-                                ReplaceEmptyStringConverterOption = new ReplaceEmptyStringConverterOption
+                                ReplaseStringConverterOption = new ReplaseStringConverterOption
                                 {
-                                    ReplacementString = "ПОСАДКИ НЕТ"
+                                    Mapping = new Dictionary<string, string>
+                                    {
+                                        {"", "ПОСАДКИ НЕТ" }
+                                    }
                                 }
                             }
                         }
