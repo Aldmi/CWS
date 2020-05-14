@@ -17,5 +17,7 @@ namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers
         public EfInsertAtEndOfLineConverterOption InsertAtEndOfLineConverterOption { get; set; }
         public EfPadRightStringConverterOption PadRightStringConverterOption { get; set; }
         public EfPadRighCharWeightStringConverterOption PadRighCharWeightStringConverterOption { get; set; }
+        public EfReplaseStringConverterOption ReplaseStringConverterOption { get; set; }
+        public EfReplaseCharStringConverterOption ReplaseCharStringConverterOption { get; set; }
     }
 }

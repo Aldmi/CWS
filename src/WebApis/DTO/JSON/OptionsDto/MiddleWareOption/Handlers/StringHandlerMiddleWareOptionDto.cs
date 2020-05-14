@@ -18,5 +18,7 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers
         public InsertAtEndOfLineConverterOptionDto InsertAtEndOfLineConverterOption { get; set; }
         public PadRightStringConverterOptionDto PadRightStringConverterOption { get; set; }
         public PadRighCharWeightStringConverterOptionDto PadRighCharWeightStringConverterOption { get; set; }
+        public ReplaseStringConverterOptionDto ReplaseStringConverterOption { get; set; }
+        public ReplaseCharStringConverterOptionDto ReplaseCharStringConverterOption { get; set; }
     }
 } 

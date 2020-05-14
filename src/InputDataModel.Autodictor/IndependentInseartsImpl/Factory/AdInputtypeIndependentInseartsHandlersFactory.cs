@@ -1,4 +1,5 @@
-﻿using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers;
+﻿using Domain.InputDataModel.Autodictor.Entities;
+using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 
@@ -8,91 +9,38 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory
     {
         public IIndependentInsertsHandler Create(StringInsertModel insertModel)
         {
-            switch (insertModel.VarName)
+            return insertModel.VarName switch
             {
-                case "TypeName":
-                    return new TypeNameInsH(insertModel);
-
-                case "TypeAlias":
-                    return new TypeAliasInsH(insertModel);
-
-                case "NumberOfTrain":
-                    return new NumberOfTrainInsH(insertModel);
-
-                case "PathNumber":
-                    return new PathNumberInsH(insertModel);
-
-                case "Platform":
-                    return new PlatformInsH(insertModel);
-
-                case "Event":
-                    return new EventInsH(insertModel);
-
-                case "EventAlias":
-                    return new EventAliasInsH(insertModel);
-
-                case "Addition":
-                    return new AdditionInsH(insertModel);
-
-                case "Stations":
-                    return new StationsInsH(insertModel);
-
-                case "StationsCut":
-                    return new StationsCutInsH(insertModel);
-
-                case "StationArrival":
-                    return new StationArrivalInsH(insertModel);
-
-                case "StationDeparture":
-                    return new StationDepartureInsH(insertModel);
-
-                case "Note":
-                    return new NoteInsH(insertModel);
-
-                case "DaysFollowing":
-                    return new DaysFollowingInsH(insertModel);
-
-                case "DaysFollowingAlias":
-                    return new DaysFollowingAliasInsH(insertModel);
-
-                case "TArrival":
-                    return new TArrivalInsH(insertModel);
-
-                case "TDepart":
-                    return new TDepartInsH(insertModel);
-
-                case "DelayTime":
-                    return new DelayTimeInsH(insertModel);
-
-                case "Time":
-                    return new TimeInsH(insertModel);
-
-                case "ExpectedTime":
-                    return new ExpectedTimeInsH(insertModel);
-
-                case "SyncTInSec":
-                    return new SyncTInSecInsH(insertModel);
-
-                case "Year":
-                    return new YearInsH(insertModel);
-
-                case "Month":
-                    return new MonthInsH(insertModel);
-
-                case "Day":
-                    return new DayInsH(insertModel);
-
-                case "Hour":
-                    return new HourInsH(insertModel);
-
-                case "Minute":
-                    return new MinuteInsH(insertModel);
-
-                case "Second":
-                    return new SecondInsH(insertModel);
-
-                default: return null;
-            }
+                "TypeName" => new TypeNameInsH(insertModel),
+                "TypeAlias" => new TypeAliasInsH(insertModel),
+                "NumberOfTrain" => new NumberOfTrainInsH(insertModel),
+                "PathNumber" => new PathNumberInsH(insertModel),
+                "Platform" => new PlatformInsH(insertModel),
+                "Event" => new EventInsH(insertModel),
+                "EventAlias" => new EventAliasInsH(insertModel),
+                "Addition" => new AdditionInsH(insertModel),
+                "Stations" => new StationsInsH(insertModel),
+                "StationsCut" => new StationsCutInsH(insertModel),
+                "StationArrival" => new StationArrivalInsH(insertModel),
+                "StationDeparture" => new StationDepartureInsH(insertModel),
+                "Note" => new NoteInsH(insertModel),
+                "DaysFollowing" => new DaysFollowingInsH(insertModel),
+                "DaysFollowingAlias" => new DaysFollowingAliasInsH(insertModel),
+                "TArrival" => new TArrivalInsH(insertModel),
+                "TDepart" => new TDepartInsH(insertModel),
+                "DelayTime" => new DelayTimeInsH(insertModel),
+                "Time" => new TimeInsH(insertModel),
+                "ExpectedTime" => new ExpectedTimeInsH(insertModel),
+                "SyncTInSec" => new SyncTInSecInsH(insertModel),
+                "Year" => new YearInsH(insertModel),
+                "Month" => new MonthInsH(insertModel),
+                "Day" => new DayInsH(insertModel),
+                "Hour" => new HourInsH(insertModel),
+                "Minute" => new MinuteInsH(insertModel),
+                "Second" => new SecondInsH(insertModel),
+                "Lang" => new LangInsH(insertModel),
+                _ => null
+            };
         }
     }
 }
