@@ -11,10 +11,15 @@ namespace Shared.MiddleWares.Converters.StringConverters
     {
         private readonly ReplaseStringConverterOption _option;
 
-
         public ReplaseStringConverter(ReplaseStringConverterOption option)
         {
             _option = option;
+        }
+
+
+        protected override string NullHandler()
+        {
+            return _option.Mapping.TryGetValue("_", out var defVal) ? defVal : null;
         }
 
 

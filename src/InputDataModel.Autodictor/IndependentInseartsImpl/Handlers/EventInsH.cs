@@ -13,7 +13,7 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
         {
             var str = uit.Event?.GetName(lang);
             var res = InsertModel.Ext.CalcFinishValue(str);
-            return res.GetEmptyOrString();
+            return res.GetSpaceOrString();
         }
     }
 }

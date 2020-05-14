@@ -34,7 +34,6 @@ namespace Shared.MiddleWares.Converters.StringConverters
                     sb.Append(c);
                 }
             }
-
             return sb.ToString();
         }
     }
