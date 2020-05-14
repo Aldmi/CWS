@@ -49,25 +49,38 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
 
 
         /// <summary>
-        /// Ищет расширение в словаре. Если расштрение не найдено, вставляется дефолтное значение. 
+        /// Ищет расширение в словаре. Если расширение не найдено, вставляется дефолтное значение. 
         /// </summary>
         private static StringInsertModelExt FindExtenstion (IReadOnlyDictionary<string, StringInsertModelExt> dictExt, string keyExt)
         {
             keyExt = keyExt.TrimStart(':');
+
+            //1. Ключа не указан, вернуть расширение по умолчанию.
             if (string.IsNullOrEmpty(keyExt))
             {
                 var defaultExt = new StringInsertModelExt("default", string.Empty, null, null);
                 return defaultExt;
             }
-
+            //2. Ключ ЕСТЬ в словаре, вернуть указанное Ext
+            if (dictExt.TryGetValue(keyExt, out var ext))
+            {
+                return ext;
+            }
+            //3. Ключ НЕТ в словаре, вернуть расширение keyNotFound (заменяющее вставку на !!!ExtKeyNotFound!!!)
             var keyNotFoundExt = new StringInsertModelExt("keyNotFound", string.Empty, null, new StringHandlerMiddleWareOption
             {
                 Converters = new List<UnitStringConverterOption>
                 {
-                    new UnitStringConverterOption {LimitStringConverterOption = new LimitStringConverterOption{Limit = 2}}  //TODO добавить конвертор с заменой вставки на строковый литерал "!!!ExtKeyNotFoumd!!!"
+                    new UnitStringConverterOption {ReplaseStringConverterOption = new ReplaseStringConverterOption
+                    {
+                        Mapping = new Dictionary<string, string>
+                        {
+                            {"_", "!!!ExtKeyNotFound!!!" }
+                        }
+                    }}
                 }
             });
-            return dictExt.TryGetValue(keyExt, out var ext) ? ext : keyNotFoundExt;
+            return keyNotFoundExt;
         }
     }
 }

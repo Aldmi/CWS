@@ -2,7 +2,7 @@
 
 namespace Domain.Device.Repository.Entities.MiddleWareOption
 {
-    public class StringHandlerHandlerMiddleWare4InDataOption : StringHandlerMiddleWareOption
+    public class StringHandlerMiddleWare4InDataOption : StringHandlerMiddleWareOption
     {
         public string PropName { get; set; }                       //Имя свойства для обработки
     }

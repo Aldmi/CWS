@@ -5,7 +5,7 @@ namespace Domain.Device.MiddleWares4InData.Handlers4InData
     public class StringHandlerMiddleWare4InData : BaseHandlerMiddleWare4InData<string>
     {
         #region ctor
-        public StringHandlerMiddleWare4InData(StringHandlerHandlerMiddleWare4InDataOption option)
+        public StringHandlerMiddleWare4InData(StringHandlerMiddleWare4InDataOption option)
         {
             PropName = option.PropName;
             Converters.AddRange(option.CreateConverters());

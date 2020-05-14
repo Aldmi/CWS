@@ -84,9 +84,9 @@ namespace ByRulesInseartedTest.Test
 
                 GetData4ViewRuleTest.InputTypesDefault,
                 //REQUEST
-                "\u0002056D%010000F000D0170024001E%100D01 Питер-Москва%010AC0D500100B0000001E%100401СКОР%010D60F000100B0020001E%1002011309\u0003",
+                "\u0002057F%010000F000D0170024001E%100D01 Питер-Москва%010AC0D500100B0000001E%100401СКОР%010D60F000100B0020001E%101401!!!ExtKeyNotFound!!!12\u0003",
                 "Windows-1251",
-                "\u0002056D%010000F000D0170024001E%100D01 Питер-Москва%010AC0D500100B0000001E%100401СКОР%010D60F000100B0020001E%1002011309\u0003",
+                "\u0002057F%010000F000D0170024001E%100D01 Питер-Москва%010AC0D500100B0000001E%100401СКОР%010D60F000100B0020001E%101401!!!ExtKeyNotFound!!!12\u0003",
                 //RESPONSE
                 new byte[]{0x02, 0x46, 0x46, 0x30, 0x38, 0x25, 0x41, 0x30, 0x37, 0x37, 0x41, 0x43, 0x4B, 0x45, 0x41, 0x03 },
 
@@ -94,9 +94,6 @@ namespace ByRulesInseartedTest.Test
             }
         };
         #endregion
-
-
-
         [Theory]
         [MemberData(nameof(Datas))]
         public void CreateStringRequestTest(

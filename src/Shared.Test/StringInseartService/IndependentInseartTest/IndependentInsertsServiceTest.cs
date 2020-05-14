@@ -77,7 +77,7 @@ namespace Shared.Test.StringInseartService.IndependentInseartTest
             new object[]
             {
                 "{NumberOfTrain} {TArrival} {MATH(rowNumber+64)}",
-                "456 08.05.2020 15:25:00 66"
+                $"456 {DateTime.Now:dd.MM.yyyy} 15:25:00 66"
             },
             new object[]
             {
@@ -151,7 +151,7 @@ namespace Shared.Test.StringInseartService.IndependentInseartTest
             new object[]
             {
                 "0x03^{NumberOfTrain:ErrorKey}",
-                "0x03^45"                      //TODO: поменять условие теста.
+                "0x03^!!!ExtKeyNotFound!!!" 
             }
         };
         #endregion
