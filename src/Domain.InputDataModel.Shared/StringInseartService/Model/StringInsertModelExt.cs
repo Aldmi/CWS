@@ -27,7 +27,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         public StringInsertModelExt(string key, string format, BorderSubString borderSubString, StringHandlerMiddleWareOption stringHandlerMiddleWareOption)
         {
             Key = key;
-            Format = format;
+            Format = format ?? String.Empty;
             BorderSubString = borderSubString;
             StringHandlerMiddleWareOption = stringHandlerMiddleWareOption;
             _lazyStringMiddleWare = new Lazy<StringHandlerMiddleWare>(() =>

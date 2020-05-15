@@ -90,7 +90,7 @@ namespace ByRulesInseartedTest.Test
                 new byte[]{0x06, 0x1F},
                3
             },
-            // Казанский перон пригород Peron.P.P7 запрос 2
+             //Казанский перон пригород Peron.P.P7 запрос 2
             new object[]
             {
                 "5",
@@ -119,11 +119,11 @@ namespace ByRulesInseartedTest.Test
                     }
                 },
 
-                GetData4ViewRuleTest.InputTypesDefault,   
+                GetData4ViewRuleTest.InputTypesDefault,
                 //REQUEST
-                "FFFF021B572020CFE8F2E5F02DCCEEF1EAE2E00931353A343009D1F2E0EDF6E8FF20312CD1F2E0EDF6E8FF20322CD1F2E0EDF6E8FF20332CD1F2E0EDF6E8FF20342CD1F2E0EDF6E8FF20352CD1F2E0EDF6E8FF20362CD1F2E0EDF6E8FF20370903761F",
+                "FFFF021B57202020CFE8F2E5F02DCCEEF1EAE2E00931353A343009D1F2E0EDF6E8FF20312CD1F2E0EDF6E8FF20322CD1F2E0EDF6E8FF20332CD1F2E0EDF6E8FF20342CD1F2E0EDF6E8FF20352CD1F2E0EDF6E8FF20362CD1F2E0EDF6E8FF20370903561F",
                 "HEX",
-                "0xFF0xFF0x020x1B0x57  Питер-Москва0x0915:400x09Станция 1,Станция 2,Станция 3,Станция 4,Станция 5,Станция 6,Станция 70x090x030x760x1F",   
+                "0xFF0xFF0x020x1B0x57   Питер-Москва0x0915:400x09Станция 1,Станция 2,Станция 3,Станция 4,Станция 5,Станция 6,Станция 70x090x030x560x1F",
                 //RESPONSE
                 new byte[]{0x06, 0x1F},
                 4
