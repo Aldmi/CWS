@@ -9,8 +9,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Dal.EfCore.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20200422035234_EfStringInsertModelExt")]
-    partial class EfStringInsertModelExt
+    [Migration("20200517110919_init_create")]
+    partial class init_create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,7 +35,7 @@ namespace Infrastructure.Dal.EfCore.Migrations
                     b.Property<string>("ExchangeKeys")
                         .HasColumnType("text");
 
-                    b.Property<string>("MiddleWareInData")
+                    b.Property<string>("MiddleWareMediator")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")

@@ -182,7 +182,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error($"neizvestnaya Ошибка формирования запроса или ответа ViewRuleId= {GetCurrentOption.Id}   {ex}"); //????
+                        _logger.Error($"Неизвестная Ошибка формирования запроса или ответа ViewRuleId= {GetCurrentOption.Id}   {ex}"); //????
                         continue;
                     }
 

@@ -33,7 +33,7 @@ namespace Infrastructure.Dal.EfCore.Migrations
                     b.Property<string>("ExchangeKeys")
                         .HasColumnType("text");
 
-                    b.Property<string>("MiddleWareInData")
+                    b.Property<string>("MiddleWareMediator")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
