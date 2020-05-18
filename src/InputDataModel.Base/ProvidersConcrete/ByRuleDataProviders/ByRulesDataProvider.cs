@@ -158,7 +158,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
                 foreach (var viewRule in rule.GetViewRules)
                 {
-                    foreach (var providerTransfer in viewRule.CreateProviderTransfer4Data(takesItems))
+                    await foreach (var providerTransfer in viewRule.CreateProviderTransfer4Data(takesItems, ct).WithCancellation(ct))
                     {
                         ct.ThrowIfCancellationRequested();
                         if (providerTransfer == null) //правило отображения не подходит под ДАННЫЕ

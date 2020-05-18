@@ -193,7 +193,7 @@ namespace ByRulesInseartedTest.Test
             var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, Logger);
 
             //Act
-            var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
+            var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
             var rt = requestTransfers.FirstOrDefault();
             var responseInfo = rt.Response.Validator.Validate(expectedRespAray);
 

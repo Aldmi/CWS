@@ -9,6 +9,7 @@ using Infrastructure.Dal.EfCore.DbContext;
 using Infrastructure.Dal.EfCore.Entities;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Infrastructure.Dal.EfCore
 {
     /// <summary>
@@ -112,7 +113,7 @@ namespace Infrastructure.Dal.EfCore
 
         public virtual async Task<IReadOnlyList<TMap>> ListAsync()
         {
-            var efOptions = await DbSet.ToListAsync();
+            var efOptions = await EntityFrameworkQueryableExtensions.ToListAsync(DbSet);// await DbSet.ToListAsync();  //TODO: Вызов через метод расширения не можеть определится с нужным методом (берет из IAsyncEnumerable)
             var spOptions = _mapper.Map<IReadOnlyList<TMap>>(efOptions);
             return spOptions;
         }

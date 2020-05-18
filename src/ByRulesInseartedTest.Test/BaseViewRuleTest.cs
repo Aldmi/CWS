@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using ByRulesInseartedTest.Test.Datas;
 using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory;
 using Domain.InputDataModel.Autodictor.Model;
@@ -39,7 +40,7 @@ namespace ByRulesInseartedTest.Test
 
 
         [Fact]
-        public void CreateStringRequestEmptyRequestOptionTest()
+        public async Task CreateStringRequestEmptyRequestOptionTest()
         {
             //Arrange
             string addressDevice = "5";
@@ -69,7 +70,7 @@ namespace ByRulesInseartedTest.Test
             var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, StringInsertModelExtDictionary, Logger);
 
             //Act
-            var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
+            var requestTransfer =  await viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault).ToArrayAsync();
             var firstItem = requestTransfer.FirstOrDefault();
 
             //Assert
@@ -84,7 +85,7 @@ namespace ByRulesInseartedTest.Test
 
 
         [Fact]
-        public void CreateStringRequestMaxBodyLenghtTest()
+        public async Task CreateStringRequestMaxBodyLenghtTest()
         {
             //Arrange
             string addressDevice = "5";
@@ -112,7 +113,7 @@ namespace ByRulesInseartedTest.Test
             var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, Logger);
 
             //Act
-            var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
+            var requestTransfer = await viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault).ToArrayAsync();
             var firstItem = requestTransfer?.FirstOrDefault();
 
             //Assert

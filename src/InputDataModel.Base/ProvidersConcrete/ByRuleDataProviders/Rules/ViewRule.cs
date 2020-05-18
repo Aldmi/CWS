@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.ProvidersAbstract;
@@ -128,8 +131,9 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// Создать строку запроса ПОД ДАННЫЕ, подставив в форматную строку запроса значения переменных из списка items.
         /// </summary>
         /// <param name="items">элементы прошедшие фильтрацию для правила</param>
+        /// <param name="ct"></param>
         /// <returns>строку запроса и батч данных в обертке </returns>
-        public IEnumerable<ProviderTransfer<TIn>> CreateProviderTransfer4Data(List<TIn> items)
+        public async IAsyncEnumerable<ProviderTransfer<TIn>> CreateProviderTransfer4Data(List<TIn> items, [EnumeratorCancellation] CancellationToken ct = default)
         {
             var viewedItems = GetViewedItems(items);
             if (viewedItems == null)
@@ -176,6 +180,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                         if (isFailure)
                         {
                             _logger.Warning(error);
+                            await Task.Delay(1000, ct);
                             continue;
                         }
                         request = value;
@@ -183,6 +188,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     catch (Exception ex)
                     {
                         _logger.Error($"Неизвестная Ошибка формирования запроса или ответа ViewRuleId= {GetCurrentOption.Id}   {ex}"); //????
+                        await Task.Delay(1000, ct);
                         continue;
                     }
 
