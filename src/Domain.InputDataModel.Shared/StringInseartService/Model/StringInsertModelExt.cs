@@ -1,14 +1,25 @@
 ﻿using System;
+using System.Text.RegularExpressions;
+using CSharpFunctionalExtensions;
+using Shared.Extensions;
 using Shared.MiddleWares.Handlers;
 using Shared.MiddleWares.HandlersOption;
 using Shared.Types;
 
 namespace Domain.InputDataModel.Shared.StringInseartService.Model
 {
+    /// <summary>
+    /// Расширение для StringInsertModel.
+    /// Задает формат начального преобразования к строке используя format, для переменной типа ValueType.
+    /// Потом, дальнейшее преобразование строки в конвеере StringMiddleWare.
+    /// </summary>
     public class StringInsertModelExt : IDisposable
     {
         #region fields
-        public readonly StringHandlerMiddleWareOption StringHandlerMiddleWareOption;
+        /// <summary>
+        /// Цепочка обработчиков строкового значения
+        /// </summary>
+        private readonly Lazy<StringHandlerMiddleWare> _lazyStringMiddleWare;
         #endregion
 
 
@@ -16,10 +27,10 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         public StringInsertModelExt(string key, string format, BorderSubString borderSubString, StringHandlerMiddleWareOption stringHandlerMiddleWareOption)
         {
             Key = key;
-            Format = format;
+            Format = format ?? String.Empty;
             BorderSubString = borderSubString;
             StringHandlerMiddleWareOption = stringHandlerMiddleWareOption;
-            LazyStringMiddleWare = new Lazy<StringHandlerMiddleWare>(() =>
+            _lazyStringMiddleWare = new Lazy<StringHandlerMiddleWare>(() =>
             {
                 if (StringHandlerMiddleWareOption == null) return null;
                 var middleWare = new StringHandlerMiddleWare(StringHandlerMiddleWareOption);
@@ -39,23 +50,84 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         /// <summary>
         ///  Формат преобразования переменной к string из базового ValueType (int, DateTime, ...)
         /// </summary>
-        public string Format { get; }       
-        
-        
-        /// <summary>
-        /// Цепочка обработчиков строкового значения
-        /// </summary>
-        public Lazy<StringHandlerMiddleWare> LazyStringMiddleWare { get; }
+        public string Format { get; }
 
         /// <summary>
         /// НЕ ОБЯЗАТЕЛЕН.
         /// Задает границы для вычленения подстроки.
         /// </summary>
         public BorderSubString BorderSubString { get; }
+
+        /// <summary>
+        /// ОПЦИИ цепочки конвеера обработки строки.
+        /// </summary>
+        public StringHandlerMiddleWareOption StringHandlerMiddleWareOption { get; }
         #endregion
 
 
+
         #region Methode
+
+        /// <summary>
+        /// Обрабатывает string.
+        /// Переменная Format не используется.
+        /// string->string (конвеер обработки заданный StringHandlerMiddleWareOption)
+        /// </summary>
+        public string CalcFinishValue(string data)
+        {
+            return StartMiddleWarePipline(data);
+        }
+
+
+        /// <summary>
+        /// Обрабатывает ValueType.
+        /// ValueType->string используя Format.
+        /// string->string (конвеер обработки заданный StringHandlerMiddleWareOption)
+        /// </summary>
+        public string CalcFinishValue<T>(T data)
+        {
+            var formatVal = ConvertByFormat(data);
+            return StartMiddleWarePipline(formatVal);
+        }
+
+
+        /// <summary>
+        /// Вернуть подстроку обозначенную границами BorderSubString.
+        /// Если BorderSubString == null. то подстрока выделяется от начала до nativeBorder.
+        /// </summary>
+        public Result<string> CalcBorderSubString(string str, string nativeBorder)
+        {
+            if (BorderSubString == null)
+            {
+               var matchString = Regex.Match(str, $"(.*){nativeBorder}").Groups[1].Value;
+               return Result.Ok(matchString);
+            }
+            var (_, isFailure, value, error) = BorderSubString.Calc(str);
+            return isFailure ? Result.Failure<string>(error) : Result.Ok(value);
+        }
+
+
+        private string ConvertByFormat<T>(T data)
+        {
+            return data switch
+            {
+                int intVal => intVal.Convert2StrByFormat(Format),
+                DateTime dateTimeVal => dateTimeVal.Convert2StrByFormat(Format),
+                byte[] byteArray => byteArray.BitConverter2StrByFormat(Format),
+                Enum e => e.ToString(), 
+                _ => data.ToString()
+            };
+            // throw new InvalidCastException("Тип переданного значнеия не соответсвует ни одному обработчику");
+        }
+
+        /// <summary>
+        ///  string->string  Конечный конвеер обработки
+        /// </summary>
+        private string StartMiddleWarePipline(string data)
+        {
+            var mw = _lazyStringMiddleWare.Value;
+            return (mw == null) ? data: mw.Convert(data, 0);
+        }
 
         #endregion
 

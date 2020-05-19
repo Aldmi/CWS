@@ -16,7 +16,6 @@ namespace Infrastructure.Dal.EfCore.DbContext
 
 
         #region Reps
-
         public DbSet<EfSerialOption> SerialPortOptions { get; set; }
         public DbSet<EfTcpIpOption> TcpIpOptions { get; set; }
         public DbSet<EfHttpOption> HttpOptions { get; set; }
@@ -24,7 +23,6 @@ namespace Infrastructure.Dal.EfCore.DbContext
         public DbSet<EfExchangeOption> ExchangeOptions { get; set; }
         public DbSet<EfProduserUnionOption> ProduserUnionOptions { get; set; }
         public DbSet<EfStringInseartModelExt> StringInseartModelExt { get; set; }
-
         #endregion
 
 

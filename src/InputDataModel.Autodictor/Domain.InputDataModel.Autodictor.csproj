@@ -9,11 +9,12 @@
     <PackageReference Include="CSharpFunctionalExtensions" Version="2.3.0" />
     <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="System.Linq.Async" Version="4.1.1" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.20" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Domain.InputDataModel.Shared\Domain.InputDataModel.Shared.csproj" />
+    <ProjectReference Include="..\Domain.InputDataModel.Shared\Domain.InputDataModel.Shared.csproj" />
     <ProjectReference Include="..\Exchange.Base\Domain.Exchange.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>

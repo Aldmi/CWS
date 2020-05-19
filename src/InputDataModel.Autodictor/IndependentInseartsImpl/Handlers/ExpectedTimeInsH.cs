@@ -16,8 +16,8 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
            var departureTime = uit.DepartureTime ?? DateTime.MinValue;
            var time = (uit.Event?.Num != null && uit.Event.Num == 0) ? arrivalTime : departureTime;
            var expectedTime = (uit.ExpectedTime == DateTime.MinValue) ? time : uit.ExpectedTime;
-           var format = InsertModel.Format;
-           return expectedTime.Convert2StrByFormat(format);
+           var res = InsertModel.Ext.CalcFinishValue(expectedTime);
+           return res;
         }
     }
 }

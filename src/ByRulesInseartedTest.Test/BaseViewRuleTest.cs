@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using ByRulesInseartedTest.Test.Datas;
 using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
+using Domain.InputDataModel.Shared.StringInseartService.Model;
 using FluentAssertions;
 using Moq;
 using Serilog;
@@ -17,7 +21,7 @@ namespace ByRulesInseartedTest.Test
     {
         protected readonly ILogger Logger;
         protected readonly IIndependentInseartsHandlersFactory InTypeIndependentInsertsHandlerFactory;
-
+        protected readonly IReadOnlyDictionary<string, StringInsertModelExt> StringInsertModelExtDictionary;
 
         #region ctor
         public BaseViewRuleTest()
@@ -29,21 +33,14 @@ namespace ByRulesInseartedTest.Test
             Logger = mock.Object;
 
             InTypeIndependentInsertsHandlerFactory = new AdInputTypeIndependentInseartsHandlersFactory();
+            StringInsertModelExtDictionary = GetStringInsertModelExtDict.SimpleDictionary;
         }
         #endregion
 
 
-        public string ReplaceFirstOccurrence (string Source, string Find, string Replace)
-        {
-            int Place = Source.IndexOf(Find);
-            string result = Source.Remove(Place, Find.Length).Insert(Place, Replace);
-            return result;
-        }
-
-        
 
         [Fact]
-        public void CreateStringRequestEmptyRequestOptionTest()
+        public async Task CreateStringRequestEmptyRequestOptionTest()
         {
             //Arrange
             string addressDevice = "5";
@@ -70,10 +67,10 @@ namespace ByRulesInseartedTest.Test
             }; 
 
             IIndependentInseartsHandlersFactory inputTypeIndependentInsertsHandlersFactory = new AdInputTypeIndependentInseartsHandlersFactory();
-            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, Logger);
+            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, StringInsertModelExtDictionary, Logger);
 
             //Act
-            var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
+            var requestTransfer =  await viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault).ToArrayAsync();
             var firstItem = requestTransfer.FirstOrDefault();
 
             //Assert
@@ -88,7 +85,7 @@ namespace ByRulesInseartedTest.Test
 
 
         [Fact]
-        public void CreateStringRequestMaxBodyLenghtTest()
+        public async Task CreateStringRequestMaxBodyLenghtTest()
         {
             //Arrange
             string addressDevice = "5";
@@ -101,7 +98,7 @@ namespace ByRulesInseartedTest.Test
                 RequestOption = new RequestOption
                 {
                     Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
-                    Body = "%00001032{(rowNumber*16):D3}3%10$12$00$60$t3{TDepart:t}%00033240{(rowNumber*16):D3}4%10$12$00$60$t3{StationArrival}%00241256{(rowNumber*16):D3}3%10$12$00$60$t1{PathNumber}%400012561451%000012561603%10$10$00$60$t2Московское время {Hour:D2}.{Minute:D2}",
+                    Body = "%00001032{MATH(rowNumber*16):D3}3%10$12$00$60$t3{TDepart:t}%00033240{MATH(rowNumber*16):D3}4%10$12$00$60$t3{StationArrival}%00241256{MATH(rowNumber*16):D3}3%10$12$00$60$t1{PathNumber}%400012561451%000012561603%10$10$00$60$t2Московское время {Hour:D2}.{Minute:D2}",
                     Footer = "{CRCXorInverse:X2}\u0003",
                     Format = "Windows-1251",
                     MaxBodyLenght = 10
@@ -113,10 +110,10 @@ namespace ByRulesInseartedTest.Test
                     //Body = "0246463038254130373741434B454103"
                 }
             };
-            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, InTypeIndependentInsertsHandlerFactory, Logger);
+            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, Logger);
 
             //Act
-            var requestTransfer = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
+            var requestTransfer = await viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault).ToArrayAsync();
             var firstItem = requestTransfer?.FirstOrDefault();
 
             //Assert

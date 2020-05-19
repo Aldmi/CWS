@@ -41,7 +41,22 @@ namespace Infrastructure.Transport.Base.Abstract
         #region prop
 
         public KeyTransport KeyTransport { get; }
-        public bool IsOpen { get; private set; }   //TODO: IsOpen и IsCycleReopened заменить на enum
+
+        //TODO: IsOpen и IsCycleReopened заменить на enum
+        private bool _isOpen;
+        public bool IsOpen
+        {
+            get => _isOpen;
+            private set
+            {
+                if (_isOpen != value)
+                {
+                    _isOpen = value;
+                    IsOpenChangeRx.OnNext(new IsOpenChangeRxModel {IsOpen = _isOpen, TransportName = KeyTransport.ToString()});
+                }
+            }
+        }
+
         public bool IsCycleReopened { get; private set; }
         public string StatusString { get; protected set; }
         public StatusDataExchange StatusDataExchange { get; protected set; }
@@ -66,6 +81,7 @@ namespace Infrastructure.Transport.Base.Abstract
         /// Циклическое открытие подключения
         /// </summary>
         private CancellationTokenSource _cycleReOpenedCts;
+
         public async Task CycleReOpenedExec()
         {
             if (IsCycleReopened)

@@ -35,8 +35,8 @@ namespace WebApiSwc
 
         public static string GetVersion()
         {
-            const string version = "CWS Ver6.02";
-            return $"{version}  [22.04.2020]  [Reliz. Add TypeAliasEng in XML intype dto]";
+            const string version = "CWS Ver7.01";
+            return $"{version}  [19.05.2020]  [Reliz. Add in Transport IsOpenChange handler]";
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

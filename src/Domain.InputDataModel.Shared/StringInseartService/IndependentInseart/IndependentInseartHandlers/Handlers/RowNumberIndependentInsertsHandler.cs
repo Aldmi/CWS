@@ -26,14 +26,14 @@ namespace Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.I
                 try
                 {
                     var rowNumber = int.Parse(value);
-                    var mathExpressions = _insertModel.Options[0];
+                    var mathExpressions = _insertModel.Option;
                     var calcVal = MathematicFormat.CalculateMathematicFormat(mathExpressions, rowNumber);
-                    var res = calcVal.Convert2StrByFormat(_insertModel.Format);
+                    var res = _insertModel.Ext.CalcFinishValue(calcVal);
                     return Result.Ok((res, _insertModel));
                 }
                 catch (FormatException ex)
                 {
-                    return Result.Failure<ValueTuple<string, StringInsertModel>>($"RowNumberIndependentInsertsHandler.  value= {value}   format= {_insertModel.Format}    {ex.Message}");
+                    return Result.Failure<ValueTuple<string, StringInsertModel>>($"RowNumberIndependentInsertsHandler.  value= {value}   format= {_insertModel.Ext.Format}    {ex.Message}");
                 }
             }
             //Нет базовой подстановки.

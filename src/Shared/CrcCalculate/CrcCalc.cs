@@ -41,6 +41,20 @@ namespace Shared.CrcCalculate
 
 
         /// <summary>
+        /// Специфический алгоритм вычисления CRC для AlphaTime протокола.
+        /// </summary>
+        public static byte[] CalcMod256AlphaTime(IReadOnlyList<byte> arr)
+        {
+            var sum = arr.Aggregate(0, (current, a) => current + a);
+            var mod256 = (sum % 256);
+            if (mod256 < 128)
+                mod256 += 128;
+
+            return new[] { (byte)mod256 };
+        }
+
+
+        /// <summary>
         /// Посчитать сумму и взять младший байт.
         /// </summary>
         public static byte[] Calc8Bit(IReadOnlyList<byte> arr)

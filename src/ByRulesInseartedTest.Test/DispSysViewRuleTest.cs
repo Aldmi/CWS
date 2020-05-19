@@ -34,9 +34,12 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        //Format = "HEX",
-                        //Lenght = 16,
-                        //Body = "0246463038254130373741434B454103"
+                        ValidatorName = "EqualValidator",
+                        EqualValidator = new EqualResponseValidatorOption
+                        {
+                            Body = "{AddressDevice:X2}0246463038254130373741434B454103",
+                            Format ="HEX"
+                        }
                     }
                 },
 
@@ -46,11 +49,11 @@ namespace ByRulesInseartedTest.Test
                 "Windows-1251",
                 "\u000205AC%30%010C60EF03B0470000001E%110406NNNNN%0100002300100B0020001E%100301456%0102403000100B0000001E%100101 %0106208600100B0000001E%10050115:25%010870AB00100B0000001E%10050116:18FB\u0003",   
                 //RESPONSE
-                "0246463038254130373741434B454103",
-                "HEX",
+                new byte[]{ 0x05, 0x02, 0x46, 0x46, 0x30, 0x38, 0x25, 0x41, 0x30, 0x37, 0x37, 0x41, 0x43, 0x4B, 0x45, 0x41, 0x03 },
+
                 3
             },
-            // Хабаровск Perehod.P3.P5 запрос 2
+            //Хабаровск Perehod.P3.P5 запрос 2
             new object[]
             {
                 "5",
@@ -70,27 +73,27 @@ namespace ByRulesInseartedTest.Test
                     },
                     ResponseOption = new ResponseOption
                     {
-                        //Format = "HEX",
-                        //Lenght = 16,
-                        //Body = "0246463038254130373741434B454103"
+                        ValidatorName = "EqualValidator",
+                        EqualValidator = new EqualResponseValidatorOption
+                        {
+                            Body = "0246463038254130373741434B454103",
+                            Format ="HEX"
+                        }
                     }
                 },
 
                 GetData4ViewRuleTest.InputTypesDefault,
                 //REQUEST
-                "\u0002056B%010000F000D0170024001E%100E01  Питер-Москва%010AC0D500100B0000001E%100101 %010D60F000100B0020001E%1002011508\u0003",
+                "\u00020580%010000F000D0170024001E%100E01  Питер-Москва%010AC0D500100B0000001E%100401СКОР%010D60F000100B0020001E%101401!!!ExtKeyNotFound!!!4A\u0003",
                 "Windows-1251",
-                "\u0002056B%010000F000D0170024001E%100E01  Питер-Москва%010AC0D500100B0000001E%100101 %010D60F000100B0020001E%1002011508\u0003",
+                "\u00020580%010000F000D0170024001E%100E01  Питер-Москва%010AC0D500100B0000001E%100401СКОР%010D60F000100B0020001E%101401!!!ExtKeyNotFound!!!4A\u0003",
                 //RESPONSE
-                "0246463038254130373741434B454103",
-                "HEX",
+                new byte[]{0x02, 0x46, 0x46, 0x30, 0x38, 0x25, 0x41, 0x30, 0x37, 0x37, 0x41, 0x43, 0x4B, 0x45, 0x41, 0x03 },
+
                 5
             }
         };
         #endregion
-
-
-
         [Theory]
         [MemberData(nameof(Datas))]
         public void CreateStringRequestTest(
@@ -101,17 +104,17 @@ namespace ByRulesInseartedTest.Test
             string expectedRequestStrRepresentFormat,
             string expectedRequestStrRepresentBase,
 
-            string expectedRespStrRepresent,
-            string expectedRespStrRepresentFormat,
-
+            byte[] expectedRespAray,
+            
             int expectedCountInseartedData)
         {
             //Arrange
-            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, Logger);
 
             //Act
-            var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
+            var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
             var rt = requestTransfers.FirstOrDefault();
+            var responseInfo = rt.Response.Validator.Validate(expectedRespAray);
 
             //Assert
             rt.Request.StrRepresent.Str.Should().Be(expectedRequestStrRepresent);
@@ -124,8 +127,7 @@ namespace ByRulesInseartedTest.Test
                 processedItem.InseartedData.Where(pair => pair.Key != "MATH").ToList().Count.Should().Be(expectedCountInseartedData);
             }
 
-            //rt.Response.StrRepresent.Str.Should().Be(expectedRespStrRepresent);
-            //rt.Response.StrRepresent.Format.Should().Be(expectedRespStrRepresentFormat);
+            responseInfo.IsOutDataValid.Should().BeTrue();
         }
 
     }

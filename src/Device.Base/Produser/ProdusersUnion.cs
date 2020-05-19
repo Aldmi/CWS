@@ -89,7 +89,7 @@ namespace Domain.Device.Produser
 
 
         /// <summary>
-        /// Отправить продюсеру по ключу ответ на обмен порцией данных.
+        /// Отправить продюсеру по ключу, ответ на обмен порцией данных.
         /// </summary>
         public async Task<Result<string, ErrorWrapper>> SendResponse(string key, ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
         {

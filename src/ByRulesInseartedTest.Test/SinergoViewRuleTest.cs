@@ -27,15 +27,18 @@ namespace ByRulesInseartedTest.Test
                     {
                         Header = ":{AddressDevice:X2}rs2=5,",
                         Body ="Test",
-                        Footer = "*{CRC8Bit[:-*]:X2}0x0D",
+                        Footer = "*{CRC8Bit:X2_BorderIncl_Sinergo}0x0D",
                         Format = "ascii",
                         MaxBodyLenght = 245
                     },
                     ResponseOption = new ResponseOption
                     {
-                        //Format = "ascii",
-                        //Lenght = 9,
-                        //Body = ":{AddressDevice:X2}ok*{CRC8Bit[:-*]:X2}0x0D"
+                        ValidatorName = "EqualValidator",
+                        EqualValidator = new EqualResponseValidatorOption
+                        {
+                            Body = ":{AddressDevice:X2}ok*{CRC8Bit:X2_BorderIncl_Sinergo}0x0D",
+                            Format ="ascii"
+                        }
                     }
                 },
 
@@ -44,12 +47,11 @@ namespace ByRulesInseartedTest.Test
                 "3A30347273323D352C546573742A31440D",
                 "HEX",
                 ":04rs2=5,Test*1D0x0D",   
+
                 //RESPONSE
-                "3A30346F6B2A41320D",
-                "HEX",
+                new byte[]{0x3A, 0x30, 0x34, 0x6F, 0x6B, 0x2A, 0x41, 0x32, 0x0D},
                 0
             }
-
         };
         #endregion
 
@@ -65,31 +67,32 @@ namespace ByRulesInseartedTest.Test
             string expectedRequestStrRepresentFormat,
             string expectedRequestStrRepresentBase,
 
-            string expectedRespStrRepresent,
-            string expectedRespStrRepresentFormat,
+            byte[] expectedRespAray,
 
             int expectedCountInseartedData)
         {
             //Arrange
-            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, Logger);
 
             //Act
-            var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArray();
+            var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
             var rt = requestTransfers.FirstOrDefault();
+            var responseInfo = rt.Response.Validator.Validate(expectedRespAray);
 
             //Assert
-            rt.Request.StrRepresent.Str.Should().Be(expectedRequestStrRepresent);
-            rt.Request.StrRepresent.Format.Should().Be(expectedRequestStrRepresentFormat);
             rt.Request.StrRepresentBase.Str.Should().Be(expectedRequestStrRepresentBase);
             rt.Request.StrRepresentBase.Format.Should().Be(option.RequestOption.Format);
+
+            rt.Request.StrRepresent.Str.Should().Be(expectedRequestStrRepresent);
+            rt.Request.StrRepresent.Format.Should().Be(expectedRequestStrRepresentFormat);
+
             rt.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(inputTypes.Count);
             foreach (var processedItem in rt.Request.ProcessedItemsInBatch.ProcessedItems)
             {
                 processedItem.InseartedData.Where(pair => pair.Key != "MATH").ToList().Count.Should().Be(expectedCountInseartedData);
             }
 
-            rt.Response.StrRepresent.Str.Should().Be(expectedRespStrRepresent);
-            rt.Response.StrRepresent.Format.Should().Be(expectedRespStrRepresentFormat);
+            responseInfo.IsOutDataValid.Should().BeTrue();
         }
     }
 }

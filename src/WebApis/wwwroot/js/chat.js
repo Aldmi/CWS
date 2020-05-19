@@ -23,8 +23,8 @@ connection.onclose(function () {
 
 //событие получения данных
 connection.on("ReceiveMessage", function (message) {
-    var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    var encodedMsg = `says ${msg}`;
+    var msg = jsonPretty(message);
+    var encodedMsg = `CWS: ${msg}`;
     var li = document.createElement("li");
     li.textContent = encodedMsg;
     document.getElementById("messagesList").appendChild(li);
@@ -101,7 +101,6 @@ document.getElementById("sendButton").addEventListener("click", function (event)
         });
     event.preventDefault();
 });
-
 
 
 //using STREAM sending

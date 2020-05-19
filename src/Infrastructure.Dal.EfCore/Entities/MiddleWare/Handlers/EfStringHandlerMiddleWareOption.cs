@@ -12,12 +12,12 @@ namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers
     {
         public EfInseartStringConverterOption InseartStringConverterOption { get; set; }
         public EfLimitStringConverterOption LimitStringConverterOption { get; set; }
-        public EfReplaceEmptyStringConverterOption ReplaceEmptyStringConverterOption { get; set; }
-        public EfReplaceSpecStringConverterOption ReplaceSpecStringConverterOption { get; set; }
         public EfSubStringMemConverterOption SubStringMemConverterOption { get; set; }
         public EfInseartEndLineMarkerConverterOption InseartEndLineMarkerConverterOption { get; set; }
         public EfInsertAtEndOfLineConverterOption InsertAtEndOfLineConverterOption { get; set; }
         public EfPadRightStringConverterOption PadRightStringConverterOption { get; set; }
         public EfPadRighCharWeightStringConverterOption PadRighCharWeightStringConverterOption { get; set; }
+        public EfReplaseStringConverterOption ReplaseStringConverterOption { get; set; }
+        public EfReplaseCharStringConverterOption ReplaseCharStringConverterOption { get; set; }
     }
 }

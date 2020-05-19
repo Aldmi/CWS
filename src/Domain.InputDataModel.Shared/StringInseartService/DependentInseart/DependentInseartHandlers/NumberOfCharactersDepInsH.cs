@@ -14,8 +14,8 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
            //Удалить маркерные симолы, выделяющие зону подсчета NumberOfCharacters \"
            const string bracket = "\\\""; // \"
            var (_, numberOfCharactersBetweenBrackets) = sb.ReplaceBrackets(bracket, bracket, "");
-           var resStr = numberOfCharactersBetweenBrackets.Convert2StrByFormat(RequiredModel.Format);
-           return Result.Ok(resStr);
+           var resStr = RequiredModel.Ext.CalcFinishValue(numberOfCharactersBetweenBrackets);
+            return Result.Ok(resStr);
         }
     }
 }

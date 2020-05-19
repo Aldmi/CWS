@@ -18,16 +18,22 @@
                 case 0:
                     NameRu = "Прибытие";
                     NameAliasRu = "ПРИБ.";
+                    NameEng = "Arrival";
+                    NameAliasEng = "ARRIV.";
                     break;
 
                 case 1:
                     NameRu = "Отправление";
                     NameAliasRu = "ОТПР.";
+                    NameEng = "Departure";
+                    NameAliasEng = "DEPAR.";
                     break;
 
                 case 2:
-                    NameRu = "Транзит";
-                    NameAliasRu = "ТРАНЗ.";
+                    NameRu = "Транзит";      
+                    NameAliasRu = "ТРАН.";
+                    NameEng = "Transit";
+                    NameAliasEng = "TRAN.";
                     break;
             }
         }

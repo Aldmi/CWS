@@ -10,15 +10,10 @@ namespace Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.I
     public class AddressDeviceIndependentInsertsHandler : IIndependentInsertsHandler
     {
         private readonly StringInsertModel _insertModel;
-        private readonly ByteHexDelemiter HexDelemiter;
 
         public AddressDeviceIndependentInsertsHandler(StringInsertModel insertModel)
         {
             _insertModel = insertModel;
-            if (_insertModel.Options != null)
-            {
-                Enum.TryParse(_insertModel.Options[0], out HexDelemiter);
-            }
         }
 
         /// <summary>
@@ -36,12 +31,12 @@ namespace Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.I
                 try
                 {
                     var address = int.Parse(value);
-                    var res = address.Convert2StrByFormat(_insertModel.Format, HexDelemiter);
+                    var res = _insertModel.Ext.CalcFinishValue(address);
                     return Result.Ok((res, _insertModel));
                 }
                 catch (FormatException ex)
                 {
-                    return Result.Failure<ValueTuple<string, StringInsertModel>>($"AddressDeviceIndependentInsertsHandler.  value= {value}   format= {_insertModel.Format}    {ex.Message}");
+                    return Result.Failure<ValueTuple<string, StringInsertModel>>($"AddressDeviceIndependentInsertsHandler.  value= {value}   format= {_insertModel.Ext.Format}    {ex.Message}");
                 }
             }
             //Нет базовой подстановки.

@@ -11,6 +11,7 @@ using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response.ResponseInfos;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
+using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Serilog;
 using Shared.Extensions;
 
@@ -36,7 +37,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         public ByRulesDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> providerResultFactory,
             ProviderOption providerOption,
             IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory,
-            //TODO: Получать StorageStringInseartModelExt и передавать его во ViewRule преобразовав к ReadOnlyDictionary
+            StringInsertModelExtStorage stringInsertModelExtStorage,
             ILogger logger) : base(providerResultFactory, logger)
         {
             _option = providerOption.ByRulesProviderOption;
@@ -44,7 +45,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 throw new ArgumentNullException(providerOption.Name); //TODO: выбросы исключений пометсить в Shared ThrowIfNull(object obj)
 
             ProviderName = providerOption.Name;
-            _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, inputTypeInseartsHandlersFactory, logger)).ToList();
+            _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, inputTypeInseartsHandlersFactory, stringInsertModelExtStorage.Cast2ReadOnlyDictionary(), logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(_option.RuleName4DefaultHandle)
                 ? "DefaultHandler"
                 : _option.RuleName4DefaultHandle;
@@ -104,7 +105,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 {
                     Datas = new List<TIn>(),
                     Command = Command4Device.None,
-                    DirectHandlerName = RuleName4DefaultHandle
+                    //DirectHandlerName = RuleName4DefaultHandle
                 };
             }
             foreach (var rule in GetRules)
@@ -121,20 +122,20 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
                     //ДАННЫЕ ДЛЯ УКАЗАНОГО RULE--------------------------------------------
                     case RuleSwitcher4InData.InDataDirectHandler:
-                        var takesItems = inData.Datas
-                            ?.Filter(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger)
-                            ?.ToList();
-                        await SendDataAsync(rule, takesItems, ct);
+                        var takesItems = inData.Datas.TakeItemIfEmpty(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger);
+                        var resultItems = takesItems.ToList();
+                        await SendDataAsync(rule, resultItems, ct);
                         continue;
 
                     //ДАННЫЕ--------------------------------------------------------------  
                     case RuleSwitcher4InData.InDataHandler:
-                        var filtredItems = inData.Datas?.Filter(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger);
+                        takesItems = inData.Datas.TakeItemIfEmpty(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger);           //Позволяет применять Filter для Default данных (inData.Datas пустой)
+                        var filtredItems = takesItems.Filter(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger);
                         if (filtredItems == null || !filtredItems.Any())
                             continue;
 
-                        takesItems = filtredItems.ToList();
-                        await SendDataAsync(rule, takesItems, ct);
+                        resultItems = filtredItems.ToList();
+                        await SendDataAsync(rule, resultItems, ct);
                         continue;
 
                     default:
@@ -157,7 +158,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
                 foreach (var viewRule in rule.GetViewRules)
                 {
-                    foreach (var providerTransfer in viewRule.CreateProviderTransfer4Data(takesItems))
+                    await foreach (var providerTransfer in viewRule.CreateProviderTransfer4Data(takesItems, ct).WithCancellation(ct))
                     {
                         ct.ThrowIfCancellationRequested();
                         if (providerTransfer == null) //правило отображения не подходит под ДАННЫЕ

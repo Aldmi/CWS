@@ -25,6 +25,7 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.0.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+    <PackageReference Include="System.Linq.Async" Version="4.1.1" />
     <PackageReference Include="System.Reactive" Version="4.3.2" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
   </ItemGroup>
@@ -36,6 +37,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BL.Services\App.Services.csproj" />
     <ProjectReference Include="..\Device.Base\Domain.Device.csproj" />
+    <ProjectReference Include="..\Domain.InputDataModel.Shared\Domain.InputDataModel.Shared.csproj" />
     <ProjectReference Include="..\Exchange.Base\Domain.Exchange.csproj" />
     <ProjectReference Include="..\Infrastructure.MessageBroker\Infrastructure.MessageBroker.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.EventBus.csproj" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Shared.Enums;
 
@@ -83,6 +84,12 @@ namespace Infrastructure.Storages
                 Remove(s.Key);
             }
             return DictionaryCrudResult.Removed;
+        }
+
+
+        public IReadOnlyDictionary<TKey, TValue> Cast2ReadOnlyDictionary()
+        {
+            return new ReadOnlyDictionary<TKey, TValue>(Storage);
         }
 
         #endregion
