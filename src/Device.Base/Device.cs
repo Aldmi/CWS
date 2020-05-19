@@ -390,8 +390,9 @@ namespace Domain.Device
         /// </summary>
         private async void ConnectChangeRxEventHandler(ConnectChangeRxModel model)
         {
-            //await Send2Produder(Option.TopicName4MessageBroker, $"Connect = {model.IsConnect} для обмена {model.KeyExchange}");
-            _logger.Debug($"ConnectChangeRxEventHandler.  Connect = {model.IsConnect} для обмена {model.KeyExchange}");
+            var warningStr = $"Exchange Connect Change. IsConnect = {model.IsConnect} для ОБМЕНА {model.KeyExchange}";
+            await SendWarningResult(warningStr);
+            _logger.Warning(warningStr);
         }
 
 
@@ -400,9 +401,9 @@ namespace Domain.Device
         /// </summary>
         private async void OpenChangeTransportRxEventHandler(IsOpenChangeRxModel model)
         {
-            //await Send2Produder(Option.TopicName4MessageBroker,$"IsOpen = {model.IsOpen} для ТРАНСПОРТА {model.TransportName}");
-            //_eventBus.Publish(isOpenChangeRxModel);  //Публикуем событие на общую шину данных  
-            _logger.Debug($"OpenChangeTransportRxEventHandler.  IsOpen = {model.IsOpen} для ТРАНСПОРТА {model.TransportName}");
+            var warningStr =$"Transport Open Change. IsOpen = {model.IsOpen} для ТРАНСПОРТА {model.TransportName}";
+            await SendWarningResult(warningStr);
+            _logger.Warning(warningStr);
         }
 
 

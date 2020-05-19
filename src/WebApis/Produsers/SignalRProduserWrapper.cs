@@ -41,7 +41,7 @@ namespace WebApiSwc.Produsers
 
             try
             {                
-                invokerName = invokerName ?? Option.MethodeName;
+                invokerName ??= Option.MethodeName;
                 await _hubProxy.Clients.All.SendCoreAsync(invokerName, new object[] { message }, ct);
                 return Result.Ok<string, ErrorWrapper>("Ok");
             }
@@ -52,9 +52,21 @@ namespace WebApiSwc.Produsers
         }
 
 
-        protected override Task<Result<string, ErrorWrapper>> SendConcrete(object message, string invokerName = null, CancellationToken ct = default(CancellationToken))
+        protected override async Task<Result<string, ErrorWrapper>> SendConcrete(object message, string invokerName = null, CancellationToken ct = default(CancellationToken))
         {
-            throw new NotImplementedException();
+            if (!_clientsStorage.Any)
+                return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.NoClientBySending));
+
+            try
+            {
+                invokerName ??= Option.MethodeName;
+                await _hubProxy.Clients.All.SendCoreAsync(invokerName, new[] { message }, ct);
+                return Result.Ok<string, ErrorWrapper>("Ok");
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.RespawnProduserError, ex));
+            }
         }
 
         #endregion
