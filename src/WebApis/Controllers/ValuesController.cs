@@ -49,7 +49,27 @@ namespace WebApiSwc.Controllers
         {
             UnitStringConverterOption p= new UnitStringConverterOption
             {
-                PadRightStringConverterOption = new PadRightStringConverterOption { Lenght = 10}
+                ReplaseCharStringConverterOption = new ReplaseCharStringConverterOption
+                {
+                    ToLowerInvariant = false,
+                    Mapping = new Dictionary<char, string>
+                    {
+                      {' ', "pp" },
+                      {'1', "rt" },
+                      {'2', "ui" }
+                    }
+                }
+
+                //  ReplaseStringConverterOption = new ReplaseStringConverterOption
+                //  {
+                //  ToLowerInvariant = false,
+                //  Mapping = new Dictionary<string, string>
+                //  {
+                //      {"1" , "pp" },
+                //      {"2", "rt" },
+                //      {"3", "ui" }
+                //  }
+                //}
             };
             return p;
         }

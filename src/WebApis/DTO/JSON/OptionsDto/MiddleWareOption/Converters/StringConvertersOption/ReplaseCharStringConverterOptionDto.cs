@@ -6,7 +6,7 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConver
     public class ReplaseCharStringConverterOptionDto
     {
         [Required(ErrorMessage = "Mapping. Словарь весов не может быть NULL")]
-        public Dictionary<char, string> Mapping { get; set; }
+        public Dictionary<string, string> Mapping { get; set; }
         public bool ToLowerInvariant { get; set; }
     }
 }

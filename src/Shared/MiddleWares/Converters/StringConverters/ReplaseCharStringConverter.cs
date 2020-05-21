@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 
@@ -19,8 +20,18 @@ namespace Shared.MiddleWares.Converters.StringConverters
         }
 
 
+        /// <summary>
+        /// null- заменяю на " ", и преобразую _option.Mapping.
+        /// </summary>
+        protected override string NullHandler()
+        {
+            return ConvertChild(" ", 1);
+        }
+
+
         protected override string ConvertChild(string inProp, int dataId)
         {
+            inProp = (inProp == string.Empty) ? " " : inProp; 
             var sb = new StringBuilder();
             foreach (var c in inProp.ToCharArray())
             {
