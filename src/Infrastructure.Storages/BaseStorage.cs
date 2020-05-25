@@ -8,11 +8,11 @@ using Shared.Enums;
 namespace Infrastructure.Storages
 {
     public class BaseStorage<TKey, TValue> where TKey : IEquatable<TKey>
-                                                  where TValue : class, IDisposable
+                                           where TValue : class, IDisposable
     {
         #region prop
 
-        private ConcurrentDictionary<TKey, TValue> Storage { get; } = new ConcurrentDictionary<TKey, TValue>();
+        protected ConcurrentDictionary<TKey, TValue> Storage { get; } = new ConcurrentDictionary<TKey, TValue>();
         public IEnumerable<TValue> Values => Storage.Values;
 
         #endregion
