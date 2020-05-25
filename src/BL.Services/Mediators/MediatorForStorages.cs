@@ -144,7 +144,7 @@ namespace App.Services.Mediators
         public Device<TIn> BuildAndAddDevice(OptionAgregator optionAgregator)
         {
             var deviceOption = optionAgregator.DeviceOptions.First();
-            if (_deviceStorage.IsExist(deviceOption.Name))
+            if (_deviceStorage.ContainsKey(deviceOption.Name))
             {
                 throw new StorageHandlerException($"Устройство с таким именем уже существует: {deviceOption.Name}");
             }
@@ -308,7 +308,7 @@ namespace App.Services.Mediators
         /// </summary>
         public DictionaryCrudResult AddOrUpdateProduserUnion(string key, ProdusersUnion<TIn> value)
         {
-            return _produserUnionStorage.IsExist(key) ?
+            return _produserUnionStorage.ContainsKey(key) ?
                 _produserUnionStorage.Update(key, value) :
                 _produserUnionStorage.AddNew(key, value);
         }
@@ -319,7 +319,7 @@ namespace App.Services.Mediators
         /// </summary>
         public DictionaryCrudResult RemoveProduserUnion(string key)
         {
-            return _produserUnionStorage.IsExist(key) ? _produserUnionStorage.Remove(key) : DictionaryCrudResult.KeyNotExist;
+            return _produserUnionStorage.ContainsKey(key) ? _produserUnionStorage.Remove(key) : DictionaryCrudResult.KeyNotExist;
         }
         #endregion
     }

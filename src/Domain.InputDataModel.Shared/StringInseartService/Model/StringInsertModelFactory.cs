@@ -42,45 +42,10 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
                       match.Groups[0].Value,
                          match.Groups[1].Value,
                           match.Groups[2].Value,
-                            FindExtenstion(extDict, match.Groups[3].Value)));
+                            new StringInsertModelExtFactory(extDict, match.Groups[3].Value.TrimStart(':'))));
 
             return matches;
         }
 
-
-        /// <summary>
-        /// Ищет расширение в словаре. Если расширение не найдено, вставляется дефолтное значение. 
-        /// </summary>
-        private static StringInsertModelExt FindExtenstion (IReadOnlyDictionary<string, StringInsertModelExt> dictExt, string keyExt)
-        {
-            keyExt = keyExt.TrimStart(':');
-
-            //1. Ключа не указан, вернуть расширение по умолчанию.
-            if (string.IsNullOrEmpty(keyExt))
-            {
-                var defaultExt = new StringInsertModelExt("default", string.Empty, null, null);
-                return defaultExt;
-            }
-            //2. Ключ ЕСТЬ в словаре, вернуть указанное Ext
-            if (dictExt.TryGetValue(keyExt, out var ext))
-            {
-                return ext;
-            }
-            //3. Ключ НЕТ в словаре, вернуть расширение keyNotFound (заменяющее вставку на !!!ExtKeyNotFound!!!)
-            var keyNotFoundExt = new StringInsertModelExt("keyNotFound", string.Empty, null, new StringHandlerMiddleWareOption
-            {
-                Converters = new List<UnitStringConverterOption>
-                {
-                    new UnitStringConverterOption {ReplaseStringConverterOption = new ReplaseStringConverterOption
-                    {
-                        Mapping = new Dictionary<string, string>
-                        {
-                            {"_", "!!!ExtKeyNotFound!!!" }
-                        }
-                    }}
-                }
-            });
-            return keyNotFoundExt;
-        }
     }
 }
