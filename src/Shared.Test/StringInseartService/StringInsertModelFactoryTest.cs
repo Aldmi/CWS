@@ -9,7 +9,7 @@ using Xunit;
 namespace Shared.Test.StringInseartService
 {
     public class StringInsertModelFactoryTest
-    {   
+    {
         #region TheoryData
         public static IEnumerable<object[]>  CreateInseartDictDatas => new[]
         {
@@ -18,8 +18,8 @@ namespace Shared.Test.StringInseartService
                 "\u0002{AddressDevice:X2} {Nbyte:D3}",
                 new List<StringInsertModel>
                 {
-                    new StringInsertModel("{AddressDevice:X2}", "AddressDevice", String.Empty, new StringInsertModelExt("X2", ":X2", null, null)),
-                    new StringInsertModel("{Nbyte:D3}", "Nbyte", String.Empty , new StringInsertModelExt("D3", ":D3", null, null)),
+                    new StringInsertModel("{AddressDevice:X2}", "AddressDevice", String.Empty, new StringInsertModelExtFactory(GetStringInsertModelExtDict.SimpleDictionary, "X2")),
+                    new StringInsertModel("{Nbyte:D3}", "Nbyte", String.Empty, new StringInsertModelExtFactory(GetStringInsertModelExtDict.SimpleDictionary, "D3")),
                 }
             },
             new object[]
@@ -27,8 +27,8 @@ namespace Shared.Test.StringInseartService
                 "\u0002{Stations} {ArrivalTime:t}",
                 new List<StringInsertModel>
                 {
-                    new StringInsertModel("{Stations}", "Stations", String.Empty, new StringInsertModelExt("default", string.Empty, null, null)),
-                    new StringInsertModel("{ArrivalTime:t}", "ArrivalTime", String.Empty , new StringInsertModelExt("t", ":t", null, null)),
+                    new StringInsertModel("{Stations}", "Stations", String.Empty, new StringInsertModelExtFactory(GetStringInsertModelExtDict.SimpleDictionary, String.Empty)),
+                    new StringInsertModel("{ArrivalTime:t}", "ArrivalTime", String.Empty, new StringInsertModelExtFactory(GetStringInsertModelExtDict.SimpleDictionary, "t")),
                 }
             },
             new object[]
@@ -36,7 +36,7 @@ namespace Shared.Test.StringInseartService
                 "0x57{Nbyte:X2 fff {CRCXor:X2}",
                 new List<StringInsertModel>
                 {
-                    new StringInsertModel("{CRCXor:X2}", "CRCXor", String.Empty, new StringInsertModelExt("X2", ":X2", null, null))
+                    new StringInsertModel("{CRCXor:X2}", "CRCXor", String.Empty, new StringInsertModelExtFactory(GetStringInsertModelExtDict.SimpleDictionary, "X2")),
                 }
             },
             new object[]
@@ -44,7 +44,8 @@ namespace Shared.Test.StringInseartService
                 "0x57{Nbyte:X2 fff {CRCXor:X2_Border}",
                 new List<StringInsertModel>
                 {
-                    new StringInsertModel("{CRCXor:X2_Border}", "CRCXor", String.Empty, new StringInsertModelExt("X2_Border", ":X2", new BorderSubString{StartCh = "0x02", EndCh = "0x03", IncludeBorder = true}, null))
+                    //new StringInsertModel("{CRCXor:X2_Border}", "CRCXor", String.Empty, new StringInsertModelExt("X2_Border", ":X2", new BorderSubString{StartCh = "0x02", EndCh = "0x03", IncludeBorder = true}, null))
+                    new StringInsertModel("{CRCXor:X2_Border}", "CRCXor", String.Empty, new StringInsertModelExtFactory(GetStringInsertModelExtDict.SimpleDictionary, "X2_Border")),
                 }
             },
             new object[]
@@ -52,7 +53,7 @@ namespace Shared.Test.StringInseartService
                 "0x57{Nbyte:X2 {} {CRCXor:X2_Border}",
                 new List<StringInsertModel>
                 {
-                    new StringInsertModel("{CRCXor:X2_Border}", "CRCXor", String.Empty, new StringInsertModelExt("X2_Border", ":X2", new BorderSubString{StartCh = "0x02", EndCh = "0x03", IncludeBorder = true}, null))
+                    new StringInsertModel("{CRCXor:X2_Border}", "CRCXor", String.Empty, new StringInsertModelExtFactory(GetStringInsertModelExtDict.SimpleDictionary, "X2_Border")),
                 }
             },
             new object[]
@@ -60,7 +61,7 @@ namespace Shared.Test.StringInseartService
                 "0x57{ fff {{{ {Nbyte:D3} }gfgf:X2",
                 new List<StringInsertModel>
                 {
-                    new StringInsertModel("{Nbyte:D3}", "Nbyte", String.Empty , new StringInsertModelExt("D3", ":D3", null, null))
+                    new StringInsertModel("{Nbyte:D3}", "Nbyte",  String.Empty, new StringInsertModelExtFactory(GetStringInsertModelExtDict.SimpleDictionary, "D3")),
                 }
             },
             new object[]
@@ -68,7 +69,7 @@ namespace Shared.Test.StringInseartService
                 "0x{MATH((rowNumber+64)-(rowNumber*1)):X1}0bb",
                 new List<StringInsertModel>
                 {
-                    new StringInsertModel("{MATH((rowNumber+64)-(rowNumber*1)):X1}", "MATH", "((rowNumber+64)-(rowNumber*1))", new StringInsertModelExt("X1", ":X1", null, null)),
+                    new StringInsertModel("{MATH((rowNumber+64)-(rowNumber*1)):X1}", "MATH", "((rowNumber+64)-(rowNumber*1))",new StringInsertModelExtFactory(GetStringInsertModelExtDict.SimpleDictionary, "X1")),
                 }
             },
 

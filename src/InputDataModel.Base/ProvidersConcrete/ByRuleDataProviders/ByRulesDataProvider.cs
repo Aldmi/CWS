@@ -45,7 +45,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 throw new ArgumentNullException(providerOption.Name); //TODO: выбросы исключений пометсить в Shared ThrowIfNull(object obj)
 
             ProviderName = providerOption.Name;
-            _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, inputTypeInseartsHandlersFactory, stringInsertModelExtStorage.Cast2ReadOnlyDictionary(), logger)).ToList();
+            _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, inputTypeInseartsHandlersFactory, stringInsertModelExtStorage, logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(_option.RuleName4DefaultHandle)
                 ? "DefaultHandler"
                 : _option.RuleName4DefaultHandle;

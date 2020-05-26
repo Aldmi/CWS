@@ -37,7 +37,7 @@ namespace ByRulesInseartedTest.Test
                         ValidatorName = "EqualValidator",
                         EqualValidator = new EqualResponseValidatorOption
                         {
-                            Body = "0x{AddressDevice:X2}0x040x830x{CRCMod256:X2}",
+                            Body = "{AddressDevice:X2}0483{CRCMod256:X2}",
                             Format ="HEX"
                         }
                     }
@@ -76,7 +76,7 @@ namespace ByRulesInseartedTest.Test
                         ValidatorName = "EqualValidator",
                         EqualValidator = new EqualResponseValidatorOption
                         {
-                            Body = "0x{AddressDevice:X2}0x040x830x{CRCMod256:X2}",
+                            Body = "{AddressDevice:X2}0483{CRCMod256:X2}",
                             Format ="HEX"
                         }
                     }

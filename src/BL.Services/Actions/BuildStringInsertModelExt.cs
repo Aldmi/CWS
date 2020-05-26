@@ -146,7 +146,7 @@ namespace App.Services.Actions
         /// </summary>
         private DictionaryCrudResult AddOrUpdateInStorage(string key, StringInsertModelExt value)
         {
-            return _storage.IsExist(key) ?
+            return _storage.ContainsKey(key) ?
                 _storage.Update(key, value) :
                 _storage.AddNew(key, value);
         }
@@ -157,7 +157,7 @@ namespace App.Services.Actions
         /// </summary>
         private DictionaryCrudResult RemoveInStorage(string key)
         {
-            return _storage.IsExist(key) ? _storage.Remove(key) : DictionaryCrudResult.KeyNotExist;
+            return _storage.ContainsKey(key) ? _storage.Remove(key) : DictionaryCrudResult.KeyNotExist;
         }
         #endregion
     }

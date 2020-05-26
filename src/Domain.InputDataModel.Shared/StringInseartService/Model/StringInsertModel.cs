@@ -12,26 +12,31 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
     /// </summary>
     public class StringInsertModel
     {
+        private readonly StringInsertModelExtFactory _extFactory;
+
+
         #region prop
         public string Replacement { get; }
         public string VarName { get; }
         public string Option { get; }
-        public StringInsertModelExt Ext { get; }
+        public StringInsertModelExt Ext => _extFactory.GetExt();
         #endregion
 
 
         #region ctor
+
         /// <summary>
         /// Конструктор.
         /// </summary>
         /// <param name="replacement">весь блок замены в строке</param>
         /// <param name="varName">имя переменной выделенной из replacement</param>
-        /// <param name="ext">расширение. НЕ МОЖЕТ быть NULL</param>
-        public StringInsertModel(string replacement, string varName, string option, StringInsertModelExt ext)
+        /// <param name="option"></param>
+        /// <param name="extFactory"></param>
+        public StringInsertModel(string replacement, string varName, string option, StringInsertModelExtFactory extFactory)
         {
             Replacement = replacement;
             VarName = varName;
-            Ext = ext ?? throw new ArgumentNullException(nameof(ext));
+            _extFactory = extFactory ?? throw new ArgumentNullException(nameof(extFactory));
             Option = option;
         }
         #endregion

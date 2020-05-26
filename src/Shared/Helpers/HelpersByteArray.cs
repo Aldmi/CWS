@@ -35,11 +35,14 @@ namespace Shared.Helpers
         }
 
         /// <summary>
-        /// Конвертор строки в массив байт, для строк в которых содержится
+        /// Конвертор с6троки в массив байт, для строк в которых содержится
         /// hex escape последовательность вида 0xYY -> YY
         /// </summary>
         public static byte[] ConvertStringWithHexEscapeChars2ByteArray(this string str, string format)
         {
+            if (format == "HEX")
+                return ConvertString2ByteArray(str, format);
+
             //УДАЛИТЬ "0x" С КОНЦА СТРОКИ
             if (str.EndsWith("0x"))
             {
