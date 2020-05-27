@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 
 namespace Shared.MiddleWares.Converters.StringConverters

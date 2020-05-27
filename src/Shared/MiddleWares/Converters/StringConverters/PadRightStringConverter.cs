@@ -15,6 +15,14 @@ namespace Shared.MiddleWares.Converters.StringConverters
         }
 
 
+        /// <summary>
+        /// null- заменяю на " ", и дополняет пробелами
+        /// </summary>
+        protected override string NullHandler()
+        {
+            return ConvertChild(" ", 1);
+        }
+
         protected override string ConvertChild(string inProp, int dataId)
         {
             var res = inProp.PadRight(_option.Lenght);
