@@ -69,9 +69,9 @@ namespace Shared.CrcCalculate
         }
 
         /// <summary>
-        /// Посчитать сумму и взять младший байт.
+        /// Посчитать СRC по алгоритму Crc8Maxim
         /// </summary>
-        public static byte[] Calc8BitMaxim(IReadOnlyList<byte> arr)
+        public static byte[] CalcCrc8Maxim(IReadOnlyList<byte> arr)
         {
             var crc8Maxim = new Crc8Maxim();
             var crc = crc8Maxim.ComputeHash(arr.ToArray());
@@ -119,5 +119,4 @@ namespace Shared.CrcCalculate
             }
         }
     }
-
 }

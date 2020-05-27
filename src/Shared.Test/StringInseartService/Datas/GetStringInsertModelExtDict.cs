@@ -17,8 +17,8 @@ namespace Shared.Test.StringInseartService.Datas
             { "D3", new StringInsertModelExt("D3", ":D3", null, null)},
             { "D2", new StringInsertModelExt("D2", ":D2", null, null)},
             { "t", new StringInsertModelExt("t", ":t", null, null)},
-            { "X2_Border", new StringInsertModelExt("X2_Border", ":X2", new BorderSubString{StartCh = "0x02", EndCh = "0x03", IncludeBorder = true}, null)},
-            { "X4_Border", new StringInsertModelExt("X4_Border", ":X4", new BorderSubString{StartCh = "0x02", EndCh = "0x03", IncludeBorder = false}, null)},
+            { "X2_Border", new StringInsertModelExt("X2_Border", ":X2", new BorderSubString{StartCh = "0x02", EndCh = "0x03", StartInclude = true}, null)},
+            { "X4_Border", new StringInsertModelExt("X4_Border", ":X4", new BorderSubString{StartCh = "0x02", EndCh = "0x03", StartInclude = false}, null)},
 
             //With string MW
             { "MW_Limit(2)", new StringInsertModelExt("MW_Limit(2)", null, null, new StringHandlerMiddleWareOption

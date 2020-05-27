@@ -137,9 +137,9 @@ namespace Shared.Extensions
         /// <param name="str">строка</param>
         /// <param name="startCh">стартовый символ</param>
         /// <param name="endCh">конечный символ</param>
-        /// <param name="includeBorder">включать ли стартовый и конечный символ в подстроку</param>
+        /// <param name="startInclude">включать ли стартовый и конечный символ в подстроку</param>
         /// <returns></returns>
-        public static Result<string> SubstringBetweenCharacters(this string str, string startCh, string endCh, bool includeBorder = false)
+        public static Result<string> SubstringBetweenCharacters(this string str, string startCh, string endCh, bool startInclude = false, bool endInclude = false)
         {
             var startIndex = str.IndexOf(startCh, StringComparison.Ordinal); 
             var endIndex = str.IndexOf(endCh, StringComparison.Ordinal);
@@ -149,18 +149,22 @@ namespace Shared.Extensions
 
             if(endIndex == -1)
                 return Result.Failure<string>($"Not Found endCh= {endCh}");
-            
-            if (includeBorder)
+
+            if (!startInclude)
             {
-                endIndex += endCh.Length-1;
+                startIndex += startCh.Length;
+            }
+
+            if (endInclude)
+            {
+                endIndex += endCh.Length - 1;
             }
             else
             {
-                startIndex += startCh.Length;
                 endIndex -= 1;
             }
-            var subStr = str.Substring(startIndex, endIndex - startIndex + 1);
 
+            var subStr = str.Substring(startIndex, endIndex - startIndex + 1);
             return Result.Ok(subStr);
         }
     }

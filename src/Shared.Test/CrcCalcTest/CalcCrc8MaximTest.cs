@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using FluentAssertions;
 using Shared.CrcCalculate;
 using Xunit;
 
 namespace Shared.Test.CrcCalcTest
 {
-    public class Calc8BitMaximTest
+    public class CalcCrc8MaximTest
     {
 
         public static IEnumerable<object[]> Datas => new[]
@@ -38,7 +37,7 @@ namespace Shared.Test.CrcCalcTest
         [MemberData(nameof(Datas))]
         public void Check(byte[] arr, byte expectedCrc)
         {
-            var crc= CrcCalc.Calc8BitMaxim(arr).First();
+            var crc= CrcCalc.CalcCrc8Maxim(arr).First();
             crc.Should().Be(expectedCrc);
         }
     }

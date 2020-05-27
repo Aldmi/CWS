@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using Shared.Extensions;
 
 namespace Shared.Types
@@ -8,7 +7,8 @@ namespace Shared.Types
     {
         public string StartCh { get; set; }
         public string EndCh { get; set; }
-        public bool IncludeBorder { get; set; }
+        public bool StartInclude { get; set; }
+        public bool EndInclude { get; set; }
 
 
 
@@ -17,7 +17,7 @@ namespace Shared.Types
         /// </summary>
         public Result<string> Calc(string str)
         {
-            var (_, isFailure, value, error) = str.SubstringBetweenCharacters(StartCh, EndCh, IncludeBorder);
+            var (_, isFailure, value, error) = str.SubstringBetweenCharacters(StartCh, EndCh, StartInclude, EndInclude);
             return isFailure ? Result.Failure<string>(error) : Result.Ok(value);
         }
     }

@@ -44,7 +44,7 @@ namespace Shared.Test.StringInseartService
                 "0x57{Nbyte:X2 fff {CRCXor:X2_Border}",
                 new List<StringInsertModel>
                 {
-                    //new StringInsertModel("{CRCXor:X2_Border}", "CRCXor", String.Empty, new StringInsertModelExt("X2_Border", ":X2", new BorderSubString{StartCh = "0x02", EndCh = "0x03", IncludeBorder = true}, null))
+                    //new StringInsertModel("{CRCXor:X2_Border}", "CRCXor", String.Empty, new StringInsertModelExt("X2_Border", ":X2", new BorderSubString{StartCh = "0x02", EndCh = "0x03", StartInclude = true}, null))
                     new StringInsertModel("{CRCXor:X2_Border}", "CRCXor", String.Empty, new StringInsertModelExtFactory(GetStringInsertModelExtDict.SimpleDictionary, "X2_Border")),
                 }
             },
