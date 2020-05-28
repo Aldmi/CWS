@@ -112,7 +112,7 @@ namespace WebApiSwc.AutoMapperConfig
                 new Note
                 {
                     NameRu = src.Note,
-                    NameEng = src.NoteENG
+                    NameEng = src.NoteEng
                 },
                 new DaysFollowing
                 {
