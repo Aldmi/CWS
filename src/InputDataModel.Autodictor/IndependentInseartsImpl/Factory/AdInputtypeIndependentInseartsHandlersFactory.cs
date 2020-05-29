@@ -39,6 +39,7 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory
                 "Minute" => new MinuteInsH(insertModel),
                 "Second" => new SecondInsH(insertModel),
                 "Lang" => new LangInsH(insertModel),
+                "VagonDirection" => new VagonDirectionInsH(insertModel),
                 _ => null
             };
         }
