@@ -19,5 +19,7 @@ namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers
         public EfPadRighCharWeightStringConverterOption PadRighCharWeightStringConverterOption { get; set; }
         public EfReplaseStringConverterOption ReplaseStringConverterOption { get; set; }
         public EfReplaseCharStringConverterOption ReplaseCharStringConverterOption { get; set; }
+        public EfToLowerConverterOption ToLowerConverterOption { get; set; }
+        public EfToUpperConverterOption ToUpperConverterOption { get; set; }
     }
 }

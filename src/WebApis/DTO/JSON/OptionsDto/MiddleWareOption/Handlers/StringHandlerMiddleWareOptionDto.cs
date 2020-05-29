@@ -20,5 +20,7 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers
         public PadRighCharWeightStringConverterOptionDto PadRighCharWeightStringConverterOption { get; set; }
         public ReplaseStringConverterOptionDto ReplaseStringConverterOption { get; set; }
         public ReplaseCharStringConverterOptionDto ReplaseCharStringConverterOption { get; set; }
+        public ToLowerConverterOptionDto ToLowerConverterOption { get; set; }
+        public ToUpperConverterOptionDto ToUpperConverterOption { get; set; }
     }
 } 
