@@ -18,8 +18,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.IndependentInseart
         /// <returns>сервис независимых вставок</returns>
         public static IndependentInsertsService CreateIndependentInsertsService(
             string str,
-            List<Func<StringInsertModel,
-            IIndependentInsertsHandler>> handlerFactorys,
+            List<Func<StringInsertModel, IIndependentInsertsHandler>> handlerFactorys,
             IReadOnlyDictionary<string, StringInsertModelExt> stringInsertModelExtDict,
             ILogger logger)
         {

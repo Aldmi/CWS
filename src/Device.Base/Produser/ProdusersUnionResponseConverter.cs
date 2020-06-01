@@ -21,6 +21,27 @@ namespace Domain.Device.Produser
                     convertedResp = response;
                     break;
 
+                case "RenderItems":
+                    convertedResp = new
+                    {
+                        response.DeviceName,
+                        response.DataAction,
+                        response.ExceptionExchangePipline,
+                        response.IsValidAll,
+                        response.TimeAction,
+                        ResponsesItems = response.ResponsesItems.Select(item => new
+                        {
+                            item.RequestId,
+                            item.StatusStr,
+                            item.TransportException,
+
+                            item.ProcessedItemsInBatch.StartItemIndex,
+                            item.ProcessedItemsInBatch.BatchSize,
+                            InseartedData = item.ProcessedItemsInBatch.ProcessedItems.Select(p=>p.InseartedData)
+                        }).ToList()
+                    };
+                    break;
+
                 case "Medium":
                     convertedResp = new
                     {
@@ -113,6 +134,5 @@ namespace Domain.Device.Produser
             var rawJson = HelpersJson.Serialize2RawJson(convertedMessage);
             return rawJson;
         }
-
     }
 }
