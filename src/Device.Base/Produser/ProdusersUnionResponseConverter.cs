@@ -12,7 +12,7 @@ namespace Domain.Device.Produser
         /// <param name="converterName"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public  string Convert(string converterName, ResponsePieceOfDataWrapper<TIn> response)
+        public string Convert(string converterName, ResponsePieceOfDataWrapper<TIn> response)
         {
             object convertedResp = null;
             switch (converterName)
@@ -24,8 +24,9 @@ namespace Domain.Device.Produser
                 case "RenderItems":
                     convertedResp = new
                     {
+                        Type= "boardData", 
                         response.DeviceName,
-                        response.DataAction,
+                        DataAction= response.DataAction.ToString("G"),
                         response.ExceptionExchangePipline,
                         response.IsValidAll,
                         response.TimeAction,
@@ -116,6 +117,15 @@ namespace Domain.Device.Produser
                 case "Lite":
                     convertedMessage = new
                     {
+                        DeviceName = objectName,
+                        Message = message
+                    };
+                    break;
+
+                case "RenderItems":
+                    convertedMessage = new
+                    {
+                        Type="Message",
                         DeviceName = objectName,
                         Message = message
                     };

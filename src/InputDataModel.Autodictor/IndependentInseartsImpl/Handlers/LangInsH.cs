@@ -2,6 +2,7 @@
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Shared.Helpers;
+using Shared.Types;
 
 namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
 {
@@ -9,10 +10,10 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
     {
         public LangInsH(StringInsertModel insertModel) : base(insertModel){}
 
-        protected override string GetInseart(Lang lang, AdInputType uit)
+        protected override Change<string> GetInseart(Lang lang, AdInputType uit)
         {
-            var res = InsertModel.Ext.CalcFinishValue(lang);
-            return res.GetSpaceOrString();
+            var f = InsertModel.Ext.CalcFinishValue(lang);
+            return new Change<string>(lang.ToString(), f.GetSpaceOrString());
         }
     }
 }

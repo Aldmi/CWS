@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
 using Serilog;
+using Shared.Collections;
+using Shared.Types;
 
 namespace Domain.InputDataModel.Shared.StringInseartService.IndependentInseart
 {
@@ -31,14 +34,15 @@ namespace Domain.InputDataModel.Shared.StringInseartService.IndependentInseart
         /// </summary>
         /// <param name="inDatas">Данные для обработчика. Если тип данных подходит для обработчика, то обработчик выполняется с этими данными и ищет замену</param>
         /// <returns>result - результат вставки. inseartedDict - всатавленные данные</returns>
-        public (StringBuilder result, Dictionary<string, string> inseartedDict) ExecuteInsearts(params object[] inDatas)
+        public (StringBuilder result, ReadOnlyDictionary<string, Change<string>> inseartedDict) ExecuteInsearts(params object[] inDatas)
         {
             var sb = new StringBuilder(_baseString);
-            var inseartedDict = new Dictionary<string, string>();
-
+            var emptyDict = new ReadOnlyDictionary<string, Change<string>>(new Dictionary<string, Change<string>>());
+            
             if (_independentInsertsHandler == null || inDatas == null)
-                return (result: sb, inseartedDict: inseartedDict);
+                return (result: sb, inseartedDict: emptyDict);
 
+            var inseartedDict = new Dictionary<string, Change<string>>();
             foreach (var handler in _independentInsertsHandler)                                                     //Обрабатываем подстановку 1-ым валидным способом
             {
                 foreach (var inData in inDatas)
@@ -46,19 +50,19 @@ namespace Domain.InputDataModel.Shared.StringInseartService.IndependentInseart
                     var (_, isFailure, value, error) = handler.CalcInserts(inData);
                     if (isFailure)
                     {
-                        _logger.Error( $"IndependentInsertsService.ExecuteInsearts Error= {error}");   //Ошибка вычисления значения подстановки
-                        return (result: sb, inseartedDict: inseartedDict);
+                        _logger.Error( $"IndependentInsertsService.ExecuteInsearts Error= {error}");    //Ошибка вычисления значения подстановки
+                        return (result: sb, inseartedDict: emptyDict);
                     }
 
-                    var (replacement, insertModel) = value;
-                    if (replacement == null)      
+                    var (change, insertModel) = value;
+                    if (change?.FinishVal == null)      
                         continue;                                                                                   //inData НЕ подошла для handler 
 
-                    sb.Replace(insertModel.Replacement, replacement);
-                    inseartedDict.TryAdd(insertModel.VarName, replacement);                                            //inData подошла для handler, handler вернул строку замены, выполнили замену в строке 
+                    sb.Replace(insertModel.Replacement, change.FinishVal);
+                    inseartedDict.TryAdd(insertModel.VarName, change);                                              //inData подошла для handler, handler вернул строку замены, выполнили замену в строке 
                 }
             }
-            return (result: sb, inseartedDict: inseartedDict);
+            return (result: sb, inseartedDict: new ReadOnlyDictionary<string, Change<string>>(inseartedDict)); 
         }
         #endregion
     }

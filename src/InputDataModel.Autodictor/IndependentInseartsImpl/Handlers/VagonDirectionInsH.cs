@@ -2,6 +2,7 @@
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Shared.Helpers;
+using Shared.Types;
 
 namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
 {
@@ -9,11 +10,11 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
     {
         public VagonDirectionInsH(StringInsertModel insertModel) : base(insertModel){}
 
-        protected override string GetInseart(Lang lang, AdInputType uit)
+        protected override Change<string> GetInseart(Lang lang, AdInputType uit)
         {
-            var str = uit.VagonDirection?.GetName(lang);
-            var res = InsertModel.Ext.CalcFinishValue(str);
-            return res.GetSpaceOrString();
+            var s = uit.VagonDirection?.GetName(lang);
+            var f = InsertModel.Ext.CalcFinishValue(s);
+            return new Change<string>(s.GetSpaceOrString(), f.GetSpaceOrString());
         }
     }
 }
