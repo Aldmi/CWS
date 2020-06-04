@@ -39,7 +39,8 @@ namespace Domain.Device
     {
         #region field
         private readonly Func<MiddleWareMediatorOption, Owned<MiddlewareInvokeService<TIn>>> _middlewareInvokeServiceFactory;  //MiddlewareInvokeService пересоздается динамически, поэтому стару версию нужно уничтожать через Owned
-        private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
+        private readonly ProduserUnionStorage<TIn> _produserUnionStorage;//TODO: убрать!!!!
+        private readonly ProduserAdapter<TIn> _produserAdapter;
         private readonly ILogger _logger;
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
         private readonly List<IDisposable> _disposeProdusersEventHandlers = new List<IDisposable>();
@@ -78,6 +79,7 @@ namespace Domain.Device
         public Device(DeviceOption option,
                       IEnumerable<IExchange<TIn>> exchanges,
                       ProduserUnionStorage<TIn> produserUnionStorage,
+                      Func<string, ProduserAdapter<TIn>> produserAdapterFactory,
                       ILogger logger,
                       Func<MiddleWareMediatorOption, Owned<MiddlewareInvokeService<TIn>>> middlewareInvokeServiceFactory,
                       Func<IEnumerable<string>, Owned<AllExchangesResponseAnaliticService>> allExchangesResponseAnaliticServiceFactory)
@@ -86,6 +88,7 @@ namespace Domain.Device
             Exchanges = exchanges.ToList();
             _middlewareInvokeServiceFactory = middlewareInvokeServiceFactory;
             _produserUnionStorage = produserUnionStorage;
+            produserAdapterFactory(Option.ProduserUnionKey);
             _logger = logger;
 
             var owner = allExchangesResponseAnaliticServiceFactory(Exchanges.Select(exch => exch.KeyExchange));
