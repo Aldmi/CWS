@@ -12,20 +12,21 @@ namespace Domain.Device.Produser
         /// <param name="converterName"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public string Convert(string converterName, ResponsePieceOfDataWrapper<TIn> response)
+        public object Convert(string converterName, ResponsePieceOfDataWrapper<TIn> response)
         {
-            object convertedResp = null;
+            object convert = null;
             switch (converterName)
             {
                 case "Full":
-                    convertedResp = response;
+                    convert = response;
                     break;
 
                 case "RenderItems":
-                    convertedResp = new
+                    convert = new
                     {
                         Type= "boardData", 
                         response.DeviceName,
+                        response.KeyExchange,
                         DataAction= response.DataAction.ToString("G"),
                         response.ExceptionExchangePipline,
                         response.IsValidAll,
@@ -44,7 +45,7 @@ namespace Domain.Device.Produser
                     break;
 
                 case "Medium":
-                    convertedResp = new
+                    convert = new
                     {
                         response.DeviceName,
                         response.DataAction,
@@ -63,7 +64,7 @@ namespace Domain.Device.Produser
                     break;
 
                 case "Lite":
-                    convertedResp = new
+                    convert = new
                     {
                         response.DeviceName,
                         response.ExceptionExchangePipline,
@@ -86,7 +87,7 @@ namespace Domain.Device.Produser
                         item.TransportException,
                         Info = item.ResponseInfo?.ToString()
                     }).ToList();
-                    convertedResp = new
+                    convert = new
                     {
                         response.DeviceName,
                         result = response.IsValidAll ? 1 : 0,
@@ -95,8 +96,7 @@ namespace Domain.Device.Produser
                     break;
             }
 
-            var rawJson = HelpersJson.Serialize2RawJson(convertedResp);
-            return rawJson;
+            return convert;
         }
 
 
@@ -107,15 +107,15 @@ namespace Domain.Device.Produser
         /// <param name="objectName"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public string Convert(string converterName, string objectName, string message)
+        public object Convert(string converterName, string objectName, string message)
         {
-            object convertedMessage = null;
+            object converted = null;
             switch (converterName)
             {
                 case "Full":
                 case "Medium":
                 case "Lite":
-                    convertedMessage = new
+                    converted = new
                     {
                         DeviceName = objectName,
                         Message = message
@@ -123,7 +123,7 @@ namespace Domain.Device.Produser
                     break;
 
                 case "RenderItems":
-                    convertedMessage = new
+                    converted = new
                     {
                         Type="Message",
                         DeviceName = objectName,
@@ -132,7 +132,7 @@ namespace Domain.Device.Produser
                     break;
 
                 case "Indigo":  //{"result": 1, "message": "", "DeviceName": "fff"}
-                    convertedMessage = new
+                    converted = new
                     {
                         result = 0,
                         DeviceName = objectName,
@@ -141,8 +141,7 @@ namespace Domain.Device.Produser
                     break;
             }
 
-            var rawJson = HelpersJson.Serialize2RawJson(convertedMessage);
-            return rawJson;
+            return converted;
         }
     }
 }

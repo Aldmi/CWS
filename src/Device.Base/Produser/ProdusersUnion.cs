@@ -81,8 +81,8 @@ namespace Domain.Device.Produser
         /// </summary>
         public async Task<IList<Result<string, ErrorWrapper>>> SendResponseAll(ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
         {
-            var messageConverted = _responseConverter.Convert(_unionOption.ConverterName, response);
-            var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(messageConverted, invokerName)).ToList();
+            var converted = _responseConverter.Convert(_unionOption.ConverterName, response);
+            var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(converted, invokerName)).ToList();
             var results = await Task.WhenAll(tasks);
             return results;
         }
@@ -96,8 +96,8 @@ namespace Domain.Device.Produser
             if (!_produsersDict.ContainsKey(key))
                 throw new KeyNotFoundException(key);
 
-            var message = HelpersJson.Serialize2RawJson(response);
-            var result = await _produsersDict[key].Produser.Send(message, invokerName);
+            var converted = _responseConverter.Convert(_unionOption.ConverterName, response);
+            var result = await _produsersDict[key].Produser.Send(converted, invokerName);
             return result;
         }
 
@@ -105,10 +105,10 @@ namespace Domain.Device.Produser
         /// <summary>
         /// Отправить всем продюссерам сообщение об ошибки.
         /// </summary>
-        public async Task<IList<Result<string, ErrorWrapper>>> SendMessageAll(string objectName, string message, string invokerName = null)
+        public async Task<IList<Result<string, ErrorWrapper>>> SendMessageAll(object obj, string invokerName = null)
         {
-            var messageConverted = _responseConverter.Convert(_unionOption.ConverterName, objectName, message);
-            var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(messageConverted, invokerName)).ToList();
+            //var messageConverted = _responseConverter.Convert(_unionOption.ConverterName, objectName, message);
+            var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(obj, invokerName)).ToList();
             var results = await Task.WhenAll(tasks);
             return results;
         }

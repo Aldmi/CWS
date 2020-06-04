@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using Infrastructure.Produser.AbstractProduser.Enums;
 using Infrastructure.Produser.AbstractProduser.Helpers;
 using Infrastructure.Produser.AbstractProduser.Options;
+using Infrastructure.Produser.AbstractProduser.RxModels;
 
 namespace Infrastructure.Produser.AbstractProduser.AbstractProduser
 {
@@ -16,31 +19,44 @@ namespace Infrastructure.Produser.AbstractProduser.AbstractProduser
     public abstract class BaseProduser<TOption> : IProduser<TOption> where TOption : BaseProduserOption
     {
         #region field
-
         private readonly TimeSpan _timeRequest;
-   
         #endregion
 
 
 
         #region prop
-
         public TrottlingCounter TrottlingCounter { get; set; }
         public TOption Option { get; }
-
         #endregion
 
 
 
-        #region ctor
+        #region Rx
+        /// <summary>
+        /// Rx событие Подключение/Отключение новго клиента к Produser
+        /// </summary>
+        public ISubject<ClientCollectionChangedRxModel> ClientCollectionChangedRx { get; } = new Subject<ClientCollectionChangedRxModel>();
+        #endregion
 
+
+
+        #region RxEventHandler
+        protected void ClientCollectionChangedRxEh(NotifyCollectionChangedAction collectionChanged)
+        {
+            ClientCollectionChangedRx.OnNext(new ClientCollectionChangedRxModel(Option.Key, collectionChanged));
+        }
+        #endregion
+
+
+
+
+        #region ctor
         protected BaseProduser(TOption baseOption)
         {
             _timeRequest = baseOption.TimeRequest;
             TrottlingCounter= new TrottlingCounter(baseOption.TrottlingQuantity);
             Option = baseOption;
         }
-
         #endregion
 
 

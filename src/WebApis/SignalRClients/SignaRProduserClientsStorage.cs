@@ -1,6 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Reactive.Subjects;
+using Domain.Exchange.RxModel;
 
 namespace WebApiSwc.SignalRClients
 {
@@ -13,12 +16,17 @@ namespace WebApiSwc.SignalRClients
         private readonly ConcurrentDictionary<string, T> _clientsInfos  = new ConcurrentDictionary<string, T>();
 
 
-
         #region prop
-
         public List<T> GetClientsInfo => _clientsInfos.Values.ToList();
         public bool Any => _clientsInfos.Count > 0;
+        #endregion
 
+
+        #region Rx
+        /// <summary>
+        /// СОБЫТИЕ изменения коллекции Клиентов.
+        /// </summary>
+        public ISubject<NotifyCollectionChangedAction> CollectionChangedRx { get; } = new Subject<NotifyCollectionChangedAction>();
         #endregion
 
 
@@ -28,6 +36,10 @@ namespace WebApiSwc.SignalRClients
         public bool AddClient(string key, T value)
         {
            var res= _clientsInfos.TryAdd(key, value);
+           if (res)
+           {
+               CollectionChangedRx.OnNext(NotifyCollectionChangedAction.Add);
+           }
            return res;
         }
 
@@ -35,6 +47,10 @@ namespace WebApiSwc.SignalRClients
         public bool RemoveClient(string key)
         {
             var res = _clientsInfos.TryRemove(key, out var value);
+            if (res)
+            {
+                CollectionChangedRx.OnNext(NotifyCollectionChangedAction.Remove);
+            }
             return res;
         }
 

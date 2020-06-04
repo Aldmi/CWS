@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.OwnedInstances;
+using Confluent.Kafka;
 using CSharpFunctionalExtensions;
 using Domain.Device.MiddleWares4InData;
 using Domain.Device.MiddleWares4InData.Invokes;
@@ -16,7 +19,9 @@ using Domain.Exchange.RxModel;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.Response;
+using Infrastructure.Produser.AbstractProduser.RxModels;
 using Infrastructure.Transport.Base.RxModel;
+using MoreLinq;
 using Newtonsoft.Json;
 using Serilog;
 using Shared.Extensions;
@@ -37,6 +42,7 @@ namespace Domain.Device
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
         private readonly ILogger _logger;
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
+        private readonly List<IDisposable> _disposeProdusersEventHandlers = new List<IDisposable>();
         private readonly List<IDisposable> _disposeExchangesCycleBehaviorEventHandlers = new List<IDisposable>();
         private IDisposable _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler;
         private readonly AllExchangesResponseAnaliticService _allCycleBehaviorResponseAnalitic;
@@ -117,8 +123,7 @@ namespace Domain.Device
         /// <summary>
         /// Подписка на события от обменов.
         /// </summary>
-        /// <param name="produserUnionKey">Имя топика, если == null, то берется из настроек</param>
-        public bool SubscrubeOnExchangesEvents(string produserUnionKey = null)
+        public bool SubscrubeOnExchangesEvents()
         {
             Exchanges.ForEach(exch =>
             {
@@ -134,12 +139,52 @@ namespace Domain.Device
 
 
         /// <summary>
+        /// Подписка на событие от продюссеров
+        /// </summary>
+        public bool SubscrubeOnProdusersEvents()
+        {
+            var produser = _produserUnionStorage.Get(ProduserUnionKey);
+            if (produser == null)
+            {
+                _logger.Error($"Продюссер по ключу {ProduserUnionKey} НЕ НАЙДЕНН для Устройства= {Option.Name}");
+                return false;
+            }
+            produser.GetProduserDict.Values.ForEach(prop =>
+            {
+                _disposeProdusersEventHandlers.Add(prop.ClientCollectionChangedRx.Where(p=>p.NotifyCollectionChangedAction == NotifyCollectionChangedAction.Add).Subscribe(AddNewProdussersClientRxEh));
+            });
+
+            return true;
+        }
+
+        /// <summary>
         /// Отписка от событий обменов.
         /// </summary>
         public void UnsubscrubeOnExchangesEvents()
         {
             _disposeExchangesEventHandlers.ForEach(d => d.Dispose());
         }
+
+
+        /// <summary>
+        /// Отписка от событий обменов.
+        /// </summary>
+        public void UnsubscrubeOnProdusersEvents()
+        {
+            _disposeProdusersEventHandlers.ForEach(d => d.Dispose());
+        }
+
+
+
+        private void AddNewProdussersClientRxEh(ClientCollectionChangedRxModel rxModel)
+        {
+            SendInitData2ConcreteProduder(rxModel.Key, new ResponsePieceOfDataWrapper<TIn>
+            {
+                DeviceName = "DDD",
+                KeyExchange = "KeyExchange111"
+            }).GetAwaiter().GetResult();
+        }
+
 
 
         /// <summary>
@@ -266,16 +311,20 @@ namespace Domain.Device
         private async Task SendDataOrCommand(IExchange<TIn> exchange, DataAction dataAction, List<TIn> inData, Command4Device command4Device = Command4Device.None, string directHandlerName = null)
         {
             string warningStr;
+       
+
             if (!exchange.IsStartedTransportBg)
             {
                 warningStr = $"Отправка данных НЕ удачна, Бекграунд обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН";
-                await SendWarningResult(warningStr);
+                var warningObj = new { Type = "Warning", KeyExchange = exchange.KeyExchange, Message = warningStr };
+                await SendWarningResult(warningObj);
                 return;
             }
             if (!exchange.IsOpen)
             {
                 warningStr = $"Отправка данных НЕ удачна, соединение транспорта для обмена {exchange.KeyExchange} НЕ ОТКРЫТО";
-                await SendWarningResult(warningStr);
+                var warningObj = new { Type = "Warning", KeyExchange = exchange.KeyExchange, Message = warningStr };
+                await SendWarningResult(warningObj);
                 return;
             }
             switch (dataAction)
@@ -284,7 +333,8 @@ namespace Domain.Device
                     if (exchange.OnceBehavior.IsFullDataQueue)
                     {
                         warningStr = $"Отправка данных НЕ удачна, очередь однократных данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}";
-                        await SendWarningResult(warningStr);
+                        var warningObj = new { Type = "Warning", KeyExchange = exchange.KeyExchange, Message = warningStr };
+                        await SendWarningResult(warningObj);
                         return;
                     }
                     exchange.SendOneTimeData(inData, directHandlerName);
@@ -294,13 +344,15 @@ namespace Domain.Device
                     if (exchange.CycleBehavior.CycleBehaviorState == CycleBehaviorState.Off)
                     {
                         warningStr = $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН";
-                        await SendWarningResult(warningStr);
+                        var warningObj = new { Type = "Warning", KeyExchange = exchange.KeyExchange, Message = warningStr };
+                        await SendWarningResult(warningObj);
                         return;
                     }
                     if (exchange.CycleBehavior.IsFullDataQueue)
                     {
                         warningStr = $"Отправка данных НЕ удачна, очередь цикличеких данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}";
-                        await SendWarningResult(warningStr);
+                        var warningObj = new { Type = "Warning", KeyExchange = exchange.KeyExchange, Message = warningStr };
+                        await SendWarningResult(warningObj);
                         return;
                     }
                     exchange.SendCycleTimeData(inData, directHandlerName);
@@ -310,7 +362,8 @@ namespace Domain.Device
                     if (exchange.CommandBehavior.IsFullDataQueue)
                     {
                         warningStr = $"Отправка команды НЕ удачна, очередь однократных данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}";
-                        await SendWarningResult(warningStr);
+                        var warningObj = new { Type = "Warning", KeyExchange = exchange.KeyExchange, Message = warningStr };
+                        await SendWarningResult(warningObj);
                         return;
                     }
                     exchange.SendCommand(command4Device);
@@ -325,12 +378,11 @@ namespace Domain.Device
         /// <summary>
         /// Отправить предупреждение о неверной работе устройства.
         /// </summary>
-        private async Task SendWarningResult(string warningStr)
+        private async Task SendWarningResult(object warningObj)
         {
-            _logger.Warning(warningStr);
+            _logger.Warning(warningObj.ToString());
             if (!string.IsNullOrEmpty(ProduserUnionKey)) 
-                await Send2ProduderUnion(Option.Name, warningStr);
-            
+                await Send2ProduderUnion(warningObj);
         }
 
 
@@ -359,9 +411,9 @@ namespace Domain.Device
 
 
         /// <summary>
-        /// Отправить сообщение от устройства на ProduserUnion.
+        /// Отправить ответ от обмена на ProduserUnion.
         /// </summary>
-        private async Task Send2ProduderUnion(string objectName, string message)
+        private async Task SendInitData2ConcreteProduder(string key, ResponsePieceOfDataWrapper<TIn> response) //TODO: возможно отправлять массив ResponsePieceOfDataWrapper<TIn> response
         {
             var produser = _produserUnionStorage.Get(ProduserUnionKey);
             if (produser == null)
@@ -370,7 +422,31 @@ namespace Domain.Device
                 return;
             }
 
-            var results = await produser.SendMessageAll(objectName, message);
+            var result = await produser.SendResponse(key, response);
+            //foreach (var (isSuccess, isFailure, _, error) in results)
+            //{
+            //    if (isFailure)
+            //        _logger.Error($"Ошибки отправки ответов для Устройства= {Option.Name} через ProduderUnion = {ProduserUnionKey}  {error}");
+
+            //    if (isSuccess)
+            //        _logger.Information($"ОТПРАВКА ОТВЕТОВ УСПЕШНА для устройства {Option.Name} через ProduderUnion = {ProduserUnionKey}");
+            //}
+        }
+
+
+        /// <summary>
+        /// Отправить сообщение от устройства на ProduserUnion.
+        /// </summary>
+        private async Task Send2ProduderUnion(object obj)
+        {
+            var produser = _produserUnionStorage.Get(ProduserUnionKey);
+            if (produser == null)
+            {
+                _logger.Error($"Продюссер по ключу {ProduserUnionKey} НЕ НАЙДЕНН для Устройства= {Option.Name}");
+                return;
+            }
+
+            var results = await produser.SendMessageAll(obj);
             foreach (var (isSuccess, isFailure, _, error) in results)
             {
                 if (isFailure)
@@ -391,7 +467,8 @@ namespace Domain.Device
         private async void ConnectChangeRxEventHandler(ConnectChangeRxModel model)
         {
             var warningStr = $"Exchange Connect Change. IsConnect = {model.IsConnect} для ОБМЕНА {model.KeyExchange}";
-            await SendWarningResult(warningStr);
+            var warningObj = new { Type = "Warning", KeyExchange = model.KeyExchange, IsConnect= model.IsConnect, Message = warningStr };
+            await SendWarningResult(warningObj);
             _logger.Warning(warningStr);
         }
 
@@ -402,7 +479,8 @@ namespace Domain.Device
         private async void OpenChangeTransportRxEventHandler(IsOpenChangeRxModel model)
         {
             var warningStr =$"Transport Open Change. IsOpen = {model.IsOpen} для ТРАНСПОРТА {model.TransportName}";
-            await SendWarningResult(warningStr);
+            var warningObj = new { Type = "Warning", KeyExchange = model.KeyExchange, TransportName= model.TransportName, IsConnect = model.IsOpen, Message = warningStr };
+            await SendWarningResult(warningObj);
             _logger.Warning(warningStr);
         }
 
@@ -463,8 +541,17 @@ namespace Domain.Device
             var message = $"Переключился режим Циклического обмена.  {dataState.KeyExchange}  {dataState.CycleBehaviorState}";
             _logger.Information(message);
 
+            var messageObj = new
+            {
+               Type="Information",
+               DeviceName= Option.Name,
+               KeyExchange= dataState.KeyExchange,
+               CycleBehaviorState= dataState.CycleBehaviorState,
+               Message= message
+            };
+
             if (!string.IsNullOrEmpty(ProduserUnionKey))
-                await Send2ProduderUnion(Option.Name, message);
+                await Send2ProduderUnion(messageObj);
         }
 
 
@@ -495,6 +582,7 @@ namespace Domain.Device
             _middlewareInvokeServiceOwner?.Dispose();
             _allCycleBehaviorResponseAnaliticOwner.Dispose();
             UnsubscrubeOnExchangesEvents();
+            UnsubscrubeOnProdusersEvents();
             UnsubscrubeOnExchangesCycleBehaviorEvents();
             _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler?.Dispose();
         }

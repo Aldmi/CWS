@@ -10,15 +10,11 @@ namespace WebApiSwc.Hubs
         private readonly SignaRProduserClientsStorage<SignaRProdusserClientsInfo> _clientsStorage;
 
         #region ctor
-
         public ProviderHub(SignaRProduserClientsStorage<SignaRProdusserClientsInfo> clientsStorage)
         {
             _clientsStorage = clientsStorage;
         }
-
         #endregion
-
-
 
 
         #region OvverideMembers
