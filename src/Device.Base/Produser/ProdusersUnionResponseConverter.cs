@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Domain.Device.Services;
 using Domain.InputDataModel.Base.Response;
 using Shared.Helpers;
 
@@ -10,9 +12,37 @@ namespace Domain.Device.Produser
         /// Конвертер для ответов.
         /// </summary>
         /// <param name="converterName"></param>
-        /// <param name="response"></param>
+        /// <param name="produserData"></param>
         /// <returns></returns>
-        public object Convert(string converterName, ResponsePieceOfDataWrapper<TIn> response)
+        public object Convert(string converterName, ProduserData<TIn> produserData)
+        {
+            switch (produserData.DataType)
+            {
+                case ProduserSendingDataType.Init:
+                case ProduserSendingDataType.BoardData:
+                    var finishResponse = produserData.Datas.Select(pd => ConvertOneItem(converterName, pd)).ToList();
+                    return new
+                    {
+                        DataType = produserData.DataType.ToString("G"),
+                        Data = finishResponse
+                    };
+
+                case ProduserSendingDataType.Info:
+                case ProduserSendingDataType.Warning:
+                    return new
+                    {
+                        DataType = produserData.DataType.ToString("G"),
+                        produserData.MessageObj
+                    };
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+        }
+
+
+        private static object ConvertOneItem(string converterName, ResponsePieceOfDataWrapper<TIn> response)
         {
             object convert = null;
             switch (converterName)
@@ -24,10 +54,9 @@ namespace Domain.Device.Produser
                 case "RenderItems":
                     convert = new
                     {
-                        Type= "boardData", 
                         response.DeviceName,
                         response.KeyExchange,
-                        DataAction= response.DataAction.ToString("G"),
+                        DataAction = response.DataAction.ToString("G"),
                         response.ExceptionExchangePipline,
                         response.IsValidAll,
                         response.TimeAction,
@@ -39,7 +68,7 @@ namespace Domain.Device.Produser
 
                             item.ProcessedItemsInBatch.StartItemIndex,
                             item.ProcessedItemsInBatch.BatchSize,
-                            InseartedData = item.ProcessedItemsInBatch.ProcessedItems.Select(p=>p.InseartedData)
+                            InseartedData = item.ProcessedItemsInBatch.ProcessedItems.Select(p => p.InseartedData)
                         }).ToList()
                     };
                     break;
@@ -99,49 +128,5 @@ namespace Domain.Device.Produser
             return convert;
         }
 
-
-        /// <summary>
-        /// конвертер для строковых сообщений
-        /// </summary>
-        /// <param name="converterName"></param>
-        /// <param name="objectName"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public object Convert(string converterName, string objectName, string message)
-        {
-            object converted = null;
-            switch (converterName)
-            {
-                case "Full":
-                case "Medium":
-                case "Lite":
-                    converted = new
-                    {
-                        DeviceName = objectName,
-                        Message = message
-                    };
-                    break;
-
-                case "RenderItems":
-                    converted = new
-                    {
-                        Type="Message",
-                        DeviceName = objectName,
-                        Message = message
-                    };
-                    break;
-
-                case "Indigo":  //{"result": 1, "message": "", "DeviceName": "fff"}
-                    converted = new
-                    {
-                        result = 0,
-                        DeviceName = objectName,
-                        Message = message
-                    };
-                    break;
-            }
-
-            return converted;
-        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
@@ -27,6 +28,13 @@ namespace Domain.Device.Services
         private readonly List<IDisposable> _disposeProdusersEventHandlers = new List<IDisposable>();
         #endregion
 
+
+        #region prop
+        /// <summary>
+        /// Наличие ProduserUnion в ProduserUnionStorage по ключу.
+        /// </summary>
+        public bool IsExistProduserUnion => _produserUnionStorage.ContainsKey(_key);
+        #endregion
 
 
         #region ctor
@@ -59,7 +67,7 @@ namespace Domain.Device.Services
         /// <summary>
         /// Подписка на событие от продюссеров.
         /// </summary>
-        public bool SubscrubeOnProdusersEvents()
+        public bool SubscrubeOnEvents()
         {
             var produser = GetProduser();
             if (produser == null)
@@ -76,40 +84,23 @@ namespace Domain.Device.Services
         /// <summary>
         /// Отписка от событий от продюссеров.
         /// </summary>
-        public void UnsubscrubeOnProdusersEvents()
+        public void UnsubscrubeOnEvents()
         {
             _disposeProdusersEventHandlers.ForEach(d => d.Dispose());
         }
 
 
         /// <summary>
-        /// Отправить данные ИНИЦИАЛИЗАЦИИ от устройства на Produser по ключу.
-        /// </summary>
-        public async Task SendInitData2ProduderAsync(string key, IEnumerable<ResponsePieceOfDataWrapper<TIn>> initDataCollection)
-        {
-            var produser = GetProduser();
-            if (produser == null)
-                return;
-
-            var (_, isFailure, value, error) = await produser.SendResponseCollection4Produser(key, initDataCollection);
-
-            if (isFailure)
-                _logger.Error($"Ошибки отправки сообщений для Устройства= {_deviceName} через ProduderUnion = {_key}  {error}");
-            else
-                _logger.Information($"ОТПРАВКА сообщений УСПЕШНА для устройства {_deviceName} через ProduderUnion = {_key}");
-        }
-
-
-        /// <summary>
         /// Отправить ответ от обмена на ProduserUnion.
         /// </summary>
-        public async Task SendData2ProduderUnion(ResponsePieceOfDataWrapper<TIn> response)
+        public async Task SendData2ProduderUnionAsync(ResponsePieceOfDataWrapper<TIn> response)
         {
             var produser = GetProduser();
             if (produser == null)
                 return;
 
-            var results = await produser.SendResponse4AllProdusers(response);
+            var data = ProduserData<TIn>.CreateBoardData(response);
+            var results = await produser.Send4AllProdusers(data);
             foreach (var (isSuccess, isFailure, _, error) in results)
             {
                 if (isFailure)
@@ -122,15 +113,37 @@ namespace Domain.Device.Services
 
 
         /// <summary>
+        /// Отправить предупреждение о неверной работе устройства.
+        /// </summary>
+        public async Task SendWarningAsync(object warningObj)
+        {
+            var data = ProduserData<TIn>.CreateWarning(warningObj);
+            if (!string.IsNullOrEmpty(_key))
+                await SendMessage2ProduderUnion(data);
+        }
+
+
+        /// <summary>
+        /// Отправить информационное сообщение
+        /// </summary>
+        public async Task SendInfoAsync(object warningObj)
+        {
+            var data = ProduserData<TIn>.CreateInfo(warningObj);
+            if (!string.IsNullOrEmpty(_key))
+                await SendMessage2ProduderUnion(data);
+        }
+
+
+        /// <summary>
         /// Отправить сообщение от устройства на ProduserUnion.
         /// </summary>
-        public async Task SendMessage2ProduderUnion(object obj)
+        private async Task SendMessage2ProduderUnion(ProduserData<TIn> data)
         {
             var produser = GetProduser();
             if (produser == null)
                 return;
 
-            var results = await produser.SendMessage4AllProdusers(obj);
+            var results = await produser.Send4AllProdusers(data);
             foreach (var (isSuccess, isFailure, _, error) in results)
             {
                 if (isFailure)
@@ -139,6 +152,25 @@ namespace Domain.Device.Services
                 if (isSuccess)
                     _logger.Information($"ОТПРАВКА сообщений УСПЕШНА для устройства {_deviceName} через ProduderUnion = {_key}");
             }
+        }
+
+
+        /// <summary>
+        /// Отправить данные ИНИЦИАЛИЗАЦИИ от устройства на Produser по ключу.
+        /// </summary>
+        private async Task SendInitData2ProduderAsync(string key, IEnumerable<ResponsePieceOfDataWrapper<TIn>> initDataCollection)
+        {
+            var produser = GetProduser();
+            if (produser == null)
+                return;
+
+            var data = ProduserData<TIn>.CreateInit(initDataCollection.ToList());
+            var (_, isFailure, value, error) = await produser.Send4Produser(key, data);
+
+            if (isFailure)
+                _logger.Error($"Ошибки отправки сообщений для Устройства= {_deviceName} через ProduderUnion = {_key}  {error}");
+            else
+                _logger.Information($"ОТПРАВКА сообщений УСПЕШНА для устройства {_deviceName} через ProduderUnion = {_key}");
         }
 
 
@@ -152,7 +184,6 @@ namespace Domain.Device.Services
             }
             return produser;
         }
-
         #endregion
 
 
@@ -160,7 +191,7 @@ namespace Domain.Device.Services
         #region Disposable
         public void Dispose()
         {
-            UnsubscrubeOnProdusersEvents();
+            UnsubscrubeOnEvents();
         }
         #endregion
     }

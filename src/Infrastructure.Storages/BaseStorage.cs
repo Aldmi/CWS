@@ -65,6 +65,9 @@ namespace Infrastructure.Storages
 
         public TValue Get(TKey key)
         {
+            if (key == null)
+                return null;
+
             if (!Storage.ContainsKey(key))
             {
                 return null;
@@ -81,7 +84,7 @@ namespace Infrastructure.Storages
 
         public bool ContainsKey(TKey key)
         {
-           return Storage.ContainsKey(key);
+            return key != null && Storage.ContainsKey(key);
         }
 
 

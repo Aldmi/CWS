@@ -36,7 +36,7 @@ namespace Domain.Exchange
         bool IsCycleReopened { get; }                                             //Соединение НЕ открыто, находится в состоянии цикличесих попыток ОТКРЫТИЯ (флаг нужен т.к. цикл переоткрытия можно отменить и тогда будет IsOpen= false, IsCycleReopened = false )
         bool IsConnect { get; }                                                   //Устройсвто на связи по открытому соединению (определяется по правильным ответам от ус-ва)
         bool IsStartedTransportBg { get; }                                        //Запущен бекграунд на транспорте
-        LastSendPieceOfDataRxModel<T> LastSendData { get; }                                    //Последние отосланные данные 
+        LastSendPieceOfDataRxModel<T> LastSendData { get; }                       //Последние отосланные данные 
         #endregion
 
 
