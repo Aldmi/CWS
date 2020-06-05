@@ -292,12 +292,7 @@ namespace Domain.Exchange
 
             //ОТЧЕТ ОБ ОТПРАВКИ ПОРЦИИ ДАННЫХ.
             LogedResponseInformation(transportResponseWrapper);
-            var processedItemsInBatches = transportResponseWrapper.ResponsesItems.Select(item => item.ProcessedItemsInBatch).ToList();
-            LastSendData = new LastSendPieceOfDataRxModel<TIn>(transportResponseWrapper.DeviceName,
-                transportResponseWrapper.KeyExchange,
-                transportResponseWrapper.DataAction,
-                transportResponseWrapper.TimeAction,
-                transportResponseWrapper.IsValidAll, processedItemsInBatches);
+            LastSendData = new LastSendPieceOfDataRxModel<TIn>(transportResponseWrapper);
             return transportResponseWrapper;
         }
 

@@ -79,7 +79,7 @@ namespace Domain.Device.Produser
         /// <summary>
         /// Отправить всем продюссерам ответ на обмен порцией данных.
         /// </summary>
-        public async Task<IList<Result<string, ErrorWrapper>>> SendResponseAll(ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
+        public async Task<IList<Result<string, ErrorWrapper>>> SendResponse4AllProdusers(ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
         {
             var converted = _responseConverter.Convert(_unionOption.ConverterName, response);
             var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(converted, invokerName)).ToList();
@@ -91,7 +91,7 @@ namespace Domain.Device.Produser
         /// <summary>
         /// Отправить продюсеру по ключу, ответ на обмен порцией данных.
         /// </summary>
-        public async Task<Result<string, ErrorWrapper>> SendResponse(string key, ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
+        public async Task<Result<string, ErrorWrapper>> SendResponse4Produser(string key, ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
         {
             if (!_produsersDict.ContainsKey(key))
                 throw new KeyNotFoundException(key);
@@ -101,11 +101,24 @@ namespace Domain.Device.Produser
             return result;
         }
 
+        /// <summary>
+        /// Отправить продюсеру по ключу, коллекцию данных.
+        /// </summary>
+        public async Task<Result<string, ErrorWrapper>> SendResponseCollection4Produser(string key, IEnumerable<ResponsePieceOfDataWrapper<TIn>> responseCollection, string invokerName = null)
+        {
+            if (!_produsersDict.ContainsKey(key))
+                throw new KeyNotFoundException(key);
+
+            var converted = responseCollection.Select(response=> _responseConverter.Convert(_unionOption.ConverterName, response)).ToList();  
+            var result = await _produsersDict[key].Produser.Send(converted, invokerName);
+            return result;
+        }
+
 
         /// <summary>
         /// Отправить всем продюссерам сообщение об ошибки.
         /// </summary>
-        public async Task<IList<Result<string, ErrorWrapper>>> SendMessageAll(object obj, string invokerName = null)
+        public async Task<IList<Result<string, ErrorWrapper>>> SendMessage4AllProdusers(object obj, string invokerName = null)
         {
             //var messageConverted = _responseConverter.Convert(_unionOption.ConverterName, objectName, message);
             var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(obj, invokerName)).ToList();

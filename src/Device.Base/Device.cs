@@ -79,7 +79,7 @@ namespace Domain.Device
         public Device(DeviceOption option,
                       IEnumerable<IExchange<TIn>> exchanges,
                       ProduserUnionStorage<TIn> produserUnionStorage,
-                      Func<string, ProduserAdapter<TIn>> produserAdapterFactory,
+                      Func<(string, string), Func<List<ResponsePieceOfDataWrapper<TIn>>>, ProduserAdapter<TIn>> produserAdapterFactory,
                       ILogger logger,
                       Func<MiddleWareMediatorOption, Owned<MiddlewareInvokeService<TIn>>> middlewareInvokeServiceFactory,
                       Func<IEnumerable<string>, Owned<AllExchangesResponseAnaliticService>> allExchangesResponseAnaliticServiceFactory)
@@ -88,7 +88,7 @@ namespace Domain.Device
             Exchanges = exchanges.ToList();
             _middlewareInvokeServiceFactory = middlewareInvokeServiceFactory;
             _produserUnionStorage = produserUnionStorage;
-            produserAdapterFactory(Option.ProduserUnionKey);
+            _produserAdapter= produserAdapterFactory((Option.ProduserUnionKey, Option.Name), ()=> Exchanges.Select(exch => exch.LastSendData.GetResponsePieceOfDataWrapper()).ToList());
             _logger = logger;
 
             var owner = allExchangesResponseAnaliticServiceFactory(Exchanges.Select(exch => exch.KeyExchange));
@@ -176,7 +176,6 @@ namespace Domain.Device
         {
             _disposeProdusersEventHandlers.ForEach(d => d.Dispose());
         }
-
 
 
         private void AddNewProdussersClientRxEh(ClientCollectionChangedRxModel rxModel)
@@ -401,7 +400,7 @@ namespace Domain.Device
                 return;
             }
 
-            var results = await produser.SendResponseAll(response);
+            var results = await produser.SendResponse4AllProdusers(response);
             foreach (var (isSuccess, isFailure, _, error) in results)
             {
                 if (isFailure)
@@ -425,7 +424,7 @@ namespace Domain.Device
                 return;
             }
 
-            var result = await produser.SendResponse(key, response);
+            var result = await produser.SendResponse4Produser(key, response);
             //foreach (var (isSuccess, isFailure, _, error) in results)
             //{
             //    if (isFailure)
@@ -449,7 +448,7 @@ namespace Domain.Device
                 return;
             }
 
-            var results = await produser.SendMessageAll(obj);
+            var results = await produser.SendMessage4AllProdusers(obj);
             foreach (var (isSuccess, isFailure, _, error) in results)
             {
                 if (isFailure)
