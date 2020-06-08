@@ -10,10 +10,10 @@ namespace Domain.Exchange.Models
         public bool IsCycleReopened { get; }
         public bool IsStartedTransportBg { get; }
         public bool IsConnect { get; }
-        public ResponsePieceOfDataWrapper<TIn> Datas { get; }
+        public ResponsePieceOfDataWrapper<TIn> Data { get; }
 
 
-        public ExchangeFullState(string keyExchange, string deviceName, bool isOpen, bool isCycleReopened, bool isStartedTransportBg, bool isConnect, ResponsePieceOfDataWrapper<TIn> datas)
+        public ExchangeFullState(string keyExchange, string deviceName, bool isOpen, bool isCycleReopened, bool isStartedTransportBg, bool isConnect, ResponsePieceOfDataWrapper<TIn> data)
         {
             KeyExchange = keyExchange;
             DeviceName = deviceName;
@@ -21,7 +21,7 @@ namespace Domain.Exchange.Models
             IsCycleReopened = isCycleReopened;
             IsStartedTransportBg = isStartedTransportBg;
             IsConnect = isConnect;
-            Datas = datas;
+            Data = data;
         }
     }
 }

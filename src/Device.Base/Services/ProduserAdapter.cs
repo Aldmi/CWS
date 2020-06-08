@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using Domain.Device.Produser;
+using Domain.Exchange.Models;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.Response;
 using Infrastructure.Produser.AbstractProduser.RxModels;
@@ -24,7 +24,7 @@ namespace Domain.Device.Services
         private readonly ILogger _logger;
         private readonly string _key;
         private readonly string _deviceName;
-        private readonly Func<List<ResponsePieceOfDataWrapper<TIn>>> _getCurrentStatus4AllExchanges;
+        private readonly Func<List<ExchangeFullState<TIn>>> _getCurrentStatus4AllExchanges;
         private readonly List<IDisposable> _disposeProdusersEventHandlers = new List<IDisposable>();
         #endregion
 
@@ -33,7 +33,7 @@ namespace Domain.Device.Services
         /// <summary>
         /// Наличие ProduserUnion в ProduserUnionStorage по ключу.
         /// </summary>
-        public bool IsExistProduserUnion => _produserUnionStorage.ContainsKey(_key);
+        public bool IsExistProduserUnion => !string.IsNullOrEmpty(_key) && _produserUnionStorage.ContainsKey(_key);
         #endregion
 
 
@@ -41,7 +41,7 @@ namespace Domain.Device.Services
         /// <param name="deviceOptions"> Ключ продюссера в produserUnionStorage.   Название устройства, использующего ProduserAdapter</param>
         /// <param name="getCurrentStatus4AllExchanges">Функция получения текущего статуса обменов</param>
         /// <param name="produserUnionStorage">Словарь продюсеров</param>
-        public ProduserAdapter((string key, string deviceName) deviceOptions, Func<List<ResponsePieceOfDataWrapper<TIn>>> getCurrentStatus4AllExchanges, ProduserUnionStorage<TIn> produserUnionStorage, ILogger logger)
+        public ProduserAdapter((string key, string deviceName) deviceOptions, Func<List<ExchangeFullState<TIn>>> getCurrentStatus4AllExchanges, ProduserUnionStorage<TIn> produserUnionStorage, ILogger logger)
         {
             _produserUnionStorage = produserUnionStorage;
             _logger = logger;
@@ -69,10 +69,10 @@ namespace Domain.Device.Services
         /// </summary>
         public bool SubscrubeOnEvents()
         {
-            var produser = GetProduser();
-            if (produser == null)
+            if (!IsExistProduserUnion)
                 return false;
 
+            var produser = GetProduser();
             produser.GetProduserDict.Values.ForEach(prop =>
             {
                 _disposeProdusersEventHandlers.Add(prop.ClientCollectionChangedRx.Where(p => p.NotifyCollectionChangedAction == NotifyCollectionChangedAction.Add).Subscribe(AddNewProdusersClientRxEh));
@@ -95,10 +95,10 @@ namespace Domain.Device.Services
         /// </summary>
         public async Task SendData2ProduderUnionAsync(ResponsePieceOfDataWrapper<TIn> response)
         {
-            var produser = GetProduser();
-            if (produser == null)
+            if(!IsExistProduserUnion)
                 return;
 
+            var produser = GetProduser();
             var data = ProduserData<TIn>.CreateBoardData(response);
             var results = await produser.Send4AllProdusers(data);
             foreach (var (isSuccess, isFailure, _, error) in results)
@@ -128,9 +128,11 @@ namespace Domain.Device.Services
         /// </summary>
         public async Task SendInfoAsync(object warningObj)
         {
+            if (!IsExistProduserUnion)
+                return;
+
             var data = ProduserData<TIn>.CreateInfo(warningObj);
-            if (!string.IsNullOrEmpty(_key))
-                await SendMessage2ProduderUnion(data);
+            await SendMessage2ProduderUnion(data);
         }
 
 
@@ -139,10 +141,10 @@ namespace Domain.Device.Services
         /// </summary>
         private async Task SendMessage2ProduderUnion(ProduserData<TIn> data)
         {
-            var produser = GetProduser();
-            if (produser == null)
+            if (!IsExistProduserUnion)
                 return;
 
+            var produser = GetProduser();
             var results = await produser.Send4AllProdusers(data);
             foreach (var (isSuccess, isFailure, _, error) in results)
             {
@@ -158,14 +160,14 @@ namespace Domain.Device.Services
         /// <summary>
         /// Отправить данные ИНИЦИАЛИЗАЦИИ от устройства на Produser по ключу.
         /// </summary>
-        private async Task SendInitData2ProduderAsync(string key, IEnumerable<ResponsePieceOfDataWrapper<TIn>> initDataCollection)
+        private async Task SendInitData2ProduderAsync(string key, List<ExchangeFullState<TIn>> initDataCollection)
         {
-            var produser = GetProduser();
-            if (produser == null)
+            if (!IsExistProduserUnion)
                 return;
 
-            var data = ProduserData<TIn>.CreateInit(initDataCollection.ToList());
-            var (_, isFailure, value, error) = await produser.Send4Produser(key, data);
+            var produser = GetProduser();
+            var data = ProduserData<TIn>.CreateInit(initDataCollection);
+            var (_, isFailure, _, error) = await produser.Send4Produser(key, data);
 
             if (isFailure)
                 _logger.Error($"Ошибки отправки сообщений для Устройства= {_deviceName} через ProduderUnion = {_key}  {error}");

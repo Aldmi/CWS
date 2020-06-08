@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Domain.Exchange.Models;
 using Domain.InputDataModel.Base.Response;
 
 namespace Domain.Device.Produser
@@ -9,17 +10,23 @@ namespace Domain.Device.Produser
     {
         #region prop
         public ProduserSendingDataType DataType { get; }
-        public List<ResponsePieceOfDataWrapper<TIn>> Datas { get; }
+        public List<ExchangeFullState<TIn>> InitDatas { get; }
+        public ResponsePieceOfDataWrapper<TIn> Data { get; }
         public object MessageObj { get; }
         #endregion
 
 
 
         #region ctor
-        private ProduserData(ProduserSendingDataType dataType, List<ResponsePieceOfDataWrapper<TIn>> datas = null, object messageObj = null)
+        private ProduserData(
+            ProduserSendingDataType dataType,
+            List<ExchangeFullState<TIn>> initDatas,
+            ResponsePieceOfDataWrapper<TIn> data,
+            object messageObj)
         {
             DataType = dataType;
-            Datas = datas;
+            InitDatas = initDatas;
+            Data = data;
             MessageObj = messageObj;
         }
         #endregion
@@ -27,29 +34,28 @@ namespace Domain.Device.Produser
 
 
         #region Factories
-        public static ProduserData<TIn> CreateInit(List<ResponsePieceOfDataWrapper<TIn>> initDatas)
+        public static ProduserData<TIn> CreateInit(List<ExchangeFullState<TIn>> initDatas)
         {
-            return new ProduserData<TIn>(ProduserSendingDataType.Init, initDatas);
+            return new ProduserData<TIn>(ProduserSendingDataType.Init, initDatas, null, null);
         }
 
 
         public static ProduserData<TIn> CreateBoardData(ResponsePieceOfDataWrapper<TIn> boardData)
         {
-            return new ProduserData<TIn>(ProduserSendingDataType.BoardData, new List<ResponsePieceOfDataWrapper<TIn>>(1){ boardData });
+            return new ProduserData<TIn>(ProduserSendingDataType.BoardData, null, boardData, null );
         }
 
 
         public static ProduserData<TIn> CreateInfo(object infoObj)
         {
-            return new ProduserData<TIn>(ProduserSendingDataType.Info, null, infoObj);
+            return new ProduserData<TIn>(ProduserSendingDataType.Info, null, null, infoObj);
         }
 
 
         public static ProduserData<TIn> CreateWarning(object warningObj)
         {
-            return new ProduserData<TIn>(ProduserSendingDataType.Warning, null, warningObj);
+            return new ProduserData<TIn>(ProduserSendingDataType.Warning, null, null, warningObj);
         }
         #endregion
-
     }   
 }

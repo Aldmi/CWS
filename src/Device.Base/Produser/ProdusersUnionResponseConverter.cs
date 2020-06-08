@@ -16,14 +16,31 @@ namespace Domain.Device.Produser
         /// <returns></returns>
         public object Convert(string converterName, ProduserData<TIn> produserData)
         {
+            var strDataType = produserData.DataType.ToString("G");
             switch (produserData.DataType)
             {
                 case ProduserSendingDataType.Init:
-                case ProduserSendingDataType.BoardData:
-                    var finishResponse = produserData.Datas.Select(pd => ConvertOneItem(converterName, pd)).ToList();
+                    var finishExchFullState = produserData.InitDatas.Select(initdata => new
+                    {
+                        initdata.DeviceName,
+                        initdata.KeyExchange,
+                        initdata.IsOpen,
+                        initdata.IsConnect,
+                        initdata.IsCycleReopened,
+                        initdata.IsStartedTransportBg,
+                        Data = initdata.Data == null ? null : ConvertResponsePieceOfDataWrapper(converterName, initdata.Data)
+                    }).ToList();
                     return new
                     {
-                        DataType = produserData.DataType.ToString("G"),
+                        Type = strDataType,
+                        ExchangesState = finishExchFullState
+                    };
+
+                case ProduserSendingDataType.BoardData:
+                    var finishResponse = produserData.Data == null ? null : ConvertResponsePieceOfDataWrapper(converterName, produserData.Data);
+                    return new
+                    {
+                        Type = strDataType,
                         Data = finishResponse
                     };
 
@@ -31,7 +48,7 @@ namespace Domain.Device.Produser
                 case ProduserSendingDataType.Warning:
                     return new
                     {
-                        DataType = produserData.DataType.ToString("G"),
+                        Type = strDataType,
                         produserData.MessageObj
                     };
 
@@ -42,7 +59,7 @@ namespace Domain.Device.Produser
         }
 
 
-        private static object ConvertOneItem(string converterName, ResponsePieceOfDataWrapper<TIn> response)
+        private static object ConvertResponsePieceOfDataWrapper(string converterName, ResponsePieceOfDataWrapper<TIn> response)
         {
             object convert = null;
             switch (converterName)
@@ -66,9 +83,9 @@ namespace Domain.Device.Produser
                             item.StatusStr,
                             item.TransportException,
 
-                            item.ProcessedItemsInBatch.StartItemIndex,
-                            item.ProcessedItemsInBatch.BatchSize,
-                            InseartedData = item.ProcessedItemsInBatch.ProcessedItems.Select(p => p.InseartedData)
+                            item.ProcessedItemsInBatch?.StartItemIndex,
+                            item.ProcessedItemsInBatch?.BatchSize,
+                            InseartedData = item.ProcessedItemsInBatch?.ProcessedItems.Select(p => p.InseartedData)
                         }).ToList()
                     };
                     break;

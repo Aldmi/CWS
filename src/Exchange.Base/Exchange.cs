@@ -38,19 +38,17 @@ namespace Domain.Exchange
         private readonly ITransport _transport;
         private readonly ITransportBackground _transportBackground;
 
-        private readonly IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, BaseResponseInfo>>>>
-            _dataProviderFactory;
+        private readonly IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, BaseResponseInfo>>>> _dataProviderFactory;
 
-        private IDataProvider<TIn, BaseResponseInfo>
-            _dataProvider; //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
+        private IDataProvider<TIn, BaseResponseInfo> _dataProvider; //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
 
-        private IDisposable _dataProviderOwner; //управляет временем жизни _dataProvider
+        private IDisposable _dataProviderOwner;                  //управляет временем жизни _dataProvider
+        private readonly IDisposable _disposeTransportIsOpenRx;   //отписка от события 
         private readonly ILogger _logger;
         private readonly Stopwatch _sw = Stopwatch.StartNew();
         private readonly List<IDisposable> _behaviorOwners;
 
-        private CancellationTokenSource
-            _ctsStartExchangePipeline; //источник прерывания выполнение конвеера отправки данных
+        private CancellationTokenSource  _ctsStartExchangePipeline; //источник прерывания выполнение конвеера отправки данных
 
         #endregion
 
@@ -101,7 +99,14 @@ namespace Domain.Exchange
         /// <summary>
         /// полное состояние Обмена.
         /// </summary>
-        public ExchangeFullState<TIn> FullState => new ExchangeFullState<TIn>(KeyExchange, DeviceName, IsOpen, IsCycleReopened, IsStartedTransportBg, IsConnect, LastSendData.GetResponsePieceOfDataWrapper());
+        public ExchangeFullState<TIn> FullState => new ExchangeFullState<TIn>(
+            KeyExchange,
+            DeviceName,
+            IsOpen,
+            IsCycleReopened,
+            IsStartedTransportBg,
+            IsConnect,
+            LastSendData?.GetResponsePieceOfDataWrapper());
         
         public CycleBehavior<TIn> CycleBehavior { get; }
         public OnceBehavior<TIn> OnceBehavior { get; }
@@ -127,6 +132,11 @@ namespace Domain.Exchange
             _option = option;
             _transport = transport;
             _transportBackground = transportBackground;
+           _disposeTransportIsOpenRx= _transport.IsOpenChangeRx.Subscribe(model =>
+            {
+                model.KeyExchange = KeyExchange; //Добавить к модели события Имя обмена.
+                IsOpenChangeTransportRx.OnNext(model);
+            });
             _dataProviderFactory = dataProviderFactory;
             var owner= dataProviderFactory[_option.Provider.Name](_option.Provider);
             _dataProviderOwner = owner;
@@ -153,7 +163,10 @@ namespace Domain.Exchange
 
 
         #region TransportRx
-        public ISubject<IsOpenChangeRxModel> IsOpenChangeTransportRx => _transport.IsOpenChangeRx;
+        /// <summary>
+        /// Перевыброс события открытия транспорта на обмене.(Добавляет к IsOpenChangeRxModel ключ обмена KeyExchnage)
+        /// </summary>
+        public ISubject<IsOpenChangeRxModel> IsOpenChangeTransportRx { get; } = new Subject<IsOpenChangeRxModel>();
         public ISubject<StatusDataExchangeChangeRxModel> StatusDataExchangeChangeTransportRx => _transport.StatusDataExchangeChangeRx;
         public ISubject<StatusStringChangeRxModel> StatusStringChangeTransportRx => _transport.StatusStringChangeRx;
         #endregion
@@ -407,6 +420,7 @@ namespace Domain.Exchange
         {
             _behaviorOwners.ForEach(beh=> beh.Dispose());
             _dataProviderOwner.Dispose();
+            _disposeTransportIsOpenRx.Dispose();
         }
         #endregion
     }

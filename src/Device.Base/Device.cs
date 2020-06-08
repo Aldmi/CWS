@@ -6,7 +6,6 @@ using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
 using Domain.Device.MiddleWares4InData;
 using Domain.Device.MiddleWares4InData.Invokes;
-using Domain.Device.Produser;
 using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.Device.Services;
 using Domain.Exchange;
@@ -71,7 +70,7 @@ namespace Domain.Device
         #region ctor
         public Device(DeviceOption option,
                       IEnumerable<IExchange<TIn>> exchanges,
-                      Func<(string, string), Func<List<ResponsePieceOfDataWrapper<TIn>>>, ProduserAdapter<TIn>> produserAdapterFactory,
+                      Func<(string, string), Func<List<ExchangeFullState<TIn>>>, ProduserAdapter<TIn>> produserAdapterFactory,
                       ILogger logger,
                       Func<MiddleWareMediatorOption, Owned<MiddlewareInvokeService<TIn>>> middlewareInvokeServiceFactory,
                       Func<IEnumerable<string>, Owned<AllExchangesResponseAnaliticService>> allExchangesResponseAnaliticServiceFactory)
@@ -79,7 +78,7 @@ namespace Domain.Device
             Option = option;
             Exchanges = exchanges.ToList();
             _middlewareInvokeServiceFactory = middlewareInvokeServiceFactory;
-            _produserAdapter= produserAdapterFactory((Option.ProduserUnionKey, Option.Name), GetLastSendData);
+            _produserAdapter= produserAdapterFactory((Option.ProduserUnionKey, Option.Name), () => Exchanges.Select(exch => exch.FullState).ToList());
             _logger = logger;
 
             var owner = allExchangesResponseAnaliticServiceFactory(Exchanges.Select(exch => exch.KeyExchange));
@@ -113,31 +112,6 @@ namespace Domain.Device
             }
         }
 
-
-        /// <summary>
-        /// Получить статус Обменов.
-        /// </summary>
-        private List<ExchangeState<TIn>> GetLastSendData()
-        {
-            var exchStatusCollection = Exchanges
-                .Where(exch => exch.LastSendData != null)
-                .Select(exch => exch.LastSendData.GetResponsePieceOfDataWrapper())
-                .ToList();
-
-            if (!exchStatusCollection.Any()) //Обмен не идет, получить текущее состояние обмена.
-            {
-                var states = Exchanges.Select(exch => new
-                {
-                    exch.IsOpen,
-                    exch.KeyExchange,
-                    exch.IsConnect,
-                    exch.IsCycleReopened,
-                    exch.KeyTransport,
-                }); //TODO: Добавить новый класс в Exchange. ExchangeState со всеми этими полями. и exchStatusCollection в этом же типе. Полное состояние обмена.
-            }
-
-            return ExchangeState; //TODO: возвращать его 
-        }
 
         /// <summary>
         /// Подписка на события от обменов.
@@ -310,17 +284,13 @@ namespace Domain.Device
             if (!exchange.IsStartedTransportBg)
             {
                 warningStr = $"Отправка данных НЕ удачна, Бекграунд обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН";
-                var warningObj = new {KeyExchange = exchange.KeyExchange, Message = warningStr };
-                await _produserAdapter.SendWarningAsync(warningObj);
-                _logger.Warning("{Type} {KeyExchange} {WarningStatus}", "Отправка данных НЕ удачна.", exchange.KeyExchange, warningStr);
+                await SendWarning2Produser(Option.Name, exchange.KeyExchange, warningStr);
                 return;
             }
             if (!exchange.IsOpen)
             {
                 warningStr = $"Отправка данных НЕ удачна, соединение транспорта для обмена {exchange.KeyExchange} НЕ ОТКРЫТО";
-                var warningObj = new {KeyExchange = exchange.KeyExchange, Message = warningStr };
-                await _produserAdapter.SendWarningAsync(warningObj);
-                _logger.Warning("{Type} {KeyExchange} {WarningStatus}", "Отправка данных НЕ удачна.", exchange.KeyExchange, warningStr);
+                await SendWarning2Produser(Option.Name, exchange.KeyExchange, warningStr);
                 return;
             }
             switch (dataAction)
@@ -329,9 +299,7 @@ namespace Domain.Device
                     if (exchange.OnceBehavior.IsFullDataQueue)
                     {
                         warningStr = $"Отправка данных НЕ удачна, очередь однократных данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}";
-                        var warningObj = new {KeyExchange = exchange.KeyExchange, Message = warningStr };
-                        await _produserAdapter.SendWarningAsync(warningObj);
-                        _logger.Warning("{Type} {KeyExchange} {WarningStatus}", "Отправка данных НЕ удачна.", exchange.KeyExchange, warningStr);
+                        await SendWarning2Produser(Option.Name, exchange.KeyExchange, warningStr);
                         return;
                     }
                     exchange.SendOneTimeData(inData, directHandlerName);
@@ -341,17 +309,13 @@ namespace Domain.Device
                     if (exchange.CycleBehavior.CycleBehaviorState == CycleBehaviorState.Off)
                     {
                         warningStr = $"Отправка данных НЕ удачна, Цикл. обмен для обмена {exchange.KeyExchange} НЕ ЗАПУЩЕН";
-                        var warningObj = new {KeyExchange = exchange.KeyExchange, Message = warningStr };
-                        await _produserAdapter.SendWarningAsync(warningObj);
-                        _logger.Warning("{Type} {KeyExchange} {WarningStatus}", "Отправка данных НЕ удачна.", exchange.KeyExchange, warningStr);
+                        await SendWarning2Produser(Option.Name, exchange.KeyExchange, warningStr);
                         return;
                     }
                     if (exchange.CycleBehavior.IsFullDataQueue)
                     {
                         warningStr = $"Отправка данных НЕ удачна, очередь цикличеких данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}";
-                        var warningObj = new {KeyExchange = exchange.KeyExchange, Message = warningStr };
-                        await _produserAdapter.SendWarningAsync(warningObj);
-                        _logger.Warning("{Type} {KeyExchange} {WarningStatus}", "Отправка данных НЕ удачна.", exchange.KeyExchange, warningStr);
+                        await SendWarning2Produser(Option.Name, exchange.KeyExchange, warningStr);
                         return;
                     }
                     exchange.SendCycleTimeData(inData, directHandlerName);
@@ -361,9 +325,7 @@ namespace Domain.Device
                     if (exchange.CommandBehavior.IsFullDataQueue)
                     {
                         warningStr = $"Отправка команды НЕ удачна, очередь однократных данных ПЕРЕПОЛНЕННА для обмена: {exchange.KeyExchange}";
-                        var warningObj = new {KeyExchange = exchange.KeyExchange, Message = warningStr };
-                        await _produserAdapter.SendWarningAsync(warningObj);
-                        _logger.Warning("{Type} {KeyExchange} {WarningStatus}", "Отправка данных НЕ удачна.", exchange.KeyExchange, warningStr);
+                        await SendWarning2Produser(Option.Name, exchange.KeyExchange, warningStr);
                         return;
                     }
                     exchange.SendCommand(command4Device);
@@ -372,6 +334,13 @@ namespace Domain.Device
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dataAction), dataAction, null);
             }
+        }
+
+        private async Task SendWarning2Produser(string deviceName, string keyExchange, string warningStr)
+        {
+            var warningObj = new {DeviceName= deviceName, KeyExchange = keyExchange, Message = warningStr };
+            await _produserAdapter.SendWarningAsync(warningObj);
+            _logger.Warning("{Type} {KeyExchange} {WarningStatus}", "Отправка данных НЕ удачна.", keyExchange, warningStr);
         }
 
         #endregion
@@ -385,7 +354,7 @@ namespace Domain.Device
         private async void ConnectChangeRxEventHandler(ConnectChangeRxModel model)
         {
             var warningStr = $"Exchange Connect Change. IsConnect = {model.IsConnect} для ОБМЕНА {model.KeyExchange}";
-            var warningObj = new { KeyExchange = model.KeyExchange, IsConnect= model.IsConnect, Message = warningStr };
+            var warningObj = new { DeviceName=Option.Name,  KeyExchange = model.KeyExchange, IsConnect= model.IsConnect, Message = warningStr };
             await _produserAdapter.SendWarningAsync(warningObj);
             _logger.Warning(warningStr);
         }
@@ -397,7 +366,7 @@ namespace Domain.Device
         private async void OpenChangeTransportRxEventHandler(IsOpenChangeRxModel model)
         {
             var warningStr =$"Transport Open Change. IsOpen = {model.IsOpen} для ТРАНСПОРТА {model.TransportName}";
-            var warningObj = new { KeyExchange = model.KeyExchange, TransportName= model.TransportName, IsConnect = model.IsOpen, Message = warningStr };
+            var warningObj = new { DeviceName = Option.Name, KeyExchange = model.KeyExchange, TransportName = model.TransportName, IsOpen = model.IsOpen, Message = warningStr };
             await _produserAdapter.SendWarningAsync(warningObj);
             _logger.Warning(warningStr);
         }

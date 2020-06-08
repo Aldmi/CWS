@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
 using Domain.Exchange.Behaviors;
+using Domain.Exchange.Models;
 using Domain.Exchange.RxModel;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
@@ -37,6 +38,7 @@ namespace Domain.Exchange
         bool IsConnect { get; }                                                   //Устройсвто на связи по открытому соединению (определяется по правильным ответам от ус-ва)
         bool IsStartedTransportBg { get; }                                        //Запущен бекграунд на транспорте
         LastSendPieceOfDataRxModel<T> LastSendData { get; }                       //Последние отосланные данные 
+        ExchangeFullState<T> FullState { get; }                                   //Полное состгяние Обмена.
         #endregion
 
 
