@@ -15,12 +15,14 @@ namespace Domain.Device.Produser
 
 
 
+        #region ctor
         private ProduserData(ProduserSendingDataType dataType, List<ResponsePieceOfDataWrapper<TIn>> datas = null, object messageObj = null)
         {
             DataType = dataType;
             Datas = datas;
             MessageObj = messageObj;
         }
+        #endregion
 
 
 
@@ -36,21 +38,18 @@ namespace Domain.Device.Produser
             return new ProduserData<TIn>(ProduserSendingDataType.BoardData, new List<ResponsePieceOfDataWrapper<TIn>>(1){ boardData });
         }
 
+
         public static ProduserData<TIn> CreateInfo(object infoObj)
         {
             return new ProduserData<TIn>(ProduserSendingDataType.Info, null, infoObj);
         }
 
+
         public static ProduserData<TIn> CreateWarning(object warningObj)
         {
             return new ProduserData<TIn>(ProduserSendingDataType.Warning, null, warningObj);
         }
-
         #endregion
-
-
-
-
 
     }   
 }

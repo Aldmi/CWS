@@ -9,6 +9,7 @@ using Autofac.Features.Indexed;
 using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
 using Domain.Exchange.Behaviors;
+using Domain.Exchange.Models;
 using Domain.Exchange.Repository.Entities;
 using Domain.Exchange.RxModel;
 using Domain.InputDataModel.Base.Enums;
@@ -32,21 +33,31 @@ namespace Domain.Exchange
     public class Exchange<TIn> : IExchange<TIn> where TIn : InputTypeBase
     {
         #region field
+
         private readonly ExchangeOption _option;
         private readonly ITransport _transport;
         private readonly ITransportBackground _transportBackground;
-        private readonly IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, BaseResponseInfo>>>> _dataProviderFactory;
-        private IDataProvider<TIn, BaseResponseInfo> _dataProvider;                       //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
-        private IDisposable _dataProviderOwner;                                       //управляет временем жизни _dataProvider
+
+        private readonly IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, BaseResponseInfo>>>>
+            _dataProviderFactory;
+
+        private IDataProvider<TIn, BaseResponseInfo>
+            _dataProvider; //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
+
+        private IDisposable _dataProviderOwner; //управляет временем жизни _dataProvider
         private readonly ILogger _logger;
         private readonly Stopwatch _sw = Stopwatch.StartNew();
         private readonly List<IDisposable> _behaviorOwners;
-        private CancellationTokenSource _ctsStartExchangePipeline; //источник прерывания выполнение конвеера отправки данных
+
+        private CancellationTokenSource
+            _ctsStartExchangePipeline; //источник прерывания выполнение конвеера отправки данных
+
         #endregion
 
 
 
         #region prop
+
         public string KeyExchange => _option.Key;
         public string DeviceName { get; }
         public string ProviderName => _option.Provider.Name;
@@ -59,6 +70,7 @@ namespace Domain.Exchange
         public bool IsStartedTransportBg => _transportBackground.IsStarted;
 
         private bool _isConnect;
+
         public bool IsConnect
         {
             get => _isConnect;
@@ -66,11 +78,12 @@ namespace Domain.Exchange
             {
                 if (value == _isConnect) return;
                 _isConnect = value;
-                IsConnectChangeRx.OnNext(new ConnectChangeRxModel { IsConnect = _isConnect, KeyExchange = KeyExchange });
+                IsConnectChangeRx.OnNext(new ConnectChangeRxModel {IsConnect = _isConnect, KeyExchange = KeyExchange});
             }
         }
 
         private LastSendPieceOfDataRxModel<TIn> _lastSendData;
+
         /// <summary>
         /// Актуальная отправленная информация через обмен.
         /// </summary>
@@ -85,6 +98,11 @@ namespace Domain.Exchange
             }
         }
 
+        /// <summary>
+        /// полное состояние Обмена.
+        /// </summary>
+        public ExchangeFullState<TIn> FullState => new ExchangeFullState<TIn>(KeyExchange, DeviceName, IsOpen, IsCycleReopened, IsStartedTransportBg, IsConnect, LastSendData.GetResponsePieceOfDataWrapper());
+        
         public CycleBehavior<TIn> CycleBehavior { get; }
         public OnceBehavior<TIn> OnceBehavior { get; }
         public CommandBehavior<TIn> CommandBehavior { get; }
