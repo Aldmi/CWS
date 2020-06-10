@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Domain.Device.Services;
 using Domain.InputDataModel.Base.Response;
 using Shared.Helpers;
 
@@ -55,7 +54,6 @@ namespace Domain.Device.Produser
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
         }
 
 
@@ -144,6 +142,5 @@ namespace Domain.Device.Produser
 
             return convert;
         }
-
     }
 }

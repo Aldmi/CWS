@@ -33,6 +33,5 @@ namespace Shared.Extensions
             var format = "{0" + formatValue + "}";
             return string.Format(format, resVal);
         }
-
     }
 }

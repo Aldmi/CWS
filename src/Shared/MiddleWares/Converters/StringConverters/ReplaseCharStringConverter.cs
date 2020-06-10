@@ -40,6 +40,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
                 }
                 else
                 {
+                    var defaultVal = _option.Mapping.TryGetValue('\u0002', out var def) ? def : "";
                     sb.Append(c);
                 }
             }

@@ -31,6 +31,7 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory
                 "DelayTime" => new DelayTimeInsH(insertModel),
                 "Time" => new TimeInsH(insertModel),
                 "ExpectedTime" => new ExpectedTimeInsH(insertModel),
+                "StopTime" => new StopTimeInsH(insertModel),
                 "SyncTInSec" => new SyncTInSecInsH(insertModel),
                 "Year" => new YearInsH(insertModel),
                 "Month" => new MonthInsH(insertModel),
@@ -38,6 +39,7 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory
                 "Hour" => new HourInsH(insertModel),
                 "Minute" => new MinuteInsH(insertModel),
                 "Second" => new SecondInsH(insertModel),
+                "DayOfWeek" => new DayOfWeekInsH(insertModel),
                 "Lang" => new LangInsH(insertModel),
                 "VagonDirection" => new VagonDirectionInsH(insertModel),
                 _ => null
