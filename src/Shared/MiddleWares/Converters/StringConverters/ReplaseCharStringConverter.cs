@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.InteropServices;
+using System.Text;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 
 namespace Shared.MiddleWares.Converters.StringConverters
@@ -10,6 +11,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
     public class ReplaseCharStringConverter : BaseStringConverter
     {
         private readonly ReplaseCharStringConverterOption _option;
+        private const char DefaultChar = '\u0002';
 
 
         public ReplaseCharStringConverter(ReplaseCharStringConverterOption option)
@@ -40,8 +42,8 @@ namespace Shared.MiddleWares.Converters.StringConverters
                 }
                 else
                 {
-                    var defaultVal = _option.Mapping.TryGetValue('\u0002', out var def) ? def : "";
-                    sb.Append(c);
+                    var defaultVal = _option.Mapping.TryGetValue(DefaultChar, out var def) ? def : c.ToString();
+                    sb.Append(defaultVal);
                 }
             }
             return sb.ToString();
