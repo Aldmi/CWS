@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Domain.InputDataModel.Base.Response;
 using Shared.Helpers;
 
@@ -10,19 +11,85 @@ namespace Domain.Device.Produser
         /// Конвертер для ответов.
         /// </summary>
         /// <param name="converterName"></param>
-        /// <param name="response"></param>
+        /// <param name="produserData"></param>
         /// <returns></returns>
-        public  string Convert(string converterName, ResponsePieceOfDataWrapper<TIn> response)
+        public object Convert(string converterName, ProduserData<TIn> produserData)
         {
-            object convertedResp = null;
+            var strDataType = produserData.DataType.ToString("G");
+            switch (produserData.DataType)
+            {
+                case ProduserSendingDataType.Init:
+                    var finishExchFullState = produserData.InitDatas.Select(initdata => new
+                    {
+                        initdata.DeviceName,
+                        initdata.KeyExchange,
+                        initdata.IsOpen,
+                        initdata.IsConnect,
+                        initdata.IsCycleReopened,
+                        initdata.IsStartedTransportBg,
+                        Data = initdata.Data == null ? null : ConvertResponsePieceOfDataWrapper(converterName, initdata.Data)
+                    }).ToList();
+                    return new
+                    {
+                        Type = strDataType,
+                        ExchangesState = finishExchFullState
+                    };
+
+                case ProduserSendingDataType.BoardData:
+                    var finishResponse = produserData.Data == null ? null : ConvertResponsePieceOfDataWrapper(converterName, produserData.Data);
+                    return new
+                    {
+                        Type = strDataType,
+                        Data = finishResponse
+                    };
+
+                case ProduserSendingDataType.Info:
+                case ProduserSendingDataType.Warning:
+                    return new
+                    {
+                        Type = strDataType,
+                        produserData.MessageObj
+                    };
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+
+        private static object ConvertResponsePieceOfDataWrapper(string converterName, ResponsePieceOfDataWrapper<TIn> response)
+        {
+            object convert = null;
             switch (converterName)
             {
                 case "Full":
-                    convertedResp = response;
+                    convert = response;
+                    break;
+
+                case "RenderItems":
+                    convert = new
+                    {
+                        response.DeviceName,
+                        response.KeyExchange,
+                        DataAction = response.DataAction.ToString("G"),
+                        response.ExceptionExchangePipline,
+                        response.IsValidAll,
+                        response.TimeAction,
+                        ResponsesItems = response.ResponsesItems.Select(item => new
+                        {
+                            item.RequestId,
+                            item.StatusStr,
+                            item.TransportException,
+
+                            item.ProcessedItemsInBatch?.StartItemIndex,
+                            item.ProcessedItemsInBatch?.BatchSize,
+                            InseartedData = item.ProcessedItemsInBatch?.ProcessedItems.Select(p => p.InseartedData)
+                        }).ToList()
+                    };
                     break;
 
                 case "Medium":
-                    convertedResp = new
+                    convert = new
                     {
                         response.DeviceName,
                         response.DataAction,
@@ -41,7 +108,7 @@ namespace Domain.Device.Produser
                     break;
 
                 case "Lite":
-                    convertedResp = new
+                    convert = new
                     {
                         response.DeviceName,
                         response.ExceptionExchangePipline,
@@ -64,7 +131,7 @@ namespace Domain.Device.Produser
                         item.TransportException,
                         Info = item.ResponseInfo?.ToString()
                     }).ToList();
-                    convertedResp = new
+                    convert = new
                     {
                         response.DeviceName,
                         result = response.IsValidAll ? 1 : 0,
@@ -73,46 +140,7 @@ namespace Domain.Device.Produser
                     break;
             }
 
-            var rawJson = HelpersJson.Serialize2RawJson(convertedResp);
-            return rawJson;
+            return convert;
         }
-
-
-        /// <summary>
-        /// конвертер для строковых сообщений
-        /// </summary>
-        /// <param name="converterName"></param>
-        /// <param name="objectName"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public string Convert(string converterName, string objectName, string message)
-        {
-            object convertedMessage = null;
-            switch (converterName)
-            {
-                case "Full":
-                case "Medium":
-                case "Lite":
-                    convertedMessage = new
-                    {
-                        DeviceName = objectName,
-                        Message = message
-                    };
-                    break;
-
-                case "Indigo":  //{"result": 1, "message": "", "DeviceName": "fff"}
-                    convertedMessage = new
-                    {
-                        result = 0,
-                        DeviceName = objectName,
-                        Message = message
-                    };
-                    break;
-            }
-
-            var rawJson = HelpersJson.Serialize2RawJson(convertedMessage);
-            return rawJson;
-        }
-
     }
 }

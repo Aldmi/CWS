@@ -20,7 +20,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
         protected override string ConvertChild(string inProp, int dataId)
         {
             var dictWeightExt= _option.LazyDictWeightExt.Value;
-            var strLenghtInPixel = ClacStrLenghtInPixels(inProp, dictWeightExt);
+            var strLenghtInPixel = CalcStrLenghtInPixels(inProp, dictWeightExt);
             var padRightCount = _option.Lenght - strLenghtInPixel;
 
             if (padRightCount <= 0)
@@ -31,7 +31,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
         }
 
 
-        private int ClacStrLenghtInPixels(string str, IReadOnlyDictionary<char, int> dictWeightExt)
+        private static int CalcStrLenghtInPixels(string str, IReadOnlyDictionary<char, int> dictWeightExt)
         {
             var sumPixel = 0;
             foreach (var ch in str.ToCharArray())

@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.ProvidersAbstract;
+using Domain.InputDataModel.Base.Response;
 
 namespace Domain.Exchange.RxModel
 {
     public class LastSendPieceOfDataRxModel<T>
     {
+        private readonly ResponsePieceOfDataWrapper<T> _response;
+
         #region prop
         public string DeviceName { get; }                     //Название ус-ва
         public string KeyExchange { get;}                     //Ключ обмена
@@ -18,14 +22,15 @@ namespace Domain.Exchange.RxModel
 
 
         #region ctor
-        public LastSendPieceOfDataRxModel(string deviceName, string keyExchange, DataAction dataAction, long timeAction, bool isValidAll, List<ProcessedItemsInBatch<T>> processedItemsInBatch)
+        public LastSendPieceOfDataRxModel(ResponsePieceOfDataWrapper<T> response)
         {
-            DeviceName = deviceName;
-            KeyExchange = keyExchange;
-            DataAction = dataAction;
-            TimeAction = timeAction;
-            IsValidAll = isValidAll;
-            ProcessedItemsInBatch = processedItemsInBatch;
+            _response = response;
+            DeviceName = response.DeviceName;
+            KeyExchange = response.KeyExchange;
+            DataAction = response.DataAction;
+            TimeAction = response.TimeAction;
+            IsValidAll = response.IsValidAll;
+            ProcessedItemsInBatch = response.ResponsesItems.Select(item => item.ProcessedItemsInBatch).ToList();
             CalcStatus();
         }
         #endregion
@@ -41,6 +46,15 @@ namespace Domain.Exchange.RxModel
             {
                 Status = "Успешно";
             }
+        }
+
+
+        /// <summary>
+        /// Получить полный объект состояние обмена
+        /// </summary>
+        public ResponsePieceOfDataWrapper<T> GetResponsePieceOfDataWrapper()
+        {
+            return _response;
         }
     }
 }

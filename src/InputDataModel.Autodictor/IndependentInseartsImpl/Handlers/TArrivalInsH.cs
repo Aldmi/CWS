@@ -4,6 +4,7 @@ using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Shared.Extensions;
 using Shared.Helpers;
+using Shared.Types;
 
 namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
 {
@@ -11,11 +12,11 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
     {
         public TArrivalInsH(StringInsertModel insertModel) : base(insertModel){}
 
-        protected override string GetInseart(Lang lang, AdInputType uit)
+        protected override Change<string> GetInseart(Lang lang, AdInputType uit)
         {
-            var arrivalTime = uit.ArrivalTime ?? DateTime.MinValue;
-            var res = InsertModel.Ext.CalcFinishValue(arrivalTime);
-            return res.GetSpaceOrString();
+            var s = uit.ArrivalTime ?? DateTime.MinValue;
+            var f = InsertModel.Ext.CalcFinishValue(s);
+            return new Change<string>(s.ToString("t"), f.GetEmptyOrString());
         }
     }
 }

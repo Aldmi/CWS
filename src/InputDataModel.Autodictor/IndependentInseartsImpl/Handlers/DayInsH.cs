@@ -2,7 +2,7 @@
 using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
-using Shared.Extensions;
+using Shared.Types;
 
 namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
 {
@@ -10,11 +10,11 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
     {
         public DayInsH(StringInsertModel insertModel) : base(insertModel){}
 
-        protected override string GetInseart(Lang lang, AdInputType uit)
+        protected override Change<string> GetInseart(Lang lang, AdInputType uit)
         {
             var day = DateTime.Now.Day;
-            var res = InsertModel.Ext.CalcFinishValue(day);
-            return res;
+            var f = InsertModel.Ext.CalcFinishValue(day);
+            return new Change<string>(day.ToString(), f);
         }
     }
 }

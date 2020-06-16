@@ -260,6 +260,8 @@ namespace WebApiSwc
                 {
                     //ПОДПИСКА НА СОБЫТИЯ ОТ ОБМЕНОВ.
                     device.SubscrubeOnExchangesEvents();
+                    //ПОДПИСКА НА СОБЫТИЯ ОТ ПРОДЮССЕРОВ ОТВЕТОВ.
+                    device.SubscrubeOnProdusersEvents();
                     //СОБЫТИЯ СМЕНЫ СОСТОЯНИЯ ПОСТУПЛЕНИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ. ОБМЕНА.
                     device.SubscrubeOnExchangesCycleBehaviorEvents();
                 }
@@ -312,6 +314,8 @@ namespace WebApiSwc
                 {
                     //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ ПУБЛИКУЕМЫХ НА ProduserUnion.
                     device.UnsubscrubeOnExchangesEvents();
+                    //ОТПИСКА ОТ СОБЫТИЙ ПРОДЮССЕРОВ ОТВЕТОВ.
+                    device.UnsubscrubeOnProdusersEvents();
                     //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ СМЕНЫ СОСТОЯНИЯ ПОСТУПЛЕНИЯ ВХОДНЫХ ДАННЫХ ДЛЯ ЦИКЛ. ОБМЕНА.
                     device.UnsubscrubeOnExchangesCycleBehaviorEvents();
                 }

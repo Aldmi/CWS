@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
@@ -14,29 +17,30 @@ namespace WebApiSwc.Produsers
 {
     public class SignalRProduserWrapper : BaseProduser<SignalRProduserOption>
     {
+        #region fields
         private readonly IHubContext<ProviderHub> _hubProxy;
         private readonly SignaRProduserClientsStorage<SignaRProdusserClientsInfo> _clientsStorage;
+        #endregion
 
 
 
         #region ctor
-
         public SignalRProduserWrapper(IHubContext<ProviderHub> hubProxy, SignaRProduserClientsStorage<SignaRProdusserClientsInfo> clientsStorage, SignalRProduserOption option) 
             : base(option)
         {
             _hubProxy = hubProxy;
             _clientsStorage = clientsStorage;
+            _clientsStorage.CollectionChangedRx.Subscribe(ClientCollectionChangedRxEh);
         }
-
         #endregion
 
-        
-    
+
+
         #region OvverideMembers
 
         protected override async Task<Result<string, ErrorWrapper>> SendConcrete(string message, string invokerName = null, CancellationToken ct = default(CancellationToken))
         {
-            if(!_clientsStorage.Any)
+            if (!_clientsStorage.Any)
                 return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.NoClientBySending));
 
             try

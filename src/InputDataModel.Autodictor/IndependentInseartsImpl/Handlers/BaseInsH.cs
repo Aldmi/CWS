@@ -4,6 +4,7 @@ using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
+using Shared.Types;
 
 
 namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
@@ -18,16 +19,16 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Handlers
         }
 
 
-        public Result<(string, StringInsertModel)> CalcInserts(object inData)
+        public Result<(Change<string>, StringInsertModel)> CalcInserts(object inData)
         {
             if (!(inData is AdInputType uit))
-                return Result.Ok<ValueTuple<string, StringInsertModel>>((null, InsertModel));
+                return Result.Ok<ValueTuple<Change<string>, StringInsertModel>>((null, InsertModel));
 
             var lang = uit.Lang;
-            var resStr= GetInseart(lang, uit);
-            return Result.Ok((resStr, InsertModel));
+            var inseart = GetInseart(lang, uit);
+            return Result.Ok((inseart, InsertModel));
         }
 
-        protected abstract string GetInseart(Lang lang, AdInputType uit);
+        protected abstract Change<string> GetInseart(Lang lang, AdInputType uit);
     }
 }

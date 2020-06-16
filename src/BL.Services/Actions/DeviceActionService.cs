@@ -232,7 +232,7 @@ namespace App.Services.Actions
             if (!string.IsNullOrEmpty(device.ProduserUnionKey))
                 throw new ActionHandlerException($"Ошибка подписи устройства на передачу данных по шине. Устройство уже подписанно на шину {device.ProduserUnionKey}. Необходимо сначало отписаться");
 
-            device.SubscrubeOnExchangesEvents(topicName4MessageBroker);
+            //device.SubscrubeOnExchangesEvents(topicName4MessageBroker);
         }
 
 

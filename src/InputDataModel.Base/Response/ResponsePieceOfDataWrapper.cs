@@ -45,6 +45,4 @@ namespace Domain.InputDataModel.Base.Response
         /// </summary>
         public ProcessedItemsInBatch<TIn> ProcessedItemsInBatch { get; set; }
     }
-
-
 }

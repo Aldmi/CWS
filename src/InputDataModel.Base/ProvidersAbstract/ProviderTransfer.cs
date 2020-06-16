@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response.ResponseValidators;
@@ -84,9 +85,9 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
     public class ProcessedItem<TIn>
     {
         public TIn InDataItem { get; set; }
-        public Dictionary<string, string> InseartedData { get; set; }  //Обработанные и выставленные в протокол данные из InDataItem
+        public ReadOnlyDictionary<string, Change<string>> InseartedData { get; set; }  //Обработанные и выставленные в протокол данные из InDataItem
 
-        public ProcessedItem(TIn inDataItem, Dictionary<string, string> inseartedData)
+        public ProcessedItem(TIn inDataItem, ReadOnlyDictionary<string, Change<string>> inseartedData)
         {
             InDataItem = inDataItem;
             InseartedData = inseartedData;

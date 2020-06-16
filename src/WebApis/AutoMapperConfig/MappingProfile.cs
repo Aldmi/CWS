@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using App.Services.Agregators;
 using AutoMapper;
 using Domain.Device;
@@ -112,7 +113,7 @@ namespace WebApiSwc.AutoMapperConfig
                 new Note
                 {
                     NameRu = src.Note,
-                    NameEng = src.NoteENG
+                    NameEng = src.NoteEng
                 },
                 new DaysFollowing
                 {
@@ -235,6 +236,11 @@ namespace WebApiSwc.AutoMapperConfig
 
         private static TimeSpan? ConvertString2TimeSpan(string str)
         {
+            if (double.TryParse(str, out var min))
+            {
+                var minuteVal = TimeSpan.FromMinutes(min);
+                return minuteVal;
+            }
             if (TimeSpan.TryParse(str, out var val))
             {
                 return val;

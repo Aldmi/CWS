@@ -5,11 +5,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
-using Domain.InputDataModel.Base.Response;
+using Domain.Device.Services;
 using Infrastructure.Produser.AbstractProduser.AbstractProduser;
 using Infrastructure.Produser.AbstractProduser.Helpers;
 using Infrastructure.Produser.AbstractProduser.Options;
-using Shared.Helpers;
 using ProduserUnionOption = Domain.Device.Repository.Entities.ResponseProduser.ProduserUnionOption;
 
 namespace Domain.Device.Produser
@@ -79,38 +78,26 @@ namespace Domain.Device.Produser
         /// <summary>
         /// Отправить всем продюссерам ответ на обмен порцией данных.
         /// </summary>
-        public async Task<IList<Result<string, ErrorWrapper>>> SendResponseAll(ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
+        public async Task<IList<Result<string, ErrorWrapper>>> Send4AllProdusers(ProduserData<TIn> produserData, string invokerName = null)
         {
-            var messageConverted = _responseConverter.Convert(_unionOption.ConverterName, response);
-            var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(messageConverted, invokerName)).ToList();
+            var convert = _responseConverter.Convert(_unionOption.ConverterName, produserData);
+            var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(convert, invokerName)).ToList();
             var results = await Task.WhenAll(tasks);
             return results;
         }
 
 
         /// <summary>
-        /// Отправить продюсеру по ключу, ответ на обмен порцией данных.
+        /// Отправить продюсеру по ключу.
         /// </summary>
-        public async Task<Result<string, ErrorWrapper>> SendResponse(string key, ResponsePieceOfDataWrapper<TIn> response, string invokerName = null)
+        public async Task<Result<string, ErrorWrapper>> Send4Produser(string key, ProduserData<TIn> produserData, string invokerName = null)
         {
             if (!_produsersDict.ContainsKey(key))
                 throw new KeyNotFoundException(key);
 
-            var message = HelpersJson.Serialize2RawJson(response);
-            var result = await _produsersDict[key].Produser.Send(message, invokerName);
+            var convert = _responseConverter.Convert(_unionOption.ConverterName, produserData);
+            var result = await _produsersDict[key].Produser.Send(convert, invokerName);
             return result;
-        }
-
-
-        /// <summary>
-        /// Отправить всем продюссерам сообщение об ошибки.
-        /// </summary>
-        public async Task<IList<Result<string, ErrorWrapper>>> SendMessageAll(string objectName, string message, string invokerName = null)
-        {
-            var messageConverted = _responseConverter.Convert(_unionOption.ConverterName, objectName, message);
-            var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(messageConverted, invokerName)).ToList();
-            var results = await Task.WhenAll(tasks);
-            return results;
         }
 
         #endregion
