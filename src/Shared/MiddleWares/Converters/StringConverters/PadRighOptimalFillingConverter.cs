@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Shared.MiddleWares.Converters.Exceptions;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 
 namespace Shared.MiddleWares.Converters.StringConverters
@@ -33,7 +36,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
 
         private (int weightstring, string inseart) FindOptimalInseart(int delta)
         {
-            var dictWeight= _option.LazyDictWeightOrdered.Value;
+            var dictWeight= _option.LazyDictWeightOrderedByDescending.Value;
 
             //В СЛОВАРЕ НАЙДЕННО ЗНАЧЕНИЕ РАВНОЕ delta.
             if (dictWeight.TryGetValue(delta, out var value))
@@ -41,8 +44,9 @@ namespace Shared.MiddleWares.Converters.StringConverters
 
             //НАЙТИ БЛИЖАЙШИЙ (МАКСИМАЛЬНЫЙ) КОЭФФИЦИЕНТ К delta.
             var firstOptimalPair = dictWeight.FirstOrDefault(pair => pair.Key < delta);
-            //if (firstOptimalPair == new KeyValuePair<int,string>())
-            //    throw new Exception($"PadRighOptimalFillingConverter ОПЦИИ заданны не верно. DictWeight не содержит элементов с коээфицентами меньше {delta}");
+            var def = default(KeyValuePair<int, string>);//DEBUG
+            if (firstOptimalPair.Equals(def))
+                throw new StringConverterException($"PadRighOptimalFillingConverter ОПЦИИ заданы не верно. DictWeight не содержит элементов с коэфицентами меньше {delta}.");
 
             return (firstOptimalPair.Key, firstOptimalPair.Value);
         }
