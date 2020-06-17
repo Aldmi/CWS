@@ -10,7 +10,6 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers
 
     public class UnitStringConverterOptionDto
     {
-        public InseartStringConverterOptionDto InseartStringConverterOption { get; set; }
         public LimitStringConverterOptionDto LimitStringConverterOption { get; set; }
         public SubStringMemConverterOptionDto SubStringMemConverterOption { get; set; }
         public InseartEndLineMarkerConverterOptionDto InseartEndLineMarkerConverterOption { get; set; }

@@ -25,7 +25,6 @@ namespace Shared.MiddleWares.HandlersOption
     /// </summary>
     public class UnitStringConverterOption
     {
-        public InseartStringConverterOption InseartStringConverterOption { get; set; }
         public LimitStringConverterOption LimitStringConverterOption { get; set; }
         public SubStringMemConverterOption SubStringMemConverterOption { get; set; }
         public InseartEndLineMarkerConverterOption InseartEndLineMarkerConverterOption { get; set; }
@@ -40,7 +39,6 @@ namespace Shared.MiddleWares.HandlersOption
 
         public IConverterMiddleWare<string> CreateConverter()
         {
-            if (InseartStringConverterOption != null) return new InseartStringConverter(InseartStringConverterOption);
             if (LimitStringConverterOption != null) return new LimitStringConverter(LimitStringConverterOption);
             if (SubStringMemConverterOption != null) return new SubStringMemConverter(SubStringMemConverterOption);
             if (InseartEndLineMarkerConverterOption != null) return new InseartEndLineMarkerConverter(InseartEndLineMarkerConverterOption);

@@ -10,7 +10,6 @@ namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers
 
     public class EfUnitStringConverterOption
     {
-        public EfInseartStringConverterOption InseartStringConverterOption { get; set; }
         public EfLimitStringConverterOption LimitStringConverterOption { get; set; }
         public EfSubStringMemConverterOption SubStringMemConverterOption { get; set; }
         public EfInseartEndLineMarkerConverterOption InseartEndLineMarkerConverterOption { get; set; }
