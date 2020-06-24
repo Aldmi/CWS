@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel.DataAnnotations;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
@@ -8,6 +9,7 @@ using Domain.Device.Produser;
 using Domain.Exchange.Models;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.Response;
+using Domain.InputDataModel.Base.Response.Comparators;
 using Infrastructure.Produser.AbstractProduser.RxModels;
 using MoreLinq.Extensions;
 using Serilog;
@@ -21,6 +23,7 @@ namespace Domain.Device.Services
     {
         #region fields
         private readonly ProduserUnionStorage<TIn> _produserUnionStorage;
+        private readonly ResponsePieceOfDataWrapperComparator<TIn> _comparatorResponse;
         private readonly ILogger _logger;
         private readonly string _key;
         private readonly string _deviceName;
@@ -41,9 +44,15 @@ namespace Domain.Device.Services
         /// <param name="deviceOptions"> Ключ продюссера в produserUnionStorage.   Название устройства, использующего ProduserAdapter</param>
         /// <param name="getCurrentStatus4AllExchanges">Функция получения текущего статуса обменов</param>
         /// <param name="produserUnionStorage">Словарь продюсеров</param>
-        public ProduserAdapter((string key, string deviceName) deviceOptions, Func<List<ExchangeFullState<TIn>>> getCurrentStatus4AllExchanges, ProduserUnionStorage<TIn> produserUnionStorage, ILogger logger)
+        /// <param name="comparatorResponse"></param>
+        public ProduserAdapter((string key, string deviceName) deviceOptions,
+            Func<List<ExchangeFullState<TIn>>> getCurrentStatus4AllExchanges,
+            ProduserUnionStorage<TIn> produserUnionStorage,
+            ResponsePieceOfDataWrapperComparator<TIn> comparatorResponse,
+            ILogger logger)
         {
             _produserUnionStorage = produserUnionStorage;
+            _comparatorResponse = comparatorResponse;
             _logger = logger;
             _key = deviceOptions.key;
             _deviceName = deviceOptions.deviceName;
@@ -97,6 +106,11 @@ namespace Domain.Device.Services
         {
             if(!IsExistProduserUnion)
                 return;
+
+            var cmpRes = _comparatorResponse.Equals(response);
+            if(cmpRes)
+                return; // response НЕ ПОМЕНЯЛСЯ
+
 
             var produser = GetProduser();
             var data = ProduserData<TIn>.CreateBoardData(response);

@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Domain.Device.Produser;
 using Domain.Device.Repository.Entities.ResponseProduser;
+using Domain.InputDataModel.Base.Response.Comparators;
 using Infrastructure.Produser.AbstractProduser.AbstractProduser;
 using Infrastructure.Produser.KafkaProduser;
 using Infrastructure.Produser.KafkaProduser.Options;
@@ -26,6 +27,8 @@ namespace WebApiSwc.AutofacModules
             builder.RegisterType<WebClientProduserWrapper>().As<IProduser<WebClientProduserOption>>().InstancePerDependency();
             builder.RegisterType<SignaRProduserClientsStorage<SignaRProdusserClientsInfo>>().SingleInstance();
             builder.RegisterType<SignalRProduserWrapper>().As<IProduser<SignalRProduserOption>>().InstancePerDependency();
+
+            builder.RegisterType<ResponsePieceOfDataWrapperComparator<TIn>>().AsSelf().InstancePerDependency();
         }
     }
 }
