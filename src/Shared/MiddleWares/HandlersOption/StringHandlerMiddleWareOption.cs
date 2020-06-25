@@ -25,7 +25,6 @@ namespace Shared.MiddleWares.HandlersOption
     /// </summary>
     public class UnitStringConverterOption
     {
-        public InseartStringConverterOption InseartStringConverterOption { get; set; }
         public LimitStringConverterOption LimitStringConverterOption { get; set; }
         public SubStringMemConverterOption SubStringMemConverterOption { get; set; }
         public InseartEndLineMarkerConverterOption InseartEndLineMarkerConverterOption { get; set; }
@@ -37,10 +36,10 @@ namespace Shared.MiddleWares.HandlersOption
         public ToLowerConverterOption ToLowerConverterOption { get; set; }
         public ToUpperConverterOption ToUpperConverterOption { get; set; }
         public PadRighOptimalFillingConverterOption PadRighOptimalFillingConverterOption { get; set; }
+        public SubStringConverterOption SubStringConverterOption { get; set; }
 
         public IConverterMiddleWare<string> CreateConverter()
         {
-            if (InseartStringConverterOption != null) return new InseartStringConverter(InseartStringConverterOption);
             if (LimitStringConverterOption != null) return new LimitStringConverter(LimitStringConverterOption);
             if (SubStringMemConverterOption != null) return new SubStringMemConverter(SubStringMemConverterOption);
             if (InseartEndLineMarkerConverterOption != null) return new InseartEndLineMarkerConverter(InseartEndLineMarkerConverterOption);
@@ -52,7 +51,7 @@ namespace Shared.MiddleWares.HandlersOption
             if (ToLowerConverterOption != null) return new ToLowerConverter(ToLowerConverterOption);
             if (ToUpperConverterOption != null) return new ToUpperConverter(ToUpperConverterOption);
             if (PadRighOptimalFillingConverterOption != null) return new PadRighOptimalFillingConverter(PadRighOptimalFillingConverterOption);
-
+            if (SubStringConverterOption != null) return new SubStringConverter(SubStringConverterOption);
 
             throw new NotSupportedException("В UnitStringConverterOption необходимо указать хотя бы одну опцию");
         }

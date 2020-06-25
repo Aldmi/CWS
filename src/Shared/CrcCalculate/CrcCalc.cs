@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Crc;
+using Shared.CrcCalculate.CrcClasses;
 
 namespace Shared.CrcCalculate
 {
@@ -76,47 +77,6 @@ namespace Shared.CrcCalculate
             var crc8Maxim = new Crc8Maxim();
             var crc = crc8Maxim.ComputeHash(arr.ToArray());
             return new[] { crc[0]};
-        }
-
-
-
-        public class Crc16Ccitt
-        {
-            private readonly ushort _init;
-            private readonly int _poly;
-
-            public Crc16Ccitt(ushort init, int poly)
-            {
-                _init = init;
-                _poly = poly;
-            }
-
-
-            public byte[] Calc(IReadOnlyList<byte> arr)
-            {
-                ushort crc = _init;
-                for (int i = 0; i < arr.Count; i++)
-                {
-                    crc ^= (ushort)(arr[i] << 8);
-                    for (int j = 0; j < 8; j++)
-                    {
-                        if ((crc & 0x8000) > 0)
-                            crc = (ushort)((crc << 1) ^ _poly);
-                        else
-                            crc <<= 1;
-                    }
-                }
-                var res = BitConverter.GetBytes(crc);
-                return res;
-            }
-        }
-
-
-        class Crc8Maxim : Crc8Base
-        {
-            public Crc8Maxim() : base(0x31, 0x00, 0x00, true, true, 0xA1)
-            {
-            }
         }
     }
 }

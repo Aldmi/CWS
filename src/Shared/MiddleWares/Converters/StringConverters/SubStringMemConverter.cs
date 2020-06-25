@@ -12,7 +12,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
     /// StateFull - хранит начало подстроки между вызовами.
     /// Длинна подстроки вычисляется с учетом константной фразы.
     /// </summary>
-    public class SubStringMemConverter : BaseStringConverter, IMemConverterMiddleWare
+    public class SubStringMemConverter : BaseStringConverter, IMemConverterMiddleWare //TODO: переименовать на PagingMemConverter
     {
         private readonly SubStringMemConverterOption _option;     //Хранит длину подстроки
         private readonly ConcurrentDictionary<int, SubStringState> _subStringDict= new ConcurrentDictionary<int, SubStringState>();

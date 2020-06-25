@@ -135,5 +135,44 @@ namespace Shared.Test
             res.IsSuccess.Should().BeFalse();
             res.Error.Should().Be("Not Found endCh= 0x99");
         }
+
+
+        [Fact]
+        public void WithOut_Start_Border_Test()
+        {
+            //Arrange
+            var border = new BorderSubString
+            {
+                EndCh = "0x03",
+                EndInclude = false,
+            };
+
+            //Act
+            var res = border.Calc(Str);
+
+            //Assert
+            res.IsSuccess.Should().BeTrue();
+            res.Value.Should().Be("1250x02hgfhggfdhgfdfh");
+        }
+
+
+        [Fact]
+        public void WithOut_End_Border_Test()
+        {
+            //Arrange
+            var border = new BorderSubString
+            {
+                StartCh = "01",
+                StartInclude = true
+            };
+
+            //Act
+            var str = "1648{CRC:X2_Border}01855a12030000000000010200188020313235";
+            var res = border.Calc(str);
+
+            //Assert
+            res.IsSuccess.Should().BeTrue();
+            res.Value.Should().Be("01855a12030000000000010200188020313235");
+        }
     }
 }

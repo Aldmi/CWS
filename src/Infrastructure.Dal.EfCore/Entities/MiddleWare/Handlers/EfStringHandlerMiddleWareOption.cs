@@ -10,7 +10,6 @@ namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers
 
     public class EfUnitStringConverterOption
     {
-        public EfInseartStringConverterOption InseartStringConverterOption { get; set; }
         public EfLimitStringConverterOption LimitStringConverterOption { get; set; }
         public EfSubStringMemConverterOption SubStringMemConverterOption { get; set; }
         public EfInseartEndLineMarkerConverterOption InseartEndLineMarkerConverterOption { get; set; }
@@ -22,5 +21,6 @@ namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers
         public EfToLowerConverterOption ToLowerConverterOption { get; set; }
         public EfToUpperConverterOption ToUpperConverterOption { get; set; }
         public EfPadRighOptimalFillingConverterOption PadRighOptimalFillingConverterOption { get; set; }
+        public EfSubStringConverterOption SubStringConverterOption { get; set; }
     }
 }

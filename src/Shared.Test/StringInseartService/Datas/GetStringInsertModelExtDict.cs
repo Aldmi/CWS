@@ -20,6 +20,8 @@ namespace Shared.Test.StringInseartService.Datas
             { "X2_Border", new StringInsertModelExt("X2_Border", ":X2", new BorderSubString{StartCh = "0x02", EndCh = "0x03", StartInclude = true}, null)},
             { "X4_Border", new StringInsertModelExt("X4_Border", ":X4", new BorderSubString{StartCh = "0x02", EndCh = "0x03", StartInclude = false}, null)},
 
+            { "X2_Border_StartOnly", new StringInsertModelExt("X2_Border_StartOnly", ":X2", new BorderSubString{StartCh = "0x01", StartInclude = true}, null)},
+
             //With string MW
             { "MW_Limit(2)", new StringInsertModelExt("MW_Limit(2)", null, null, new StringHandlerMiddleWareOption
             {
