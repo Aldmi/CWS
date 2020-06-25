@@ -44,6 +44,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart
             handlers.AddRange(from model in array where model.VarName == "CRC8Bit" select new Crc8BitDepInsH(model));
             handlers.AddRange(from model in array where model.VarName == "CRCCcitt" select new Crc16CcittDepInsH(model));
             handlers.AddRange(from model in array where model.VarName == "Crc8Maxim" select new Crc8MaximDepInsH(model));
+            handlers.AddRange(from model in array where model.VarName == "Crc8FullPoly" select new Crc8FullPolyDepInsH(model));
 
             return handlers;
         }
