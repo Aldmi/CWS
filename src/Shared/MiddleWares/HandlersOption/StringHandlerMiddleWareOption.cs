@@ -36,6 +36,7 @@ namespace Shared.MiddleWares.HandlersOption
         public ToLowerConverterOption ToLowerConverterOption { get; set; }
         public ToUpperConverterOption ToUpperConverterOption { get; set; }
         public PadRighOptimalFillingConverterOption PadRighOptimalFillingConverterOption { get; set; }
+        public SubStringConverterOption SubStringConverterOption { get; set; }
 
         public IConverterMiddleWare<string> CreateConverter()
         {
@@ -50,7 +51,7 @@ namespace Shared.MiddleWares.HandlersOption
             if (ToLowerConverterOption != null) return new ToLowerConverter(ToLowerConverterOption);
             if (ToUpperConverterOption != null) return new ToUpperConverter(ToUpperConverterOption);
             if (PadRighOptimalFillingConverterOption != null) return new PadRighOptimalFillingConverter(PadRighOptimalFillingConverterOption);
-
+            if (SubStringConverterOption != null) return new SubStringConverter(SubStringConverterOption);
 
             throw new NotSupportedException("В UnitStringConverterOption необходимо указать хотя бы одну опцию");
         }
