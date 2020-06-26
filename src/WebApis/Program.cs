@@ -35,8 +35,8 @@ namespace WebApiSwc
 
         public static string GetVersion()
         {
-            const string version = "CWS Ver7.17";
-            return $"{version}  [16.06.2020]  [Relise. Add PadRighOptimalFillingConverterOption for EF and Dto]";
+            const string version = "CWS Ver7.18";
+            return $"{version}  [25.06.2020]  [Relise. Add SubStringConverter]";
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

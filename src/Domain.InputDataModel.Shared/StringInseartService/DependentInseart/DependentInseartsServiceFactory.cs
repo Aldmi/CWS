@@ -20,7 +20,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart
         }
         
         /// <summary>
-        ///  Порядок выполнения обработчиков СТРОГО задан и не определяется порядком нахождения replacement в строке.
+        /// Порядок выполнения обработчиков СТРОГО задан и не определяется порядком нахождения replacement в строке.
         /// </summary>
         private static List<BaseDepInsH> CreateListDependentInseartHandlers(IEnumerable<StringInsertModel> insertModels)
         {
@@ -43,8 +43,10 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart
             handlers.AddRange(from model in array where model.VarName == "CRCMod256At" select new CrcMod256AlphaTimeDepInsH(model));
             handlers.AddRange(from model in array where model.VarName == "CRC8Bit" select new Crc8BitDepInsH(model));
             handlers.AddRange(from model in array where model.VarName == "CRCCcitt" select new Crc16CcittDepInsH(model));
-            handlers.AddRange(from model in array where model.VarName == "Crc8Maxim" select new Crc8MaximDepInsH(model));
-            handlers.AddRange(from model in array where model.VarName == "Crc8FullPoly" select new Crc8FullPolyDepInsH(model));
+            handlers.AddRange(from model in array where model.VarName == "CRC8Maxim" select new Crc8MaximDepInsH(model));
+            handlers.AddRange(from model in array where model.VarName == "CRC8FullPoly" select new Crc8FullPolyDepInsH(model));
+            //4. Вставки NbyteFullLastCalc (после всех вставвок)
+            handlers.AddRange(from model in array where model.VarName == "NbyteFullLastCalc" select new NbyteFullLastCalcDepInsH(model));
 
             return handlers;
         }

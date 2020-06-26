@@ -17,7 +17,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         public Crc8FullPolyDepInsHTest()
         {
             _extDict = GetStringInsertModelExtDict.SimpleDictionary;
-            var requiredModel = StringInsertModelFactory.CreateList("{Crc8FullPoly:X2_Border_StartOnly}", _extDict).First();
+            var requiredModel = StringInsertModelFactory.CreateList("{CRC8FullPoly:X2_Border_StartOnly}", _extDict).First();
             _handler = new Crc8FullPolyDepInsH(requiredModel);
         }
 
@@ -26,7 +26,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         public void Calc_Normal_Test()
         {
             //Arrange
-            var sb = new StringBuilder("0x160x480x{Crc8FullPoly:X2_Border_StartOnly}0x010x850x5a0x120x030x000x000x000x000x000x010x020x000x180x800x200x310x320x35");
+            var sb = new StringBuilder("0x160x480x{CRC8FullPoly:X2_Border_StartOnly}0x010x850x5a0x120x030x000x000x000x000x000x010x020x000x180x800x200x310x320x35");
             var format = "Windows-1251";
             //Act
             var (isSuccess, _, value) = _handler.CalcInsert(sb, format);

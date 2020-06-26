@@ -54,6 +54,19 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
             }
             return Result.Failure<string>($"Невозможно выделить подстроку из строки {str} используя паттерн {pattern}");
         }
+
+
+        public static Result<string> CalcSubStringBeetweenModelAndEndString(string str, StringInsertModel startModel)
+        {
+            var pattern = $"{startModel.Replacement}(.*)";
+            var match = Regex.Match(str, pattern);
+            if (match.Success)
+            {
+                var res = match.Groups[1].Value;
+                return Result.Ok(res);
+            }
+            return Result.Failure<string>($"Невозможно выделить подстроку из строки {str} используя паттерн {pattern}");
+        }
         #endregion
     }
 }

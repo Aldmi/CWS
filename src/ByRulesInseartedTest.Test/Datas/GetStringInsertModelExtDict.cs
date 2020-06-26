@@ -22,6 +22,9 @@ namespace ByRulesInseartedTest.Test.Datas
             { "X2_BorderExclude", new StringInsertModelExt("X2_BorderExclude", ":X2", new BorderSubString{StartCh = "0x02", EndCh = "0x03", StartInclude = false}, null)},
             { "X4_Border", new StringInsertModelExt("X4_Border", ":X4", new BorderSubString{StartCh = "0x02", EndCh = "0x03", StartInclude = false}, null)},
             { "X2_BorderIncl_Sinergo", new StringInsertModelExt("X2_BorderIncl_Sinergo", ":X2", new BorderSubString{StartCh = ":", EndCh = "*", StartInclude = true}, null)},
+            { "X2_hex_Border_StartOnly", new StringInsertModelExt("X2_hex_Border_StartOnly", ":X2", new BorderSubString{StartCh = "01", StartInclude = true}, null)},
+            { "X2_hex_Border_StartOnly2", new StringInsertModelExt("X2_hex_Border_StartOnly2", ":X2", new BorderSubString{StartCh = "02", StartInclude = true}, null)},
+            { "X2_Border_StartOnly", new StringInsertModelExt("X2_Border_StartOnly", ":X2", new BorderSubString{StartCh = "0x01", StartInclude = true}, null)},
 
             //With string MW
             { "MW_Limit(2)", new StringInsertModelExt("MW_Limit(2)", null, null, new StringHandlerMiddleWareOption

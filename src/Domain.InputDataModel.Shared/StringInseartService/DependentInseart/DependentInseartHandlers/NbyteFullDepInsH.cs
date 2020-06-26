@@ -2,7 +2,6 @@
 using System.Text;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
-using Shared.Extensions;
 using Shared.Helpers;
 
 namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.DependentInseartHandlers
