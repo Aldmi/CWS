@@ -67,7 +67,6 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
 
 
         #region Methode
-
         /// <summary>
         /// Обрабатывает string.
         /// Переменная Format не используется.
@@ -88,22 +87,6 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         {
             var formatVal = ConvertByFormat(data);
             return StartMiddleWarePipline(formatVal);
-        }
-
-
-        /// <summary>
-        /// Вернуть подстроку обозначенную границами BorderSubString.
-        /// Если BorderSubString == null. то подстрока выделяется от начала до nativeBorder.
-        /// </summary>
-        public Result<string> CalcBorderSubString(string str, string nativeBorder)
-        {
-            if (BorderSubString == null)
-            {
-               var matchString = Regex.Match(str, $"(.*){nativeBorder}").Groups[1].Value;
-               return Result.Ok(matchString);
-            }
-            var (_, isFailure, value, error) = BorderSubString.Calc(str);
-            return isFailure ? Result.Failure<string>(error) : Result.Ok(value);
         }
 
 
@@ -130,6 +113,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         }
 
         #endregion
+
 
 
         #region Disposable

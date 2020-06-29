@@ -1,8 +1,6 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
-using Shared.Extensions;
 using Shared.Helpers;
 
 namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.DependentInseartHandlers
@@ -19,7 +17,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
         protected override Result<string> GetInseart(StringBuilder sb, string format)
         {
             var str = sb.ToString();
-            var res = StringInsertModel.CalcSubStringBeetweenModelAndEndString(str, RequiredModel);
+            var res = RequiredModel.CalcSubStringBeetweenModelAndEndString(str);
             if (res.IsFailure)
                 return res;
 

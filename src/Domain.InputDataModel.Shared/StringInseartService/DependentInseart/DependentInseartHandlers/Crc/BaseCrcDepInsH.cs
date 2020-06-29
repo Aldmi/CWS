@@ -22,7 +22,8 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
         /// <returns></returns>
         protected override Result<string> GetInseart(StringBuilder sb, string format)
         {
-            var (_, isFailure, arr, error) = CrcHelper.CalcCrc(sb, RequiredModel.Ext.CalcBorderSubString, format, RequiredModel.Replacement, CrcAlgoritm);
+            //TODO: убрать вычисление Border в СRC. передавать уже готовую строку.
+            var (_, isFailure, arr, error) = CrcHelper.CalcCrc(sb, RequiredModel.Ext.CalcSubStringUsingBorder, format, RequiredModel.Replacement, CrcAlgoritm);
             if (isFailure)
                 return Result.Failure<string>(error);
 

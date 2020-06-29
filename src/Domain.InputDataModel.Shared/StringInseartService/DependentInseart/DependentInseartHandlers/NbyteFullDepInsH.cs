@@ -32,7 +32,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
         protected override Result<string> GetInseart(StringBuilder sb, string format)
         {
             var str = sb.ToString();
-            var res= StringInsertModel.CalcSubStringBeetween2Models(str, RequiredModel, _crcModel);
+            var res = RequiredModel.CalcSubStringBeetween2Models(_crcModel, str);
             if (res.IsFailure)
                 return res;
 
