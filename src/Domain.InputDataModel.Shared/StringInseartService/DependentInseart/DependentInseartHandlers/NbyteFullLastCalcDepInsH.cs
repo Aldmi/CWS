@@ -14,18 +14,22 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
 
         public NbyteFullLastCalcDepInsH(StringInsertModel requiredModel) : base(requiredModel) { }
         
-        protected override Result<string> GetInseart(StringBuilder sb, string format)
+        protected override Result<string> GetInseart(string borderedStr, string format, StringBuilder sbMutable)
         {
-            var str = sb.ToString();
-            var res = RequiredModel.CalcSubStringBeetweenModelAndEndString(str);
-            if (res.IsFailure)
-                return res;
-
-            var subStr = res.Value;
-            var buf = subStr.ConvertStringWithHexEscapeChars2ByteArray(format);
+            var buf = borderedStr.ConvertStringWithHexEscapeChars2ByteArray(format);
             var fullLenght = buf.Length + LenghtNbyteFullLastCalcInbytes;
             var resStr = RequiredModel.Ext.CalcFinishValue(fullLenght);
             return Result.Ok(resStr);
+        }
+
+
+        /// <summary>
+        /// Возвращаем null.
+        /// BaseDepInsH вычислит посдтроку ОТ МЕСТА ВСТАВКИ ДО КОНЦА СТРОКИ.
+        /// </summary>
+        protected override Result<string> GetSubString4Handle(string str)
+        { 
+            return Result.Ok<string>(null);
         }
     }
 }

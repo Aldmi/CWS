@@ -7,7 +7,7 @@ using Shared.Extensions;
 namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.DependentInseartHandlers
 {
     /// <summary>
-    /// Подсчет СИМВОЛОВ между маркером Nbyte и CRC
+    /// Подсчет СИМВОЛОВ Nchar. Подстрока определяется границами.
     /// </summary>
     public class NcharDepInsH : BaseDepInsH
     {
@@ -18,11 +18,12 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
             if(_crcModel == null)
                 throw new ArgumentNullException(nameof(crcModel));
         }
-        
-        protected override Result<string> GetInseart(StringBuilder sb, string format)
+
+        //TODO: переделать на работу по SubString
+        protected override Result<string> GetInseart(string borderedStr, string format, StringBuilder sbMutable)
         {
-            var nByteIndex = sb.IndexOf(RequiredModel.Replacement, 0, false);
-            var crcIndex = sb.IndexOf(_crcModel.Replacement, 0, false);
+            var nByteIndex = sbMutable.IndexOf(RequiredModel.Replacement, 0, false);
+            var crcIndex = sbMutable.IndexOf(_crcModel.Replacement, 0, false);
             if(crcIndex == -1)
                 return Result.Failure<string>($"Обработка NcharDepInsH не может быт выполненна. Не найдена замена в строке {_crcModel.Replacement}");
 
@@ -31,6 +32,12 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
             var delta = endIndex - startIndex;
             var resStr = RequiredModel.Ext.CalcFinishValue(delta);
             return Result.Ok(resStr);
+        }
+
+
+        protected override Result<string> GetSubString4Handle(string str)
+        {
+            return Result.Ok(str);
         }
     }
 }

@@ -28,21 +28,30 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
                 throw new ArgumentNullException(nameof(crcModel));
         }
 
-        
-        protected override Result<string> GetInseart(StringBuilder sb, string format)
-        {
-            var str = sb.ToString();
-            var res = RequiredModel.CalcSubStringBeetween2Models(_crcModel, str);
-            if (res.IsFailure)
-                return res;
 
-            var subStr = res.Value;
-            var buf = subStr.ConvertStringWithHexEscapeChars2ByteArray(format);
+        /// <summary>
+        /// </summary>
+        /// <param name="borderedStr">строка для вычисления</param>
+        /// <param name="format">формат преобразования строки к byte[]</param>
+        /// <param name="sbMutable">NOT USE</param>
+        /// <returns></returns>
+        protected override Result<string> GetInseart(string borderedStr, string format, StringBuilder sbMutable)
+        {
+            var buf = borderedStr.ConvertStringWithHexEscapeChars2ByteArray(format);
             var lenghtBody = buf.Length;
             var lenght = lenghtBody + LenghtAddressInBytes + LenghtNByteInbytes + LenghtCrcInbytes;
             var resStr = RequiredModel.Ext.CalcFinishValue(lenght);
             return Result.Ok(resStr);
         }
-        
+
+
+        /// <summary>
+        /// Вернуть подстроку между местом вставки {NbyteFull} и {CRC....}
+        /// </summary>
+        protected override Result<string> GetSubString4Handle(string str)
+        {
+            var res = RequiredModel.CalcSubStringBeetween2Models(_crcModel, str);
+            return res;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Shared.CrcCalculate;
@@ -17,18 +18,30 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
         /// <summary>
         /// Задает базовые шаги вычисления CRC
         /// </summary>
-        /// <param name="sb"></param>
+        /// <param name="borderedStr"></param>
         /// <param name="format"></param>
+        /// <param name="sbMutable"></param>
         /// <returns></returns>
-        protected override Result<string> GetInseart(StringBuilder sb, string format)
+        protected override Result<string> GetInseart(string borderedStr, string format, StringBuilder sbMutable)
         {
-            //TODO: убрать вычисление Border в СRC. передавать уже готовую строку.
-            var (_, isFailure, arr, error) = CrcHelper.CalcCrc(sb, RequiredModel.Ext.CalcSubStringUsingBorder, format, RequiredModel.Replacement, CrcAlgoritm);
+            var (_, isFailure, arr, error) = CrcHelper.CalcCrc(borderedStr, format, RequiredModel.Replacement, CrcAlgoritm);
             if (isFailure)
                 return Result.Failure<string>(error);
 
             var resStr = RequiredModel.Ext.CalcFinishValue(arr);
             return Result.Ok(resStr);
+        }
+
+
+        /// <summary>
+        /// ЕСЛИ BorderSubString НЕ УКАЗАН.
+        /// Подстрока - от начала строки до блока {CRC...}
+        /// </summary>
+        protected override Result<string> GetSubString4Handle(string str)
+        {
+            var nativeBorder = RequiredModel.Replacement;
+            var matchString = Regex.Match(str, $"(.*){nativeBorder}").Groups[1].Value;
+            return Result.Ok(matchString);
         }
 
         /// <summary>
