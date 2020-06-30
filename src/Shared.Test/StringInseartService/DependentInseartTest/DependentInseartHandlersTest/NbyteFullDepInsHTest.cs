@@ -25,6 +25,24 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         }
 
 
+        //[Fact]
+        //public void Calc_Normal_With_Border_Test()
+        //{
+        //    //Arrange
+        //    var requiredModel = StringInsertModelFactory.CreateList("{NbyteFull:X2_Border[0x03-10]}", _extDict).First();
+        //    var crcModel = StringInsertModelFactory.CreateList("{CRCMod256:X2}", _extDict).First();
+        //    var handler = new NbyteFullDepInsH(requiredModel, crcModel);
+        //    var sb = new StringBuilder("0x050x{NbyteFull:X2_Border[0x03-10]}0x03^52^ 10:250x{CRCMod256:X2}");  //??? изменить ключ X2_Border[0x03-10] 
+        //    var format = "cp866";
+        //    //Act
+        //    var (isSuccess, _, value) = handler.CalcInsert(sb, format);
+        //    //Assert
+        //    isSuccess.Should().BeTrue();
+        //    value.ToString().Should().Be("0x050x0E0x03^52^ 10:250x{CRCMod256:X2}");
+        //}
+
+
+
         [Fact]
         public void Calc_Normal_Test()
         {

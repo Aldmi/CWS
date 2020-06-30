@@ -36,6 +36,25 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         }
 
 
+        /// <summary>
+        /// подстрока для подсчета CRC равна 0x160x480x
+        /// </summary>
+        [Fact] 
+        public void Calc_CRC_WithOut_Border_Test()
+        {
+            //Arrange
+            var requiredModel = StringInsertModelFactory.CreateList("{CRC8FullPoly:X2}", _extDict).First();
+            var handler = new Crc8FullPolyDepInsH(requiredModel);
+            var sb = new StringBuilder("0x160x480x{CRC8FullPoly:X2}0x010x850x5a0x120x030x000x000x000x000x000x010x020x000x180x800x200x310x320x35");
+            var format = "Windows-1251";
+            //Act
+            var (isSuccess, _, value) = handler.CalcInsert(sb, format);
+            //Assert
+            isSuccess.Should().BeTrue();
+            value.ToString().Should().Be("0x160x480x550x010x850x5a0x120x030x000x000x000x000x000x010x020x000x180x800x200x310x320x35");
+        }
+
+
         //[Fact]
         //public void Replace_FirstOccurence_Crc()
         //{

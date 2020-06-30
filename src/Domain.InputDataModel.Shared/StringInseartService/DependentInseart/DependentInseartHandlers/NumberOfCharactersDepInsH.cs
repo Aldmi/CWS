@@ -29,6 +29,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
 
         /// <summary>
         /// NOT USE
+        /// Сам алгоритм GetInseart() вычисляет подстроку.
         /// </summary>
         protected override Result<string> GetSubString4Handle(string str)
         {

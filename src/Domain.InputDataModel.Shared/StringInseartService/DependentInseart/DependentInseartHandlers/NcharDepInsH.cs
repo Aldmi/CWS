@@ -37,7 +37,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
 
         protected override Result<string> GetSubString4Handle(string str)
         {
-            return Result.Ok(str);
+            return Result.Ok(str); //TODO: не выделяю подстроку для подсчета
         }
     }
 }

@@ -3,6 +3,12 @@ using Shared.Extensions;
 
 namespace Shared.Types
 {
+    /// <summary>
+    /// Разделитель строки на 2 части.
+    /// Выделять подстроку СЛЕВА/СПРАВА от указанного разделителя
+    /// </summary>
+    public enum DelemiterBorderSubString { None, Left, Right}
+
     public class BorderSubString
     {
         public string StartCh { get; set; }

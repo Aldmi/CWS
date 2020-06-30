@@ -48,5 +48,21 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
             isSuccess.Should().BeTrue();
             value.ToString().Should().Be("0xFF0xFF0xFF0x0208000x060x03143E0x04");
         }
+
+
+        [Fact]
+        public void Calc_CRC_WithOut_Border_Test()
+        {
+            //Arrange
+            var requiredModel = StringInsertModelFactory.CreateList("{CRCCcitt:X4}", _extDict).First();
+            var handler = new Crc16CcittDepInsH(requiredModel);
+            var sb = new StringBuilder("0xFF0xFF0xFF0x0208000x060x03{CRCCcitt:X4}0x04");
+            var format = "Windows-1251";
+            //Act
+            var (isSuccess, _, value) = handler.CalcInsert(sb, format);
+            //Assert
+            isSuccess.Should().BeTrue();
+            value.ToString().Should().Be("0xFF0xFF0xFF0x0208000x060x03A66A0x04");
+        }
     }
 }

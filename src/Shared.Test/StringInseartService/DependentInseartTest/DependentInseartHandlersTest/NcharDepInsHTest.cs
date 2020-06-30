@@ -37,20 +37,20 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         }
 
 
-        //[Fact]
-        //public void Error_Format_Not_Found_Test()
-        //{
-        //    //Arrange
-        //    var requiredModel = StringInsertModelFactory.CreateList("{Nchar:D99}", _extDict).First();
-        //    var crcModel = StringInsertModelFactory.CreateList("{CRCXorInverse:X2}", _extDict).First();
-        //    var handler = new NcharDepInsH(requiredModel, crcModel);
-        //    var sb = new StringBuilder("\u000201{Nchar:D99}%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
-        //    //Act
-        //    var (isSuccess, _, value, error) = handler.CalcInsert(sb);
-        //    //Assert
-        //    isSuccess.Should().BeFalse();
-        //    value.ToString().Should().Be("\u00020127%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");  //27
-        //}
+        [Fact]
+        public void Error_Format_Not_Found_Test()
+        {
+            //Arrange
+            var requiredModel = StringInsertModelFactory.CreateList("{Nchar:D99}", _extDict).First();
+            var crcModel = StringInsertModelFactory.CreateList("{CRCXorInverse:X2}", _extDict).First();
+            var handler = new NcharDepInsH(requiredModel, crcModel);
+            var sb = new StringBuilder("\u000201{Nchar:D99}%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
+            //Act
+            var (isSuccess, _, value, error) = handler.CalcInsert(sb);
+            //Assert
+            isSuccess.Should().BeTrue();
+            value.ToString().Should().Be("\u000201!!!ExtKeyNotFound!!!%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
+        }
 
 
         [Fact]

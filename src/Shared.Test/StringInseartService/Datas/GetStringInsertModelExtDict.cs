@@ -14,13 +14,16 @@ namespace Shared.Test.StringInseartService.Datas
             { "default", new StringInsertModelExt("default", string.Empty, null, null)},
             { "X1", new StringInsertModelExt("X1", ":X1", null, null)},
             { "X2", new StringInsertModelExt("X2", ":X2", null, null)},
+            { "X4", new StringInsertModelExt("X4", ":X4", null, null)},
             { "D3", new StringInsertModelExt("D3", ":D3", null, null)},
             { "D2", new StringInsertModelExt("D2", ":D2", null, null)},
             { "t", new StringInsertModelExt("t", ":t", null, null)},
-            { "X2_Border", new StringInsertModelExt("X2_Border", ":X2", new BorderSubString{StartCh = "0x02", EndCh = "0x03", StartInclude = true}, null)},
+            { "X2_Border", new StringInsertModelExt("X2_Border", ":X2", new BorderSubString{StartCh = "0x02", EndCh = "0x03", StartInclude = true, EndInclude = true}, null)},
             { "X4_Border", new StringInsertModelExt("X4_Border", ":X4", new BorderSubString{StartCh = "0x02", EndCh = "0x03", StartInclude = false}, null)},
 
             { "X2_Border_StartOnly", new StringInsertModelExt("X2_Border_StartOnly", ":X2", new BorderSubString{StartCh = "0x01", StartInclude = true}, null)},
+
+            { "X2_Border[0x03-10]", new StringInsertModelExt("X2_Border[0x03-10]", ":X2", new BorderSubString{StartCh = "0x03", EndCh ="10", StartInclude = true, EndInclude = true}, null)},
 
             //With string MW
             { "MW_Limit(2)", new StringInsertModelExt("MW_Limit(2)", null, null, new StringHandlerMiddleWareOption

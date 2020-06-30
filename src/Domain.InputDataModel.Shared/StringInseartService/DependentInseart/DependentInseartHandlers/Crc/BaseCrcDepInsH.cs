@@ -39,9 +39,8 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
         /// </summary>
         protected override Result<string> GetSubString4Handle(string str)
         {
-            var nativeBorder = RequiredModel.Replacement;
-            var matchString = Regex.Match(str, $"(.*){nativeBorder}").Groups[1].Value;
-            return Result.Ok(matchString);
+            var res = RequiredModel.CalcSubStringBeetweenStartStringAndModel(str);
+            return res;
         }
 
         /// <summary>
