@@ -6,7 +6,7 @@ using Shared.Helpers;
 namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.DependentInseartHandlers
 {
     /// <summary>
-    /// Кол-во байт во всей строке (включая вставленные байты CRC)
+    /// Кол-во байт во всей строке (включая вставленое ЗАРАНЕЕ CRC)
     /// </summary>
     public class NbyteFullLastCalcDepInsH : BaseDepInsH
     {
@@ -24,12 +24,13 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
 
 
         /// <summary>
-        /// Возвращаем null.
-        /// BaseDepInsH вычислит посдтроку ОТ МЕСТА ВСТАВКИ ДО КОНЦА СТРОКИ.
+        /// ТОЛЬКО BorderSubString ОПРЕДЕЛЯЕТ ПОДСТРОКУ ДЛЯ GetInseart
         /// </summary>
         protected override Result<string> GetSubString4Handle(string str)
-        { 
-            return Result.Ok<string>(null);
+        {
+            return Result.Failure<string>("Для NbyteFullLastCalcDepInsH подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
+            //var res = RequiredModel.CalcSubStringBeetween2Models(_crcModel, str);
+            //return res;
         }
     }
 }

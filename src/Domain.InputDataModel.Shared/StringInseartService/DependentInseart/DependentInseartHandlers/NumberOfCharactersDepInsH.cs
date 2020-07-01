@@ -28,8 +28,8 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
 
 
         /// <summary>
-        /// NOT USE
-        /// Сам алгоритм GetInseart() вычисляет подстроку.
+        /// ЕСЛИ ЗАДАН BorderSubString, ТО ОН ОПРЕДЕЛЯЕТ НАЧАЛЬНУЮ ПОДСТРОКУ ДЛЯ GetInseart.
+        /// ЕСЛИ НЕ ЗАДАН, ТО ПЕРЕДЕДАИМ ВСЮ СТРОКУ В GetInseart().
         /// </summary>
         protected override Result<string> GetSubString4Handle(string str)
         {

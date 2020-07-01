@@ -46,24 +46,16 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
         /// </summary>
         private Result<string> CalcSubString4Handle(string str)
         {
-            //TODO: убирать из строки все вставки {} там где это нужнго, например для вычисления BorderSubString
-
-            //1.ЕСЛИ УКАЗАН BorderSubString => ВЫЧИСЛИМ ПОДСТРОКУ С ЕГО ПОМОЩЬЮ
+            //TODO: ??? убирать из строки все вставки {} там где это нужнго, например для вычисления BorderSubString
+            //1. ЕСЛИ УКАЗАН BorderSubString => ВЫЧИСЛИМ ПОДСТРОКУ С ЕГО ПОМОЩЬЮ
             if (RequiredModel.Ext.BorderSubString != null)
             {
                 var res = RequiredModel.Ext.BorderSubString.Calc(str);
                 return res;
             }
 
-            var resChild= GetSubString4Handle(str);
-
-            //2. ЕСЛИ ПОТОМОК ВЕРНУЛ NULL, Т.Е. НЕ ВОЗВРАЩАЕТ ПОДСТРОКУ, ВЕРНУТЬ ПОДСТРОКУ ОТ МЕСТА ВСТАВКИ ДО КОНЦА СТРОКИ.
-            if (resChild.IsSuccess && resChild.Value == null)
-            {
-               return RequiredModel.CalcSubStringBeetweenModelAndEndString(str);
-            }
-
-            //3.ВЫЧИСЛЯЕТСЯ ПОТОМКОМ
+            //2. ВЫЧИСЛЯЕТСЯ ПОТОМКОМ
+            var resChild = GetSubString4Handle(str);
             return resChild;
         }
 

@@ -7,7 +7,6 @@ using Shared.CrcCalculate;
 
 namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.DependentInseartHandlers.Crc
 {
-
     public abstract class BaseCrcDepInsH : BaseDepInsH
     {
         #region ctor
@@ -34,17 +33,17 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
 
 
         /// <summary>
-        /// ЕСЛИ BorderSubString НЕ УКАЗАН.
-        /// Подстрока - от начала строки до блока {CRC...}
+        /// ТОЛЬКО BorderSubString ОПРЕДЕЛЯЕТ ПОДСТРОКУ ДЛЯ GetInseart.
         /// </summary>
         protected override Result<string> GetSubString4Handle(string str)
         {
-            var res = RequiredModel.CalcSubStringBeetweenStartStringAndModel(str);
-            return res;
+            return Result.Failure<string>("Для любого алгоритма CRC подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
+            //var res = RequiredModel.CalcSubStringBeetweenStartStringAndModel(str);
+            //return res;
         }
 
         /// <summary>
-        /// Задает алгоритм вычисления CRC
+        /// Задает алгоритм вычисления CRC.
         /// </summary>
         protected abstract byte[] CrcAlgoritm(IReadOnlyList<byte> arg);
     }

@@ -46,12 +46,13 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
 
 
         /// <summary>
-        /// Вернуть подстроку между местом вставки {NbyteFull} и {CRC....}
+        /// ТОЛЬКО BorderSubString ОПРЕДЕЛЯЕТ ПОДСТРОКУ ДЛЯ GetInseart
         /// </summary>
         protected override Result<string> GetSubString4Handle(string str)
-        {
-            var res = RequiredModel.CalcSubStringBeetween2Models(_crcModel, str);
-            return res;
+        { 
+            return Result.Failure<string>("Для NbyteFullDepInsH подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
+            //var res = RequiredModel.CalcSubStringBeetween2Models(_crcModel, str);
+            //return res;
         }
     }
 }
