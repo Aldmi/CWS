@@ -21,6 +21,7 @@ namespace Shared.Test.StringInseartService.Datas
 
 
             { "D2_NcharBorder", new StringInsertModelExt("D2_NcharBorder", ":D2", new BorderSubString{DelimiterSign = DelimiterSign.Right, EndCh = "{CRC", EndInclude = false}, null)},
+            { "D2_NcharBorder<%01-%1>", new StringInsertModelExt("D2_NcharBorder<%01-%1>", ":D2", new BorderSubString{DelimiterSign = DelimiterSign.Right, StartCh = "%01", EndCh = "%1", StartInclude = false, EndInclude = false}, null)},
 
 
             { "X2_Border", new StringInsertModelExt("X2_Border", ":X2", new BorderSubString{StartCh = "0x02", EndCh = "0x03", StartInclude = true, EndInclude = true}, null)},

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CSharpFunctionalExtensions;
@@ -24,7 +23,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
 
 
         [Fact]
-        public void Calc_Normal_Test()
+        public void Calc_Nchar_Test()
         {
             //Arrange
             var sb = new StringBuilder("\u000201{Nchar:D2_NcharBorder}%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
@@ -37,18 +36,19 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
 
 
         [Fact]
-        public void Error_Format_Not_Found_Test()
+        public void Calc_Nchar_Manual_Border_Test()
         {
             //Arrange
-            var requiredModel = StringInsertModelFactory.CreateList("{Nchar:D99}", _extDict).First();
+            var requiredModel = StringInsertModelFactory.CreateList("{Nchar:D2_NcharBorder<%01-%1>}", _extDict).First();
             var handler = new NcharDepInsH(requiredModel);
-            var sb = new StringBuilder("\u000201{Nchar:D99}%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
+            var sb = new StringBuilder("\u000201{Nchar:D2_NcharBorder<%01-%1>}%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
             //Act
             var (isSuccess, _, value, error) = handler.CalcInsert(sb);
             //Assert
             isSuccess.Should().BeTrue();
-            value.ToString().Should().Be("\u000201!!!ExtKeyNotFound!!!%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
+            value.ToString().Should().Be("\u00020120%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
         }
+
 
 
         [Fact]
@@ -65,7 +65,38 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
 
 
         [Fact]
-        public void Not_Nchar_Marker_In_Str_Test()
+        public void CheckError_Format_Not_Found_Test()
+        {
+            //Arrange
+            var requiredModel = StringInsertModelFactory.CreateList("{Nchar:D99}", _extDict).First();
+            var handler = new NcharDepInsH(requiredModel);
+            var sb = new StringBuilder("\u000201{Nchar:D99}%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
+            //Act
+            var (isSuccess, _, value, error) = handler.CalcInsert(sb);
+            //Assert
+            isSuccess.Should().BeTrue();
+            value.ToString().Should().Be("\u000201!!!ExtKeyNotFound!!!%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
+        }
+
+
+        [Fact]
+        public void CheckError_Format_WithOut_Border_Test()
+        {
+            //Arrange
+            var requiredModel = StringInsertModelFactory.CreateList("{Nchar:D2}", _extDict).First();
+            var handler = new NcharDepInsH(requiredModel);
+            var sb = new StringBuilder("\u000201{Nchar:D2}%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
+            //Act
+            var (isSuccess, _, value, error) = handler.CalcInsert(sb);
+            //Assert
+            isSuccess.Should().BeFalse();
+            error.ToString().Should().Be("Для NcharDepInsH подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
+        }
+
+
+
+        [Fact]
+        public void CheckError_Not_Nchar_Marker_In_Str_Test()
         {
             //Arrange
             var sb = new StringBuilder("\u000201%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
@@ -78,7 +109,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
 
 
         [Fact]
-        public void Not_Crc_Marker_in_str_Test()
+        public void CheckError_Not_Crc_Marker_in_str_Test()
         {
             //Arrange
             var sb = new StringBuilder("\u000201{Nchar:D2_NcharBorder}%010C60EF03B0470000001E%110\u0003");
@@ -88,19 +119,5 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
             isSuccess.Should().BeFalse();
             error.Should().Be("Not Found endCh= {CRC");
         }
-
-
-        //[Fact]
-        //public void Not_Crc_optionalModel_Test()
-        //{
-        //    //Arrange
-        //    var requiredModel = StringInsertModelFactory.CreateList("{Nchar:D2}", _extDict).First();
-        //    StringInsertModel optionalModel = null;
-
-        //    //Act & Asert
-        //    ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new NcharDepInsH(requiredModel, optionalModel));
-        //    exception.Should().BeOfType<ArgumentNullException>();
-        //    exception.Message.Should().Contain("Value cannot be null. (Parameter 'crcModel')");
-        //}
     }
 }
