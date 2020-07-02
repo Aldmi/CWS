@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using Shared.Extensions;
 using Shared.Helpers;
@@ -17,34 +16,14 @@ namespace Shared.Types
 
     public class BorderSubString
     {
+        #region prop
         public string StartCh { get; set; }
         public string EndCh { get; set; }
         public bool StartInclude { get; set; }
         public bool EndInclude { get; set; }
         public DelimiterSign DelimiterSign { get; set; }
+        #endregion
 
-        /// <summary>
-        /// Вернуть подстроку обозначенную границами BorderSubString
-        /// </summary>
-        public Result<string> Calc(string str)
-        {
-            Result<string> result;
-            if (string.IsNullOrEmpty(StartCh))
-            {
-                result = str.SubstringBetweenCharacters(0, EndCh, EndInclude);
-            }
-            else
-            if (string.IsNullOrEmpty(EndCh))
-            {
-                result = str.SubstringBetweenCharacters(StartCh, str.Length - 1, StartInclude);
-            }
-            else
-            {
-                result = str.SubstringBetweenCharacters(StartCh, EndCh, StartInclude, EndInclude);
-            }
-            var (_, isFailure, value, error) = result;
-            return isFailure ? Result.Failure<string>(error) : Result.Ok(value);
-        }
 
 
         /// <summary>
@@ -52,8 +31,8 @@ namespace Shared.Types
         /// </summary>
         public Result<string> Calc(string str, string delemiter)
         {
-            if (string.IsNullOrEmpty(delemiter))
-                return Result.Failure<string>("BorderSubString.Calc(...)  delemiter не может быть null или пуст");
+            if (DelimiterSign != DelimiterSign.None && string.IsNullOrEmpty(delemiter))
+                return Result.Failure<string>("BorderSubString.Calc(...)  delemiter не может быть null или пуст.");
 
             //ВЫДЕЛИМ ЗАДАНУЮ DelimiterSign ЧАСТЬ СТРОКИ.
             var resStr = str;
@@ -86,12 +65,41 @@ namespace Shared.Types
                     break;
 
                 case DelimiterSign.DeleteDelemiter:
-                    resStr= str.ReplaceFirstOccurrence(delemiter, string.Empty);
+                    resStr = str.ReplaceFirstOccurrence(delemiter, string.Empty);
                     break;
             }
 
-            return Calc(resStr);
+            return CalcBetweenStartChEndCh(resStr);
         }
 
+
+
+        /// <summary>
+        /// Вернуть подстроку обозначенную границами StartCh - EndCh, учитывая StartInclude, EndInclude
+        /// </summary>
+        private Result<string> CalcBetweenStartChEndCh(string str)
+        {
+            Result<string> result;
+            if (string.IsNullOrEmpty(StartCh) && string.IsNullOrEmpty(EndCh))
+            {
+                result= Result.Ok(str);
+            }
+            else
+            if (string.IsNullOrEmpty(StartCh))
+            {
+                result = str.SubstringBetweenCharacters(0, EndCh, EndInclude);
+            }
+            else
+            if (string.IsNullOrEmpty(EndCh))
+            {
+                result = str.SubstringBetweenCharacters(StartCh, str.Length - 1, StartInclude);
+            }
+            else
+            {
+                result = str.SubstringBetweenCharacters(StartCh, EndCh, StartInclude, EndInclude);
+            }
+            var (_, isFailure, value, error) = result;
+            return isFailure ? Result.Failure<string>(error) : Result.Ok(value);
+        }
     }
 }

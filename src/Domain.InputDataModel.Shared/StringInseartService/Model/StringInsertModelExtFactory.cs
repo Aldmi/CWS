@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 using Shared.MiddleWares.HandlersOption;
+using Shared.Types;
 
 namespace Domain.InputDataModel.Shared.StringInseartService.Model
 {
@@ -20,7 +21,8 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
             _extDict = extDict;
             _keyExt = keyExt;
             _defaultExt = new StringInsertModelExt("default", string.Empty, null, null);
-            _keyNotFoundExt = new StringInsertModelExt("keyNotFound", string.Empty, null, 
+            _keyNotFoundExt = new StringInsertModelExt("keyNotFound", string.Empty,
+                new BorderSubString(), 
                 new StringHandlerMiddleWareOption
                 {
                     Converters = new List<UnitStringConverterOption>

@@ -28,10 +28,8 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart
             //1. Вставки NumberOfCharacters
             var handlers = (from model in array where model.VarName == "NumberOfCharacters" select new NumberOfCharactersDepInsH(model)).Cast<BaseDepInsH>().ToList();
             //2. Вставки NbyteFull и Nchar
-            handlers.AddRange(from model in array
-                where model.VarName == "Nchar"
-                let crcModel = array.FirstOrDefault(m => m.VarName.Contains("CRC")) //передать доп модель. содержащую CRC
-                select new NcharDepInsH(model, crcModel));
+            handlers.AddRange(from model in array where model.VarName == "Nchar" select new NcharDepInsH(model));
+
             handlers.AddRange(from model in array
                 where model.VarName == "NbyteFull"
                 let crcModel = array.FirstOrDefault(m => m.VarName.Contains("CRC")) //передать доп модель. содержащую CRC

@@ -50,7 +50,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
             //1. ЕСЛИ УКАЗАН BorderSubString => ВЫЧИСЛИМ ПОДСТРОКУ С ЕГО ПОМОЩЬЮ
             if (RequiredModel.Ext.BorderSubString != null)
             {
-                var res = RequiredModel.Ext.BorderSubString.Calc(str);
+                var res = RequiredModel.Ext.BorderSubString.Calc(str, RequiredModel.Replacement);
                 return res;
             }
 

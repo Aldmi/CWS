@@ -18,6 +18,11 @@ namespace Shared.Test.StringInseartService.Datas
             { "D3", new StringInsertModelExt("D3", ":D3", null, null)},
             { "D2", new StringInsertModelExt("D2", ":D2", null, null)},
             { "t", new StringInsertModelExt("t", ":t", null, null)},
+
+
+            { "D2_NcharBorder", new StringInsertModelExt("D2_NcharBorder", ":D2", new BorderSubString{DelimiterSign = DelimiterSign.Right, EndCh = "{CRC", EndInclude = false}, null)},
+
+
             { "X2_Border", new StringInsertModelExt("X2_Border", ":X2", new BorderSubString{StartCh = "0x02", EndCh = "0x03", StartInclude = true, EndInclude = true}, null)},
             { "X4_Border", new StringInsertModelExt("X4_Border", ":X4", new BorderSubString{StartCh = "0x02", EndCh = "0x03", StartInclude = false}, null)},
 
