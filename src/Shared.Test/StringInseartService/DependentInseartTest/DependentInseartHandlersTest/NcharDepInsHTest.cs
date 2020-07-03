@@ -17,7 +17,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         public NcharDepInsHTest()
         {
             _extDict = GetStringInsertModelExtDict.SimpleDictionary;
-            var requiredModel = StringInsertModelFactory.CreateList("{Nchar:D2_NcharBorder}", _extDict).First();
+            var requiredModel = StringInsertModelFactory.CreateList("{Nchar:D2_BorderRightBeforeCrc}", _extDict).First();
             _handler = new NcharDepInsH(requiredModel);
         }
 
@@ -26,7 +26,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         public void Calc_Nchar_Test()
         {
             //Arrange
-            var sb = new StringBuilder("\u000201{Nchar:D2_NcharBorder}%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
+            var sb = new StringBuilder("\u000201{Nchar:D2_BorderRightBeforeCrc}%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
             //Act
             var (isSuccess, _, value) = _handler.CalcInsert(sb);
             //Assert
@@ -55,12 +55,12 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         public void Calc_Zero_Nchar_Test()
         {
             //Arrange
-            var sb = new StringBuilder("\u000201{Nchar:D2_NcharBorder}{CRCXorInverse:X2}\u0003");
+            var sb = new StringBuilder("\u000201{Nchar:D2_BorderRightBeforeCrc}{CRCXorInverse:X2}\u0003");
             //Act
             var (isSuccess, _, value) = _handler.CalcInsert(sb);
             //Assert
             isSuccess.Should().BeTrue();
-            value.ToString().Should().Be("\u00020100{CRCXorInverse:X2}\u0003");  //27
+            value.ToString().Should().Be("\u00020100{CRCXorInverse:X2}\u0003");
         }
 
 
@@ -104,7 +104,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
             var (isSuccess, _, _, error) = _handler.CalcInsert(sb);
             //Assert
             isSuccess.Should().BeFalse();
-            error.Should().Be("Обработчик Dependency Inseart не может найти Replacement переменную {Nchar:D2_NcharBorder} в строке \u000201%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
+            error.Should().Be("Обработчик Dependency Inseart не может найти Replacement переменную {Nchar:D2_BorderRightBeforeCrc} в строке \u000201%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
         }
 
 
@@ -112,7 +112,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         public void CheckError_Not_Crc_Marker_in_str_Test()
         {
             //Arrange
-            var sb = new StringBuilder("\u000201{Nchar:D2_NcharBorder}%010C60EF03B0470000001E%110\u0003");
+            var sb = new StringBuilder("\u000201{Nchar:D2_BorderRightBeforeCrc}%010C60EF03B0470000001E%110\u0003");
             //Act
             var (isSuccess, _, _, error) = _handler.CalcInsert(sb);
             //Assert

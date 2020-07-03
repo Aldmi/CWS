@@ -17,16 +17,16 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         public CrcXorDepInsHTest()
         {
             _extDict = GetStringInsertModelExtDict.SimpleDictionary;
-            var requiredModel = StringInsertModelFactory.CreateList("{CRCXor:X2_Border}", _extDict).First();
+            var requiredModel = StringInsertModelFactory.CreateList("{CRCXor:X2_BorderLeft}", _extDict).First();
             _handler = new CrcXorDepInsH(requiredModel);
         }
 
 
         [Fact]
-        public void Calc_Normal_Test()
+        public void CrcXor_Calc_Test()
         {
             //Arrange
-            var sb = new StringBuilder("0xFF0xFF0x020x1B0x57дополнение0x09Москва-Питер0x0915:250x030x{CRCXor:X2_Border}0x1F");
+            var sb = new StringBuilder("0xFF0xFF0x020x1B0x57дополнение0x09Москва-Питер0x0915:250x030x{CRCXor:X2_BorderLeft}0x1F");
             var format = "cp866";
             //Act
             var (isSuccess, _, value) = _handler.CalcInsert(sb, format);
@@ -40,13 +40,13 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         public void Replace_FirstOccurence_Crc()
         {
             //Arrange
-            var sb = new StringBuilder("0xFF0xFF0x020x1B0x57дополнение0x09Москва-Питер0x0915:250x030x{CRCXor:X2_Border}0x030x{CRCXor:X2_Border}0x1F");
+            var sb = new StringBuilder("0xFF0xFF0x020x1B0x57дополнение0x09Москва-Питер0x0915:250x030x{CRCXor:X2_BorderLeft}0x030x{CRCXor:X2_BorderLeft}0x1F");
             var format = "cp866";
             //Act
-            var (isSuccess, _, value) = _handler.CalcInsert(sb, format);
+            var (isSuccess, _,  value, error) = _handler.CalcInsert(sb, format);
             //Assert
             isSuccess.Should().BeTrue();
-            value.ToString().Should().Be("0xFF0xFF0x020x1B0x57дополнение0x09Москва-Питер0x0915:250x030xBA0x030x{CRCXor:X2_Border}0x1F");
+            value.ToString().Should().Be("0xFF0xFF0x020x1B0x57дополнение0x09Москва-Питер0x0915:250x030xC80x030x{CRCXor:X2_BorderLeft}0x1F");
         }
 
 
@@ -54,7 +54,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         public void String_With_Trash()
         {
             //Arrange
-            var sb = new StringBuilder("0xFF0xFF0x020x1B0x57{AddressDevice:X2}{Nbyte:X2}дополнение0x09Москва-Питер0x0915:250x{CRCXor:X2_Border0x030x{CRCXor:X2_Border}0x1F");
+            var sb = new StringBuilder("0xFF0xFF0x020x1B0x57{AddressDevice:X2}{Nbyte:X2}дополнение0x09Москва-Питер0x0915:250x{CRCXor:X2_Border0x030x{CRCXor:X2_BorderLeft}0x1F");
             var format = "cp866";
             //Act
             var (isSuccess, _, value) = _handler.CalcInsert(sb, format);
@@ -65,7 +65,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
 
 
         [Fact]
-        public void Calc_Crc_WithOut_CrcOptions_WithOut_HexInStr_Test()
+        public void CheckError_Format_WithOut_Border_Test()
         {
             //Arrange
             var requiredModel = StringInsertModelFactory.CreateList("{CRCXor:X2}", _extDict).First();
@@ -73,21 +73,23 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
             var sb = new StringBuilder("\u000201BA%00001021дополнение4%10$00$60$t3$13Москва-Питер%10$00$615:254%10$00$60$t3$13{CRCXor:X2}\u0003");
             var format = "Windows-1251";
             //Act
-            var (isSuccess, _, value) = handler.CalcInsert(sb, format);
+            var (isSuccess, _, _, error) = handler.CalcInsert(sb, format);
             //Assert
-            isSuccess.Should().BeTrue();
-            value.ToString().Should().Be("\u000201BA%00001021дополнение4%10$00$60$t3$13Москва-Питер%10$00$615:254%10$00$60$t3$13D0\u0003");
+            isSuccess.Should().BeFalse();
+            error.Should().Be("Для любого алгоритма CRC подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
         }
 
 
         [Fact]
-        public void Border_Not_Found_In_Str()
+        public void CheckError_Border_Not_Found_In_Str()
         {
             //Arrange
+            var requiredModel = StringInsertModelFactory.CreateList("{CRCXor:X2_Border}", _extDict).First();
+            var handler = new CrcXorDepInsH(requiredModel);
             var sb = new StringBuilder("0xFF0xAA0x{CRCXor:X2_Border}0x1F");
             var format = "cp866";
             //Act
-            var (isSuccess, _, value, error) = _handler.CalcInsert(sb, format);
+            var (isSuccess, _, value, error) = handler.CalcInsert(sb, format);
             //Assert
             isSuccess.Should().BeFalse();
             error.Should().Be("Not Found startCh= 0x02");
@@ -95,7 +97,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
 
 
         [Fact]
-        public void Crc_WithOut_StringInseartExt()
+        public void CheckError_Crc_WithOut_StringInseartExt()
         {
             //Arrange
             var requiredModel = StringInsertModelFactory.CreateList("{CRCXor}", _extDict).First();
@@ -103,10 +105,10 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
             var sb = new StringBuilder("0xFF0xAA0x{CRCXor}0x1F");
             var format = "cp866";
             //Act
-            var (isSuccess, _, value) = handler.CalcInsert(sb, format);
+            var (isSuccess, _, _,error) = handler.CalcInsert(sb, format);
             //Assert
-            isSuccess.Should().BeTrue();
-            value.ToString().Should().Be("0xFF0xAA0x850x1F");
+            isSuccess.Should().BeFalse();
+            error.Should().Be("Для любого алгоритма CRC подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
         }
     }
 }

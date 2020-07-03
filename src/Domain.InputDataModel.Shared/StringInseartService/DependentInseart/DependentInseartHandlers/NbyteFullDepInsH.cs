@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Shared.Helpers;
@@ -20,13 +19,8 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
         private const int LenghtNByteInbytes = 1;
         private const int LenghtCrcInbytes = 1;
         
-        private readonly StringInsertModel _crcModel;
-        public NbyteFullDepInsH(StringInsertModel requiredModel, StringInsertModel crcModel) : base(requiredModel)
-        {
-            _crcModel = crcModel;
-            if(_crcModel == null)
-                throw new ArgumentNullException(nameof(crcModel));
-        }
+
+        public NbyteFullDepInsH(StringInsertModel requiredModel) : base(requiredModel) { }
 
 
         /// <summary>
@@ -51,8 +45,6 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
         protected override Result<string> GetSubString4Handle(string str)
         { 
             return Result.Failure<string>("Для NbyteFullDepInsH подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
-            //var res = RequiredModel.CalcSubStringBeetween2Models(_crcModel, str);
-            //return res;
         }
     }
 }

@@ -29,11 +29,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart
             var handlers = (from model in array where model.VarName == "NumberOfCharacters" select new NumberOfCharactersDepInsH(model)).Cast<BaseDepInsH>().ToList();
             //2. Вставки NbyteFull и Nchar
             handlers.AddRange(from model in array where model.VarName == "Nchar" select new NcharDepInsH(model));
-
-            handlers.AddRange(from model in array
-                where model.VarName == "NbyteFull"
-                let crcModel = array.FirstOrDefault(m => m.VarName.Contains("CRC")) //передать доп модель. содержащую CRC
-                select new NbyteFullDepInsH(model, crcModel));
+            handlers.AddRange(from model in array where model.VarName == "NbyteFull" select new NbyteFullDepInsH(model));
             //3. Вставки CRC
             handlers.AddRange(from model in array where model.VarName == "CRCXor" select new CrcXorDepInsH(model));
             handlers.AddRange(from model in array where model.VarName == "CRCXorInverse" select new CrcXorInverseDepInsH(model));
@@ -48,5 +44,11 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart
 
             return handlers;
         }
+
+
+        //handlers.AddRange(from model in array
+        //    where model.VarName == "NbyteFull"
+        //let crcModel = array.FirstOrDefault(m => m.VarName.Contains("CRC")) //передать доп модель. содержащую CRC
+        //select new NbyteFullDepInsH(model, crcModel));
     }
 }
