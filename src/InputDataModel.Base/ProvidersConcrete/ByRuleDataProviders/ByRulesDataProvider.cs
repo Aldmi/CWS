@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
@@ -158,14 +159,18 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
                 foreach (var viewRule in rule.GetViewRules)
                 {
-                    await foreach (var providerTransfer in viewRule.CreateProviderTransfer4Data(takesItems, ct).WithCancellation(ct))
+                    await foreach (var (_, isFailure, value, error) in viewRule.CreateProviderTransfer4Data(takesItems, ct).WithCancellation(ct))
                     {
                         ct.ThrowIfCancellationRequested();
-                        if (providerTransfer == null) //правило отображения не подходит под ДАННЫЕ
+                        if (isFailure)
+                        {
+                            _logger.Warning(error);
+                            await Task.Delay(1000, ct); //Задержка на отображение ошибки
                             continue;
+                        }
 
                         StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption.Id}";
-                        var providerResult = ProviderResultFactory(providerTransfer, StatusDict);
+                        var providerResult = ProviderResultFactory(value, StatusDict);
                         RaiseSendDataRx.OnNext(providerResult);
                     }
                 }

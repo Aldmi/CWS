@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ByRulesInseartedTest.Test.Datas;
+using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
@@ -66,7 +67,7 @@ namespace ByRulesInseartedTest.Test
                     {
                         Header = "0xFF0xFF0x020x1B0x57",
                         Body = "{StationsCut}0x09{NumberOfTrain}0x09{ExpectedTime:t}0x09",
-                        Footer = "0x030x{CRCXor:X2_BorderExclude}0x1F",
+                        Footer = "0x030x{CRCXor:X2_BorderLeft<0x02-0x03>}0x1F",
                         Format = "Windows-1251",
                         MaxBodyLenght = 245
                     },
@@ -104,7 +105,7 @@ namespace ByRulesInseartedTest.Test
                     {
                         Header = "0xFF0xFF0x020x1B0x57",
                         Body = "{Addition}  {StationsCut}0x09{ExpectedTime:t}0x09{Note}0x09",
-                        Footer = "0x030x{CRCXor:X2_BorderExclude}0x1F",
+                        Footer = "0x030x{CRCXor:X2_BorderLeft<0x02-0x03>}0x1F",
                         Format = "Windows-1251",
                         MaxBodyLenght = 230
                     },
@@ -142,7 +143,7 @@ namespace ByRulesInseartedTest.Test
                     {
                         Header = "0xFF0xFF0x020x1B0x57",
                         Body = "0x{MATH(rowNumber+64):X1}0x46{NumberOfTrain}0x09{TypeAlias}0x09{StationArrival}0x09{TDepart:t}0x09{PathNumber}0x09{DelayTime:t}0x09",
-                        Footer = "0x030x{CRCXor:X2_BorderExclude}0x1F",
+                        Footer = "0x030x{CRCXor:X2_BorderLeft<0x02-0x03>}0x1F",
                         Format = "Windows-1251",
                         MaxBodyLenght = 230
                     },
@@ -191,21 +192,65 @@ namespace ByRulesInseartedTest.Test
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
-            var rt = requestTransfers.FirstOrDefault();
-            var responseInfo = rt.Response.Validator.Validate(expectedRespAray);
+            var (isSuccess, isFailure, providerTransfer, error) = requestTransfers.FirstOrDefault();
 
             //Assert
-            rt.Request.StrRepresentBase.Str.Should().Be(expectedRequestStrRepresentBase);
-            rt.Request.StrRepresentBase.Format.Should().Be(option.RequestOption.Format);
-            rt.Request.StrRepresent.Str.Should().Be(expectedRequestStrRepresent);
-            rt.Request.StrRepresent.Format.Should().Be(expectedRequestStrRepresentFormat);
-            rt.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(inputTypes.Count);
-            foreach (var processedItem in rt.Request.ProcessedItemsInBatch.ProcessedItems)
+            isSuccess.Should().BeTrue();
+
+            var request = providerTransfer.Request;
+            request.StrRepresent.Str.Should().Be(expectedRequestStrRepresent);
+            request.StrRepresent.Format.Should().Be(expectedRequestStrRepresentFormat);
+            request.StrRepresentBase.Str.Should().Be(expectedRequestStrRepresentBase);
+            request.StrRepresentBase.Format.Should().Be(option.RequestOption.Format);
+            request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(inputTypes.Count);
+            foreach (var processedItem in request.ProcessedItemsInBatch.ProcessedItems)
             {
                 processedItem.InseartedData.Where(pair => pair.Key != "MATH").ToList().Count.Should().Be(expectedCountInseartedData);
             }
 
+            var response = providerTransfer.Response;
+            var responseInfo = response.Validator.Validate(expectedRespAray);
             responseInfo.IsOutDataValid.Should().BeTrue();
+        }
+
+
+        [Fact]
+        public void CheckError_Border_StartCh_0x02_NotFound()
+        {
+            //Arrange
+            var option = new ViewRuleOption()
+            {
+                Id = 1,
+                StartPosition = 0,
+                Count = 1,
+                BatchSize = 1,
+                RequestOption = new RequestOption
+                {
+                    Header = "0xFF0xFF0x1B0x57",
+                    Body = "{Addition}  {StationsCut}0x09{ExpectedTime:t}0x09{Note}0x09",
+                    Footer = "0x030x{CRCXor:X2_BorderLeft<0x02-0x03>}0x1F",
+                    Format = "Windows-1251",
+                    MaxBodyLenght = 230
+                },
+                ResponseOption = new ResponseOption
+                {
+                    ValidatorName = "EqualValidator",
+                    EqualValidator = new EqualResponseValidatorOption
+                    {
+                        Body = "061F",
+                        Format = "HEX"
+                    }
+                }
+            };
+            var viewRule = ViewRule<AdInputType>.Create("5", option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, Logger);
+
+            //Act
+            var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
+            var (isSuccess, isFailure, providerTransfer, error) = requestTransfers.FirstOrDefault();
+
+            //Assert
+            isSuccess.Should().BeFalse();
+            error.Should().Be("Not Found startCh= 0x02");
         }
     }
 }

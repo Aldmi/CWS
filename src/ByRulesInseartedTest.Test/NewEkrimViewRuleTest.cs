@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ByRulesInseartedTest.Test.Datas;
+using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
@@ -28,7 +29,7 @@ namespace ByRulesInseartedTest.Test
                     {
                         Header = "0xFF0xFF0xFF0x0200{AddressDevice:X2}WEB",
                         Body = "10x0914:010x09260x093",
-                        Footer = "0x03{CRCCcitt:X4_Border}0x04",
+                        Footer = "0x03{CRCCcitt:X4_BorderLeft<0x02-0x03>}0x04",
                         Format = "Windows-1251",
                         MaxBodyLenght = 245
                     },
@@ -37,7 +38,7 @@ namespace ByRulesInseartedTest.Test
                         ValidatorName = "EqualValidator",
                         EqualValidator = new EqualResponseValidatorOption
                         {
-                            Body = "0xFF0xFF0xFF0x0208{AddressDevice:X2}0x060x03{CRCCcitt:X4_Border}0x04",
+                            Body = "0xFF0xFF0xFF0x0208{AddressDevice:X2}0x060x03{CRCCcitt:X4_BorderLeft<0x02-0x03>}0x04",
                             Format = "Windows-1251"
                         }
                     }
@@ -66,7 +67,7 @@ namespace ByRulesInseartedTest.Test
                     {
                         Header = "0xFF0xFF0xFF0x0200{AddressDevice:X2}WCB",
                         Body = "Любань0x0912:220x09Поезд следует со всеми остановками",
-                        Footer = "0x03{CRCCcitt:X4_Border}0x04",
+                        Footer = "0x03{CRCCcitt:X4_BorderLeft<0x02-0x03>}0x04",
                         Format = "Windows-1251",
                         MaxBodyLenght = 245
                     },
@@ -75,7 +76,7 @@ namespace ByRulesInseartedTest.Test
                         ValidatorName = "EqualValidator",
                         EqualValidator = new EqualResponseValidatorOption
                         {
-                            Body = "0xFF0xFF0xFF0x0208{AddressDevice:X2}0x060x03{CRCCcitt:X4_Border}0x04",
+                            Body = "0xFF0xFF0xFF0x0208{AddressDevice:X2}0x060x03{CRCCcitt:X4_BorderLeft<0x02-0x03>}0x04",
                             Format = "Windows-1251"
                         }
                     }
@@ -91,44 +92,6 @@ namespace ByRulesInseartedTest.Test
                 0
             },
 
-            // Питер. табло LD45 (Обухово). УСТАНОВКА СОЕДИНЕНИЯ
-            new object[]
-            {
-                "3",
-                new ViewRuleOption()
-                {
-                    Id = 1,
-                    StartPosition = 0,
-                    Count = 1,
-                    BatchSize = 1,
-                    RequestOption = new RequestOption
-                    {
-                        Header = "0x100x10{AddressDevice:X2}{AddressDevice:X2}0x050x1F",
-                        Body = "",
-                        Footer = "",
-                        Format = "Windows-1251",
-                        MaxBodyLenght = 245
-                    },
-                    ResponseOption = new ResponseOption
-                    {
-                        ValidatorName = "EqualValidator",
-                        EqualValidator = new EqualResponseValidatorOption
-                        {
-                            Body = "0x060x1F",
-                            Format = "Windows-1251"
-                        }
-                    }
-                },
-                GetData4ViewRuleTest.InputTypesDefault,   
-                //REQUEST
-                "101030333033051F",
-                "HEX",
-                "0x100x1003030x050x1F",   
-                //RESPONSE
-                new byte[] {0x06, 0x1F},
-
-                0
-            },
 
             // Питер. табло LD45 (Обухово). Передача данных.
             new object[]
@@ -191,21 +154,25 @@ namespace ByRulesInseartedTest.Test
             var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, Logger);
 
             //Act
-            var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.ListInputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
-            var rt = requestTransfers.FirstOrDefault();
-            var responseInfo = rt.Response.Validator.Validate(expectedRespAray);
+            var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
+            var (isSuccess, isFailure, providerTransfer, error) = requestTransfers.FirstOrDefault();
 
             //Assert
-            rt.Request.StrRepresentBase.Str.Should().Be(expectedRequestStrRepresentBase);
-            rt.Request.StrRepresentBase.Format.Should().Be(option.RequestOption.Format);
-            rt.Request.StrRepresent.Str.Should().Be(expectedRequestStrRepresent);
-            rt.Request.StrRepresent.Format.Should().Be(expectedRequestStrRepresentFormat);
-            rt.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(inputTypes.Count);
-            foreach (var processedItem in rt.Request.ProcessedItemsInBatch.ProcessedItems)
+            isSuccess.Should().BeTrue();
+
+            var request = providerTransfer.Request;
+            request.StrRepresent.Str.Should().Be(expectedRequestStrRepresent);
+            request.StrRepresent.Format.Should().Be(expectedRequestStrRepresentFormat);
+            request.StrRepresentBase.Str.Should().Be(expectedRequestStrRepresentBase);
+            request.StrRepresentBase.Format.Should().Be(option.RequestOption.Format);
+            request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(inputTypes.Count);
+            foreach (var processedItem in request.ProcessedItemsInBatch.ProcessedItems)
             {
                 processedItem.InseartedData.Where(pair => pair.Key != "MATH").ToList().Count.Should().Be(expectedCountInseartedData);
             }
 
+            var response = providerTransfer.Response;
+            var responseInfo = response.Validator.Validate(expectedRespAray);
             responseInfo.IsOutDataValid.Should().BeTrue();
         }
     }

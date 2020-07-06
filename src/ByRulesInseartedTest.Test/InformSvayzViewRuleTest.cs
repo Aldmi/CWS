@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ByRulesInseartedTest.Test.Datas;
+using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
@@ -26,9 +27,9 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "0x{AddressDevice:X2}0x{NbyteFull:X2}",
+                        Header = "0x{AddressDevice:X2}0x{NbyteFull:X2_BorderRightBeforeCrc}",
                         Body = "0x03^{NumberOfTrain}^ {StationsCut}^{TArrival:t}^{TDepart:t}",
-                        Footer = "0x{CRCMod256:X2}",
+                        Footer = "0x{CRCMod256:X2_BorderLeft}",
                         Format = "cp866",
                         MaxBodyLenght = 245
                     },
@@ -37,7 +38,7 @@ namespace ByRulesInseartedTest.Test
                         ValidatorName = "EqualValidator",
                         EqualValidator = new EqualResponseValidatorOption
                         {
-                            Body = "{AddressDevice:X2}0483{CRCMod256:X2}",
+                            Body = "{AddressDevice:X2}0483{CRCMod256:X2_BorderLeft}",
                             Format ="HEX"
                         }
                     }
@@ -65,9 +66,9 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "0x{AddressDevice:X2}0x{NbyteFull:X2}",
+                        Header = "0x{AddressDevice:X2}0x{NbyteFull:X2_BorderRightBeforeCrc}",
                         Body = "0x03{Note}",
-                        Footer = "0x{CRCMod256:X2}",
+                        Footer = "0x{CRCMod256:X2_BorderLeft}",
                         Format = "cp866",
                         MaxBodyLenght = 245
                     },
@@ -76,7 +77,7 @@ namespace ByRulesInseartedTest.Test
                         ValidatorName = "EqualValidator",
                         EqualValidator = new EqualResponseValidatorOption
                         {
-                            Body = "{AddressDevice:X2}0483{CRCMod256:X2}",
+                            Body = "{AddressDevice:X2}0483{CRCMod256:X2_BorderLeft}",
                             Format ="HEX"
                         }
                     }
@@ -117,22 +118,24 @@ namespace ByRulesInseartedTest.Test
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
-            var rt = requestTransfers.FirstOrDefault();
-            var responseInfo = rt.Response.Validator.Validate(expectedRespAray);
+            var (isSuccess, isFailure, providerTransfer, error) = requestTransfers.FirstOrDefault();
 
             //Assert
-            rt.Request.StrRepresentBase.Str.Should().Be(expectedRequestStrRepresentBase);
-            rt.Request.StrRepresentBase.Format.Should().Be(option.RequestOption.Format);
+            isSuccess.Should().BeTrue();
 
-            rt.Request.StrRepresent.Str.Should().Be(expectedRequestStrRepresent);
-            rt.Request.StrRepresent.Format.Should().Be(expectedRequestStrRepresentFormat);
-
-            rt.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(inputTypes.Count);
-            foreach (var processedItem in rt.Request.ProcessedItemsInBatch.ProcessedItems)
+            var request = providerTransfer.Request;
+            request.StrRepresent.Str.Should().Be(expectedRequestStrRepresent);
+            request.StrRepresent.Format.Should().Be(expectedRequestStrRepresentFormat);
+            request.StrRepresentBase.Str.Should().Be(expectedRequestStrRepresentBase);
+            request.StrRepresentBase.Format.Should().Be(option.RequestOption.Format);
+            request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(inputTypes.Count);
+            foreach (var processedItem in request.ProcessedItemsInBatch.ProcessedItems)
             {
                 processedItem.InseartedData.Where(pair => pair.Key != "MATH").ToList().Count.Should().Be(expectedCountInseartedData);
             }
 
+            var response = providerTransfer.Response;
+            var responseInfo = response.Validator.Validate(expectedRespAray);
             responseInfo.IsOutDataValid.Should().BeTrue();
         }
     }
