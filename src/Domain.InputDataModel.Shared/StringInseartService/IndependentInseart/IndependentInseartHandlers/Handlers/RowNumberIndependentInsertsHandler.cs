@@ -28,7 +28,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.I
                 {
                     var rowNumber = int.Parse(value);
                     var mathExpressions = _insertModel.Option;
-                    var calcVal = MathematicFormat.CalculateMathematicFormat(mathExpressions, "rowNumber", rowNumber);
+                    var calcVal = MathematicExpression.CalculateExpression(mathExpressions, "rowNumber", rowNumber);
                     var finishValue = _insertModel.Ext.CalcFinishValue(calcVal);
                     return Result.Ok<(Change<string>, StringInsertModel)>((new Change<string>(calcVal.ToString(), finishValue), _insertModel));
                 }

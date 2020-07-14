@@ -23,7 +23,13 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
 
 
         #region ctor
-        public StringInsertModelExt(string key, string format, BorderSubString borderSubString, StringHandlerMiddleWareOption stringHandlerMiddleWareOption)
+        public StringInsertModelExt(
+            string key,
+            string format,
+            BorderSubString borderSubString,
+            StringHandlerMiddleWareOption stringHandlerMiddleWareOption,
+            MathematicFormula mathematicFormula = null
+            )
         {
             Key = key;
             Format = format ?? String.Empty;
@@ -35,6 +41,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
                 var middleWare = new StringHandlerMiddleWare(StringHandlerMiddleWareOption);
                 return middleWare;
             });
+            MathematicFormula = mathematicFormula;
         }
         #endregion
 
@@ -62,7 +69,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         /// НЕ ОБЯЗАТЕЛЕН.
         /// Задает границы для вычленения подстроки.
         /// </summary>
-        public MathematicService MathematicService { get; }
+        public MathematicFormula MathematicFormula { get; }
 
         /// <summary>
         /// НЕ ОБЯЗАТЕЛЕН.
@@ -92,38 +99,32 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         /// </summary>
         public string CalcFinishValue<T>(T data)
         {
-            var afterMath = ApplyMath(data);
             var formatVal = ConvertByFormat(data);
             return StartMiddleWarePipline(formatVal);
         }
 
 
-        /// <summary>
-        /// Выполняет математическую обработку над входной переменной.
-        /// </summary>
-        private T ApplyMath<T>(T data)
+        private string ConvertByFormat<T>(T data)
         {
-            return data switch
+            switch (data)
             {
-                //int intVal => intVal + 10,
-                //DateTime dateTimeVal => dateTimeVal.AddMinutes(1.0),
-                _ => data
-            };
+                case int intVal:
+                    var afterMath = MathematicFormula?.Calc(intVal) ?? intVal;
+                    return afterMath.Convert2StrByFormat(Format);
 
-        }
+                case DateTime dateTimeVal:
+                    return dateTimeVal.Convert2StrByFormat(Format);
 
+                case byte[] byteArray:
+                    return byteArray.BitConverter2StrByFormat(Format);
 
+                case Enum e:
+                    return e.ToString();
 
-        private string ConvertByFormat<T>(T data) 
-        {
-            return data switch
-            {
-                int intVal => intVal.Convert2StrByFormat(Format),
-                DateTime dateTimeVal => dateTimeVal.Convert2StrByFormat(Format),
-                byte[] byteArray => byteArray.BitConverter2StrByFormat(Format),
-                Enum e => e.ToString(), 
-                _ => data.ToString()
-            };
+                default:
+                    return data.ToString();
+            }
+
             // throw new InvalidCastException("Тип переданного значнеия не соответсвует ни одному обработчику");
         }
 
@@ -133,7 +134,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         private string StartMiddleWarePipline(string data)
         {
             var mw = _lazyStringMiddleWare.Value;
-            return (mw == null) ? data: mw.Convert(data, 0);
+            return (mw == null) ? data : mw.Convert(data, 0);
         }
 
         #endregion

@@ -2,7 +2,7 @@
 
 namespace Shared.Mathematic
 {
-    public static class MathematicFormat
+    public static class MathematicExpression
     {
         #region fields
         private static readonly object LockerNCalc = new object();
@@ -17,7 +17,7 @@ namespace Shared.Mathematic
         /// <param name="expression">математическое выражение где содержится переменная 'varName', вместо нее подставится значение var</param>
         /// <param name="varName">имя переменной</param>
         /// <param name="var">значение переменной</param>
-        public static int CalculateMathematicFormat(string expression, string varName, int var)
+        public static int CalculateExpression(string expression, string varName, int var)
         {
             lock (LockerNCalc)
             {

@@ -1,8 +1,6 @@
-﻿using CSharpFunctionalExtensions;
-
-namespace Shared.Mathematic
+﻿namespace Shared.Mathematic
 {
-    public class MathematicService
+    public class MathematicFormula
     {
         private const string VarName = "x";
 
@@ -15,7 +13,7 @@ namespace Shared.Mathematic
 
 
         #region ctor
-        public MathematicService(string expr)
+        public MathematicFormula(string expr)
         {
             Expr = expr;
         }
@@ -25,7 +23,7 @@ namespace Shared.Mathematic
 
         public int Calc(int var)
         {
-            return MathematicFormat.CalculateMathematicFormat(Expr, VarName, var);
+            return MathematicExpression.CalculateExpression(Expr, VarName, var);
         }
     }
 }
