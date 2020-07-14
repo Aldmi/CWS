@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Text.RegularExpressions;
-using CSharpFunctionalExtensions;
 using Shared.Extensions;
+using Shared.Mathematic;
 using Shared.MiddleWares.Handlers;
 using Shared.MiddleWares.HandlersOption;
 using Shared.Types;
@@ -58,7 +57,15 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         /// </summary>
         public BorderSubString BorderSubString { get; }
 
+
         /// <summary>
+        /// НЕ ОБЯЗАТЕЛЕН.
+        /// Задает границы для вычленения подстроки.
+        /// </summary>
+        public MathematicService MathematicService { get; }
+
+        /// <summary>
+        /// НЕ ОБЯЗАТЕЛЕН.
         /// ОПЦИИ цепочки конвеера обработки строки.
         /// </summary>
         public StringHandlerMiddleWareOption StringHandlerMiddleWareOption { get; }
@@ -85,12 +92,29 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         /// </summary>
         public string CalcFinishValue<T>(T data)
         {
+            var afterMath = ApplyMath(data);
             var formatVal = ConvertByFormat(data);
             return StartMiddleWarePipline(formatVal);
         }
 
 
-        private string ConvertByFormat<T>(T data)
+        /// <summary>
+        /// Выполняет математическую обработку над входной переменной.
+        /// </summary>
+        private T ApplyMath<T>(T data)
+        {
+            return data switch
+            {
+                //int intVal => intVal + 10,
+                //DateTime dateTimeVal => dateTimeVal.AddMinutes(1.0),
+                _ => data
+            };
+
+        }
+
+
+
+        private string ConvertByFormat<T>(T data) 
         {
             return data switch
             {

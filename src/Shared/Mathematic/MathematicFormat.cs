@@ -14,13 +14,16 @@ namespace Shared.Mathematic
         /// Математическое вычисление формулы с участием переменной rowNumber
         /// Возможно CuncurrencyException при многопоточной работе с Expression.
         /// </summary>
-        public static int CalculateMathematicFormat(string str, int row)
+        /// <param name="expression">математическое выражение где содержится переменная 'varName', вместо нее подставится значение var</param>
+        /// <param name="varName">имя переменной</param>
+        /// <param name="var">значение переменной</param>
+        public static int CalculateMathematicFormat(string expression, string varName, int var)
         {
             lock (LockerNCalc)
             {
-                var expr = new Expression(str)
+                var expr = new Expression(expression)
                 {
-                    Parameters = { ["rowNumber"] = row }
+                    Parameters = { [varName] = var }
                 };
                 var func = expr.ToLambda<int>();
                 var arithmeticResult = func();

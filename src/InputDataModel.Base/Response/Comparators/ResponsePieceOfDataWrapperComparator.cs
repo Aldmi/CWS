@@ -4,6 +4,14 @@ using KellermanSoftware.CompareNetObjects;
 
 namespace Domain.InputDataModel.Base.Response.Comparators
 {
+
+    /// <summary>
+    /// Проверка изменения данных.
+    /// СВ-Ва для сравнения
+    /// ResponsePieceOfDataWrapper.IsValidAll
+    /// ResponsePieceOfDataWrapper.ResponsesItems
+    /// </summary>
+    /// <typeparam name="TIn"></typeparam>
     public class ResponsePieceOfDataWrapperComparator<TIn> : IEquatable<ResponsePieceOfDataWrapper<TIn>>
     {
         private ResponsePieceOfDataWrapper<TIn> _oldValue;

@@ -111,7 +111,6 @@ namespace Domain.Device.Services
             if(cmpRes)
                 return; // response НЕ ПОМЕНЯЛСЯ
 
-
             var produser = GetProduser();
             var data = ProduserData<TIn>.CreateBoardData(response);
             var results = await produser.Send4AllProdusers(data);
