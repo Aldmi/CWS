@@ -15,6 +15,9 @@ namespace Infrastructure.Dal.EfCore.DbContext.EntitiConfiguration
 
             builder.Property(p => p.StringHandlerMiddleWareOption)
                 .HasJsonValueConversion();
+
+            builder.Property(p => p.MathematicFormula)
+                .HasJsonValueConversion();
         }
     }
 }

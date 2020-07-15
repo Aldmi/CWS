@@ -20,6 +20,7 @@ using Infrastructure.Dal.EfCore.Entities.Transport;
 using Infrastructure.Transport.Http;
 using Infrastructure.Transport.SerialPort;
 using Infrastructure.Transport.TcpIp;
+using Shared.Mathematic;
 using Shared.MiddleWares.HandlersOption;
 using WebApiSwc.DTO.JSON.DevicesStateDto;
 using WebApiSwc.DTO.JSON.InputTypesDto;
@@ -28,6 +29,7 @@ using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption;
 using WebApiSwc.DTO.JSON.OptionsDto.ProduserUnionOption;
 using WebApiSwc.DTO.JSON.OptionsDto.TransportOption;
+using WebApiSwc.DTO.JSON.Shared;
 using WebApiSwc.DTO.XML;
 
 namespace WebApiSwc.AutoMapperConfig
@@ -167,30 +169,44 @@ namespace WebApiSwc.AutoMapperConfig
 
 
             #region StringInsertModelExt  mapping
+
+            CreateMap<MathematicFormulaDto, MathematicFormula>()
+                .ConstructUsing((src, context) => new MathematicFormula(src.Expr));
+
+            CreateMap<MathematicFormula, MathematicFormulaDto>();
+
+            CreateMap<EfMathematicFormula, MathematicFormula>()
+                .ConstructUsing((src, context) => new MathematicFormula(src.Expr));
+
+            CreateMap<MathematicFormula, EfMathematicFormula>();
+            
             CreateMap<StringInsertModelExt, StringInsertModelExtDto>().ReverseMap();
-
-            CreateMap<StringInsertModelExt, EfStringInseartModelExt>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => 0))
-                .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.Key))
-                .ForMember(dest => dest.Format, opt => opt.MapFrom(src => src.Format))
-                .ForMember(dest => dest.BorderSubString, opt => opt.MapFrom(src => src.BorderSubString))
-                .ForMember(dest => dest.StringHandlerMiddleWareOption, opt => opt.MapFrom(src => src.StringHandlerMiddleWareOption));
-
-            CreateMap<EfStringInseartModelExt, StringInsertModelExt>()
-              .ConstructUsing((src, context) => new StringInsertModelExt(
-                  src.Key,
-                  src.Format,
-                  src.BorderSubString,
-                 context.Mapper.Map<StringHandlerMiddleWareOption>(src.StringHandlerMiddleWareOption)
-              )).ForAllMembers(opt => opt.Ignore());
 
             CreateMap<StringInsertModelExtDto, StringInsertModelExt>()
                 .ConstructUsing((src, context) => new StringInsertModelExt(
                     src.Key,
                     src.Format,
                     src.BorderSubString,
-                    context.Mapper.Map<StringHandlerMiddleWareOption>(src.StringHandlerMiddleWareOption)
+                    context.Mapper.Map<StringHandlerMiddleWareOption>(src.StringHandlerMiddleWareOption),
+                    context.Mapper.Map<MathematicFormula>(src.MathematicFormula)
                 )).ForAllMembers(opt => opt.Ignore());
+
+            CreateMap<StringInsertModelExt, EfStringInseartModelExt>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => 0))
+                .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.Key))
+                .ForMember(dest => dest.Format, opt => opt.MapFrom(src => src.Format))
+                .ForMember(dest => dest.BorderSubString, opt => opt.MapFrom(src => src.BorderSubString))
+                .ForMember(dest => dest.StringHandlerMiddleWareOption, opt => opt.MapFrom(src => src.StringHandlerMiddleWareOption))
+                .ForMember(dest => dest.MathematicFormula, opt => opt.MapFrom(src => src.MathematicFormula));
+
+            CreateMap<EfStringInseartModelExt, StringInsertModelExt>()
+              .ConstructUsing((src, context) => new StringInsertModelExt(
+                  src.Key,
+                  src.Format,
+                  src.BorderSubString,
+                 context.Mapper.Map<StringHandlerMiddleWareOption>(src.StringHandlerMiddleWareOption),
+                  context.Mapper.Map<MathematicFormula>(src.MathematicFormula)
+              )).ForAllMembers(opt => opt.Ignore());
             #endregion
         }
 

@@ -9,6 +9,7 @@ using Infrastructure.Transport;
 using Infrastructure.Transport.Base.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Events;
+using Shared.Mathematic;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 using Shared.MiddleWares.HandlersOption;
 using WebApiSwc.Extensions;
@@ -45,33 +46,38 @@ namespace WebApiSwc.Controllers
         // GET api/values
         [HttpGet]
         // public IEnumerable<InputData<AdInputType>> Get()
-        public UnitStringConverterOption Get()
+        public MathematicFormula Get()
         {
-            UnitStringConverterOption p= new UnitStringConverterOption
-            {
-                ReplaseCharStringConverterOption = new ReplaseCharStringConverterOption
-                {
-                    ToLowerInvariant = false,
-                    Mapping = new Dictionary<char, string>
-                    {
-                      {' ', "pp" },
-                      {'1', "rt" },
-                      {'2', "ui" }
-                    }
-                }
 
-                //  ReplaseStringConverterOption = new ReplaseStringConverterOption
-                //  {
-                //  ToLowerInvariant = false,
-                //  Mapping = new Dictionary<string, string>
-                //  {
-                //      {"1" , "pp" },
-                //      {"2", "rt" },
-                //      {"3", "ui" }
-                //  }
-                //}
-            };
-            return p;
+            var m = new MathematicFormula("saddsa");
+
+
+
+            //UnitStringConverterOption p= new UnitStringConverterOption
+            //{
+            //    ReplaseCharStringConverterOption = new ReplaseCharStringConverterOption
+            //    {
+            //        ToLowerInvariant = false,
+            //        Mapping = new Dictionary<char, string>
+            //        {
+            //          {' ', "pp" },
+            //          {'1', "rt" },
+            //          {'2', "ui" }
+            //        }
+            //    }
+
+            //    //  ReplaseStringConverterOption = new ReplaseStringConverterOption
+            //    //  {
+            //    //  ToLowerInvariant = false,
+            //    //  Mapping = new Dictionary<string, string>
+            //    //  {
+            //    //      {"1" , "pp" },
+            //    //      {"2", "rt" },
+            //    //      {"3", "ui" }
+            //    //  }
+            //    //}
+            //};
+            return m;
         }
 
         // GET api/values/5
@@ -94,16 +100,20 @@ namespace WebApiSwc.Controllers
 
         //POST api/values
         [HttpPost]
-        public void Post([FromBody]List<StringHandlerMiddleWareOption111> handlers)
+        public void Post([FromBody] MathematicFormula formula)
         {
 
         }
+
+
 
         // PUT api/values/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
+
+
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
