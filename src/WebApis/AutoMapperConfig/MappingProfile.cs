@@ -170,15 +170,15 @@ namespace WebApiSwc.AutoMapperConfig
 
             #region StringInsertModelExt  mapping
 
-            CreateMap<MathematicFormulaDto, MathematicFormula>()
-                .ConstructUsing((src, context) => new MathematicFormula(src.Expr));
+            //CreateMap<MathematicFormulaDto, MathematicFormula>()
+            //    .ConstructUsing((src, context) => new MathematicFormula(src.Expr));
 
-            CreateMap<MathematicFormula, MathematicFormulaDto>();
+            //CreateMap<MathematicFormula, MathematicFormulaDto>();
 
-            CreateMap<EfMathematicFormula, MathematicFormula>()
-                .ConstructUsing((src, context) => new MathematicFormula(src.Expr));
+            //CreateMap<EfMathematicFormula, MathematicFormula>()
+            //    .ConstructUsing((src, context) => new MathematicFormula(src.Expr));
 
-            CreateMap<MathematicFormula, EfMathematicFormula>();
+            //CreateMap<MathematicFormula, EfMathematicFormula>();
             
             CreateMap<StringInsertModelExt, StringInsertModelExtDto>().ReverseMap();
 

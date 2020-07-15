@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain.InputDataModel.Shared\Domain.InputDataModel.Shared.csproj" />
+    <ProjectReference Include="..\Infrastructure.Dal.EfCore\Infrastructure.Dal.EfCore.csproj" />
     <ProjectReference Include="..\WebApis\WebApiSwc.csproj" />
   </ItemGroup>
 

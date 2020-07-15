@@ -64,7 +64,6 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         /// </summary>
         public BorderSubString BorderSubString { get; }
 
-
         /// <summary>
         /// НЕ ОБЯЗАТЕЛЕН.
         /// Задает границы для вычленения подстроки.
