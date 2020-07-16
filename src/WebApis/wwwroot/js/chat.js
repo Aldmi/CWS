@@ -1,5 +1,6 @@
 ﻿"use strict";
 
+//let hubUrl = 'http://192.168.1.35:44138/providerHub';
 let hubUrl = '/providerHub';
 var connection = new signalR.HubConnectionBuilder()
     .withUrl(hubUrl)

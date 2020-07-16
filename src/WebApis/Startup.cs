@@ -76,14 +76,26 @@ namespace WebApiSwc
             services.AddAutoMapper(typeof(Startup));
 
             services.AddSignalR();
+
+            var corsOriginsSettings = SettingsFactory.GetCorsConfig(Env, AppConfiguration);
             services.AddCors(options =>
             {
                 // задаём политику CORS, чтобы наше клиентское приложение могло отправить запрос на сервер API
                 options.AddPolicy("WebApp", policy =>
                 {
                     policy
-                        .WithOrigins("http://localhost:3000")
-                        //.AllowCredentials()
+                        .WithOrigins(corsOriginsSettings.WebApiOrigins)
+                        .AllowCredentials()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+
+                // задаём политику CORS, для клиента SignalR (провайдер ответов)
+                options.AddPolicy("SignalR_providerHub", policy =>
+                {
+                    policy
+                        .WithOrigins(corsOriginsSettings.SignalROrigins)
+                        .AllowCredentials()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
@@ -188,11 +200,19 @@ namespace WebApiSwc
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseCors("WebApp");
+
+            //app.UseAuthorization(); //DEBUG
+            app.UseCors();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<ProviderHub>("/providerHub");
-                endpoints.MapControllers();
+                endpoints.MapHub<ProviderHub>("/providerHub")
+                    .RequireCors("SignalR_providerHub");
+
+                endpoints.MapControllers()
+                    //.RequireCors(o => o.AllowAnyOrigin()); 
+                    .RequireCors("WebApp");
+
                 //endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
         }

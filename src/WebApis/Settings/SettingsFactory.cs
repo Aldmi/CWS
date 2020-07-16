@@ -114,6 +114,40 @@ namespace WebApiSwc.Settings
         }
 
 
+        public static CorsSettings GetCorsConfig(IHostEnvironment env, IConfiguration conf)
+        {
+            CorsSettings corsSettings;
+            if (env.IsDevelopment())
+            {
+                var siganlR = conf.GetSection("Cors:SignalROrigins");
+                var webApi = conf.GetSection("Cors:WebApiOrigins");
+                var siganlROrigins = siganlR.GetChildren().Select(section => section.Value).ToList();
+                var webApiOrigins = webApi.GetChildren().Select(section => section.Value).ToList();
+
+                if (!siganlROrigins.Any() && !webApiOrigins.Any())
+                    return null;
+
+                corsSettings = new CorsSettings(siganlROrigins, webApiOrigins);
+            }
+            else
+            {
+                var corsSett = Environment.GetEnvironmentVariable("Cors");
+                if (string.IsNullOrEmpty(corsSett))
+                    return null;
+
+                try
+                {
+                    corsSettings = JsonConvert.DeserializeObject<CorsSettings>(corsSett);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Исключение при дессериализации настроек политик Cors {ex}");
+                }
+            }
+
+            return corsSettings;
+        }
+
 
     }
 }
