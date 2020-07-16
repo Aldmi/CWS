@@ -9,7 +9,6 @@ namespace WebApiSwc.Settings
         public string[] WebApiOrigins { get; }
 
 
-
         public CorsSettings(IEnumerable<string> signalROrigins, IEnumerable<string> webApiOrigins)
         {
             SignalROrigins = signalROrigins.ToArray();

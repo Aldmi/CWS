@@ -72,32 +72,49 @@ namespace WebApiSwc
                 });
             
             services.AddOptions();
-            //services.AddAutoMapper();//OldVersion
+
             services.AddAutoMapper(typeof(Startup));
 
             services.AddSignalR();
 
-            var corsOriginsSettings = SettingsFactory.GetCorsConfig(Env, AppConfiguration);
+            var corsSettings = SettingsFactory.GetCorsConfig(Env, AppConfiguration);
             services.AddCors(options =>
             {
                 // задаём политику CORS, чтобы наше клиентское приложение могло отправить запрос на сервер API
                 options.AddPolicy("WebApp", policy =>
                 {
-                    policy
-                        .WithOrigins(corsOriginsSettings.WebApiOrigins)
-                        .AllowCredentials()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
+                    if (corsSettings?.WebApiOrigins != null && corsSettings.WebApiOrigins.Any())
+                    {
+                        policy
+                            .WithOrigins(corsSettings.WebApiOrigins)
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    }
+                    else
+                    {
+                        policy
+                            .AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    }
                 });
-
                 // задаём политику CORS, для клиента SignalR (провайдер ответов)
                 options.AddPolicy("SignalR_providerHub", policy =>
                 {
-                    policy
-                        .WithOrigins(corsOriginsSettings.SignalROrigins)
-                        .AllowCredentials()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
+                    if (corsSettings?.SignalROrigins != null && corsSettings.SignalROrigins.Any())
+                    {
+                        policy
+                            .WithOrigins(corsSettings.SignalROrigins)
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    }
+                    else
+                    {
+                        policy
+                            .AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    }
                 });
             });
 
@@ -200,8 +217,6 @@ namespace WebApiSwc
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            //app.UseAuthorization(); //DEBUG
             app.UseCors();
 
             app.UseEndpoints(endpoints =>
@@ -210,7 +225,6 @@ namespace WebApiSwc
                     .RequireCors("SignalR_providerHub");
 
                 endpoints.MapControllers()
-                    //.RequireCors(o => o.AllowAnyOrigin()); 
                     .RequireCors("WebApp");
 
                 //endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
