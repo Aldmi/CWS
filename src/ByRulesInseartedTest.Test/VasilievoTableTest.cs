@@ -13,7 +13,7 @@ namespace ByRulesInseartedTest.Test
 
     /// <summary>
     /// Тест табло Для Васильево
-    /// по протоколу {NbyteFullLastCalc:X2}{CRCMod256:X2_hex_Border_StartOnly}{CRC8FullPoly:X2_hex_Border_StartOnly}0x01{(rowNumber+128):X2}0x5a0x120x030xa00x000x000x000x000x000x020x000x100x80{Platform}
+    /// по протоколу {NbyteLastCalc:X2}{CRCMod256:X2_hex_Border_StartOnly}{CRC8FullPoly:X2_hex_Border_StartOnly}0x01{(rowNumber+128):X2}0x5a0x120x030xa00x000x000x000x000x000x020x000x100x80{Platform}
     /// </summary>
     public class VasilievoTableTest : BaseViewRuleTest
     {
@@ -32,7 +32,7 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "{NbyteFullLastCalc:X2_BorderRight}{CRCMod256:X2_hex_Border_StartOnly}{CRC8FullPoly:X2_hex_Border_StartOnly}",
+                        Header = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly}{CRC8FullPoly:X2_hex_Border_StartOnly}",
                         Body = "01815a0800000000000001ff0020",
                         Footer = "",
                         Format = "HEX",
@@ -43,7 +43,7 @@ namespace ByRulesInseartedTest.Test
                         ValidatorName = "EqualValidator",
                         EqualValidator = new EqualResponseValidatorOption
                         {
-                            Body = "{NbyteFullLastCalc:X2_BorderRight}{CRCMod256:X2_hex_Border_StartOnly2}{CRC8FullPoly:X2_hex_Border_StartOnly2}02014F4B00",
+                            Body = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly2}{CRC8FullPoly:X2_hex_Border_StartOnly2}02014F4B00",
                             Format ="HEX"
                         }
                     }
@@ -72,7 +72,7 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "{NbyteFullLastCalc:X2_BorderRight}{CRCMod256:X2_hex_Border_StartOnly}{CRC8FullPoly:X2_hex_Border_StartOnly}",
+                        Header = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly}{CRC8FullPoly:X2_hex_Border_StartOnly}",
                         Body = "01815A12030000000000010100188031",
                         Footer = "",
                         Format = "HEX",
@@ -83,7 +83,7 @@ namespace ByRulesInseartedTest.Test
                         ValidatorName = "EqualValidator",
                         EqualValidator = new EqualResponseValidatorOption
                         {
-                            Body = "{NbyteFullLastCalc:X2_BorderRight}{CRCMod256:X2_hex_Border_StartOnly2}{CRC8FullPoly:X2_hex_Border_StartOnly2}02014F4B00",
+                            Body = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly2}{CRC8FullPoly:X2_hex_Border_StartOnly2}02014F4B00",
                             Format ="HEX"
                         }
                     }
@@ -112,7 +112,7 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "0x{NbyteFullLastCalc:X2_BorderRight}0x{CRC8FullPoly:X2_Border_StartOnly}0x{CRCMod256:X2_Border_StartOnly}",
+                        Header = "0x{NbyteLastCalc:X2_BorderRight_Math}0x{CRC8FullPoly:X2_Border_StartOnly}0x{CRCMod256:X2_Border_StartOnly}",
                         Body = "0x010x810x5a0x080x000x000x000x000x000x000x01{NumberOfTrain}",
                         Footer = "",
                         Format = "Windows-1251",
@@ -123,7 +123,7 @@ namespace ByRulesInseartedTest.Test
                         ValidatorName = "EqualValidator",
                         EqualValidator = new EqualResponseValidatorOption
                         {
-                            Body = "{NbyteFullLastCalc:X2_BorderRight}{CRCMod256:X2_hex_Border_StartOnly2}{CRC8FullPoly:X2_hex_Border_StartOnly2}02014F4B00",
+                            Body = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly2}{CRC8FullPoly:X2_hex_Border_StartOnly2}02014F4B00",
                             Format ="HEX"
                         }
                     }
@@ -195,7 +195,7 @@ namespace ByRulesInseartedTest.Test
                 BatchSize = 1,
                 RequestOption = new RequestOption
                 {
-                    Header = "0x{NbyteFullLastCalc:X2}0x{CRC8FullPoly:X2_Border_StartOnly}0x{CRCMod256:X2_Border_StartOnly}",
+                    Header = "0x{NbyteLastCalc:X2}0x{CRC8FullPoly:X2_Border_StartOnly}0x{CRCMod256:X2_Border_StartOnly}",
                     Body = "0x010x810x5a0x080x000x000x000x000x000x000x01{NumberOfTrain}",
                     Footer = "",
                     Format = "Windows-1251",
@@ -219,7 +219,7 @@ namespace ByRulesInseartedTest.Test
 
             //Assert
             isSuccess.Should().BeFalse();
-            error.Should().Be("Для NbyteFullLastCalcDepInsH подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
+            error.Should().Be("Для NbyteLastCalcDepInsH подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
         }
 
     }

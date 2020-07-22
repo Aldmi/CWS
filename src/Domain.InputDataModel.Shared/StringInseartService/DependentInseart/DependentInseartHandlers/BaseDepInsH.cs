@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Shared.Extensions;
@@ -46,7 +45,6 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
         /// </summary>
         private Result<string> CalcSubString4Handle(string str)
         {
-            //TODO: ??? убирать из строки все вставки {} там где это нужнго, например для вычисления BorderSubString
             //1. ЕСЛИ УКАЗАН BorderSubString => ВЫЧИСЛИМ ПОДСТРОКУ С ЕГО ПОМОЩЬЮ
             if (RequiredModel.Ext.BorderSubString != null)
             {
@@ -68,7 +66,6 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
         /// <param name="sbMutable">базовая строка для изменения</param>
         /// <returns></returns>
         protected abstract Result<string> GetInseart(string borderedStr, string format, StringBuilder sbMutable);
-
 
         /// <summary>
         /// Если BorderSubString не задан форматом. Потомок возвращает нужную подстроку для вычисления.

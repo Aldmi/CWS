@@ -12,15 +12,9 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
     /// длинна самого NbyteFull = 1
     /// длинна Crc = 1 
     /// </summary>
-    public class NbyteFullDepInsH : BaseDepInsH
+    public class NbyteDepInsH : BaseDepInsH
     {
-        //Предустановленные значения размеров в байтах. (для другого протокола нужно сделать другую реализацию)
-        private const int LenghtAddressInBytes = 1;
-        private const int LenghtNByteInbytes = 1;
-        private const int LenghtCrcInbytes = 1;
-        
-
-        public NbyteFullDepInsH(StringInsertModel requiredModel) : base(requiredModel) { }
+        public NbyteDepInsH(StringInsertModel requiredModel) : base(requiredModel) { }
 
 
         /// <summary>
@@ -33,8 +27,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
         {
             var buf = borderedStr.ConvertStringWithHexEscapeChars2ByteArray(format);
             var lenghtBody = buf.Length;
-            var lenght = lenghtBody + LenghtAddressInBytes + LenghtNByteInbytes + LenghtCrcInbytes;
-            var resStr = RequiredModel.Ext.CalcFinishValue(lenght);
+            var resStr = RequiredModel.Ext.CalcFinishValue(lenghtBody);
             return Result.Ok(resStr);
         }
 
@@ -44,7 +37,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
         /// </summary>
         protected override Result<string> GetSubString4Handle(string str)
         { 
-            return Result.Failure<string>("Для NbyteFullDepInsH подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
+            return Result.Failure<string>("Для NbyteDepInsH подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
         }
     }
 }

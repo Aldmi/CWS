@@ -27,7 +27,7 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "0x{AddressDevice:X2}0x{NbyteFull:X2_BorderRightBeforeCrc}",
+                        Header = "0x{AddressDevice:X2}0x{Nbyte:X2_BorderRightBeforeCrc_Math}",
                         Body = "0x03^{NumberOfTrain}^ {StationsCut}^{TArrival:t}^{TDepart:t}",
                         Footer = "0x{CRCMod256:X2_BorderLeft}",
                         Format = "cp866",
@@ -66,7 +66,7 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "0x{AddressDevice:X2}0x{NbyteFull:X2_BorderRightBeforeCrc}",
+                        Header = "0x{AddressDevice:X2}0x{Nbyte:X2_BorderRightBeforeCrc_Math}",
                         Body = "0x03{Note}",
                         Footer = "0x{CRCMod256:X2_BorderLeft}",
                         Format = "cp866",

@@ -29,7 +29,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart
             var handlers = (from model in array where model.VarName == "NumberOfCharacters" select new NumberOfCharactersDepInsH(model)).Cast<BaseDepInsH>().ToList();
             //2. Вставки NbyteFull и Nchar
             handlers.AddRange(from model in array where model.VarName == "Nchar" select new NcharDepInsH(model));
-            handlers.AddRange(from model in array where model.VarName == "NbyteFull" select new NbyteFullDepInsH(model));
+            handlers.AddRange(from model in array where model.VarName == "Nbyte" select new NbyteDepInsH(model));
             //3. Вставки CRC
             handlers.AddRange(from model in array where model.VarName == "CRCXor" select new CrcXorDepInsH(model));
             handlers.AddRange(from model in array where model.VarName == "CRCXorInverse" select new CrcXorInverseDepInsH(model));
@@ -39,8 +39,8 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart
             handlers.AddRange(from model in array where model.VarName == "CRCCcitt" select new Crc16CcittDepInsH(model));
             handlers.AddRange(from model in array where model.VarName == "CRC8Maxim" select new Crc8MaximDepInsH(model));
             handlers.AddRange(from model in array where model.VarName == "CRC8FullPoly" select new Crc8FullPolyDepInsH(model));
-            //4. Вставки NbyteFullLastCalc (после всех вставвок)
-            handlers.AddRange(from model in array where model.VarName == "NbyteFullLastCalc" select new NbyteFullLastCalcDepInsH(model));
+            //4. Вставки NbyteLastCalc (после всех вставвок)
+            handlers.AddRange(from model in array where model.VarName == "NbyteLastCalc" select new NbyteLastCalcDepInsH(model));
 
             return handlers;
         }
@@ -49,6 +49,6 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart
         //handlers.AddRange(from model in array
         //    where model.VarName == "NbyteFull"
         //let crcModel = array.FirstOrDefault(m => m.VarName.Contains("CRC")) //передать доп модель. содержащую CRC
-        //select new NbyteFullDepInsH(model, crcModel));
+        //select new NbyteDepInsH(model, crcModel));
     }
 }

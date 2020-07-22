@@ -46,7 +46,8 @@ namespace Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption
         public int TimeRespone { get; set; }                                         
         public string ValidatorName { get; set; }                              
         public EfLenghtResponseValidatorOption LenghtValidator { get; set; }         
-        public EfEqualResponseValidatorOption EqualValidator { get; set; }            
+        public EfEqualResponseValidatorOption EqualValidator { get; set; }
+        public EfManualEkrimValidatorOption ManualEkrimValidator { get; set; }
     }
 
     public class EfLenghtResponseValidatorOption
@@ -59,4 +60,6 @@ namespace Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption
         public string Format { get; set; }
         public string Body { get; set; }
     }
+
+    public class EfManualEkrimValidatorOption { }
 }

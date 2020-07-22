@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
+using Shared.Mathematic;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 using Shared.MiddleWares.HandlersOption;
 using Shared.Types;
@@ -21,6 +22,8 @@ namespace ByRulesInseartedTest.Test.Datas
 
             { "D2_BorderRightBeforeCrc", new StringInsertModelExt("D2_BorderRightBeforeCrc", ":D2", new BorderSubString{DelimiterSign = DelimiterSign.Right, EndCh = "{CRC", EndInclude = false}, null)},
             { "X2_BorderRightBeforeCrc", new StringInsertModelExt("X2_BorderRightBeforeCrc", ":X2", new BorderSubString{DelimiterSign = DelimiterSign.Right, EndCh = "{CRC", EndInclude = false}, null)},
+            { "X2_BorderRightBeforeCrc_Math", new StringInsertModelExt("X2_BorderRightBeforeCrc_Math", ":X2", new BorderSubString{DelimiterSign = DelimiterSign.Right, EndCh = "{CRC", EndInclude = false}, null, new MathematicFormula("x+3"))},
+            { "X2_BorderRight_Math", new StringInsertModelExt("X2_BorderRight_Math", ":X2", new BorderSubString{DelimiterSign = DelimiterSign.Right}, null, new MathematicFormula("x+1"))},
             { "X2_BorderRight", new StringInsertModelExt("X2_BorderRight", ":X2", new BorderSubString{DelimiterSign = DelimiterSign.Right}, null)},
             { "X2_BorderLeft", new StringInsertModelExt("X2_BorderLeft", ":X2", new BorderSubString{DelimiterSign = DelimiterSign.Left}, null)},
             { "X4_BorderLeft", new StringInsertModelExt("X4_BorderLeft", ":X4", new BorderSubString{DelimiterSign = DelimiterSign.Left}, null)},

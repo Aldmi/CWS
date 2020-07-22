@@ -10,9 +10,14 @@ namespace Domain.InputDataModel.Base.Response.ResponseInfos
     /// </summary>
     public class ManualEkrimResponseInfo : BaseResponseInfo
     {
-        public readonly int Address;
-        public readonly byte[] Data;
-        public readonly byte Crc;
+        #region prop
+        public int Address { get; }
+        public byte[] Data { get; }
+        public byte Crc { get; }
+        #endregion
+
+
+        #region ctor
         private ManualEkrimResponseInfo(int address, byte[] data, byte crc)
         {
             Address = address;
@@ -24,6 +29,8 @@ namespace Domain.InputDataModel.Base.Response.ResponseInfos
         {
             IsOutDataValid = false;
         }
+        #endregion
+
 
         public static ManualEkrimResponseInfo CreateInstanse(byte[] arr)
         {
@@ -42,10 +49,24 @@ namespace Domain.InputDataModel.Base.Response.ResponseInfos
                 return new ManualEkrimResponseInfo();                    //НЕ Валидные данные 
             }
         }
+
+
         public override string ToString()
         {
-            var json = HelpersJson.Serialize2RawJson(this);
-            return $"{IsOutDataValid}  ManualEkrimResponseInfo= {json}";
+            var data = GetData();
+            var json = HelpersJson.Serialize2RawJson(data);
+            return $"{base.ToString()}  Info= '{json}'";
+        }
+
+
+        protected override object GetData()
+        {
+            return new
+            {
+                Address,
+                Data = Data.Select(d=>d.ToString("X")).ToArray(),
+                Crc
+            };
         }
     }
 }

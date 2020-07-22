@@ -10,16 +10,16 @@ using Xunit;
 
 namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseartHandlersTest
 {
-    public class NbyteFullDepInsHTest
+    public class NbyteDepInsHTest
     {
-        private readonly NbyteFullDepInsH _handler;
+        private readonly NbyteDepInsH _handler;
         private readonly IReadOnlyDictionary<string, StringInsertModelExt> _extDict;
 
-        public NbyteFullDepInsHTest()
+        public NbyteDepInsHTest()
         {
             _extDict = GetStringInsertModelExtDict.SimpleDictionary;
-            var requiredModel = StringInsertModelFactory.CreateList("{NbyteFull:X2_BorderRightBeforeCrc}", _extDict).First();
-            _handler = new NbyteFullDepInsH(requiredModel);
+            var requiredModel = StringInsertModelFactory.CreateList("{Nbyte:X2_BorderRightBeforeCrc_Math}", _extDict).First();
+            _handler = new NbyteDepInsH(requiredModel);
         }
 
 
@@ -27,9 +27,9 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         public void Calc_Nchar_Manual_Border_Test()
         {
             //Arrange
-            var requiredModel = StringInsertModelFactory.CreateList("{NbyteFull:X2_NbyteFull<%01-%1>}", _extDict).First(); 
-            var handler = new NbyteFullDepInsH(requiredModel);
-            var sb = new StringBuilder("\u000201{NbyteFull:X2_NbyteFull<%01-%1>}0C60E%01F03B04700000010E%110{CRCXorInverse:X2}\u0003");
+            var requiredModel = StringInsertModelFactory.CreateList("{Nbyte:X2_NbyteFull<%01-%1>_Math}", _extDict).First(); 
+            var handler = new NbyteDepInsH(requiredModel);
+            var sb = new StringBuilder("\u000201{Nbyte:X2_NbyteFull<%01-%1>_Math}0C60E%01F03B04700000010E%110{CRCXorInverse:X2}\u0003");
             var format = "cp866";
             //Act
             var (isSuccess, _, value, error) = handler.CalcInsert(sb, format);
@@ -44,7 +44,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         public void Calc_Normal_Test()
         {
             //Arrange
-            var sb = new StringBuilder("0x050x{NbyteFull:X2_BorderRightBeforeCrc}0x03^52^ 10:250x{CRCMod256:X2}");
+            var sb = new StringBuilder("0x050x{Nbyte:X2_BorderRightBeforeCrc_Math}0x03^52^ 10:250x{CRCMod256:X2}");
             var format = "cp866";
             //Act
             var (isSuccess, _, value) = _handler.CalcInsert(sb, format);
@@ -58,7 +58,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         public void Calc_Zero_NbyteFull_Test()
         {
             //Arrange
-            var sb = new StringBuilder("\u000201{NbyteFull:X2_BorderRightBeforeCrc}{CRCMod256:X2}\u0003");
+            var sb = new StringBuilder("\u000201{Nbyte:X2_BorderRightBeforeCrc_Math}{CRCMod256:X2}\u0003");
             //Act
             var (isSuccess, _, value) = _handler.CalcInsert(sb);
             //Assert
@@ -76,7 +76,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
             var (isSuccess, _, _, error) = _handler.CalcInsert(sb);
             //Assert
             isSuccess.Should().BeFalse();
-            error.Should().Be("Обработчик Dependency Inseart не может найти Replacement переменную {NbyteFull:X2_BorderRightBeforeCrc} в строке \u000201%010C60EF03B0470000001E%110{CRCMod256:X2}\u0003");
+            error.Should().Be("Обработчик Dependency Inseart не может найти Replacement переменную {Nbyte:X2_BorderRightBeforeCrc_Math} в строке \u000201%010C60EF03B0470000001E%110{CRCMod256:X2}\u0003");
         }
 
 
@@ -84,7 +84,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         public void CheckError_Not_Crc_Marker_In_Str_Test()
         {
             //Arrange
-            var sb = new StringBuilder("\u000201{NbyteFull:X2_BorderRightBeforeCrc}%010C60EF03B0470000001E%110\u0003");
+            var sb = new StringBuilder("\u000201{Nbyte:X2_BorderRightBeforeCrc_Math}%010C60EF03B0470000001E%110\u0003");
             //Act
             var (isSuccess, _, _, error) = _handler.CalcInsert(sb);
             //Assert
@@ -101,7 +101,7 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         //    StringInsertModel optionalModel = null;
 
         //    //Act & Asert
-        //    ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new NbyteFullDepInsH(requiredModel, optionalModel));
+        //    ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new NbyteDepInsH(requiredModel, optionalModel));
         //    exception.Should().BeOfType<ArgumentNullException>();
         //    exception.Message.Should().Contain("Value cannot be null. (Parameter 'crcModel')");
         //}

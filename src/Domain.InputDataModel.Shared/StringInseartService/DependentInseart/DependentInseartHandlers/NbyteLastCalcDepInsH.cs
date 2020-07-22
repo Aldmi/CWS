@@ -8,16 +8,14 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
     /// <summary>
     /// Кол-во байт во всей строке (включая вставленое ЗАРАНЕЕ CRC)
     /// </summary>
-    public class NbyteFullLastCalcDepInsH : BaseDepInsH
+    public class NbyteLastCalcDepInsH : BaseDepInsH
     {
-        private const int LenghtNbyteFullLastCalcInbytes = 1;
-
-        public NbyteFullLastCalcDepInsH(StringInsertModel requiredModel) : base(requiredModel) { }
+        public NbyteLastCalcDepInsH(StringInsertModel requiredModel) : base(requiredModel) { }
         
         protected override Result<string> GetInseart(string borderedStr, string format, StringBuilder sbMutable)
         {
             var buf = borderedStr.ConvertStringWithHexEscapeChars2ByteArray(format);
-            var fullLenght = buf.Length + LenghtNbyteFullLastCalcInbytes;
+            var fullLenght = buf.Length;
             var resStr = RequiredModel.Ext.CalcFinishValue(fullLenght);
             return Result.Ok(resStr);
         }
@@ -28,9 +26,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
         /// </summary>
         protected override Result<string> GetSubString4Handle(string str)
         {
-            return Result.Failure<string>("Для NbyteFullLastCalcDepInsH подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
-            //var res = RequiredModel.CalcSubStringBeetween2Models(_crcModel, str);
-            //return res;
+            return Result.Failure<string>("Для NbyteLastCalcDepInsH подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
         }
     }
 }

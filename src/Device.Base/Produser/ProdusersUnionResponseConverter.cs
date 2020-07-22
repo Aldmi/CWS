@@ -88,6 +88,35 @@ namespace Domain.Device.Produser
                     };
                     break;
 
+                case "OnlyResponseData":
+                    //convert = new
+                    //{
+                    //    response.DeviceName,
+                    //    response.KeyExchange,
+                    //    DataAction = response.DataAction.ToString("G"),
+                    //    response.ExceptionExchangePipline,
+                    //    response.IsValidAll,
+                    //    response.TimeAction,
+                    //    ResponsesItems = response.ResponsesItems.Select(item => new
+                    //    {
+                    //        item.RequestId,
+                    //        item.StatusStr,
+                    //        item.TransportException,
+                    //        obj = item.ResponseInfo.GetResponseObj()
+                    //    }).ToList()
+                    //};
+                    convert = new
+                    {
+                        response.DeviceName,
+                        response.KeyExchange,
+                        ResponsesItems = response.ResponsesItems.Select(item => new
+                        {
+                            item.StatusStr,
+                            obj = item.ResponseInfo.GetResponseData()
+                        }).ToList()
+                    };
+                    break;
+
                 case "Medium":
                     convert = new
                     {
