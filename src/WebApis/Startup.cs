@@ -87,6 +87,7 @@ namespace WebApiSwc
                     {
                         policy
                             .WithOrigins(corsSettings.WebApiOrigins)
+                            .AllowCredentials()
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     }
@@ -105,6 +106,7 @@ namespace WebApiSwc
                     {
                         policy
                             .WithOrigins(corsSettings.SignalROrigins)
+                            .AllowCredentials()
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     }
