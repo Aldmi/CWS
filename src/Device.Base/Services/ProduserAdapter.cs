@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel.DataAnnotations;
+
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
@@ -81,7 +81,7 @@ namespace Domain.Device.Services
             if (!IsExistProduserUnion)
                 return false;
 
-            var produser = GetProduser();
+            var produser = GetProduserUnion();
             produser.GetProduserDict.Values.ForEach(prop =>
             {
                 _disposeProdusersEventHandlers.Add(prop.ClientCollectionChangedRx.Where(p => p.NotifyCollectionChangedAction == NotifyCollectionChangedAction.Add).Subscribe(AddNewProdusersClientRxEh));
@@ -111,9 +111,9 @@ namespace Domain.Device.Services
             if(cmpRes)
                 return; // response НЕ ПОМЕНЯЛСЯ
 
-            var produser = GetProduser();
+            var produserUnion = GetProduserUnion();
             var data = ProduserData<TIn>.CreateBoardData(response);
-            var results = await produser.Send4AllProdusers(data);
+            var results = await produserUnion.Send4AllProdusers(data);
             foreach (var (isSuccess, isFailure, _, error) in results)
             {
                 if (isFailure)
@@ -128,37 +128,36 @@ namespace Domain.Device.Services
         /// <summary>
         /// Отправить предупреждение о неверной работе устройства.
         /// </summary>
-        public async Task SendWarningAsync(object warningObj)
+        public async Task SendWarningAsync(object warning)
         {
-            var data = ProduserData<TIn>.CreateWarning(warningObj);
-            if (!string.IsNullOrEmpty(_key))
-                await SendMessage2ProduderUnion(data);
+            if (!IsExistProduserUnion)
+                return;
+
+            var data = ProduserData<TIn>.CreateWarning(warning);
+            await SendMessage2ProduderUnionAsync(data);
         }
 
 
         /// <summary>
         /// Отправить информационное сообщение
         /// </summary>
-        public async Task SendInfoAsync(object warningObj)
+        public async Task SendInfoAsync(object info)
         {
             if (!IsExistProduserUnion)
                 return;
 
-            var data = ProduserData<TIn>.CreateInfo(warningObj);
-            await SendMessage2ProduderUnion(data);
+            var data = ProduserData<TIn>.CreateInfo(info);
+            await SendMessage2ProduderUnionAsync(data);
         }
 
 
         /// <summary>
         /// Отправить сообщение от устройства на ProduserUnion.
         /// </summary>
-        private async Task SendMessage2ProduderUnion(ProduserData<TIn> data)
+        private async Task SendMessage2ProduderUnionAsync(ProduserData<TIn> data)
         {
-            if (!IsExistProduserUnion)
-                return;
-
-            var produser = GetProduser();
-            var results = await produser.Send4AllProdusers(data);
+            var produserUnion = GetProduserUnion();
+            var results = await produserUnion.Send4AllProdusers(data);
             foreach (var (isSuccess, isFailure, _, error) in results)
             {
                 if (isFailure)
@@ -178,7 +177,7 @@ namespace Domain.Device.Services
             if (!IsExistProduserUnion)
                 return;
 
-            var produser = GetProduser();
+            var produser = GetProduserUnion();
             var data = ProduserData<TIn>.CreateInit(initDataCollection);
             var (_, isFailure, _, error) = await produser.Send4Produser(key, data);
 
@@ -189,7 +188,7 @@ namespace Domain.Device.Services
         }
 
 
-        private ProdusersUnion<TIn> GetProduser()
+        private ProdusersUnion<TIn> GetProduserUnion()
         {
             var produser = _produserUnionStorage.Get(_key);
             if (produser == null)

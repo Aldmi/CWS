@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Domain.InputDataModel.Base.Response;
+using Infrastructure.Produser.AbstractProduser.AbstractProduser;
 using Shared.Helpers;
 
 namespace Domain.Device.Produser

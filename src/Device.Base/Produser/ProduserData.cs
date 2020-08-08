@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Domain.Exchange.Models;
 using Domain.InputDataModel.Base.Response;
+using Infrastructure.Produser.AbstractProduser.AbstractProduser;
 
 namespace Domain.Device.Produser
 {
-    public enum ProduserSendingDataType { Init, BoardData, Info, Warning }
+
 
     public class ProduserData<TIn>
     {

@@ -62,36 +62,7 @@ namespace Infrastructure.Produser.AbstractProduser.AbstractProduser
 
 
         #region Methode
-
-        public async Task<Result<string, ErrorWrapper>> Send(string message, string invokerName = null)
-        {
-            TrottlingCounter++;
-            if(TrottlingCounter.IsTrottle)
-               return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Trottling));
-
-            var cts = new CancellationTokenSource(_timeRequest);
-            try
-            {
-                var res = await SendConcrete(message, invokerName, cts.Token);
-                return res;
-            }
-            catch (TaskCanceledException)
-            {
-                return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.Timeout));
-            }
-            catch (Exception ex)
-            {
-                return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.SendException, ex));
-            }
-            finally
-            {
-                cts.Dispose();
-                TrottlingCounter--;
-            }   
-        }
-
-
-        public async Task<Result<string, ErrorWrapper>> Send(Object obj, string invokerName = null)
+        public async Task<Result<string, ErrorWrapper>> Send(object obj, ProduserSendingDataType dataType)
         {
             TrottlingCounter++;
             if (TrottlingCounter.IsTrottle)
@@ -100,8 +71,14 @@ namespace Infrastructure.Produser.AbstractProduser.AbstractProduser
             var cts = new CancellationTokenSource(_timeRequest);
             try
             {
-                var res = await SendConcrete(obj, invokerName, cts.Token);
-                return res;
+                return dataType switch
+                {
+                    ProduserSendingDataType.Init => await SendInit(obj, cts.Token),
+                    ProduserSendingDataType.BoardData => await SendBoardData(obj, cts.Token),
+                    ProduserSendingDataType.Info => await SendInfo(obj, cts.Token),
+                    ProduserSendingDataType.Warning => await SendWarning(obj, cts.Token),
+                    _ => throw new ArgumentOutOfRangeException(nameof(dataType), dataType, null),
+                };
             }
             catch (TaskCanceledException)
             {
@@ -117,24 +94,21 @@ namespace Infrastructure.Produser.AbstractProduser.AbstractProduser
                 TrottlingCounter--;
             }
         }
-
         #endregion
 
 
 
         #region AbstractMembers
-
-        protected abstract Task<Result<string, ErrorWrapper>> SendConcrete(string message, string invokerName = null, CancellationToken ct = default(CancellationToken));
-        protected abstract Task<Result<string, ErrorWrapper>> SendConcrete(object message, string invokerName = null, CancellationToken ct = default(CancellationToken));
-
+        protected abstract Task<Result<string, ErrorWrapper>> SendInit(object message, CancellationToken ct = default(CancellationToken));
+        protected abstract Task<Result<string, ErrorWrapper>> SendBoardData(object message, CancellationToken ct = default(CancellationToken));
+        protected abstract Task<Result<string, ErrorWrapper>> SendInfo(object message, CancellationToken ct = default(CancellationToken));
+        protected abstract Task<Result<string, ErrorWrapper>> SendWarning(object message, CancellationToken ct = default(CancellationToken));
         #endregion
 
 
 
         #region Disposable
-
         public abstract void Dispose();
-
         #endregion
     }
 }
