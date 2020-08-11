@@ -34,32 +34,31 @@ namespace Infrastructure.Produser.WebClientProduser
         #region OvverideMembers
         protected override Task<Result<string, ErrorWrapper>> SendInit(object message, CancellationToken ct = default(CancellationToken))
         {
-            var strUri = Option.Url; //TODO: Url в опциях должен быть  для 4 случаев.
+            var strUri = Option.InitUrl;
             var mes = message.ToString();
             return SendConcrete(mes, strUri, ct);
         }
 
         protected override Task<Result<string, ErrorWrapper>> SendBoardData(object message, CancellationToken ct = default(CancellationToken))
         {
-            var strUri = Option.Url; //TODO: Url в опциях должен быть  для 4 случаев.
+            var strUri = Option.BoardDataUrl;
             var mes = message.ToString();
             return SendConcrete(mes, strUri, ct);
         }
 
         protected override Task<Result<string, ErrorWrapper>> SendInfo(object message, CancellationToken ct = default(CancellationToken))
         {
-            var strUri = Option.Url; //TODO: Url в опциях должен быть  для 4 случаев.
+            var strUri = Option.InfoUrl;
             var mes = message.ToString();
             return SendConcrete(mes, strUri, ct);
         }
 
         protected override Task<Result<string, ErrorWrapper>> SendWarning(object message, CancellationToken ct = default(CancellationToken))
         {
-            var strUri = Option.Url; //TODO: Url в опциях должен быть  для 4 случаев.
+            var strUri = Option.WarningUrl;
             var mes = message.ToString();
             return SendConcrete(mes, strUri, ct);
         }
-
         #endregion
 
 

@@ -4,6 +4,9 @@ namespace Domain.Device.Repository.Entities.ResponseProduser
 {
     public class SignalRProduserOption : BaseProduserOption
     {
-        public string MethodeName { get; set; }
+        public string InitMethodeName { get; set; }
+        public string BoardDataMethodeName { get; set; }
+        public string InfoMethodeName { get; set; }
+        public string WarningMethodeName { get; set; }
     }
 }

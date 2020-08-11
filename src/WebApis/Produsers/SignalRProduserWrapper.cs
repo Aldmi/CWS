@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
@@ -39,28 +36,32 @@ namespace WebApiSwc.Produsers
         #region OvverideMembers
         protected override Task<Result<string, ErrorWrapper>> SendInit(object message, CancellationToken ct = default(CancellationToken))
         {
-            var invokerName = Option.MethodeName; //TODO: MethodeName в опциях должен быть  для 4 случаев.
+            var invokerName = Option.InitMethodeName;
             return SendConcrete(message, invokerName, ct);
         }
 
         protected override Task<Result<string, ErrorWrapper>> SendBoardData(object message, CancellationToken ct = default(CancellationToken))
         {
-            var invokerName = Option.MethodeName;
+            var invokerName = Option.BoardDataMethodeName;
             return SendConcrete(message, invokerName, ct);
         }
 
         protected override Task<Result<string, ErrorWrapper>> SendInfo(object message, CancellationToken ct = default(CancellationToken))
         {
-            var invokerName = Option.MethodeName;
+            var invokerName = Option.InfoMethodeName;
             return SendConcrete(message, invokerName, ct);
         }
 
         protected override Task<Result<string, ErrorWrapper>> SendWarning(object message, CancellationToken ct = default(CancellationToken))
         {
-            var invokerName = Option.MethodeName;
+            var invokerName = Option.WarningMethodeName;
             return SendConcrete(message, invokerName, ct);
         }
+        #endregion
 
+
+
+        #region Methods
         private async Task<Result<string, ErrorWrapper>> SendConcrete(object message, string invokerName, CancellationToken ct)
         {
             if (!_clientsStorage.Any)

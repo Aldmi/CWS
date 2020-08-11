@@ -83,15 +83,38 @@ namespace Infrastructure.Produser.KafkaProduser
 
 
         #region OvverideMembers
+        protected override Task<Result<string, ErrorWrapper>> SendInit(object message, CancellationToken ct = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
 
-        protected override async Task<Result<string, ErrorWrapper>> SendConcrete(string message, string invokerName = null, CancellationToken ct = default(CancellationToken))
+        protected override Task<Result<string, ErrorWrapper>> SendBoardData(object message, CancellationToken ct = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<Result<string, ErrorWrapper>> SendInfo(object message, CancellationToken ct = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<Result<string, ErrorWrapper>> SendWarning(object message, CancellationToken ct = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+
+
+        #region Methods
+        protected async Task<Result<string, ErrorWrapper>> SendConcrete(string message, string invokerName = null, CancellationToken ct = default(CancellationToken))
         {
             try
             {
                 invokerName = invokerName ?? Option.TopicName;
                 var res = await ProduceAsync(invokerName, message);
-                return res.Error != null ? 
-                    Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.RespawnProduserError, res.Error.ToString())) 
+                return res.Error != null ?
+                    Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.RespawnProduserError, res.Error.ToString()))
                     : Result.Ok<string, ErrorWrapper>(res.Value);
             }
             catch (KafkaException ex)
@@ -101,14 +124,13 @@ namespace Infrastructure.Produser.KafkaProduser
         }
 
 
-        protected override async Task<Result<string, ErrorWrapper>> SendConcrete(object message, string invokerName = null, CancellationToken ct = default(CancellationToken))
+        protected async Task<Result<string, ErrorWrapper>> SendConcrete(object message, string invokerName = null, CancellationToken ct = default(CancellationToken))
         {
             ////TODO:заменить на реальную отправку kaffka
             //await Task.Delay(1000, ct);
             //return Result.Ok<string, ErrorWrapper>("Ок");
             throw new NotImplementedException();
         }
-
 
 
         private async Task<Message<Null, string>> ProduceAsync(string topic, string value, int partition = -1)
@@ -143,8 +165,8 @@ namespace Infrastructure.Produser.KafkaProduser
                 throw;
             }
         }
-
         #endregion
+
 
 
         #region Disposable

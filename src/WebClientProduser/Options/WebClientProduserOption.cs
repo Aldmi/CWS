@@ -5,8 +5,11 @@ namespace Infrastructure.Produser.WebClientProduser.Options
 {
     public class WebClientProduserOption : BaseProduserOption
     {
-        public string Url { get; set; }
+        public string InitUrl { get; set; }
+        public string BoardDataUrl { get; set; }
+        public string InfoUrl { get; set; }
+        public string WarningUrl { get; set; }
+
         public HttpMethode HttpMethode { get; set; }
     }
-
 }
