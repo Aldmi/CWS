@@ -32,6 +32,29 @@ namespace Shared.Test
 
 
         [Fact]
+        public void Set_DelimiterSign_Masking_Chars_In_Str_Test()
+        {
+            //Arrange
+            string str = "125\u0002hgfhggfdhgfdfh\u0003hghg{Nchar:X2}";
+            var border = new BorderSubString
+            {
+                StartCh = "\u0002",
+                EndCh = "\u0003",
+                StartInclude = false,
+                EndInclude = false,
+            };
+
+            //Act
+            var res = border.Calc(str, DelimiterStr);
+
+            //Assert
+            res.IsSuccess.Should().BeTrue();
+            res.Value.Should().Be("hgfhggfdhgfdfh");
+        }
+
+
+
+        [Fact]
         public void Set_DelimiterSign_None_Include_Start_Border_Test()
         {
             //Arrange
