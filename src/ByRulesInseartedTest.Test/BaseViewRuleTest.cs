@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using ByRulesInseartedTest.Test.Datas;
+using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
@@ -71,21 +71,24 @@ namespace ByRulesInseartedTest.Test
 
             //Act
             var requestTransfer =  await viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault).ToArrayAsync();
-            var firstItem = requestTransfer.FirstOrDefault();
+            var (isSuccess, isFailure, providerTransfer, error) = requestTransfer.FirstOrDefault();
 
             //Assert
             requestTransfer.Should().NotBeNull();
             requestTransfer.Length.Should().Be(1);
-            firstItem.Request.StrRepresent.Str.Should().Be(String.Empty);
-            firstItem.Request.StrRepresent.Format.Should().Be(viewRuleOption.RequestOption.Format);
-            firstItem.Request.StrRepresentBase.Str.Should().Be(String.Empty);
-            firstItem.Request.StrRepresentBase.Format.Should().Be(viewRuleOption.RequestOption.Format);
-            firstItem.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(1);
+            isSuccess.Should().BeTrue();
+
+            var request = providerTransfer.Request;
+            request.StrRepresent.Str.Should().Be(String.Empty);
+            request.StrRepresent.Format.Should().Be(viewRuleOption.RequestOption.Format);
+            request.StrRepresentBase.Str.Should().Be(String.Empty);
+            request.StrRepresentBase.Format.Should().Be(viewRuleOption.RequestOption.Format);
+            request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(1);
         }
 
 
         [Fact]
-        public async Task CreateStringRequestMaxBodyLenghtTest()
+        public async Task CheckError_CreateStringRequestMaxBodyLenght_Test()
         {
             //Arrange
             string addressDevice = "5";
@@ -97,9 +100,9 @@ namespace ByRulesInseartedTest.Test
                 BatchSize = 1,
                 RequestOption = new RequestOption
                 {
-                    Header = "\u0002{AddressDevice:X2}{Nbyte:X2}",
+                    Header = "",
                     Body = "%00001032{MATH(rowNumber*16):D3}3%10$12$00$60$t3{TDepart:t}%00033240{MATH(rowNumber*16):D3}4%10$12$00$60$t3{StationArrival}%00241256{MATH(rowNumber*16):D3}3%10$12$00$60$t1{PathNumber}%400012561451%000012561603%10$10$00$60$t2Московское время {Hour:D2}.{Minute:D2}",
-                    Footer = "{CRCXorInverse:X2}\u0003",
+                    Footer = "",
                     Format = "Windows-1251",
                     MaxBodyLenght = 10
                 },
@@ -114,11 +117,11 @@ namespace ByRulesInseartedTest.Test
 
             //Act
             var requestTransfer = await viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault).ToArrayAsync();
-            var firstItem = requestTransfer?.FirstOrDefault();
+            var (isSuccess, isFailure, providerTransfer, error) = requestTransfer.FirstOrDefault();
 
             //Assert
-            firstItem.Should().BeNull();
+            isSuccess.Should().BeFalse();
+            error.Should().Be("Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на 149");
         }
-
     }
 }

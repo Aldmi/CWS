@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Text.RegularExpressions;
-using CSharpFunctionalExtensions;
+
 
 namespace Domain.InputDataModel.Shared.StringInseartService.Model
 {
@@ -24,7 +23,6 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
 
 
         #region ctor
-
         /// <summary>
         /// Конструктор.
         /// </summary>
@@ -38,21 +36,6 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
             VarName = varName;
             _extFactory = extFactory ?? throw new ArgumentNullException(nameof(extFactory));
             Option = option;
-        }
-        #endregion
-
-
-        #region StaticMethode
-        public static Result<string> CalcSubStringBeetween2Models(string str, StringInsertModel startModel, StringInsertModel endModel)
-        {
-            var pattern = $"{startModel.Replacement}(.*){endModel.Replacement}";
-            var match = Regex.Match(str, pattern);
-            if (match.Success)
-            {
-                var res = match.Groups[1].Value;
-                return Result.Ok(res);
-            }
-            return Result.Failure<string>($"Невозможно выделить подстроку из строки {str} используя паттерн {pattern}");
         }
         #endregion
     }

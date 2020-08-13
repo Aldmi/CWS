@@ -350,9 +350,8 @@ namespace Domain.Exchange
                 {
                     Rule = $"RuleName= {item.MessageDict["RuleName"]}  viewRule.Id= {item.MessageDict["viewRule.Id"]}",
                     StatusStr = item.StatusStr,
-                    Request = item.MessageDict["GetDataByte.Request"],
-                    RequestBase = item.MessageDict["GetDataByte.RequestBase"],
-                    //Response = item.MessageDict.ContainsKey("SetDataByte.StringResponse") ? item.MessageDict["SetDataByte.StringResponse"] : null,
+                    Request = item.MessageDict.ContainsKey("GetDataByte.Request") ? item.MessageDict["GetDataByte.Request"] : null,
+                    RequestBase = item.MessageDict.ContainsKey("GetDataByte.RequestBase") ? item.MessageDict["GetDataByte.RequestBase"] : null,
                     Response = item.ResponseInfo?.ToString(),
                     TimeResponse = item.MessageDict["TimeResponse"],
                     StronglyTypedResponse = item.MessageDict.ContainsKey("SetDataByte.StronglyTypedResponse") ? item.MessageDict["SetDataByte.StronglyTypedResponse"] : null,

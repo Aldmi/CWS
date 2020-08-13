@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Domain.InputDataModel.Base.Response;
+using Infrastructure.Produser.AbstractProduser.AbstractProduser;
 using Shared.Helpers;
 
 namespace Domain.Device.Produser
@@ -84,6 +85,20 @@ namespace Domain.Device.Produser
                             item.ProcessedItemsInBatch?.StartItemIndex,
                             item.ProcessedItemsInBatch?.BatchSize,
                             InseartedData = item.ProcessedItemsInBatch?.ProcessedItems.Select(p => p.InseartedData)
+                        }).ToList()
+                    };
+                    break;
+
+                //Для передачи ответов от устройства
+                case "OnlyResponseData":
+                    convert = new
+                    {
+                        response.DeviceName,
+                        response.KeyExchange,
+                        ResponsesItems = response.ResponsesItems.Select(item => new
+                        {
+                            item.StatusStr,
+                            obj = item.ResponseInfo.GetResponseData()
                         }).ToList()
                     };
                     break;

@@ -56,10 +56,11 @@ namespace Domain.InputDataModel.Base.ProvidersOption
 
     public class ResponseOption
     {
-        public int TimeRespone { get; set; }                                         //Время ответа
-        public string ValidatorName { get; set; }                                    //Если имя валидатора не указанно, то по умолчанию ставится RequireResponseValidator  
-        public LenghtResponseValidatorOption LenghtValidator { get; set; }           //      
-        public EqualResponseValidatorOption EqualValidator { get; set; }             //
+        public int TimeRespone { get; set; }                                         // Время ответа
+        public string ValidatorName { get; set; }                                    // Если имя валидатора не указанно, то по умолчанию ставится RequireResponseValidator  
+        public LenghtResponseValidatorOption LenghtValidator { get; set; }           // ВАЛИДАТОР проверки длинны ответа     
+        public EqualResponseValidatorOption EqualValidator { get; set; }             // ВАЛИДАТОР точного сравнения самого ответа с заданным. 
+        public ManualEkrimValidatorOption ManualEkrimValidator { get; set; }         // ВАЛИДАТОР протокола экрим
 
         public Result<BaseResponseValidator> CreateValidator()
         {
@@ -69,7 +70,7 @@ namespace Domain.InputDataModel.Base.ProvidersOption
                 {
                     "LenghtValidator" when LenghtValidator != null => Result.Ok<BaseResponseValidator>(new LenghtResponseValidator(LenghtValidator.ExpectedLenght)),
                     "EqualValidator" when EqualValidator != null => Result.Ok<BaseResponseValidator>(new EqualResponseValidator(new StringRepresentation(EqualValidator.Body, EqualValidator.Format))),
-                    "ManualEkrimValidator" when LenghtValidator != null => Result.Ok<BaseResponseValidator>(new ManualEkrimResponseValidator()),
+                    "ManualEkrimValidator"  => Result.Ok<BaseResponseValidator>(new ManualEkrimResponseValidator()),
                     _ => Result.Ok<BaseResponseValidator>(new RequireResponseValidator())
                 };
             }
@@ -77,7 +78,6 @@ namespace Domain.InputDataModel.Base.ProvidersOption
             {
                 return Result.Failure<BaseResponseValidator>($"Исключение при создании ВАЛИДАТОРА ответа {ex.Message}");
             }
-
         }
     }
 
@@ -91,4 +91,6 @@ namespace Domain.InputDataModel.Base.ProvidersOption
         public string Format { get; set; }
         public string Body { get; set; }
     }
+
+    public class ManualEkrimValidatorOption { }
 }

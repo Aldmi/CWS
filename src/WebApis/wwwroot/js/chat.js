@@ -1,5 +1,6 @@
 ﻿"use strict";
 
+//let hubUrl = 'http://192.168.1.35:44138/providerHub';
 let hubUrl = '/providerHub';
 var connection = new signalR.HubConnectionBuilder()
     .withUrl(hubUrl)
@@ -21,14 +22,42 @@ connection.onclose(function () {
 });
 
 
-//событие получения данных
-connection.on("ReceiveMessage", function (message) {
+//событие получения данных ИНИЦИАЛИЗАЦИИ
+connection.on("Init", function (message) {
     var msg = jsonPretty(message);
-    var encodedMsg = `CWS: ${msg}`;
+    var encodedMsg = `Init: ${msg}`;
     var li = document.createElement("li");
     li.textContent = encodedMsg;
     document.getElementById("messagesList").appendChild(li);
 });
+
+//событие получения данных ДЛЯ обработки данных
+connection.on("BoardData", function (message) {
+    var msg = jsonPretty(message);
+    var encodedMsg = `BoardData: ${msg}`;
+    var li = document.createElement("li");
+    li.textContent = encodedMsg;
+    document.getElementById("messagesList").appendChild(li);
+});
+
+//событие получения СООБЩЕНИЯ ИНФО
+connection.on("Info", function (message) {
+    var msg = jsonPretty(message);
+    var encodedMsg = `Info: ${msg}`;
+    var li = document.createElement("li");
+    li.textContent = encodedMsg;
+    document.getElementById("messagesList").appendChild(li);
+});
+
+//событие получения СООБЩЕНИЯ ПРЕДУПРЕЖДЕНИЯ
+connection.on("Warning", function (message) {
+    var msg = jsonPretty(message);
+    var encodedMsg = `Warning: ${msg}`;
+    var li = document.createElement("li");
+    li.textContent = encodedMsg;
+    document.getElementById("messagesList").appendChild(li);
+});
+
 
 
 //Функция подключения к хабу

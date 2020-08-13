@@ -133,12 +133,12 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <param name="items">элементы прошедшие фильтрацию для правила</param>
         /// <param name="ct"></param>
         /// <returns>строку запроса и батч данных в обертке </returns>
-        public async IAsyncEnumerable<ProviderTransfer<TIn>> CreateProviderTransfer4Data(List<TIn> items, [EnumeratorCancellation] CancellationToken ct = default)
+        public async IAsyncEnumerable<Result<ProviderTransfer<TIn>>> CreateProviderTransfer4Data(List<TIn> items, [EnumeratorCancellation] CancellationToken ct = default)
         {
             var viewedItems = GetViewedItems(items);
             if (viewedItems == null)
             {
-                yield return null;
+                yield return Result.Failure<ProviderTransfer<TIn>>("ViewRule.CreateProviderTransfer4Data.GetViewedItems. Границы диапазона выбора данных не правильны");
             }
             else
             {
@@ -173,31 +173,28 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     //}
                     #endregion
 
-                    RequestTransfer<TIn> request;
+                    string errorCreateRequestTransfer4Data = null;
+                    RequestTransfer<TIn> request = null;
                     try
                     {
                         var (_, isFailure, value, error) = CreateRequestTransfer4Data(batch, startItemIndex, numberOfBatch);
                         if (isFailure)
                         {
-                            _logger.Warning(error);
-                            await Task.Delay(1000, ct);
-                            continue;
+                            errorCreateRequestTransfer4Data = error;
                         }
-                        request = value;
+                        else
+                        {
+                            request = value;
+                        }
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error($"Неизвестная Ошибка формирования запроса или ответа ViewRuleId= {GetCurrentOption.Id}   {ex}"); //????
-                        await Task.Delay(1000, ct);
-                        continue;
+                        errorCreateRequestTransfer4Data = $"Неизвестная Ошибка формирования запроса или ответа ViewRuleId= {GetCurrentOption.Id}   {ex}";
                     }
 
-                    yield return new ProviderTransfer<TIn>
-                    {
-                        Request = request,
-                        Response = _responseTransfer,
-                        Command = Command4Device.None
-                    };
+                    yield return (errorCreateRequestTransfer4Data == null) ?
+                        Result.Ok(new ProviderTransfer<TIn> {Request = request, Response = _responseTransfer, Command = Command4Device.None}) :
+                        Result.Failure<ProviderTransfer<TIn>>(errorCreateRequestTransfer4Data);
                 }
             }
         }
@@ -229,7 +226,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
         /// <summary>
         /// Вернуть элементы из диапазона укзанного в правиле отображения
-        /// Если границы диапазона не прпавильны вернуть null
+        /// Если границы диапазона не правильны вернуть null
         /// </summary>
         private IEnumerable<TIn> GetViewedItems(List<TIn> items)
         {

@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
-using Domain.Device.Services;
 using Infrastructure.Produser.AbstractProduser.AbstractProduser;
 using Infrastructure.Produser.AbstractProduser.Helpers;
 using Infrastructure.Produser.AbstractProduser.Options;
@@ -76,12 +75,13 @@ namespace Domain.Device.Produser
 
 
         /// <summary>
-        /// Отправить всем продюссерам ответ на обмен порцией данных.
+        /// Отправить всем продюссерам.
         /// </summary>
-        public async Task<IList<Result<string, ErrorWrapper>>> Send4AllProdusers(ProduserData<TIn> produserData, string invokerName = null)
+        public async Task<IList<Result<string, ErrorWrapper>>> Send4AllProdusers(ProduserData<TIn> produserData)
         {
-            var convert = _responseConverter.Convert(_unionOption.ConverterName, produserData);
-            var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(convert, invokerName)).ToList();
+            var converted = _responseConverter.Convert(_unionOption.ConverterName, produserData);
+            var dataType = produserData.DataType;
+            var tasks = _produsersDict.Values.Select(produserOwner => produserOwner.Produser.Send(converted, dataType)).ToList();
             var results = await Task.WhenAll(tasks);
             return results;
         }
@@ -90,13 +90,14 @@ namespace Domain.Device.Produser
         /// <summary>
         /// Отправить продюсеру по ключу.
         /// </summary>
-        public async Task<Result<string, ErrorWrapper>> Send4Produser(string key, ProduserData<TIn> produserData, string invokerName = null)
+        public async Task<Result<string, ErrorWrapper>> Send4Produser(string key, ProduserData<TIn> produserData)
         {
             if (!_produsersDict.ContainsKey(key))
                 throw new KeyNotFoundException(key);
 
-            var convert = _responseConverter.Convert(_unionOption.ConverterName, produserData);
-            var result = await _produsersDict[key].Produser.Send(convert, invokerName);
+            var dataType = produserData.DataType;
+            var converted = _responseConverter.Convert(_unionOption.ConverterName, produserData);
+            var result = await _produsersDict[key].Produser.Send(converted, dataType);
             return result;
         }
 

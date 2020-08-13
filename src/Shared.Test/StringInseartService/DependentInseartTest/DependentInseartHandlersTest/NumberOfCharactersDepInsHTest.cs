@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Shared.StringInseartService.DependentInseart.DependentInseartHandlers;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 using FluentAssertions;
@@ -90,6 +91,37 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
             //Assert
             res.IsSuccess.Should().BeTrue();
             res.Value.ToString().Should().Be("00ggggggg");
+        }
+
+
+
+        [Fact]
+        public void CheckError_Format_Not_Found_Test()
+        {
+            //Arrange
+            var requiredModel = StringInsertModelFactory.CreateList("{NumberOfCharacters:D99}", _extDict).First();
+            var handler = new NumberOfCharactersDepInsH(requiredModel);
+            var sb = new StringBuilder("\u000201{NumberOfCharacters:D99}%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
+
+            //Act
+            var (isSuccess, _, value, error) = handler.CalcInsert(sb);
+
+            //Assert
+            isSuccess.Should().BeTrue();
+            value.ToString().Should().Be("\u000201!!!ExtKeyNotFound!!!%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
+        }
+
+
+        [Fact]
+        public void CheckError_Not_NumberOfCharacters_Marker_In_Str_Test()
+        {
+            //Arrange
+            var sb = new StringBuilder("\u000201%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
+            //Act
+            var (isSuccess, _, _, error) = _handler.CalcInsert(sb);
+            //Assert
+            isSuccess.Should().BeFalse();
+            error.Should().Be("Обработчик Dependency Inseart не может найти Replacement переменную {NumberOfCharacters:X2} в строке \u000201%010C60EF03B0470000001E%110{CRCXorInverse:X2}\u0003");
         }
     }
 }

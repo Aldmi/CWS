@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ByRulesInseartedTest.Test.Datas;
+using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
@@ -26,9 +27,9 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "\u0002{AddressDevice:X2}{Nchar:X2}",
+                        Header = "\u0002{AddressDevice:X2}{Nchar:X2_BorderRightBeforeCrc}",
                         Body = "%000010320113%10$10$00$60$t2{Time:t}%000330940113%10$10$00$60$t3{Event}%000951920114%10$10$00$60$t1{StationsCut}%000011920183%10$10$00$60$t2 ",
-                        Footer = "{CRCXorInverse:X2}\u0003",
+                        Footer = "{CRCXorInverse:X2_BorderLeft}\u0003",
                         Format = "Windows-1251",
                         MaxBodyLenght = 245
                     },
@@ -53,6 +54,7 @@ namespace ByRulesInseartedTest.Test
 
                 3
             },
+
             //Павелецкий Peron.vidor.P8 запрос 2
             new object[]
             {
@@ -65,9 +67,9 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "\u0002{AddressDevice:X2}{Nchar:X2}",
+                        Header = "\u0002{AddressDevice:X2}{Nchar:X2_BorderRightBeforeCrc}",
                         Body = "%000011920304%10$10$00$60$t2{Note}%000011600483%10$10$00$60$t3Московское время%001611920483%10$10$00$60$t1",
-                        Footer = "{CRCXorInverse:X2}\u0003",
+                        Footer = "{CRCXorInverse:X2_BorderLeft}\u0003",
                         Format = "Windows-1251",
                         MaxBodyLenght = 245
                     },
@@ -92,6 +94,7 @@ namespace ByRulesInseartedTest.Test
 
                 1
             },
+
             //Павелецкий Prigorod.9Str
             new object[]
             {
@@ -104,9 +107,9 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "\u0002{AddressDevice:X2}{Nchar:X2}",
+                        Header = "\u0002{AddressDevice:X2}{Nchar:X2_BorderRightBeforeCrc}",
                         Body = "%00001032{MATH(rowNumber*16):D3}3%10$12$00$60$t3{TDepart:t}%00033240{MATH(rowNumber*16):D3}4%10$12$00$60$t3{StationArrival}%00241256{MATH(rowNumber*16):D3}3%10$12$00$60$t1{PathNumber}%400012561451%000012561603%10$10$00$60$t2Московское время",
-                        Footer = "{CRCXorInverse:X2}\u0003",
+                        Footer = "{CRCXorInverse:X2_BorderLeft}\u0003",
                         Format = "Windows-1251",
                         MaxBodyLenght = 245
                     },
@@ -143,9 +146,9 @@ namespace ByRulesInseartedTest.Test
                     BatchSize = 1,
                     RequestOption = new RequestOption
                     {
-                        Header = "\u0002{AddressDevice:X2}{Nchar:X2}",
+                        Header = "\u0002{AddressDevice:X2}{Nchar:X2_BorderRightBeforeCrc}",
                         Body = "%00001021{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{NumberOfTrain}%00025144{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{StationArrival}%00168199{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{TDepart:t}%00202233{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13%00202233{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13%00241254{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{PathNumber}",
-                        Footer = "{CRCXorInverse:X2}\u0003",
+                        Footer = "{CRCXorInverse:X2_BorderLeft}\u0003",
                         Format = "Windows-1251",
                         MaxBodyLenght = 245
                     },
@@ -194,22 +197,24 @@ namespace ByRulesInseartedTest.Test
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
-            var rt = requestTransfers.FirstOrDefault();
-            var responseInfo = rt.Response.Validator.Validate(expectedRespAray);
+            var (isSuccess, _, providerTransfer, error) = requestTransfers.FirstOrDefault();
 
             //Assert
-            rt.Request.StrRepresentBase.Str.Should().Be(expectedRequestStrRepresentBase);
-            rt.Request.StrRepresentBase.Format.Should().Be(option.RequestOption.Format);
+            isSuccess.Should().BeTrue();
 
-            rt.Request.StrRepresent.Str.Should().Be(expectedRequestStrRepresent);
-            rt.Request.StrRepresent.Format.Should().Be(expectedRequestStrRepresentFormat);
-
-            rt.Request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(inputTypes.Count);
-            foreach (var processedItem in rt.Request.ProcessedItemsInBatch.ProcessedItems)
+            var request = providerTransfer.Request;
+            request.StrRepresent.Str.Should().Be(expectedRequestStrRepresent);
+            request.StrRepresent.Format.Should().Be(expectedRequestStrRepresentFormat);
+            request.StrRepresentBase.Str.Should().Be(expectedRequestStrRepresentBase);
+            request.StrRepresentBase.Format.Should().Be(option.RequestOption.Format);
+            request.ProcessedItemsInBatch.ProcessedItems.Count.Should().Be(inputTypes.Count);
+            foreach (var processedItem in request.ProcessedItemsInBatch.ProcessedItems)
             {
-                processedItem.InseartedData.Where(pair=>pair.Key != "MATH").ToList().Count.Should().Be(expectedCountInseartedData);
+                processedItem.InseartedData.Where(pair => pair.Key != "MATH").ToList().Count.Should().Be(expectedCountInseartedData);
             }
 
+            var response = providerTransfer.Response;
+            var responseInfo = response.Validator.Validate(expectedRespAray);
             responseInfo.IsOutDataValid.Should().BeTrue();
         }
     }

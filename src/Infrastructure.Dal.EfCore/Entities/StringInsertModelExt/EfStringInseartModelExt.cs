@@ -22,5 +22,8 @@ namespace Infrastructure.Dal.EfCore.Entities.StringInsertModelExt
 
         [JsonField]
         public EfStringHandlerMiddleWareOption StringHandlerMiddleWareOption { get; set; }
+
+        [JsonField]
+        public EfMathematicFormula MathematicFormula { get; set; }
     }
 }

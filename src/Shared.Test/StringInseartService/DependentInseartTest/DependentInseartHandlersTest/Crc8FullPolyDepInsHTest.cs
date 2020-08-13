@@ -17,16 +17,16 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         public Crc8FullPolyDepInsHTest()
         {
             _extDict = GetStringInsertModelExtDict.SimpleDictionary;
-            var requiredModel = StringInsertModelFactory.CreateList("{Crc8FullPoly:X2_Border_StartOnly}", _extDict).First();
+            var requiredModel = StringInsertModelFactory.CreateList("{CRC8FullPoly:X2_BorderRight}", _extDict).First();
             _handler = new Crc8FullPolyDepInsH(requiredModel);
         }
 
 
         [Fact]
-        public void Calc_Normal_Test()
+        public void Crc8FullPoly_Calc_Test()
         {
             //Arrange
-            var sb = new StringBuilder("0x160x480x{Crc8FullPoly:X2_Border_StartOnly}0x010x850x5a0x120x030x000x000x000x000x000x010x020x000x180x800x200x310x320x35");
+            var sb = new StringBuilder("0x160x480x{CRC8FullPoly:X2_BorderRight}0x010x850x5a0x120x030x000x000x000x000x000x010x020x000x180x800x200x310x320x35");
             var format = "Windows-1251";
             //Act
             var (isSuccess, _, value) = _handler.CalcInsert(sb, format);
@@ -36,77 +36,54 @@ namespace Shared.Test.StringInseartService.DependentInseartTest.DependentInseart
         }
 
 
-        //[Fact]
-        //public void Replace_FirstOccurence_Crc()
-        //{
-        //    //Arrange
-        //    var sb = new StringBuilder("0xFF0xFF0x020x1B0x57дополнение0x09Москва-Питер0x0915:250x030x{CRCXor:X2_Border}0x030x{CRCXor:X2_Border}0x1F");
-        //    var format = "cp866";
-        //    //Act
-        //    var (isSuccess, _, value) = _handler.CalcInsert(sb, format);
-        //    //Assert
-        //    isSuccess.Should().BeTrue();
-        //    value.ToString().Should().Be("0xFF0xFF0x020x1B0x57дополнение0x09Москва-Питер0x0915:250x030xBA0x030x{CRCXor:X2_Border}0x1F");
-        //}
+        /// <summary>
+        /// подстрока для подсчета CRC равна 0x160x480x
+        /// </summary>
+        [Fact] 
+        public void Crc8FullPoly_Calc_BorderLeft_Test()
+        {
+            //Arrange
+            var requiredModel = StringInsertModelFactory.CreateList("{CRC8FullPoly:X2_BorderLeft}", _extDict).First();
+            var handler = new Crc8FullPolyDepInsH(requiredModel);
+            var sb = new StringBuilder("0x160x480x{CRC8FullPoly:X2_BorderLeft}0x010x850x5a0x120x030x000x000x000x000x000x010x020x000x180x800x200x310x320x35");
+            var format = "Windows-1251";
+            //Act
+            var (isSuccess, _, value) = handler.CalcInsert(sb, format);
+            //Assert
+            isSuccess.Should().BeTrue();
+            value.ToString().Should().Be("0x160x480x550x010x850x5a0x120x030x000x000x000x000x000x010x020x000x180x800x200x310x320x35");
+        }
 
 
-        //[Fact]
-        //public void String_With_Trash()
-        //{
-        //    //Arrange
-        //    var sb = new StringBuilder("0xFF0xFF0x020x1B0x57{AddressDevice:X2}{Nbyte:X2}дополнение0x09Москва-Питер0x0915:250x{CRCXor:X2_Border0x030x{CRCXor:X2_Border}0x1F");
-        //    var format = "cp866";
-        //    //Act
-        //    var (isSuccess, _, value) = _handler.CalcInsert(sb, format);
-        //    //Assert
-        //    isSuccess.Should().BeTrue();
-        //    value.ToString().Should().Be("0xFF0xFF0x020x1B0x57{AddressDevice:X2}{Nbyte:X2}дополнение0x09Москва-Питер0x0915:250x{CRCXor:X2_Border0x030xA70x1F");
-        //}
+        [Fact]
+        public void Empty_String_Test()
+        {
+            //Arrange
+            var sb = new StringBuilder("0x{CRC8FullPoly:X2_BorderRight}");
+
+            //Act
+            var format = "Windows-1251";
+            var (isSuccess, _, value, error) = _handler.CalcInsert(sb, format);
+
+            //Assert
+            isSuccess.Should().BeTrue();
+            value.ToString().Should().Be("0x00");
+        }
 
 
-        //[Fact]
-        //public void Calc_Crc_WithOut_CrcOptions_WithOut_HexInStr_Test()
-        //{
-        //    //Arrange
-        //    var requiredModel = StringInsertModelFactory.CreateList("{CRCXor:X2}", _extDict).First();
-        //    var handler = new CrcXorDepInsH(requiredModel);
-        //    var sb = new StringBuilder("\u000201BA%00001021дополнение4%10$00$60$t3$13Москва-Питер%10$00$615:254%10$00$60$t3$13{CRCXor:X2}\u0003");
-        //    var format = "Windows-1251";
-        //    //Act
-        //    var (isSuccess, _, value) = handler.CalcInsert(sb, format);
-        //    //Assert
-        //    isSuccess.Should().BeTrue();
-        //    value.ToString().Should().Be("\u000201BA%00001021дополнение4%10$00$60$t3$13Москва-Питер%10$00$615:254%10$00$60$t3$13D0\u0003");
-        //}
-
-
-        //[Fact]
-        //public void Border_Not_Found_In_Str()
-        //{
-        //    //Arrange
-        //    var sb = new StringBuilder("0xFF0xAA0x{CRCXor:X2_Border}0x1F");
-        //    var format = "cp866";
-        //    //Act
-        //    var (isSuccess, _, value, error) = _handler.CalcInsert(sb, format);
-        //    //Assert
-        //    isSuccess.Should().BeFalse();
-        //    error.Should().Be("Not Found startCh= 0x02");
-        //}
-
-
-        //[Fact]
-        //public void Crc_WithOut_StringInseartExt()
-        //{
-        //    //Arrange
-        //    var requiredModel = StringInsertModelFactory.CreateList("{CRCXor}", _extDict).First();
-        //    var handler = new CrcXorDepInsH(requiredModel);
-        //    var sb = new StringBuilder("0xFF0xAA0x{CRCXor}0x1F");
-        //    var format = "cp866";
-        //    //Act
-        //    var (isSuccess, _, value) = handler.CalcInsert(sb, format);
-        //    //Assert
-        //    isSuccess.Should().BeTrue();
-        //    value.ToString().Should().Be("0xFF0xAA0x850x1F");
-        //}
+        [Fact]
+        public void CheckError_Format_WithOut_Border_Test()
+        {
+            //Arrange
+            var requiredModel = StringInsertModelFactory.CreateList("{CRC8FullPoly:X4}", _extDict).First();
+            var handler = new Crc16CcittDepInsH(requiredModel);
+            var sb = new StringBuilder("0xFF0xFF0xFF0x0208000x060x03{CRC8FullPoly:X4}0x04");
+            var format = "Windows-1251";
+            //Act
+            var (isSuccess, _, _, error) = handler.CalcInsert(sb, format);
+            //Assert
+            isSuccess.Should().BeFalse();
+            error.Should().Be("Для любого алгоритма CRC подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
+        }
     }
 }

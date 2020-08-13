@@ -15,15 +15,14 @@ namespace Shared.CrcCalculate
         /// Выделяет подстроку из sb, ограниченную border -> Переводит в массив байт по format -> вычисляет CRC по алгоритму calcCrc.
         /// Переводит 
         /// </summary>
-        /// <param name="sb"></param>
-        /// <param name="calcBorder"></param>
+        /// <param name="borderedStr"></param>
         /// <param name="format">формат перевода string в hex</param>
         /// <param name="replacement">выражение для замены</param>
         /// <param name="calcCrc">Алгоритм вычисления СRC</param>
         /// <returns></returns>
-        public static Result<byte[]> CalcCrc(StringBuilder sb, Func<string, string, Result<string>> calcBorder, string format, string replacement, Func<IReadOnlyList<byte>, byte[]> calcCrc)
+        public static Result<byte[]> CalcCrc(string borderedStr, string format, string replacement, Func<IReadOnlyList<byte>, byte[]> calcCrc)
         {
-            var (_, isFailure, value, error) = CalcCrcByteArray(sb, calcBorder, format, replacement);
+            var (_, isFailure, value, error) = CalcCrcByteArray(borderedStr, format, replacement);
             if (isFailure)
                 return Result.Failure<byte[]>(error);
             
@@ -32,14 +31,9 @@ namespace Shared.CrcCalculate
         }
         
 
-        private static Result<byte[]> CalcCrcByteArray(StringBuilder sb, Func<string, string, Result<string>> calcBorder, string format, string replacement)
+        private static Result<byte[]> CalcCrcByteArray(string borderedStr, string format, string replacement)
         {
-            var str = sb.ToString();
-            var(_, isFailure, value, error)= calcBorder(str, replacement);
-            if (isFailure) 
-                return Result.Failure<byte[]>(error);
-
-            var res = value.Replace("\u0002", string.Empty).Replace("\u0003", string.Empty);
+            var res = borderedStr.Replace("\u0002", string.Empty).Replace("\u0003", string.Empty);
             var crcBytes = res.ConvertStringWithHexEscapeChars2ByteArray(format);
             return Result.Ok(crcBytes);
         }

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Text.RegularExpressions;
-using CSharpFunctionalExtensions;
 using Shared.Extensions;
+using Shared.Mathematic;
 using Shared.MiddleWares.Handlers;
 using Shared.MiddleWares.HandlersOption;
 using Shared.Types;
@@ -24,7 +23,13 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
 
 
         #region ctor
-        public StringInsertModelExt(string key, string format, BorderSubString borderSubString, StringHandlerMiddleWareOption stringHandlerMiddleWareOption)
+        public StringInsertModelExt(
+            string key,
+            string format,
+            BorderSubString borderSubString,
+            StringHandlerMiddleWareOption stringHandlerMiddleWareOption,
+            MathematicFormula mathematicFormula = null
+            )
         {
             Key = key;
             Format = format ?? String.Empty;
@@ -36,6 +41,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
                 var middleWare = new StringHandlerMiddleWare(StringHandlerMiddleWareOption);
                 return middleWare;
             });
+            MathematicFormula = mathematicFormula;
         }
         #endregion
 
@@ -59,6 +65,13 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         public BorderSubString BorderSubString { get; }
 
         /// <summary>
+        /// НЕ ОБЯЗАТЕЛЕН.
+        /// Задает границы для вычленения подстроки.
+        /// </summary>
+        public MathematicFormula MathematicFormula { get; }
+
+        /// <summary>
+        /// НЕ ОБЯЗАТЕЛЕН.
         /// ОПЦИИ цепочки конвеера обработки строки.
         /// </summary>
         public StringHandlerMiddleWareOption StringHandlerMiddleWareOption { get; }
@@ -67,7 +80,6 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
 
 
         #region Methode
-
         /// <summary>
         /// Обрабатывает string.
         /// Переменная Format не используется.
@@ -91,32 +103,27 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         }
 
 
-        /// <summary>
-        /// Вернуть подстроку обозначенную границами BorderSubString.
-        /// Если BorderSubString == null. то подстрока выделяется от начала до nativeBorder.
-        /// </summary>
-        public Result<string> CalcBorderSubString(string str, string nativeBorder)
-        {
-            if (BorderSubString == null)
-            {
-               var matchString = Regex.Match(str, $"(.*){nativeBorder}").Groups[1].Value;
-               return Result.Ok(matchString);
-            }
-            var (_, isFailure, value, error) = BorderSubString.Calc(str);
-            return isFailure ? Result.Failure<string>(error) : Result.Ok(value);
-        }
-
-
         private string ConvertByFormat<T>(T data)
         {
-            return data switch
+            switch (data)
             {
-                int intVal => intVal.Convert2StrByFormat(Format),
-                DateTime dateTimeVal => dateTimeVal.Convert2StrByFormat(Format),
-                byte[] byteArray => byteArray.BitConverter2StrByFormat(Format),
-                Enum e => e.ToString(), 
-                _ => data.ToString()
-            };
+                case int intVal:
+                    var afterMath = MathematicFormula?.Calc(intVal) ?? intVal;
+                    return afterMath.Convert2StrByFormat(Format);
+
+                case DateTime dateTimeVal:
+                    return dateTimeVal.Convert2StrByFormat(Format);
+
+                case byte[] byteArray:
+                    return byteArray.BitConverter2StrByFormat(Format);
+
+                case Enum e:
+                    return e.ToString();
+
+                default:
+                    return data.ToString();
+            }
+
             // throw new InvalidCastException("Тип переданного значнеия не соответсвует ни одному обработчику");
         }
 
@@ -126,10 +133,11 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
         private string StartMiddleWarePipline(string data)
         {
             var mw = _lazyStringMiddleWare.Value;
-            return (mw == null) ? data: mw.Convert(data, 0);
+            return (mw == null) ? data : mw.Convert(data, 0);
         }
 
         #endregion
+
 
 
         #region Disposable

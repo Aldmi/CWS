@@ -49,7 +49,7 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption
         public int TimeRespone { get; set; }                                         
         public string ValidatorName { get; set; }                         
         public LenghtResponseValidatorOption LenghtValidator { get; set; }            
-        public EqualResponseValidatorOption EqualValidator { get; set; }           
+        public EqualResponseValidatorOption EqualValidator { get; set; }
+        public ManualEkrimValidatorOption ManualEkrimValidator { get; set; }
     }
-
 }

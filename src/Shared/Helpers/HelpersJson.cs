@@ -20,5 +20,21 @@ namespace Shared.Helpers
             var jsonResp = JsonConvert.SerializeObject(response, settings);
             return jsonResp;
         }
+
+
+        /// <summary>
+        ///Конвертировать в JSON. Beauty -для людей, с форрматированием  
+        /// </summary>
+        public static string Serialize2BeautyJson(object response)
+        {
+            var settings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,                 //Отступы дочерних элементов ДА
+                NullValueHandling = NullValueHandling.Ignore      //Игнорировать пустые теги
+            };
+
+            var jsonResp = JsonConvert.SerializeObject(response, settings);
+            return jsonResp;
+        }
     }
 }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
@@ -37,33 +34,41 @@ namespace WebApiSwc.Produsers
 
 
         #region OvverideMembers
-
-        protected override async Task<Result<string, ErrorWrapper>> SendConcrete(string message, string invokerName = null, CancellationToken ct = default(CancellationToken))
+        protected override Task<Result<string, ErrorWrapper>> SendInit(object message, CancellationToken ct = default(CancellationToken))
         {
-            if (!_clientsStorage.Any)
-                return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.NoClientBySending));
-
-            try
-            {                
-                invokerName ??= Option.MethodeName;
-                await _hubProxy.Clients.All.SendCoreAsync(invokerName, new object[] { message }, ct);
-                return Result.Ok<string, ErrorWrapper>("Ok");
-            }
-            catch (Exception ex)
-            {
-                return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.RespawnProduserError, ex));
-            }
+            var invokerName = Option.InitMethodeName;
+            return SendConcrete(message, invokerName, ct);
         }
 
+        protected override Task<Result<string, ErrorWrapper>> SendBoardData(object message, CancellationToken ct = default(CancellationToken))
+        {
+            var invokerName = Option.BoardDataMethodeName;
+            return SendConcrete(message, invokerName, ct);
+        }
 
-        protected override async Task<Result<string, ErrorWrapper>> SendConcrete(object message, string invokerName = null, CancellationToken ct = default(CancellationToken))
+        protected override Task<Result<string, ErrorWrapper>> SendInfo(object message, CancellationToken ct = default(CancellationToken))
+        {
+            var invokerName = Option.InfoMethodeName;
+            return SendConcrete(message, invokerName, ct);
+        }
+
+        protected override Task<Result<string, ErrorWrapper>> SendWarning(object message, CancellationToken ct = default(CancellationToken))
+        {
+            var invokerName = Option.WarningMethodeName;
+            return SendConcrete(message, invokerName, ct);
+        }
+        #endregion
+
+
+
+        #region Methods
+        private async Task<Result<string, ErrorWrapper>> SendConcrete(object message, string invokerName, CancellationToken ct)
         {
             if (!_clientsStorage.Any)
                 return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.NoClientBySending));
 
             try
             {
-                invokerName ??= Option.MethodeName;
                 await _hubProxy.Clients.All.SendCoreAsync(invokerName, new[] { message }, ct);
                 return Result.Ok<string, ErrorWrapper>("Ok");
             }
@@ -72,17 +77,14 @@ namespace WebApiSwc.Produsers
                 return Result.Failure<string, ErrorWrapper>(new ErrorWrapper(Option.Key, ResultError.RespawnProduserError, ex));
             }
         }
-
         #endregion
 
 
 
         #region Disposable
-
         public override void Dispose()
         {
         }
-
         #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Shared.Types;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers;
+using WebApiSwc.DTO.JSON.Shared;
 
 namespace WebApiSwc.DTO.JSON.InputTypesDto
 {
@@ -13,5 +14,7 @@ namespace WebApiSwc.DTO.JSON.InputTypesDto
         public StringHandlerMiddleWareOptionDto StringHandlerMiddleWareOption { get; set; }
 
         public BorderSubString BorderSubString { get; set; }
+
+        public MathematicFormulaDto MathematicFormula { get; set; }
     }
 }
