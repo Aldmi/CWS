@@ -13,23 +13,10 @@ namespace Shared.MiddleWares.Converters.DateTimeConverters
         }
 
 
-        public int Priority { get; }
-
         public DateTime Convert(DateTime inProp, int dataId)
         {
             //DEBUG
             return inProp.AddHours(10);
-        }
-
-
-        public void SendCommand(MemConverterCommand command)
-        {
-            //NOT IMPLEMENTED
-        }
-
-        public void Mem()
-        {
-            throw new NotImplementedException();
         }
     }
 }
