@@ -31,6 +31,7 @@ namespace Domain.Device.MiddleWares4InData
         private readonly PropertyMutationsServise<string> _mutationsServiseStr = new PropertyMutationsServise<string>();    //Сервис изменения свойства типа string, по имени, через рефлексию.
         private readonly PropertyMutationsServise<DateTime> _mutationsServiseDt = new PropertyMutationsServise<DateTime>(); //Сервис изменения свойства типа DateTime, по имени, через рефлексию.
         private readonly PropertyMutationsServise<Enum> _mutationsServiseEnum = new PropertyMutationsServise<Enum>();      //Сервис изменения свойства типа enum(byte), по имени, через рефлексию.
+        private readonly PropertyMutationsServise<DateTime?> _mutationsServiseDtN = new PropertyMutationsServise<DateTime?>(); //Сервис изменения свойства типа DateTime, по имени, через рефлексию.
 
         private readonly List<StringHandlerMiddleWare4InData> _stringHandlers;
         private readonly List<DateTimeHandlerMiddleWare4InData> _dateTimeHandlers;
@@ -197,6 +198,42 @@ namespace Domain.Device.MiddleWares4InData
                             }
                         });
                     }
+
+                    //DEBUG Nullable dateTime-------------
+                    //var firstHandler = _dateTimeHandlers.FirstOrDefault();
+                    //var propName1 = "DepartureTime";
+                    //var resultGet1 = _mutationsServiseDtN.GetPropValue(data, propName1);
+                    //if (resultGet1.IsSuccess)
+                    //{
+                    //    var tuple = resultGet1.Value;
+                    //    try
+                    //    {
+
+                    //        //var newValue = DateTime.Now;//firstHandler.Convert((DateTime)tuple.val, data.Id);
+                    //        tuple.val = null;// newValue;
+                    //        var resultSet = _mutationsServiseDtN.SetPropValue(tuple);
+                    //        if (resultSet.IsFailure)
+                    //        {
+                    //            error = $"MiddlewareInvokeService.HandleInvoke.DateTimeConverter. Ошибка установки свойства:  {resultSet.Error}";
+                    //            errorHandlerWrapper.AddError(error);
+                    //        }
+                    //    }
+                    //    catch (StringConverterException ex)
+                    //    {
+                    //        error = $"MiddlewareInvokeService.HandleInvoke.DateTimeConverter. Exception в конверторе:  {ex}";
+                    //        errorHandlerWrapper.AddError(error);
+                    //    }
+                    //    catch (Exception e)
+                    //    {
+                    //        error = $"MiddlewareInvokeService.HandleInvoke.DateTimeConverter. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
+                    //        errorHandlerWrapper.AddError(error);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    error = $"MiddlewareInvokeService.HandleInvoke.DateTimeConverter.  Ошибка получения строкового свойства:  {resultGet1.Error}";
+                    //    errorHandlerWrapper.AddError(error);
+                    //}
                 }
             );
 
