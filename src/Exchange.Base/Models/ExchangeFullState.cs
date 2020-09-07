@@ -1,4 +1,5 @@
-﻿using Domain.InputDataModel.Base.Response;
+﻿using System.Linq;
+using Domain.InputDataModel.Base.Response;
 
 namespace Domain.Exchange.Models
 {
@@ -22,6 +23,67 @@ namespace Domain.Exchange.Models
             IsStartedTransportBg = isStartedTransportBg;
             IsConnect = isConnect;
             Data = data;
+        }
+
+        //TODO: добавить проесеты преобразования к различным dto (полная форма, сокрпшеная и тд)
+
+        public object GetPresenterFull()
+        {
+            var presenter = new
+            {
+                DeviceName,
+                KeyExchange,
+                IsConnect,
+                transport = new
+                {
+                    IsOpen,
+                    IsCycleReopened,
+                    IsStartedTransportBg,
+                },
+
+                data = Data == null ? (object)"НЕТ ДАННЫХ ДЛЯ ОБМЕНА" :
+                    new
+                    {
+                        Data.TimeAction,
+                        Data.IsValidAll,
+                        Data.MessageDict,
+                        Data.ResponsesItems
+                    }
+            };
+            return presenter;
+        }
+
+        public object GetPresenterWithoutProcessedItemsInBatch()
+        {
+            var presentert = new
+            {
+                DeviceName,
+                KeyExchange,
+                IsConnect,
+                transport = new
+                {
+                    IsOpen,
+                    IsCycleReopened,
+                    IsStartedTransportBg,
+                },
+
+                data = Data == null ? (object)"НЕТ ДАННЫХ ДЛЯ ОБМЕНА" :
+                    new
+                    {
+                        Data.TimeAction,
+                        Data.IsValidAll,
+                        Data.MessageDict,
+                        ResponsesItems = Data.ResponsesItems.Select(r=> new
+                        {
+                            r.MessageDict,
+                            r.Status,
+                            r.StatusStr,
+                            r.ResponseInfo
+                        }).ToArray()
+                    }
+            };
+
+            return presentert;
         }
     }
 }

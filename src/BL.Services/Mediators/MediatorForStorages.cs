@@ -128,6 +128,13 @@ namespace App.Services.Mediators
         }
 
 
+
+        public IReadOnlyList<IExchange<TIn>> GetExchanges()
+        {
+            return _exchangeStorage.Values.Select(owned => owned.Value).ToList();
+        }
+
+
         public ITransportBackground GetBackground(KeyTransport keyTransport)
         {
             return _backgroundStorage.Get(keyTransport);
@@ -321,6 +328,11 @@ namespace App.Services.Mediators
         {
             return _produserUnionStorage.ContainsKey(key) ? _produserUnionStorage.Remove(key) : DictionaryCrudResult.KeyNotExist;
         }
+
+
+
+
+
         #endregion
     }
 }
