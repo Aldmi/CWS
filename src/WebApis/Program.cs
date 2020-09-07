@@ -35,8 +35,8 @@ namespace WebApiSwc
 
         public static string GetVersion()
         {
-            const string version = "CWS Ver7.24";
-            return $"{version}  [07.09.2020]  [Relise. Add GetFullStateAllExchanges in DeviceController]";
+            const string version = "CWS Ver7.25";
+            return $"{version}  [07.09.2020]  [Relise. Add Emergency Independent Inseart]";
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

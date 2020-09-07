@@ -42,6 +42,7 @@ namespace Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory
                 "DayOfWeek" => new DayOfWeekInsH(insertModel),
                 "Lang" => new LangInsH(insertModel),
                 "VagonDirection" => new VagonDirectionInsH(insertModel),
+                "Emergency" => new EmergencyInsH(insertModel),
                 _ => null
             };
         }
