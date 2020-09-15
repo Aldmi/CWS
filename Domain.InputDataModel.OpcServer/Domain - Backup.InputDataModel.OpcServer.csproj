@@ -14,9 +14,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain.InputDataModel.Shared\Domain.InputDataModel.Shared.csproj" />
-    <ProjectReference Include="..\InputDataModel.Base\Domain.InputDataModel.Base.csproj" />
-    <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\src\Domain.InputDataModel.Shared\Domain.InputDataModel.Shared.csproj" />
+    <ProjectReference Include="..\src\InputDataModel.Base\Domain.InputDataModel.Base.csproj" />
+    <ProjectReference Include="..\src\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ForProviderImpl\" />
+    <Folder Include="ProvidersSpecial%27\" />
   </ItemGroup>
 
 </Project>

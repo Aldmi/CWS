@@ -12,7 +12,7 @@ using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response;
 using Domain.InputDataModel.Base.Response.ResponseInfos;
 
-namespace Domain.InputDataModel.Autodictor.ProvidersSpecial
+namespace Domain.InputDataModel.Autodictor.ForProviderImpl.ProvidersSpecial
 {
     public class VidorBinaryDataProvider : BaseDataProvider<AdInputType>, IDataProvider<AdInputType>
     {
