@@ -8,7 +8,7 @@ using Domain.InputDataModel.Base.ProvidersOption;
 
 namespace Domain.InputDataModel.Base.ProvidersAbstract
 {
-    public interface IDataProvider<TInput, TOutput> : IDisposable
+    public interface IDataProvider<TInput> : IDisposable
     {
         string ProviderName { get;  }                                 //Название провайдера
         Dictionary<string, string> StatusDict{ get; }                 //Статус провайдера.

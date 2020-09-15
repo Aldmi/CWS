@@ -176,8 +176,6 @@ namespace WebApiSwc.Controllers
         public IActionResult GetFullStateAllExchanges([FromRoute] string presenter)
         {
             var exchanges = _mediatorForStorages.GetExchanges();
-
-            //TODO:вынести логику в _mediatorForStorages
             var fullStateArray = exchanges.Select(e =>
             {
                 return presenter switch

@@ -150,26 +150,12 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     #region РЕАЛИЗАЦИЯ СПИСКА ЗАПРОС/ОТВЕТ ДЛЯ КАЖДОГО ViewRule (SendingUnitList)
                     //1. requestOption и responseOption обернуть в тип SendingUnit
                     //2. ViewRule хранит List<SendingUnit> SendingUnitList
+                    //3.
                     //foreach (var sendingUnit in _option.SendingUnitList)
                     //{
-                    //    var requestOption = sendingUnit.RequestOption;
-                    //    var responseOption = sendingUnit.ResponseOption;
-
-                    //    var stringRequest = CreateRequestTransfer4Data(batch, requestOption, startItemIndex); //requestOption передаем
-                    //    var stringResponse = CreateResponseTransfer(responseOption);//responseOption передаем
-                    //    if (stringRequest == null)
-                    //        continue;
-
-                    //    yield return new ViewRuleRequestModelWrapper
-                    //    {
-                    //        StartItemIndex = startItemIndex,
-                    //        BatchSize = _option.BatchSize,
-                    //        BatchedData = batch,
-                    //        StringRequest = stringRequest,
-                    //        StringResponse = stringResponse,
-                    //        RequestOption = _option.RequestOption,
-                    //        ResponseOption = _option.ResponseOption
-                    //    };
+                    //   ProviderTransfer<TIn> pr= _sendingUnit.CreateUnit(batch, startItemIndex, numberOfBatch);
+                    //   yield return pr;
+                    //   
                     //}
                     #endregion
 
@@ -298,7 +284,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
 
         /// <summary>
-        /// Создать запрос для комманды.
+        /// Создать запрос для команды.
         /// </summary>
         /// <returns></returns>
         private Result<RequestTransfer<TIn>> CreateRequestTransfer4Command()

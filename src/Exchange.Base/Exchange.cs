@@ -17,7 +17,6 @@ using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response;
-using Domain.InputDataModel.Base.Response.ResponseInfos;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.Transport.Base.Abstract;
 using Infrastructure.Transport.Base.RxModel;
@@ -38,9 +37,9 @@ namespace Domain.Exchange
         private readonly ITransport _transport;
         private readonly ITransportBackground _transportBackground;
 
-        private readonly IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, BaseResponseInfo>>>> _dataProviderFactory;
+        private readonly IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn>>>> _dataProviderFactory;
 
-        private IDataProvider<TIn, BaseResponseInfo> _dataProvider; //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
+        private IDataProvider<TIn> _dataProvider; //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
 
         private IDisposable _dataProviderOwner;                  //управляет временем жизни _dataProvider
         private readonly IDisposable _disposeTransportIsOpenRx;   //отписка от события 
@@ -122,7 +121,7 @@ namespace Domain.Exchange
                                  ExchangeOption option,
                                  ITransport transport,
                                  ITransportBackground transportBackground,
-                                 IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, BaseResponseInfo>>>> dataProviderFactory,
+                                 IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn>>>> dataProviderFactory,
                                  ILogger logger,
                                  Func<string, ITransportBackground, CycleFuncOption, Func<DataAction, InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<CycleBehavior<TIn>>> cycleBehaviorFactory,
                                  Func<string, ITransportBackground, Func<DataAction, InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<OnceBehavior<TIn>>> onceBehaviorFactory,
@@ -397,7 +396,7 @@ namespace Domain.Exchange
         }
 
 
-        private Result<Owned<IDataProvider<TIn, BaseResponseInfo>>> TryCreateProvider(ProviderOption option)
+        private Result<Owned<IDataProvider<TIn>>> TryCreateProvider(ProviderOption option)
         {
             try
             {
@@ -407,7 +406,7 @@ namespace Domain.Exchange
             catch (Exception e)
             {
                 var unionMessages = e.GetOriginalException().Message;
-                return Result.Failure<Owned<IDataProvider<TIn, BaseResponseInfo>>>($"Exception при УСТАНОВКИ НОВГО ПРОВАЙДЕРА \"{unionMessages}\"");
+                return Result.Failure<Owned<IDataProvider<TIn>>>($"Exception при УСТАНОВКИ НОВГО ПРОВАЙДЕРА \"{unionMessages}\"");
             }
         }
         #endregion

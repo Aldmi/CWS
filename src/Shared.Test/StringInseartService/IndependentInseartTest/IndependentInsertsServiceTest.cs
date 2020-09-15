@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory;
+using Domain.InputDataModel.Autodictor.ForProviderImpl.IndependentInseartsImpl.Factory;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
