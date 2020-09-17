@@ -17,7 +17,7 @@ namespace Domain.InputDataModel.OpcServer.ForProviderImpl.ProvidersSpecial
     {
 
         #region ctor
-        public OpcSpecialDataProvider(Func<ProviderTransfer<OpcInputType>, ProviderStatus, ProviderResult<OpcInputType>> providerResultFactory, ILogger logger) 
+        public OpcSpecialDataProvider(Func<ProviderTransfer<OpcInputType>, ProviderStatus.Builder, ProviderResult<OpcInputType>> providerResultFactory, ILogger logger) 
             : base("OpcSpecial", providerResultFactory, logger)
         {
         }
@@ -31,8 +31,8 @@ namespace Domain.InputDataModel.OpcServer.ForProviderImpl.ProvidersSpecial
             await Task.Delay(500, ct);
 
             //Добавили статусы
-            StatusDict["State 1"] = "qqq";
-            StatusDict["State 2"] = "ppp";
+            //StatusDict["State 1"] = "qqq";
+            //StatusDict["State 2"] = "ppp";
 
             //REQUEST
             var requestOption = new RequestOption
@@ -74,9 +74,9 @@ namespace Domain.InputDataModel.OpcServer.ForProviderImpl.ProvidersSpecial
             transfer.Request.StrRepresent = new StringRepresentation(requestOption.Header  + requestOption.Body + requestOption.Footer, requestOption.Format);
             transfer.Request.StrRepresentBase = new StringRepresentation(requestOption.Header + requestOption.Body + requestOption.Footer, requestOption.Format);
 
-            var providerStatus = new ProviderStatus("RequestName= 'Opc1'");
-            var providerResult = ProviderResultFactory(transfer, providerStatus);
-            RaiseProviderResultRx.OnNext(providerResult);
+            //var providerStatus = new ProviderStatusBuilder("RequestName= 'Opc1'");
+            //var providerResult = ProviderResultFactory(transfer, providerStatus);
+           // RaiseProviderResultRx.OnNext(providerResult);
         }
 
 

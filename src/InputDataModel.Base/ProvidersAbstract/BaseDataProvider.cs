@@ -11,15 +11,13 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
     public abstract class BaseDataProvider<TIn> : IDisposable where TIn : InputTypeBase
     {
         #region field
-        protected readonly Func<ProviderTransfer<TIn>, ProviderStatus, ProviderResult<TIn>> ProviderResultFactory;
+        protected readonly Func<ProviderTransfer<TIn>, ProviderStatus.Builder, ProviderResult<TIn>> ProviderResultFactory;
         private readonly ILogger _logger;
         #endregion
 
 
-
         #region prop
         public string ProviderName { get; }
-        public Dictionary<string, string> StatusDict { get; } = new Dictionary<string, string>();
         #endregion
 
 
@@ -31,7 +29,7 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         #region ctor
         protected BaseDataProvider(
             string providerName,
-            Func<ProviderTransfer<TIn>, ProviderStatus, ProviderResult<TIn>> providerResultFactory,
+            Func<ProviderTransfer<TIn>, ProviderStatus.Builder, ProviderResult<TIn>> providerResultFactory,
             ILogger logger)
         {
             ProviderName = providerName;

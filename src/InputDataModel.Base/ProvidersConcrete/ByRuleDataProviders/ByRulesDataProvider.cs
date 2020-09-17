@@ -35,7 +35,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
         #region ctor
         public ByRulesDataProvider(
-            Func<ProviderTransfer<TIn>, ProviderStatus, ProviderResult<TIn>> providerResultFactory,
+            Func<ProviderTransfer<TIn>, ProviderStatus.Builder, ProviderResult<TIn>> providerResultFactory,
             ProviderOption providerOption,
             IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory,
             StringInsertModelExtStorage stringInsertModelExtStorage,
@@ -101,8 +101,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
             foreach (var rule in GetRules)
             { 
                ct.ThrowIfCancellationRequested();
-               StatusDict.Clear();
-                var ruleOption = rule.GetCurrentOption();
+               var ruleOption = rule.GetCurrentOption();
                 switch (SwitchInDataHandler(inData, ruleOption.Name))
                 {
                     //КОМАНДА-------------------------------------------------------------
@@ -133,7 +132,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 }
             }
             //Конвеер обработки входных данных завершен    
-            StatusDict.Clear();
             await Task.CompletedTask;
         }
 
@@ -157,8 +155,9 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                             await Task.Delay(1000, ct); //Задержка на отображение ошибки
                             continue;
                         }
-                        var providerStatus = new ProviderStatus( $"RuleName= '{ruleName}' viewRule.Id= '{viewRule.GetCurrentOption.Id}'");
-                        var providerResult = ProviderResultFactory(transfer, providerStatus);
+                        var sendingUnitName = $"RuleName= '{ruleName}' viewRule.Id= '{viewRule.GetCurrentOption.Id}'";
+                        var providerStatusBuilder = transfer.CreateProviderStatusBuilder(sendingUnitName);
+                        var providerResult = ProviderResultFactory(transfer, providerStatusBuilder);
                         RaiseProviderResultRx.OnNext(providerResult);
                     }
                 }
@@ -173,13 +172,15 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         private void SendCommand(Rule<TIn> rule, Command4Device command)
         {
             var commandViewRule = rule.GetViewRules.FirstOrDefault();
-            var providerTransfer = commandViewRule?.CreateProviderTransfer4Command(command);
-            if(providerTransfer == null)
+            var transfer = commandViewRule?.CreateProviderTransfer4Command(command);
+            if(transfer == null)
                 return;
 
-            StatusDict["Command"] = $"{command}";
-            var providerStatus = new ProviderStatus($"RuleName= '{rule.GetCurrentOption().Name}' viewRule.Id= '{commandViewRule.GetCurrentOption.Id}'");
-            var providerResult = ProviderResultFactory(providerTransfer, providerStatus);
+            var sendingUnitName = $"RuleName= '{rule.GetCurrentOption().Name}' viewRule.Id= '{commandViewRule.GetCurrentOption.Id}'";
+            var providerStatusBuilder = transfer.CreateProviderStatusBuilder(sendingUnitName);
+            providerStatusBuilder.SetCommand(command);
+            var providerResult = ProviderResultFactory(transfer, providerStatusBuilder);
+
             RaiseProviderResultRx.OnNext(providerResult);
         }
         #endregion

@@ -313,7 +313,6 @@ namespace Domain.Exchange
                 //ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ.
                 IsConnect = false;
                 responsePieceOfDataWrapper.ExceptionExchangePipline = ex;
-                responsePieceOfDataWrapper.MessageDict = new Dictionary<string, string>(_dataProvider.StatusDict);
                 _logger.Warning("{Type} {KeyExchange}", "ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. (смотерть ExceptionExchangePipline)", KeyExchange);
             }
             finally
@@ -321,9 +320,11 @@ namespace Domain.Exchange
                 subscription.Dispose();
             }
 
-            //ОТЧЕТ ОБ ОТПРАВКИ ПОРЦИИ ДАННЫХ.
+            //ОЦЕНКА ОТВЕТОВ ПОЛУЧЕННЫХ, НА ОТПРАВКУ ПОРЦИИ ДАННЫХ.
             responsePieceOfDataWrapper.EvaluateResponsesItems();
-            LogedResponseInformation(responsePieceOfDataWrapper);
+
+            //ОТЧЕТ ОБ ОТПРАВКИ ПОРЦИИ ДАННЫХ.
+            LogedInformation(responsePieceOfDataWrapper);
             LastSendData = new LastSendPieceOfDataRxModel<TIn>(responsePieceOfDataWrapper);
             return responsePieceOfDataWrapper;
         }
@@ -332,7 +333,7 @@ namespace Domain.Exchange
         /// <summary>
         /// Логирование информации.
         /// </summary>
-        private void LogedResponseInformation(ResponsePieceOfDataWrapper<TIn> response)
+        private void LogedInformation(ResponsePieceOfDataWrapper<TIn> response)
         {
             try
             {
@@ -346,10 +347,10 @@ namespace Domain.Exchange
                 {
                     SendingUnitName = item.ProviderStatus.SendingUnitName,
                     StatusStr = item.StatusStr,
-                    Request = item.MessageDict.ContainsKey("GetDataByte.Request") ? item.MessageDict["GetDataByte.Request"] : null,
-                    RequestBase = item.MessageDict.ContainsKey("GetDataByte.RequestBase") ? item.MessageDict["GetDataByte.RequestBase"] : null,
+                    Request = item.ProviderStatus.Request.ToString(),
+                    RequestBase = item.ProviderStatus.GetRequestBaseIfHeNotEqualRequest?.ToString(),
                     Response = item.ResponseInfo?.ToString(),
-                    TimeResponse = item.MessageDict["TimeResponse"],  //TimeResponse->вынести в отдельное поле;
+                    TimeResponse = item.ProviderStatus.TimeResponse,
                     StronglyTypedResponse = item.MessageDict.ContainsKey("SetDataByte.StronglyTypedResponse") ? item.MessageDict["SetDataByte.StronglyTypedResponse"] : null,  //StronglyTypedResponse-> вынести в отдельное поле
                 }).ToList();
 
@@ -367,7 +368,7 @@ namespace Domain.Exchange
             }
             catch (Exception ex)
             {
-                _logger.Error("{Type} {KeyExchange}  {Exception}", "ОШИБКА Exchange.LogedResponseInformation", KeyExchange, ex);
+                _logger.Error("{Type} {KeyExchange}  {Exception}", "ОШИБКА Exchange.LogedInformation", KeyExchange, ex);
             }
         }
         #endregion

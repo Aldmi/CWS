@@ -1,4 +1,5 @@
-﻿using Shared.Extensions;
+﻿using KellermanSoftware.CompareNetObjects;
+using Shared.Extensions;
 using Shared.Helpers;
 
 namespace Shared.Types
@@ -33,12 +34,15 @@ namespace Shared.Types
 
 
         #region EqualsOperator
-
         protected bool Equals(StringRepresentation other)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Str == other.Str && Format == other.Format;
+            var compareLogic = new CompareLogic();
+            var result = compareLogic.Compare(other, this);
+            return result.AreEqual;
+
+            // if (ReferenceEquals(null, other)) return false;
+            //if (ReferenceEquals(this, other)) return true;
+            //return Str == other.Str && Format == other.Format;
         }
 
         public override int GetHashCode()
@@ -58,11 +62,12 @@ namespace Shared.Types
         {
             return !(obj1 == obj2);
         }
+        #endregion
+
 
         public override string ToString()
         {
-            return $"[{Str}]:{Format}";
+            return $"[{Str}]:{Format} L='{Str.Length}'";
         }
-        #endregion
     }
 }
