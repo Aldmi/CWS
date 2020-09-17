@@ -34,7 +34,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         
 
         #region ctor
-        public ByRulesDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> providerResultFactory,
+        public ByRulesDataProvider(
+            Func<ProviderTransfer<TIn>, ProviderStatus, ProviderResult<TIn>> providerResultFactory,
             ProviderOption providerOption,
             IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory,
             StringInsertModelExtStorage stringInsertModelExtStorage,
@@ -57,7 +58,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
 
         #region prop
-
         private IEnumerable<Rule<TIn>> GetRules => _rules.ToList();                     //Копия списка Rules, чтобы  избежать Exception при перечислении (т.к. Rules - мутабельна).
         public string RuleName4DefaultHandle { get; }
         #endregion
@@ -145,10 +145,10 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         {
             if (takesItems != null && takesItems.Any())
             {
-                StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
+                var ruleName = $"{rule.GetCurrentOption().Name}";
                 foreach (var viewRule in rule.GetViewRules)
                 {
-                    await foreach (var (_, isFailure, value, error) in viewRule.CreateProviderTransfer4Data(takesItems, ct).WithCancellation(ct))
+                    await foreach (var (_, isFailure, transfer, error) in viewRule.CreateProviderTransfer4Data(takesItems, ct).WithCancellation(ct))
                     {
                         ct.ThrowIfCancellationRequested();
                         if (isFailure)
@@ -157,14 +157,12 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                             await Task.Delay(1000, ct); //Задержка на отображение ошибки
                             continue;
                         }
-
-                        StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption.Id}";
-                        var providerResult = ProviderResultFactory(value, StatusDict);
+                        var providerStatus = new ProviderStatus( $"RuleName= '{ruleName}' viewRule.Id= '{viewRule.GetCurrentOption.Id}'");
+                        var providerResult = ProviderResultFactory(transfer, providerStatus);
                         RaiseProviderResultRx.OnNext(providerResult);
                     }
                 }
             }
-
             await Task.CompletedTask;
         }
 
@@ -180,9 +178,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 return;
 
             StatusDict["Command"] = $"{command}";
-            StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
-            StatusDict["viewRule.Id"] = $"{commandViewRule.GetCurrentOption.Id}";
-            var providerResult = ProviderResultFactory(providerTransfer, StatusDict);
+            var providerStatus = new ProviderStatus($"RuleName= '{rule.GetCurrentOption().Name}' viewRule.Id= '{commandViewRule.GetCurrentOption.Id}'");
+            var providerResult = ProviderResultFactory(providerTransfer, providerStatus);
             RaiseProviderResultRx.OnNext(providerResult);
         }
         #endregion

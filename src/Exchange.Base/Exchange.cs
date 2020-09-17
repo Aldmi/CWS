@@ -137,8 +137,8 @@ namespace Domain.Exchange
                 IsOpenChangeTransportRx.OnNext(model);
             });
             _dataProviderFactory = dataProviderFactory;
-            //var owner= dataProviderFactory[_option.Provider.Name](_option.Provider);
-            var owner = dataProviderFactory["OpcSpecial"](_option.Provider);
+            var owner= dataProviderFactory[_option.Provider.Name](_option.Provider);
+            //var owner = dataProviderFactory["OpcSpecial"](_option.Provider);//DEBUG
             _dataProviderOwner = owner;
             _dataProvider = owner.Value;
             _logger = logger;
@@ -291,6 +291,7 @@ namespace Domain.Exchange
                 {
                     transportResp.ResponseInfo = providerResult.OutputData;
                     transportResp.Status = status;
+                    transportResp.ProviderStatus = providerResult.ProviderStatus;
                     transportResp.MessageDict = new Dictionary<string, string>(providerResult.StatusDict);
                     responsePieceOfDataWrapper.ResponsesItems.Add(transportResp);
                 }
@@ -343,7 +344,7 @@ namespace Domain.Exchange
 
                 var responseInfo = response.ResponsesItems.Select(item => new
                 {
-                    Rule = $"RuleName= {item.MessageDict["RuleName"]}  viewRule.Id= {item.MessageDict["viewRule.Id"]}", //RuleName->SendingUnitName;   viewRule.Id-> входит а SendingUnitName
+                    SendingUnitName = item.ProviderStatus.SendingUnitName,
                     StatusStr = item.StatusStr,
                     Request = item.MessageDict.ContainsKey("GetDataByte.Request") ? item.MessageDict["GetDataByte.Request"] : null,
                     RequestBase = item.MessageDict.ContainsKey("GetDataByte.RequestBase") ? item.MessageDict["GetDataByte.RequestBase"] : null,

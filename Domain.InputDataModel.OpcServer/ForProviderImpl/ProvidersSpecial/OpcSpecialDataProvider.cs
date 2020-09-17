@@ -17,7 +17,7 @@ namespace Domain.InputDataModel.OpcServer.ForProviderImpl.ProvidersSpecial
     {
 
         #region ctor
-        public OpcSpecialDataProvider(Func<ProviderTransfer<OpcInputType>, IDictionary<string, string>, ProviderResult<OpcInputType>> providerResultFactory, ILogger logger) 
+        public OpcSpecialDataProvider(Func<ProviderTransfer<OpcInputType>, ProviderStatus, ProviderResult<OpcInputType>> providerResultFactory, ILogger logger) 
             : base("OpcSpecial", providerResultFactory, logger)
         {
         }
@@ -74,7 +74,8 @@ namespace Domain.InputDataModel.OpcServer.ForProviderImpl.ProvidersSpecial
             transfer.Request.StrRepresent = new StringRepresentation(requestOption.Header  + requestOption.Body + requestOption.Footer, requestOption.Format);
             transfer.Request.StrRepresentBase = new StringRepresentation(requestOption.Header + requestOption.Body + requestOption.Footer, requestOption.Format);
 
-            var providerResult = ProviderResultFactory(transfer, StatusDict);
+            var providerStatus = new ProviderStatus("RequestName= 'Opc1'");
+            var providerResult = ProviderResultFactory(transfer, providerStatus);
             RaiseProviderResultRx.OnNext(providerResult);
         }
 

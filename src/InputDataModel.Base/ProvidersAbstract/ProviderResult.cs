@@ -27,6 +27,8 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         public int TimeRespone => _transfer.Response.Option.TimeRespone;         //Время на ответ
         public BaseResponseInfo OutputData { get; private set; }
         public bool IsOutDataValid { get; private set; }
+        public ProviderStatus ProviderStatus { get; }
+
         /// <summary>
         /// Результат работы провайдера, обработанные и выставленные в протокол данные из InputData
         /// </summary>
@@ -35,10 +37,11 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
 
 
         #region ctor
-        public ProviderResult(ProviderTransfer<TIn> transfer, IDictionary<string, string> providerStatusDict)
+        public ProviderResult(ProviderTransfer<TIn> transfer, ProviderStatus providerStatus)
         {
+            ProviderStatus = providerStatus;
             _transfer = transfer;
-            StatusDict = providerStatusDict == null ? new Dictionary<string, string>() : new Dictionary<string, string>(providerStatusDict);
+            StatusDict = new Dictionary<string, string>();//TODO: убрать
         }
         #endregion
 
@@ -97,5 +100,19 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         }
         #endregion
 
+    }
+
+
+    public class ProviderStatus
+    {
+        public readonly string SendingUnitName;
+
+        public ProviderStatus(string sendingUnitName)
+        {
+            if(string.IsNullOrEmpty(sendingUnitName))
+                throw new ArgumentException("sendingUnitName не может быть NULL или Empty");
+
+            SendingUnitName = sendingUnitName;
+        }
     }
 }

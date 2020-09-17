@@ -69,10 +69,11 @@ namespace Domain.InputDataModel.Base.Response
     /// <summary>
     /// Единица ответа от устройства на единицу запроса
     /// </summary>
-    public class ResponseDataItem<TIn>
+    public class ResponseDataItem<TIn> //TODO: Сильно много статусов, оптимизиршовать поля, объект создается на базе providerResult
     {
         public string RequestId { get; set; }
         public Dictionary<string, string> MessageDict { get; set; }   //Доп. информация
+        public ProviderStatus ProviderStatus { get; set; }   
         public StatusDataExchange Status { get; set; }
         public string StatusStr => Status.ToString();
 
