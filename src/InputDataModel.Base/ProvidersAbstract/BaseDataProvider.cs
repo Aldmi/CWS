@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Subjects;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Serilog;
@@ -16,9 +17,25 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
 
 
 
+        #region prop
+        public string ProviderName { get; }
+        public Dictionary<string, string> StatusDict { get; } = new Dictionary<string, string>();
+        #endregion
+
+
+        #region RxEvent
+        public Subject<ProviderResult<TIn>> RaiseProviderResultRx { get; } = new Subject<ProviderResult<TIn>>();
+        #endregion
+
+
         #region ctor
-        protected BaseDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> providerResultFactory, ILogger logger)
+        protected BaseDataProvider(
+            string providerName,
+            Func<ProviderTransfer<TIn>,
+            IDictionary<string, string>, ProviderResult<TIn>> providerResultFactory,
+            ILogger logger)
         {
+            ProviderName = providerName;
             ProviderResultFactory = providerResultFactory;
             _logger = logger;
         }
@@ -27,7 +44,6 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
 
 
         #region Methode
-
         /// <summary>
         /// Определяет обработчик входных данных.
         /// Команда или Данные.

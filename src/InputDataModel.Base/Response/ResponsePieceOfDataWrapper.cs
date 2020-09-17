@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.Response.ResponseInfos;
@@ -19,11 +21,53 @@ namespace Domain.InputDataModel.Base.Response
         public DataAction DataAction { get; set; }                 //Действие
 
         public long TimeAction { get; set; }                       //Время выполнения обмена (на порцию данных)
-        public bool IsValidAll { get; set; }                       //Флаг валидности всех ответов
+        public bool IsValidAll { get; set; }                       //TODO: убрать!!!
+
+        public EvaluateResponsesItemsResult Evaluation { get; private set; }   //Оценка ответов
 
         public Exception ExceptionExchangePipline { get; set; }    //Критическая Ошибка обработки данных в конвеере.
         public Dictionary<string, string> MessageDict { get; set; } //Доп. информация
         public List<ResponseDataItem<TIn>> ResponsesItems { get; set; } = new List<ResponseDataItem<TIn>>();
+
+
+
+
+        public Result EvaluateResponsesItems()
+        {
+            var numberPreparedPackages =ResponsesItems.Count;                                                                                            //кол-во подготовленных к отправке пакетов  
+            var countAll = ResponsesItems.Count(resp => resp.Status != StatusDataExchange.EndWithTimeout);                        //кол-во ВСЕХ полученных ответов
+            var countIsValid = ResponsesItems.Count(resp => resp.ResponseInfo != null && resp.ResponseInfo.IsOutDataValid);       //кол-во ВАЛИДНЫХ ответов
+            Evaluation = new EvaluateResponsesItemsResult(numberPreparedPackages, countAll, countIsValid, ResponsesItems.Select(r => r.Status));
+            return Evaluation.IsValidAll ? Result.Ok() : Result.Failure(Evaluation.ErrorStat);
+        }
+    }
+
+
+    public class EvaluateResponsesItemsResult
+    {
+        public readonly int NumberPreparedPackages;
+        public readonly int CountAll;
+        public readonly int CountIsValid;
+        public readonly bool IsValidAll;
+        public readonly string ErrorStat;
+
+        public EvaluateResponsesItemsResult(int numberPreparedPackages, int countAll, int countIsValid, IEnumerable<StatusDataExchange> responseStatuses)
+        {
+            NumberPreparedPackages = numberPreparedPackages;
+            CountAll = countAll;
+            CountIsValid = countIsValid;
+
+            if (countIsValid < numberPreparedPackages)
+            {
+                ErrorStat = responseStatuses.Select(status => status.ToString()).Aggregate((i, j) => i + " | " + j);
+                IsValidAll = false;
+            }
+            else
+            {
+                IsValidAll = true;
+                ErrorStat = string.Empty;
+            }
+        }
     }
 
 

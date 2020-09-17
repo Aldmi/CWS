@@ -4,6 +4,7 @@ using Domain.InputDataModel.Autodictor.ForProviderImpl.ProvidersSpecial;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;
+using Domain.InputDataModel.OpcServer.ForProviderImpl.ProvidersSpecial;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
 
 namespace WebApiSwc.AutofacModules
@@ -20,6 +21,10 @@ namespace WebApiSwc.AutofacModules
                 case "AdInputType":
                     builder.RegisterType<AdInputTypeIndependentInseartsHandlersFactory>().As<IIndependentInseartsHandlersFactory>().SingleInstance();
                     builder.RegisterType<VidorBinaryDataProvider>().Named<IDataProvider<TIn>>("VidorBinary").InstancePerDependency();
+                    break;
+
+                case "OpcInputType":
+                    builder.RegisterType<OpcSpecialDataProvider>().Named<IDataProvider<TIn>>("OpcSpecial").InstancePerDependency();
                     break;
 
                 case "OtherType":

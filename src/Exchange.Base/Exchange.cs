@@ -137,7 +137,8 @@ namespace Domain.Exchange
                 IsOpenChangeTransportRx.OnNext(model);
             });
             _dataProviderFactory = dataProviderFactory;
-            var owner= dataProviderFactory[_option.Provider.Name](_option.Provider);
+            //var owner= dataProviderFactory[_option.Provider.Name](_option.Provider);
+            var owner = dataProviderFactory["OpcSpecial"](_option.Provider);
             _dataProviderOwner = owner;
             _dataProvider = owner.Value;
             _logger = logger;
@@ -223,9 +224,9 @@ namespace Domain.Exchange
         private int _countTimeoutTrying = 0;
         private async Task<ResponsePieceOfDataWrapper<TIn>> SendingPieceOfData(DataAction dataAction, InDataWrapper<TIn> inData, CancellationToken ct)
         {
-            var transportResponseWrapper = new ResponsePieceOfDataWrapper<TIn> {KeyExchange = KeyExchange, DeviceName = DeviceName, DataAction = dataAction};
+            var responsePieceOfDataWrapper = new ResponsePieceOfDataWrapper<TIn> {KeyExchange = KeyExchange, DeviceName = DeviceName, DataAction = dataAction};
             //ПОДПИСКА НА СОБЫТИЕ ОТПРАВКИ ПОРЦИИ ДАННЫХ
-            var subscription = _dataProvider.RaiseSendDataRx.Subscribe(providerResult =>
+            var subscription = _dataProvider.RaiseProviderResultRx.Subscribe(providerResult =>
             {
                 var transportResp = new ResponseDataItem<TIn>();
                 var status = StatusDataExchange.None;
@@ -239,7 +240,6 @@ namespace Domain.Exchange
                             IsConnect = true;
                             _countErrorTrying = 0;
                             _countTimeoutTrying = 0;
-                            transportResp.ResponseInfo = providerResult.OutputData;
                             transportResp.ProcessedItemsInBatch = providerResult.ProcessedItemsInBatch;
                             break;
 
@@ -292,7 +292,7 @@ namespace Domain.Exchange
                     transportResp.ResponseInfo = providerResult.OutputData;
                     transportResp.Status = status;
                     transportResp.MessageDict = new Dictionary<string, string>(providerResult.StatusDict);
-                    transportResponseWrapper.ResponsesItems.Add(transportResp);
+                    responsePieceOfDataWrapper.ResponsesItems.Add(transportResp);
                 }
             });
             try
@@ -301,7 +301,7 @@ namespace Domain.Exchange
                 _sw.Restart();
                 await _dataProvider.StartExchangePipelineAsync(inData, _ctsStartExchangePipeline.Token);
                 _sw.Stop();
-                transportResponseWrapper.TimeAction = _sw.ElapsedMilliseconds;
+                responsePieceOfDataWrapper.TimeAction = _sw.ElapsedMilliseconds;
             }
             catch (OperationCanceledException)
             {
@@ -311,8 +311,8 @@ namespace Domain.Exchange
             {
                 //ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ.
                 IsConnect = false;
-                transportResponseWrapper.ExceptionExchangePipline = ex;
-                transportResponseWrapper.MessageDict = new Dictionary<string, string>(_dataProvider.StatusDict);
+                responsePieceOfDataWrapper.ExceptionExchangePipline = ex;
+                responsePieceOfDataWrapper.MessageDict = new Dictionary<string, string>(_dataProvider.StatusDict);
                 _logger.Warning("{Type} {KeyExchange}", "ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. (смотерть ExceptionExchangePipline)", KeyExchange);
             }
             finally
@@ -321,39 +321,35 @@ namespace Domain.Exchange
             }
 
             //ОТЧЕТ ОБ ОТПРАВКИ ПОРЦИИ ДАННЫХ.
-            LogedResponseInformation(transportResponseWrapper);
-            LastSendData = new LastSendPieceOfDataRxModel<TIn>(transportResponseWrapper);
-            return transportResponseWrapper;
+            responsePieceOfDataWrapper.EvaluateResponsesItems();
+            LogedResponseInformation(responsePieceOfDataWrapper);
+            LastSendData = new LastSendPieceOfDataRxModel<TIn>(responsePieceOfDataWrapper);
+            return responsePieceOfDataWrapper;
         }
 
 
         /// <summary>
         /// Логирование информации.
         /// </summary>
-        private void LogedResponseInformation(ResponsePieceOfDataWrapper<TIn> response)//TODO: Разнести обработку (выставить response.IsValidAll) и логирование данных.
+        private void LogedResponseInformation(ResponsePieceOfDataWrapper<TIn> response)
         {
             try
             {
-                var numberPreparedPackages = response.ResponsesItems.Count;                                                                           //кол-во подготовленных к отправке пакетов        
-                var countAll = response.ResponsesItems.Count(resp => resp.Status != StatusDataExchange.EndWithTimeout);                               //кол-во ВСЕХ полученных ответов
-                var countIsValid = response.ResponsesItems.Count(resp => resp.ResponseInfo != null && resp.ResponseInfo.IsOutDataValid);              //кол-во ВАЛИДНЫХ ответов
-                string errorStat = string.Empty;
-                response.IsValidAll = true;
-                if (countIsValid < numberPreparedPackages)
-                {
-                    errorStat = response.ResponsesItems.Select(r => r.Status.ToString()).Aggregate((i, j) => i + " | " + j);
-                    response.IsValidAll = false;
-                }
+                var numberPreparedPackages = response.Evaluation.NumberPreparedPackages;     //кол-во подготовленных к отправке пакетов        
+                var countAll = response.Evaluation.CountAll;                                 //кол-во ВСЕХ полученных ответов
+                var countIsValid = response.Evaluation.CountIsValid;                         //кол-во ВАЛИДНЫХ ответов
+                var errorStat = response.Evaluation.ErrorStat;                             //конкатенация ошибок, если IsValidAll == false
+                var isValidAll = response.Evaluation.IsValidAll;                                //Объединение всех флагов ошибок по 'И'
 
                 var responseInfo = response.ResponsesItems.Select(item => new
                 {
-                    Rule = $"RuleName= {item.MessageDict["RuleName"]}  viewRule.Id= {item.MessageDict["viewRule.Id"]}",
+                    Rule = $"RuleName= {item.MessageDict["RuleName"]}  viewRule.Id= {item.MessageDict["viewRule.Id"]}", //RuleName->SendingUnitName;   viewRule.Id-> входит а SendingUnitName
                     StatusStr = item.StatusStr,
                     Request = item.MessageDict.ContainsKey("GetDataByte.Request") ? item.MessageDict["GetDataByte.Request"] : null,
                     RequestBase = item.MessageDict.ContainsKey("GetDataByte.RequestBase") ? item.MessageDict["GetDataByte.RequestBase"] : null,
                     Response = item.ResponseInfo?.ToString(),
-                    TimeResponse = item.MessageDict["TimeResponse"],
-                    StronglyTypedResponse = item.MessageDict.ContainsKey("SetDataByte.StronglyTypedResponse") ? item.MessageDict["SetDataByte.StronglyTypedResponse"] : null,
+                    TimeResponse = item.MessageDict["TimeResponse"],  //TimeResponse->вынести в отдельное поле;
+                    StronglyTypedResponse = item.MessageDict.ContainsKey("SetDataByte.StronglyTypedResponse") ? item.MessageDict["SetDataByte.StronglyTypedResponse"] : null,  //StronglyTypedResponse-> вынести в отдельное поле
                 }).ToList();
 
                 var settings = new JsonSerializerSettings
@@ -364,13 +360,13 @@ namespace Domain.Exchange
                 var jsonRespInfo = JsonConvert.SerializeObject(responseInfo, settings);
                 var countStat = $"успех/ответов/запросов= ({countIsValid} / {countAll} / {numberPreparedPackages})";
                 var timeAction = response.TimeAction;
-                var isValidAll = response.IsValidAll;
+              
                 _logger.Information("{Type} ({TimeAction} мс.) {KeyExchange}  РЕЗУЛЬТАТ= {isValid}  {countStat}  [{errorStat}] jsonRespInfo= {jsonRespInfo}",
                                     "ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН.", timeAction, KeyExchange, isValidAll, countStat, errorStat, jsonRespInfo);
             }
             catch (Exception ex)
             {
-                _logger.Error("{Type} {KeyExchange}  {Exception}", "ОШИБКА LogedResponseInformation", KeyExchange, ex);
+                _logger.Error("{Type} {KeyExchange}  {Exception}", "ОШИБКА Exchange.LogedResponseInformation", KeyExchange, ex);
             }
         }
         #endregion

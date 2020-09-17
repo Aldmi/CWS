@@ -28,7 +28,8 @@ namespace Domain.InputDataModel.Autodictor.ForProviderImpl.ProvidersSpecial
 
         #region ctor
 
-        public VidorBinaryDataProvider(ProviderOption providerOption) : base(null, null)
+        public VidorBinaryDataProvider(ProviderOption providerOption)
+            : base("Vidor", null, null)
         {
             _providerOption = providerOption.ManualProviderOption;
             if(_providerOption == null)
@@ -87,7 +88,7 @@ namespace Domain.InputDataModel.Autodictor.ForProviderImpl.ProvidersSpecial
             throw new NotImplementedException();
         }
 
-        Subject<ProviderResult<AdInputType>> IDataProvider<AdInputType>.RaiseSendDataRx => _raiseSendDataRx;
+        Subject<ProviderResult<AdInputType>> IDataProvider<AdInputType>.RaiseProviderResultRx => _raiseSendDataRx;
 
         public Subject<IDataProvider<AdInputType>> RaiseSendDataRx { get; }
 

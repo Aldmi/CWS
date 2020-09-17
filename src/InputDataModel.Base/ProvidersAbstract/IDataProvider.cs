@@ -13,8 +13,8 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         string ProviderName { get;  }                                 //Название провайдера
         Dictionary<string, string> StatusDict{ get; }                 //Статус провайдера.
 
-        Task StartExchangePipelineAsync(InDataWrapper<TInput> inData, CancellationToken ct);                   //Запустить конвеер обмена. После окончания подготовки порции данных конвеером, срабатывает RaiseSendDataRx.
-        Subject<ProviderResult<TInput>> RaiseSendDataRx { get; }                   //Событие отправки данных, в процессе обработки их конвеером.
+        Task StartExchangePipelineAsync(InDataWrapper<TInput> inData, CancellationToken ct);                   //Запустить конвеер обмена. После окончания подготовки порции данных конвеером, срабатывает RaiseProviderResultRx.
+        Subject<ProviderResult<TInput>> RaiseProviderResultRx { get; }                   //Событие отправки данных, в процессе обработки их конвеером.
 
         ProviderOption GetCurrentOption();                                           //Вернуть список текущих опций (опции могут быть изменены и отличатся от опций из БД)
     }

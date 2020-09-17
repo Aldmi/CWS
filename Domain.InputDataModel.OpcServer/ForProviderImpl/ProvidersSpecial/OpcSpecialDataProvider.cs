@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain.InputDataModel.Base.Enums;
@@ -16,23 +15,20 @@ namespace Domain.InputDataModel.OpcServer.ForProviderImpl.ProvidersSpecial
 {
     public class OpcSpecialDataProvider : BaseDataProvider<OpcInputType>, IDataProvider<OpcInputType>
     {
-        public string ProviderName { get; }                                     //TODO: возможно вынести в base
-        public Dictionary<string, string> StatusDict { get; } = new Dictionary<string, string>();   //TODO: возможно вынести в base
-        public Subject<ProviderResult<OpcInputType>> RaiseSendDataRx { get; }  //TODO: возможно вынести в base
 
-
-
-        public OpcSpecialDataProvider(Func<ProviderTransfer<OpcInputType>, IDictionary<string, string>, ProviderResult<OpcInputType>> providerResultFactory, ILogger logger) : base(providerResultFactory, logger)
+        #region ctor
+        public OpcSpecialDataProvider(Func<ProviderTransfer<OpcInputType>, IDictionary<string, string>, ProviderResult<OpcInputType>> providerResultFactory, ILogger logger) 
+            : base("OpcSpecial", providerResultFactory, logger)
         {
-            ProviderName = "OpcSpecial"; //providerOption.Name;
         }
+        #endregion
 
 
 
 
         public async Task StartExchangePipelineAsync(InDataWrapper<OpcInputType> inData, CancellationToken ct)
         {
-            await Task.Delay(1000, ct);
+            await Task.Delay(500, ct);
 
             //Добавили статусы
             StatusDict["State 1"] = "qqq";
@@ -62,6 +58,7 @@ namespace Domain.InputDataModel.OpcServer.ForProviderImpl.ProvidersSpecial
                 Response = new ResponseTransfer(respOption, respValidatorResult.Value),
                 Command = Command4Device.None
             };
+
             //заполнили статистику обработки элемента ВХОДНЫХ данных
             transfer.Request.ProcessedItemsInBatch = new ProcessedItemsInBatch<OpcInputType>(0, 1, new List<ProcessedItem<OpcInputType>>
                 {
@@ -72,8 +69,13 @@ namespace Domain.InputDataModel.OpcServer.ForProviderImpl.ProvidersSpecial
                       }))
                 });
 
+
+            //сформировать конечную строку запроса.
+            transfer.Request.StrRepresent = new StringRepresentation(requestOption.Header  + requestOption.Body + requestOption.Footer, requestOption.Format);
+            transfer.Request.StrRepresentBase = new StringRepresentation(requestOption.Header + requestOption.Body + requestOption.Footer, requestOption.Format);
+
             var providerResult = ProviderResultFactory(transfer, StatusDict);
-            RaiseSendDataRx.OnNext(providerResult);
+            RaiseProviderResultRx.OnNext(providerResult);
         }
 
 

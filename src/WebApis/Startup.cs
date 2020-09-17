@@ -12,6 +12,8 @@ using Domain.Device;
 using Domain.Exchange;
 using Domain.Exchange.Enums;
 using Domain.InputDataModel.Autodictor.Model;
+using Domain.InputDataModel.Base.InData;
+using Domain.InputDataModel.OpcServer.Model;
 using Firewall;
 using Infrastructure.Background;
 using Infrastructure.Background.Abstarct;
@@ -135,8 +137,8 @@ namespace WebApiSwc
                 builder.RegisterModule(new MessageBrokerAutofacModule());
                 builder.RegisterModule(new BlConfigAutofacModule());
 
-                var inputDataName = AppConfiguration["InputDataModel"];
-                switch (inputDataName)
+                var inTypeName = AppConfiguration["InputDataModel"];
+                switch (inTypeName)
                 {
                     case "AdInputType":
                         builder.RegisterModule(new DataProviderAutofacModule<AdInputType>());
@@ -146,7 +148,18 @@ namespace WebApiSwc
                         builder.RegisterModule(new MediatorsAutofacModule<AdInputType>());
                         builder.RegisterModule(new ExchangeAutofacModule<AdInputType>());
                         builder.RegisterModule(new DeviceAutofacModule<AdInputType>());
-                        builder.RegisterModule(new InputDataAutofacModule<AdInputType>(AppConfiguration.GetSection("MessageBrokerConsumer4InData")));
+                        builder.RegisterModule(new MessageBrokerConsumer4InDataAutofacModule<AdInputType>(AppConfiguration.GetSection("MessageBrokerConsumer4InData")));
+                        break;
+
+                    case "OpcInputType":
+                        builder.RegisterModule(new DataProviderAutofacModule<OpcInputType>());
+                        builder.RegisterModule(new ProduserUnionAutofacModule<OpcInputType>());
+                        builder.RegisterModule(new BlStorageAutofacModule<OpcInputType>());
+                        builder.RegisterModule(new BlBuildAutofacModule<OpcInputType>());
+                        builder.RegisterModule(new MediatorsAutofacModule<OpcInputType>());
+                        builder.RegisterModule(new ExchangeAutofacModule<OpcInputType>());
+                        builder.RegisterModule(new DeviceAutofacModule<OpcInputType>());
+                        builder.RegisterModule(new MessageBrokerConsumer4InDataAutofacModule<OpcInputType>(AppConfiguration.GetSection("MessageBrokerConsumer4InData")));
                         break;
 
                     case "OtherInputType":
@@ -193,8 +206,22 @@ namespace WebApiSwc
                 Console.WriteLine(ex.Message);
             }
 
-            InitializeAsync(scope).Wait();
-            ConfigurationBackgroundProcessAsync(app, scope);
+            var inTypeName = AppConfiguration["InputDataModel"];
+            switch (inTypeName)
+            {
+                case "AdInputType":
+                    InitializeAsync<AdInputType>(scope).Wait();
+                    ConfigurationBackgroundProcessAsync<AdInputType>(app, scope);
+                    break;
+
+                case "OpcInputType":
+                    InitializeAsync<OpcInputType>(scope).Wait();
+                    ConfigurationBackgroundProcessAsync<OpcInputType>(app, scope);
+                    break;
+
+                case "OtherInputType":
+                    throw new NotImplementedException();
+            }
 
             if (env.IsDevelopment())
             {
@@ -234,19 +261,19 @@ namespace WebApiSwc
         }
 
 
-        private void ConfigurationBackgroundProcessAsync(IApplicationBuilder app, ILifetimeScope scope)
+        private void ConfigurationBackgroundProcessAsync<TInType>(IApplicationBuilder app, ILifetimeScope scope) where TInType : InputTypeBase
         {
             var lifetimeApp = app.ApplicationServices.GetService<IHostApplicationLifetime>();
-            ApplicationStarted(lifetimeApp, scope);
-            ApplicationStopping(lifetimeApp, scope);
-            ApplicationStopped(lifetimeApp, scope);
+            ApplicationStarted<TInType>(lifetimeApp, scope);
+            ApplicationStopping<TInType>(lifetimeApp, scope);
+            ApplicationStopped<TInType>(lifetimeApp, scope);
         }
 
 
-        private void ApplicationStarted(IHostApplicationLifetime lifetimeApp, ILifetimeScope scope)
+        private void ApplicationStarted<TInType>(IHostApplicationLifetime lifetimeApp, ILifetimeScope scope) where TInType : InputTypeBase
         {
             //ЗАПУСК БЕКГРАУНДА ОПРОСА ШИНЫ ДАННЫХ
-            scope.Resolve<ConsumerMessageBroker4InputData<AdInputType>>();//перед запуском bg нужно создать ConsumerMessageBroker4InputData
+            scope.Resolve<ConsumerMessageBroker4InputData<TInType>>();//перед запуском bg нужно создать ConsumerMessageBroker4InputData
             bool.TryParse(AppConfiguration["MessageBrokerConsumer4InData:AutoStart"], out var autoStart);
             if (autoStart)
             {
@@ -279,7 +306,7 @@ namespace WebApiSwc
             });
 
             //ЗАПУСК НА ОБМЕНЕ ЦИКЛИЧЕСКОГО ОБМЕНА.
-            var exchangeServices = scope.Resolve<ExchangeStorage<AdInputType>>();
+            var exchangeServices = scope.Resolve<ExchangeStorage<TInType>>();
             lifetimeApp.ApplicationStarted.Register(() =>
             {
                 foreach (var exchange in exchangeServices.Values.Select(owned => owned.Value).Where(exch=> exch.CycleBehavior.CycleFuncOption.AutoStartCycleFunc))
@@ -289,7 +316,7 @@ namespace WebApiSwc
             });
 
             //ПОДПИСКА ДЕВАЙСА.
-            var deviceServices = scope.Resolve<DeviceStorage<AdInputType>>();
+            var deviceServices = scope.Resolve<DeviceStorage<TInType>>();
             lifetimeApp.ApplicationStarted.Register(() =>
             {
                 foreach (var device in deviceServices.Values.Select(owned => owned.Value))
@@ -305,7 +332,7 @@ namespace WebApiSwc
         }
 
 
-        private void ApplicationStopping(IHostApplicationLifetime lifetimeApp, ILifetimeScope scope)
+        private void ApplicationStopping<TInType>(IHostApplicationLifetime lifetimeApp, ILifetimeScope scope) where TInType : InputTypeBase
         {
             //ОСТАНОВ БЕКГРАУНДА ОПРОСА ШИНЫ ДАННЫХ
             var backgroundName = AppConfiguration["MessageBrokerConsumer4InData:Name"];
@@ -333,7 +360,7 @@ namespace WebApiSwc
             });
 
             //ОСТАНОВ НА ОБМЕНЕ ЦИКЛИЧЕСКОГО ОБМЕНА.
-            var exchangeServices = scope.Resolve<ExchangeStorage<AdInputType>>();
+            var exchangeServices = scope.Resolve<ExchangeStorage<TInType>>();
             lifetimeApp.ApplicationStopping.Register(() =>
             {
                 foreach (var exchange in exchangeServices.Values.Select(owned => owned.Value).Where(exch => exch.CycleBehavior.CycleBehaviorState != CycleBehaviorState.Off))
@@ -343,7 +370,7 @@ namespace WebApiSwc
             });
 
             //ОТПИСКА ДЕВАЙСА ОТ СОБЫТИЙ
-            var deviceServices = scope.Resolve<DeviceStorage<AdInputType>>();
+            var deviceServices = scope.Resolve<DeviceStorage<TInType>>();
             lifetimeApp.ApplicationStopping.Register(() =>
             {
                 foreach (var device in deviceServices.Values.Select(owned => owned.Value))
@@ -359,7 +386,7 @@ namespace WebApiSwc
         }
 
 
-        private void ApplicationStopped(IHostApplicationLifetime lifetimeApp, ILifetimeScope scope)
+        private void ApplicationStopped<TInType>(IHostApplicationLifetime lifetimeApp, ILifetimeScope scope) where TInType : InputTypeBase
         {
             lifetimeApp.ApplicationStopped.Register(() => { });
         }
@@ -368,7 +395,7 @@ namespace WebApiSwc
         /// <summary>
         /// Инициализация системы.
         /// </summary>
-        private async Task InitializeAsync(ILifetimeScope scope)
+        private async Task InitializeAsync<TInType>(ILifetimeScope scope) where TInType : InputTypeBase
         {
             var logger = scope.Resolve<ILogger>();
             var howCreateDb = SettingsFactory.GetHowCreateDb(Env, AppConfiguration);
@@ -391,7 +418,7 @@ namespace WebApiSwc
             //СОЗДАНИЕ СПИСКА ПРОДЮССЕРОВ ДЛЯ ОТВЕТОВ-------------------------------------------------
             try
             {
-                var buildProdusersUnionService = scope.Resolve<BuildProdusersUnionService<AdInputType>>();
+                var buildProdusersUnionService = scope.Resolve<BuildProdusersUnionService<TInType>>();
                 await buildProdusersUnionService.BuildAllProdusers();
             }
             catch (Exception ex) 
@@ -413,7 +440,7 @@ namespace WebApiSwc
             //СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ--------------------------------------------------
             try
             {
-                var buildDeviceService = scope.Resolve<BuildDeviceService<AdInputType>>();
+                var buildDeviceService = scope.Resolve<BuildDeviceService<TInType>>();
                 await buildDeviceService.BuildAllDevices();
             }
             catch (AggregateException ex)

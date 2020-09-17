@@ -38,13 +38,12 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
             ProviderOption providerOption,
             IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory,
             StringInsertModelExtStorage stringInsertModelExtStorage,
-            ILogger logger) : base(providerResultFactory, logger)
+            ILogger logger) : base(providerOption.Name, providerResultFactory, logger)
         {
             _option = providerOption.ByRulesProviderOption;
             if (_option == null)
                 throw new ArgumentNullException(providerOption.Name); //TODO: выбросы исключений пометсить в Shared ThrowIfNull(object obj)
 
-            ProviderName = providerOption.Name;
             _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, inputTypeInseartsHandlersFactory, stringInsertModelExtStorage, logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(_option.RuleName4DefaultHandle)
                 ? "DefaultHandler"
@@ -58,18 +57,9 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
 
         #region prop
-        public string ProviderName { get; }
+
         private IEnumerable<Rule<TIn>> GetRules => _rules.ToList();                     //Копия списка Rules, чтобы  избежать Exception при перечислении (т.к. Rules - мутабельна).
         public string RuleName4DefaultHandle { get; }
-        public Dictionary<string, string> StatusDict { get; } = new Dictionary<string, string>();
-        #endregion
-
-
-
-        #region RxEvent
-
-        public Subject<ProviderResult<TIn>> RaiseSendDataRx { get; } = new Subject<ProviderResult<TIn>>();
-
         #endregion
 
 
@@ -170,7 +160,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
                         StatusDict["viewRule.Id"] = $"{viewRule.GetCurrentOption.Id}";
                         var providerResult = ProviderResultFactory(value, StatusDict);
-                        RaiseSendDataRx.OnNext(providerResult);
+                        RaiseProviderResultRx.OnNext(providerResult);
                     }
                 }
             }
@@ -193,17 +183,18 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
             StatusDict["RuleName"] = $"{rule.GetCurrentOption().Name}";
             StatusDict["viewRule.Id"] = $"{commandViewRule.GetCurrentOption.Id}";
             var providerResult = ProviderResultFactory(providerTransfer, StatusDict);
-            RaiseSendDataRx.OnNext(providerResult);
+            RaiseProviderResultRx.OnNext(providerResult);
         }
-       #endregion
+        #endregion
 
 
 
-
-       public override void Dispose()
-       {
+        #region Disposable
+        public override void Dispose()
+        {
            base.Dispose();
-           RaiseSendDataRx?.Dispose();
-       }
+           RaiseProviderResultRx?.Dispose();
+        }
+        #endregion
     }
 }

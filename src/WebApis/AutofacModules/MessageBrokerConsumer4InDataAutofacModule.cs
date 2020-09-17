@@ -14,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace WebApiSwc.AutofacModules
 {
-    public class InputDataAutofacModule<TIn> : Module where TIn : InputTypeBase
+    public class MessageBrokerConsumer4InDataAutofacModule<TIn> : Module where TIn : InputTypeBase
     {
         public string BackgroundName { get;  }
         public bool AutoStartBg { get;  }
@@ -22,10 +22,8 @@ namespace WebApiSwc.AutofacModules
         public ConsumerOption ConsumerOption { get;}
 
 
-
         #region ctor
-
-        public InputDataAutofacModule(IConfigurationSection config)
+        public MessageBrokerConsumer4InDataAutofacModule(IConfigurationSection config)
         {
             BackgroundName= config["Name"];
             AutoStartBg=  bool.Parse(config["AutoStart"]);
@@ -37,9 +35,7 @@ namespace WebApiSwc.AutofacModules
                 Topics = new List<string> {config["Topics"]}
             };
         }
-
         #endregion
-
 
 
         protected override void Load(ContainerBuilder builder)
