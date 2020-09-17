@@ -16,19 +16,14 @@ namespace Domain.InputDataModel.Base.Response
     /// </summary>
     public class ResponsePieceOfDataWrapper<TIn>
     {
-        public string DeviceName { get; set; }                     //Название ус-ва
-        public string KeyExchange { get; set; }                    //Ключ обмена
-        public DataAction DataAction { get; set; }                 //Действие
-
-        public long TimeAction { get; set; }                       //Время выполнения обмена (на порцию данных)
-        public bool IsValidAll { get; set; }                       //TODO: убрать!!!
-
-        public EvaluateResponsesItemsResult Evaluation { get; private set; }   //Оценка ответов
-
-        public Exception ExceptionExchangePipline { get; set; }    //Критическая Ошибка обработки данных в конвеере.
-        public Dictionary<string, string> MessageDict { get; set; } //Доп. информация
+        public string DeviceName { get; set; }                                  //Название ус-ва
+        public string KeyExchange { get; set; }                                 //Ключ обмена
+        public DataAction DataAction { get; set; }                              //Действие
+        public long TimeAction { get; set; }                                    //Время выполнения обмена (на порцию данных)
+        public EvaluateResponsesItemsResult Evaluation { get; private set; }    //Оценка ответов
+        public Exception ExceptionExchangePipline { get; set; }                 //Критическая Ошибка обработки данных в конвеере.
+        public Dictionary<string, string> MessageDict { get; set; }             //Доп. информация
         public List<ResponseDataItem<TIn>> ResponsesItems { get; set; } = new List<ResponseDataItem<TIn>>();
-
 
 
 
