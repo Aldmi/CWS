@@ -46,7 +46,6 @@ namespace Domain.Exchange.Models
                     {
                         Data.TimeAction,
                         Data.Evaluation.IsValidAll,
-                        Data.MessageDict,
                         Data.ResponsesItems
                     }
             };
@@ -72,10 +71,9 @@ namespace Domain.Exchange.Models
                     {
                         Data.TimeAction,
                         Data.Evaluation.IsValidAll,
-                        Data.MessageDict,
                         ResponsesItems = Data.ResponsesItems.Select(r=> new
                         {
-                            r.MessageDict,
+                            r.ProviderStatus,
                             r.Status,
                             r.StatusStr,
                             r.ResponseInfo

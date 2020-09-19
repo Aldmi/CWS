@@ -22,7 +22,6 @@ namespace Domain.InputDataModel.Base.Response
         public long TimeAction { get; set; }                                    //Время выполнения обмена (на порцию данных)
         public EvaluateResponsesItemsResult Evaluation { get; private set; }    //Оценка ответов
         public Exception ExceptionExchangePipline { get; set; }                 //Критическая Ошибка обработки данных в конвеере.
-        public Dictionary<string, string> MessageDict { get; set; }             //Доп. информация
         public List<ResponseDataItem<TIn>> ResponsesItems { get; set; } = new List<ResponseDataItem<TIn>>();
 
 
@@ -72,7 +71,6 @@ namespace Domain.InputDataModel.Base.Response
     public class ResponseDataItem<TIn> //TODO: Сильно много статусов, оптимизиршовать поля, объект создается на базе providerResult
     {
         public string RequestId { get; set; }
-        public Dictionary<string, string> MessageDict { get; set; }   //Доп. информация
         public ProviderStatus ProviderStatus { get; set; }   
         public StatusDataExchange Status { get; set; }
         public string StatusStr => Status.ToString();

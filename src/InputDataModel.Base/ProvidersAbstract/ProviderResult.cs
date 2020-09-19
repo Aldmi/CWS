@@ -26,13 +26,10 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
 
 
         #region prop
-        public Dictionary<string, string> StatusDict { get; }
         public int TimeRespone => _transfer.Response.Option.TimeRespone;         //Время на ответ
         public BaseResponseInfo OutputData { get; private set; }
         public bool IsOutDataValid { get; private set; }
         public ProviderStatus ProviderStatus { get; private set; }
-
-
         /// <summary>
         /// Результат работы провайдера, обработанные и выставленные в протокол данные из InputData
         /// </summary>
@@ -45,7 +42,6 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         {
             _providerStatusBuilder = providerStatusBuilder;
             _transfer = transfer;
-            StatusDict = new Dictionary<string, string>();//TODO: убрать
         }
         #endregion
 

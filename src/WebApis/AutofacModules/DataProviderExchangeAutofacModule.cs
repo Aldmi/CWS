@@ -28,8 +28,6 @@ namespace WebApiSwc.AutofacModules
                     break;
 
                 case "OtherType":
-                    //builder.RegisterType<OtherTypeStronglyTypedResponseFactory>().As<IStronglyTypedResponseFactory>().SingleInstance();
-                    //builder.RegisterType<OtherDataProvider>().As<IExchangeDataProvider<TIn, TransportResponse>>().InstancePerDependency();
                     break;
             }
 

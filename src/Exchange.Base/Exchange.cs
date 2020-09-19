@@ -292,7 +292,6 @@ namespace Domain.Exchange
                     transportResp.ResponseInfo = providerResult.OutputData;
                     transportResp.Status = status;
                     transportResp.ProviderStatus = providerResult.ProviderStatus;
-                    transportResp.MessageDict = new Dictionary<string, string>(providerResult.StatusDict);
                     responsePieceOfDataWrapper.ResponsesItems.Add(transportResp);
                 }
             });
@@ -349,9 +348,7 @@ namespace Domain.Exchange
                     StatusStr = item.StatusStr,
                     Request = item.ProviderStatus.Request.ToString(),
                     RequestBase = item.ProviderStatus.GetRequestBaseIfHeNotEqualRequest?.ToString(),
-                    Response = item.ResponseInfo?.ToString(),
-                    TimeResponse = item.ProviderStatus.TimeResponse,
-                    StronglyTypedResponse = item.MessageDict.ContainsKey("SetDataByte.StronglyTypedResponse") ? item.MessageDict["SetDataByte.StronglyTypedResponse"] : null,  //StronglyTypedResponse-> вынести в отдельное поле
+                    Response =$"{item.ResponseInfo?.ToString() ?? string.Empty} T='{item.ProviderStatus.TimeResponse}'"
                 }).ToList();
 
                 var settings = new JsonSerializerSettings
