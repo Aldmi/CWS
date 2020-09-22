@@ -111,7 +111,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// Создает массив из сервисов Зависимой вставки.
         /// Ко-во сервисов определяется как разбивается строка на батчи исходя из опций option.BatchSize, option.Count
         /// Для каждого сервиса DependentInseartsServiceFactory определяет свой набор обработчиков.
-        /// Номер батча является индексом этого массива. Для выбора нужного серовиса.
+        /// Номер батча является индексом этого массива. Для выбора нужного сервиса.
         /// </summary>
         private static DependentInseartService[] CreateDependentInseartServiceCollection(int batchSize, int count, string header, string body, string footer, IReadOnlyDictionary<string, StringInsertModelExt> stringInsertModelExtDict)
         {

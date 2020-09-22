@@ -74,9 +74,11 @@ namespace Domain.InputDataModel.OpcServer.ForProviderImpl.ProvidersSpecial
             transfer.Request.StrRepresent = new StringRepresentation(requestOption.Header  + requestOption.Body + requestOption.Footer, requestOption.Format);
             transfer.Request.StrRepresentBase = new StringRepresentation(requestOption.Header + requestOption.Body + requestOption.Footer, requestOption.Format);
 
-            //var providerStatus = new ProviderStatusBuilder("RequestName= 'Opc1'");
-            //var providerResult = ProviderResultFactory(transfer, providerStatus);
-           // RaiseProviderResultRx.OnNext(providerResult);
+            transfer.CreateProviderStatusBuilder("RequestName= 'Opc1'");
+
+            var providerStatus = transfer.CreateProviderStatusBuilder("RequestName= 'Opc1'");
+            var providerResult = ProviderResultFactory(transfer, providerStatus);
+            RaiseProviderResultRx.OnNext(providerResult);
         }
 
 
