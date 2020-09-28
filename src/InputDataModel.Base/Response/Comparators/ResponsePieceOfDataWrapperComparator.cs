@@ -29,7 +29,7 @@ namespace Domain.InputDataModel.Base.Response.Comparators
             if (ReferenceEquals(_oldValue,  value))
                 return true;
 
-            var isValidCmp = _oldValue.IsValidAll == value.IsValidAll;
+            var isValidCmp = _oldValue.Evaluation.IsValidAll == value.Evaluation.IsValidAll;
             var (isSuccess, _) = Comparer(_oldValue.ResponsesItems, value.ResponsesItems);
             var equal= isValidCmp && isSuccess;
             if (!equal)

@@ -36,5 +36,6 @@ namespace WebApiSwc.DTO.JSON.InputTypesDto
         public Addition Addition { get; set; }                       //Дополнение (свободная строка)
         public Note Note { get; set; }                               //Примечание.
         public DaysFollowing DaysFollowing { get; set; }             //Дни следования
+        public Emergency Emergency { get; set; }                     //Нештатки
     }
 }

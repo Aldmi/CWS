@@ -1,10 +1,10 @@
 ﻿using Autofac;
-using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory;
-using Domain.InputDataModel.Autodictor.ProvidersSpecial;
+using Domain.InputDataModel.Autodictor.ForProviderImpl.IndependentInseartsImpl.Factory;
+using Domain.InputDataModel.Autodictor.ForProviderImpl.ProvidersSpecial;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;
-using Domain.InputDataModel.Base.Response.ResponseInfos;
+using Domain.InputDataModel.OpcServer.ForProviderImpl.ProvidersSpecial;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
 
 namespace WebApiSwc.AutofacModules
@@ -20,17 +20,18 @@ namespace WebApiSwc.AutofacModules
             {
                 case "AdInputType":
                     builder.RegisterType<AdInputTypeIndependentInseartsHandlersFactory>().As<IIndependentInseartsHandlersFactory>().SingleInstance();
+                    builder.RegisterType<VidorBinaryDataProvider>().Named<IDataProvider<TIn>>("VidorBinary").InstancePerDependency();
+                    break;
 
-                    builder.RegisterType<VidorBinaryDataProvider>().Named<IDataProvider<TIn, BaseResponseInfo>>("VidorBinary").InstancePerDependency();
-                    builder.RegisterType<ByRulesDataProvider<TIn>>().Named<IDataProvider<TIn, BaseResponseInfo>>("ByRules").InstancePerDependency();
+                case "OpcInputType":
+                    builder.RegisterType<OpcSpecialDataProvider>().Named<IDataProvider<TIn>>("OpcSpecial").InstancePerDependency();
                     break;
 
                 case "OtherType":
-                    //builder.RegisterType<OtherTypeStronglyTypedResponseFactory>().As<IStronglyTypedResponseFactory>().SingleInstance();
-                    //builder.RegisterType<OtherDataProvider>().As<IExchangeDataProvider<TIn, TransportResponse>>().InstancePerDependency();
                     break;
             }
 
+            builder.RegisterType<ByRulesDataProvider<TIn>>().Named<IDataProvider<TIn>>("ByRules").InstancePerDependency();
             builder.RegisterType<ProviderResult<TIn>>().InstancePerDependency();
         }
     }

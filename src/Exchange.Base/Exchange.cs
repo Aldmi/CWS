@@ -17,7 +17,6 @@ using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response;
-using Domain.InputDataModel.Base.Response.ResponseInfos;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.Transport.Base.Abstract;
 using Infrastructure.Transport.Base.RxModel;
@@ -38,9 +37,9 @@ namespace Domain.Exchange
         private readonly ITransport _transport;
         private readonly ITransportBackground _transportBackground;
 
-        private readonly IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, BaseResponseInfo>>>> _dataProviderFactory;
+        private readonly IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn>>>> _dataProviderFactory;
 
-        private IDataProvider<TIn, BaseResponseInfo> _dataProvider; //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
+        private IDataProvider<TIn> _dataProvider; //провайдер данных является StateFull, т.е. хранит свое последнее состояние между отправкой данных
 
         private IDisposable _dataProviderOwner;                  //управляет временем жизни _dataProvider
         private readonly IDisposable _disposeTransportIsOpenRx;   //отписка от события 
@@ -122,7 +121,7 @@ namespace Domain.Exchange
                                  ExchangeOption option,
                                  ITransport transport,
                                  ITransportBackground transportBackground,
-                                 IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn, BaseResponseInfo>>>> dataProviderFactory,
+                                 IIndex<string, Func<ProviderOption, Owned<IDataProvider<TIn>>>> dataProviderFactory,
                                  ILogger logger,
                                  Func<string, ITransportBackground, CycleFuncOption, Func<DataAction, InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<CycleBehavior<TIn>>> cycleBehaviorFactory,
                                  Func<string, ITransportBackground, Func<DataAction, InDataWrapper<TIn>, CancellationToken, Task<ResponsePieceOfDataWrapper<TIn>>>, Owned<OnceBehavior<TIn>>> onceBehaviorFactory,
@@ -139,6 +138,7 @@ namespace Domain.Exchange
             });
             _dataProviderFactory = dataProviderFactory;
             var owner= dataProviderFactory[_option.Provider.Name](_option.Provider);
+            //var owner = dataProviderFactory["OpcSpecial"](_option.Provider);//DEBUG
             _dataProviderOwner = owner;
             _dataProvider = owner.Value;
             _logger = logger;
@@ -224,9 +224,9 @@ namespace Domain.Exchange
         private int _countTimeoutTrying = 0;
         private async Task<ResponsePieceOfDataWrapper<TIn>> SendingPieceOfData(DataAction dataAction, InDataWrapper<TIn> inData, CancellationToken ct)
         {
-            var transportResponseWrapper = new ResponsePieceOfDataWrapper<TIn> {KeyExchange = KeyExchange, DeviceName = DeviceName, DataAction = dataAction};
+            var responsePieceOfDataWrapper = new ResponsePieceOfDataWrapper<TIn> {KeyExchange = KeyExchange, DeviceName = DeviceName, DataAction = dataAction};
             //ПОДПИСКА НА СОБЫТИЕ ОТПРАВКИ ПОРЦИИ ДАННЫХ
-            var subscription = _dataProvider.RaiseSendDataRx.Subscribe(providerResult =>
+            var subscription = _dataProvider.RaiseProviderResultRx.Subscribe(providerResult =>
             {
                 var transportResp = new ResponseDataItem<TIn>();
                 var status = StatusDataExchange.None;
@@ -240,7 +240,6 @@ namespace Domain.Exchange
                             IsConnect = true;
                             _countErrorTrying = 0;
                             _countTimeoutTrying = 0;
-                            transportResp.ResponseInfo = providerResult.OutputData;
                             transportResp.ProcessedItemsInBatch = providerResult.ProcessedItemsInBatch;
                             break;
 
@@ -292,8 +291,8 @@ namespace Domain.Exchange
                 {
                     transportResp.ResponseInfo = providerResult.OutputData;
                     transportResp.Status = status;
-                    transportResp.MessageDict = new Dictionary<string, string>(providerResult.StatusDict);
-                    transportResponseWrapper.ResponsesItems.Add(transportResp);
+                    transportResp.ProviderStatus = providerResult.ProviderStatus;
+                    responsePieceOfDataWrapper.ResponsesItems.Add(transportResp);
                 }
             });
             try
@@ -302,7 +301,7 @@ namespace Domain.Exchange
                 _sw.Restart();
                 await _dataProvider.StartExchangePipelineAsync(inData, _ctsStartExchangePipeline.Token);
                 _sw.Stop();
-                transportResponseWrapper.TimeAction = _sw.ElapsedMilliseconds;
+                responsePieceOfDataWrapper.TimeAction = _sw.ElapsedMilliseconds;
             }
             catch (OperationCanceledException)
             {
@@ -312,8 +311,7 @@ namespace Domain.Exchange
             {
                 //ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ.
                 IsConnect = false;
-                transportResponseWrapper.ExceptionExchangePipline = ex;
-                transportResponseWrapper.MessageDict = new Dictionary<string, string>(_dataProvider.StatusDict);
+                responsePieceOfDataWrapper.ExceptionExchangePipline = ex;
                 _logger.Warning("{Type} {KeyExchange}", "ОШИБКА ПОДГОТОВКИ ДАННЫХ К ОБМЕНУ. (смотерть ExceptionExchangePipline)", KeyExchange);
             }
             finally
@@ -321,40 +319,36 @@ namespace Domain.Exchange
                 subscription.Dispose();
             }
 
+            //ОЦЕНКА ОТВЕТОВ ПОЛУЧЕННЫХ, НА ОТПРАВКУ ПОРЦИИ ДАННЫХ.
+            responsePieceOfDataWrapper.EvaluateResponsesItems();
+
             //ОТЧЕТ ОБ ОТПРАВКИ ПОРЦИИ ДАННЫХ.
-            LogedResponseInformation(transportResponseWrapper);
-            LastSendData = new LastSendPieceOfDataRxModel<TIn>(transportResponseWrapper);
-            return transportResponseWrapper;
+            LogedInformation(responsePieceOfDataWrapper);
+            LastSendData = new LastSendPieceOfDataRxModel<TIn>(responsePieceOfDataWrapper);
+            return responsePieceOfDataWrapper;
         }
 
 
         /// <summary>
         /// Логирование информации.
         /// </summary>
-        private void LogedResponseInformation(ResponsePieceOfDataWrapper<TIn> response)//TODO: Разнести обработку (выставить response.IsValidAll) и логирование данных.
+        private void LogedInformation(ResponsePieceOfDataWrapper<TIn> response)
         {
             try
             {
-                var numberPreparedPackages = response.ResponsesItems.Count;                                                                           //кол-во подготовленных к отправке пакетов        
-                var countAll = response.ResponsesItems.Count(resp => resp.Status != StatusDataExchange.EndWithTimeout);                               //кол-во ВСЕХ полученных ответов
-                var countIsValid = response.ResponsesItems.Count(resp => resp.ResponseInfo != null && resp.ResponseInfo.IsOutDataValid);              //кол-во ВАЛИДНЫХ ответов
-                string errorStat = string.Empty;
-                response.IsValidAll = true;
-                if (countIsValid < numberPreparedPackages)
-                {
-                    errorStat = response.ResponsesItems.Select(r => r.Status.ToString()).Aggregate((i, j) => i + " | " + j);
-                    response.IsValidAll = false;
-                }
+                var numberPreparedPackages = response.Evaluation.NumberPreparedPackages;     //кол-во подготовленных к отправке пакетов        
+                var countAll = response.Evaluation.CountAll;                                 //кол-во ВСЕХ полученных ответов
+                var countIsValid = response.Evaluation.CountIsValid;                         //кол-во ВАЛИДНЫХ ответов
+                var errorStat = response.Evaluation.ErrorStat;                             //конкатенация ошибок, если IsValidAll == false
+                var isValidAll = response.Evaluation.IsValidAll;                                //Объединение всех флагов ошибок по 'И'
 
                 var responseInfo = response.ResponsesItems.Select(item => new
                 {
-                    Rule = $"RuleName= {item.MessageDict["RuleName"]}  viewRule.Id= {item.MessageDict["viewRule.Id"]}",
+                    SendingUnitName = item.ProviderStatus.SendingUnitName,
                     StatusStr = item.StatusStr,
-                    Request = item.MessageDict.ContainsKey("GetDataByte.Request") ? item.MessageDict["GetDataByte.Request"] : null,
-                    RequestBase = item.MessageDict.ContainsKey("GetDataByte.RequestBase") ? item.MessageDict["GetDataByte.RequestBase"] : null,
-                    Response = item.ResponseInfo?.ToString(),
-                    TimeResponse = item.MessageDict["TimeResponse"],
-                    StronglyTypedResponse = item.MessageDict.ContainsKey("SetDataByte.StronglyTypedResponse") ? item.MessageDict["SetDataByte.StronglyTypedResponse"] : null,
+                    Request = item.ProviderStatus.Request.ToString(),
+                    RequestBase = item.ProviderStatus.GetRequestBaseIfHeNotEqualRequest?.ToString(),
+                    Response =$"{item.ResponseInfo?.ToString() ?? string.Empty} T='{item.ProviderStatus.TimeResponse}'"
                 }).ToList();
 
                 var settings = new JsonSerializerSettings
@@ -365,13 +359,13 @@ namespace Domain.Exchange
                 var jsonRespInfo = JsonConvert.SerializeObject(responseInfo, settings);
                 var countStat = $"успех/ответов/запросов= ({countIsValid} / {countAll} / {numberPreparedPackages})";
                 var timeAction = response.TimeAction;
-                var isValidAll = response.IsValidAll;
+              
                 _logger.Information("{Type} ({TimeAction} мс.) {KeyExchange}  РЕЗУЛЬТАТ= {isValid}  {countStat}  [{errorStat}] jsonRespInfo= {jsonRespInfo}",
                                     "ОТВЕТ НА ПАКЕТНУЮ ОТПРАВКУ ПОЛУЧЕН.", timeAction, KeyExchange, isValidAll, countStat, errorStat, jsonRespInfo);
             }
             catch (Exception ex)
             {
-                _logger.Error("{Type} {KeyExchange}  {Exception}", "ОШИБКА LogedResponseInformation", KeyExchange, ex);
+                _logger.Error("{Type} {KeyExchange}  {Exception}", "ОШИБКА Exchange.LogedInformation", KeyExchange, ex);
             }
         }
         #endregion
@@ -397,7 +391,7 @@ namespace Domain.Exchange
         }
 
 
-        private Result<Owned<IDataProvider<TIn, BaseResponseInfo>>> TryCreateProvider(ProviderOption option)
+        private Result<Owned<IDataProvider<TIn>>> TryCreateProvider(ProviderOption option)
         {
             try
             {
@@ -407,7 +401,7 @@ namespace Domain.Exchange
             catch (Exception e)
             {
                 var unionMessages = e.GetOriginalException().Message;
-                return Result.Failure<Owned<IDataProvider<TIn, BaseResponseInfo>>>($"Exception при УСТАНОВКИ НОВГО ПРОВАЙДЕРА \"{unionMessages}\"");
+                return Result.Failure<Owned<IDataProvider<TIn>>>($"Exception при УСТАНОВКИ НОВГО ПРОВАЙДЕРА \"{unionMessages}\"");
             }
         }
         #endregion

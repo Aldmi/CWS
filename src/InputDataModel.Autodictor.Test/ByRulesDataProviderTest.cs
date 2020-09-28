@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Domain.InputDataModel.Autodictor.Entities;
-using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory;
+using Domain.InputDataModel.Autodictor.ForProviderImpl.IndependentInseartsImpl.Factory;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
@@ -93,7 +93,7 @@ namespace InputDataModel.Autodictor.Test
             //// Act
             //int countSetDataByte = 0;
             //byte[] getDataByte = null;
-            //var subscription = btByRulesDataProvider.RaiseSendDataRx.Subscribe(provider =>
+            //var subscription = btByRulesDataProvider.RaiseProviderResultRx.Subscribe(provider =>
             //    {
 
 

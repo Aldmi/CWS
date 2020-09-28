@@ -37,6 +37,8 @@ namespace Domain.InputDataModel.Autodictor.Model
         public Addition Addition { get; private set; }                       //Дополнение (свободная строка)
         public Note Note { get; private set; }                               //Примечание.
         public DaysFollowing DaysFollowing { get; private set; }             //Дни следования
+
+        public Emergency Emergency { get; private set; }                     //Нештатки
         #endregion
 
 
@@ -46,7 +48,7 @@ namespace Domain.InputDataModel.Autodictor.Model
         public AdInputType(int id, int scheduleId, int trnId, Lang lang, string numberOfTrain, string pathNumber, string platform, EventTrain @event,
         TypeTrain trainType, VagonDirection vagonDirection, Station stationDeparture, Station stationArrival, Station stationWhereFrom,
         Station stationWhereTo, DirectionStation directionStation, DateTime? arrivalTime, DateTime? departureTime, DateTime? delayTime,
-        DateTime? expectedTime, TimeSpan? stopTime, Addition addition, Note note, DaysFollowing daysFollowing) : base(id)
+        DateTime? expectedTime, TimeSpan? stopTime, Addition addition, Note note, DaysFollowing daysFollowing, Emergency emergency) : base(id)
         {
             ScheduleId = scheduleId;
             TrnId = trnId;
@@ -72,13 +74,14 @@ namespace Domain.InputDataModel.Autodictor.Model
             DaysFollowing = daysFollowing;
             StationsCut = CreateStationsCut(StationArrival, StationDeparture, Event);
             Stations = CreateStations(StationArrival, StationDeparture);
+            Emergency = emergency;
         }
 
 
         public AdInputType(int id, string numberOfTrain, Note note, string pathNumber, EventTrain @event, TypeTrain trainType, Station stationDeparture, Station stationArrival,
             DateTime? arrivalTime, DateTime? departureTime, Lang lang = Lang.Ru)
             : this(id,0, 0, lang, numberOfTrain, pathNumber, null, @event, trainType, null, stationDeparture, stationArrival,
-                null, null, null, arrivalTime, departureTime, null, DateTime.MinValue, null, null, note, null)
+                null, null, null, arrivalTime, departureTime, null, DateTime.MinValue, null, null, note, null, null)
         {
            
         }

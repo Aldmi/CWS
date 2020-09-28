@@ -122,7 +122,8 @@ namespace WebApiSwc.AutoMapperConfig
                     NameRu = src.DaysOfGoing,
                     NameAliasRu = src.DaysOfGoingAlias,
                     NameAliasEng = src.DaysOfGoingAliasENG
-                }
+                },
+                new Emergency(src.EmergencySituation)
                 )).ForAllMembers(opt => opt.Ignore());
             #endregion
 
@@ -151,7 +152,8 @@ namespace WebApiSwc.AutoMapperConfig
                 src.StopTime,
                 src.Addition,
                 src.Note,
-                src.DaysFollowing
+                src.DaysFollowing,
+                src.Emergency
                 )).ForAllMembers(opt => opt.Ignore());
             #endregion
 

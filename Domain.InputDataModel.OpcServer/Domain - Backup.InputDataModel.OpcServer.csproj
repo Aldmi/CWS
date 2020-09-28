@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CompareNETObjects" Version="4.65.0" />
+    <PackageReference Include="CSharpFunctionalExtensions" Version="2.3.0" />
+    <PackageReference Include="morelinq" Version="3.3.2" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="System.Linq.Async" Version="4.1.1" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.20" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\Domain.InputDataModel.Shared\Domain.InputDataModel.Shared.csproj" />
+    <ProjectReference Include="..\src\InputDataModel.Base\Domain.InputDataModel.Base.csproj" />
+    <ProjectReference Include="..\src\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ForProviderImpl\" />
+    <Folder Include="ProvidersSpecial%27\" />
+  </ItemGroup>
+
+</Project>

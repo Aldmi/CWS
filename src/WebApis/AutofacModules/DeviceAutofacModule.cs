@@ -13,8 +13,8 @@ namespace WebApiSwc.AutofacModules
         {
             builder.RegisterType<Device<TIn>>().AsSelf().InstancePerDependency();
             builder.RegisterType<AllExchangesResponseAnaliticService>().AsSelf().InstancePerDependency();
-            builder.RegisterType<MiddlewareInvokeService<TIn>>().AsSelf().InstancePerDependency();
 
+            builder.RegisterType<MiddlewareInvokeService<TIn>>().AsSelf().InstancePerDependency();
             builder.RegisterType<MiddleWareMediator<TIn>>().As<ISupportMiddlewareInvoke<TIn>>().InstancePerDependency();
 
             builder.RegisterType<ProduserAdapter<TIn>>().AsSelf().InstancePerDependency();

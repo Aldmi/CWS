@@ -28,9 +28,10 @@ namespace Domain.Device.MiddleWares4InData
         private readonly MiddleWareMediatorOption _option;
         private readonly ILogger _logger;
 
-        private readonly PropertyMutationsServise<string> _mutationsServiseStr = new PropertyMutationsServise<string>();    //Сервис изменения совойства типа string, по имени, через рефлексию.
-        private readonly PropertyMutationsServise<DateTime> _mutationsServiseDt = new PropertyMutationsServise<DateTime>(); //Сервис изменения совойства типа DateTime, по имени, через рефлексию.
-        private readonly PropertyMutationsServise<Enum> _mutationsServiseEnum = new PropertyMutationsServise<Enum>();      //Сервис изменения совойства типа enum(byte), по имени, через рефлексию.
+        private readonly PropertyMutationsServise<string> _mutationsServiseStr = new PropertyMutationsServise<string>();    //Сервис изменения свойства типа string, по имени, через рефлексию.
+        private readonly PropertyMutationsServise<DateTime> _mutationsServiseDt = new PropertyMutationsServise<DateTime>(); //Сервис изменения свойства типа DateTime, по имени, через рефлексию.
+        private readonly PropertyMutationsServise<Enum> _mutationsServiseEnum = new PropertyMutationsServise<Enum>();      //Сервис изменения свойства типа enum(byte), по имени, через рефлексию.
+        private readonly PropertyMutationsServise<DateTime?> _mutationsServiseDtN = new PropertyMutationsServise<DateTime?>(); //Сервис изменения свойства типа DateTime, по имени, через рефлексию.
 
         private readonly List<StringHandlerMiddleWare4InData> _stringHandlers;
         private readonly List<DateTimeHandlerMiddleWare4InData> _dateTimeHandlers;
@@ -96,21 +97,18 @@ namespace Domain.Device.MiddleWares4InData
                                     var resultSet = _mutationsServiseStr.SetPropValue(tuple);
                                     if (resultSet.IsFailure)
                                     {
-                                        error =
-                                            $"MiddlewareInvokeService.HandleInvoke.StringConvert. Ошибка установки свойства:  {resultSet.Error}";
+                                        error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. Ошибка установки свойства:  {resultSet.Error}";
                                         errorHandlerWrapper.AddError(error);
                                     }
                                 }
                                 catch (StringConverterException ex)
                                 {
-                                    error =
-                                        $"MiddlewareInvokeService.HandleInvoke.StringConvert. Exception в конверторе:  {ex}";
+                                    error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. Exception в конверторе:  {ex}";
                                     errorHandlerWrapper.AddError(error);
                                 }
                                 catch (Exception e)
                                 {
-                                    error =
-                                        $"MiddlewareInvokeService.HandleInvoke.StringConvert. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
+                                    error = $"MiddlewareInvokeService.HandleInvoke.StringConvert. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
                                     errorHandlerWrapper.AddError(error);
                                 }
                             }
@@ -145,25 +143,97 @@ namespace Domain.Device.MiddleWares4InData
                                 }
                                 catch (StringConverterException ex)
                                 {
-                                    error =
-                                        $"MiddlewareInvokeService.HandleInvoke.EnumConvert. Exception в конверторе:  {ex}";
+                                    error = $"MiddlewareInvokeService.HandleInvoke.EnumConvert. Exception в конверторе:  {ex}";
                                     errorHandlerWrapper.AddError(error);
                                 }
                                 catch (Exception e)
                                 {
-                                    error =
-                                        $"MiddlewareInvokeService.HandleInvoke.EnumConvert. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
+                                    error = $"MiddlewareInvokeService.HandleInvoke.EnumConvert. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
                                     errorHandlerWrapper.AddError(error);
                                 }
                             }
                             else
                             {
-                                error =
-                                    $"MiddlewareInvokeService.HandleInvoke.EnumConvert.  Ошибка получения стркового свойства:  {resultGet.Error}";
+                                error = $"MiddlewareInvokeService.HandleInvoke.EnumConvert.  Ошибка получения стркового свойства:  {resultGet.Error}";
                                 errorHandlerWrapper.AddError(error);
                             }
                         });
                     }
+
+                    if (_dateTimeHandlers != null)
+                    {
+                        Parallel.ForEach(_dateTimeHandlers, (handler) =>
+                        {
+                            var propName = handler.PropName;
+                            var resultGet = _mutationsServiseDt.GetPropValue(data, propName);
+                            if (resultGet.IsSuccess)
+                            {
+                                var tuple = resultGet.Value;
+                                try
+                                {
+                                    var newValue = handler.Convert(tuple.val, data.Id);
+                                    tuple.val = newValue;
+                                    var resultSet = _mutationsServiseDt.SetPropValue(tuple);
+                                    if (resultSet.IsFailure)
+                                    {
+                                        error = $"MiddlewareInvokeService.HandleInvoke.DateTimeConverter. Ошибка установки свойства:  {resultSet.Error}";
+                                        errorHandlerWrapper.AddError(error);
+                                    }
+                                }
+                                catch (StringConverterException ex)
+                                {
+                                    error = $"MiddlewareInvokeService.HandleInvoke.DateTimeConverter. Exception в конверторе:  {ex}";
+                                    errorHandlerWrapper.AddError(error);
+                                }
+                                catch (Exception e)
+                                {
+                                    error = $"MiddlewareInvokeService.HandleInvoke.DateTimeConverter. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
+                                    errorHandlerWrapper.AddError(error);
+                                }
+                            }
+                            else
+                            {
+                                error = $"MiddlewareInvokeService.HandleInvoke.DateTimeConverter.  Ошибка получения строкового свойства:  {resultGet.Error}";
+                                errorHandlerWrapper.AddError(error);
+                            }
+                        });
+                    }
+
+                    //DEBUG Nullable dateTime-------------
+                    //var firstHandler = _dateTimeHandlers.FirstOrDefault();
+                    //var propName1 = "DepartureTime";
+                    //var resultGet1 = _mutationsServiseDtN.GetPropValue(data, propName1);
+                    //if (resultGet1.IsSuccess)
+                    //{
+                    //    var tuple = resultGet1.Value;
+                    //    try
+                    //    {
+
+                    //        //var newValue = DateTime.Now;//firstHandler.Convert((DateTime)tuple.val, data.Id);
+                    //        tuple.val = null;// newValue;
+                    //        var resultSet = _mutationsServiseDtN.SetPropValue(tuple);
+                    //        if (resultSet.IsFailure)
+                    //        {
+                    //            error = $"MiddlewareInvokeService.HandleInvoke.DateTimeConverter. Ошибка установки свойства:  {resultSet.Error}";
+                    //            errorHandlerWrapper.AddError(error);
+                    //        }
+                    //    }
+                    //    catch (StringConverterException ex)
+                    //    {
+                    //        error = $"MiddlewareInvokeService.HandleInvoke.DateTimeConverter. Exception в конверторе:  {ex}";
+                    //        errorHandlerWrapper.AddError(error);
+                    //    }
+                    //    catch (Exception e)
+                    //    {
+                    //        error = $"MiddlewareInvokeService.HandleInvoke.DateTimeConverter. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
+                    //        errorHandlerWrapper.AddError(error);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    error = $"MiddlewareInvokeService.HandleInvoke.DateTimeConverter.  Ошибка получения строкового свойства:  {resultGet1.Error}";
+                    //    errorHandlerWrapper.AddError(error);
+                    //}
                 }
             );
 

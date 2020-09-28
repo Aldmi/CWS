@@ -74,7 +74,7 @@ namespace Domain.Device.Produser
                         response.KeyExchange,
                         DataAction = response.DataAction.ToString("G"),
                         response.ExceptionExchangePipline,
-                        response.IsValidAll,
+                        response.Evaluation.IsValidAll,
                         response.TimeAction,
                         ResponsesItems = response.ResponsesItems.Select(item => new
                         {
@@ -109,7 +109,7 @@ namespace Domain.Device.Produser
                         response.DeviceName,
                         response.DataAction,
                         response.ExceptionExchangePipline,
-                        response.IsValidAll,
+                        response.Evaluation.IsValidAll,
                         response.TimeAction,
                         ResponsesItems = response.ResponsesItems.Select(item => new
                         {
@@ -127,7 +127,7 @@ namespace Domain.Device.Produser
                     {
                         response.DeviceName,
                         response.ExceptionExchangePipline,
-                        response.IsValidAll,
+                        response.Evaluation.IsValidAll,
                         response.TimeAction,
                         ResponsesItems = response.ResponsesItems.Select(item => new
                         {
@@ -149,7 +149,7 @@ namespace Domain.Device.Produser
                     convert = new
                     {
                         response.DeviceName,
-                        result = response.IsValidAll ? 1 : 0,
+                        result = response.Evaluation.IsValidAll ? 1 : 0,
                         Message = HelpersJson.Serialize2RawJson(responsesItems)
                     };
                     break;

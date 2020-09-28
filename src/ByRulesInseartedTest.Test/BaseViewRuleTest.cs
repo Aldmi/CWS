@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ByRulesInseartedTest.Test.Datas;
 using CSharpFunctionalExtensions;
-using Domain.InputDataModel.Autodictor.IndependentInseartsImpl.Factory;
+using Domain.InputDataModel.Autodictor.ForProviderImpl.IndependentInseartsImpl.Factory;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;

@@ -156,6 +156,38 @@ namespace WebApiSwc.Controllers
         }
 
 
+        // GET api/Devices/GetFullState/exchnageKey
+        [HttpGet("GetFullState/{exchnageKey}")]
+        public IActionResult GetFullState([FromRoute] string exchnageKey)
+        {
+            var exchange = _mediatorForStorages.GetExchange(exchnageKey);
+            if (exchange == null)
+            {
+                return NotFound(exchnageKey);
+            }
+            var fullState = exchange.FullState;
+            var fullStateDto = fullState.GetPresenterWithoutProcessedItemsInBatch();
+            return new JsonResult(fullStateDto);
+        }
+
+
+        // GET api/Devices/GetFullStateAllExchanges
+        [HttpGet("GetFullStateAllExchanges/{presenter}")]
+        public IActionResult GetFullStateAllExchanges([FromRoute] string presenter)
+        {
+            var exchanges = _mediatorForStorages.GetExchanges();
+            var fullStateArray = exchanges.Select(e =>
+            {
+                return presenter switch
+                {
+                    "small" => e.FullState.GetPresenterWithoutProcessedItemsInBatch(),
+                    _ => e.FullState.GetPresenterFull()
+                };
+            }).ToArray();
+            return new JsonResult(fullStateArray);
+        }
+
+
         // DELETE api/Devices/{deviceName}
         [HttpDelete("{deviceName}")]
         public async Task<IActionResult> RemoveDevice([FromRoute] string deviceName)

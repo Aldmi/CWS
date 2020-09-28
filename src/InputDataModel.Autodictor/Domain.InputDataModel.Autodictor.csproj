@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain.InputDataModel.Shared\Domain.InputDataModel.Shared.csproj" />
-    <ProjectReference Include="..\Exchange.Base\Domain.Exchange.csproj" />
+    <ProjectReference Include="..\InputDataModel.Base\Domain.InputDataModel.Base.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 
