@@ -28,16 +28,16 @@ namespace Shared.Extensions
             var agregateList = new List<TInput>();
             foreach (var p in filter.Filters)
             {
-                //1. Where-------------------------------------
+                //1. Where-------------------------------------------
                 var where = p.Where;
                 var whereLenghtConditionFunc = p.WhereLenght.HasValue
                     ? new Func<bool>(() => items.Count() == p.WhereLenght.Value)
                     : () => true;
                 items = inData.Filter(where, logger);
-                var filterConditions = items.Any() && whereLenghtConditionFunc();
+                var filterConditions = (items.Any() && whereLenghtConditionFunc()) || p.AlwaysTake;
                 if (!filterConditions)
                     continue;
-                //2. OredBy------------------------------------
+                //2. OredBy------------------------------------------
                 var oredBy = p.OrderBy;
                 if (!string.IsNullOrEmpty(oredBy))
                 {
@@ -88,7 +88,6 @@ namespace Shared.Extensions
 
             try
             {
-                //ПРИМЕНИТЬ ФИЛЬТР И УПОРЯДОЧЕВАНИЕ
                 var filtred = inData.AsQueryable().Where(whereFilter).ToList();
                 return filtred;
             }

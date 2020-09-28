@@ -114,7 +114,7 @@ namespace Shared.Test.StringInseartService.IndependentInseartTest
             var independentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(str,  _handlerFactorys, GetStringInsertModelExtDict.SimpleDictionary, _logger);
 
             //Act
-            var adInputType = GetData4IndependentInsertsService.InputType.First();
+            var adInputType = GetListAdInputType.ListInputType1Item.First();
             var headerExecuteInseartsResult = independentInsertsService.ExecuteInsearts(adInputType, new Dictionary<string, string> { { "rowNumber", "2" } }).result;
 
             var resStr = headerExecuteInseartsResult.ToString();
@@ -163,7 +163,7 @@ namespace Shared.Test.StringInseartService.IndependentInseartTest
             var independentInsertsService = IndependentInsertsServiceFactory.CreateIndependentInsertsService(str, _handlerFactorys, GetStringInsertModelExtDict.SimpleDictionary, _logger);
 
             //Act
-            var adInputType = GetData4IndependentInsertsService.InputType.First();
+            var adInputType = GetListAdInputType.ListInputType1Item.First();
             var headerExecuteInseartsResult = independentInsertsService.ExecuteInsearts(adInputType, new Dictionary<string, string> { { "rowNumber", "2" } }).result;
 
             var resStr = headerExecuteInseartsResult.ToString();
