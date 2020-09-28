@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Base.Response.ResponseValidators;
-using KellermanSoftware.CompareNetObjects;
 using Shared.Types;
 
 namespace Domain.InputDataModel.Base.ProvidersAbstract
@@ -16,6 +15,9 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         public RequestTransfer<TIn> Request { get; set; }           //Строка запроса, созданная по правилам RequestOption.
         public ResponseTransfer Response { get; set; }              //Строка ответа, созданная по правилам ResponseOption.
         public Command4Device Command { get; set; }                 //Команда
+
+        public ProviderStatus.Builder CreateProviderStatusBuilder(string sendingUnitName) 
+            => new ProviderStatus.Builder(sendingUnitName, Request.StrRepresent, Request.StrRepresentBase, Response.Option.TimeRespone);
     }
 
 
@@ -23,16 +25,6 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
     {
         public StringRepresentation StrRepresentBase { get; set; }             //Строковое представление данных, созданная по правилам Option (В ФОРМАТЕ ИЗ Option).
         public StringRepresentation StrRepresent { get; set; }                 //Строковое представление данных, созданная по правилам Option (ВОЗМОЖНО В ИЗМЕНЕННОМ ФОРМАТЕ)
-
-        public bool EqualStrRepresent
-        {
-            get
-            {
-                var compareLogic = new CompareLogic();
-                var result = compareLogic.Compare(StrRepresentBase, StrRepresent);
-                return result.AreEqual;
-            }
-        }
     }
 
 

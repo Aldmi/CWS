@@ -93,7 +93,7 @@ namespace InputDataModel.Autodictor.Test
             //// Act
             //int countSetDataByte = 0;
             //byte[] getDataByte = null;
-            //var subscription = btByRulesDataProvider.RaiseSendDataRx.Subscribe(provider =>
+            //var subscription = btByRulesDataProvider.RaiseProviderResultRx.Subscribe(provider =>
             //    {
 
 

@@ -28,16 +28,16 @@ namespace Shared.Extensions
             var agregateList = new List<TInput>();
             foreach (var p in filter.Filters)
             {
-                //1. Where-------------------------------------
+                //1. Where-------------------------------------------
                 var where = p.Where;
                 var whereLenghtConditionFunc = p.WhereLenght.HasValue
                     ? new Func<bool>(() => items.Count() == p.WhereLenght.Value)
                     : () => true;
                 items = inData.Filter(where, logger);
-                var filterConditions = items.Any() && whereLenghtConditionFunc();
+                var filterConditions = (items.Any() && whereLenghtConditionFunc()) || p.AlwaysTake;
                 if (!filterConditions)
                     continue;
-                //2. OredBy------------------------------------
+                //2. OredBy------------------------------------------
                 var oredBy = p.OrderBy;
                 if (!string.IsNullOrEmpty(oredBy))
                 {
@@ -54,6 +54,7 @@ namespace Shared.Extensions
 
         /// <summary>
         /// Если inData пустой список, то Take в каждом фильтре формируеут список из defaultItemJson элементов.
+        /// Фильтрация и Упорядочевание не применяются.
         /// </summary>
         /// <returns>Созданный список</returns>
         public static IEnumerable<TInput> TakeItemIfEmpty<TInput>(this IEnumerable<TInput> inData, AgregateFilter filter, string defaultItemJson, ILogger logger = null)
@@ -85,31 +86,9 @@ namespace Shared.Extensions
             if (inData == null)
                 return new List<TInput>();
 
-            var now = DateTime.Now;
             try
             {
-                //ЗАМЕНА  DateTime.Now.AddMinute(...)---------------------------
-                var pattern = @"DateTime\.Now\.AddMinute\(([^()]*)\)";
-                var where = whereFilter;
-                where = Regex.Replace(where, pattern, x =>
-                {
-                    var val = x.Groups[1].Value;
-                    if (int.TryParse(val, out var min))
-                    {
-                        var date = now.AddMinutes(min);
-                        return $"DateTime({date.Year}, {date.Month}, {date.Day}, {date.Hour}, {date.Minute}, 0)";
-                    }
-                    return x.Value;
-                });
-                //ЗАМЕНА  DateTime.Now----------------------------------------
-                pattern = @"DateTime.Now";
-                where = Regex.Replace(where, pattern, x =>
-                {
-                    var date = now;
-                    return $"DateTime({date.Year}, {date.Month}, {date.Day}, {date.Hour}, {date.Minute}, 0)";
-                });
-                //ПРИМЕНИТЬ ФИЛЬТР И УПОРЯДОЧЕВАНИЕ
-                var filtred = inData.AsQueryable().Where(where).ToList();
+                var filtred = inData.AsQueryable().Where(whereFilter).ToList();
                 return filtred;
             }
             catch (Exception ex)

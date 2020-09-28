@@ -29,7 +29,7 @@ namespace Domain.Exchange.RxModel
             KeyExchange = response.KeyExchange;
             DataAction = response.DataAction;
             TimeAction = response.TimeAction;
-            IsValidAll = response.IsValidAll;
+            IsValidAll = response.Evaluation.IsValidAll;
             ProcessedItemsInBatch = response.ResponsesItems.Select(item => item.ProcessedItemsInBatch).ToList();
             CalcStatus();
         }

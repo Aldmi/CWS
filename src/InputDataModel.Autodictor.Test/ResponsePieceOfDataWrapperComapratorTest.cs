@@ -25,7 +25,6 @@ namespace InputDataModel.Autodictor.Test
             {
                 KeyExchange = "1111",
                 DeviceName = "3222",
-                IsValidAll = true,
                 ResponsesItems = new List<ResponseDataItem<AdInputType>>
                 {
                     new ResponseDataItem<AdInputType>
@@ -52,7 +51,6 @@ namespace InputDataModel.Autodictor.Test
             {
                 KeyExchange = "1111",
                 DeviceName = "3222",
-                IsValidAll = true,
                 ResponsesItems = new List<ResponseDataItem<AdInputType>>
                 {
                     new ResponseDataItem<AdInputType>
@@ -74,6 +72,10 @@ namespace InputDataModel.Autodictor.Test
                 }
             };
 
+            valueStep1.EvaluateResponsesItems();
+            valueStep2.EvaluateResponsesItems();
+
+
             //Act
             var resStep1 = cmp.Equals(valueStep1);
             var resStep2 = cmp.Equals(valueStep2);
@@ -81,6 +83,8 @@ namespace InputDataModel.Autodictor.Test
 
             //Asert
             resStep1.Should().BeTrue();
+            resStep2.Should().BeFalse();
+            resStep3.Should().BeTrue();
         }
 
     }

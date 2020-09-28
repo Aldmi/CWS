@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Subjects;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
 using Serilog;
@@ -10,15 +11,28 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
     public abstract class BaseDataProvider<TIn> : IDisposable where TIn : InputTypeBase
     {
         #region field
-        protected readonly Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> ProviderResultFactory;
+        protected readonly Func<ProviderTransfer<TIn>, ProviderStatus.Builder, ProviderResult<TIn>> ProviderResultFactory;
         private readonly ILogger _logger;
         #endregion
 
 
+        #region prop
+        public string ProviderName { get; }
+        #endregion
+
+
+        #region RxEvent
+        public Subject<ProviderResult<TIn>> RaiseProviderResultRx { get; } = new Subject<ProviderResult<TIn>>();
+        #endregion
+
 
         #region ctor
-        protected BaseDataProvider(Func<ProviderTransfer<TIn>, IDictionary<string, string>, ProviderResult<TIn>> providerResultFactory, ILogger logger)
+        protected BaseDataProvider(
+            string providerName,
+            Func<ProviderTransfer<TIn>, ProviderStatus.Builder, ProviderResult<TIn>> providerResultFactory,
+            ILogger logger)
         {
+            ProviderName = providerName;
             ProviderResultFactory = providerResultFactory;
             _logger = logger;
         }
@@ -27,7 +41,6 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
 
 
         #region Methode
-
         /// <summary>
         /// Определяет обработчик входных данных.
         /// Команда или Данные.

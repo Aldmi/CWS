@@ -379,7 +379,7 @@ namespace Domain.Device
         {
             //Анализ ответов от всех обменов.
            var exchangesInfoTuple= Exchanges.Select(exchange=> (key: exchange.KeyExchange, isOpen: exchange.IsOpen)).ToList(); 
-            _allCycleBehaviorResponseAnalitic.SetResponseResult(responsePieceOfDataWrapper.KeyExchange, responsePieceOfDataWrapper.IsValidAll, exchangesInfoTuple);
+            _allCycleBehaviorResponseAnalitic.SetResponseResult(responsePieceOfDataWrapper.KeyExchange, responsePieceOfDataWrapper.Evaluation.IsValidAll, exchangesInfoTuple);
             await OnceAndCommandBehaviorResponseReadyRxEventHandler(responsePieceOfDataWrapper);
         }
 
