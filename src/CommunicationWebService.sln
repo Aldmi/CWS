@@ -82,7 +82,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ByRulesInseartedTest.Test",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.InputDataModel.Shared", "Domain.InputDataModel.Shared\Domain.InputDataModel.Shared.csproj", "{B579A04E-887A-4153-B44C-6937F62BD7B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.InputDataModel.OpcServer", "..\Domain.InputDataModel.OpcServer\Domain.InputDataModel.OpcServer.csproj", "{42F8BD68-B881-4F80-8F77-E1B921F84EE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.InputDataModel.OpcServer", "Domain.InputDataModel.OpcServer\Domain.InputDataModel.OpcServer.csproj", "{42F8BD68-B881-4F80-8F77-E1B921F84EE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
