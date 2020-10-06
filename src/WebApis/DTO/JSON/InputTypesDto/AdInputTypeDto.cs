@@ -37,5 +37,7 @@ namespace WebApiSwc.DTO.JSON.InputTypesDto
         public Note Note { get; set; }                               //Примечание.
         public DaysFollowing DaysFollowing { get; set; }             //Дни следования
         public Emergency Emergency { get; set; }                     //Нештатки
+        public Category Category { get; set; }                       //Категория поезда. ПРИГОРОД/ДАЛЬНИЕ/ПРОЧИЕ
+
     }
 }
