@@ -124,7 +124,8 @@ namespace WebApiSwc.AutoMapperConfig
                     NameAliasEng = src.DaysOfGoingAliasENG
                 },
                 new Emergency(src.EmergencySituation),
-                new Category(src.TypeName)
+                new Category(src.TypeName),
+                new CreepingLine("Бегущая строка слово1 слово2 слово3 слово4", null, TimeSpan.FromSeconds(20))
                 )).ForAllMembers(opt => opt.Ignore());
             #endregion
 
@@ -155,7 +156,8 @@ namespace WebApiSwc.AutoMapperConfig
                 src.Note,
                 src.DaysFollowing,
                 src.Emergency,
-                src.Category
+                src.Category,
+                src.CreepingLine
                 )).ForAllMembers(opt => opt.Ignore());
             #endregion
 

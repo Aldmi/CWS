@@ -39,5 +39,6 @@ namespace WebApiSwc.DTO.JSON.InputTypesDto
         public Emergency Emergency { get; set; }                     //Нештатки
         public Category Category { get; set; }                       //Категория поезда. ПРИГОРОД/ДАЛЬНИЕ/ПРОЧИЕ
 
+        public CreepingLine CreepingLine { get; set; }              //Бегущая строка 
     }
 }

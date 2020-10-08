@@ -32,6 +32,7 @@ namespace Shared.Test.StringInseartService.Datas
                 new Note {NameRu = "Станция 1,Станция 2,Станция 3,Станция 4,Станция 5,Станция 6,Станция 7"},
                 null,
                 null,
+                null,
                 null)
         };
 
@@ -61,6 +62,7 @@ namespace Shared.Test.StringInseartService.Datas
                 new Note {NameRu = "Станция 1,Станция 2,Станция 3,Станция 4,Станция 5,Станция 6,Станция 7"},
                 null,
                 null,
+                null,
                 null),
 
             new AdInputType(2, 1, 1, Lang.Ru, 
@@ -84,6 +86,7 @@ namespace Shared.Test.StringInseartService.Datas
                 new Note {NameRu = "Станция 1,Станция 2,Станция 3,Станция 4,Станция 5,Станция 6,Станция 7"},
                 null,
                 null,
+                null,
                 null),
 
             new AdInputType(3, 1, 1, Lang.Ru, 
@@ -105,6 +108,7 @@ namespace Shared.Test.StringInseartService.Datas
                 null,
                 new Addition{NameRu = String.Empty},
                 new Note {NameRu = "Станция 1,Станция 2,Станция 3,Станция 4,Станция 5,Станция 6,Станция 7"},
+                null,
                 null,
                 null,
                 null)
@@ -134,6 +138,7 @@ namespace Shared.Test.StringInseartService.Datas
                     null,
                     new Addition {NameRu = String.Empty},
                     new Note {NameRu = "Станция 1,Станция 2,Станция 3,Станция 4,Станция 5,Станция 6,Станция 7"},
+                    null,
                     null,
                     null,
                     null)).ToList();

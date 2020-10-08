@@ -40,6 +40,8 @@ namespace Domain.InputDataModel.Autodictor.Model
 
         public Emergency Emergency { get; private set; }                     //Нештатки
         public Category Category { get; private set; }                       //Категория поезда. ПРИГОРОД/ДАЛЬНИЕ/ПРОЧИЕ
+
+        public CreepingLine CreepingLine { get; private set; }               //Бегущая строка 
         #endregion
 
 
@@ -49,7 +51,8 @@ namespace Domain.InputDataModel.Autodictor.Model
         public AdInputType(int id, int scheduleId, int trnId, Lang lang, string numberOfTrain, string pathNumber, string platform, EventTrain @event,
         TypeTrain trainType, VagonDirection vagonDirection, Station stationDeparture, Station stationArrival, Station stationWhereFrom,
         Station stationWhereTo, DirectionStation directionStation, DateTime? arrivalTime, DateTime? departureTime, DateTime? delayTime,
-        DateTime? expectedTime, TimeSpan? stopTime, Addition addition, Note note, DaysFollowing daysFollowing, Emergency emergency, Category category) : base(id)
+        DateTime? expectedTime, TimeSpan? stopTime, Addition addition, Note note, DaysFollowing daysFollowing, Emergency emergency,
+        Category category, CreepingLine creepingLine) : base(id)
         {
             ScheduleId = scheduleId;
             TrnId = trnId;
@@ -77,13 +80,15 @@ namespace Domain.InputDataModel.Autodictor.Model
             Stations = CreateStations(StationArrival, StationDeparture);
             Emergency = emergency;
             Category = category;
+            CreepingLine = creepingLine;
         }
 
 
         public AdInputType(int id, string numberOfTrain, Note note, string pathNumber, EventTrain @event, TypeTrain trainType, Station stationDeparture, Station stationArrival,
             DateTime? arrivalTime, DateTime? departureTime, Lang lang = Lang.Ru)
             : this(id,0, 0, lang, numberOfTrain, pathNumber, null, @event, trainType, null, stationDeparture, stationArrival,
-                null, null, null, arrivalTime, departureTime, null, DateTime.MinValue, null, null, note, null, null, null)
+                null, null, null, arrivalTime, departureTime, null, DateTime.MinValue,
+                null, null, note, null, null, null, null)
         {
            
         }

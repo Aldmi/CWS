@@ -44,6 +44,7 @@ namespace Domain.InputDataModel.Autodictor.ForProviderImpl.IndependentInseartsIm
                 "VagonDirection" => new VagonDirectionInsH(insertModel),
                 "Emergency" => new EmergencyInsH(insertModel),
                 "Category"=> new CategoryInsH(insertModel),
+                "CreepingLine" => new CreepingLineInsH(insertModel),
                 _ => null
             };
         }
