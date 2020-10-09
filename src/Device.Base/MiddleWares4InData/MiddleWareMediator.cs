@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using Domain.Device.MiddleWares4InData.Handlers4InData;
 using Domain.Device.MiddleWares4InData.Invokes;
-using Domain.Device.Repository.Entities.MiddleWareOption;
+using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Base.InData;
 using FastDeepCloner;
 using Serilog;
@@ -24,27 +24,25 @@ namespace Domain.Device.MiddleWares4InData
     public class MiddleWareMediator<TIn> : ISupportMiddlewareInvoke<TIn> where TIn : InputTypeBase
     {
         #region fields
-
         private readonly MiddleWareMediatorOption _option;
         private readonly ILogger _logger;
 
         private readonly PropertyMutationsServise<string> _mutationsServiseStr = new PropertyMutationsServise<string>();    //Сервис изменения свойства типа string, по имени, через рефлексию.
         private readonly PropertyMutationsServise<DateTime> _mutationsServiseDt = new PropertyMutationsServise<DateTime>(); //Сервис изменения свойства типа DateTime, по имени, через рефлексию.
         private readonly PropertyMutationsServise<Enum> _mutationsServiseEnum = new PropertyMutationsServise<Enum>();      //Сервис изменения свойства типа enum(byte), по имени, через рефлексию.
-        private readonly PropertyMutationsServise<DateTime?> _mutationsServiseDtN = new PropertyMutationsServise<DateTime?>(); //Сервис изменения свойства типа DateTime, по имени, через рефлексию.
+        //private readonly PropertyMutationsServise<DateTime?> _mutationsServiseDtN = new PropertyMutationsServise<DateTime?>(); //Сервис изменения свойства типа DateTime, по имени, через рефлексию.
+        private readonly PropertyMutationsServise<object> _mutationsServiseObj = new PropertyMutationsServise<object>();       //Сервис изменения свойства типа object (целых объектов), по имени, через рефлексию.
 
         private readonly List<StringHandlerMiddleWare4InData> _stringHandlers;
         private readonly List<DateTimeHandlerMiddleWare4InData> _dateTimeHandlers;
         private readonly List<EnumHandlerMiddleWare4InData> _enumHandlers;
-
+        private readonly List<ObjectHandlerMiddleWare4InData> _objectHandlers;
         #endregion
 
 
 
         #region prop
-
         public string Description => _option.Description;
-
         #endregion
 
 
@@ -63,6 +61,9 @@ namespace Domain.Device.MiddleWares4InData
 
             _enumHandlers = option.EnumHandlers?.
                 Select(h => new EnumHandlerMiddleWare4InData(h)).ToList();
+
+            _objectHandlers = option.ObjectHandlers?.
+                Select(h => new ObjectHandlerMiddleWare4InData(h)).ToList();
         }
         #endregion
 
@@ -114,8 +115,7 @@ namespace Domain.Device.MiddleWares4InData
                             }
                             else
                             {
-                                error =
-                                    $"MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  {resultGet.Error}";
+                                error = $"MiddlewareInvokeService.HandleInvoke.StringConvert.  Ошибка получения стркового свойства:  {resultGet.Error}";
                                 errorHandlerWrapper.AddError(error);
                             }
                         });
@@ -198,6 +198,47 @@ namespace Domain.Device.MiddleWares4InData
                             }
                         });
                     }
+
+                    if (_objectHandlers != null)
+                    {
+                        Parallel.ForEach(_objectHandlers, (objHandler) =>
+                        {
+                            var propName = objHandler.PropName;
+                            var resultGet = _mutationsServiseObj.GetPropValue(data, propName);
+                            if (resultGet.IsSuccess)
+                            {
+                                var tuple = resultGet.Value;
+                                try
+                                {
+                                    var newValue = objHandler.Convert(tuple.val, data.Id);
+                                    tuple.val = newValue;
+                                    var resultSet = _mutationsServiseObj.SetPropValue(tuple);
+                                    if (resultSet.IsFailure)
+                                    {
+                                        error = $"MiddlewareInvokeService.HandleInvoke.ObjectConvert. Ошибка установки свойства:  {resultSet.Error}";
+                                        errorHandlerWrapper.AddError(error);
+                                    }
+                                }
+                                catch (StringConverterException ex)
+                                {
+                                    error = $"MiddlewareInvokeService.HandleInvoke.ObjectConvert. Exception в конверторе:  {ex}";
+                                    errorHandlerWrapper.AddError(error);
+                                }
+                                catch (Exception e)
+                                {
+                                    error = $"MiddlewareInvokeService.HandleInvoke.ObjectConvert. НЕИЗВЕСТНОЕ ИСКЛЮЧЕНИЕ:  {e}";
+                                    errorHandlerWrapper.AddError(error);
+                                }
+                            }
+                            else
+                            {
+                                error = $"MiddlewareInvokeService.HandleInvoke.ObjectConvert.  Ошибка получения стркового свойства:  {resultGet.Error}";
+                                errorHandlerWrapper.AddError(error);
+                            }
+                        });
+                    }
+
+
 
                     //DEBUG Nullable dateTime-------------
                     //var firstHandler = _dateTimeHandlers.FirstOrDefault();

@@ -13,6 +13,7 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption
         public List<StringHandlerMiddleWare4InDataOptionDto> StringHandlers { get; set; }
         public List<DateTimeHandlerMiddleWare4InDataOptionDto> DateTimeHandlers { get; set; }
         public List<EnumHandlerMiddleWare4InDataOptionDto> EnumHandlers { get; set; }
+        public List<ObjectHandlerMiddleWare4InDataOptionDto> ObjectHandlers { get; set; }
 
         [Required(ErrorMessage = "Укажите InvokerOutput")]
         public InvokerOutputDto InvokerOutput { get; set; }

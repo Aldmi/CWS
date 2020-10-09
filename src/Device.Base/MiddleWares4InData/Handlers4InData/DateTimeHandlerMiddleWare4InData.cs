@@ -1,5 +1,5 @@
 ﻿using System;
-using Domain.Device.Repository.Entities.MiddleWareOption;
+using Shared.MiddleWares.HandlersOption;
 
 namespace Domain.Device.MiddleWares4InData.Handlers4InData
 {
@@ -12,5 +12,11 @@ namespace Domain.Device.MiddleWares4InData.Handlers4InData
             Converters.AddRange(option.CreateConverters());
         }
         #endregion
+    }
+
+
+    public class DateTimeHandlerMiddleWare4InDataOption : DateTimeHandlerMiddleWareOption
+    {
+        public string PropName { get; set; }                       //Имя свойства для обработки
     }
 }

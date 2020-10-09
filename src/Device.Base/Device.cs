@@ -6,7 +6,6 @@ using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
 using Domain.Device.MiddleWares4InData;
 using Domain.Device.MiddleWares4InData.Invokes;
-using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.Device.Services;
 using Domain.Exchange;
 using Domain.Exchange.Enums;

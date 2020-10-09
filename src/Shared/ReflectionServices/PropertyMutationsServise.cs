@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using CSharpFunctionalExtensions;
 
@@ -56,6 +57,52 @@ namespace Shared.ReflectionServices
             return Result.Ok(tuple);
         }
 
+
+        /// <summary>
+        /// Возвращает ЗНАЧЕНИЕ переданного свойства, под типом dynamic.
+        /// Вызываемый код должен сам выполнить cast к нужному типу.
+        /// </summary>
+        public Result<dynamic> GetValue(object inData, string propName)
+        {
+            if (inData == null)
+                throw new ArgumentNullException(nameof(inData));
+
+            var props = propName.Split('.');
+            if (props.Length == 0)
+                return Result.Failure<dynamic>("propName Не задан");
+
+            //Поиск свойства (выставление состояния сервиса)------------------------------------
+            var obj = inData;                       //Значение свойства для изменения (например "Имя1")
+            foreach (var prop in props)
+            {
+                if (obj == null)
+                {
+                    return Result.Failure<object>($"Родительский объект == Null. {propName}. Невозможно обратится к свойству {prop}");
+                }
+                var propInfo = GetPropertyInfo(obj, prop);                 //свойство для изменения (например NameRu)
+                if (propInfo == null)
+                {
+                    return Result.Failure<object>($"метаданные для {prop} не найдены");
+                }
+                obj = propInfo.GetValue(obj);
+            }
+            return Result.Ok(obj);
+        }
+
+
+        public Result<Dictionary<string, dynamic>> GetValuesDict(object inData, params string[] propNames)
+        {
+            Dictionary<string, dynamic> resDict= new Dictionary<string, dynamic>();
+            foreach (var propName in propNames)
+            {
+              var (_, isFailure, value, error) = GetValue(inData, propName);
+              if(isFailure)
+                  return Result.Failure<Dictionary<string, dynamic>>(error);
+
+              resDict.Add(propName, value);
+            }
+            return Result.Ok(resDict);
+        }
 
 
 

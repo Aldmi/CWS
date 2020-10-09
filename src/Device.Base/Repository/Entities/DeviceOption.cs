@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Domain.Device.Repository.Entities.MiddleWareOption;
+using Domain.Device.MiddleWares4InData;
 using Infrastructure.Dal.Abstract;
 
 namespace Domain.Device.Repository.Entities
