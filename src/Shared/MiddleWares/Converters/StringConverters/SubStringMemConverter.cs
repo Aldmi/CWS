@@ -33,11 +33,8 @@ namespace Shared.MiddleWares.Converters.StringConverters
         /// <returns></returns>
         protected override string ConvertChild(string inProp, int dataId)
         {
-            SubStringState GetResetState()
-            {
-                return new SubStringState(inProp, _option.Lenght, _option.InitPharases, _option.Separator);
-            }
-          
+            SubStringState GetResetState() => new SubStringState(inProp, _option.Lenght, _option.InitPharases, _option.Separator);
+            
             //Если данных нет в словаре. Добавить в словарь новые данные.
             if (!_subStringDict.ContainsKey(dataId))
             {
@@ -63,63 +60,63 @@ namespace Shared.MiddleWares.Converters.StringConverters
             throw new StringConverterException($"SubStringMemConverter НЕ СМОГ ИЗВЛЕЧЬ РЕЗУЛЬТАТ ОБРАБОТКИ ИЗ СЛОВАРЯ {inProp}");
         }
 
+
+
+
+
         public void SendCommand(MemConverterCommand command)
         {
             //NotImplemented
         }
-    }
-
-
-    /// <summary>
-    /// Разбивает строку на подстроки при создании объекта.
-    /// Каждый вызов метода GetNextSubString - циклически перебирает подстроки
-    /// </summary>
-    public class SubStringState  //TODO: попробовать поменять на структуру
-    {
-        private int _ingex;                             //Индекс подстроки для вывода
-        private readonly string _baseStr;               //Строка
-        private readonly IList<string> _subStrings;     //Список подстрок индексируемых _index
 
 
 
-        #region ctor
-
-        public SubStringState(string baseStr, int subStrLenght, IEnumerable<string> phrases, char separator)
+        /// <summary>
+        /// Разбивает строку на подстроки при создании объекта.
+        /// Каждый вызов метода GetNextSubString - циклически перебирает подстроки
+        /// </summary>
+        private class SubStringState  //TODO: попробовать поменять на структуру
         {
-            _ingex = -1;
-            _baseStr = baseStr;
-
-            var (initPhrase, resStr) = HelperString.SearchPhrase(baseStr, phrases);
-            subStrLenght -= initPhrase.Length;
-            _subStrings = resStr.SubstringWithWholeWords(subStrLenght, initPhrase, separator).ToList();
-        }
-
-        #endregion
+            private int _ingex;                             //Индекс подстроки для вывода
+            private readonly string _baseStr;               //Строка
+            private readonly IList<string> _subStrings;     //Список подстрок индексируемых _index
 
 
-        #region Methode
-
-        public bool EqualStr(string str)
-        {
-            return _baseStr.Equals(str);
-        }
-
-
-        public string GetNextSubString()
-        {
-            IncrementIndex();
-            return _subStrings[_ingex];
-        }
-
-
-        private void IncrementIndex()
-        {
-            if (++_ingex >= _subStrings.Count)
+            #region ctor
+            public SubStringState(string baseStr, int subStrLenght, IEnumerable<string> phrases, char separator)
             {
-                _ingex = 0;
-            }
-        }
+                _ingex = -1;
+                _baseStr = baseStr;
 
-        #endregion
+                var (initPhrase, resStr) = HelperString.SearchPhrase(baseStr, phrases);
+                subStrLenght -= initPhrase.Length;
+                _subStrings = resStr.SubstringWithWholeWords(subStrLenght, initPhrase, separator).ToList();
+            }
+            #endregion
+
+
+            #region Methode
+            public bool EqualStr(string str)
+            {
+                return _baseStr.Equals(str);
+            }
+
+
+            public string GetNextSubString()
+            {
+                IncrementIndex();
+                return _subStrings[_ingex];
+            }
+
+
+            private void IncrementIndex()
+            {
+                if (++_ingex >= _subStrings.Count)
+                {
+                    _ingex = 0;
+                }
+            }
+            #endregion
+        }
     }
 }
