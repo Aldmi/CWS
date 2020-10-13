@@ -13,6 +13,7 @@ using Domain.InputDataModel.Base.Response.ResponseValidators;
 using Domain.InputDataModel.Shared.StringInseartService.DependentInseart;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
+using Domain.InputDataModel.Shared.StringInseartService.InlineInseart;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Serilog;
 using Shared.Extensions;
@@ -70,11 +71,17 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             ViewRuleOption option,
             IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory,
             IReadOnlyDictionary<string, StringInsertModelExt> stringInsertModelExtDict,
+            InlineInseartService inlineInseartService,
             ILogger logger)
         {
             var header = option.RequestOption.Header;
             var body = option.RequestOption.Body;
             var footer = option.RequestOption.Footer;
+
+            //вставка inline переменных {$VarName}
+            header = inlineInseartService.ExecuteInseart(header).Value;
+            body = inlineInseartService.ExecuteInseart(body).Value;
+            footer = inlineInseartService.ExecuteInseart(footer).Value;
 
             //список фабрик, создающих нужные обработчики
             var handlerFactorys = new List<Func<StringInsertModel, IIndependentInsertsHandler>>

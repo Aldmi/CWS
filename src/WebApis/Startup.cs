@@ -136,7 +136,8 @@ namespace WebApiSwc
                 builder.RegisterModule(new ControllerAutofacModule());
                 builder.RegisterModule(new MessageBrokerAutofacModule());
                 builder.RegisterModule(new BlConfigAutofacModule());
-
+                builder.RegisterModule(new ServicesAutofacModule());
+                
                 var inTypeName = AppConfiguration["InputDataModel"];
                 switch (inTypeName)
                 {

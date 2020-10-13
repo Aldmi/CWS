@@ -11,6 +11,7 @@ using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
+using Domain.InputDataModel.Shared.StringInseartService.InlineInseart;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Serilog;
 using Shared.Extensions;
@@ -39,13 +40,16 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
             ProviderOption providerOption,
             IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory,
             StringInsertModelExtStorage stringInsertModelExtStorage,
+           // InlineInseartService inlineInseartService,
             ILogger logger) : base(providerOption.Name, providerResultFactory, logger)
         {
             _option = providerOption.ByRulesProviderOption;
             if (_option == null)
                 throw new ArgumentNullException(providerOption.Name); //TODO: выбросы исключений пометсить в Shared ThrowIfNull(object obj)
 
-            _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, inputTypeInseartsHandlersFactory, stringInsertModelExtStorage, logger)).ToList();
+            InlineInseartService inlineInseartService = null;//DEBUG
+
+            _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, inputTypeInseartsHandlersFactory, stringInsertModelExtStorage, inlineInseartService, logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(_option.RuleName4DefaultHandle)
                 ? "DefaultHandler"
                 : _option.RuleName4DefaultHandle;

@@ -67,7 +67,7 @@ namespace ByRulesInseartedTest.Test
             }; 
 
             IIndependentInseartsHandlersFactory inputTypeIndependentInsertsHandlersFactory = new AdInputTypeIndependentInseartsHandlersFactory();
-            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, StringInsertModelExtDictionary, Logger);
+            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, StringInsertModelExtDictionary, null, Logger);
 
             //Act
             var requestTransfer =  await viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault).ToArrayAsync();
@@ -113,7 +113,7 @@ namespace ByRulesInseartedTest.Test
                     //Body = "0246463038254130373741434B454103"
                 }
             };
-            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, Logger);
+            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, null, Logger);
 
             //Act
             var requestTransfer = await viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault).ToArrayAsync();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using CSharpFunctionalExtensions;
 
@@ -220,6 +221,23 @@ namespace Shared.Extensions
 
             var subStr = str.Substring(startIndex, endIndex - startIndex + 1);
             return Result.Ok(subStr);
+        }
+
+
+        /// <summary>
+        /// Заменить подстроки в строке.
+        /// </summary>
+        /// <param name="str">строка для выполнения цепочки замен</param>
+        /// <param name="replacePattern">Паттерн для поиска подстроки для замены</param>
+        /// <param name="identifyKeyPattern">ля извленения ключа из найденной строки по ReplacePattern {$Time}  нужно извлечь time</param>
+        /// <param name="getValueByKey">делегат возвращает значение для замены</param>
+        /// <returns></returns>
+        public static Result<string> ExecInlineInseart(this string str,
+            string replacePattern,
+            string identifyKeyPattern,
+            Func<string, string> getValueByKey)
+        {
+            return Result.Ok(str);
         }
     }
 }

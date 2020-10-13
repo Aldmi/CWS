@@ -4,6 +4,7 @@ using Domain.Device.Produser;
 using Domain.Exchange;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
+using Domain.InputDataModel.Shared.StringInseartService.Model.InlineStringInsert;
 using Infrastructure.Background;
 using Infrastructure.Transport;
 
@@ -22,7 +23,7 @@ namespace WebApiSwc.AutofacModules
             builder.RegisterType<DeviceStorage<TIn>>().SingleInstance();
             builder.RegisterType<ProduserUnionStorage<TIn>>().SingleInstance();
             builder.RegisterType<StringInsertModelExtStorage>().SingleInstance();
-            
+            builder.RegisterType<InlineStringInsertModelStorage>().SingleInstance();
         }
     }
 }
