@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using Domain.InputDataModel.Autodictor.Entities;
+using MoreLinq;
 using Shared.MiddleWares.Converters;
 using Shared.MiddleWares.Converters.StringConverters;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
@@ -17,7 +19,6 @@ namespace Domain.InputDataModel.Autodictor.MIddleWare.ObjectConverters
         public CreepingLineRunningConvertert(CreepingLineRunningConvertertOption option)
         {
             _option = option;
-
             _pagingConverter = new SubStringMemConverter(new SubStringMemConverterOption
             {
                 Lenght = _option.Lenght,
@@ -33,20 +34,17 @@ namespace Domain.InputDataModel.Autodictor.MIddleWare.ObjectConverters
             var str = cl.NameRu;
             var resetTime = (int)cl.WorkTime.TotalMilliseconds;
 
-
             //Конвертор 1--------------------------------------------------------------
             TriggerStringMemConverter CreateTriggerConverter() => new TriggerStringMemConverter(new TriggerStringMemConverterOption
             {
                 String4Reset = _option.String4Reset,
                 ResetTime = resetTime
             });
-
             //Если данных нет в словаре. Добавить в словарь новые данные.
             if (!_triggerStringDict.ContainsKey(dataId))
             {
                 _triggerStringDict.TryAdd(dataId, CreateTriggerConverter());
             }
-
             //Вызовем Convert на конверторе
             string resStep1 = null;
             if (_triggerStringDict.TryGetValue(dataId, out var triggConverter))
@@ -57,24 +55,27 @@ namespace Domain.InputDataModel.Autodictor.MIddleWare.ObjectConverters
                     triggConverter.Dispose();
                     var newConverter = CreateTriggerConverter();
                     _triggerStringDict[dataId] = newConverter;
-                    resStep1 = newConverter.Convert(cl.NameRu, dataId);
+                    resStep1 = newConverter.Convert(str, dataId);
                 }
                 else
                 {
-                    resStep1 = triggConverter.Convert(cl.NameRu, dataId);
+                    resStep1 = triggConverter.Convert(str, dataId);
                 }
             }
 
-
             //Конвертор 2--------------------------------------------------------------
-            //var resStep2 = _pagingConverter.Convert(resStep1, dataId);
+            var resStep2 = _pagingConverter.Convert(resStep1, dataId);
 
-            cl.NameRu = resStep1; //resStep2
+            cl.NameRu = resStep2;
             return cl;
         }
 
         public void SendCommand(MemConverterCommand command)
         {
+            _triggerStringDict
+                .Select(d=>d.Value)
+                .ForEach(t => t.SendCommand(MemConverterCommand.Reset));
+
             //NotImplemented
         }
     }

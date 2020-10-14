@@ -300,6 +300,10 @@ namespace Domain.Device.MiddleWares4InData
             {
                 Parallel.ForEach(_enumHandlers, (h) => { h.SendCommand4MemConverters(command); });
             }
+            if (_objectHandlers != null)
+            {
+                Parallel.ForEach(_objectHandlers, (h) => { h.SendCommand4MemConverters(command); });
+            }
         }
         #endregion
     }

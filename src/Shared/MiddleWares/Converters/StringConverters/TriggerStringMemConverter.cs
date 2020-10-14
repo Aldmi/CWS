@@ -47,7 +47,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
 
         public void SendCommand(MemConverterCommand command)
         {
-            //NotImplemented
+            _stateDict.Select(d=>d.Value).ForEach(state=> state.RestartTrigger());
         }
 
 
@@ -70,7 +70,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
                     _isFired = true;
                     StateAfter = resetStr;
                 };
-                RestartTimer();
+                RestartTrigger();
             }
 
 
@@ -85,9 +85,8 @@ namespace Shared.MiddleWares.Converters.StringConverters
                         return StateAfter;
                     }
                     //данные новые
-                    _isFired = false;
                     StateBefore = newState;
-                    RestartTimer();
+                    RestartTrigger();
                     return StateBefore;
                 }
 
@@ -98,9 +97,8 @@ namespace Shared.MiddleWares.Converters.StringConverters
                     return StateBefore;
                 }
                 //данные новые
-                _isFired = false;
                 StateBefore = newState;
-                RestartTimer();
+                RestartTrigger();
                 return StateBefore;
             }
 
@@ -108,8 +106,9 @@ namespace Shared.MiddleWares.Converters.StringConverters
             private bool EqualStateBefore(string str)=> StateBefore.Equals(str);
 
 
-            private void RestartTimer()
+            public void RestartTrigger()
             {
+                _isFired = false;
                 _timerInvoke.Stop();
                 _timerInvoke.Interval = _resetTime;
                 _timerInvoke.Start();
