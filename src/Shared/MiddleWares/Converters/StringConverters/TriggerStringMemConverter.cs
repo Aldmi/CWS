@@ -30,7 +30,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
                 _stateDict.TryAdd(dataId, GetState());
             }
 
-            //Попытка установить новое состояние и сбросить таймер тригерра.
+            //Попытка установить новое состояние и сбросить таймер тригерра для новой строки.
             if (_stateDict.TryGetValue(dataId, out var triggerState))
             {
                var state = triggerState.TrySetState(inProp);
@@ -47,7 +47,10 @@ namespace Shared.MiddleWares.Converters.StringConverters
 
         public void SendCommand(MemConverterCommand command)
         {
-            _stateDict.Select(d=>d.Value).ForEach(state=> state.RestartTrigger());
+            if (command == MemConverterCommand.Reset)
+            {
+                _stateDict.Values.ForEach(state => state.RestartTrigger());
+            }
         }
 
 

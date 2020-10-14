@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using MoreLinq.Extensions;
 using Shared.Helpers;
 using Shared.MiddleWares.Converters.Exceptions;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
@@ -18,7 +19,6 @@ namespace Shared.MiddleWares.Converters.StringConverters
         private readonly ConcurrentDictionary<int, SubStringState> _subStringDict= new ConcurrentDictionary<int, SubStringState>();
 
 
-
         public SubStringMemConverter(SubStringMemConverterOption option)
         {
             _option = option;
@@ -34,39 +34,47 @@ namespace Shared.MiddleWares.Converters.StringConverters
         protected override string ConvertChild(string inProp, int dataId)
         {
             SubStringState GetResetState() => new SubStringState(inProp, _option.Lenght, _option.InitPharases, _option.Separator);
-            
-            //Если данных нет в словаре. Добавить в словарь новые данные.
-            if (!_subStringDict.ContainsKey(dataId))
-            {
-                _subStringDict.TryAdd(dataId, GetResetState());
-            }
 
-            //Если Строка по заданному индексу поменялась, сбросим состояние.
-            if (_subStringDict.TryGetValue(dataId, out var value))
+            var state = _subStringDict.GetOrAdd(dataId, GetResetState());
+            if (!state.EqualStr(inProp))
             {
-                if (!value.EqualStr(inProp))        
-                {
-                    _subStringDict[dataId] = GetResetState();
-                }
+                state= GetResetState();
+                _subStringDict[dataId] = state;
             }
+            var subStr = state.GetNextSubString();
+            return subStr;
 
-            //Вернуть следующую подстроку
-            if (_subStringDict.TryGetValue(dataId, out var resultValue))
-            {
-                var subStr = resultValue.GetNextSubString();
-                return subStr;
-            }
+            ////TODO: заменить на GetOrAdd 2 if
+            ////Если данных нет в словаре. Добавить в словарь новые данные.
+            //if (!_subStringDict.ContainsKey(dataId))
+            //{
+            //    _subStringDict.TryAdd(dataId, GetResetState());
+            //}
 
-            throw new StringConverterException($"SubStringMemConverter НЕ СМОГ ИЗВЛЕЧЬ РЕЗУЛЬТАТ ОБРАБОТКИ ИЗ СЛОВАРЯ {inProp}");
+            ////Если Строка по заданному индексу поменялась, сбросим состояние.
+            //if (_subStringDict.TryGetValue(dataId, out var value))
+            //{
+            //    if (!value.EqualStr(inProp))        
+            //    {
+            //        _subStringDict[dataId] = GetResetState();
+            //    }
+            //}
+
+            ////Вернуть следующую подстроку
+            //if (_subStringDict.TryGetValue(dataId, out var resultValue))
+            //{
+            //    var subStr = resultValue.GetNextSubString();
+            //    return subStr;
+            //}
+
+            //throw new StringConverterException($"SubStringMemConverter НЕ СМОГ ИЗВЛЕЧЬ РЕЗУЛЬТАТ ОБРАБОТКИ ИЗ СЛОВАРЯ {inProp}");
         }
-
-
 
 
 
         public void SendCommand(MemConverterCommand command)
         {
-            //NotImplemented
+            //not implemented т.к. сброс осуществляется приходом новой строки inProp и перезаписыванием объекта SubStringState созданного на базе этой строки
         }
 
 

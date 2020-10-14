@@ -40,29 +40,19 @@ namespace Domain.InputDataModel.Autodictor.MIddleWare.ObjectConverters
                 String4Reset = _option.String4Reset,
                 ResetTime = resetTime
             });
-            //Если данных нет в словаре. Добавить в словарь новые данные.
-            if (!_triggerStringDict.ContainsKey(dataId))
+            var triggConverter = _triggerStringDict.GetOrAdd(dataId, CreateTriggerConverter());
+            string resStep1;
+            if (!triggConverter.IsEqualResetTime(resetTime))   //Если Пришло новое значение таймера, нужно пересоздать TriggerConverter с новым значением таймера.т.к. TriggerStringMemConverter является иммутабельным.
             {
-                _triggerStringDict.TryAdd(dataId, CreateTriggerConverter());
+                triggConverter.Dispose();
+                var newTriggConverter = CreateTriggerConverter();
+                _triggerStringDict[dataId] = newTriggConverter;
+                resStep1 = newTriggConverter.Convert(str, dataId);
             }
-            //Вызовем Convert на конверторе
-            string resStep1 = null;
-            if (_triggerStringDict.TryGetValue(dataId, out var triggConverter))
+            else
             {
-                //Пришло новое значение таймера, нужно пересоздать TriggerConverter с новым значением таймера.
-                if (!triggConverter.IsEqualResetTime(resetTime))
-                {
-                    triggConverter.Dispose();
-                    var newConverter = CreateTriggerConverter();
-                    _triggerStringDict[dataId] = newConverter;
-                    resStep1 = newConverter.Convert(str, dataId);
-                }
-                else
-                {
-                    resStep1 = triggConverter.Convert(str, dataId);
-                }
+                resStep1 = triggConverter.Convert(str, dataId);
             }
-
             //Конвертор 2--------------------------------------------------------------
             var resStep2 = _pagingConverter.Convert(resStep1, dataId);
 
@@ -70,13 +60,20 @@ namespace Domain.InputDataModel.Autodictor.MIddleWare.ObjectConverters
             return cl;
         }
 
+        /// <summary>
+        /// Сигнал поступления НОВЫХ данных на вход. Именно список AdInput поменялся, при этом само входное значение конвертора inProp может не поменятсья,
+        /// например поменялся только Id в данных, это значит новый пакет данных отправленн.
+        /// </summary>
         public void SendCommand(MemConverterCommand command)
         {
-            _triggerStringDict
-                .Select(d=>d.Value)
-                .ForEach(t => t.SendCommand(MemConverterCommand.Reset));
+            if (command == MemConverterCommand.Reset)
+            {
+                _triggerStringDict
+                    .Values
+                    .ForEach(t => t.SendCommand(command));
 
-            //NotImplemented
+                _pagingConverter.SendCommand(command);
+            }
         }
     }
 
