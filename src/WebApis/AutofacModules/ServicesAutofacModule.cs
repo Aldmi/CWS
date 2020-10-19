@@ -1,6 +1,6 @@
-﻿using App.Services.Actions;
+﻿using System.Collections.Generic;
 using Autofac;
-using Domain.InputDataModel.Base.InData;
+using Autofac.Core;
 using Domain.InputDataModel.Shared.StringInseartService.InlineInseart;
 
 namespace WebApiSwc.AutofacModules
@@ -9,7 +9,16 @@ namespace WebApiSwc.AutofacModules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<InlineInseartService>().AsSelf().InstancePerDependency();
+            //Регистрация InlineInseartService для ByRules провайдера, со специальным replacePattern
+            const string replacePattern = @"\{\$[^{}:$]+\}";
+            builder.RegisterType<InlineInseartService>()
+                .AsSelf()
+                .Named<InlineInseartService>("ByRules")
+                .WithParameters(new List<Parameter>
+                {
+                    new NamedParameter("replacePattern", replacePattern),
+                })
+                .InstancePerDependency();
         }
     }
 }

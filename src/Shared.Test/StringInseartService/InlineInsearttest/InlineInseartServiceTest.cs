@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Shared.StringInseartService.InlineInseart;
 using Domain.InputDataModel.Shared.StringInseartService.Model.InlineStringInsert;
@@ -10,6 +9,15 @@ namespace Shared.Test.StringInseartService.InlineInsearttest
 {
     public class InlineInseartServiceTest
     {
+        private readonly string _replacePattern4ByRules;
+
+        public InlineInseartServiceTest()
+        {
+             _replacePattern4ByRules = @"\{\$[^{}:$]+\}";
+        }
+
+
+
         #region TheoryData
         public static IEnumerable<object[]> InseartsDatas => new[]
         {
@@ -48,7 +56,7 @@ namespace Shared.Test.StringInseartService.InlineInsearttest
             var storage = new InlineStringInsertModelStorage();
             storage.AddNew("{$StationCutVar}", new InlineStringInsertModel("{$StationCutVar}", "%010205{StationCutVar:MW_replace}", "Описание 1"));
             storage.AddNew("{$Time}", new InlineStringInsertModel("{$Time}", "%0368541{Time:t}", "Описание 2"));
-            var serv= new InlineInseartService(storage);
+            var serv= new InlineInseartService(_replacePattern4ByRules,storage);
 
             //Act
             var (isSuccess, _, value) = serv.ExecuteInseart(str);
@@ -67,7 +75,7 @@ namespace Shared.Test.StringInseartService.InlineInsearttest
             var storage = new InlineStringInsertModelStorage();
             storage.AddNew("{$StationCutVar}", new InlineStringInsertModel("{$StationCutVar}", "%010205{StationCutVar:MW_replace}", "Описание 1"));
             storage.AddNew("{$Time}", new InlineStringInsertModel("{$Time}", "%0368541{Time:t}", "Описание 2"));
-            var serv = new InlineInseartService(storage);
+            var serv = new InlineInseartService(_replacePattern4ByRules, storage);
             string str = null;
 
             //Act

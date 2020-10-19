@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Features.AttributeFilters;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
@@ -15,6 +16,8 @@ using Domain.InputDataModel.Shared.StringInseartService.InlineInseart;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Serilog;
 using Shared.Extensions;
+using Autofac.Features.Indexed;
+
 
 
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
@@ -40,13 +43,15 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
             ProviderOption providerOption,
             IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory,
             StringInsertModelExtStorage stringInsertModelExtStorage,
-            InlineInseartService inlineInseartService,
+            //IIndex<string, InlineInseartService> inlineInseartServiceNamed,
+            [KeyFilter("ByRules")] InlineInseartService inlineInseartService,
             ILogger logger) : base(providerOption.Name, providerResultFactory, logger)
         {
             _option = providerOption.ByRulesProviderOption;
             if (_option == null)
                 throw new ArgumentNullException(providerOption.Name); //TODO: выбросы исключений пометсить в Shared ThrowIfNull(object obj)
 
+            //inlineInseartServiceNamed["ByRules"]
             _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, inputTypeInseartsHandlersFactory, stringInsertModelExtStorage, inlineInseartService, logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(_option.RuleName4DefaultHandle)
                 ? "DefaultHandler"
