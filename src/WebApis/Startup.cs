@@ -207,6 +207,8 @@ namespace WebApiSwc
                 Console.WriteLine(ex.Message);
             }
 
+
+            //Инициализация системы и настройка Фоновых процессов.
             var inTypeName = AppConfiguration["InputDataModel"];
             switch (inTypeName)
             {
@@ -435,10 +437,21 @@ namespace WebApiSwc
             }
             catch (Exception ex)
             {
-                logger.Error($"ОШИБКА СОЗДАНИЕ СПИСКА ПРОДЮССЕРОВ НА БАЗЕ ОПЦИЙ  {ex}");
+                logger.Error($"ОШИБКА СОЗДАНИЕ СПИСКА ОПЦИЙ StringInsertModelExt  {ex}");
             }
 
-            //СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ--------------------------------------------------
+            //СОЗДАНИЕ СПИСКА ОПЦИЙ ДЛЯ ИНЛАЙН ВСТАВОК В СТРОКУ--------------------------------------------
+            try
+            {
+                var builderInlineStrIns = scope.Resolve<BuildInlineStringInsertModel>();
+                await builderInlineStrIns.BuildAll();
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"ОШИБКА СОЗДАНИЕ СПИСКА ОПЦИЙ InlineStringInsertModel  {ex}");
+            }
+
+            //СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ------------------------------------------------------
             try
             {
                 var buildDeviceService = scope.Resolve<BuildDeviceService<TInType>>();

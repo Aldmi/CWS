@@ -12,8 +12,10 @@ namespace WebApiSwc.AutofacModules
         {
             builder.RegisterType<MediatorForStorages<TIn>>().InstancePerDependency();
             builder.RegisterType<MediatorForDeviceOptions>().InstancePerDependency();
+
             builder.RegisterType<ProduserUnionOptionRepositoryFacade>().InstancePerDependency();
             builder.RegisterType<StringInsertModelExtRepositoryFacade>().InstancePerDependency();
+            builder.RegisterType<InlineStringInsertModeRepositoryFacade>().InstancePerDependency();
         }
     }
 }
