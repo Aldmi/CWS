@@ -5,7 +5,7 @@ using FluentAssertions;
 using Shared.Extensions;
 using Xunit;
 
-namespace Shared.Test
+namespace Shared.Test.ExtensionsTests
 {
     public class StringBuilderExtensionsTest
     {
@@ -67,7 +67,7 @@ namespace Shared.Test
                   "",
                   "",
                   0
-              },
+              }
         };
         [Theory]
         [MemberData(nameof(ReplaceBracketsDatas))]

@@ -5,28 +5,26 @@ using Shared.Extensions;
 
 namespace Domain.InputDataModel.Shared.StringInseartService.InlineInseart
 {
+    /// <summary>
+    /// Сервис замены подстрок в строке.
+    /// Соотвествие подстрок определяет InlineStringInsertModelStorage
+    /// </summary>
     public class InlineInseartService
     {
         private readonly InlineStringInsertModelFactory _factory;
-        private readonly ILogger _logger;
-        private const string ReplacePattern = "!!!!";
-        private const string IdentifyKeyPattern = "!!!!";
+        private const string ReplacePattern = @"\{\$[^{}:$]+\}";
 
 
-        public InlineInseartService(InlineStringInsertModelStorage inlineStrInsStorage, ILogger logger)
+        //TODO:передавать ReplacePattern в ctor. для этого нужно имунную регитстрация в Autofac. Т.е. в  ByRulesDataProvider будет внедрятся реализация именно для ByRulesDataProvider со своим ReplacePattern
+        public InlineInseartService(InlineStringInsertModelStorage inlineStrInsStorage)
         {
             _factory = new InlineStringInsertModelFactory(inlineStrInsStorage);
-            _logger = logger;
         }
-
 
 
         public Result<string> ExecuteInseart(string baseStr)
         {
-            //TODO: возможно еще 1 паттерн передавать для извленения ключа из найденной строки по ReplacePattern {$Time}  нужно извлечь time
-            var resStr = baseStr.ExecInlineInseart(ReplacePattern, IdentifyKeyPattern, _factory.GetInlineStr);
-            return Result.Ok(baseStr);
+            return baseStr.ExecInlineInseart(ReplacePattern, _factory.GetInlineStr);
         }
-
     }
 }
