@@ -58,7 +58,7 @@ namespace WebApiSwc.Controllers
         }
 
 
-        // GET api/StringInsertModelExt/id
+        // GET api/StringInsertModelExt/varName
         [HttpGet("{varName}", Name = "GetModel")]
         public ActionResult Get([FromRoute]string varName)
         {

@@ -7,7 +7,7 @@ namespace WebApiSwc.DTO.JSON.InputTypesDto
 {
     public class StringInsertModelExtDto
     {
-        [Required(ErrorMessage = "Укажите Key для  StringInsertModelExt")]
+        [Required(ErrorMessage = "Укажите Key для StringInsertModelExt")]
         public string Key { get; set; }
         public string Format { get; set; }
 
