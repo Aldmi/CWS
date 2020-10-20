@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using App.Services.Actions;
 using AutoMapper;
 using CSharpFunctionalExtensions;
-using Domain.InputDataModel.Shared.StringInseartService.Model;
+using Domain.InputDataModel.Shared.StringInseartService.Model.InlineStringInsert;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using WebApiSwc.DTO.JSON.InputTypesDto;
@@ -14,10 +13,10 @@ namespace WebApiSwc.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
-    public class StringInsertModelExtController : Controller
+    public class InlineStringInsertModelController : Controller
     {
         #region fields
-        private readonly BuildStringInsertModelExt _buildService;
+        private readonly BuildInlineStringInsertModel _buildService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         #endregion
@@ -25,8 +24,8 @@ namespace WebApiSwc.Controllers
 
 
         #region ctor
-        public StringInsertModelExtController(
-            BuildStringInsertModelExt buildService,
+        public InlineStringInsertModelController(
+            BuildInlineStringInsertModel buildService,
             IMapper mapper,
             ILogger logger)
         {
@@ -38,56 +37,56 @@ namespace WebApiSwc.Controllers
 
 
 
+
         #region ApiMethode
 
-        // GET api/StringInsertModelExt
+        // GET api/InlineStringInsertModel
         [HttpGet]
         public IActionResult Get()
         {
             try
             {
-                var list =  _buildService.GetValuesFromStorage();
-                var listDto = _mapper.Map<List<StringInsertModelExtDto>>(list);
+                var list = _buildService.GetValuesFromStorage();
+                var listDto = _mapper.Map<List<InlineStringInsertModelDto>>(list);
                 return new JsonResult(listDto);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Ошибка в StringInsertModelExtController/Get");
+                _logger.Error(ex, "Ошибка в InlineStringInsertModelController/Get");
                 throw;
             }
         }
 
 
-        // GET api/StringInsertModelExt/varName
-        [HttpGet("{varName}", Name = "GetModel")]
-        public ActionResult Get([FromRoute]string varName)
+        // GET api/InlineStringInsertModel/key
+        [HttpGet("{key}", Name = "GetInlineInsModel")]
+        public ActionResult Get([FromRoute] string key)
         {
             try
             {
-                var model = _buildService.GetValuesFromStorageByVarName(varName);
+                var model = _buildService.GetValuesFromStorageByVarName(key);
                 if (model == null)
                 {
-                    return NotFound(varName);
+                    return NotFound(key);
                 }
-        
-                var modelDto = _mapper.Map<StringInsertModelExtDto>(model);
+
+                var modelDto = _mapper.Map<InlineStringInsertModelDto>(model);
                 return new JsonResult(modelDto);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Ошибка в StringInsertModelExtController/Get");
+                _logger.Error(ex, "Ошибка в InlineStringInsertModelController/Get by key");
                 throw;
             }
         }
 
-
-        // POST api/StringInsertModelExt
+        // POST api/InlineStringInsertModel
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]StringInsertModelExtDto data)
+        public async Task<IActionResult> Post([FromBody] InlineStringInsertModelDto data)
         {
             if (data == null)
             {
-                ModelState.AddModelError("StringInsertModelExt", "POST body is null");
+                ModelState.AddModelError("InlineStringInsertModel", "POST body is null");
                 return BadRequest(ModelState);
             }
 
@@ -96,28 +95,29 @@ namespace WebApiSwc.Controllers
 
             try
             {
-                var model = _mapper.Map<StringInsertModelExt>(data);
+                var model = _mapper.Map<InlineStringInsertModel>(data);
                 var (_, isFailure, value, error) = await _buildService.AddOrUpdateAndBuildAsync(model);
-                if(isFailure)
+                if (isFailure)
                     return BadRequest($"{error}");
 
-                return CreatedAtAction("Get",  data);
+                return CreatedAtAction("Get", data);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Критическая Ошибка в StringInsertModelExt/Post");
+                _logger.Error(ex, "Критическая Ошибка в InlineStringInsertModel/Post");
                 return BadRequest(ex);
             }
         }
 
 
-        // POST api/StringInsertModelExt/AddOrUpdateList
+
+        // POST api/InlineStringInsertModel/AddOrUpdateList
         [HttpPost("AddOrUpdateList")]
-        public async Task<IActionResult> AddOrUpdateList([FromBody]List<StringInsertModelExtDto> listDto)
+        public async Task<IActionResult> AddOrUpdateList([FromBody] List<InlineStringInsertModelDto> listDto)
         {
             if (listDto == null)
             {
-                ModelState.AddModelError("StringInsertModelExt", "POST body is null");
+                ModelState.AddModelError("InlineStringInsertModel", "POST body is null");
                 return BadRequest(ModelState);
             }
 
@@ -126,7 +126,7 @@ namespace WebApiSwc.Controllers
 
             try
             {
-                var listModels = _mapper.Map<List<StringInsertModelExt>>(listDto);
+                var listModels = _mapper.Map<List<InlineStringInsertModel>>(listDto);
                 var (_, isFailure, error) = await _buildService.AddOrUpdateAndBuildListAsync(listModels);
                 if (isFailure)
                     return BadRequest($"{error}");
@@ -135,19 +135,19 @@ namespace WebApiSwc.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Критическая Ошибка в StringInsertModelExt/Post");
+                _logger.Error(ex, "Критическая Ошибка в InlineStringInsertModel/Post");
                 return BadRequest(ex);
             }
         }
 
 
-        // DELETE api/StringInsertModelExt/varName
+        // DELETE api/InlineStringInsertModel/varName
         [HttpDelete("{varName}")]
-        public async Task<IActionResult> Delete([FromRoute]string varName)
+        public async Task<IActionResult> Delete([FromRoute] string varName)
         {
             if (string.IsNullOrEmpty(varName))
             {
-                ModelState.AddModelError("StringInsertModelExt", "varName is null or empty");
+                ModelState.AddModelError("InlineStringInsertModel", "varName is null or empty");
                 return BadRequest(ModelState);
             }
 
@@ -163,29 +163,27 @@ namespace WebApiSwc.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Ошибка в StringInsertModelExt/Delete");
+                _logger.Error(ex, "Ошибка в InlineStringInsertModel/Delete");
                 throw;
             }
         }
 
 
-
-
         /// <summary>
         /// В теле запроса должно быть указанно "Ok" в формате application/json
         /// </summary>
-        // DELETE api/StringInsertModelExt
+        // DELETE api/InlineStringInsertModel/
         [HttpDelete]
         public async Task<IActionResult> Erase([FromBody] string resolution)
         {
             if (!resolution.Equals("Ok"))
-                return BadRequest(" Не верный resolution в теле запроса");
+                return BadRequest("Не верный resolution в теле запроса");
 
             var (isSuccess, _, error) = await _buildService.EraseAsync();
             if (isSuccess)
                 return Ok();
 
-            _logger.Error(error, "Ошибка в StringInsertModelExtController/Erase");
+            _logger.Error(error, "Ошибка в InlineStringInsertModel/Erase");
             return BadRequest(error);
         }
 

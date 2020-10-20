@@ -11,8 +11,10 @@ using Domain.Exchange.Repository.Entities;
 using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
+using Domain.InputDataModel.Shared.StringInseartService.Model.InlineStringInsert;
 using Infrastructure.Dal.EfCore.Entities.Device;
 using Infrastructure.Dal.EfCore.Entities.Exchange;
+using Infrastructure.Dal.EfCore.Entities.InlineStringInsertModel;
 using Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers;
 using Infrastructure.Dal.EfCore.Entities.ResponseProduser;
 using Infrastructure.Dal.EfCore.Entities.StringInsertModelExt;
@@ -213,8 +215,36 @@ namespace WebApiSwc.AutoMapperConfig
                  context.Mapper.Map<StringHandlerMiddleWareOption>(src.StringHandlerMiddleWareOption),
                   context.Mapper.Map<MathematicFormula>(src.MathematicFormula)
               )).ForAllMembers(opt => opt.Ignore());
+
+            #endregion
+
+
+            #region InlineStringInsertModel mapping
+            CreateMap<InlineStringInsertModel, InlineStringInsertModelDto>();
+
+            CreateMap<InlineStringInsertModelDto, InlineStringInsertModel>()
+                .ConstructUsing((src, context) => new InlineStringInsertModel(
+                    src.Key,
+                    src.InlineStr,
+                    src.Description
+                )).ForAllMembers(opt => opt.Ignore());
+
+
+            CreateMap<InlineStringInsertModel, EfInlineStringInsertModel>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => 0))
+                .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.Key))
+                .ForMember(dest => dest.InlineStr, opt => opt.MapFrom(src => src.InlineStr))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+
+            CreateMap<EfInlineStringInsertModel, InlineStringInsertModel>()
+                .ConstructUsing((src, context) => new InlineStringInsertModel(
+                    src.Key,
+                    src.InlineStr,
+                    src.Description
+                )).ForAllMembers(opt => opt.Ignore());
             #endregion
         }
+
 
 
         private static int? ConvertString2NullableInt(string str)

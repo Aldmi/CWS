@@ -5,6 +5,7 @@ namespace WebApiSwc.DTO.JSON.InputTypesDto
     public class InlineStringInsertModelDto
     {
         [Required(ErrorMessage = "Укажите Key для InlineStringInsertModel")]
+        [RegularExpression(@"\{\$[^{}:$]+\}", ErrorMessage = "Key не соответсвует формату {$Key}")]
         public string Key { get; set; }
 
         [Required(ErrorMessage = "Укажите InlineStr для InlineStringInsertModel")]
