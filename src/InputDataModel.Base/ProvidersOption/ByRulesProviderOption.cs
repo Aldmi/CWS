@@ -16,12 +16,11 @@ namespace Domain.InputDataModel.Base.ProvidersOption
     public class RuleOption
     {
         public string Name { get; set; }                    //Имя правила, или название команды вида Command_On, Command_Off, Command_Restart, Command_Clear       
-        public string AddressDevice { get; set; }           // Адресс ус-ва.
+        public string AddressDevice { get; set; }           //Адресс ус-ва.
         public AgregateFilter AgregateFilter { get; set; }  //Список фильтров, результат которых, объединяется в 1 список
         public string DefaultItemJson { get; set; }         //Элемент по умолчанию (заменяет null на указанный тип в JSON). "{}" - дефолтный конструктор типа
-        public List<ViewRuleOption> ViewRules { get; set; }  //Правила отображения. TakeItems элементов распределяются между правилами для отображения. Например первые 3 элемента отображаются первым правилом, остальные вторым правилом.
+        public List<ViewRuleOption> ViewRules { get; set; } //Правила отображения. TakeItems элементов распределяются между правилами для отображения. Например первые 3 элемента отображаются первым правилом, остальные вторым правилом.
     }
-
 
 
     /// <summary>
@@ -30,27 +29,33 @@ namespace Domain.InputDataModel.Base.ProvidersOption
     public class ViewRuleOption
     {
         public int Id { get; set; }
-        public int StartPosition { get; set; }               //Начальная позиция элемента из списка
-        public int Count { get; set; }                      //Конечная позиция элемента из списка
-        public int BatchSize { get; set; }                   //Разбить отправку на порции по BatchSize.
+        public int StartPosition { get; set; }                  //Начальная позиция элемента из списка
+        public int Count { get; set; }                          //Конечная позиция элемента из списка
+        public int BatchSize { get; set; }                      //Разбить отправку на порции по BatchSize.
+        public List<UnitOfSending> UnitOfSendings { get; set; } //Список Единиц отправки данных
+
+        //DEBUG-------------------------
+        public RequestOption RequestOption => UnitOfSendings[0].RequestOption; //DEBUG DEL!!!
+        public ResponseOption ResponseOption => UnitOfSendings[0].ResponseOption;//DEBUG DEL!!!
+        //DEBUG----------------------------
+    }
+
+
+
+    public class UnitOfSending
+    {
         public RequestOption RequestOption { get; set; }     //Запрос
         public ResponseOption ResponseOption { get; set; }   //Ответ
     }
 
 
-    public abstract class RequestResonseOption
+    public class RequestOption
     {
         public string Format { get; set; }
-        public string Body { get; set; }                    
-    }
-
-
-
-    public class RequestOption : RequestResonseOption
-    {  
         public int MaxBodyLenght { get; set; }               // Максимальная длина тела запроса
         public string Header { get; set; }                   // НАЧАЛО запроса (ТОЛЬКО ЗАВИСИМЫЕ ДАННЫЕ).
-        public string Footer { get; set; }                   // КОНЕЦ ЗАПРОСА (ТОЛЬКО ЗАВИСИМЫЕ ДАННЫЕ).
+        public string Body { get; set; }                     // ТЕЛО запроса (ЗАВИСИМЫЕ И НЕЗАВИСМЫЕ ДАННЫЕ).
+        public string Footer { get; set; }                   // КОНЕЦ запроса (ТОЛЬКО ЗАВИСИМЫЕ ДАННЫЕ).
     }
 
 

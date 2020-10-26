@@ -30,23 +30,27 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    RequestOption = new RequestOption
-                    {
-                        Header = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly}{CRC8FullPoly:X2_hex_Border_StartOnly}",
-                        Body = "01815a0800000000000001ff0020",
-                        Footer = "",
-                        Format = "HEX",
-                        MaxBodyLenght = 245
-                    },
-                    ResponseOption = new ResponseOption
-                    {
-                        ValidatorName = "EqualValidator",
-                        EqualValidator = new EqualResponseValidatorOption
-                        {
-                            Body = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly2}{CRC8FullPoly:X2_hex_Border_StartOnly2}02014F4B00",
-                            Format ="HEX"
+                    UnitOfSendings = new List<UnitOfSending> {
+                            new UnitOfSending {
+                                RequestOption = new RequestOption
+                                {
+                                    Header = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly}{CRC8FullPoly:X2_hex_Border_StartOnly}",
+                                    Body = "01815a0800000000000001ff0020",
+                                    Footer = "",
+                                    Format = "HEX",
+                                    MaxBodyLenght = 245
+                                },
+                                ResponseOption = new ResponseOption
+                                {
+                                    ValidatorName = "EqualValidator",
+                                    EqualValidator = new EqualResponseValidatorOption
+                                    {
+                                        Body = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly2}{CRC8FullPoly:X2_hex_Border_StartOnly2}02014F4B00",
+                                        Format ="HEX"
+                                    }
+                                }
+                            }
                         }
-                    }
                 },
 
                 GetData4ViewRuleTest.InputTypesDefault,  
@@ -70,23 +74,27 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    RequestOption = new RequestOption
-                    {
-                        Header = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly}{CRC8FullPoly:X2_hex_Border_StartOnly}",
-                        Body = "01815A12030000000000010100188031",
-                        Footer = "",
-                        Format = "HEX",
-                        MaxBodyLenght = 245
-                    },
-                    ResponseOption = new ResponseOption
-                    {
-                        ValidatorName = "EqualValidator",
-                        EqualValidator = new EqualResponseValidatorOption
-                        {
-                            Body = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly2}{CRC8FullPoly:X2_hex_Border_StartOnly2}02014F4B00",
-                            Format ="HEX"
+                    UnitOfSendings = new List<UnitOfSending> {
+                            new UnitOfSending {
+                                RequestOption = new RequestOption
+                                {
+                                    Header = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly}{CRC8FullPoly:X2_hex_Border_StartOnly}",
+                                    Body = "01815A12030000000000010100188031",
+                                    Footer = "",
+                                    Format = "HEX",
+                                    MaxBodyLenght = 245
+                                },
+                                ResponseOption = new ResponseOption
+                                {
+                                    ValidatorName = "EqualValidator",
+                                    EqualValidator = new EqualResponseValidatorOption
+                                    {
+                                        Body = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly2}{CRC8FullPoly:X2_hex_Border_StartOnly2}02014F4B00",
+                                        Format ="HEX"
+                                    }
+                                }
+                            }
                         }
-                    }
                 },
 
                 GetData4ViewRuleTest.InputTypesDefault,  
@@ -110,23 +118,27 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    RequestOption = new RequestOption
-                    {
-                        Header = "0x{NbyteLastCalc:X2_BorderRight_Math}0x{CRC8FullPoly:X2_Border_StartOnly}0x{CRCMod256:X2_Border_StartOnly}",
-                        Body = "0x010x810x5a0x080x000x000x000x000x000x000x01{NumberOfTrain}",
-                        Footer = "",
-                        Format = "Windows-1251",
-                        MaxBodyLenght = 245
-                    },
-                    ResponseOption = new ResponseOption
-                    {
-                        ValidatorName = "EqualValidator",
-                        EqualValidator = new EqualResponseValidatorOption
-                        {
-                            Body = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly2}{CRC8FullPoly:X2_hex_Border_StartOnly2}02014F4B00",
-                            Format ="HEX"
+                    UnitOfSendings = new List<UnitOfSending> {
+                            new UnitOfSending {
+                                RequestOption = new RequestOption
+                                {
+                                    Header = "0x{NbyteLastCalc:X2_BorderRight_Math}0x{CRC8FullPoly:X2_Border_StartOnly}0x{CRCMod256:X2_Border_StartOnly}",
+                                    Body = "0x010x810x5a0x080x000x000x000x000x000x000x01{NumberOfTrain}",
+                                    Footer = "",
+                                    Format = "Windows-1251",
+                                    MaxBodyLenght = 245
+                                },
+                                ResponseOption = new ResponseOption
+                                {
+                                    ValidatorName = "EqualValidator",
+                                    EqualValidator = new EqualResponseValidatorOption
+                                    {
+                                        Body = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly2}{CRC8FullPoly:X2_hex_Border_StartOnly2}02014F4B00",
+                                        Format ="HEX"
+                                    }
+                                }
+                            }
                         }
-                    }
                 },
 
                 GetData4ViewRuleTest.InputTypesDefault,  
@@ -156,7 +168,7 @@ namespace ByRulesInseartedTest.Test
             int expectedCountInseartedData)
         {
             //Arrange
-            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, null, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
@@ -193,25 +205,29 @@ namespace ByRulesInseartedTest.Test
                 StartPosition = 0,
                 Count = 1,
                 BatchSize = 1,
-                RequestOption = new RequestOption
-                {
-                    Header = "0x{NbyteLastCalc:X2}0x{CRC8FullPoly:X2_Border_StartOnly}0x{CRCMod256:X2_Border_StartOnly}",
-                    Body = "0x010x810x5a0x080x000x000x000x000x000x000x01{NumberOfTrain}",
-                    Footer = "",
-                    Format = "Windows-1251",
-                    MaxBodyLenght = 245
-                },
-                ResponseOption = new ResponseOption
-                {
-                    ValidatorName = "EqualValidator",
-                    EqualValidator = new EqualResponseValidatorOption
-                    {
-                        Body = "{AddressDevice:X2}0246463038254130373741434B454103",
-                        Format = "HEX"
+                UnitOfSendings = new List<UnitOfSending> {
+                    new UnitOfSending {
+                        RequestOption = new RequestOption
+                        {
+                            Header = "0x{NbyteLastCalc:X2}0x{CRC8FullPoly:X2_Border_StartOnly}0x{CRCMod256:X2_Border_StartOnly}",
+                            Body = "0x010x810x5a0x080x000x000x000x000x000x000x01{NumberOfTrain}",
+                            Footer = "",
+                            Format = "Windows-1251",
+                            MaxBodyLenght = 245
+                        },
+                        ResponseOption = new ResponseOption
+                        {
+                            ValidatorName = "EqualValidator",
+                            EqualValidator = new EqualResponseValidatorOption
+                            {
+                                Body = "{AddressDevice:X2}0246463038254130373741434B454103",
+                                Format = "HEX"
+                            }
+                        }
                     }
                 }
             };
-            var viewRule = ViewRule<AdInputType>.Create("5", option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, null, Logger);
+            var viewRule = ViewRule<AdInputType>.Create("5", option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
@@ -221,6 +237,5 @@ namespace ByRulesInseartedTest.Test
             isSuccess.Should().BeFalse();
             error.Should().Be("Для NbyteLastCalcDepInsH подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
         }
-
     }
 }

@@ -25,23 +25,27 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    RequestOption = new RequestOption
-                    {
-                        Header = "0xFF0xFF0xFF0x0200{AddressDevice:X2}WEB",
-                        Body = "10x0914:010x09260x093",
-                        Footer = "0x03{CRCCcitt:X4_BorderLeft<0x02-0x03>}0x04",
-                        Format = "Windows-1251",
-                        MaxBodyLenght = 245
-                    },
-                    ResponseOption = new ResponseOption
-                    {
-                        ValidatorName = "EqualValidator",
-                        EqualValidator = new EqualResponseValidatorOption
-                        {
-                            Body = "0xFF0xFF0xFF0x0208{AddressDevice:X2}0x060x03{CRCCcitt:X4_BorderLeft<0x02-0x03>}0x04",
-                            Format = "Windows-1251"
+                    UnitOfSendings = new List<UnitOfSending> {
+                            new UnitOfSending {
+                                RequestOption = new RequestOption
+                                {
+                                    Header = "0xFF0xFF0xFF0x0200{AddressDevice:X2}WEB",
+                                    Body = "10x0914:010x09260x093",
+                                    Footer = "0x03{CRCCcitt:X4_BorderLeft<0x02-0x03>}0x04",
+                                    Format = "Windows-1251",
+                                    MaxBodyLenght = 245
+                                },
+                                ResponseOption = new ResponseOption
+                                {
+                                    ValidatorName = "EqualValidator",
+                                    EqualValidator = new EqualResponseValidatorOption
+                                    {
+                                        Body = "0xFF0xFF0xFF0x0208{AddressDevice:X2}0x060x03{CRCCcitt:X4_BorderLeft<0x02-0x03>}0x04",
+                                        Format = "Windows-1251"
+                                    }
+                                }
+                            }
                         }
-                    }
                 },
                 GetData4ViewRuleTest.InputTypesDefault,
                 //REQUEST
@@ -63,23 +67,27 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    RequestOption = new RequestOption
-                    {
-                        Header = "0xFF0xFF0xFF0x0200{AddressDevice:X2}WCB",
-                        Body = "Любань0x0912:220x09Поезд следует со всеми остановками",
-                        Footer = "0x03{CRCCcitt:X4_BorderLeft<0x02-0x03>}0x04",
-                        Format = "Windows-1251",
-                        MaxBodyLenght = 245
-                    },
-                    ResponseOption = new ResponseOption
-                    {
-                        ValidatorName = "EqualValidator",
-                        EqualValidator = new EqualResponseValidatorOption
-                        {
-                            Body = "0xFF0xFF0xFF0x0208{AddressDevice:X2}0x060x03{CRCCcitt:X4_BorderLeft<0x02-0x03>}0x04",
-                            Format = "Windows-1251"
+                    UnitOfSendings = new List<UnitOfSending> {
+                            new UnitOfSending {
+                                RequestOption = new RequestOption
+                                {
+                                    Header = "0xFF0xFF0xFF0x0200{AddressDevice:X2}WCB",
+                                    Body = "Любань0x0912:220x09Поезд следует со всеми остановками",
+                                    Footer = "0x03{CRCCcitt:X4_BorderLeft<0x02-0x03>}0x04",
+                                    Format = "Windows-1251",
+                                    MaxBodyLenght = 245
+                                },
+                                ResponseOption = new ResponseOption
+                                {
+                                    ValidatorName = "EqualValidator",
+                                    EqualValidator = new EqualResponseValidatorOption
+                                    {
+                                        Body = "0xFF0xFF0xFF0x0208{AddressDevice:X2}0x060x03{CRCCcitt:X4_BorderLeft<0x02-0x03>}0x04",
+                                        Format = "Windows-1251"
+                                    }
+                                }
+                            }
                         }
-                    }
                 },
                 GetData4ViewRuleTest.InputTypesDefault,   
                 //REQUEST
@@ -103,23 +111,27 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    RequestOption = new RequestOption
-                    {
-                        Header = "0xFF0xFF0xFF0x020x1BW",
-                        Body = "САНКТ-ПЕТЕРБУРГ0x0912:340x0920x09САНКТПЕТЕРБУРГ0x0913:390x09 0x09ЛЮБАНЬ0x0912:220x0910x09КИРИШИ0x0912:550x09 0x09",
-                        Footer = "0x03{CRCXor:X2_BorderExclude}0x1F",
-                        Format = "Windows-1251",
-                        MaxBodyLenght = 300
-                    },
-                    ResponseOption = new ResponseOption
-                    {
-                        ValidatorName = "EqualValidator",
-                        EqualValidator = new EqualResponseValidatorOption
-                        {
-                            Body = "0x060x1F",
-                            Format = "Windows-1251"
+                    UnitOfSendings = new List<UnitOfSending> {
+                            new UnitOfSending {
+                                RequestOption = new RequestOption
+                                {
+                                    Header = "0xFF0xFF0xFF0x020x1BW",
+                                    Body = "САНКТ-ПЕТЕРБУРГ0x0912:340x0920x09САНКТПЕТЕРБУРГ0x0913:390x09 0x09ЛЮБАНЬ0x0912:220x0910x09КИРИШИ0x0912:550x09 0x09",
+                                    Footer = "0x03{CRCXor:X2_BorderExclude}0x1F",
+                                    Format = "Windows-1251",
+                                    MaxBodyLenght = 300
+                                },
+                                ResponseOption = new ResponseOption
+                                {
+                                    ValidatorName = "EqualValidator",
+                                    EqualValidator = new EqualResponseValidatorOption
+                                    {
+                                        Body = "0x060x1F",
+                                        Format = "Windows-1251"
+                                    }
+                                }
+                            }
                         }
-                    }
                 },
                 GetData4ViewRuleTest.InputTypesDefault,   
                 //REQUEST
@@ -151,7 +163,7 @@ namespace ByRulesInseartedTest.Test
             int expectedCountInseartedData)
         {
             //Arrange
-            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, null, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();

@@ -25,23 +25,27 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    RequestOption = new RequestOption
-                    {
-                        Header = "\u0002{AddressDevice:X2}{Nchar:X2_BorderRightBeforeCrc}",
-                        Body = "%000010320113%10$10$00$60$t2{Time:t}%000330940113%10$10$00$60$t3{Event}%000951920114%10$10$00$60$t1{StationsCut}%000011920183%10$10$00$60$t2 ",
-                        Footer = "{CRCXorInverse:X2_BorderLeft}\u0003",
-                        Format = "Windows-1251",
-                        MaxBodyLenght = 245
-                    },
-                    ResponseOption = new ResponseOption
-                    {
-                        ValidatorName = "EqualValidator",
-                        EqualValidator = new EqualResponseValidatorOption
-                        {
-                            Body = "0230323030464403",
-                            Format ="HEX"
+                    UnitOfSendings = new List<UnitOfSending> {
+                            new UnitOfSending {
+                                RequestOption = new RequestOption
+                                {
+                                    Header = "\u0002{AddressDevice:X2}{Nchar:X2_BorderRightBeforeCrc}",
+                                    Body = "%000010320113%10$10$00$60$t2{Time:t}%000330940113%10$10$00$60$t3{Event}%000951920114%10$10$00$60$t1{StationsCut}%000011920183%10$10$00$60$t2 ",
+                                    Footer = "{CRCXorInverse:X2_BorderLeft}\u0003",
+                                    Format = "Windows-1251",
+                                    MaxBodyLenght = 245
+                                },
+                                ResponseOption = new ResponseOption
+                                {
+                                    ValidatorName = "EqualValidator",
+                                    EqualValidator = new EqualResponseValidatorOption
+                                    {
+                                        Body = "0230323030464403",
+                                        Format ="HEX"
+                                    }
+                                }
+                            }
                         }
-                    }
                 },
 
                 //REQUEST
@@ -65,23 +69,27 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    RequestOption = new RequestOption
-                    {
-                        Header = "\u0002{AddressDevice:X2}{Nchar:X2_BorderRightBeforeCrc}",
-                        Body = "%000011920304%10$10$00$60$t2{Note}%000011600483%10$10$00$60$t3Московское время%001611920483%10$10$00$60$t1",
-                        Footer = "{CRCXorInverse:X2_BorderLeft}\u0003",
-                        Format = "Windows-1251",
-                        MaxBodyLenght = 245
-                    },
-                    ResponseOption = new ResponseOption
-                    {
-                        ValidatorName = "EqualValidator",
-                        EqualValidator = new EqualResponseValidatorOption
-                        {
-                            Body = "0230323030464403",
-                            Format ="HEX"
+                    UnitOfSendings = new List<UnitOfSending> {
+                            new UnitOfSending {
+                                RequestOption = new RequestOption
+                                {
+                                    Header = "\u0002{AddressDevice:X2}{Nchar:X2_BorderRightBeforeCrc}",
+                                    Body = "%000011920304%10$10$00$60$t2{Note}%000011600483%10$10$00$60$t3Московское время%001611920483%10$10$00$60$t1",
+                                    Footer = "{CRCXorInverse:X2_BorderLeft}\u0003",
+                                    Format = "Windows-1251",
+                                    MaxBodyLenght = 245
+                                },
+                                ResponseOption = new ResponseOption
+                                {
+                                    ValidatorName = "EqualValidator",
+                                    EqualValidator = new EqualResponseValidatorOption
+                                    {
+                                        Body = "0230323030464403",
+                                        Format ="HEX"
+                                    }
+                                }
+                            }
                         }
-                    }
                 },
 
                 //REQUEST
@@ -105,23 +113,27 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    RequestOption = new RequestOption
-                    {
-                        Header = "\u0002{AddressDevice:X2}{Nchar:X2_BorderRightBeforeCrc}",
-                        Body = "%00001032{MATH(rowNumber*16):D3}3%10$12$00$60$t3{TDepart:t}%00033240{MATH(rowNumber*16):D3}4%10$12$00$60$t3{StationArrival}%00241256{MATH(rowNumber*16):D3}3%10$12$00$60$t1{PathNumber}%400012561451%000012561603%10$10$00$60$t2Московское время",
-                        Footer = "{CRCXorInverse:X2_BorderLeft}\u0003",
-                        Format = "Windows-1251",
-                        MaxBodyLenght = 245
-                    },
-                    ResponseOption = new ResponseOption
-                    {
-                        ValidatorName = "EqualValidator",
-                        EqualValidator = new EqualResponseValidatorOption
-                        {
-                            Body = "0230323030464403",
-                            Format ="HEX"
+                    UnitOfSendings = new List<UnitOfSending> {
+                            new UnitOfSending {
+                                RequestOption = new RequestOption
+                                {
+                                    Header = "\u0002{AddressDevice:X2}{Nchar:X2_BorderRightBeforeCrc}",
+                                    Body = "%00001032{MATH(rowNumber*16):D3}3%10$12$00$60$t3{TDepart:t}%00033240{MATH(rowNumber*16):D3}4%10$12$00$60$t3{StationArrival}%00241256{MATH(rowNumber*16):D3}3%10$12$00$60$t1{PathNumber}%400012561451%000012561603%10$10$00$60$t2Московское время",
+                                    Footer = "{CRCXorInverse:X2_BorderLeft}\u0003",
+                                    Format = "Windows-1251",
+                                    MaxBodyLenght = 245
+                                },
+                                ResponseOption = new ResponseOption
+                                {
+                                    ValidatorName = "EqualValidator",
+                                    EqualValidator = new EqualResponseValidatorOption
+                                    {
+                                        Body = "0230323030464403",
+                                        Format ="HEX"
+                                    }
+                                }
+                            }
                         }
-                    }
                 },
 
                 //REQUEST
@@ -144,23 +156,27 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    RequestOption = new RequestOption
-                    {
-                        Header = "\u0002{AddressDevice:X2}{Nchar:X2_BorderRightBeforeCrc}",
-                        Body = "%00001021{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{NumberOfTrain}%00025144{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{StationArrival}%00168199{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{TDepart:t}%00202233{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13%00202233{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13%00241254{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{PathNumber}",
-                        Footer = "{CRCXorInverse:X2_BorderLeft}\u0003",
-                        Format = "Windows-1251",
-                        MaxBodyLenght = 245
-                    },
-                    ResponseOption = new ResponseOption
-                    {
-                        ValidatorName = "EqualValidator",
-                        EqualValidator = new EqualResponseValidatorOption
-                        {
-                            Body = "0230323030464403",
-                            Format ="HEX"
+                    UnitOfSendings = new List<UnitOfSending> {
+                            new UnitOfSending {
+                                RequestOption = new RequestOption
+                                {
+                                    Header = "\u0002{AddressDevice:X2}{Nchar:X2_BorderRightBeforeCrc}",
+                                    Body = "%00001021{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{NumberOfTrain}%00025144{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{StationArrival}%00168199{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{TDepart:t}%00202233{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13%00202233{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13%00241254{MATH(rowNumber*11+16):D3}4%10$00$60$t3$13{PathNumber}",
+                                    Footer = "{CRCXorInverse:X2_BorderLeft}\u0003",
+                                    Format = "Windows-1251",
+                                    MaxBodyLenght = 245
+                                },
+                                ResponseOption = new ResponseOption
+                                {
+                                    ValidatorName = "EqualValidator",
+                                    EqualValidator = new EqualResponseValidatorOption
+                                    {
+                                        Body = "0230323030464403",
+                                        Format ="HEX"
+                                    }
+                                }
+                            }
                         }
-                    }
                 },
 
                 //REQUEST
@@ -193,7 +209,7 @@ namespace ByRulesInseartedTest.Test
             int expectedCountInseartedData)
         {
             //Arrange
-            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, null, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();

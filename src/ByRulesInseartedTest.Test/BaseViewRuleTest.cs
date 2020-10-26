@@ -9,7 +9,9 @@ using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
+using Domain.InputDataModel.Shared.StringInseartService.InlineInseart;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
+using Domain.InputDataModel.Shared.StringInseartService.Model.InlineStringInsert;
 using FluentAssertions;
 using Moq;
 using Serilog;
@@ -22,6 +24,7 @@ namespace ByRulesInseartedTest.Test
         protected readonly ILogger Logger;
         protected readonly IIndependentInseartsHandlersFactory InTypeIndependentInsertsHandlerFactory;
         protected readonly IReadOnlyDictionary<string, StringInsertModelExt> StringInsertModelExtDictionary;
+        protected readonly InlineInseartService InlineInseartService;
 
         #region ctor
         public BaseViewRuleTest()
@@ -34,6 +37,8 @@ namespace ByRulesInseartedTest.Test
 
             InTypeIndependentInsertsHandlerFactory = new AdInputTypeIndependentInseartsHandlersFactory();
             StringInsertModelExtDictionary = GetStringInsertModelExtDict.SimpleDictionary;
+
+            InlineInseartService= new InlineInseartService(@"\{\$[^{}:$]+\}", new InlineStringInsertModelStorage());
         }
         #endregion
 
@@ -50,24 +55,28 @@ namespace ByRulesInseartedTest.Test
                 StartPosition = 0,
                 Count = 1,
                 BatchSize = 1,
-                RequestOption = new RequestOption
-                {
-                    Header = "",
-                    Body ="",
-                    Footer = "",
-                    Format = "Windows-1251",
-                    MaxBodyLenght = 245
-                },
-                ResponseOption = new ResponseOption
-                {
-                    //Format = "HEX",
-                    //Lenght = 16,
-                    //Body = "0246463038254130373741434B454103"
+                UnitOfSendings = new List<UnitOfSending> {
+                    new UnitOfSending {
+                        RequestOption = new RequestOption
+                        {
+                            Header = "",
+                            Body ="",
+                            Footer = "",
+                            Format = "Windows-1251",
+                            MaxBodyLenght = 245
+                        },
+                        ResponseOption = new ResponseOption
+                        {
+                            //Format = "HEX",
+                            //Lenght = 16,
+                            //Body = "0246463038254130373741434B454103"
+                        }
+                    }
                 }
             }; 
 
             IIndependentInseartsHandlersFactory inputTypeIndependentInsertsHandlersFactory = new AdInputTypeIndependentInseartsHandlersFactory();
-            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, StringInsertModelExtDictionary, null, Logger);
+            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfer =  await viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault).ToArrayAsync();
@@ -98,22 +107,26 @@ namespace ByRulesInseartedTest.Test
                 StartPosition = 0,
                 Count = 1,
                 BatchSize = 1,
-                RequestOption = new RequestOption
-                {
-                    Header = "",
-                    Body = "%00001032{MATH(rowNumber*16):D3}3%10$12$00$60$t3{TDepart:t}%00033240{MATH(rowNumber*16):D3}4%10$12$00$60$t3{StationArrival}%00241256{MATH(rowNumber*16):D3}3%10$12$00$60$t1{PathNumber}%400012561451%000012561603%10$10$00$60$t2Московское время {Hour:D2}.{Minute:D2}",
-                    Footer = "",
-                    Format = "Windows-1251",
-                    MaxBodyLenght = 10
-                },
-                ResponseOption = new ResponseOption
-                {
-                    //Format = "HEX",
-                    //Lenght = 16,
-                    //Body = "0246463038254130373741434B454103"
+                UnitOfSendings = new List<UnitOfSending> {
+                    new UnitOfSending {
+                        RequestOption = new RequestOption
+                        {
+                            Header = "",
+                            Body = "%00001032{MATH(rowNumber*16):D3}3%10$12$00$60$t3{TDepart:t}%00033240{MATH(rowNumber*16):D3}4%10$12$00$60$t3{StationArrival}%00241256{MATH(rowNumber*16):D3}3%10$12$00$60$t1{PathNumber}%400012561451%000012561603%10$10$00$60$t2Московское время {Hour:D2}.{Minute:D2}",
+                            Footer = "",
+                            Format = "Windows-1251",
+                            MaxBodyLenght = 10
+                        },
+                        ResponseOption = new ResponseOption
+                        {
+                            //Format = "HEX",
+                            //Lenght = 16,
+                            //Body = "0246463038254130373741434B454103"
+                        }
+                    }
                 }
             };
-            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, null, Logger);
+            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfer = await viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault).ToArrayAsync();

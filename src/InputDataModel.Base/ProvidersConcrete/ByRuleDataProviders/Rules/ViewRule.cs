@@ -45,6 +45,12 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
 
 
+        #region prop
+        public ViewRuleOption GetCurrentOption { get; }
+        #endregion
+
+
+
         #region ctor
         private ViewRule(ViewRuleOption option,
             StringBuilder headerExecuteInseartsResult,
@@ -107,9 +113,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
 
 
-        #region prop
-        public ViewRuleOption GetCurrentOption { get; }
-        #endregion
+
 
 
 

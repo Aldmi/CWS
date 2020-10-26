@@ -25,23 +25,27 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    RequestOption = new RequestOption
-                    {
-                        Header = "0x{AddressDevice:X2}0x{Nbyte:X2_BorderRightBeforeCrc_Math}",
-                        Body = "0x03^{NumberOfTrain}^ {StationsCut}^{TArrival:t}^{TDepart:t}",
-                        Footer = "0x{CRCMod256:X2_BorderLeft}",
-                        Format = "cp866",
-                        MaxBodyLenght = 245
-                    },
-                    ResponseOption = new ResponseOption
-                    {
-                        ValidatorName = "EqualValidator",
-                        EqualValidator = new EqualResponseValidatorOption
-                        {
-                            Body = "{AddressDevice:X2}0483{CRCMod256:X2_BorderLeft}",
-                            Format ="HEX"
+                    UnitOfSendings = new List<UnitOfSending> {
+                            new UnitOfSending {
+                                RequestOption = new RequestOption
+                                {
+                                    Header = "0x{AddressDevice:X2}0x{Nbyte:X2_BorderRightBeforeCrc_Math}",
+                                    Body = "0x03^{NumberOfTrain}^ {StationsCut}^{TArrival:t}^{TDepart:t}",
+                                    Footer = "0x{CRCMod256:X2_BorderLeft}",
+                                    Format = "cp866",
+                                    MaxBodyLenght = 245
+                                },
+                                ResponseOption = new ResponseOption
+                                {
+                                    ValidatorName = "EqualValidator",
+                                    EqualValidator = new EqualResponseValidatorOption
+                                    {
+                                        Body = "{AddressDevice:X2}0483{CRCMod256:X2_BorderLeft}",
+                                        Format ="HEX"
+                                    }
+                                }
+                            }
                         }
-                    }
                 },
 
                 GetData4ViewRuleTest.InputTypesDefault,  
@@ -64,23 +68,28 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    RequestOption = new RequestOption
-                    {
-                        Header = "0x{AddressDevice:X2}0x{Nbyte:X2_BorderRightBeforeCrc_Math}",
-                        Body = "0x03{Note}",
-                        Footer = "0x{CRCMod256:X2_BorderLeft}",
-                        Format = "cp866",
-                        MaxBodyLenght = 245
-                    },
-                    ResponseOption = new ResponseOption
-                    {
-                        ValidatorName = "EqualValidator",
-                        EqualValidator = new EqualResponseValidatorOption
-                        {
-                            Body = "{AddressDevice:X2}0483{CRCMod256:X2_BorderLeft}",
-                            Format ="HEX"
+                    UnitOfSendings = new List<UnitOfSending> {
+                            new UnitOfSending {
+                                RequestOption = new RequestOption
+                                {
+                                    Header = "0x{AddressDevice:X2}0x{Nbyte:X2_BorderRightBeforeCrc_Math}",
+                                    Body = "0x03{Note}",
+                                    Footer = "0x{CRCMod256:X2_BorderLeft}",
+                                    Format = "cp866",
+                                    MaxBodyLenght = 245
+                                },
+                                ResponseOption = new ResponseOption
+                                {
+                                    ValidatorName = "EqualValidator",
+                                    EqualValidator = new EqualResponseValidatorOption
+                                    {
+                                        Body = "{AddressDevice:X2}0483{CRCMod256:X2_BorderLeft}",
+                                        Format ="HEX"
+                                    }
+                                }
+                            }
                         }
-                    }
+
                 },
 
                 GetData4ViewRuleTest.InputTypesDefault,    
@@ -114,7 +123,7 @@ namespace ByRulesInseartedTest.Test
             int expectedCountInseartedData)
         {
             //Arrange
-            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, null, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
