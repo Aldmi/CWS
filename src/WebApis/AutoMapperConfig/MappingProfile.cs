@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using App.Services.Agregators;
 using AutoMapper;
 using Domain.Device;
@@ -15,7 +14,6 @@ using Domain.InputDataModel.Shared.StringInseartService.Model.InlineStringInsert
 using Infrastructure.Dal.EfCore.Entities.Device;
 using Infrastructure.Dal.EfCore.Entities.Exchange;
 using Infrastructure.Dal.EfCore.Entities.InlineStringInsertModel;
-using Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers;
 using Infrastructure.Dal.EfCore.Entities.ResponseProduser;
 using Infrastructure.Dal.EfCore.Entities.StringInsertModelExt;
 using Infrastructure.Dal.EfCore.Entities.Transport;
@@ -31,7 +29,6 @@ using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption;
 using WebApiSwc.DTO.JSON.OptionsDto.ProduserUnionOption;
 using WebApiSwc.DTO.JSON.OptionsDto.TransportOption;
-using WebApiSwc.DTO.JSON.Shared;
 using WebApiSwc.DTO.XML;
 
 namespace WebApiSwc.AutoMapperConfig

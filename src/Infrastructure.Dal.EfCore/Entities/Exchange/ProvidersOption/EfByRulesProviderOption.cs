@@ -16,7 +16,7 @@ namespace Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption
         public string AddressDevice { get; set; }
         public AgregateFilter AgregateFilter { get; set; }
         public string DefaultItemJson { get; set; } 
-        public List<EfViewRuleOption> ViewRules { get; set; }  
+        public List<EfViewRuleOption> ViewRules { get; set; }
     }
 
 
@@ -25,9 +25,15 @@ namespace Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption
         public int Id { get; set; }
         public int StartPosition { get; set; }               
         public int Count { get; set; }     
-        public int BatchSize { get; set; }    
-        public EfRequestOption RequestOption { get; set; }     
-        public EfResponseOption ResponseOption { get; set; }   
+        public int BatchSize { get; set; }
+        public List<EfUnitOfSending> UnitOfSendings { get; set; }
+    }
+
+
+    public class EfUnitOfSending
+    {
+        public EfRequestOption RequestOption { get; set; }     //Запрос
+        public EfResponseOption ResponseOption { get; set; }   //Ответ
     }
 
 
