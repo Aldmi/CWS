@@ -20,9 +20,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
 
         #region prop
-
         public IEnumerable<ViewRule<TIn>> GetViewRules => _viewRules.ToList();
-
         #endregion
 
 
@@ -37,8 +35,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             Option = option;
             _logger = logger;
             _viewRules= option.ViewRules.Select(viewRuleOption=> ViewRule<TIn>.Create(
-                Option.AddressDevice,
                 viewRuleOption,
+                Option.AddressDevice,
                 inputTypeInseartsHandlersFactory,
                 stringInsertModelExtDict,
                 inlineInseartService,
@@ -50,7 +48,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
 
         #region Methods
-
         public RuleOption GetCurrentOption()
         {
             var ruleOption = Option;
@@ -58,7 +55,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             ruleOption.ViewRules = new List<ViewRuleOption>(currentViewRuleOptions);
             return ruleOption;
         }
-
         #endregion
     }
 }

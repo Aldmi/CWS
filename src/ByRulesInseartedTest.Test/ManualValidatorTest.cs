@@ -24,8 +24,8 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    UnitOfSendings = new List<UnitOfSending> {
-                            new UnitOfSending {
+                    UnitOfSendings = new List<UnitOfSendingOption> {
+                            new UnitOfSendingOption {
                                 RequestOption = new RequestOption
                                 {
                                     Header = "",
@@ -73,7 +73,7 @@ namespace ByRulesInseartedTest.Test
             int expectedCountInseartedData)
         {
             //Arrange
-            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(option, addressDevice,  InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
@@ -102,8 +102,8 @@ namespace ByRulesInseartedTest.Test
                 StartPosition = 0,
                 Count = 1,
                 BatchSize = 1,
-                UnitOfSendings = new List<UnitOfSending> {
-                    new UnitOfSending {
+                UnitOfSendings = new List<UnitOfSendingOption> {
+                    new UnitOfSendingOption {
                         RequestOption = new RequestOption
                         {
                             Header = "0xFF0xFF0x1B0x57",
@@ -124,7 +124,7 @@ namespace ByRulesInseartedTest.Test
                     }
                 }
             };
-            var viewRule = ViewRule<AdInputType>.Create("5", option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(option, "5",  InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
@@ -132,7 +132,7 @@ namespace ByRulesInseartedTest.Test
 
             //Assert
             isSuccess.Should().BeFalse();
-            error.Should().Be("Not Found startCh= 0x02");
+            error.Should().Be("ViewRuleId= 1. Not Found startCh= 0x02");
         }
     }
 }

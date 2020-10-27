@@ -25,8 +25,8 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    UnitOfSendings = new List<UnitOfSending> {
-                            new UnitOfSending {
+                    UnitOfSendings = new List<UnitOfSendingOption> {
+                            new UnitOfSendingOption {
                                 RequestOption = new RequestOption
                                 {
                                     Header = "0x{AddressDevice:X2}0x{Nbyte:X2_BorderRightBeforeCrc_Math}",
@@ -68,8 +68,8 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    UnitOfSendings = new List<UnitOfSending> {
-                            new UnitOfSending {
+                    UnitOfSendings = new List<UnitOfSendingOption> {
+                            new UnitOfSendingOption {
                                 RequestOption = new RequestOption
                                 {
                                     Header = "0x{AddressDevice:X2}0x{Nbyte:X2_BorderRightBeforeCrc_Math}",
@@ -123,7 +123,7 @@ namespace ByRulesInseartedTest.Test
             int expectedCountInseartedData)
         {
             //Arrange
-            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(option, addressDevice, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();

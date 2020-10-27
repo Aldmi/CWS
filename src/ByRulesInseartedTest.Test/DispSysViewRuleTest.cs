@@ -25,8 +25,8 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    UnitOfSendings = new List<UnitOfSending> {
-                        new UnitOfSending {
+                    UnitOfSendings = new List<UnitOfSendingOption> {
+                        new UnitOfSendingOption {
                                 RequestOption = new RequestOption
                                 {
                                     Header = "\u0002{AddressDevice:X2}{Nchar:X2_BorderRightBeforeCrc}",
@@ -68,8 +68,8 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    UnitOfSendings = new List<UnitOfSending> {
-                            new UnitOfSending {
+                    UnitOfSendings = new List<UnitOfSendingOption> {
+                            new UnitOfSendingOption {
                                 RequestOption = new RequestOption
                                 {
                                     Header = "\u0002{AddressDevice:X2}{Nchar:X2_BorderRightBeforeCrc}",
@@ -119,11 +119,11 @@ namespace ByRulesInseartedTest.Test
             int expectedCountInseartedData)
         {
             //Arrange
-            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(option, addressDevice, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
-            var (isSuccess, isFailure, providerTransfer, error) = requestTransfers.FirstOrDefault();
+            var (isSuccess, _, providerTransfer, _) = requestTransfers.FirstOrDefault();
             
             //Assert
             isSuccess.Should().BeTrue();
@@ -157,8 +157,8 @@ namespace ByRulesInseartedTest.Test
                 StartPosition = 0,
                 Count = 1,
                 BatchSize = 1,
-                UnitOfSendings = new List<UnitOfSending> {
-                    new UnitOfSending {
+                UnitOfSendings = new List<UnitOfSendingOption> {
+                    new UnitOfSendingOption {
                         RequestOption = new RequestOption
                         {
                             Header = "\u0002{AddressDevice:X2}{Nchar:X2}",
@@ -179,7 +179,7 @@ namespace ByRulesInseartedTest.Test
                     }
                 }
             };
-            var viewRule = ViewRule<AdInputType>.Create("5", option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(option, "5",  InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
@@ -187,7 +187,7 @@ namespace ByRulesInseartedTest.Test
 
             //Assert
             isSuccess.Should().BeFalse();
-            error.Should().Be("Для NcharDepInsH подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
+            error.Should().Be("ViewRuleId= 1. Для NcharDepInsH подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
         }
 
 
@@ -201,8 +201,8 @@ namespace ByRulesInseartedTest.Test
                 StartPosition = 0,
                 Count = 1,
                 BatchSize = 1,
-                UnitOfSendings = new List<UnitOfSending> {
-                    new UnitOfSending {
+                UnitOfSendings = new List<UnitOfSendingOption> {
+                    new UnitOfSendingOption {
                         RequestOption = new RequestOption
                         {
                             Header = "\u0002{AddressDevice:D99}{Nchar:X2_BorderRightBeforeCrc}",
@@ -223,7 +223,7 @@ namespace ByRulesInseartedTest.Test
                     }
                 }
             };
-            var viewRule = ViewRule<AdInputType>.Create("5", option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(option, "5",  InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();

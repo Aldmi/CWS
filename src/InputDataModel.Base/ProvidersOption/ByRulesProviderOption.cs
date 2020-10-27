@@ -32,7 +32,7 @@ namespace Domain.InputDataModel.Base.ProvidersOption
         public int StartPosition { get; set; }                  //Начальная позиция элемента из списка
         public int Count { get; set; }                          //Конечная позиция элемента из списка
         public int BatchSize { get; set; }                      //Разбить отправку на порции по BatchSize.
-        public List<UnitOfSending> UnitOfSendings { get; set; } //Список Единиц отправки данных
+        public List<UnitOfSendingOption> UnitOfSendings { get; set; } //Список Единиц отправки данных
 
         //DEBUG-------------------------
         public RequestOption RequestOption => UnitOfSendings[0].RequestOption; //DEBUG DEL!!!
@@ -42,7 +42,7 @@ namespace Domain.InputDataModel.Base.ProvidersOption
 
 
 
-    public class UnitOfSending
+    public class UnitOfSendingOption
     {
         public RequestOption RequestOption { get; set; }     //Запрос
         public ResponseOption ResponseOption { get; set; }   //Ответ

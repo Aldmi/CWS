@@ -26,11 +26,11 @@ namespace Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption
         public int StartPosition { get; set; }               
         public int Count { get; set; }     
         public int BatchSize { get; set; }
-        public List<EfUnitOfSending> UnitOfSendings { get; set; }
+        public List<EfUnitOfSendingOption> UnitOfSendings { get; set; }
     }
 
 
-    public class EfUnitOfSending
+    public class EfUnitOfSendingOption
     {
         public EfRequestOption RequestOption { get; set; }     //Запрос
         public EfResponseOption ResponseOption { get; set; }   //Ответ

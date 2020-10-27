@@ -30,8 +30,8 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    UnitOfSendings = new List<UnitOfSending> {
-                            new UnitOfSending {
+                    UnitOfSendings = new List<UnitOfSendingOption> {
+                            new UnitOfSendingOption {
                                 RequestOption = new RequestOption
                                 {
                                     Header = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly}{CRC8FullPoly:X2_hex_Border_StartOnly}",
@@ -74,8 +74,8 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    UnitOfSendings = new List<UnitOfSending> {
-                            new UnitOfSending {
+                    UnitOfSendings = new List<UnitOfSendingOption> {
+                            new UnitOfSendingOption {
                                 RequestOption = new RequestOption
                                 {
                                     Header = "{NbyteLastCalc:X2_BorderRight_Math}{CRCMod256:X2_hex_Border_StartOnly}{CRC8FullPoly:X2_hex_Border_StartOnly}",
@@ -118,8 +118,8 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    UnitOfSendings = new List<UnitOfSending> {
-                            new UnitOfSending {
+                    UnitOfSendings = new List<UnitOfSendingOption> {
+                            new UnitOfSendingOption {
                                 RequestOption = new RequestOption
                                 {
                                     Header = "0x{NbyteLastCalc:X2_BorderRight_Math}0x{CRC8FullPoly:X2_Border_StartOnly}0x{CRCMod256:X2_Border_StartOnly}",
@@ -168,7 +168,7 @@ namespace ByRulesInseartedTest.Test
             int expectedCountInseartedData)
         {
             //Arrange
-            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(option, addressDevice,  InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
@@ -205,8 +205,8 @@ namespace ByRulesInseartedTest.Test
                 StartPosition = 0,
                 Count = 1,
                 BatchSize = 1,
-                UnitOfSendings = new List<UnitOfSending> {
-                    new UnitOfSending {
+                UnitOfSendings = new List<UnitOfSendingOption> {
+                    new UnitOfSendingOption {
                         RequestOption = new RequestOption
                         {
                             Header = "0x{NbyteLastCalc:X2}0x{CRC8FullPoly:X2_Border_StartOnly}0x{CRCMod256:X2_Border_StartOnly}",
@@ -227,7 +227,7 @@ namespace ByRulesInseartedTest.Test
                     }
                 }
             };
-            var viewRule = ViewRule<AdInputType>.Create("5", option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(option, "5",  InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
@@ -235,7 +235,7 @@ namespace ByRulesInseartedTest.Test
 
             //Assert
             isSuccess.Should().BeFalse();
-            error.Should().Be("Для NbyteLastCalcDepInsH подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
+            error.Should().Be("ViewRuleId= 1. Для NbyteLastCalcDepInsH подстрока определяется BorderSubString. ОБЯЗАТЕЛЬНО ЗАДАЙТЕ BorderSubString.");
         }
     }
 }

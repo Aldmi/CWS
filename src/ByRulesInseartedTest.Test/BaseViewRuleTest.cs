@@ -55,8 +55,8 @@ namespace ByRulesInseartedTest.Test
                 StartPosition = 0,
                 Count = 1,
                 BatchSize = 1,
-                UnitOfSendings = new List<UnitOfSending> {
-                    new UnitOfSending {
+                UnitOfSendings = new List<UnitOfSendingOption> {
+                    new UnitOfSendingOption {
                         RequestOption = new RequestOption
                         {
                             Header = "",
@@ -76,7 +76,7 @@ namespace ByRulesInseartedTest.Test
             }; 
 
             IIndependentInseartsHandlersFactory inputTypeIndependentInsertsHandlersFactory = new AdInputTypeIndependentInseartsHandlersFactory();
-            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, inputTypeIndependentInsertsHandlersFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
+            var viewRule =  ViewRule<AdInputType>.Create(viewRuleOption, addressDevice,  inputTypeIndependentInsertsHandlersFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfer =  await viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault).ToArrayAsync();
@@ -107,8 +107,8 @@ namespace ByRulesInseartedTest.Test
                 StartPosition = 0,
                 Count = 1,
                 BatchSize = 1,
-                UnitOfSendings = new List<UnitOfSending> {
-                    new UnitOfSending {
+                UnitOfSendings = new List<UnitOfSendingOption> {
+                    new UnitOfSendingOption {
                         RequestOption = new RequestOption
                         {
                             Header = "",
@@ -126,15 +126,14 @@ namespace ByRulesInseartedTest.Test
                     }
                 }
             };
-            var viewRule =  ViewRule<AdInputType>.Create(addressDevice, viewRuleOption, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
+            var viewRule =  ViewRule<AdInputType>.Create(viewRuleOption, addressDevice, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
-            var requestTransfer = await viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault).ToArrayAsync();
-            var (isSuccess, isFailure, providerTransfer, error) = requestTransfer.FirstOrDefault();
-
+            var (isSuccess, isFailure, providerTransfer, error) = await viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault).FirstOrDefaultAsync();
+            
             //Assert
             isSuccess.Should().BeFalse();
-            error.Should().Be("Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на 149");
+            error.Should().Be("ViewRuleId= 1. Строка тела запроса СЛИШКОМ БОЛЬШАЯ. Превышение на 149");
         }
     }
 }

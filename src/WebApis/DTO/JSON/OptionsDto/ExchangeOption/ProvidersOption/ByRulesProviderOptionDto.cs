@@ -25,10 +25,10 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption
         public int StartPosition { get; set; }               
         public int Count { get; set; }                      
         public int BatchSize { get; set; }
-        public List<UnitOfSendingDto> UnitOfSendings { get; set; } 
+        public List<UnitOfSendingOptionDto> UnitOfSendings { get; set; } 
     }
 
-    public class UnitOfSendingDto
+    public class UnitOfSendingOptionDto
     {
         public RequestOptionDto RequestOption { get; set; }     //Запрос
         public ResponseOptionDto ResponseOption { get; set; }   //Ответ
