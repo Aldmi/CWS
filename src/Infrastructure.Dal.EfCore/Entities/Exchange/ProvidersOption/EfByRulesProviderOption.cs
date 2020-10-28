@@ -32,6 +32,7 @@ namespace Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption
 
     public class EfUnitOfSendingOption
     {
+        public string Name { get; set; }
         public EfRequestOption RequestOption { get; set; }     //Запрос
         public EfResponseOption ResponseOption { get; set; }   //Ответ
     }

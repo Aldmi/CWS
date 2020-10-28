@@ -44,6 +44,7 @@ namespace Domain.InputDataModel.Base.ProvidersOption
 
     public class UnitOfSendingOption
     {
+        public string Name { get; set; }
         public RequestOption RequestOption { get; set; }     //Запрос
         public ResponseOption ResponseOption { get; set; }   //Ответ
     }

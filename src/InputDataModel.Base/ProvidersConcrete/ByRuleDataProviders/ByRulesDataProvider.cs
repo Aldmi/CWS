@@ -55,8 +55,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 ? "DefaultHandler"
                 : _option.RuleName4DefaultHandle;
             _logger = logger;
-
-            //var providerCore = ProviderResultFactory(null, StatusDict);//DEBUG
         }
         #endregion
 
@@ -160,7 +158,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                             await Task.Delay(1000, ct); //Задержка на отображение ошибки
                             continue;
                         }
-                        var sendingUnitName = $"RuleName= '{ruleName}' viewRule.Id= '{viewRule.GetCurrentOption.Id}'";
+
+                        var sendingUnitName = $"RuleName= '{ruleName}' viewRule.Id= '{viewRule.GetCurrentOption.Id}' TransferName= '{transfer.TransferName}'";
                         var providerStatusBuilder = transfer.CreateProviderStatusBuilder(sendingUnitName);
                         var providerResult = ProviderResultFactory(transfer, providerStatusBuilder);
                         RaiseProviderResultRx.OnNext(providerResult);

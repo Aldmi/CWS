@@ -183,6 +183,10 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Создать Запрос (используя форматную строку RequestOption) из одного батча данных.
         /// </summary>
+        /// <param name="batch">Данные, для вставки в строку</param>
+        /// <param name="startItemIndex"></param>
+        /// <param name="numberOfBatch"></param>
+        /// <returns></returns>
         public Result<RequestTransfer<TIn>> CreateRequestTransfer4Data(IEnumerable<TIn> batch, int startItemIndex, int numberOfBatch)
         {
             try
@@ -203,7 +207,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     sbBodyResult.Append(result);
                 }
                 var sbAppendResult = new StringBuilder().Append(_headerExecuteInseartsResult).Append(sbBodyResult).Append(_footerExecuteInseartsResult);
-
 
                 //DEPENDENT insearts------------------------------------------------------------------------------------------------------
                 if (_requestDepInsServCollection != null)
@@ -242,8 +245,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                return Result.Failure<RequestTransfer<TIn>>($"Неизвестная Ошибка формирования запроса RequestTransfer '{ex}'");
             }
         }
-
-
 
 
 

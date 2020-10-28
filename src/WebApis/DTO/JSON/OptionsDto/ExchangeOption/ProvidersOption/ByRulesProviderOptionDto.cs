@@ -30,6 +30,7 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption
 
     public class UnitOfSendingOptionDto
     {
+        public string Name { get; set; }
         public RequestOptionDto RequestOption { get; set; }     //Запрос
         public ResponseOptionDto ResponseOption { get; set; }   //Ответ
     }
