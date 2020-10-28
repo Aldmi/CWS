@@ -85,7 +85,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     {
                         var (isSuccess, _, requestTransfer, error) = uos.CreateRequestTransfer4Data(batch, startItemIndex, numberOfBatch);
                         yield return isSuccess ?
-                            Result.Ok(new ProviderTransfer<TIn> {TransferName = uos.GetCurrentOption.Name, Request = requestTransfer, Response = uos.ResponseTransfer, Command = Command4Device.None }) :
+                            Result.Ok(new ProviderTransfer<TIn> {Name = uos.Option.Name, Request = requestTransfer, Response = uos.ResponseTransfer, Command = Command4Device.None }) :
                             Result.Failure<ProviderTransfer<TIn>>($"ViewRuleId= {GetCurrentOption.Id}. {error}");
                     }
                 }

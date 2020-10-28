@@ -149,7 +149,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 var ruleName = $"{rule.GetCurrentOption().Name}";
                 foreach (var viewRule in rule.GetViewRules)
                 {
-                    await foreach (var (_, isFailure, transfer, error) in viewRule.CreateProviderTransfer4Data(takesItems, ct).WithCancellation(ct))
+                    await foreach (var (_, isFailure, providerTransfer, error) in viewRule.CreateProviderTransfer4Data(takesItems, ct).WithCancellation(ct))
                     {
                         ct.ThrowIfCancellationRequested();
                         if (isFailure)
@@ -159,9 +159,9 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                             continue;
                         }
 
-                        var sendingUnitName = $"RuleName= '{ruleName}' viewRule.Id= '{viewRule.GetCurrentOption.Id}' TransferName= '{transfer.TransferName}'";
-                        var providerStatusBuilder = transfer.CreateProviderStatusBuilder(sendingUnitName);
-                        var providerResult = ProviderResultFactory(transfer, providerStatusBuilder);
+                        var sendingUnitName = $"RuleName= '{ruleName}' viewRule.Id= '{viewRule.GetCurrentOption.Id}' TransferName= '{providerTransfer.Name}'";
+                        var providerStatusBuilder = providerTransfer.CreateProviderStatusBuilder(sendingUnitName);
+                        var providerResult = ProviderResultFactory(providerTransfer, providerStatusBuilder);
                         RaiseProviderResultRx.OnNext(providerResult);
                     }
                 }

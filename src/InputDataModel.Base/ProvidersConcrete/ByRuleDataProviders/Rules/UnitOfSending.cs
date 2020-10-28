@@ -34,7 +34,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
 
         #region prop
-        public UnitOfSendingOption GetCurrentOption { get; }
+        public UnitOfSendingOption Option { get; }
         public ResponseTransfer ResponseTransfer { get; }               //Готовый Ответ после всех вставок.
         #endregion
 
@@ -49,7 +49,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             ResponseTransfer responseTransfer,
             ILogger logger)
         {
-            GetCurrentOption = option;
+            Option = option;
             _headerExecuteInseartsResult = headerExecuteInseartsResult;
             _bodyIndependentInsertsService = bodyIndependentInsertsService;
             _footerExecuteInseartsResult = footerExecuteInseartsResult;
@@ -192,8 +192,8 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             try
             {
                 var items = batch.ToList();
-                var format = GetCurrentOption.RequestOption.Format;
-                var maxBodyLenght = GetCurrentOption.RequestOption.MaxBodyLenght;
+                var format = Option.RequestOption.Format;
+                var maxBodyLenght = Option.RequestOption.MaxBodyLenght;
 
                 //INDEPENDENT insearts-----------------------------------------------------------------------------------------------------
                 var processedItems = new List<ProcessedItem<TIn>>();
@@ -232,7 +232,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                 var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
 
                 //ФОРМИРОВАНИЕ ОБЪЕКТА ЗАПРОСА.------------------------------------------------------------------------------------------------
-                var request = new RequestTransfer<TIn>(GetCurrentOption.RequestOption)
+                var request = new RequestTransfer<TIn>(Option.RequestOption)
                 {
                     StrRepresentBase = new StringRepresentation(str, format),
                     StrRepresent = new StringRepresentation(newStr, newFormat),
@@ -254,7 +254,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <returns></returns>
         public Result<RequestTransfer<TIn>> CreateRequestTransfer4Command()
         {
-            var format = GetCurrentOption.RequestOption.Format;
+            var format = Option.RequestOption.Format;
 
             //INDEPENDENT insearts-------------------------------------------------------------------------------
             var (sbBodyResult, _) = _bodyIndependentInsertsService.ExecuteInsearts(null);
@@ -277,7 +277,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
             var (newStr, newFormat) = HelperFormatSwitcher.CheckSwitch2Hex(str, format);
 
             //ФОРМИРОВАНИЕ ОБЪЕКТА ЗАПРОСА.-----------------------------------------------------------------------
-            var request = new RequestTransfer<TIn>(GetCurrentOption.RequestOption)
+            var request = new RequestTransfer<TIn>(Option.RequestOption)
             {
                 StrRepresentBase = new StringRepresentation(str, format),
                 StrRepresent = new StringRepresentation(newStr, newFormat)

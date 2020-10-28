@@ -73,18 +73,17 @@ namespace Domain.Device.Produser
                         response.DeviceName,
                         response.KeyExchange,
                         DataAction = response.DataAction.ToString("G"),
-                        response.ExceptionExchangePipline,
-                        response.Evaluation.IsValidAll,
+                        response.Evaluation,
                         response.TimeAction,
                         ResponsesItems = response.ResponsesItems.Select(item => new
                         {
-                            item.RequestId,
+                            item.ProviderStatus.SendingUnitName,
                             item.StatusStr,
                             item.TransportException,
 
                             item.ProcessedItemsInBatch?.StartItemIndex,
                             item.ProcessedItemsInBatch?.BatchSize,
-                            InseartedData = item.ProcessedItemsInBatch?.ProcessedItems.Select(p => p.InseartedData)
+                            InseartedData = item.ProcessedItemsInBatch?.ProcessedItems.Select(p => p.InseartedData).ToList()
                         }).ToList()
                     };
                     break;
@@ -113,7 +112,6 @@ namespace Domain.Device.Produser
                         response.TimeAction,
                         ResponsesItems = response.ResponsesItems.Select(item => new
                         {
-                            item.RequestId,
                             item.Status,
                             item.StatusStr,
                             item.TransportException,
@@ -131,7 +129,6 @@ namespace Domain.Device.Produser
                         response.TimeAction,
                         ResponsesItems = response.ResponsesItems.Select(item => new
                         {
-                            item.RequestId,
                             item.StatusStr,
                             Info = item.ResponseInfo?.ToString()
                         }).ToList()
@@ -141,7 +138,6 @@ namespace Domain.Device.Produser
                 case "Indigo":  //{"result": 1, "message": "", "DeviceName": "fff"}
                     var responsesItems = response.ResponsesItems.Select(item => new
                     {
-                        item.RequestId,
                         item.StatusStr,
                         item.TransportException,
                         Info = item.ResponseInfo?.ToString()

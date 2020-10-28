@@ -12,7 +12,7 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
     /// </summary>
     public class ProviderTransfer<TIn>
     {
-        public string TransferName { get; set; }                    //Название единицы запроса
+        public string Name { get; set; }                    //Название единицы запроса
         public RequestTransfer<TIn> Request { get; set; }           //Строка запроса, созданная по правилам RequestOption.
         public ResponseTransfer Response { get; set; }              //Строка ответа, созданная по правилам ResponseOption.
         public Command4Device Command { get; set; }                 //Команда
@@ -74,6 +74,7 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
 
     /// <summary>
     /// Единица обработанного элемента входных данных.
+    /// Одного поля из InDataItem. Например InseartedData["PathNumber"].
     /// </summary>
     public class ProcessedItem<TIn>
     {

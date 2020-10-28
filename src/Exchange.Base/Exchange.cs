@@ -289,7 +289,7 @@ namespace Domain.Exchange
                 }
                 finally
                 {
-                    transportResp.ResponseInfo = providerResult.OutputData;
+                    transportResp.ResponseInfo = providerResult.ResponseInfo;
                     transportResp.Status = status;
                     transportResp.ProviderStatus = providerResult.ProviderStatus;
                     responsePieceOfDataWrapper.ResponsesItems.Add(transportResp);
