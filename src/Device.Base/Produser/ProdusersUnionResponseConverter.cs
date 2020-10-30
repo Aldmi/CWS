@@ -75,16 +75,30 @@ namespace Domain.Device.Produser
                         DataAction = response.DataAction.ToString("G"),
                         response.Evaluation,
                         response.TimeAction,
-                        ResponsesItems = response.ResponsesItems.Select(item => new
-                        {
-                            item.ProviderStatus.SendingUnitName,
-                            item.StatusStr,
-                            item.TransportException,
+                        LinearizationBatchs = response.LinearizationBatchs().Select(pair=>pair)
+                    };
+                    break;
 
-                            item.ProcessedItemsInBatch?.StartItemIndex,
-                            item.ProcessedItemsInBatch?.BatchSize,
-                            InseartedData = item.ProcessedItemsInBatch?.ProcessedItems.Select(p => p.InseartedData).ToList()
-                        }).ToList()
+                case "RenderItemsFull":
+                    convert = new
+                    {
+                        response.DeviceName,
+                        response.KeyExchange,
+                        DataAction = response.DataAction.ToString("G"),
+                        response.Evaluation,
+                        response.TimeAction,
+                        ResponsesItems = response.ResponsesItems.Select(respItem => new
+                        {
+                            respItem.ProviderStatus.SendingUnitName,
+                            respItem.StatusStr,
+                            respItem.TransportException,
+
+                            respItem.ProcessedItemsInBatch?.StartItemIndex,
+                            respItem.ProcessedItemsInBatch?.BatchSize,
+                            InseartedData = respItem.ProcessedItemsInBatch?.ProcessedItems.Select(p => p.InseartedData).ToList()
+                        }).ToList(),
+
+                        LinearizationBatchs = response.LinearizationBatchs().Select(pair => pair)
                     };
                     break;
 

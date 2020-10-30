@@ -7,6 +7,7 @@ using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.Response.ResponseInfos;
 using Shared.Enums;
+using Shared.Types;
 
 
 namespace Domain.InputDataModel.Base.Response
@@ -35,9 +36,25 @@ namespace Domain.InputDataModel.Base.Response
             return Evaluation.IsValidAll ? Result.Ok() : Result.Failure(Evaluation.ErrorStat);
         }
 
-        //TODO: 1. для каждого ResponsesItems вызвать UnionBatchItems и объединить списки по ключу, добавив к значения словаря StatusDataExchange - чтобы понимать отправлен успешно или не успешно батч
-        // ReadOnlyDictionary<int,  List<ProcessedItem<TIn>> processedItems> 
-        // Создавать 2 списка с нормальнл оотработанными запросами Status == "End" и с ошибочными.
+
+        /// <summary>
+        /// Линеризация батчей от каждого запроса в единый словарь
+        /// </summary>
+        /// <returns></returns>
+        public ReadOnlyDictionary<int, List<SimpleBatchInfo>> LinearizationBatchs()  //TODO: вынести в Extensions methode
+        {
+            var linearList = new List<KeyValuePair<int, SimpleBatchInfo>>();
+            foreach (var hh in ResponsesItems.Select(item => item.SweepBatch().Select(i => i)))
+            {
+                linearList.AddRange(hh);
+            }
+
+            var linearDict = linearList
+                .GroupBy(item => item.Key)
+                .ToDictionary(k => k.Key, pairs => pairs.Select(p => p.Value).ToList());
+
+            return new ReadOnlyDictionary<int, List<SimpleBatchInfo>>(linearDict);
+        }
     }
 
 
@@ -77,15 +94,12 @@ namespace Domain.InputDataModel.Base.Response
         public ProviderStatus ProviderStatus { get; set; }   
         public StatusDataExchange Status { get; set; }
         public string StatusStr => Status.ToString();
-
         public Exception TransportException { get; set; }      //Ошибка передачи данных
         public BaseResponseInfo ResponseInfo { get; set; }     //Ответ
-
         /// <summary>
         /// Результат работы провайдера, обработанные и выставленные в протокол данные из InputData
         /// </summary>
         public ProcessedItemsInBatch<TIn> ProcessedItemsInBatch { get; set; }
-
 
 
         /// <summary>
@@ -94,16 +108,34 @@ namespace Domain.InputDataModel.Base.Response
         /// key- индекс переменной в списке
         /// value - ProcessedItem, т.е. обертка над словарем всех обработанных значений.
         /// </summary>
-        public ReadOnlyDictionary<int, ProcessedItem<TIn>> SweepBatch()
+        public ReadOnlyDictionary<int, SimpleBatchInfo> SweepBatch() //TODO: вынести в Extensions methode
         {
-            var dict= new Dictionary<int, ProcessedItem<TIn>>();
+            var dict = new Dictionary<int, SimpleBatchInfo>();
             for (int i = 0; i < ProcessedItemsInBatch.BatchSize; i++)
             {
                 var key = ProcessedItemsInBatch.StartItemIndex + i;
                 var value = ProcessedItemsInBatch.ProcessedItems[i];
-                dict[key] = value;
+                dict[key] = new SimpleBatchInfo(ProviderStatus.SendingUnitName, StatusStr, value.InseartedData);
             }
-            return new ReadOnlyDictionary<int, ProcessedItem<TIn>>(dict);
+            return new ReadOnlyDictionary<int, SimpleBatchInfo>(dict);
+        }
+    }
+
+    //TODO: вынести в Extensions methode
+    /// <summary>
+    /// Упрощенная информация об обработангных данных в батче.
+    /// </summary>
+    public class SimpleBatchInfo
+    {
+        public string SendingUnitName { get;  }
+        public string StatusStr { get; }
+        public ReadOnlyDictionary<string, Change<string>> InseartedData { get; }
+
+        public SimpleBatchInfo(string sendingUnitName, string statusStr,  ReadOnlyDictionary<string, Change<string>> inseartedData)
+        {
+            SendingUnitName = sendingUnitName;
+            StatusStr = statusStr;
+            InseartedData = inseartedData;
         }
     }
 }
