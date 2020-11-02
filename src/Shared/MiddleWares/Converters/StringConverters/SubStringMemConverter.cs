@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using MoreLinq.Extensions;
@@ -13,10 +14,10 @@ namespace Shared.MiddleWares.Converters.StringConverters
     /// StateFull - хранит начало подстроки между вызовами.
     /// Длинна подстроки вычисляется с учетом константной фразы.
     /// </summary>
-    public class SubStringMemConverter : BaseStringConverter, IMemConverterMiddleWare //TODO: переименовать на PagingMemConverter
+    public class SubStringMemConverter : BaseStringConverter, IMemConverterMiddleWare, IDisposable //TODO: переименовать на PagingMemConverter
     {
         private readonly SubStringMemConverterOption _option;     //Хранит длину подстроки
-        private readonly ConcurrentDictionary<int, SubStringState> _subStringDict= new ConcurrentDictionary<int, SubStringState>();
+        private readonly ConcurrentDictionary<int, SubStringStateImmutable> _stateDict= new ConcurrentDictionary<int, SubStringStateImmutable>();
 
 
         public SubStringMemConverter(SubStringMemConverterOption option)
@@ -33,15 +34,15 @@ namespace Shared.MiddleWares.Converters.StringConverters
         /// <returns></returns>
         protected override string ConvertChild(string inProp, int dataId)
         {
-            SubStringState GetResetState() => new SubStringState(inProp, _option.Lenght, _option.InitPharases, _option.Separator, _option.BanTime);
-
-            var state = _subStringDict.GetOrAdd(dataId, GetResetState());
+            SubStringStateImmutable SetState() => new SubStringStateImmutable(inProp, _option.Lenght, _option.InitPharases, _option.Separator, _option.BanTime);
+            var state = _stateDict.GetOrAdd(dataId, SetState());
             if (!state.EqualStr(inProp))
             {
-                state= GetResetState();
-                _subStringDict[dataId] = state;
+                state.Dispose();
+                state = SetState();
+                _stateDict[dataId] = state;
             }
-            var subStr = state.GetNextSubString();
+            var subStr = state.GetState();
             return subStr;
         }
 
@@ -58,7 +59,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
         /// Разбивает строку на подстроки при создании объекта.
         /// Каждый вызов метода GetNextSubString - циклически перебирает подстроки
         /// </summary>
-        private class SubStringState : BaseState4MemConverter
+        private class SubStringStateImmutable : BaseState4MemConverter
         {
             private int _ingex;                             //Индекс подстроки для вывода
             private readonly string _baseStr;               //Строка
@@ -66,9 +67,9 @@ namespace Shared.MiddleWares.Converters.StringConverters
 
 
             #region ctor
-            public SubStringState(string baseStr, int subStrLenght, IEnumerable<string> phrases, char separator, int banTime) : base(banTime)
+            public SubStringStateImmutable(string baseStr, int subStrLenght, IEnumerable<string> phrases, char separator, int banTime) : base(banTime)
             {
-                _ingex = -1;
+                _ingex = 0;
                 _baseStr = baseStr;
 
                 var (initPhrase, resStr) = HelperString.SearchPhrase(baseStr, phrases);
@@ -85,10 +86,15 @@ namespace Shared.MiddleWares.Converters.StringConverters
             }
 
 
-            public string GetNextSubString()
+            public string GetState()
             {
-                IncrementIndex();
-                return _subStrings[_ingex];
+                var subStr= _subStrings[_ingex];
+                if (TriggerDisabledOrIsFire)
+                {
+                    IncrementIndex();
+                    RestartTrigger();
+                }
+                return subStr;
             }
 
 
@@ -100,6 +106,12 @@ namespace Shared.MiddleWares.Converters.StringConverters
                 }
             }
             #endregion
+        }
+
+
+        public void Dispose()
+        {
+            _stateDict.ForEach(s => s.Value.Dispose());
         }
     }
 }

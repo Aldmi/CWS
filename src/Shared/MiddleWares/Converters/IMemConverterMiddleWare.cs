@@ -20,8 +20,21 @@ namespace Shared.MiddleWares.Converters
     {
         private readonly int _fireTime;
         private readonly Timer _triggerTimer;
-        public bool IsFired { get; private set; }
+
+        /// <summary>
+        /// Триггер сработал
+        /// </summary>
+        private bool IsFired { get; set; }
+
+        /// <summary>
+        /// триггер отключен, таймер не созданн и не считает
+        /// </summary>
         protected bool TriggerDisabled => _fireTime == 0;
+
+        /// <summary>
+        /// Триггер отключен или сработал.
+        /// </summary>
+        public bool TriggerDisabledOrIsFire => TriggerDisabled || IsFired;
 
 
         protected BaseState4MemConverter(int fireTime)

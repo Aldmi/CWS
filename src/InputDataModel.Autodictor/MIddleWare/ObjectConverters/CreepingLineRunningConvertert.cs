@@ -32,29 +32,29 @@ namespace Domain.InputDataModel.Autodictor.MIddleWare.ObjectConverters
             var str = cl.NameRu;
             var resetTime = (int)cl.WorkTime.TotalMilliseconds;
 
-            //Конвертор 1--------------------------------------------------------------
-            TriggerStringMemConverter CreateTriggerConverter() => new TriggerStringMemConverter(new TriggerStringMemConverterOption
-            {
-                String4Reset = _option.String4Reset,
-                ResetTime = resetTime
-            });
-            var triggConverter = _triggerStringDict.GetOrAdd(dataId, CreateTriggerConverter());
-            string resStep1;
-            if (!triggConverter.IsEqualResetTime(resetTime))   //Если Пришло новое значение таймера, нужно пересоздать TriggerConverter с новым значением таймера.т.к. TriggerStringMemConverter является иммутабельным.
-            {
-                triggConverter.Dispose();
-                var newTriggConverter = CreateTriggerConverter();
-                _triggerStringDict[dataId] = newTriggConverter;
-                resStep1 = newTriggConverter.Convert(str, dataId);
-            }
-            else
-            {
-                resStep1 = triggConverter.Convert(str, dataId);
-            }
-            //Конвертор 2--------------------------------------------------------------
-            var resStep2 = _pagingConverter.Convert(resStep1, dataId);
+            ////Конвертор 1--------------------------------------------------------------
+            //TriggerStringMemConverter CreateTriggerConverter() => new TriggerStringMemConverter(new TriggerStringMemConverterOption
+            //{
+            //    String4Reset = _option.String4Reset,
+            //    ResetTime = resetTime
+            //});
+            //var triggConverter = _triggerStringDict.GetOrAdd(dataId, CreateTriggerConverter());
+            //string resStep1;
+            //if (!triggConverter.IsEqualResetTime(resetTime))   //Если Пришло новое значение таймера, нужно пересоздать TriggerConverter с новым значением таймера.т.к. TriggerStringMemConverter является иммутабельным.
+            //{
+            //    triggConverter.Dispose();
+            //    var newTriggConverter = CreateTriggerConverter();
+            //    _triggerStringDict[dataId] = newTriggConverter;
+            //    resStep1 = newTriggConverter.Convert(str, dataId);
+            //}
+            //else
+            //{
+            //    resStep1 = triggConverter.Convert(str, dataId);
+            //}
+            ////Конвертор 2--------------------------------------------------------------
+            //var resStep2 = _pagingConverter.Convert(resStep1, dataId);
 
-            cl.NameRu = resStep2;
+            //cl.NameRu = resStep2;
             return cl;
         }
 

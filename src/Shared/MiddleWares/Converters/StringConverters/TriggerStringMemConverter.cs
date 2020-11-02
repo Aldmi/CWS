@@ -8,7 +8,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
     public class TriggerStringMemConverter : BaseStringConverter, IMemConverterMiddleWare, IDisposable
     {
         private readonly TriggerStringMemConverterOption _option;
-        private readonly ConcurrentDictionary<int, TriggerState> _stateDict = new ConcurrentDictionary<int, TriggerState>();
+        private readonly ConcurrentDictionary<int, TriggerStateImmutable> _stateDict = new ConcurrentDictionary<int, TriggerStateImmutable>();
 
 
         public TriggerStringMemConverter(TriggerStringMemConverterOption option)
@@ -19,18 +19,20 @@ namespace Shared.MiddleWares.Converters.StringConverters
 
         protected override string ConvertChild(string inProp, int dataId)
         {
-            TriggerState GetState() => new TriggerState(inProp, _option.String4Reset, _option.ResetTime);
-
-            var state = _stateDict.GetOrAdd(dataId, GetState());
-            //установить новое состояние и сбросить таймер тригера для новой строки.
-            var strResult = state.TrySetState(inProp);
+            TriggerStateImmutable SetState() => new TriggerStateImmutable(inProp, _option.String4Reset, _option.ResetTime);
+            var state = _stateDict.GetOrAdd(dataId, SetState());
+            if (!state.EqualStr(inProp))
+            {
+                state.Dispose();
+                state = SetState();
+                _stateDict[dataId] = state;
+            }
+            var strResult = state.GetState(inProp);
             return strResult;
         }
 
-
-        public bool IsEqualResetTime(int resetTime) => _option.ResetTime == resetTime;
-  
-
+       // public bool IsEqualResetTime(int resetTime) => _option.ResetTime == resetTime;
+       
 
         public void SendCommand(MemConverterCommand command)
         {
@@ -41,48 +43,20 @@ namespace Shared.MiddleWares.Converters.StringConverters
         }
 
 
-        private class TriggerState : BaseState4MemConverter
+        private class TriggerStateImmutable : BaseState4MemConverter
         {
             private string StateBefore { get; set; }
             private string StateAfter { get; set; }
 
-
-            public TriggerState(string baseStr, string resetStr, int resetTime) : base(resetTime)
+            public TriggerStateImmutable(string baseStr, string resetStr, int resetTime) : base(resetTime)
             {
                 StateBefore = baseStr;
                 StateAfter = resetStr;
             }
 
+            public bool EqualStr(string str) => StateBefore.Equals(str);
 
-            public string TrySetState(string newState)
-            {
-                bool EqualStateBefore(string str) => StateBefore.Equals(str);
-
-                //ТРИГГЕР СРАБОТАЛ
-                if (IsFired)
-                {
-                    //данные старые
-                    if (EqualStateBefore(newState))
-                    {
-                        return StateAfter;
-                    }
-                    //данные новые
-                    StateBefore = newState;
-                    RestartTrigger();
-                    return StateBefore;
-                }
-
-                // ТРИГГЕР НЕ СРАБОТАЛ
-                //данные старые
-                if (EqualStateBefore(newState))
-                {
-                    return StateBefore;
-                }
-                //данные новые
-                StateBefore = newState;
-                RestartTrigger();
-                return StateBefore;
-            }
+            public string GetState(string newState) => TriggerDisabledOrIsFire ? StateAfter : StateBefore;
         }
 
         public void Dispose()
