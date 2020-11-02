@@ -19,7 +19,8 @@ namespace DeviceForExchnage.Test.ConverterTests
             {
                 Lenght = 60,
                 InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
-                Separator = ','
+                Separator = ',',
+                BanTime = 0
             };
         }
 

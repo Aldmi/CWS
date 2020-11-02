@@ -21,11 +21,15 @@ namespace Shared.MiddleWares.Converters
         private readonly int _fireTime;
         private readonly Timer _triggerTimer;
         public bool IsFired { get; private set; }
+        protected bool TriggerDisabled => _fireTime == 0;
 
 
         protected BaseState4MemConverter(int fireTime)
         {
             _fireTime = fireTime;
+            if(TriggerDisabled)
+                return;
+
             _triggerTimer = new Timer();
             _triggerTimer.Elapsed += (sender, args) =>
             {
@@ -37,6 +41,9 @@ namespace Shared.MiddleWares.Converters
 
         public void RestartTrigger()
         {
+            if (TriggerDisabled)
+                return;
+
             IsFired = false;
             _triggerTimer.Stop();
             _triggerTimer.Interval = _fireTime;
@@ -46,6 +53,9 @@ namespace Shared.MiddleWares.Converters
 
         public void Dispose()
         {
+            if (TriggerDisabled)
+                return;
+
             _triggerTimer.Stop();
             _triggerTimer.Dispose();
         }

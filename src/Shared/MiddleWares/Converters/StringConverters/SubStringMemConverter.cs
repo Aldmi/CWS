@@ -33,7 +33,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
         /// <returns></returns>
         protected override string ConvertChild(string inProp, int dataId)
         {
-            SubStringState GetResetState() => new SubStringState(inProp, _option.Lenght, _option.InitPharases, _option.Separator);
+            SubStringState GetResetState() => new SubStringState(inProp, _option.Lenght, _option.InitPharases, _option.Separator, _option.BanTime);
 
             var state = _subStringDict.GetOrAdd(dataId, GetResetState());
             if (!state.EqualStr(inProp))
@@ -58,7 +58,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
         /// Разбивает строку на подстроки при создании объекта.
         /// Каждый вызов метода GetNextSubString - циклически перебирает подстроки
         /// </summary>
-        private class SubStringState  //TODO: попробовать поменять на структуру
+        private class SubStringState : BaseState4MemConverter
         {
             private int _ingex;                             //Индекс подстроки для вывода
             private readonly string _baseStr;               //Строка
@@ -66,7 +66,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
 
 
             #region ctor
-            public SubStringState(string baseStr, int subStrLenght, IEnumerable<string> phrases, char separator)
+            public SubStringState(string baseStr, int subStrLenght, IEnumerable<string> phrases, char separator, int banTime) : base(banTime)
             {
                 _ingex = -1;
                 _baseStr = baseStr;

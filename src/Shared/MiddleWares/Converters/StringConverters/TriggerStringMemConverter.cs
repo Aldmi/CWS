@@ -41,7 +41,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
         }
 
 
-        private class TriggerState : State4MemConverterBase
+        private class TriggerState : BaseState4MemConverter
         {
             private string StateBefore { get; set; }
             private string StateAfter { get; set; }
