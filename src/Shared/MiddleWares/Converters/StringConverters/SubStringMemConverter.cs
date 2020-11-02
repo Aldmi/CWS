@@ -43,31 +43,6 @@ namespace Shared.MiddleWares.Converters.StringConverters
             }
             var subStr = state.GetNextSubString();
             return subStr;
-
-            ////TODO: заменить на GetOrAdd 2 if
-            ////Если данных нет в словаре. Добавить в словарь новые данные.
-            //if (!_subStringDict.ContainsKey(dataId))
-            //{
-            //    _subStringDict.TryAdd(dataId, GetResetState());
-            //}
-
-            ////Если Строка по заданному индексу поменялась, сбросим состояние.
-            //if (_subStringDict.TryGetValue(dataId, out var value))
-            //{
-            //    if (!value.EqualStr(inProp))        
-            //    {
-            //        _subStringDict[dataId] = GetResetState();
-            //    }
-            //}
-
-            ////Вернуть следующую подстроку
-            //if (_subStringDict.TryGetValue(dataId, out var resultValue))
-            //{
-            //    var subStr = resultValue.GetNextSubString();
-            //    return subStr;
-            //}
-
-            //throw new StringConverterException($"SubStringMemConverter НЕ СМОГ ИЗВЛЕЧЬ РЕЗУЛЬТАТ ОБРАБОТКИ ИЗ СЛОВАРЯ {inProp}");
         }
 
 
