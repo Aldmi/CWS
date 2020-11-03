@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using MoreLinq;
+using Shared.Extensions;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 
 namespace Shared.MiddleWares.Converters.StringConverters
@@ -20,14 +21,14 @@ namespace Shared.MiddleWares.Converters.StringConverters
         protected override string ConvertChild(string inProp, int dataId)
         {
             TriggerStateImmutable SetState() => new TriggerStateImmutable(inProp, _option.String4Reset, _option.ResetTime);
-            var state = _stateDict.GetOrAdd(dataId, SetState());
+            var state = _stateDict.GetOrAddExt(dataId, SetState);
             if (!state.EqualStr(inProp))
             {
                 state.Dispose();
                 state = SetState();
                 _stateDict[dataId] = state;
             }
-            var strResult = state.GetState(inProp);
+            var strResult = state.GetState();
             return strResult;
         }
 
@@ -45,8 +46,8 @@ namespace Shared.MiddleWares.Converters.StringConverters
 
         private class TriggerStateImmutable : BaseState4MemConverter
         {
-            private string StateBefore { get; set; }
-            private string StateAfter { get; set; }
+            private string StateBefore { get; }
+            private string StateAfter { get; }
 
             public TriggerStateImmutable(string baseStr, string resetStr, int resetTime) : base(resetTime)
             {
@@ -55,8 +56,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
             }
 
             public bool EqualStr(string str) => StateBefore.Equals(str);
-
-            public string GetState(string newState) => TriggerDisabledOrIsFire ? StateAfter : StateBefore;
+            public string GetState() => TriggerEnabledAndIsFire ? StateAfter : StateBefore;
         }
 
         public void Dispose()

@@ -27,7 +27,7 @@ namespace Shared.MiddleWares.Converters
         private bool IsFired { get; set; }
 
         /// <summary>
-        /// триггер отключен, таймер не созданн и не считает
+        /// триггер отключен, таймер не создан и не считает
         /// </summary>
         protected bool TriggerDisabled => _fireTime == 0;
 
@@ -35,6 +35,7 @@ namespace Shared.MiddleWares.Converters
         /// Триггер отключен или сработал.
         /// </summary>
         public bool TriggerDisabledOrIsFire => TriggerDisabled || IsFired;
+        public bool TriggerEnabledAndIsFire => !TriggerDisabled && IsFired;
 
 
         protected BaseState4MemConverter(int fireTime)

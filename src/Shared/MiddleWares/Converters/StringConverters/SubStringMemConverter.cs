@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using MoreLinq.Extensions;
+using Shared.Extensions;
 using Shared.Helpers;
 using Shared.MiddleWares.Converters.Exceptions;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
@@ -35,7 +36,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
         protected override string ConvertChild(string inProp, int dataId)
         {
             SubStringStateImmutable SetState() => new SubStringStateImmutable(inProp, _option.Lenght, _option.InitPharases, _option.Separator, _option.BanTime);
-            var state = _stateDict.GetOrAdd(dataId, SetState());
+            var state = _stateDict.GetOrAddExt(dataId, SetState);
             if (!state.EqualStr(inProp))
             {
                 state.Dispose();
