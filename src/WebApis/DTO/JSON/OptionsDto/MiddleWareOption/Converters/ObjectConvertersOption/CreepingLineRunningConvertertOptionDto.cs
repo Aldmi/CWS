@@ -4,7 +4,7 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.ObjectConver
 {
     public class CreepingLineRunningConvertertOptionDto
     {
-        [Required(ErrorMessage = "CreepingLineRunningConvertertOption. String4Reset не может быть NULL")]
+        [Required(ErrorMessage = "CreepingLineRunningConvertertOption. String4Reset не может быть NULL", AllowEmptyStrings = true)]
         public string String4Reset { get; set; }
 
         [Range(1, 1000)]

@@ -3,7 +3,7 @@
     public class EfCreepingLineRunningConvertertOption
     {
         public string String4Reset { get; set; }       
-        public int Lenght { get; set; }                
+        public int Length { get; set; }                
         public char Separator { get; set; }      
     }
 }

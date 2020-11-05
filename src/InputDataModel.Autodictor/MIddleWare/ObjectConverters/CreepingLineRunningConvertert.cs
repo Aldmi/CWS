@@ -23,7 +23,7 @@ namespace Domain.InputDataModel.Autodictor.MIddleWare.ObjectConverters
         public object Convert(object inProp, int dataId)
         {
             var cl = (CreepingLine)inProp;
-            CreepingLineStateImmutable SetState() => new CreepingLineStateImmutable(cl, _option.String4Reset, _option.Lenght, _option.Separator);
+            CreepingLineStateImmutable SetState() => new CreepingLineStateImmutable(cl, _option.String4Reset, _option.Length, _option.Separator);
             var state = _stateDict.GetOrAddExt(dataId, SetState);
             if (!state.IsEqual(cl))
             {
@@ -43,6 +43,7 @@ namespace Domain.InputDataModel.Autodictor.MIddleWare.ObjectConverters
         {
             if (command == MemConverterCommand.Reset)
             {
+                //TODO: проверить сброс
                 //_creepingLineStateDict
                 //    .Values
                 //    .ForEach(t => t.SendCommand(command));
@@ -122,7 +123,7 @@ namespace Domain.InputDataModel.Autodictor.MIddleWare.ObjectConverters
     public class CreepingLineRunningConvertertOption
     {
         public string String4Reset { get; set; }        // Строка выставляется принудительно после сброса тригера
-        public int Lenght { get; set; }                 // Длина подстроки которую нужно вернуть
+        public int Length { get; set; }                 // Длина подстроки которую нужно вернуть
         public char Separator { get; set; }             // Разделитель подстрок
     }
 }

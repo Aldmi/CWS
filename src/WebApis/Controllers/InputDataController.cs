@@ -220,86 +220,107 @@ namespace WebApiSwc.Controllers
                                                                       [FromHeader] string exchangeName = "",
                                                                       [FromHeader] string directHandlerName = "",
                                                                       [FromHeader] string dataAction = "",
-                                                                      [FromHeader] string command = "None") // [FromHeader] string fileEncoding = "Windows-1251"
+                                                                      [FromHeader] string command = "None")
         {
-            var xmlFile = userfile;
-            if (xmlFile == null)
-            {
-                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", "xmlFile == null");
-                return BadRequest("SendDataXmlMultipart4Devices. xmlFile == null");
-            }
-            var values = xmlFile.FileName.Split('+');
+            //TODO: убрать выбор способа передачи имен. Сделать 2 метода контроллера с разными способами.
+            var values = userfile.FileName.Split('+');
             if (values.Length == 2)
             {
                 var fileName = values[0];
                 dataAction = values[1];
                 deviceName ??= fileName;//Если deviceName не переданн в заголовке 
-                var str = fileName != null ? $"FileName= {fileName}" : "FileName= NULL";
+                var str = $"FileName= {fileName}";
                 _logger.Information("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", str);
             }
-            if (string.IsNullOrEmpty(deviceName))
+            var (_, isFailureHeader, (actionParse, commandParse), errorHeader) = AcceptHeaders(deviceName, dataAction, command);
+            if (isFailureHeader)
             {
-                ModelState.AddModelError("SendDataXmlMultipart4Devices", "deviceName == null");
-                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "deviceName == null");
-                return BadRequest(ModelState);
+                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", errorHeader);
+                return BadRequest($"SendDataXmlMultipart4Devices. {errorHeader}");
             }
-            if (!Enum.TryParse(dataAction, out DataAction dataActionParsed))
+            var (_, isFailureXml, xmlDto, erroXml) = await AcceptXmlFile<AdInputType4XmlDtoContainer>(userfile);
+            if (isFailureXml)
             {
-                ModelState.AddModelError("SendDataXmlMultipart4Devices", "DataAction Error Parse");
-                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "DataAction Error Parse");
-                return BadRequest(ModelState);
-            }
-            if (!Enum.TryParse(command, out Command4Device commandParse))
-            {
-                ModelState.AddModelError("SendDataXmlMultipart4Devices", "Command4Device Error Parse");
-                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "Command4Device Error Parse");
-                return BadRequest(ModelState);
+                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", erroXml);
+                return BadRequest($"SendDataXmlMultipart4Devices. {erroXml}");
             }
 
             try
             {
-                if (xmlFile.Length > 0)
+                var trains = xmlDto.Trains;
+                InitDataId(trains);
+                var data = _mapper.Map<List<AdInputType>>(trains);
+                var inputData = new InputData<AdInputType>
                 {
-                    await using var memoryStream = new MemoryStream();
-                    await xmlFile.CopyToAsync(memoryStream);
-                    memoryStream.Position = 0;
-                    const string encoding = "utf-8";
-
-                    #region Debug
-                    //System.IO.File.WriteAllBytes(@"D:\\InDataXml_NewAd.xml", memoryStream.ToArray());
-                    var xmlContent = Encoding.GetEncoding(encoding).GetString(memoryStream.ToArray()); //utf-8   "Windows-1251"
-                    _logger.Debug($"{xmlContent}");
-                    #endregion
-
-                    using var reader = new StreamReader(memoryStream, Encoding.GetEncoding(encoding), true);
-                    var serializer = new XmlSerializer(typeof(AdInputType4XmlDtoContainer));
-                    var adInputType4XmlList = (AdInputType4XmlDtoContainer)serializer.Deserialize(reader);
-                    var trains = adInputType4XmlList.Trains;
-                    InitDataId(trains);
-                    var data = _mapper.Map<List<AdInputType>>(adInputType4XmlList.Trains); //TODO: выставить язык из запроса для всех данных AdInputType
-                    var inputData = new InputData<AdInputType>
-                    {
-                        DeviceName = deviceName,
-                        ExchangeName = exchangeName,
-                        DirectHandlerName = directHandlerName,
-                        DataAction = dataActionParsed,
-                        Command = commandParse,
-                        Data = data
-                    };
-                    var res = await InputDataHandler(new List<InputData<AdInputType>> { inputData });
-                    return res;
-                }
-
-                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "Размер XML файла равен 0");
-                return BadRequest("Размер XML файла равен 0");
+                    DeviceName = deviceName,
+                    ExchangeName = exchangeName,
+                    DirectHandlerName = directHandlerName,
+                    DataAction = actionParse,
+                    Command = commandParse,
+                    Data = data
+                };
+                var res = await InputDataHandler(new List<InputData<AdInputType>> { inputData });
+                return res;
             }
             catch (Exception ex)
             {
-                _logger.Error(ex ,"{Type}", "Ошибка в InputDataController");
+                _logger.Error(ex ,"{Type}", "Ошибка Mapping");
                 throw;
             }
         }
 
+
+        private async Task<Result<TXmlDto>> AcceptXmlFile<TXmlDto>(IFormFile xmlFile)
+        {
+            if (xmlFile == null)
+            {
+                return Result.Failure<TXmlDto>("xmlFile == null");
+            }
+            if (xmlFile.Length == 0)
+            {
+                return Result.Failure<TXmlDto>("Размер XML файла равен 0");
+            }
+            try
+            {
+                await using var memoryStream = new MemoryStream();
+                await xmlFile.CopyToAsync(memoryStream);
+                memoryStream.Position = 0;
+                const string encoding = "utf-8";
+
+                #region Debug
+                //System.IO.File.WriteAllBytes(@"D:\\InDataXml_NewAd.xml", memoryStream.ToArray());
+                var xmlContent = Encoding.GetEncoding(encoding).GetString(memoryStream.ToArray()); //utf-8   "Windows-1251"
+                _logger.Debug($"{xmlContent}");
+                #endregion
+
+                using var reader = new StreamReader(memoryStream, Encoding.GetEncoding(encoding), true);
+                var serializer = new XmlSerializer(typeof(TXmlDto));
+                var dto = (TXmlDto)serializer.Deserialize(reader);
+                return Result.Ok(dto);
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure<TXmlDto>($"Ошибка преобразования XML файла к Dto объекту.  Exception= '{ex}'");
+            }
+        }
+
+
+        private Result<(DataAction actionParse, Command4Device commandParse)> AcceptHeaders(string deviceName, string dataAction, string command)
+        {
+            if (string.IsNullOrEmpty(deviceName))
+            {
+                return Result.Failure<(DataAction, Command4Device)>("DataAction Error Parse");
+            }
+            if (!Enum.TryParse(dataAction, out DataAction dataActionParsed))
+            {
+                return Result.Failure<(DataAction, Command4Device)>("deviceName == null");
+            }
+            if (!Enum.TryParse(command, out Command4Device commandParse))
+            {
+                return Result.Failure<(DataAction, Command4Device)>("Command4Device Error Parse");
+            }
+            return Result.Ok((dataActionParsed, commandParse));
+        }
 
 
 

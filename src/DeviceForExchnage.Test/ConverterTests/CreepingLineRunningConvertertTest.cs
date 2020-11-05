@@ -20,7 +20,7 @@ namespace DeviceForExchnage.Test.ConverterTests
             {
                 String4Reset = String.Empty,
                 Separator = ' ',
-                Lenght = 30,
+                Length = 30,
             };
         }
 
