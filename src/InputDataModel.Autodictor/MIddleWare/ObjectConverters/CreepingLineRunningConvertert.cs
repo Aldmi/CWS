@@ -54,7 +54,7 @@ namespace Domain.InputDataModel.Autodictor.MIddleWare.ObjectConverters
 
         private class CreepingLineStateImmutable : IDisposable
         {
-            private CreepingLine BaseState { get; }
+            private CreepingLine BaseState { get; set; }
             private readonly TriggerStringMemConverter _trigConverter;
             private readonly SubStringMemConverter _pagingConverter;
 
@@ -100,15 +100,14 @@ namespace Domain.InputDataModel.Autodictor.MIddleWare.ObjectConverters
                 return (resetTime: resTime, pagingTime: pagTime);
             }
 
-
-            public bool IsEqual(CreepingLine cl) => BaseState.NameRu == cl.NameRu && BaseState.Duration == cl.Duration;
-
-
+            public bool IsEqual(CreepingLine cl) => (BaseState.NameRu == cl.NameRu && BaseState.Duration == cl.Duration && BaseState.StartTime == cl.StartTime);
+            
             public CreepingLine GetState() 
             {
                 var resStep1 = _trigConverter.Convert(BaseState.NameRu, 1);
                 var resStep2 = _pagingConverter.Convert(resStep1, 1);
-                return new CreepingLine(resStep2, "", BaseState.Duration);
+                var clNew= new CreepingLine(resStep2, "", BaseState.Duration);
+                return clNew;
             }
 
             public void Dispose()

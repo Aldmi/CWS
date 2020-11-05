@@ -32,8 +32,6 @@ namespace Shared.MiddleWares.Converters.StringConverters
             return strResult;
         }
 
-       // public bool IsEqualResetTime(int resetTime) => _option.ResetTime == resetTime;
-       
 
         public void SendCommand(MemConverterCommand command)
         {

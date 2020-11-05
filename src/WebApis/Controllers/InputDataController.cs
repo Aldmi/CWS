@@ -244,7 +244,6 @@ namespace WebApiSwc.Controllers
                 _logger.Warning("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", erroXml);
                 return BadRequest($"SendDataXmlMultipart4Devices. {erroXml}");
             }
-
             try
             {
                 var trains = xmlDto.Trains;
@@ -268,6 +267,74 @@ namespace WebApiSwc.Controllers
                 throw;
             }
         }
+
+
+        /// <summary>
+        /// Отправить бегущую строку на 1 Device.
+        /// Формат POST запроса Multipart.
+        /// XML передается как файл с именем username в FromForm виде.
+        /// </summary>
+        /// <param name="userfile">Имя фала</param>
+        /// <param name="deviceName"></param>
+        /// <param name="exchangeName"></param>
+        /// <param name="directHandlerName"></param>
+        /// <param name="dataAction"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPost("SendCreepLineXmlMultipart4Devices")]
+        public async Task<IActionResult> SendCreepLineXmlMultipart4Devices([FromForm] IFormFile userfile,
+                                                                      [FromHeader] string deviceName,
+                                                                      [FromHeader] string exchangeName = "",
+                                                                      [FromHeader] string directHandlerName = "",
+                                                                      [FromHeader] string dataAction = "",
+                                                                      [FromHeader] string command = "None")
+        {
+            //TODO: убрать выбор способа передачи имен. Сделать 2 метода контроллера с разными способами.
+            var values = userfile.FileName.Split('+');
+            if (values.Length == 2)
+            {
+                var fileName = values[0];
+                dataAction = values[1];
+                deviceName ??= fileName;//Если deviceName не переданн в заголовке 
+                var str = $"FileName= {fileName}";
+                _logger.Information("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", str);
+            }
+            var (_, isFailureHeader, (actionParse, commandParse), errorHeader) = AcceptHeaders(deviceName, dataAction, command);
+            if (isFailureHeader)
+            {
+                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", errorHeader);
+                return BadRequest($"SendDataXmlMultipart4Devices. {errorHeader}");
+            }
+            var (_, isFailureXml, xmlDto, erroXml) = await AcceptXmlFile<CreepingLine4XmlDto>(userfile);
+            if (isFailureXml)
+            {
+                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", erroXml);
+                return BadRequest($"SendDataXmlMultipart4Devices. {erroXml}");
+            }
+            try
+            {
+                var trains = xmlDto;
+               // InitDataId(trains); //TODO: выставить Id
+                var data = _mapper.Map<AdInputType>(trains);
+                var inputData = new InputData<AdInputType>
+                {
+                    DeviceName = deviceName,
+                    ExchangeName = exchangeName,
+                    DirectHandlerName = directHandlerName,
+                    DataAction = actionParse,
+                    Command = commandParse,
+                    Data = new List<AdInputType>{data}
+                };
+                var res = await InputDataHandler(new List<InputData<AdInputType>> { inputData });
+                return res;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "{Type}", "Ошибка Mapping");
+                throw;
+            }
+        }
+
 
 
         private async Task<Result<TXmlDto>> AcceptXmlFile<TXmlDto>(IFormFile xmlFile)

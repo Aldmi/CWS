@@ -84,6 +84,10 @@ namespace Domain.InputDataModel.Autodictor.Model
         }
 
 
+        //TODO: убрать ctor функционал вынеексти в фабрику в проектк с тестами.
+        /// <summary>
+        /// для тестов
+        /// </summary>
         public AdInputType(int id, string numberOfTrain, Note note, string pathNumber, EventTrain @event, TypeTrain trainType, Station stationDeparture, Station stationArrival,
             DateTime? arrivalTime, DateTime? departureTime, Lang lang = Lang.Ru)
             : this(id,0, 0, lang, numberOfTrain, pathNumber, null, @event, trainType, null, stationDeparture, stationArrival,
@@ -91,6 +95,17 @@ namespace Domain.InputDataModel.Autodictor.Model
                 null, null, note, null, null, null, null)
         {
            
+        }
+
+        /// <summary>
+        /// Для бег. строки
+        /// </summary>
+        public AdInputType(int id, CreepingLine creepingLine, Lang lang = Lang.Ru)
+            : this(id, 0, 0, lang, null, null, null, null, null, null, null, null,
+                null, null, null, null, null, null, DateTime.MinValue,
+                null, null, null, null, null, null, creepingLine)
+        {
+
         }
 
         /// <summary>
@@ -108,6 +123,9 @@ namespace Domain.InputDataModel.Autodictor.Model
 
         private static Station CreateStationsCut(Station arrivalSt, Station departureSt, EventTrain ev)
         {
+            if (ev == null)
+                return null;
+
             string CreateStationCutName(string stArrivalName, string stDepartName)
             {
                 if (!ev.Num.HasValue)
