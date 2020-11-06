@@ -35,26 +35,16 @@ namespace Domain.InputDataModel.Autodictor.MIddleWare.ObjectConverters
             return resState;
         }
 
-        /// <summary>
-        /// Сигнал поступления НОВЫХ данных на вход. Именно список AdInput поменялся, при этом само входное значение конвертора inProp может не поменятсья,
-        /// например поменялся только Id в данных, это значит новый пакет данных отправленн.
-        /// </summary>
+
         public void SendCommand(MemConverterCommand command)
         {
-            if (command == MemConverterCommand.Reset)
-            {
-                //TODO: проверить сброс
-                //_creepingLineStateDict
-                //    .Values
-                //    .ForEach(t => t.SendCommand(command));
-
-                //_pagingConverter.SendCommand(command);
-            }
+            //Not realized
         }
+
 
         private class CreepingLineStateImmutable : IDisposable
         {
-            private CreepingLine BaseState { get; set; }
+            private CreepingLine BaseState { get; }
             private readonly TriggerStringMemConverter _trigConverter;
             private readonly SubStringMemConverter _pagingConverter;
 
@@ -91,7 +81,7 @@ namespace Domain.InputDataModel.Autodictor.MIddleWare.ObjectConverters
             /// </summary>
             private static (int resetTime, int pagingTime) CalcTimes(int pagingCount, TimeSpan duration)
             {
-                if (duration == TimeSpan.Zero)
+                if (duration == TimeSpan.Zero || pagingCount == 0)
                 {
                     return (resetTime: 0, pagingTime: 0);
                 }

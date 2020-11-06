@@ -47,7 +47,6 @@ namespace Domain.InputDataModel.Autodictor.Model
 
 
         #region ctor
-
         public AdInputType(int id, int scheduleId, int trnId, Lang lang, string numberOfTrain, string pathNumber, string platform, EventTrain @event,
         TypeTrain trainType, VagonDirection vagonDirection, Station stationDeparture, Station stationArrival, Station stationWhereFrom,
         Station stationWhereTo, DirectionStation directionStation, DateTime? arrivalTime, DateTime? departureTime, DateTime? delayTime,
@@ -84,9 +83,8 @@ namespace Domain.InputDataModel.Autodictor.Model
         }
 
 
-        //TODO: убрать ctor функционал вынеексти в фабрику в проектк с тестами.
         /// <summary>
-        /// для тестов
+        /// Основной функционал
         /// </summary>
         public AdInputType(int id, string numberOfTrain, Note note, string pathNumber, EventTrain @event, TypeTrain trainType, Station stationDeparture, Station stationArrival,
             DateTime? arrivalTime, DateTime? departureTime, Lang lang = Lang.Ru)
@@ -120,7 +118,6 @@ namespace Domain.InputDataModel.Autodictor.Model
 
 
         #region Methode
-
         private static Station CreateStationsCut(Station arrivalSt, Station departureSt, EventTrain ev)
         {
             if (ev == null)
@@ -175,7 +172,6 @@ namespace Domain.InputDataModel.Autodictor.Model
             };
             return newStation;
         }
-
         #endregion
     }
 }
