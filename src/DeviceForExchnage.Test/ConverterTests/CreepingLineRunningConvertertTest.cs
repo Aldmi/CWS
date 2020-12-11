@@ -227,7 +227,7 @@ namespace DeviceForExchnage.Test.ConverterTests
 
 
 
-        //Постоянный сброс тригера новым временем
+        //Постоянный сброс тригера новой строкой
         [Fact]
         public async Task Reset_Trigger_Always_New_String_Income()
         {
