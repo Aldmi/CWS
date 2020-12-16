@@ -16,7 +16,7 @@ using Domain.InputDataModel.Shared.StringInseartService.InlineInseart;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Serilog;
 using Shared.Extensions;
-using Autofac.Features.Indexed;
+
 
 
 
@@ -43,7 +43,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
             ProviderOption providerOption,
             IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory,
             StringInsertModelExtStorage stringInsertModelExtStorage,
-            //IIndex<string, InlineInseartService> inlineInseartServiceNamed,
             [KeyFilter("ByRules")] InlineInseartService inlineInseartService,
             ILogger logger) : base(providerOption.Name, providerResultFactory, logger)
         {
@@ -51,14 +50,11 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
             if (_option == null)
                 throw new ArgumentNullException(providerOption.Name); //TODO: выбросы исключений пометсить в Shared ThrowIfNull(object obj)
 
-            //inlineInseartServiceNamed["ByRules"]
             _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, inputTypeInseartsHandlersFactory, stringInsertModelExtStorage, inlineInseartService, logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(_option.RuleName4DefaultHandle)
                 ? "DefaultHandler"
                 : _option.RuleName4DefaultHandle;
             _logger = logger;
-
-            //var providerCore = ProviderResultFactory(null, StatusDict);//DEBUG
         }
         #endregion
 
@@ -113,7 +109,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 {
                     //КОМАНДА-------------------------------------------------------------
                     case RuleSwitcher4InData.CommandHanler:
-                        SendCommand(rule, inData.Command);
+                        await SendCommandAsync(rule, inData.Command);
                         continue;
 
                     //ДАННЫЕ ДЛЯ УКАЗАНОГО RULE--------------------------------------------
@@ -153,7 +149,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 var ruleName = $"{rule.GetCurrentOption().Name}";
                 foreach (var viewRule in rule.GetViewRules)
                 {
-                    await foreach (var (_, isFailure, transfer, error) in viewRule.CreateProviderTransfer4Data(takesItems, ct).WithCancellation(ct))
+                    await foreach (var (_, isFailure, providerTransfer, error) in viewRule.CreateProviderTransfer4Data(takesItems, ct).WithCancellation(ct))
                     {
                         ct.ThrowIfCancellationRequested();
                         if (isFailure)
@@ -162,9 +158,10 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                             await Task.Delay(1000, ct); //Задержка на отображение ошибки
                             continue;
                         }
-                        var sendingUnitName = $"RuleName= '{ruleName}' viewRule.Id= '{viewRule.GetCurrentOption.Id}'";
-                        var providerStatusBuilder = transfer.CreateProviderStatusBuilder(sendingUnitName);
-                        var providerResult = ProviderResultFactory(transfer, providerStatusBuilder);
+
+                        var sendingUnitName = $"RuleName= '{ruleName}' viewRule.Id= '{viewRule.GetCurrentOption.Id}' TransferName= '{providerTransfer.Name}'";
+                        var providerStatusBuilder = providerTransfer.CreateProviderStatusBuilder(sendingUnitName);
+                        var providerResult = ProviderResultFactory(providerTransfer, providerStatusBuilder);
                         RaiseProviderResultRx.OnNext(providerResult);
                     }
                 }
@@ -174,14 +171,17 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
 
         /// <summary>
-        /// Отправить команду через первое ViewRule.
+        /// Отправить команду через первое ViewRule!!! и внутри ViewRule через первое uos.
         /// </summary>
-        private void SendCommand(Rule<TIn> rule, Command4Device command)
+        private async Task SendCommandAsync(Rule<TIn> rule, Command4Device command)
         {
-            var commandViewRule = rule.GetViewRules.FirstOrDefault();
-            var transfer = commandViewRule?.CreateProviderTransfer4Command(command);
-            if(transfer == null)
+            var commandViewRule = rule.GetViewRules.First();
+            var (_, isFailure, transfer, error) = await commandViewRule.CreateProviderTransfer4Command(command).FirstAsync();
+            if (isFailure)
+            {
+                _logger.Error(error);
                 return;
+            }
 
             var sendingUnitName = $"RuleName= '{rule.GetCurrentOption().Name}' viewRule.Id= '{commandViewRule.GetCurrentOption.Id}'";
             var providerStatusBuilder = transfer.CreateProviderStatusBuilder(sendingUnitName);
@@ -190,6 +190,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
             RaiseProviderResultRx.OnNext(providerResult);
         }
+
         #endregion
 
 

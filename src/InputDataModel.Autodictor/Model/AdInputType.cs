@@ -47,7 +47,6 @@ namespace Domain.InputDataModel.Autodictor.Model
 
 
         #region ctor
-
         public AdInputType(int id, int scheduleId, int trnId, Lang lang, string numberOfTrain, string pathNumber, string platform, EventTrain @event,
         TypeTrain trainType, VagonDirection vagonDirection, Station stationDeparture, Station stationArrival, Station stationWhereFrom,
         Station stationWhereTo, DirectionStation directionStation, DateTime? arrivalTime, DateTime? departureTime, DateTime? delayTime,
@@ -84,6 +83,9 @@ namespace Domain.InputDataModel.Autodictor.Model
         }
 
 
+        /// <summary>
+        /// Основной функционал
+        /// </summary>
         public AdInputType(int id, string numberOfTrain, Note note, string pathNumber, EventTrain @event, TypeTrain trainType, Station stationDeparture, Station stationArrival,
             DateTime? arrivalTime, DateTime? departureTime, Lang lang = Lang.Ru)
             : this(id,0, 0, lang, numberOfTrain, pathNumber, null, @event, trainType, null, stationDeparture, stationArrival,
@@ -91,6 +93,17 @@ namespace Domain.InputDataModel.Autodictor.Model
                 null, null, note, null, null, null, null)
         {
            
+        }
+
+        /// <summary>
+        /// Для бег. строки
+        /// </summary>
+        public AdInputType(int id, CreepingLine creepingLine, Lang lang = Lang.Ru)
+            : this(id, 0, 0, lang, null, null, null, null, null, null, null, null,
+                null, null, null, null, null, null, DateTime.MinValue,
+                null, null, null, null, null, null, creepingLine)
+        {
+
         }
 
         /// <summary>
@@ -105,9 +118,11 @@ namespace Domain.InputDataModel.Autodictor.Model
 
 
         #region Methode
-
         private static Station CreateStationsCut(Station arrivalSt, Station departureSt, EventTrain ev)
         {
+            if (ev == null)
+                return null;
+
             string CreateStationCutName(string stArrivalName, string stDepartName)
             {
                 if (!ev.Num.HasValue)
@@ -157,7 +172,6 @@ namespace Domain.InputDataModel.Autodictor.Model
             };
             return newStation;
         }
-
         #endregion
     }
 }

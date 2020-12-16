@@ -7,6 +7,7 @@ namespace Domain.InputDataModel.OpcServer.Model
         #region prop
         public string NameProp { get; private set; }                    //имя свойства
         public double Voltage { get; private set; }                     //напряжение
+        public int Temperature { get; private set; }                 //температура
         #endregion
 
 
@@ -20,7 +21,7 @@ namespace Domain.InputDataModel.OpcServer.Model
         /// <summary>
         /// для дефолтного создания объекта DefaultItemJson
         /// </summary>
-        public OpcInputType(int id) : base(0)
+        public OpcInputType() : base(0)
         {
         }
         #endregion

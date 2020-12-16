@@ -12,5 +12,7 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConver
 
         [Required(ErrorMessage = " SubStringMemConverterOption. Separator не может быть NULL")]
         public char Separator { get; set; }
+
+        public int BanTime { get; set; }                // Время запрета работы таймера
     }
 }

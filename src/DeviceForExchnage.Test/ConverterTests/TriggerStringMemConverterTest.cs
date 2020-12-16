@@ -135,5 +135,34 @@ namespace DeviceForExchnage.Test.ConverterTests
             resStep2.Should().Be(newInStr1);
         }
 
+
+        [Fact]
+        public async Task TriggerDisabled()
+        {
+            //Arrage
+            var option = new TriggerStringMemConverterOption
+            {
+                String4Reset = String.Empty,
+                ResetTime = 0
+            };
+            var converer = new TriggerStringMemConverter(option);
+            var newInStr1 = "NewStr1";
+            var newInStr2 = "NewStr2222";
+
+            //Act
+            var resStep1 = converer.Convert(InStr, 1);
+            await Task.Delay(50);
+            var resStep2 = converer.Convert(InStr, 1);
+            await Task.Delay(50);
+            var resStep3 = converer.Convert(newInStr1, 1);
+            await Task.Delay(50);
+            var resStep4 = converer.Convert(newInStr2, 1);
+
+            //Assert
+            resStep1.Should().Be("С остановками: Волочаевская");
+            resStep2.Should().Be("С остановками: Волочаевская");
+            resStep3.Should().Be("NewStr1");
+            resStep4.Should().Be("NewStr2222");
+        }
     }
 }

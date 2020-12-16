@@ -65,7 +65,7 @@ namespace Domain.InputDataModel.OpcServer.ForProviderImpl.ProvidersSpecial
                    new ProcessedItem<OpcInputType>(new OpcInputType(1, "prop1", 220.0),
                   new ReadOnlyDictionary<string, Change<string>>(new Dictionary<string, Change<string>>
                       {
-                          { "1", new Change<string>("220.0", "220.0") }
+                          { "Voltage", new Change<string>("220.0", "220.0") }
                       }))
                 });
 

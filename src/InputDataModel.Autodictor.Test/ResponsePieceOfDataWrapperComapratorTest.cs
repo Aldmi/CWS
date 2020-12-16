@@ -29,7 +29,6 @@ namespace InputDataModel.Autodictor.Test
                 {
                     new ResponseDataItem<AdInputType>
                     {
-                        RequestId = null,
                         Status = StatusDataExchange.End,
                         TransportException = null,
                         ProcessedItemsInBatch = new ProcessedItemsInBatch<AdInputType>(0,1, new List<ProcessedItem<AdInputType>>
@@ -55,7 +54,6 @@ namespace InputDataModel.Autodictor.Test
                 {
                     new ResponseDataItem<AdInputType>
                     {
-                        RequestId = null,
                         Status = StatusDataExchange.End,
                         TransportException = null,
                         ProcessedItemsInBatch = new ProcessedItemsInBatch<AdInputType>(0,1, new List<ProcessedItem<AdInputType>>

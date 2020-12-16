@@ -8,43 +8,27 @@ using Xunit;
 
 namespace MappingTest
 {
-    public class AdInputTypeMappingTest
+    public class CreepingLine4XmlDtoMappingTest
     {
         [Fact]
-        public void MappingFromAdInputType4XmlDto()
+        public void MappingFromDtoToObj()
         {
             var myProfile = new MappingProfile();
             var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
             IMapper mapper = new Mapper(configuration);
 
             //Arrage
-            var xmlDto = new AdInputType4XmlDto()
+            var xmlDto = new CreepingLine4XmlDto()
             {
-                Note = "Со всеми: Московский, Волжский",
-                ScheduleId = "254688",
-                TrainNumber = "740",
-                Addition = "Дополнение 111",
-                DaysOfGoing = "Без выходных",
-                Direction = "1",
-                EmergencySituation = "0",
-
-                RecDateTime = "2019-07-09T08:14:00",
-                SndDateTime = "2019-07-09T08:56:00",
-
-                DirectionStation = "Крымское",
-                StartStation = "Москва",
-                EndStation = "Кисловодск",
-                StartStationENG = "Moscow",
-                EndStationENG = "Kislovodsk",
-
-                TrackNumber = "5",
-
-                TypeName = "Скоростной",
-                TrainType ="1",
-
-                HereDateTime = "00:14:00",
-                //ExpectedTime = "00:22:00",
+                Id = 0,
+                Key = "c749ea14-9d9a-405c-aa2e-6f46c25f7d8c",
+                Message = "уважаемые встречающие скоростной электропоезд Стрела сообщением Н.Новгород С.Петербург прибывает на 5 путь платформа номер 4 скоростной электропоезд Стрела сообщением ",
+                StarTime = 1603780890073,
+                Duration = 19052
             };
+
+            var ts=  TimeSpan.FromMilliseconds(1603780890073);
+            var dt= (new DateTime(1970, 1, 1)).AddMilliseconds(1603780890073);
 
             //Act
             var res = mapper.Map<AdInputType>(xmlDto);

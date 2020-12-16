@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Shared.MiddleWares.Converters.StringConverters;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
@@ -19,7 +20,8 @@ namespace DeviceForExchnage.Test.ConverterTests
             {
                 Lenght = 60,
                 InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
-                Separator = ','
+                Separator = ',',
+                BanTime = 0
             };
         }
 
@@ -29,21 +31,21 @@ namespace DeviceForExchnage.Test.ConverterTests
         public void NormalUse_8Step()
         {
             //Arrage
-            var converer = new SubStringMemConverter(Option);
+            var converter = new SubStringMemConverter(Option);
 
             //Act
-            var resStep1 = converer.Convert(InStr, 1);
-            var resStep2 = converer.Convert(InStr, 1);
-            var resStep3 = converer.Convert(InStr, 1);
-            var resStep4 = converer.Convert(InStr, 1);
-            var resStep5 = converer.Convert(InStr, 1);
-            var resStep6 = converer.Convert(InStr, 1);
-            var resStep7 = converer.Convert(InStr, 1);
-            var resStep8 = converer.Convert(InStr, 1);
+            var resStep1 = converter.Convert(InStr, 1);
+            var resStep2 = converter.Convert(InStr, 1);
+            var resStep3 = converter.Convert(InStr, 1);
+            var resStep4 = converter.Convert(InStr, 1);
+            var resStep5 = converter.Convert(InStr, 1);
+            var resStep6 = converter.Convert(InStr, 1);
+            var resStep7 = converter.Convert(InStr, 1);
+            var resStep8 = converter.Convert(InStr, 1);
 
             //Asert
             resStep1.Should().Be("С остановками: Волочаевская, Климская, Октябрьская,"); 
-            resStep2.Should().Be("С остановками: Новосибирская, Красноярская, 25 Километр,");
+            resStep2.Should().Be("С остановками: Новосибирская, Красно0ярская, 25 Километр,");
             resStep3.Should().Be("С остановками: Волховские холмы,"); 
             resStep4.Should().Be("Ленинско кузнецкие золотые сопки верхней пыж");
             resStep5.Should().Be("С остановками: Куйбышевская, Казахстанская, Свердлолвская,");
@@ -63,13 +65,13 @@ namespace DeviceForExchnage.Test.ConverterTests
                 InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
                 Separator = ','
             };
-            var converer = new SubStringMemConverter(option);
+            var converter = new SubStringMemConverter(option);
 
 
             //Act
-            var resStep1 = converer.Convert(InStr,1);
-            var resStep2 = converer.Convert(InStr, 1);
-            var resStep3 = converer.Convert(InStr, 1);
+            var resStep1 = converter.Convert(InStr,1);
+            var resStep2 = converter.Convert(InStr, 1);
+            var resStep3 = converter.Convert(InStr, 1);
 
             //Asert
             resStep1.Should().Be(InStr);
@@ -88,16 +90,16 @@ namespace DeviceForExchnage.Test.ConverterTests
                 InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
                 Separator = ' '
             };
-            var converer = new SubStringMemConverter(option);
+            var converter = new SubStringMemConverter(option);
             var str = "С остановками: серпухово, балаково, Свободное";
 
             //Act
-            var resStep1 = converer.Convert(str,1);
-            var resStep2 = converer.Convert(str,1);
+            var resStep1 = converter.Convert(str,1);
+            var resStep2 = converter.Convert(str,1);
             str = "Новая строка 11 22 33 44 55 66 7777777 8888888";
-            var resStep3 = converer.Convert(str,1);
-            var resStep4 = converer.Convert(str,1);
-            var resStep5 = converer.Convert(str,1);
+            var resStep3 = converter.Convert(str,1);
+            var resStep4 = converter.Convert(str,1);
+            var resStep5 = converter.Convert(str,1);
 
             //Asert
             resStep1.Should().Be("С остановками: серпухово,");
@@ -119,16 +121,16 @@ namespace DeviceForExchnage.Test.ConverterTests
                 InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
                 Separator = ','
             };
-            var converer = new SubStringMemConverter(option);
+            var converter = new SubStringMemConverter(option);
             var str = "С остановками: серпухово, балаково, Свободное";
 
             //Act
-            var resStep1 = converer.Convert(str, 1);
-            var resStep2 = converer.Convert(str, 1);
+            var resStep1 = converter.Convert(str, 1);
+            var resStep2 = converter.Convert(str, 1);
             str = "Без остановок: Московское, южное, Северное сияние";
-            var resStep3 = converer.Convert(str, 1);
-            var resStep4 = converer.Convert(str, 1);
-            var resStep5 = converer.Convert(str, 1);
+            var resStep3 = converter.Convert(str, 1);
+            var resStep4 = converter.Convert(str, 1);
+            var resStep5 = converter.Convert(str, 1);
 
             //Asert
             resStep1.Should().Be("С остановками: серпухово, балаково,");
@@ -151,20 +153,20 @@ namespace DeviceForExchnage.Test.ConverterTests
                 InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
                 Separator = ','
             };
-            var converer = new SubStringMemConverter(option);
+            var converter = new SubStringMemConverter(option);
             var str = "С остановками: серпухово, балаково, Свободное";
 
             //Act
-            var resStep1 = converer.Convert(str, 1);
+            var resStep1 = converter.Convert(str, 1);
             str = "Без остановок: Московское, южное, Северное сияние";
-            var resStep2 = converer.Convert(str, 1);
+            var resStep2 = converter.Convert(str, 1);
             str = "Без остановок: Корейская, Ясное, Рыбий Глаз желтый";
-            var resStep3 = converer.Convert(str, 1);
+            var resStep3 = converter.Convert(str, 1);
             str = "С остановками: серпухово, балаково, Свободное";
-            var resStep4 = converer.Convert(str, 1);
-            var resStep5 = converer.Convert(str, 1);
-            var resStep6 = converer.Convert(str, 1);
-            var resStep7 = converer.Convert(str, 1);
+            var resStep4 = converter.Convert(str, 1);
+            var resStep5 = converter.Convert(str, 1);
+            var resStep6 = converter.Convert(str, 1);
+            var resStep7 = converter.Convert(str, 1);
 
             //Asert
             resStep1.Should().Be("С остановками: серпухово, балаково,");
@@ -186,13 +188,13 @@ namespace DeviceForExchnage.Test.ConverterTests
             {
                 Lenght = 5
             };
-            var converer = new SubStringMemConverter(option);
+            var converter = new SubStringMemConverter(option);
             var str = String.Empty;
 
             //Act
-            var resStep1 = converer.Convert(str,1);
-            var resStep2 = converer.Convert(str,1);
-            var resStep3 = converer.Convert(str,1);
+            var resStep1 = converter.Convert(str,1);
+            var resStep2 = converter.Convert(str,1);
+            var resStep3 = converter.Convert(str,1);
 
             //Asert
             resStep1.Should().Be(expected: string.Empty);
@@ -209,18 +211,154 @@ namespace DeviceForExchnage.Test.ConverterTests
             {
                 Lenght = 25
             };
-            var converer = new SubStringMemConverter(option);
+            var converter = new SubStringMemConverter(option);
             string str = null;
 
             //Act
-            var resStep1 = converer.Convert(str,1);
-            var resStep2 = converer.Convert(str,1);
-            var resStep3 = converer.Convert(str,1);
+            var resStep1 = converter.Convert(str,1);
+            var resStep2 = converter.Convert(str,1);
+            var resStep3 = converter.Convert(str,1);
 
             //Asert
             resStep1.Should().Be(expected:null);
             resStep2.Should().Be(null);
             resStep3.Should().Be(null);
+        }
+
+
+
+        [Fact]
+        public void BanTime_Always_3Step()
+        {
+            //Arrage
+            var option = new SubStringMemConverterOption()
+            {
+                Lenght = 60,
+                InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
+                Separator = ',',
+                BanTime = 1000
+            };
+            var converter = new SubStringMemConverter(option);
+
+            //Act
+            var resStep1 = converter.Convert(InStr, 1);
+            var resStep2 = converter.Convert(InStr, 1);
+            var resStep3 = converter.Convert(InStr, 1);
+
+
+            //Asert
+            resStep1.Should().Be("С остановками: Волочаевская, Климская, Октябрьская,");
+            resStep2.Should().Be("С остановками: Волочаевская, Климская, Октябрьская,");
+            resStep3.Should().Be("С остановками: Волочаевская, Климская, Октябрьская,");
+        }
+
+
+        [Fact]
+        public async Task BanTime_Every_2_Steps()
+        {
+            //Arrage
+            var option = new SubStringMemConverterOption()
+            {
+                Lenght = 60,
+                InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
+                Separator = ',',
+                BanTime = 200
+            };
+            var converter = new SubStringMemConverter(option);
+
+            //Act
+            var resStep1 = converter.Convert(InStr, 1); //Первая выдача данных, запускает таймер тргерра
+
+            await Task.Delay(100);
+            var resStep2 = converter.Convert(InStr, 1); //Вторая уже на работающем таймере прошло 100 мс
+
+            await Task.Delay(100);
+            var resStep3 = converter.Convert(InStr, 1);  //Третья тожн на работающем таймере прошло 200 мс
+
+            await Task.Delay(100);
+            var resStep4 = converter.Convert(InStr, 1);
+
+            await Task.Delay(100);
+            var resStep5 = converter.Convert(InStr, 1);
+
+            await Task.Delay(100);
+            var resStep6 = converter.Convert(InStr, 1);
+
+            await Task.Delay(100);
+            var resStep7 = converter.Convert(InStr, 1);
+
+            await Task.Delay(100);
+            var resStep8 = converter.Convert(InStr, 1);
+
+            await Task.Delay(100);
+            var resStep9 = converter.Convert(InStr, 1);
+
+            await Task.Delay(100);
+            var resStep10 = converter.Convert(InStr, 1);
+
+
+            //Asert
+            resStep1.Should().Be("С остановками: Волочаевская, Климская, Октябрьская,");
+            resStep2.Should().Be("С остановками: Волочаевская, Климская, Октябрьская,");
+            resStep3.Should().Be("С остановками: Волочаевская, Климская, Октябрьская,");
+        }
+
+
+        [Fact]
+        public async Task BanTime_Every_2Steps_After_5Step_New_data()
+        {
+            //Arrage
+            var option = new SubStringMemConverterOption()
+            {
+                Lenght = 60,
+                InitPharases = new List<string> { "Без остановок: ", "С остановками: " },
+                Separator = ',',
+                BanTime = 200
+            };
+            var converter = new SubStringMemConverter(option);
+
+            //Act
+            var resStep1 = converter.Convert(InStr, 1);
+
+            await Task.Delay(100);
+            var resStep2 = converter.Convert(InStr, 1);
+
+            await Task.Delay(100);
+            var resStep3 = converter.Convert(InStr, 1);
+
+            await Task.Delay(100);
+            var resStep4 = converter.Convert(InStr, 1);
+
+            await Task.Delay(100);
+            var resStep5 = converter.Convert(InStr, 1);
+
+            await Task.Delay(100);
+            var resStep6 = converter.Convert(InStr, 1);
+
+            var str = "С остановками: Станция1, Станция2, Станция4, Станция5, Станция6, Станция7, Станция8, Станция9, Станция10, Станция11, Станция12";
+            await Task.Delay(100);
+            var resStep7 = converter.Convert(str, 1);
+
+            await Task.Delay(100);
+            var resStep8 = converter.Convert(str, 1);
+
+            await Task.Delay(100);
+            var resStep9 = converter.Convert(str, 1);
+
+            await Task.Delay(100);
+            var resStep10 = converter.Convert(str, 1);
+
+            await Task.Delay(100);
+            var resStep11 = converter.Convert(str, 1);
+
+            await Task.Delay(100);
+            var resStep12 = converter.Convert(str, 1);
+
+
+            //Asert
+            resStep1.Should().Be("С остановками: Волочаевская, Климская, Октябрьская,");
+            resStep2.Should().Be("С остановками: Волочаевская, Климская, Октябрьская,");
+            resStep3.Should().Be("С остановками: Волочаевская, Климская, Октябрьская,");
         }
     }
 }

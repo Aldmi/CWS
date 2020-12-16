@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using App.Services.Agregators;
 using AutoMapper;
 using Domain.Device;
@@ -15,7 +14,6 @@ using Domain.InputDataModel.Shared.StringInseartService.Model.InlineStringInsert
 using Infrastructure.Dal.EfCore.Entities.Device;
 using Infrastructure.Dal.EfCore.Entities.Exchange;
 using Infrastructure.Dal.EfCore.Entities.InlineStringInsertModel;
-using Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers;
 using Infrastructure.Dal.EfCore.Entities.ResponseProduser;
 using Infrastructure.Dal.EfCore.Entities.StringInsertModelExt;
 using Infrastructure.Dal.EfCore.Entities.Transport;
@@ -31,7 +29,6 @@ using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption;
 using WebApiSwc.DTO.JSON.OptionsDto.ProduserUnionOption;
 using WebApiSwc.DTO.JSON.OptionsDto.TransportOption;
-using WebApiSwc.DTO.JSON.Shared;
 using WebApiSwc.DTO.XML;
 
 namespace WebApiSwc.AutoMapperConfig
@@ -62,7 +59,7 @@ namespace WebApiSwc.AutoMapperConfig
             #endregion
 
 
-            #region AdInputType xml in ProcessedItemsInBatch mapping
+            #region AdInputType4XmlDto -> AdInputType mapping
             CreateMap<AdInputType4XmlDto, AdInputType>().ConstructUsing(src => new AdInputType(
                 src.Id,
                 ConvertString2Int(src.ScheduleId),
@@ -127,8 +124,21 @@ namespace WebApiSwc.AutoMapperConfig
                 },
                 new Emergency(src.EmergencySituation),
                 new Category(src.TypeName),
-                new CreepingLine("Бегущая строка слово1 слово2 слово3 слово4", null, TimeSpan.FromSeconds(20))
-                )).ForAllMembers(opt => opt.Ignore());
+                null)
+            ).ForAllMembers(opt => opt.Ignore());
+            #endregion
+
+
+            #region CreepingLine4XmlDto -> AdInputType mapping
+            CreateMap<CreepingLine4XmlDto, AdInputType>().ConstructUsing(src => new AdInputType(
+                src.Id,
+                new CreepingLine(
+                    src.Message,
+                    src.Message,
+                    TimeSpan.FromMilliseconds(src.Duration),
+                    (new DateTime(1970, 1, 1)).AddMilliseconds(src.StarTime)),
+                Lang.Ru
+            )).ForAllMembers(opt => opt.Ignore());
             #endregion
 
 
