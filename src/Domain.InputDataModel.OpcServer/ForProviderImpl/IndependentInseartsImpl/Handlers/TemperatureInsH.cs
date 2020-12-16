@@ -11,8 +11,9 @@ namespace Domain.InputDataModel.OpcServer.ForProviderImpl.IndependentInseartsImp
 
         protected override Change<string> GetInseart(OpcInputType uit)
         {
-            var s = uit.Temperature;
+            var s = uit.Temperature + 10;
             var f = InsertModel.Ext.CalcFinishValue(s);
+            f = $"{f}\u00B0C"; //симол градусов по цельсию
             return new Change<string>(s.ToString().GetSpaceOrString(), f.GetSpaceOrString());
         }
     }

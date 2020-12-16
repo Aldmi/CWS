@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using App.Services.Actions;
 using App.Services.Agregators;
 using App.Services.Exceptions;
 using App.Services.Mediators;
@@ -10,7 +9,6 @@ using AutoMapper;
 using CSharpFunctionalExtensions;
 using Domain.Device.Repository.Entities;
 using Domain.Exchange.Repository.Entities;
-using Domain.InputDataModel.Autodictor.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using WebApiSwc.DTO.JSON.OptionsDto;
@@ -28,7 +26,6 @@ namespace WebApiSwc.Controllers
     {
         #region fields
         private readonly MediatorForDeviceOptions _mediatorForDeviceOptionsRep;
-        private readonly BuildDeviceService<AdInputType> _buildDeviceService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         #endregion
@@ -37,12 +34,10 @@ namespace WebApiSwc.Controllers
 
         #region ctor
         public DevicesOptionController(MediatorForDeviceOptions mediatorForDeviceOptionsRep,
-                                       BuildDeviceService<AdInputType> buildDeviceService,
                                        IMapper mapper,
                                        ILogger logger)
         {
             _mediatorForDeviceOptionsRep = mediatorForDeviceOptionsRep;
-            _buildDeviceService = buildDeviceService;
             _mapper = mapper;
             _logger = logger;
         }
@@ -166,33 +161,6 @@ namespace WebApiSwc.Controllers
 
             _logger.Error(error, "Ошибка в DevicesOptionController/Delete");
             return BadRequest(error);
-        }
-
-
-        // PUT api/devicesoption/BuildDevice/deviceName
-        [HttpPut("BuildDevice/{deviceName}")]
-        public async Task<IActionResult> BuildDevice([FromRoute] string deviceName)
-        {
-            try
-            {
-                var newDevice = await _buildDeviceService.BuildDevice(deviceName);
-                if (newDevice == null)
-                {
-                    return NotFound(deviceName);
-                }
-                return Ok(newDevice);
-            }
-            catch (StorageHandlerException ex)
-            {
-                _logger.Error(ex, "Ошибка в DevicesOptionController/BuildDevice");
-                ModelState.AddModelError("BuildAndAddDeviceException", ex.Message);
-                return BadRequest(ModelState);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Критическая Ошибка в DevicesOptionController/BuildDevice");
-                throw;
-            }
         }
         #endregion
     }
