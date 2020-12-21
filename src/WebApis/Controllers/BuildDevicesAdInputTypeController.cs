@@ -35,7 +35,7 @@ namespace WebApiSwc.Controllers
         #endregion
 
 
-        #region ApiMethode
+        #region Api
         // PUT api/devicesoption/BuildDevice/deviceName
         [HttpPut("BuildDevice/{deviceName}")]
         public async Task<IActionResult> BuildDevice([FromRoute] string deviceName)

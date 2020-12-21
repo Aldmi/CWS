@@ -4,16 +4,16 @@ namespace Domain.InputDataModel.Base.Response.ResponseInfos
 {
     /// <summary>
     /// Интерпретатор ответа.
-    /// IsOutDataValid выставляется при получении ЛЮБЫХ данных
+    /// IsOutDataValid выставляется даже при отсутсвии данных.
     /// </summary>
-    public class RequireResponseInfo : BaseResponseInfo
+    public class DisabledResponseInfo : BaseResponseInfo
     {
         public readonly StringRepresentation RealData;
 
-        public RequireResponseInfo(StringRepresentation realData)
+        public DisabledResponseInfo(StringRepresentation realData)
         {
             RealData = realData;
-            IsOutDataValid = !RealData.IsNull;
+            IsOutDataValid = true;
         }
 
         public override string ToString()

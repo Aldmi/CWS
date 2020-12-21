@@ -276,13 +276,10 @@ namespace WebApiSwc
         private void ApplicationStarted<TInType>(IHostApplicationLifetime lifetimeApp, ILifetimeScope scope) where TInType : InputTypeBase
         {
             //ЗАПУСК БЕКГРАУНДА ОПРОСА ШИНЫ ДАННЫХ
-            scope.Resolve<ConsumerMessageBroker4InputData<TInType>>();//перед запуском bg нужно создать ConsumerMessageBroker4InputData
-            bool.TryParse(AppConfiguration["MessageBrokerConsumer4InData:AutoStart"], out var autoStart);
-            if (autoStart)
+            var consumerMb= scope.Resolve<ConsumerMessageBroker4InputData<TInType>>();
+            if (consumerMb.BgAutoStart)
             {
-                var backgroundName = AppConfiguration["MessageBrokerConsumer4InData:Name"];
-                var bgConsumer = scope.ResolveNamed<ISimpleBackground>(backgroundName);
-                lifetimeApp.ApplicationStarted.Register(() => bgConsumer.StartAsync(CancellationToken.None));
+                lifetimeApp.ApplicationStarted.Register(async () => await consumerMb.StartConsumerBg());
             }
 
             //ЗАПУСК БЕКГРАУНДА ОПРОСА УСТРОЙСТВ

@@ -15,7 +15,7 @@ namespace Domain.InputDataModel.Base.Response.ResponseValidators
 
         public override BaseResponseInfo Validate(byte[] arr)
         {
-            var realLenght = arr.Length;
+            var realLenght = arr?.Length ?? 0;
             return new LenghtResponseInfo(realLenght, _expectedLenght);
         }
         public override BaseResponseInfo Validate(string str)

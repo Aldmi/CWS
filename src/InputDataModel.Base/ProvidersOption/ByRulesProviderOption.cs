@@ -35,8 +35,8 @@ namespace Domain.InputDataModel.Base.ProvidersOption
         public List<UnitOfSendingOption> UnitOfSendings { get; set; } //Список Единиц отправки данных
 
         //DEBUG-------------------------
-        public RequestOption RequestOption => UnitOfSendings[0].RequestOption; //DEBUG DEL!!!
-        public ResponseOption ResponseOption => UnitOfSendings[0].ResponseOption;//DEBUG DEL!!!
+        public RequestOption RequestOption => UnitOfSendings[0].RequestOption; //DEBUG for test DEL!!!
+        public ResponseOption ResponseOption => UnitOfSendings[0].ResponseOption;//DEBUG for test DEL!!!
         //DEBUG----------------------------
     }
 
@@ -77,6 +77,7 @@ namespace Domain.InputDataModel.Base.ProvidersOption
                     "LenghtValidator" when LenghtValidator != null => Result.Ok<BaseResponseValidator>(new LenghtResponseValidator(LenghtValidator.ExpectedLenght)),
                     "EqualValidator" when EqualValidator != null => Result.Ok<BaseResponseValidator>(new EqualResponseValidator(new StringRepresentation(EqualValidator.Body, EqualValidator.Format))),
                     "ManualEkrimValidator"  => Result.Ok<BaseResponseValidator>(new ManualEkrimResponseValidator()),
+                    "DisabledValidator" => Result.Ok<BaseResponseValidator>(new DisabledResponseValidator()),
                     _ => Result.Ok<BaseResponseValidator>(new RequireResponseValidator())
                 };
             }

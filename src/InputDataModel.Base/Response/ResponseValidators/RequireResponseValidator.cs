@@ -10,6 +10,11 @@ namespace Domain.InputDataModel.Base.Response.ResponseValidators
     {
         public override BaseResponseInfo Validate(byte[] arr)
         {
+            if (arr == null)
+            {
+                var nullData = StringRepresentation.CreateNull();
+                return new RequireResponseInfo(nullData);
+            }
             var realData = StringRepresentation.Create(arr, "HEX");
             return new RequireResponseInfo(realData);
         }
