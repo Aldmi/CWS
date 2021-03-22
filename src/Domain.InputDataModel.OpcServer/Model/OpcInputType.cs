@@ -7,7 +7,7 @@ namespace Domain.InputDataModel.OpcServer.Model
         #region prop
         public string NameProp { get; private set; }                    //имя свойства
         public double Voltage { get; private set; }                     //напряжение
-        public int Temperature { get; private set; }                 //температура
+        public int Temperature { get; set; }                         //температура
         #endregion
 
 

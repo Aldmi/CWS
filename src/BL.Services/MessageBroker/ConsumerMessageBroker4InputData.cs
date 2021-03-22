@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using App.Services.InputData;
 using Confluent.Kafka;
+using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.InData;
 using Infrastructure.Background.Abstarct;
 using Infrastructure.MessageBroker.Abstract;
@@ -24,20 +25,24 @@ namespace App.Services.MessageBroker
     public class ConsumerMessageBroker4InputData<TIn> : IDisposable where TIn : InputTypeBase
     {
         #region field
-
         private readonly IConsumer  _consumer;
         private readonly ILogger _logger;
         private readonly InputDataApplyService<TIn> _inputDataApplyService;
+        private readonly ISimpleBackground _background;
         private readonly int _batchSize;
         private IDisposable _registration;
+        #endregion
 
+
+
+        #region prop
+        public bool BgAutoStart => _background.AutoStart;
         #endregion
 
 
 
 
         #region ctor
-
         public ConsumerMessageBroker4InputData(
             ISimpleBackground background,
             IConsumer consumer,
@@ -45,20 +50,66 @@ namespace App.Services.MessageBroker
             InputDataApplyService<TIn> inputDataApplyService,
             int batchSize)
         {
+            _background = background;
             _batchSize = batchSize;
             _consumer = consumer;
             _logger = logger;
             _inputDataApplyService = inputDataApplyService;
-
             background.AddOneTimeAction(RunAsync); 
         }
-
         #endregion
 
 
 
 
         #region Methode
+
+        public string GetConsumerBgState()
+        {
+            var bgState = _background.IsStarted ? "Started" : "Stoped";
+            return bgState;
+        }
+
+
+        public async Task<Result> StartConsumerBg()
+        {
+            try
+            {
+                if (_background.IsStarted)
+                {
+                    return Result.Failure("Listener already started !!!");
+                }
+
+                await _background.StartAsync(CancellationToken.None);
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "{Type}", "Ошибка в InputDataController/StartConsumerBg");
+                return Result.Failure("Ошибка в InputDataController/StartConsumerBg");
+            }
+        }
+
+
+        public async Task<Result> StopConsumerBg()
+        {
+            try
+            {
+                if (!_background.IsStarted)
+                {
+                    return Result.Failure("Listener already stoped !!!");
+                }
+
+                await _background.StopAsync(CancellationToken.None);
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "{Type}", "Ошибка в InputDataController/StopConsumerBg");
+                return Result.Failure("Ошибка в InputDataController/StopConsumerBg");
+            }
+        }
+
 
         private async Task RunAsync(CancellationToken cancellationToken)
         {

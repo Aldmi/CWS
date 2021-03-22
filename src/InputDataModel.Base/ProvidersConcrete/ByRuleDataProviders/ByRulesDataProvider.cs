@@ -18,8 +18,6 @@ using Serilog;
 using Shared.Extensions;
 
 
-
-
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 {
     /// <summary>
@@ -33,9 +31,10 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         private readonly List<Rule<TIn>> _rules;        // Набор правил, для обработки данных.
         private readonly ILogger _logger;
         private readonly ByRulesProviderOption _option;
+        private readonly ChangeRuleTracker _changeRuleTracker = new ChangeRuleTracker();
         #endregion
 
-        
+
 
         #region ctor
         public ByRulesDataProvider(
@@ -122,12 +121,12 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                     //ДАННЫЕ--------------------------------------------------------------  
                     case RuleSwitcher4InData.InDataHandler:
                         takesItems = inData.Datas.TakeItemIfEmpty(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger);           //Позволяет применять Filter для Default данных (inData.Datas пустой)
-                        var filtredItems = takesItems.Filter(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger);
+                        var filtredItems = takesItems.Filter(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger)?.ToList();
                         if (filtredItems == null || !filtredItems.Any())
                             continue;
 
-                        resultItems = filtredItems.ToList();
-                        await SendDataAsync(rule, resultItems, ct);
+                        TryResetViewRulesMode2Default(rule);
+                        await SendDataAsync(rule, filtredItems, ct);
                         continue;
 
                     default:
@@ -140,10 +139,26 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
 
         /// <summary>
+        /// Для нового правила (выбранного agregateFilter фильтром) сбросим режим всех ViewRules, на дефолтный (указанный в настрйоках)
+        /// Это позволит выполнять "Init" правила 1 раз.
+        /// </summary>
+        private void TryResetViewRulesMode2Default(Rule<TIn> rule)
+        {
+            if (_changeRuleTracker.CheckChange(rule))
+            {
+                rule.ResetViewRulesMode2Default();
+            }
+        }
+
+
+
+        /// <summary>
         /// Отобразить данные через коллекцию ViewRules у правила.
         /// </summary>
         private async Task SendDataAsync(Rule<TIn> rule, List<TIn> takesItems, CancellationToken ct)
         {
+
+
             if (takesItems != null && takesItems.Any())
             {
                 var ruleName = $"{rule.GetCurrentOption().Name}";
@@ -200,6 +215,25 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         {
            base.Dispose();
            RaiseProviderResultRx?.Dispose();
+        }
+        #endregion
+
+
+
+        #region NestedClass
+        private class ChangeRuleTracker
+        {
+            //Можно добавить RX событие по смене Rule
+            private Rule<TIn> _currentRule;
+            public bool CheckChange(Rule<TIn> newRule)
+            {
+                if (newRule != _currentRule)
+                {
+                    _currentRule = newRule;
+                    return true;
+                }
+                return false;
+            }
         }
         #endregion
     }

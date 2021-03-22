@@ -7,13 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using App.Services.InputData;
-using Autofac.Features.Indexed;
 using AutoMapper;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
-using Infrastructure.Background.Abstarct;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -29,102 +27,28 @@ namespace WebApiSwc.Controllers
     public class InputDataController : Controller
     {
         #region fields
-
-        private readonly ISimpleBackground _backgroundMessageBrokConsum;
         private readonly InputDataApplyService<AdInputType> _inputDataApplyService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
-
         #endregion
-
 
 
 
         #region ctor
-
         public InputDataController(IConfiguration config,
-                                   IIndex<string, ISimpleBackground> background,
                                    InputDataApplyService<AdInputType> inputDataApplyService,
                                    IMapper mapper,
                                    ILogger logger)
-                                  
         {
             _inputDataApplyService = inputDataApplyService;
             _mapper = mapper;
             _logger = logger;
-            var backgroundName= config["MessageBrokerConsumer4InData:Name"]; //TODO: работу с _backgroundMessageBrokConsum вынести в отдельный сервис
-            _backgroundMessageBrokConsum = background[backgroundName];
         }
-
         #endregion
 
 
 
-
         #region Api
-
-        // GET api/InputData/GetMessageBrokerConsumerBgState
-        [HttpGet("GetMessageBrokerConsumerBgState")]
-        public async Task<IActionResult> GetMessageBrokerConsumerBgState()
-        {          
-            var bgState = _backgroundMessageBrokConsum.IsStarted ? "Started" : "Stoped";
-            await Task.CompletedTask;
-            return new JsonResult(bgState);
-        }
-
-
-        /// <summary>
-        /// Запустить бекграунд слушателя выходных сообшений от messageBroker
-        /// </summary>
-        // GET api/InputData/StartMessageBrokerConsumerBg
-        [HttpPut("StartMessageBrokerConsumerBg")]
-        public async Task<IActionResult> StartMessageBrokerConsumerBg()
-        {
-            try
-            {
-                if (_backgroundMessageBrokConsum.IsStarted)
-                {
-                    ModelState.AddModelError("StartMessageBrokerConsumerBg", "Listener already started !!!");
-                    return BadRequest(ModelState);
-                }
-
-                await _backgroundMessageBrokConsum.StartAsync(CancellationToken.None);
-                return Ok("Listener starting");
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "{Type}", "Ошибка в InputDataController/StartMessageBrokerConsumerBg");
-                throw;
-            }
-        }
-
-
-        /// <summary>
-        /// Запустить бекграунд слушателя выходных сообшений от messageBroker
-        /// </summary>
-        [HttpPut("StopMessageBrokerConsumerBg")]
-        public async Task<IActionResult> StopMessageBrokerConsumerBg()
-        {
-            try
-            {
-                if (!_backgroundMessageBrokConsum.IsStarted)
-                {
-                    ModelState.AddModelError("StopMessageBrokerConsumerBg", "Listener already staopped !!!");
-                    return BadRequest(ModelState);
-                }
-
-                await _backgroundMessageBrokConsum.StopAsync(CancellationToken.None);
-                return Ok("Listener Stoping");
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "{Type}", "Ошибка в InputDataController/StopMessageBrokerConsumerBg");
-                throw;
-            }
-        }
-
-
-
         [HttpPost("SendData4Devices")]
         public async Task<IActionResult> SendData4Devices([FromBody] IReadOnlyList<InputData<AdInputTypeDto>> inputDatasDto)
         {
@@ -387,19 +311,6 @@ namespace WebApiSwc.Controllers
                 return Result.Failure<(DataAction, Command4Device)>("Command4Device Error Parse");
             }
             return Result.Ok((dataActionParsed, commandParse));
-        }
-
-
-
-        /// <summary>
-        /// helthCheck по адресу api/InputData/SendDataXml4Devices
-        /// Нужно для Клиентского ПО, для поднятия флага ISConnect 
-        /// </summary>
-        // GET api/InputData/SendDataXml4Devices
-        [HttpGet("SendDataXmlMultipart4Devices")]
-        public IActionResult SendDataXml4DevicesGet()
-        {
-            return Ok();
         }
 
         #endregion

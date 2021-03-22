@@ -16,6 +16,11 @@ namespace Domain.InputDataModel.Base.Response.ResponseValidators
 
         public override BaseResponseInfo Validate(byte[] arr)
         {
+            if (arr == null)
+            {
+                var nullData = StringRepresentation.CreateNull();
+                return new EqualResponseInfo(nullData, ExpectedData);
+            }
             var realData = StringRepresentation.Create(arr, ExpectedData.Format);
             return new EqualResponseInfo(realData, ExpectedData);
         }

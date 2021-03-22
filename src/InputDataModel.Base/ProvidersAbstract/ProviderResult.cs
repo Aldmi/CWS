@@ -2,6 +2,7 @@
 using System.IO;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.Response.ResponseInfos;
+using Domain.InputDataModel.Base.Response.ResponseValidators;
 using Infrastructure.Transport.Base.DataProvidert;
 using Shared.Extensions;
 using Shared.Helpers;
@@ -66,6 +67,7 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
             ResponseInfo = respInfo;
             return IsOutDataValid;
         }
+
         #endregion
 
 

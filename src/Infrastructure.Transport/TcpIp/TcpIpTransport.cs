@@ -101,6 +101,7 @@ namespace Infrastructure.Transport.TcpIp
                 }
                 catch (TimeoutException)
                 {
+                    dataProvider.SetDataByte(null);
                     StatusDataExchange = StatusDataExchange.EndWithTimeout;
                     return StatusDataExchange;
                 }
