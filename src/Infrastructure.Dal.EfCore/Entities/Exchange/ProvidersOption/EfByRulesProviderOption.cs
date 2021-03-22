@@ -26,6 +26,7 @@ namespace Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption
         public int StartPosition { get; set; }               
         public int Count { get; set; }     
         public int BatchSize { get; set; }
+        public ViewRuleMode Mode { get; set; }
         public List<EfUnitOfSendingOption> UnitOfSendings { get; set; }
     }
 
@@ -69,4 +70,15 @@ namespace Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption
     }
 
     public class EfManualEkrimValidatorOption { }
+
+
+    /// <summary>
+    /// Режим работы ViewRule
+    /// </summary>
+    public enum ViewRuleMode  //TODO: в какой слой вынести?
+    {
+        Deprecated,
+        Init,
+        LongWork
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Domain.InputDataModel.Base.ProvidersOption;
+using Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption;
 using Shared.Types;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption
@@ -25,6 +26,7 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption.ProvidersOption
         public int StartPosition { get; set; }               
         public int Count { get; set; }                      
         public int BatchSize { get; set; }
+        public ViewRuleMode Mode { get; set; }
         public List<UnitOfSendingOptionDto> UnitOfSendings { get; set; } 
     }
 

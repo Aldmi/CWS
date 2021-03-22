@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
+using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.Response.ResponseValidators;
+using Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption;
 using Shared.Types;
 
 namespace Domain.InputDataModel.Base.ProvidersOption
@@ -13,13 +15,35 @@ namespace Domain.InputDataModel.Base.ProvidersOption
     }
 
 
-    public class RuleOption
+    public class RuleOption : IEquatable<RuleOption>
     {
         public string Name { get; set; }                    //Имя правила, или название команды вида Command_On, Command_Off, Command_Restart, Command_Clear       
         public string AddressDevice { get; set; }           //Адресс ус-ва.
         public AgregateFilter AgregateFilter { get; set; }  //Список фильтров, результат которых, объединяется в 1 список
         public string DefaultItemJson { get; set; }         //Элемент по умолчанию (заменяет null на указанный тип в JSON). "{}" - дефолтный конструктор типа
         public List<ViewRuleOption> ViewRules { get; set; } //Правила отображения. TakeItems элементов распределяются между правилами для отображения. Например первые 3 элемента отображаются первым правилом, остальные вторым правилом.
+
+        #region IEquatable
+        public bool Equals(RuleOption other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Name == other.Name && AddressDevice == other.AddressDevice;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((RuleOption) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, AddressDevice);
+        }
+        #endregion
     }
 
 
@@ -32,11 +56,11 @@ namespace Domain.InputDataModel.Base.ProvidersOption
         public int StartPosition { get; set; }                  //Начальная позиция элемента из списка
         public int Count { get; set; }                          //Конечная позиция элемента из списка
         public int BatchSize { get; set; }                      //Разбить отправку на порции по BatchSize.
+        public ViewRuleMode Mode { get; set; }                 //Режим работы ViewRule.
         public List<UnitOfSendingOption> UnitOfSendings { get; set; } //Список Единиц отправки данных
 
         //DEBUG-------------------------
         public RequestOption RequestOption => UnitOfSendings[0].RequestOption; //DEBUG for test DEL!!!
-        public ResponseOption ResponseOption => UnitOfSendings[0].ResponseOption;//DEBUG for test DEL!!!
         //DEBUG----------------------------
     }
 

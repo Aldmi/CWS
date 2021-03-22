@@ -10,13 +10,16 @@ using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
 using Domain.InputDataModel.Shared.StringInseartService.InlineInseart;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
+using Infrastructure.Dal.EfCore.Entities.Exchange.ProvidersOption;
 using Serilog;
 using Shared.Extensions;
 
 namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 {
     /// <summary>
-    /// Правило отображения порции даных
+    /// Правило отображения порции даных.
+    /// Если в ViewRuleOption указан режим работы Init, То такой ViewRule Выполнится только 1 раз, сброс этого состояни на дефолтный (из ViewRuleOption) возможен внешним кодом, вызвав метод ResetMode2Default()
+    /// Режимы Deprecated и LongWork, указанные ViewRuleOption, в процессе работы не меняются. 
     /// </summary>
     public class ViewRule<TIn>
     {
@@ -29,6 +32,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
 
         #region prop
         public ViewRuleOption GetCurrentOption { get; }
+        public ViewRuleMode CurrentMode { get; private set; }
         #endregion
 
 
@@ -37,6 +41,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         private ViewRule(ViewRuleOption option, IReadOnlyList<UnitOfSending<TIn>> uosList, ILogger logger)
         {
             GetCurrentOption = option;
+            CurrentMode = GetCurrentOption.Mode;
             _uosList = uosList;
             _logger = logger;
         }
@@ -90,8 +95,18 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
                     }
                 }
             }
+            if (CurrentMode == ViewRuleMode.Init)
+            {
+                CurrentMode = ViewRuleMode.Deprecated;
+            }
         }
 
+
+        /// <summary>
+        /// Сбросить режим на Дефолтный.
+        /// </summary>
+        public void ResetMode2Default() => CurrentMode = GetCurrentOption.Mode;
+        
 
         /// <summary>
         /// Вернуть элементы из диапазона укзанного в правиле отображения
@@ -127,4 +142,5 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         }
         #endregion
     }
+
 }
