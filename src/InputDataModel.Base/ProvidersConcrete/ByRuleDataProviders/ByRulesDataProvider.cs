@@ -125,6 +125,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                         if (filtredItems == null || !filtredItems.Any())
                             continue;
 
+                        TryResetViewRulesMode2Default(rule);
                         await SendDataAsync(rule, filtredItems, ct);
                         continue;
 
@@ -138,16 +139,25 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
 
         /// <summary>
+        /// Для нового правила (выбранного agregateFilter фильтром) сбросим режим всех ViewRules, на дефолтный (указанный в настрйоках)
+        /// Это позволит выполнять "Init" правила 1 раз.
+        /// </summary>
+        private void TryResetViewRulesMode2Default(Rule<TIn> rule)
+        {
+            if (_changeRuleTracker.CheckChange(rule))
+            {
+                rule.ResetViewRulesMode2Default();
+            }
+        }
+
+
+
+        /// <summary>
         /// Отобразить данные через коллекцию ViewRules у правила.
         /// </summary>
         private async Task SendDataAsync(Rule<TIn> rule, List<TIn> takesItems, CancellationToken ct)
         {
-            if (_changeRuleTracker.CheckChange(rule))
-            {
-                //Для нового правила (выбранного agregateFilter фильтром) сбросим режим всех ViewRules, на дефолтный (указанный в настрйоках)
-                //Это позволит выполнять "Init" правила 1 раз.
-                rule.ResetViewRulesMode2Default();
-            }
+
 
             if (takesItems != null && takesItems.Any())
             {

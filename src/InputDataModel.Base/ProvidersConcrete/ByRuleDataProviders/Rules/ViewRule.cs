@@ -41,7 +41,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         private ViewRule(ViewRuleOption option, IReadOnlyList<UnitOfSending<TIn>> uosList, ILogger logger)
         {
             GetCurrentOption = option;
-            CurrentMode = GetCurrentOption.Mode;
+            ResetMode2Default();
             _uosList = uosList;
             _logger = logger;
         }
@@ -105,7 +105,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules
         /// <summary>
         /// Сбросить режим на Дефолтный.
         /// </summary>
-        public void ResetMode2Default() => CurrentMode = GetCurrentOption.Mode;
+        public void ResetMode2Default() => CurrentMode = GetCurrentOption.Mode ?? ViewRuleMode.LongWork;
         
 
         /// <summary>

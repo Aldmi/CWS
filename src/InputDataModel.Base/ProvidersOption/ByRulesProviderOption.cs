@@ -56,7 +56,7 @@ namespace Domain.InputDataModel.Base.ProvidersOption
         public int StartPosition { get; set; }                  //Начальная позиция элемента из списка
         public int Count { get; set; }                          //Конечная позиция элемента из списка
         public int BatchSize { get; set; }                      //Разбить отправку на порции по BatchSize.
-        public ViewRuleMode Mode { get; set; }                 //Режим работы ViewRule.
+        public ViewRuleMode? Mode { get; set; }                 //Режим работы ViewRule.
         public List<UnitOfSendingOption> UnitOfSendings { get; set; } //Список Единиц отправки данных
 
         //DEBUG-------------------------
