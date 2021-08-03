@@ -24,6 +24,7 @@ namespace Domain.InputDataModel.Autodictor.Model
         public Station StationArrival { get; private set; }
         public Station Stations { get; private set; }                        //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
         public Station StationsCut { get; private set; }                     //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
+        public Station StationsCutInv { get; private set; }                  //ФОРМИРУЕТСЯ при маппинге из StationArrival - StationDeparture
         public Station StationWhereFrom { get; private set; }                //ближайшая станция после текущей
         public Station StationWhereTo { get; private set; }                 //ближайшая станция после текущей
         public DirectionStation DirectionStation { get; private set; }       //Направление.
@@ -76,6 +77,7 @@ namespace Domain.InputDataModel.Autodictor.Model
             Note = note;
             DaysFollowing = daysFollowing;
             StationsCut = CreateStationsCut(StationArrival, StationDeparture, Event);
+            StationsCutInv = CreateStationsCutInv(StationArrival, StationDeparture, Event);
             Stations = CreateStations(StationArrival, StationDeparture);
             Emergency = emergency;
             Category = category;
@@ -135,6 +137,38 @@ namespace Domain.InputDataModel.Autodictor.Model
                     0 => stArrivalName,//"ПРИБ"
                     1 => stDepartName,//"ОТПР"
                     2 => $"{stDepartName}-{stArrivalName}",//"СТОЯНКА"
+                    _ => string.Empty
+                };
+                return stations;
+            }
+
+            var newStation = new Station
+            {
+                NameRu = CreateStationCutName(arrivalSt?.NameRu, departureSt?.NameRu),
+                NameEng = CreateStationCutName(arrivalSt?.NameEng, departureSt?.NameEng),
+                NameCh = CreateStationCutName(arrivalSt?.NameCh, departureSt?.NameCh)
+            };
+            return newStation;
+        }
+
+
+        private static Station CreateStationsCutInv(Station arrivalSt, Station departureSt, EventTrain ev)
+        {
+            if (ev == null)
+                return null;
+
+            string CreateStationCutName(string stArrivalName, string stDepartName)
+            {
+                if (!ev.Num.HasValue)
+                    return string.Empty;
+
+                stArrivalName ??= string.Empty;
+                stDepartName ??= string.Empty;
+                var stations = ev.Num switch
+                {
+                    0 => stArrivalName,//"ПРИБ"
+                    1 => stDepartName,//"ОТПР"
+                    2 => $"{stArrivalName}-{stDepartName}",//"СТОЯНКА"
                     _ => string.Empty
                 };
                 return stations;

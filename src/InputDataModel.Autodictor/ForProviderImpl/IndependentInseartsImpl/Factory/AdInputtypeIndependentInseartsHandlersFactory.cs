@@ -21,6 +21,7 @@ namespace Domain.InputDataModel.Autodictor.ForProviderImpl.IndependentInseartsIm
                 "Addition" => new AdditionInsH(insertModel),
                 "Stations" => new StationsInsH(insertModel),
                 "StationsCut" => new StationsCutInsH(insertModel),
+                "StationsCutInv" => new StationsCutInvInsH(insertModel),
                 "StationArrival" => new StationArrivalInsH(insertModel),
                 "StationDeparture" => new StationDepartureInsH(insertModel),
                 "Note" => new NoteInsH(insertModel),
