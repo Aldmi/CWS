@@ -29,4 +29,8 @@
     <ProjectReference Include="..\WebClientProduser\Infrastructure.Produser.WebClientProduser.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Paged4InData" />
+  </ItemGroup>
+
 </Project>

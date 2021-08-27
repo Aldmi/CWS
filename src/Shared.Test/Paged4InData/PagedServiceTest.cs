@@ -1,0 +1,38 @@
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
+using System.Threading.Tasks;
+using Shared.Paged;
+using Xunit;
+
+namespace Shared.Test.Paged4InData
+{
+    public class PagedServiceTest
+    {
+        [Fact]
+        public async Task CalculateNextPageTest()
+        {
+            var pagedService = new PagedService<int>(new PagedOption {Count = 3, Time = 200});
+            pagedService.NextPageRx.Subscribe(res =>
+            {
+                Debug.WriteLine(res.ToArray().Select(v=>v.ToString()).Aggregate((s1,s2)=> $"{s1} {s2}"));
+            });
+            
+            
+            var bufer = Enumerable.Range(1, 10).ToArray();
+            pagedService.SetData(bufer);
+            await Task.Delay(2000);
+            Debug.WriteLine("----------------------------");
+            
+            bufer = Enumerable.Range(10, 5).ToArray();
+            pagedService.SetData(bufer);
+            await Task.Delay(2000);
+            Debug.WriteLine("----------------------------");
+            
+            
+            await Task.Delay(-1);
+        }
+    }
+}
