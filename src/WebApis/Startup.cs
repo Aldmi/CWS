@@ -146,6 +146,7 @@ namespace WebApiSwc
                         builder.RegisterModule(new ProduserUnionAutofacModule<AdInputType>());
                         builder.RegisterModule(new BlStorageAutofacModule<AdInputType>());
                         builder.RegisterModule(new BlBuildAutofacModule<AdInputType>());
+                        builder.RegisterModule(new PagedAutofacModule<AdInputType>());
                         builder.RegisterModule(new MediatorsAutofacModule<AdInputType>());
                         builder.RegisterModule(new ExchangeAutofacModule<AdInputType>());
                         builder.RegisterModule(new DeviceAutofacModule<AdInputType>());

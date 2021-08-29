@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Infrastructure.Dal.EfCore.Entities.MiddleWare;
+using Infrastructure.Dal.EfCore.Entities.Paging;
 using Innofactor.EfCoreJsonValueConverter;
 
 namespace Infrastructure.Dal.EfCore.Entities.Device
@@ -41,5 +42,8 @@ namespace Infrastructure.Dal.EfCore.Entities.Device
 
         [JsonField]
         public EfMiddleWareMediatorOption MiddleWareMediator { get; set; }
+        
+        [JsonField]
+        public EfPagedOption Paging { get; set; }
     }
 }

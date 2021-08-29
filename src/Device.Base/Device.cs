@@ -18,6 +18,7 @@ using Infrastructure.Transport.Base.RxModel;
 using Newtonsoft.Json;
 using Serilog;
 using Shared.Extensions;
+using Shared.Paged;
 using DeviceOption = Domain.Device.Repository.Entities.DeviceOption;
 
 
@@ -32,14 +33,18 @@ namespace Domain.Device
     {
         #region field
         private readonly Func<MiddleWareMediatorOption, Owned<MiddlewareInvokeService<TIn>>> _middlewareInvokeServiceFactory;  //MiddlewareInvokeService пересоздается динамически, поэтому стару версию нужно уничтожать через Owned
+        private readonly Func<PagedOption, Owned<PagedService<TIn>>> _pagedServiceFactory;
         private readonly ProduserAdapter<TIn> _produserAdapter;
         private readonly ILogger _logger;
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
         private readonly List<IDisposable> _disposeExchangesCycleBehaviorEventHandlers = new List<IDisposable>();
-        private IDisposable _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler;
         private readonly AllExchangesResponseAnaliticService _allCycleBehaviorResponseAnalitic;
+        
+        private IDisposable _disposeMiddlewareInvokeServiceInvokeIsCompleteLifeTime;
         private readonly IDisposable _allCycleBehaviorResponseAnaliticOwner;
         private IDisposable _middlewareInvokeServiceOwner;
+        private IDisposable _pagedServiceOwner;
+        private IDisposable _pagedServiceNextPageRxLifeTime;
         #endregion
 
 
@@ -47,9 +52,10 @@ namespace Domain.Device
         #region prop
         public DeviceOption Option { get; }
         public List<IExchange<TIn>> Exchanges { get; }
+        public PagedService<TIn> PagedService { get; private set; }
         public MiddlewareInvokeService<TIn> MiddlewareInvokeService { get; private set; }
-
         public string ProduserUnionKey => Option.ProduserUnionKey;
+        
         /// <summary>
         /// Настройки MiddleWareMediator сервиса.
         /// </summary>
@@ -62,6 +68,19 @@ namespace Domain.Device
                 CreateMiddleWareInDataByOption(Option.MiddleWareMediator);
             }
         }
+        
+        /// <summary>
+        /// Настройки MiddleWareMediator сервиса.
+        /// </summary>
+        public PagedOption PagedOption
+        {
+            get => Option.Paging;
+            set
+            {
+                Option.Paging = value;
+                CreatePagedServiceByOption(Option.Paging);
+            }
+        }
         #endregion
 
 
@@ -70,22 +89,27 @@ namespace Domain.Device
         public Device(DeviceOption option,
                       IEnumerable<IExchange<TIn>> exchanges,
                       Func<(string, string), Func<List<ExchangeFullState<TIn>>>, ProduserAdapter<TIn>> produserAdapterFactory,
-                      ILogger logger,
                       Func<MiddleWareMediatorOption, Owned<MiddlewareInvokeService<TIn>>> middlewareInvokeServiceFactory,
-                      Func<IEnumerable<string>, Owned<AllExchangesResponseAnaliticService>> allExchangesResponseAnaliticServiceFactory)
+                      Func<PagedOption, Owned<PagedService<TIn>>> pagedServiceFactory,
+                      Func<IEnumerable<string>, Owned<AllExchangesResponseAnaliticService>> allExchangesResponseAnaliticServiceFactory,
+                      ILogger logger)
         {
             Option = option;
             Exchanges = exchanges.ToList();
             _middlewareInvokeServiceFactory = middlewareInvokeServiceFactory;
-            _produserAdapter= produserAdapterFactory((Option.ProduserUnionKey, Option.Name), () => Exchanges.Select(exch => exch.FullState).ToList());
-            _logger = logger;
+            _pagedServiceFactory = pagedServiceFactory;
 
+            _produserAdapter= produserAdapterFactory((Option.ProduserUnionKey, Option.Name), () => Exchanges.Select(exch => exch.FullState).ToList());
+            
             var owner = allExchangesResponseAnaliticServiceFactory(Exchanges.Select(exch => exch.KeyExchange));
             _allCycleBehaviorResponseAnalitic = owner.Value;
             _allCycleBehaviorResponseAnalitic.AllExchangeAnaliticDoneRx.Subscribe(AllExhangeAnaliticDoneRxEventHandler);
             _allCycleBehaviorResponseAnaliticOwner = owner;
 
             CreateMiddleWareInDataByOption(Option.MiddleWareMediator);
+            CreatePagedServiceByOption(Option.Paging);
+            
+            _logger = logger;
         }
         #endregion
 
@@ -98,7 +122,7 @@ namespace Domain.Device
         /// <param name="option">Опции. Если option == null, то ранее созданный MiddlewareInvokeService уничтожается</param>
         private void CreateMiddleWareInDataByOption(MiddleWareMediatorOption option)
         {
-            _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler?.Dispose();
+            _disposeMiddlewareInvokeServiceInvokeIsCompleteLifeTime?.Dispose();
             _middlewareInvokeServiceOwner?.Dispose();
             MiddlewareInvokeService = null;
             if (option != null)
@@ -107,11 +131,30 @@ namespace Domain.Device
                 var owner = _middlewareInvokeServiceFactory(option);
                 MiddlewareInvokeService = owner.Value;
                 _middlewareInvokeServiceOwner = owner;
-                _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler = MiddlewareInvokeService?.InvokeIsCompleteRx.Subscribe(MiddlewareInvokeIsCompleteRxEventHandler);
+                _disposeMiddlewareInvokeServiceInvokeIsCompleteLifeTime = MiddlewareInvokeService?.InvokeIsCompleteRx.Subscribe(MiddlewareInvokeIsCompleteRxEventHandler);
+            }
+        }
+        
+        
+        /// <summary>
+        /// Создать PagedService из опций.
+        /// </summary>
+        /// <param name="option">Опции. Если option == null, то ранее созданный PagedService уничтожается</param>
+        private void CreatePagedServiceByOption(PagedOption option)
+        {
+            _pagedServiceNextPageRxLifeTime?.Dispose();
+            _pagedServiceOwner?.Dispose();
+            PagedService = null;
+            if (option != null)
+            {
+                var owner = _pagedServiceFactory(option);
+                PagedService = owner.Value;
+                _pagedServiceOwner = owner;
+                _pagedServiceNextPageRxLifeTime = PagedService?.NextPageRx.Subscribe(PagedServiceOnNextEventHandler);
             }
         }
 
-
+        
         /// <summary>
         /// Подписка на события от обменов.
         /// </summary>
@@ -439,7 +482,16 @@ namespace Domain.Device
                 await _produserAdapter.SendInfoAsync(messageObj);
         }
 
-
+        /// <summary>
+        /// Обработчик события получения данных от сервиса Paging.
+        /// </summary>
+        /// <param name="nextPage"></param>
+        private void PagedServiceOnNextEventHandler(Memory<TIn> nextPage)
+        {
+            //throw new NotImplementedException();
+        }
+        
+        
         /// <summary>
         /// Обработчик события получения данных после подготовки в Middleware.
         /// </summary>
@@ -465,11 +517,14 @@ namespace Domain.Device
         public void Dispose()
         {
             _middlewareInvokeServiceOwner?.Dispose();
+            _disposeMiddlewareInvokeServiceInvokeIsCompleteLifeTime?.Dispose();
             _allCycleBehaviorResponseAnaliticOwner.Dispose();
+            _pagedServiceOwner?.Dispose();
+            _pagedServiceNextPageRxLifeTime?.Dispose();
+            
             UnsubscrubeOnExchangesEvents();
             UnsubscrubeOnProdusersEvents();
             UnsubscrubeOnExchangesCycleBehaviorEvents();
-            _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler?.Dispose();
         }
         #endregion
     }
