@@ -46,6 +46,9 @@ namespace Shared.Paged
 
         private Memory<T> CalculateNextPage()
         {
+            if (_bufer.IsEmpty)
+                return _bufer;
+            
             var count = Option.Count;
             if (_currentPosition + Option.Count >= _bufer.Length)
             {

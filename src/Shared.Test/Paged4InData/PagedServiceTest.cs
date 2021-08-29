@@ -17,10 +17,10 @@ namespace Shared.Test.Paged4InData
             var pagedService = new PagedService<int>(new PagedOption {Count = 3, Time = 200});
             pagedService.NextPageRx.Subscribe(res =>
             {
-                Debug.WriteLine(res.ToArray().Select(v=>v.ToString()).Aggregate((s1,s2)=> $"{s1} {s2}"));
+                Debug.WriteLine(res.ToArray().Select(v => v.ToString()).Aggregate((s1, s2) => $"{s1} {s2}"));
             });
-            
-            
+
+
             var bufer = Enumerable.Range(1, 10).ToArray();
             pagedService.SetData(bufer);
             await Task.Delay(2000);
@@ -31,7 +31,72 @@ namespace Shared.Test.Paged4InData
             await Task.Delay(2000);
             Debug.WriteLine("----------------------------");
             
-            
+            await Task.Delay(-1);
+        }
+
+
+        [Fact]
+        public async Task CalculateNextPage_Empty_SetData_Test()
+        {
+            var pagedService = new PagedService<int>(new PagedOption {Count = 3, Time = 2000});
+            pagedService.NextPageRx.Subscribe(res =>
+            {
+                if (res.IsEmpty)
+                    Debug.WriteLine("IsEmpty");
+                else
+                {
+                    Debug.WriteLine(res.ToArray().Select(v => v.ToString()).Aggregate((s1, s2) => $"{s1} {s2}"));
+                }
+            });
+
+
+            var bufer = Enumerable.Range(1, 10).ToArray();
+            pagedService.SetData(bufer);
+            await Task.Delay(1000);
+            //Debug.WriteLine("----------------------------");
+
+            bufer = Enumerable.Range(1, 0).ToArray();
+            pagedService.SetData(bufer);
+            //await Task.Delay(2000);
+            // Debug.WriteLine("----------------------------");
+
+
+            await Task.Delay(-1);
+        }
+
+
+        [Fact]
+        public async Task CalculateNextPage_Null_SetData_Test()
+        {
+            var pagedService = new PagedService<int>(new PagedOption {Count = 3, Time = 200});
+            pagedService.NextPageRx.Subscribe(res =>
+            {
+                if (res.IsEmpty)
+                    Debug.WriteLine("IsEmpty");
+                else
+                {
+                    Debug.WriteLine(res.ToArray().Select(v => v.ToString()).Aggregate((s1, s2) => $"{s1} {s2}"));
+                }
+            });
+
+
+            var bufer = Enumerable.Range(1, 10).ToArray();
+            pagedService.SetData(bufer);
+            await Task.Delay(1000);
+            Debug.WriteLine("----------------------------");
+
+            bufer = null;
+            pagedService.SetData(bufer);
+            await Task.Delay(2000);
+            Debug.WriteLine("----------------------------");
+
+
+            bufer = Enumerable.Range(100, 5).ToArray();
+            pagedService.SetData(bufer);
+            await Task.Delay(1000);
+            Debug.WriteLine("-----------------------------");
+
+
             await Task.Delay(-1);
         }
     }
