@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Domain.Device.Paged4InData;
 using Domain.InputDataModel.Base.InData;
 using Shared.Paged;
 
@@ -8,7 +9,7 @@ namespace WebApiSwc.AutofacModules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<PagedService<TIn>>().InstancePerDependency();
+            builder.RegisterType<PagingInvokeService<TIn>>().InstancePerDependency();
         }
     }
 }

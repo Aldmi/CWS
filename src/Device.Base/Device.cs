@@ -6,6 +6,7 @@ using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
 using Domain.Device.MiddleWares4InData;
 using Domain.Device.MiddleWares4InData.Invokes;
+using Domain.Device.Paged4InData;
 using Domain.Device.Services;
 using Domain.Exchange;
 using Domain.Exchange.Enums;
@@ -32,8 +33,9 @@ namespace Domain.Device
     public class Device<TIn> : IDisposable where TIn : InputTypeBase
     {
         #region field
+        private readonly Func<PagedOption, Owned<PagingInvokeService<TIn>>> _pagedInvokeServiceFactory;
         private readonly Func<MiddleWareMediatorOption, Owned<MiddlewareInvokeService<TIn>>> _middlewareInvokeServiceFactory;  //MiddlewareInvokeService пересоздается динамически, поэтому стару версию нужно уничтожать через Owned
-        private readonly Func<PagedOption, Owned<PagedService<TIn>>> _pagedServiceFactory;
+        
         private readonly ProduserAdapter<TIn> _produserAdapter;
         private readonly ILogger _logger;
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
@@ -43,8 +45,8 @@ namespace Domain.Device
         private IDisposable _disposeMiddlewareInvokeServiceInvokeIsCompleteLifeTime;
         private readonly IDisposable _allCycleBehaviorResponseAnaliticOwner;
         private IDisposable _middlewareInvokeServiceOwner;
-        private IDisposable _pagedServiceOwner;
-        private IDisposable _pagedServiceNextPageRxLifeTime;
+        private IDisposable _pagedInvokeServiceOwner;
+        private IDisposable _pagedInvokeServiceNextPageRxLifeTime;
         #endregion
 
 
@@ -52,7 +54,7 @@ namespace Domain.Device
         #region prop
         public DeviceOption Option { get; }
         public List<IExchange<TIn>> Exchanges { get; }
-        public PagedService<TIn> PagedService { get; private set; }
+        public PagingInvokeService<TIn> PagedInvokeService { get; private set; }
         public MiddlewareInvokeService<TIn> MiddlewareInvokeService { get; private set; }
         public string ProduserUnionKey => Option.ProduserUnionKey;
         
@@ -70,7 +72,7 @@ namespace Domain.Device
         }
         
         /// <summary>
-        /// Настройки MiddleWareMediator сервиса.
+        /// Настройки Paging сервиса.
         /// </summary>
         public PagedOption PagedOption
         {
@@ -89,16 +91,16 @@ namespace Domain.Device
         public Device(DeviceOption option,
                       IEnumerable<IExchange<TIn>> exchanges,
                       Func<(string, string), Func<List<ExchangeFullState<TIn>>>, ProduserAdapter<TIn>> produserAdapterFactory,
+                      Func<PagedOption, Owned<PagingInvokeService<TIn>>> pagedInvokeServiceFactory,
                       Func<MiddleWareMediatorOption, Owned<MiddlewareInvokeService<TIn>>> middlewareInvokeServiceFactory,
-                      Func<PagedOption, Owned<PagedService<TIn>>> pagedServiceFactory,
                       Func<IEnumerable<string>, Owned<AllExchangesResponseAnaliticService>> allExchangesResponseAnaliticServiceFactory,
                       ILogger logger)
         {
             Option = option;
             Exchanges = exchanges.ToList();
+            _pagedInvokeServiceFactory = pagedInvokeServiceFactory;
             _middlewareInvokeServiceFactory = middlewareInvokeServiceFactory;
-            _pagedServiceFactory = pagedServiceFactory;
-
+            
             _produserAdapter= produserAdapterFactory((Option.ProduserUnionKey, Option.Name), () => Exchanges.Select(exch => exch.FullState).ToList());
             
             var owner = allExchangesResponseAnaliticServiceFactory(Exchanges.Select(exch => exch.KeyExchange));
@@ -142,15 +144,15 @@ namespace Domain.Device
         /// <param name="option">Опции. Если option == null, то ранее созданный PagedService уничтожается</param>
         private void CreatePagedServiceByOption(PagedOption option)
         {
-            _pagedServiceNextPageRxLifeTime?.Dispose();
-            _pagedServiceOwner?.Dispose();
-            PagedService = null;
+            _pagedInvokeServiceNextPageRxLifeTime?.Dispose();
+            _pagedInvokeServiceOwner?.Dispose();
+            PagedInvokeService = null;
             if (option != null)
             {
-                var owner = _pagedServiceFactory(option);
-                PagedService = owner.Value;
-                _pagedServiceOwner = owner;
-                _pagedServiceNextPageRxLifeTime = PagedService?.NextPageRx.Subscribe(PagedServiceOnNextEventHandler);
+                var owner = _pagedInvokeServiceFactory(option);
+                PagedInvokeService = owner.Value;
+                _pagedInvokeServiceOwner = owner;
+                _pagedInvokeServiceNextPageRxLifeTime = PagedInvokeService?.NextPageRx.Subscribe(PagedServiceOnNextEventHandler);
             }
         }
 
@@ -229,6 +231,11 @@ namespace Domain.Device
         /// <param name="inData">входные данные в обертке</param>
         public async Task Resive(InputData<TIn> inData)
         {
+            if (PagedInvokeService != null && inData.DataAction == DataAction.CycleAction)
+            {
+                PagedInvokeService.SetData(inData);
+            }
+            else
             if (MiddlewareInvokeService != null)
             {
                 switch (inData.DataAction)
@@ -482,11 +489,12 @@ namespace Domain.Device
                 await _produserAdapter.SendInfoAsync(messageObj);
         }
 
+        
         /// <summary>
         /// Обработчик события получения данных от сервиса Paging.
         /// </summary>
         /// <param name="nextPage"></param>
-        private void PagedServiceOnNextEventHandler(Memory<TIn> nextPage)
+        private void PagedServiceOnNextEventHandler(InputData<TIn> nextPage)
         {
             //throw new NotImplementedException();
         }
@@ -519,8 +527,8 @@ namespace Domain.Device
             _middlewareInvokeServiceOwner?.Dispose();
             _disposeMiddlewareInvokeServiceInvokeIsCompleteLifeTime?.Dispose();
             _allCycleBehaviorResponseAnaliticOwner.Dispose();
-            _pagedServiceOwner?.Dispose();
-            _pagedServiceNextPageRxLifeTime?.Dispose();
+            _pagedInvokeServiceOwner?.Dispose();
+            _pagedInvokeServiceNextPageRxLifeTime?.Dispose();
             
             UnsubscrubeOnExchangesEvents();
             UnsubscrubeOnProdusersEvents();
