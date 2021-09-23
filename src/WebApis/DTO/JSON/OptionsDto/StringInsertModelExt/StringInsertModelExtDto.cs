@@ -3,7 +3,7 @@ using Shared.Types;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers;
 using WebApiSwc.DTO.JSON.Shared;
 
-namespace WebApiSwc.DTO.JSON.InputTypesDto
+namespace WebApiSwc.DTO.JSON.OptionsDto.StringInsertModelExt
 {
     public class StringInsertModelExtDto
     {

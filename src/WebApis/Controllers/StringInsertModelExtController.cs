@@ -9,6 +9,7 @@ using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using WebApiSwc.DTO.JSON.InputTypesDto;
+using WebApiSwc.DTO.JSON.OptionsDto.StringInsertModelExt;
 
 namespace WebApiSwc.Controllers
 {

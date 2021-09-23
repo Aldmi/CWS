@@ -35,8 +35,8 @@ namespace WebApiSwc
 
         public static string GetVersion()
         {
-            const string version = "CWS Ver7.32";
-            return $"{version}  [03.08.2021]  [Relise. Add new Prop StationsCutInv]";
+            const string version = "CWS Ver7.42";
+            return $"{version}  [23.09.2021]  [Relise. Fix bug BorderSubString props add nullable definitions]";
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

@@ -41,7 +41,7 @@ namespace Shared.Test.Paged4InData
             var pagedService = new PagedService<int>(new PagedOption {Count = 3, Time = 2000});
             pagedService.NextPageRx.Subscribe(res =>
             {
-                if (res.IsEmpty)
+                if (!res.Any())
                     Debug.WriteLine("IsEmpty");
                 else
                 {
@@ -71,7 +71,7 @@ namespace Shared.Test.Paged4InData
             var pagedService = new PagedService<int>(new PagedOption {Count = 3, Time = 200});
             pagedService.NextPageRx.Subscribe(res =>
             {
-                if (res.IsEmpty)
+                if (!res.Any())
                     Debug.WriteLine("IsEmpty");
                 else
                 {
@@ -87,7 +87,7 @@ namespace Shared.Test.Paged4InData
 
             bufer = null;
             pagedService.SetData(bufer);
-            await Task.Delay(2000);
+            await Task.Delay(5000);
             Debug.WriteLine("----------------------------");
 
 

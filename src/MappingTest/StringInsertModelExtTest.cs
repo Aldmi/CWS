@@ -6,6 +6,7 @@ using Shared.Mathematic;
 using Shared.Types;
 using WebApiSwc.AutoMapperConfig;
 using WebApiSwc.DTO.JSON.InputTypesDto;
+using WebApiSwc.DTO.JSON.OptionsDto.StringInsertModelExt;
 using WebApiSwc.DTO.JSON.Shared;
 using Xunit;
 

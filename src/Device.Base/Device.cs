@@ -33,20 +33,20 @@ namespace Domain.Device
     public class Device<TIn> : IDisposable where TIn : InputTypeBase
     {
         #region field
-        private readonly Func<PagedOption, Owned<PagingInvokeService<TIn>>> _pagedInvokeServiceFactory;
+        private readonly Func<PagedOption, Owned<PagingInvokeService<TIn>>> _pagedInvokeServiceFactory;                        //PagingInvokeService пересоздается динамически, поэтому стару версию нужно уничтожать через Owned
         private readonly Func<MiddleWareMediatorOption, Owned<MiddlewareInvokeService<TIn>>> _middlewareInvokeServiceFactory;  //MiddlewareInvokeService пересоздается динамически, поэтому стару версию нужно уничтожать через Owned
         
         private readonly ProduserAdapter<TIn> _produserAdapter;
-        private readonly ILogger _logger;
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
         private readonly List<IDisposable> _disposeExchangesCycleBehaviorEventHandlers = new List<IDisposable>();
         private readonly AllExchangesResponseAnaliticService _allCycleBehaviorResponseAnalitic;
         
-        private IDisposable _disposeMiddlewareInvokeServiceInvokeIsCompleteLifeTime;
-        private readonly IDisposable _allCycleBehaviorResponseAnaliticOwner;
-        private IDisposable _middlewareInvokeServiceOwner;
-        private IDisposable _pagedInvokeServiceOwner;
-        private IDisposable _pagedInvokeServiceNextPageRxLifeTime;
+        private IDisposable? _disposeMiddlewareInvokeServiceInvokeIsCompleteLifeTime;
+        private readonly IDisposable? _allCycleBehaviorResponseAnaliticOwner;
+        private IDisposable? _middlewareInvokeServiceOwner;
+        private IDisposable? _pagedInvokeServiceOwner;
+        private IDisposable? _pagedInvokeServiceNextPageRxLifeTime;
+        private readonly ILogger _logger;
         #endregion
 
 
@@ -54,8 +54,8 @@ namespace Domain.Device
         #region prop
         public DeviceOption Option { get; }
         public List<IExchange<TIn>> Exchanges { get; }
-        public PagingInvokeService<TIn> PagedInvokeService { get; private set; }
-        public MiddlewareInvokeService<TIn> MiddlewareInvokeService { get; private set; }
+        public PagingInvokeService<TIn>? PagedInvokeService { get; private set; }
+        public MiddlewareInvokeService<TIn>? MiddlewareInvokeService { get; private set; }
         public string ProduserUnionKey => Option.ProduserUnionKey;
         
         /// <summary>
@@ -108,8 +108,8 @@ namespace Domain.Device
             _allCycleBehaviorResponseAnalitic.AllExchangeAnaliticDoneRx.Subscribe(AllExhangeAnaliticDoneRxEventHandler);
             _allCycleBehaviorResponseAnaliticOwner = owner;
 
-            CreateMiddleWareInDataByOption(Option.MiddleWareMediator);
             CreatePagedServiceByOption(Option.Paging);
+            CreateMiddleWareInDataByOption(Option.MiddleWareMediator);
             
             _logger = logger;
         }
@@ -122,7 +122,7 @@ namespace Domain.Device
         /// Создать MiddlewareInvokeService из опций.
         /// </summary>
         /// <param name="option">Опции. Если option == null, то ранее созданный MiddlewareInvokeService уничтожается</param>
-        private void CreateMiddleWareInDataByOption(MiddleWareMediatorOption option)
+        private void CreateMiddleWareInDataByOption(MiddleWareMediatorOption? option)
         {
             _disposeMiddlewareInvokeServiceInvokeIsCompleteLifeTime?.Dispose();
             _middlewareInvokeServiceOwner?.Dispose();
@@ -142,7 +142,7 @@ namespace Domain.Device
         /// Создать PagedService из опций.
         /// </summary>
         /// <param name="option">Опции. Если option == null, то ранее созданный PagedService уничтожается</param>
-        private void CreatePagedServiceByOption(PagedOption option)
+        private void CreatePagedServiceByOption(PagedOption? option)
         {
             _pagedInvokeServiceNextPageRxLifeTime?.Dispose();
             _pagedInvokeServiceOwner?.Dispose();
@@ -493,10 +493,29 @@ namespace Domain.Device
         /// <summary>
         /// Обработчик события получения данных от сервиса Paging.
         /// </summary>
-        /// <param name="nextPage"></param>
-        private void PagedServiceOnNextEventHandler(InputData<TIn> nextPage)
+        /// <param name="inData"></param>
+        private async void PagedServiceOnNextEventHandler(InputData<TIn> inData)
         {
-            //throw new NotImplementedException();
+            _logger.Information($"Данные УСПЕШНО подготовленны Paging для устройства: {Option.Name}  Count= '{inData.Data.Count}'");
+            if (MiddlewareInvokeService != null)
+            {
+                switch (inData.DataAction)
+                {
+                    case DataAction.OneTimeAction://однократные данные обрабатываем сразу.
+                        await MiddlewareInvokeService.InputSetInstantly(inData);
+                        break;
+                    case DataAction.CycleAction: //циклические данные поступают в обработку MiddlewareInvokeService.
+                        await MiddlewareInvokeService.InputSetByOptionMode(inData);
+                        break;
+                    case DataAction.CommandAction://Команды не проходят обработку через MiddlewareInvokeService
+                        await ResiveInExchange(inData);
+                        break;
+                }
+            }
+            else
+            {
+                await ResiveInExchange(inData);
+            }
         }
         
         
@@ -508,9 +527,9 @@ namespace Domain.Device
         {
             if (result.IsSuccess)
             {
+                _logger.Information($"Данные УСПЕШНО подготовленны MiddlewareInData для устройства: {Option.Name}");
                 var inData = result.Value;
                 await ResiveInExchange(inData);
-                _logger.Information($"Данные УСПЕШНО подготовленны MiddlewareInData для устройства: {Option.Name}");
             }
             else
             {
@@ -526,7 +545,7 @@ namespace Domain.Device
         {
             _middlewareInvokeServiceOwner?.Dispose();
             _disposeMiddlewareInvokeServiceInvokeIsCompleteLifeTime?.Dispose();
-            _allCycleBehaviorResponseAnaliticOwner.Dispose();
+            _allCycleBehaviorResponseAnaliticOwner?.Dispose();
             _pagedInvokeServiceOwner?.Dispose();
             _pagedInvokeServiceNextPageRxLifeTime?.Dispose();
             

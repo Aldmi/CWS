@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Timers;
+using MoreLinq.Extensions;
 using Shared.Extensions;
 
 namespace Shared.Paged
@@ -9,9 +12,9 @@ namespace Shared.Paged
     public class PagedService<T> : IDisposable
     {
         private readonly Timer _timerInvoke;
-        private readonly Subject<Memory<T>> _nextPageSubj = new Subject<Memory<T>>();
+        private readonly Subject<T[]> _nextPageSubj = new Subject<T[]>();
         private int _currentPosition;
-        private Memory<T> _bufer;
+        private T[]? _bufer;
 
         
         public PagedService(PagedOption option)
@@ -27,13 +30,13 @@ namespace Shared.Paged
 
         
         public PagedOption Option { get; }
-        public IObservable<Memory<T>> NextPageRx => _nextPageSubj.AsObservable();
+        public IObservable<T[]> NextPageRx => _nextPageSubj.AsObservable();
 
 
         
-        public void SetData(Memory<T> data)
+        public void SetData(T[]? data)
         {
-            var compareRes = data.Compare(_bufer);
+            var compareRes =  ObjectExtensions.Compare(data, _bufer);
             if (compareRes.IsFailure)
             {
                 _bufer = data;
@@ -44,9 +47,12 @@ namespace Shared.Paged
         }
 
 
-        private Memory<T> CalculateNextPage()
+        private T[]? CalculateNextPage()
         {
-            if (_bufer.IsEmpty)
+            if (_bufer == null)
+                return new T[] { };
+            
+            if (!_bufer.Any())
                 return _bufer;
             
             var count = Option.Count;
@@ -54,7 +60,7 @@ namespace Shared.Paged
             {
                 count = _bufer.Length - _currentPosition;
             }
-            var nextPageMem= _bufer.Slice(_currentPosition, count);
+            var nextPageMem= _bufer.Slice(_currentPosition, count).ToArray();
             _currentPosition += nextPageMem.Length;
             if (_currentPosition == _bufer.Length)
             {

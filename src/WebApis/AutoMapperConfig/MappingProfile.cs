@@ -26,8 +26,10 @@ using WebApiSwc.DTO.JSON.DevicesStateDto;
 using WebApiSwc.DTO.JSON.InputTypesDto;
 using WebApiSwc.DTO.JSON.OptionsDto.DeviceOption;
 using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
+using WebApiSwc.DTO.JSON.OptionsDto.InlineStringInsertModel;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption;
 using WebApiSwc.DTO.JSON.OptionsDto.ProduserUnionOption;
+using WebApiSwc.DTO.JSON.OptionsDto.StringInsertModelExt;
 using WebApiSwc.DTO.JSON.OptionsDto.TransportOption;
 using WebApiSwc.DTO.XML;
 

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApiSwc.DTO.JSON.InputTypesDto
+namespace WebApiSwc.DTO.JSON.OptionsDto.InlineStringInsertModel
 {
     public class InlineStringInsertModelDto
     {
