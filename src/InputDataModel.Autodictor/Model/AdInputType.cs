@@ -152,6 +152,9 @@ namespace Domain.InputDataModel.Autodictor.Model
         }
 
 
+        /// <summary>
+        /// Поменять местами станции относительно переменной StationsCut
+        /// </summary>>
         private static Station CreateStationsCutInv(Station arrivalSt, Station departureSt, EventTrain ev)
         {
             if (ev == null)
@@ -166,8 +169,8 @@ namespace Domain.InputDataModel.Autodictor.Model
                 stDepartName ??= string.Empty;
                 var stations = ev.Num switch
                 {
-                    0 => stArrivalName,//"ПРИБ"
-                    1 => stDepartName,//"ОТПР"
+                    0 => stDepartName,//"ОТПР"
+                    1 => stArrivalName,//"ПРИБ"
                     2 => $"{stArrivalName}-{stDepartName}",//"СТОЯНКА"
                     _ => string.Empty
                 };
