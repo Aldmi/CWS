@@ -126,7 +126,8 @@ namespace WebApiSwc.AutoMapperConfig
                 },
                 new Emergency(src.EmergencySituation),
                 new Category(src.TypeName),
-                null)
+                null,
+                new Route(src.Route))
             ).ForAllMembers(opt => opt.Ignore());
             #endregion
 
@@ -171,7 +172,8 @@ namespace WebApiSwc.AutoMapperConfig
                 src.DaysFollowing,
                 src.Emergency,
                 src.Category,
-                src.CreepingLine
+                src.CreepingLine,
+                src.Route
                 )).ForAllMembers(opt => opt.Ignore());
             #endregion
 

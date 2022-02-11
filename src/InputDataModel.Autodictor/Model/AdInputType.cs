@@ -43,6 +43,8 @@ namespace Domain.InputDataModel.Autodictor.Model
         public Category Category { get; private set; }                       //Категория поезда. ПРИГОРОД/ДАЛЬНИЕ/ПРОЧИЕ
 
         public CreepingLine CreepingLine { get; private set; }               //Бегущая строка 
+
+        public Route Route { get; private set; }                            //Маршрут 
         #endregion
 
 
@@ -52,7 +54,7 @@ namespace Domain.InputDataModel.Autodictor.Model
         TypeTrain trainType, VagonDirection vagonDirection, Station stationDeparture, Station stationArrival, Station stationWhereFrom,
         Station stationWhereTo, DirectionStation directionStation, DateTime? arrivalTime, DateTime? departureTime, DateTime? delayTime,
         DateTime? expectedTime, TimeSpan? stopTime, Addition addition, Note note, DaysFollowing daysFollowing, Emergency emergency,
-        Category category, CreepingLine creepingLine) : base(id)
+        Category category, CreepingLine creepingLine, Route route) : base(id)
         {
             ScheduleId = scheduleId;
             TrnId = trnId;
@@ -82,6 +84,7 @@ namespace Domain.InputDataModel.Autodictor.Model
             Emergency = emergency;
             Category = category;
             CreepingLine = creepingLine;
+            Route = route;
         }
 
 
@@ -92,7 +95,7 @@ namespace Domain.InputDataModel.Autodictor.Model
             DateTime? arrivalTime, DateTime? departureTime, Lang lang = Lang.Ru)
             : this(id,0, 0, lang, numberOfTrain, pathNumber, null, @event, trainType, null, stationDeparture, stationArrival,
                 null, null, null, arrivalTime, departureTime, null, DateTime.MinValue,
-                null, null, note, null, null, null, null)
+                null, null, note, null, null, null, null, null)
         {
            
         }
@@ -103,7 +106,7 @@ namespace Domain.InputDataModel.Autodictor.Model
         public AdInputType(int id, CreepingLine creepingLine, Lang lang = Lang.Ru)
             : this(id, 0, 0, lang, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, DateTime.MinValue,
-                null, null, null, null, null, null, creepingLine)
+                null, null, null, null, null, null, creepingLine, null)
         {
 
         }

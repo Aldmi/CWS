@@ -448,6 +448,8 @@ namespace Domain.Device
                 Formatting = Formatting.Indented,             //Отступы дочерних элементов 
                 NullValueHandling = NullValueHandling.Ignore  //Игнорировать пустые теги
             };
+            
+            //TODO: Не вызывать сериализатор, если текущий уровень _logger.Debug
             var jsonResp = JsonConvert.SerializeObject(responsePieceOfDataWrapper, settings);
             _logger.Debug($"TransportResponseChangeRxEventHandler.  jsonResp = {jsonResp} ");
         }

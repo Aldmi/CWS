@@ -31,6 +31,7 @@ namespace ByRulesInseartedTest.Test.Datas
                 null,
                 null,
                 null,
+                null,
                 null)
         };
 
@@ -59,6 +60,7 @@ namespace ByRulesInseartedTest.Test.Datas
                 null,
                 null,
                 null,
+                null,
                 null),
 
             new AdInputType(2, 1, 1, Lang.Ru, 
@@ -80,6 +82,7 @@ namespace ByRulesInseartedTest.Test.Datas
                 null,
                 new Addition{NameRu = String.Empty},
                 new Note {NameRu = "Станция 1,Станция 2,Станция 3,Станция 4,Станция 5,Станция 6,Станция 7"},
+                null,
                 null,
                 null,
                 null,
@@ -107,6 +110,7 @@ namespace ByRulesInseartedTest.Test.Datas
                 null,
                 null,
                 null,
+                null,
                 null),
 
             new AdInputType(4, 1, 1, Lang.Ru,
@@ -128,6 +132,7 @@ namespace ByRulesInseartedTest.Test.Datas
                 null,
                 new Addition{NameRu = String.Empty},
                 new Note {NameRu = "Станция 1,Станция 2,Станция 3,Станция 4,Станция 5,Станция 6,Станция 7"},
+                null,
                 null,
                 null,
                 null,
