@@ -82,8 +82,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.InputDataModel.Share
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.InputDataModel.OpcServer", "Domain.InputDataModel.OpcServer\Domain.InputDataModel.OpcServer.csproj", "{42F8BD68-B881-4F80-8F77-E1B921F84EE1}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{2572316F-3034-4C2E-9717-C31312EA601E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -247,12 +245,6 @@ Global
 		{42F8BD68-B881-4F80-8F77-E1B921F84EE1}.NoVariablesDefault|Any CPU.Build.0 = Release|Any CPU
 		{42F8BD68-B881-4F80-8F77-E1B921F84EE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42F8BD68-B881-4F80-8F77-E1B921F84EE1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2572316F-3034-4C2E-9717-C31312EA601E}.Debug|Any CPU.ActiveCfg = NoVariablesDefault
-		{2572316F-3034-4C2E-9717-C31312EA601E}.Debug|Any CPU.Build.0 = NoVariablesDefault
-		{2572316F-3034-4C2E-9717-C31312EA601E}.NoVariablesDefault|Any CPU.ActiveCfg = NoVariablesDefault
-		{2572316F-3034-4C2E-9717-C31312EA601E}.NoVariablesDefault|Any CPU.Build.0 = NoVariablesDefault
-		{2572316F-3034-4C2E-9717-C31312EA601E}.Release|Any CPU.ActiveCfg = NoVariablesDefault
-		{2572316F-3034-4C2E-9717-C31312EA601E}.Release|Any CPU.Build.0 = NoVariablesDefault
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
