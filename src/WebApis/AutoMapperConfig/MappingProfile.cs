@@ -127,7 +127,7 @@ namespace WebApiSwc.AutoMapperConfig
                 new Emergency(src.EmergencySituation),
                 new Category(src.TypeName),
                 null,
-                new Route(src.Route))
+                new Route(src.Route, src.RouteEng))
             ).ForAllMembers(opt => opt.Ignore());
             #endregion
 

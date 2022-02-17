@@ -30,6 +30,5 @@ rulr - ------                                     - выполняется всегда.
 
 
 
-Создание DockerImage командой build
-
+Создание DockerImage командой build:
 D:\Git\CWS\src> docker build -t webapiswc -f Dockerfile .

@@ -35,8 +35,8 @@ namespace WebApiSwc
 
         public static string GetVersion()
         {
-            const string version = "CWS Ver7.51";
-            return $"{version}  [11.02.2022]  [Relise. Add Route field in AdInputType And Move Dockerfile in root folder)]";
+            const string version = "CWS Ver7.52";
+            return $"{version}  [12.02.2022]  [Relise. Add in Route NameEng Field)]";
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

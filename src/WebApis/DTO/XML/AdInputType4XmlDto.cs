@@ -47,6 +47,7 @@ namespace WebApiSwc.DTO.XML
         public string Direction { get; set; }                         //0,1 - прибытие, отправление
         public string EvTrackNumber { get; set; }                     //Путь (как TrackNumber)
         public string Route { get; set; }                             //Маршрут (Станция1-Станция2-Станция3)
+        public string RouteEng { get; set; }                          //Маршрут Eng (Station1-Station2-Station3)
         //<State>0</State>
         public string VagonDirection { get; set; }                    //Нумерация вагонов в поезде. 0,1,2 - не задано, нумерация с головы, с хвоста
         //<Enabled>1</Enabled>

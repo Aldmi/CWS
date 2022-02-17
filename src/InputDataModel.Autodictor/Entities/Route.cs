@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Domain.InputDataModel.Autodictor.Entities
 {
@@ -10,18 +11,17 @@ namespace Domain.InputDataModel.Autodictor.Entities
     /// </summary>
     public class Route : TrainBase
     {
-        public Route(string rawValue)
+        public Route(string nameRu, string nameEng)
         {
-            RawValue = rawValue;
-            NameRu = rawValue;
-            Stations = RawValue?
-                .Split('-')
-                .Select(s => new Station{NameRu = s})
-                .ToList();
+            NameRu = nameRu;
+            NameEng = nameEng;
+            
+            // Stations = RawValue?
+            //     .Split('-')
+            //     .Select(s => new Station{NameRu = s})
+            //     .ToList();
         }
 
-        public string RawValue { get; }
-        
-        public IList<Station> Stations { get; }
+       // public IList<Station> Stations { get; }
     }
 }
