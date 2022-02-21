@@ -14,5 +14,6 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
         Task StartExchangePipelineAsync(InDataWrapper<TInput> inData, CancellationToken ct);                   //Запустить конвеер обмена. После окончания подготовки порции данных конвеером, срабатывает RaiseProviderResultRx.
         Subject<ProviderResult<TInput>> RaiseProviderResultRx { get; }                   //Событие отправки данных, в процессе обработки их конвеером.
         ProviderOption GetCurrentOption();                                           //Вернуть список текущих опций (опции могут быть изменены и отличатся от опций из БД)
+        void ResetProvider();                                                        // Текущее состояние провайдера сбросить на дефолтное 
     }
 }

@@ -138,6 +138,16 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         }
 
 
+        public void ResetProvider()
+        {
+            //Сбросить Mode для ViewRules
+            foreach (var rule in GetRules)
+            {
+                rule.ResetViewRulesMode2Default();
+            }
+        }
+
+
         /// <summary>
         /// Для нового правила (выбранного agregateFilter фильтром) сбросим режим всех ViewRules, на дефолтный (указанный в настрйоках)
         /// Это позволит выполнять "Init" правила 1 раз.
@@ -157,8 +167,6 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         /// </summary>
         private async Task SendDataAsync(Rule<TIn> rule, List<TIn> takesItems, CancellationToken ct)
         {
-
-
             if (takesItems != null && takesItems.Any())
             {
                 var ruleName = $"{rule.GetCurrentOption().Name}";

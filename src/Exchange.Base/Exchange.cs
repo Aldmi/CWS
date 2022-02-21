@@ -133,6 +133,11 @@ namespace Domain.Exchange
             _transportBackground = transportBackground;
            _disposeTransportIsOpenRx= _transport.IsOpenChangeRx.Subscribe(model =>
             {
+                if (model.IsOpen)
+                {
+                    //При открытии транспорта - сбросить состояние провайдера.
+                    _dataProvider.ResetProvider();
+                }
                 model.KeyExchange = KeyExchange; //Добавить к модели события Имя обмена.
                 IsOpenChangeTransportRx.OnNext(model);
             });

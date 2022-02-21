@@ -87,5 +87,10 @@ namespace Domain.InputDataModel.OpcServer.ForProviderImpl.ProvidersSpecial
         {
             throw new NotImplementedException();
         }
+
+        public void ResetProvider()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

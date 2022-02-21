@@ -118,6 +118,11 @@ namespace Domain.InputDataModel.Autodictor.ForProviderImpl.ProvidersSpecial
             throw new NotImplementedException();
         }
 
+        public void ResetProvider()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool SetCurrentOptionRt(ProviderOption optionNew)
         {
             throw new NotImplementedException();

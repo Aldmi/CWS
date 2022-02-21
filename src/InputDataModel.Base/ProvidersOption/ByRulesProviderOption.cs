@@ -111,7 +111,7 @@ namespace Domain.InputDataModel.Base.ProvidersOption
             }
         }
     }
-
+    
     public class LenghtResponseValidatorOption
     {
         public int ExpectedLenght { get; set; }
