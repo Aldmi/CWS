@@ -45,6 +45,11 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
         /// </summary>
         private Result<string> CalcSubString4Handle(string str)
         {
+            if (RequiredModel.Ext.Key == "keyNotFound")
+            {
+                return Result.Failure<string>($"для {RequiredModel.VarName} не найдено 'StringInsertModelExt'. Replacement= '{RequiredModel.Replacement}'");
+            }
+            
             //1. ЕСЛИ УКАЗАН BorderSubString => ВЫЧИСЛИМ ПОДСТРОКУ С ЕГО ПОМОЩЬЮ
             if (RequiredModel.Ext.BorderSubString != null)
             {

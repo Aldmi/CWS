@@ -7,17 +7,13 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart.Dep
 {
     /// <summary>
     /// Строка сначала преобразуется в массив байт по формату и возвращается длинна этого массива байт.
-    /// ДЛЯ ВЫЧИСЛЕНИЯ ПОЛНОЙ ДЛИННЫ В БАЙТАХ ПРИНЯТЫ НЕКОТОРОЕ ДОПУЩЕНИЯ длин в байтах:
-    /// длина адреса = 1
-    /// длинна самого NbyteFull = 1
-    /// длинна Crc = 1 
-    /// </summary>
+    /// </summary>t
     public class NbyteDepInsH : BaseDepInsH
     {
         public NbyteDepInsH(StringInsertModel requiredModel) : base(requiredModel) { }
 
 
-        /// <summary>
+        /// <summary>t
         /// </summary>
         /// <param name="borderedStr">строка для вычисления</param>
         /// <param name="format">формат преобразования строки к byte[]</param>
