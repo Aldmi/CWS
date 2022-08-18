@@ -34,5 +34,16 @@ namespace Domain.InputDataModel.Base.InData
         /// Команда
         /// </summary>
         public Command4Device Command { get; set; }
+
+
+        public InputData<TIn> CloneWithOutDataArray()=> new InputData<TIn>
+            {
+                DeviceName = DeviceName,
+                ExchangeName = ExchangeName,
+                DirectHandlerName = DirectHandlerName,
+                DataAction = DataAction,
+                Command = Command,
+            };
+        
     }
 }

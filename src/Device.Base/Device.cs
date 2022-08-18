@@ -6,7 +6,7 @@ using Autofac.Features.OwnedInstances;
 using CSharpFunctionalExtensions;
 using Domain.Device.MiddleWares4InData;
 using Domain.Device.MiddleWares4InData.Invokes;
-using Domain.Device.Repository.Entities.MiddleWareOption;
+using Domain.Device.Paged4InData;
 using Domain.Device.Services;
 using Domain.Exchange;
 using Domain.Exchange.Enums;
@@ -19,6 +19,7 @@ using Infrastructure.Transport.Base.RxModel;
 using Newtonsoft.Json;
 using Serilog;
 using Shared.Extensions;
+using Shared.Paged;
 using DeviceOption = Domain.Device.Repository.Entities.DeviceOption;
 
 
@@ -32,15 +33,20 @@ namespace Domain.Device
     public class Device<TIn> : IDisposable where TIn : InputTypeBase
     {
         #region field
+        private readonly Func<PagedOption, Owned<PagingInvokeService<TIn>>> _pagedInvokeServiceFactory;                        //PagingInvokeService пересоздается динамически, поэтому стару версию нужно уничтожать через Owned
         private readonly Func<MiddleWareMediatorOption, Owned<MiddlewareInvokeService<TIn>>> _middlewareInvokeServiceFactory;  //MiddlewareInvokeService пересоздается динамически, поэтому стару версию нужно уничтожать через Owned
+        
         private readonly ProduserAdapter<TIn> _produserAdapter;
-        private readonly ILogger _logger;
         private readonly List<IDisposable> _disposeExchangesEventHandlers = new List<IDisposable>();
         private readonly List<IDisposable> _disposeExchangesCycleBehaviorEventHandlers = new List<IDisposable>();
-        private IDisposable _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler;
         private readonly AllExchangesResponseAnaliticService _allCycleBehaviorResponseAnalitic;
-        private readonly IDisposable _allCycleBehaviorResponseAnaliticOwner;
-        private IDisposable _middlewareInvokeServiceOwner;
+        
+        private IDisposable? _disposeMiddlewareInvokeServiceInvokeIsCompleteLifeTime;
+        private readonly IDisposable? _allCycleBehaviorResponseAnaliticOwner;
+        private IDisposable? _middlewareInvokeServiceOwner;
+        private IDisposable? _pagedInvokeServiceOwner;
+        private IDisposable? _pagedInvokeServiceNextPageRxLifeTime;
+        private readonly ILogger _logger;
         #endregion
 
 
@@ -48,9 +54,10 @@ namespace Domain.Device
         #region prop
         public DeviceOption Option { get; }
         public List<IExchange<TIn>> Exchanges { get; }
-        public MiddlewareInvokeService<TIn> MiddlewareInvokeService { get; private set; }
-
+        public PagingInvokeService<TIn>? PagedInvokeService { get; private set; }
+        public MiddlewareInvokeService<TIn>? MiddlewareInvokeService { get; private set; }
         public string ProduserUnionKey => Option.ProduserUnionKey;
+        
         /// <summary>
         /// Настройки MiddleWareMediator сервиса.
         /// </summary>
@@ -63,6 +70,19 @@ namespace Domain.Device
                 CreateMiddleWareInDataByOption(Option.MiddleWareMediator);
             }
         }
+        
+        /// <summary>
+        /// Настройки Paging сервиса.
+        /// </summary>
+        public PagedOption PagedOption
+        {
+            get => Option.Paging;
+            set
+            {
+                Option.Paging = value;
+                CreatePagedServiceByOption(Option.Paging);
+            }
+        }
         #endregion
 
 
@@ -71,22 +91,27 @@ namespace Domain.Device
         public Device(DeviceOption option,
                       IEnumerable<IExchange<TIn>> exchanges,
                       Func<(string, string), Func<List<ExchangeFullState<TIn>>>, ProduserAdapter<TIn>> produserAdapterFactory,
-                      ILogger logger,
+                      Func<PagedOption, Owned<PagingInvokeService<TIn>>> pagedInvokeServiceFactory,
                       Func<MiddleWareMediatorOption, Owned<MiddlewareInvokeService<TIn>>> middlewareInvokeServiceFactory,
-                      Func<IEnumerable<string>, Owned<AllExchangesResponseAnaliticService>> allExchangesResponseAnaliticServiceFactory)
+                      Func<IEnumerable<string>, Owned<AllExchangesResponseAnaliticService>> allExchangesResponseAnaliticServiceFactory,
+                      ILogger logger)
         {
             Option = option;
             Exchanges = exchanges.ToList();
+            _pagedInvokeServiceFactory = pagedInvokeServiceFactory;
             _middlewareInvokeServiceFactory = middlewareInvokeServiceFactory;
+            
             _produserAdapter= produserAdapterFactory((Option.ProduserUnionKey, Option.Name), () => Exchanges.Select(exch => exch.FullState).ToList());
-            _logger = logger;
-
+            
             var owner = allExchangesResponseAnaliticServiceFactory(Exchanges.Select(exch => exch.KeyExchange));
             _allCycleBehaviorResponseAnalitic = owner.Value;
             _allCycleBehaviorResponseAnalitic.AllExchangeAnaliticDoneRx.Subscribe(AllExhangeAnaliticDoneRxEventHandler);
             _allCycleBehaviorResponseAnaliticOwner = owner;
 
+            CreatePagedServiceByOption(Option.Paging);
             CreateMiddleWareInDataByOption(Option.MiddleWareMediator);
+            
+            _logger = logger;
         }
         #endregion
 
@@ -97,9 +122,9 @@ namespace Domain.Device
         /// Создать MiddlewareInvokeService из опций.
         /// </summary>
         /// <param name="option">Опции. Если option == null, то ранее созданный MiddlewareInvokeService уничтожается</param>
-        private void CreateMiddleWareInDataByOption(MiddleWareMediatorOption option)
+        private void CreateMiddleWareInDataByOption(MiddleWareMediatorOption? option)
         {
-            _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler?.Dispose();
+            _disposeMiddlewareInvokeServiceInvokeIsCompleteLifeTime?.Dispose();
             _middlewareInvokeServiceOwner?.Dispose();
             MiddlewareInvokeService = null;
             if (option != null)
@@ -108,11 +133,30 @@ namespace Domain.Device
                 var owner = _middlewareInvokeServiceFactory(option);
                 MiddlewareInvokeService = owner.Value;
                 _middlewareInvokeServiceOwner = owner;
-                _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler = MiddlewareInvokeService?.InvokeIsCompleteRx.Subscribe(MiddlewareInvokeIsCompleteRxEventHandler);
+                _disposeMiddlewareInvokeServiceInvokeIsCompleteLifeTime = MiddlewareInvokeService?.InvokeIsCompleteRx.Subscribe(MiddlewareInvokeIsCompleteRxEventHandler);
+            }
+        }
+        
+        
+        /// <summary>
+        /// Создать PagedService из опций.
+        /// </summary>
+        /// <param name="option">Опции. Если option == null, то ранее созданный PagedService уничтожается</param>
+        private void CreatePagedServiceByOption(PagedOption? option)
+        {
+            _pagedInvokeServiceNextPageRxLifeTime?.Dispose();
+            _pagedInvokeServiceOwner?.Dispose();
+            PagedInvokeService = null;
+            if (option != null)
+            {
+                var owner = _pagedInvokeServiceFactory(option);
+                PagedInvokeService = owner.Value;
+                _pagedInvokeServiceOwner = owner;
+                _pagedInvokeServiceNextPageRxLifeTime = PagedInvokeService?.NextPageRx.Subscribe(PagedServiceOnNextEventHandler);
             }
         }
 
-
+        
         /// <summary>
         /// Подписка на события от обменов.
         /// </summary>
@@ -187,6 +231,11 @@ namespace Domain.Device
         /// <param name="inData">входные данные в обертке</param>
         public async Task Resive(InputData<TIn> inData)
         {
+            if (PagedInvokeService != null && inData.DataAction == DataAction.CycleAction)
+            {
+                PagedInvokeService.SetData(inData);
+            }
+            else
             if (MiddlewareInvokeService != null)
             {
                 switch (inData.DataAction)
@@ -399,6 +448,8 @@ namespace Domain.Device
                 Formatting = Formatting.Indented,             //Отступы дочерних элементов 
                 NullValueHandling = NullValueHandling.Ignore  //Игнорировать пустые теги
             };
+            
+            //TODO: Не вызывать сериализатор, если текущий уровень _logger.Debug
             var jsonResp = JsonConvert.SerializeObject(responsePieceOfDataWrapper, settings);
             _logger.Debug($"TransportResponseChangeRxEventHandler.  jsonResp = {jsonResp} ");
         }
@@ -440,7 +491,36 @@ namespace Domain.Device
                 await _produserAdapter.SendInfoAsync(messageObj);
         }
 
-
+        
+        /// <summary>
+        /// Обработчик события получения данных от сервиса Paging.
+        /// </summary>
+        /// <param name="inData"></param>
+        private async void PagedServiceOnNextEventHandler(InputData<TIn> inData)
+        {
+            _logger.Information($"Данные УСПЕШНО подготовленны Paging для устройства: {Option.Name}  Count= '{inData.Data.Count}'");
+            if (MiddlewareInvokeService != null)
+            {
+                switch (inData.DataAction)
+                {
+                    case DataAction.OneTimeAction://однократные данные обрабатываем сразу.
+                        await MiddlewareInvokeService.InputSetInstantly(inData);
+                        break;
+                    case DataAction.CycleAction: //циклические данные поступают в обработку MiddlewareInvokeService.
+                        await MiddlewareInvokeService.InputSetByOptionMode(inData);
+                        break;
+                    case DataAction.CommandAction://Команды не проходят обработку через MiddlewareInvokeService
+                        await ResiveInExchange(inData);
+                        break;
+                }
+            }
+            else
+            {
+                await ResiveInExchange(inData);
+            }
+        }
+        
+        
         /// <summary>
         /// Обработчик события получения данных после подготовки в Middleware.
         /// </summary>
@@ -449,9 +529,9 @@ namespace Domain.Device
         {
             if (result.IsSuccess)
             {
+                _logger.Information($"Данные УСПЕШНО подготовленны MiddlewareInData для устройства: {Option.Name}");
                 var inData = result.Value;
                 await ResiveInExchange(inData);
-                _logger.Information($"Данные УСПЕШНО подготовленны MiddlewareInData для устройства: {Option.Name}");
             }
             else
             {
@@ -466,11 +546,14 @@ namespace Domain.Device
         public void Dispose()
         {
             _middlewareInvokeServiceOwner?.Dispose();
-            _allCycleBehaviorResponseAnaliticOwner.Dispose();
+            _disposeMiddlewareInvokeServiceInvokeIsCompleteLifeTime?.Dispose();
+            _allCycleBehaviorResponseAnaliticOwner?.Dispose();
+            _pagedInvokeServiceOwner?.Dispose();
+            _pagedInvokeServiceNextPageRxLifeTime?.Dispose();
+            
             UnsubscrubeOnExchangesEvents();
             UnsubscrubeOnProdusersEvents();
             UnsubscrubeOnExchangesCycleBehaviorEvents();
-            _disposeMiddlewareInvokeServiceInvokeIsCompleteEventHandler?.Dispose();
         }
         #endregion
     }

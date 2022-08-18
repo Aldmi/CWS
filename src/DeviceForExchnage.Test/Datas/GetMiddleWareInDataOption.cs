@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Domain.Device.Enums;
-using Domain.Device.Repository.Entities.MiddleWareOption;
+using Domain.Device.MiddleWares4InData;
+using Domain.Device.MiddleWares4InData.Handlers4InData;
 using Shared.MiddleWares.ConvertersOption.EnumsConvertersOption;
 using Shared.MiddleWares.ConvertersOption.StringConvertersOption;
 using Shared.MiddleWares.HandlersOption;

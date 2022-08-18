@@ -24,6 +24,7 @@ namespace Domain.InputDataModel.Autodictor.Model
         public Station StationArrival { get; private set; }
         public Station Stations { get; private set; }                        //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
         public Station StationsCut { get; private set; }                     //ФОРМИРУЕТСЯ при маппинге из StationDeparture - StationArrival
+        public Station StationsCutInv { get; private set; }                  //ФОРМИРУЕТСЯ при маппинге из StationArrival - StationDeparture
         public Station StationWhereFrom { get; private set; }                //ближайшая станция после текущей
         public Station StationWhereTo { get; private set; }                 //ближайшая станция после текущей
         public DirectionStation DirectionStation { get; private set; }       //Направление.
@@ -39,16 +40,21 @@ namespace Domain.InputDataModel.Autodictor.Model
         public DaysFollowing DaysFollowing { get; private set; }             //Дни следования
 
         public Emergency Emergency { get; private set; }                     //Нештатки
+        public Category Category { get; private set; }                       //Категория поезда. ПРИГОРОД/ДАЛЬНИЕ/ПРОЧИЕ
+
+        public CreepingLine CreepingLine { get; private set; }               //Бегущая строка 
+
+        public Route Route { get; private set; }                            //Маршрут 
         #endregion
 
 
 
         #region ctor
-
         public AdInputType(int id, int scheduleId, int trnId, Lang lang, string numberOfTrain, string pathNumber, string platform, EventTrain @event,
         TypeTrain trainType, VagonDirection vagonDirection, Station stationDeparture, Station stationArrival, Station stationWhereFrom,
         Station stationWhereTo, DirectionStation directionStation, DateTime? arrivalTime, DateTime? departureTime, DateTime? delayTime,
-        DateTime? expectedTime, TimeSpan? stopTime, Addition addition, Note note, DaysFollowing daysFollowing, Emergency emergency) : base(id)
+        DateTime? expectedTime, TimeSpan? stopTime, Addition addition, Note note, DaysFollowing daysFollowing, Emergency emergency,
+        Category category, CreepingLine creepingLine, Route route) : base(id)
         {
             ScheduleId = scheduleId;
             TrnId = trnId;
@@ -73,17 +79,36 @@ namespace Domain.InputDataModel.Autodictor.Model
             Note = note;
             DaysFollowing = daysFollowing;
             StationsCut = CreateStationsCut(StationArrival, StationDeparture, Event);
+            StationsCutInv = CreateStationsCutInv(StationArrival, StationDeparture, Event);
             Stations = CreateStations(StationArrival, StationDeparture);
             Emergency = emergency;
+            Category = category;
+            CreepingLine = creepingLine;
+            Route = route;
         }
 
 
+        /// <summary>
+        /// Основной функционал
+        /// </summary>
         public AdInputType(int id, string numberOfTrain, Note note, string pathNumber, EventTrain @event, TypeTrain trainType, Station stationDeparture, Station stationArrival,
             DateTime? arrivalTime, DateTime? departureTime, Lang lang = Lang.Ru)
             : this(id,0, 0, lang, numberOfTrain, pathNumber, null, @event, trainType, null, stationDeparture, stationArrival,
-                null, null, null, arrivalTime, departureTime, null, DateTime.MinValue, null, null, note, null, null)
+                null, null, null, arrivalTime, departureTime, null, DateTime.MinValue,
+                null, null, note, null, null, null, null, null)
         {
            
+        }
+
+        /// <summary>
+        /// Для бег. строки
+        /// </summary>
+        public AdInputType(int id, CreepingLine creepingLine, Lang lang = Lang.Ru)
+            : this(id, 0, 0, lang, null, null, null, null, null, null, null, null,
+                null, null, null, null, null, null, DateTime.MinValue,
+                null, null, null, null, null, null, creepingLine, null)
+        {
+
         }
 
         /// <summary>
@@ -98,9 +123,11 @@ namespace Domain.InputDataModel.Autodictor.Model
 
 
         #region Methode
-
         private static Station CreateStationsCut(Station arrivalSt, Station departureSt, EventTrain ev)
         {
+            if (ev == null)
+                return null;
+
             string CreateStationCutName(string stArrivalName, string stDepartName)
             {
                 if (!ev.Num.HasValue)
@@ -113,6 +140,41 @@ namespace Domain.InputDataModel.Autodictor.Model
                     0 => stArrivalName,//"ПРИБ"
                     1 => stDepartName,//"ОТПР"
                     2 => $"{stDepartName}-{stArrivalName}",//"СТОЯНКА"
+                    _ => string.Empty
+                };
+                return stations;
+            }
+
+            var newStation = new Station
+            {
+                NameRu = CreateStationCutName(arrivalSt?.NameRu, departureSt?.NameRu),
+                NameEng = CreateStationCutName(arrivalSt?.NameEng, departureSt?.NameEng),
+                NameCh = CreateStationCutName(arrivalSt?.NameCh, departureSt?.NameCh)
+            };
+            return newStation;
+        }
+
+
+        /// <summary>
+        /// Поменять местами станции относительно переменной StationsCut
+        /// </summary>>
+        private static Station CreateStationsCutInv(Station arrivalSt, Station departureSt, EventTrain ev)
+        {
+            if (ev == null)
+                return null;
+
+            string CreateStationCutName(string stArrivalName, string stDepartName)
+            {
+                if (!ev.Num.HasValue)
+                    return string.Empty;
+
+                stArrivalName ??= string.Empty;
+                stDepartName ??= string.Empty;
+                var stations = ev.Num switch
+                {
+                    0 => stDepartName,//"ОТПР"
+                    1 => stArrivalName,//"ПРИБ"
+                    2 => $"{stArrivalName}-{stDepartName}",//"СТОЯНКА"
                     _ => string.Empty
                 };
                 return stations;
@@ -150,7 +212,6 @@ namespace Domain.InputDataModel.Autodictor.Model
             };
             return newStation;
         }
-
         #endregion
     }
 }

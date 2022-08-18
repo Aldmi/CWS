@@ -17,8 +17,8 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.ProduserUnionOption
         [Required(ErrorMessage = "Укажите ConverterName для ProduserUnionOption")]
         public string ConverterName { get; set; }
 
-        public List<KafkaProduserOption> KafkaProduserOptions { get; set; } = new List<KafkaProduserOption>();
-        public List<SignalRProduserOption> SignalRProduserOptions { get; set; } = new List<SignalRProduserOption>();
-        public List<WebClientProduserOption> WebClientProduserOptions { get; set; } = new List<WebClientProduserOption>();
+        public List<KafkaProduserOptionDto> KafkaProduserOptions { get; set; } = new List<KafkaProduserOptionDto>();
+        public List<SignalRProduserOptionDto> SignalRProduserOptions { get; set; } = new List<SignalRProduserOptionDto>();
+        public List<WebClientProduserOptionDto> WebClientProduserOptions { get; set; } = new List<WebClientProduserOptionDto>();
     }
 }

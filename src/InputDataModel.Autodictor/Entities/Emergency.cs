@@ -51,11 +51,5 @@
                     break;
             }
         }
-
-        //public Emergency()
-        //{
-            
-        //}
-
     }
 }

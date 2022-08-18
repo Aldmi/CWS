@@ -3,6 +3,7 @@ using Infrastructure.Dal.Abstract.Enums;
 using Infrastructure.Dal.EfCore.DbContext.EntitiConfiguration;
 using Infrastructure.Dal.EfCore.Entities.Device;
 using Infrastructure.Dal.EfCore.Entities.Exchange;
+using Infrastructure.Dal.EfCore.Entities.InlineStringInsertModel;
 using Infrastructure.Dal.EfCore.Entities.ResponseProduser;
 using Infrastructure.Dal.EfCore.Entities.StringInsertModelExt;
 using Infrastructure.Dal.EfCore.Entities.Transport;
@@ -23,6 +24,7 @@ namespace Infrastructure.Dal.EfCore.DbContext
         public DbSet<EfExchangeOption> ExchangeOptions { get; set; }
         public DbSet<EfProduserUnionOption> ProduserUnionOptions { get; set; }
         public DbSet<EfStringInseartModelExt> StringInseartModelExt { get; set; }
+        public DbSet<EfInlineStringInsertModel> InlineStringInsertModels { get; set; }
         #endregion
 
 
@@ -40,7 +42,6 @@ namespace Infrastructure.Dal.EfCore.DbContext
 
 
         #region Config
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql(_connStr);
@@ -55,26 +56,23 @@ namespace Infrastructure.Dal.EfCore.DbContext
            modelBuilder.ApplyConfiguration(new EfStringInseartModelExtConfig());
            base.OnModelCreating(modelBuilder);
         }
-
         #endregion
 
 
 
         #region Methode
-
         public async Task CreateDb(HowCreateDb howCreateDb)
         {
             switch (howCreateDb)
             {
                 case HowCreateDb.Migrate:
-                   await Database.MigrateAsync();       //Если БД нет, то создать по схемам МИГРАЦИИ.
+                   await Database.MigrateAsync();                  //Если БД нет, то создать по схемам МИГРАЦИИ.
                     break;
                 case HowCreateDb.EnsureCreated:
-                    Database.EnsureCreated();           //Если БД нет, то создать. (ОТКЛЮЧАТЬ ПРИ МИГРАЦИИ)
+                    await Database.EnsureCreatedAsync();           //Если БД нет, то создать. (ОТКЛЮЧАТЬ ПРИ МИГРАЦИИ)
                     break;
             }
         }
-
         #endregion
     }
 }

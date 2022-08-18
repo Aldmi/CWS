@@ -24,19 +24,23 @@ namespace ByRulesInseartedTest.Test
                     StartPosition = 0,
                     Count = 1,
                     BatchSize = 1,
-                    RequestOption = new RequestOption
-                    {
-                        Header = "",
-                        Body = "041FFFFF1010FEFE051F",
-                        Footer = "",
-                        Format = "HEX",
-                        MaxBodyLenght = 245
-                    },
-                    ResponseOption = new ResponseOption
-                    {
-                        ValidatorName = "ManualEkrimValidator",
-                        ManualEkrimValidator = new ManualEkrimValidatorOption()
-                    }
+                    UnitOfSendings = new List<UnitOfSendingOption> {
+                            new UnitOfSendingOption {
+                                RequestOption = new RequestOption
+                                {
+                                    Header = "",
+                                    Body = "041FFFFF1010FEFE051F",
+                                    Footer = "",
+                                    Format = "HEX",
+                                    MaxBodyLenght = 245
+                                },
+                                ResponseOption = new ResponseOption
+                                {
+                                    ValidatorName = "ManualEkrimValidator",
+                                    ManualEkrimValidator = new ManualEkrimValidatorOption()
+                                }
+                            }
+                        }
                 },
 
                 GetData4ViewRuleTest.InputTypesDefault,   
@@ -69,7 +73,7 @@ namespace ByRulesInseartedTest.Test
             int expectedCountInseartedData)
         {
             //Arrange
-            var viewRule = ViewRule<AdInputType>.Create(addressDevice, option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(option, addressDevice,  InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
@@ -98,25 +102,29 @@ namespace ByRulesInseartedTest.Test
                 StartPosition = 0,
                 Count = 1,
                 BatchSize = 1,
-                RequestOption = new RequestOption
-                {
-                    Header = "0xFF0xFF0x1B0x57",
-                    Body = "{Addition}  {StationsCut}0x09{ExpectedTime:t}0x09{Note}0x09",
-                    Footer = "0x030x{CRCXor:X2_BorderLeft<0x02-0x03>}0x1F",
-                    Format = "Windows-1251",
-                    MaxBodyLenght = 230
-                },
-                ResponseOption = new ResponseOption
-                {
-                    ValidatorName = "EqualValidator",
-                    EqualValidator = new EqualResponseValidatorOption
-                    {
-                        Body = "061F",
-                        Format = "HEX"
+                UnitOfSendings = new List<UnitOfSendingOption> {
+                    new UnitOfSendingOption {
+                        RequestOption = new RequestOption
+                        {
+                            Header = "0xFF0xFF0x1B0x57",
+                            Body = "{Addition}  {StationsCut}0x09{ExpectedTime:t}0x09{Note}0x09",
+                            Footer = "0x030x{CRCXor:X2_BorderLeft<0x02-0x03>}0x1F",
+                            Format = "Windows-1251",
+                            MaxBodyLenght = 230
+                        },
+                        ResponseOption = new ResponseOption
+                        {
+                            ValidatorName = "EqualValidator",
+                            EqualValidator = new EqualResponseValidatorOption
+                            {
+                                Body = "061F",
+                                Format = "HEX"
+                            }
+                        }
                     }
                 }
             };
-            var viewRule = ViewRule<AdInputType>.Create("5", option, InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, Logger);
+            var viewRule = ViewRule<AdInputType>.Create(option, "5",  InTypeIndependentInsertsHandlerFactory, StringInsertModelExtDictionary, InlineInseartService, Logger);
 
             //Act
             var requestTransfers = viewRule.CreateProviderTransfer4Data(GetData4ViewRuleTest.InputTypesDefault)?.ToArrayAsync().GetAwaiter().GetResult();
@@ -124,7 +132,7 @@ namespace ByRulesInseartedTest.Test
 
             //Assert
             isSuccess.Should().BeFalse();
-            error.Should().Be("Not Found startCh= 0x02");
+            error.Should().Be("ViewRuleId= 1. Not Found startCh= 0x02");
         }
     }
 }

@@ -4,6 +4,7 @@ using Domain.InputDataModel.Autodictor.ForProviderImpl.ProvidersSpecial;
 using Domain.InputDataModel.Base.InData;
 using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders;
+using Domain.InputDataModel.OpcServer.ForProviderImpl.IndependentInseartsImpl.Factory;
 using Domain.InputDataModel.OpcServer.ForProviderImpl.ProvidersSpecial;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
 
@@ -24,6 +25,7 @@ namespace WebApiSwc.AutofacModules
                     break;
 
                 case "OpcInputType":
+                    builder.RegisterType<OpcInputTypeIndependentInseartsHandlersFactory>().As<IIndependentInseartsHandlersFactory>().SingleInstance();
                     builder.RegisterType<OpcSpecialDataProvider>().Named<IDataProvider<TIn>>("OpcSpecial").InstancePerDependency();
                     break;
 

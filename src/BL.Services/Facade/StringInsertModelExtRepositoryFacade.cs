@@ -29,7 +29,7 @@ namespace App.Services.Facade
 
         #region Methode
         /// <summary>
-        /// Вернуть продюсер по ключу.
+        /// Вернуть формат по ключу.
         /// </summary>
         /// <returns></returns>
         public async Task<StringInsertModelExt> GetAsync(string key)
@@ -39,7 +39,7 @@ namespace App.Services.Facade
 
 
         /// <summary>
-        /// Вернуть список продюсеров.
+        /// Вернуть список форматов.
         /// </summary>
         /// <returns></returns>
         public async Task<IReadOnlyList<StringInsertModelExt>> GetListAsync()
@@ -51,7 +51,7 @@ namespace App.Services.Facade
         /// <summary>
         /// Проверка наличия продюссера по ключу и по Id.
         /// </summary>
-        public async Task<bool> IsExistByVarNameAsync(string key)
+        public async Task<bool> IsExistByKeyAsync(string key)
         {
             return await _stringInsertModelExtRepository.IsExistAsync(m => m.Key == key);
         }
@@ -65,7 +65,7 @@ namespace App.Services.Facade
             if (model == null)
                 return Result.Failure("model == null");
 
-            if (await IsExistByVarNameAsync(model.Key))
+            if (await IsExistByKeyAsync(model.Key))
             {
                 await _stringInsertModelExtRepository.EditAsync(model);
             }

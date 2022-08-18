@@ -23,7 +23,8 @@ namespace Shared.MiddleWares.Converters.EnumsConverters
 
         public override Enum Convert(Enum inProp, int dataId)
         {
-            var enumState = _enumStateDict.GetOrAdd(dataId, new EnumState(ObjectType, _option.DictChain));
+            EnumState SetState() => new EnumState(ObjectType, _option.DictChain);
+            var enumState = _enumStateDict.GetOrAddExt(dataId, SetState);
             var nextState = enumState.GetNextState();
             return nextState;
         }

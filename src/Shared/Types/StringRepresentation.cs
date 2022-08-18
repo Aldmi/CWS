@@ -11,6 +11,7 @@ namespace Shared.Types
     {
         public string Str { get; }
         public string Format { get; }
+        public bool IsNull => Str.Equals("NULL") && Format.Equals("_");
 
         public StringRepresentation(string str, string format)
         {
@@ -18,13 +19,20 @@ namespace Shared.Types
             Format = format;
         }
 
-
         #region Methode
         public static StringRepresentation Create(byte[] arr, string dataFormat)
         {
            var strRes= arr.ArrayByteToString(dataFormat);
            return new StringRepresentation(strRes, dataFormat);
         }
+
+        public static StringRepresentation CreateNull()
+        {
+            var strRes = "NULL";
+            var format = "_";
+            return new StringRepresentation(strRes, format);
+        }
+
 
         public byte[] Convert2ByteArray()
         {
@@ -39,10 +47,6 @@ namespace Shared.Types
             var compareLogic = new CompareLogic();
             var result = compareLogic.Compare(other, this);
             return result.AreEqual;
-
-            // if (ReferenceEquals(null, other)) return false;
-            //if (ReferenceEquals(this, other)) return true;
-            //return Str == other.Str && Format == other.Format;
         }
 
         public override int GetHashCode()
@@ -67,7 +71,10 @@ namespace Shared.Types
 
         public override string ToString()
         {
-            return $"[{Str}]:{Format} L='{Str.Length}'";
+            var viewInfo = IsNull ?
+                $"[{Str}]:{Format}" :
+                $"[{Str}]:{Format} L='{Str.Length}'";
+            return viewInfo;
         }
     }
 }

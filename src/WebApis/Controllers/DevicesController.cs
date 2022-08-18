@@ -7,7 +7,7 @@ using App.Services.Exceptions;
 using App.Services.Mediators;
 using AutoMapper;
 using CSharpFunctionalExtensions;
-using Domain.Device.Repository.Entities.MiddleWareOption;
+using Domain.Device.MiddleWares4InData;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Microsoft.AspNetCore.Mvc;

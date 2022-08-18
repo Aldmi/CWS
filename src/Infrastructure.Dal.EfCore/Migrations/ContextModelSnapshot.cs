@@ -41,6 +41,9 @@ namespace Infrastructure.Dal.EfCore.Migrations
                         .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
+                    b.Property<string>("Paging")
+                        .HasColumnType("text");
+
                     b.Property<string>("ProduserUnionKey")
                         .IsRequired()
                         .HasColumnType("character varying(256)")
@@ -78,6 +81,25 @@ namespace Infrastructure.Dal.EfCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ExchangeOptions");
+                });
+
+            modelBuilder.Entity("Infrastructure.Dal.EfCore.Entities.InlineStringInsertModel.EfInlineStringInsertModel", b =>
+                {
+                    b.Property<string>("Key")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("InlineStr")
+                        .HasColumnType("text");
+
+                    b.HasKey("Key");
+
+                    b.ToTable("InlineStringInsertModels");
                 });
 
             modelBuilder.Entity("Infrastructure.Dal.EfCore.Entities.ResponseProduser.EfProduserUnionOption", b =>

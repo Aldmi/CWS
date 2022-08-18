@@ -90,6 +90,14 @@ namespace WebApiSwc.AutofacModules
                 })
                 .InstancePerLifetimeScope();
 
+
+            builder.RegisterType<EfInlineStringInsertModelRepository>().As<IInlineStringInsertModelRepository>()
+                .WithParameters(new List<Parameter>
+                {
+                    new NamedParameter("connectionString", _connectionString),
+                })
+                .InstancePerLifetimeScope();
+
         }
     }
 }

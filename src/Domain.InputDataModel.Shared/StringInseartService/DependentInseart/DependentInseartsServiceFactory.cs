@@ -44,11 +44,5 @@ namespace Domain.InputDataModel.Shared.StringInseartService.DependentInseart
 
             return handlers;
         }
-
-
-        //handlers.AddRange(from model in array
-        //    where model.VarName == "NbyteFull"
-        //let crcModel = array.FirstOrDefault(m => m.VarName.Contains("CRC")) //передать доп модель. содержащую CRC
-        //select new NbyteDepInsH(model, crcModel));
     }
 }

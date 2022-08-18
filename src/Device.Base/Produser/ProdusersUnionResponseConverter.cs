@@ -73,19 +73,32 @@ namespace Domain.Device.Produser
                         response.DeviceName,
                         response.KeyExchange,
                         DataAction = response.DataAction.ToString("G"),
-                        response.ExceptionExchangePipline,
-                        response.Evaluation.IsValidAll,
+                        response.Evaluation,
                         response.TimeAction,
-                        ResponsesItems = response.ResponsesItems.Select(item => new
-                        {
-                            item.RequestId,
-                            item.StatusStr,
-                            item.TransportException,
+                        LinearizationBatchs = response.LinearizationBatchs().Select(pair=>pair)
+                    };
+                    break;
 
-                            item.ProcessedItemsInBatch?.StartItemIndex,
-                            item.ProcessedItemsInBatch?.BatchSize,
-                            InseartedData = item.ProcessedItemsInBatch?.ProcessedItems.Select(p => p.InseartedData)
-                        }).ToList()
+                case "RenderItemsFull":
+                    convert = new
+                    {
+                        response.DeviceName,
+                        response.KeyExchange,
+                        DataAction = response.DataAction.ToString("G"),
+                        response.Evaluation,
+                        response.TimeAction,
+                        ResponsesItems = response.ResponsesItems.Select(respItem => new
+                        {
+                            respItem.ProviderStatus.SendingUnitName,
+                            respItem.StatusStr,
+                            respItem.TransportException,
+
+                            respItem.ProcessedItemsInBatch?.StartItemIndex,
+                            respItem.ProcessedItemsInBatch?.BatchSize,
+                            InseartedData = respItem.ProcessedItemsInBatch?.ProcessedItems.Select(p => p.InseartedData).ToList()
+                        }).ToList(),
+
+                        LinearizationBatchs = response.LinearizationBatchs().Select(pair => pair)
                     };
                     break;
 
@@ -113,7 +126,6 @@ namespace Domain.Device.Produser
                         response.TimeAction,
                         ResponsesItems = response.ResponsesItems.Select(item => new
                         {
-                            item.RequestId,
                             item.Status,
                             item.StatusStr,
                             item.TransportException,
@@ -131,7 +143,6 @@ namespace Domain.Device.Produser
                         response.TimeAction,
                         ResponsesItems = response.ResponsesItems.Select(item => new
                         {
-                            item.RequestId,
                             item.StatusStr,
                             Info = item.ResponseInfo?.ToString()
                         }).ToList()
@@ -141,7 +152,6 @@ namespace Domain.Device.Produser
                 case "Indigo":  //{"result": 1, "message": "", "DeviceName": "fff"}
                     var responsesItems = response.ResponsesItems.Select(item => new
                     {
-                        item.RequestId,
                         item.StatusStr,
                         item.TransportException,
                         Info = item.ResponseInfo?.ToString()

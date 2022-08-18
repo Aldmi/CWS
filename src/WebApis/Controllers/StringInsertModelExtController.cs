@@ -9,6 +9,7 @@ using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using WebApiSwc.DTO.JSON.InputTypesDto;
+using WebApiSwc.DTO.JSON.OptionsDto.StringInsertModelExt;
 
 namespace WebApiSwc.Controllers
 {
@@ -58,7 +59,7 @@ namespace WebApiSwc.Controllers
         }
 
 
-        // GET api/StringInsertModelExt/id
+        // GET api/StringInsertModelExt/varName
         [HttpGet("{varName}", Name = "GetModel")]
         public ActionResult Get([FromRoute]string varName)
         {
@@ -174,7 +175,7 @@ namespace WebApiSwc.Controllers
         /// <summary>
         /// В теле запроса должно быть указанно "Ok" в формате application/json
         /// </summary>
-        // DELETE api/devicesoption
+        // DELETE api/StringInsertModelExt
         [HttpDelete]
         public async Task<IActionResult> Erase([FromBody] string resolution)
         {

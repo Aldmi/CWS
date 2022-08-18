@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Features.AttributeFilters;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
@@ -11,6 +12,7 @@ using Domain.InputDataModel.Base.ProvidersAbstract;
 using Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders.Rules;
 using Domain.InputDataModel.Base.ProvidersOption;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
+using Domain.InputDataModel.Shared.StringInseartService.InlineInseart;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 using Serilog;
 using Shared.Extensions;
@@ -29,9 +31,10 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         private readonly List<Rule<TIn>> _rules;        // Набор правил, для обработки данных.
         private readonly ILogger _logger;
         private readonly ByRulesProviderOption _option;
+        private readonly ChangeRuleTracker _changeRuleTracker = new ChangeRuleTracker();
         #endregion
 
-        
+
 
         #region ctor
         public ByRulesDataProvider(
@@ -39,19 +42,18 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
             ProviderOption providerOption,
             IIndependentInseartsHandlersFactory inputTypeInseartsHandlersFactory,
             StringInsertModelExtStorage stringInsertModelExtStorage,
+            [KeyFilter("ByRules")] InlineInseartService inlineInseartService,
             ILogger logger) : base(providerOption.Name, providerResultFactory, logger)
         {
             _option = providerOption.ByRulesProviderOption;
             if (_option == null)
                 throw new ArgumentNullException(providerOption.Name); //TODO: выбросы исключений пометсить в Shared ThrowIfNull(object obj)
 
-            _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, inputTypeInseartsHandlersFactory, stringInsertModelExtStorage, logger)).ToList();
+            _rules = _option.Rules.Select(opt => new Rule<TIn>(opt, inputTypeInseartsHandlersFactory, stringInsertModelExtStorage, inlineInseartService, logger)).ToList();
             RuleName4DefaultHandle = string.IsNullOrEmpty(_option.RuleName4DefaultHandle)
                 ? "DefaultHandler"
                 : _option.RuleName4DefaultHandle;
             _logger = logger;
-
-            //var providerCore = ProviderResultFactory(null, StatusDict);//DEBUG
         }
         #endregion
 
@@ -106,7 +108,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 {
                     //КОМАНДА-------------------------------------------------------------
                     case RuleSwitcher4InData.CommandHanler:
-                        SendCommand(rule, inData.Command);
+                        await SendCommandAsync(rule, inData.Command);
                         continue;
 
                     //ДАННЫЕ ДЛЯ УКАЗАНОГО RULE--------------------------------------------
@@ -119,12 +121,12 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                     //ДАННЫЕ--------------------------------------------------------------  
                     case RuleSwitcher4InData.InDataHandler:
                         takesItems = inData.Datas.TakeItemIfEmpty(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger);           //Позволяет применять Filter для Default данных (inData.Datas пустой)
-                        var filtredItems = takesItems.Filter(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger);
+                        var filtredItems = takesItems.Filter(ruleOption.AgregateFilter, ruleOption.DefaultItemJson, _logger)?.ToList();
                         if (filtredItems == null || !filtredItems.Any())
                             continue;
 
-                        resultItems = filtredItems.ToList();
-                        await SendDataAsync(rule, resultItems, ct);
+                        TryResetViewRulesMode2Default(rule);
+                        await SendDataAsync(rule, filtredItems, ct);
                         continue;
 
                     default:
@@ -134,6 +136,30 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
             //Конвеер обработки входных данных завершен    
             await Task.CompletedTask;
         }
+
+
+        public void ResetProvider()
+        {
+            //Сбросить Mode для ViewRules
+            foreach (var rule in GetRules)
+            {
+                rule.ResetViewRulesMode2Default();
+            }
+        }
+
+
+        /// <summary>
+        /// Для нового правила (выбранного agregateFilter фильтром) сбросим режим всех ViewRules, на дефолтный (указанный в настрйоках)
+        /// Это позволит выполнять "Init" правила 1 раз.
+        /// </summary>
+        private void TryResetViewRulesMode2Default(Rule<TIn> rule)
+        {
+            if (_changeRuleTracker.CheckChange(rule))
+            {
+                rule.ResetViewRulesMode2Default();
+            }
+        }
+
 
 
         /// <summary>
@@ -146,7 +172,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                 var ruleName = $"{rule.GetCurrentOption().Name}";
                 foreach (var viewRule in rule.GetViewRules)
                 {
-                    await foreach (var (_, isFailure, transfer, error) in viewRule.CreateProviderTransfer4Data(takesItems, ct).WithCancellation(ct))
+                    await foreach (var (_, isFailure, providerTransfer, error) in viewRule.CreateProviderTransfer4Data(takesItems, ct).WithCancellation(ct))
                     {
                         ct.ThrowIfCancellationRequested();
                         if (isFailure)
@@ -155,9 +181,10 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
                             await Task.Delay(1000, ct); //Задержка на отображение ошибки
                             continue;
                         }
-                        var sendingUnitName = $"RuleName= '{ruleName}' viewRule.Id= '{viewRule.GetCurrentOption.Id}'";
-                        var providerStatusBuilder = transfer.CreateProviderStatusBuilder(sendingUnitName);
-                        var providerResult = ProviderResultFactory(transfer, providerStatusBuilder);
+
+                        var sendingUnitName = $"RuleName= '{ruleName}' viewRule.Id= '{viewRule.GetCurrentOption.Id}' TransferName= '{providerTransfer.Name}'";
+                        var providerStatusBuilder = providerTransfer.CreateProviderStatusBuilder(sendingUnitName);
+                        var providerResult = ProviderResultFactory(providerTransfer, providerStatusBuilder);
                         RaiseProviderResultRx.OnNext(providerResult);
                     }
                 }
@@ -167,14 +194,17 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
 
         /// <summary>
-        /// Отправить команду через первое ViewRule.
+        /// Отправить команду через первое ViewRule!!! и внутри ViewRule через первое uos.
         /// </summary>
-        private void SendCommand(Rule<TIn> rule, Command4Device command)
+        private async Task SendCommandAsync(Rule<TIn> rule, Command4Device command)
         {
-            var commandViewRule = rule.GetViewRules.FirstOrDefault();
-            var transfer = commandViewRule?.CreateProviderTransfer4Command(command);
-            if(transfer == null)
+            var commandViewRule = rule.GetViewRules.First();
+            var (_, isFailure, transfer, error) = await commandViewRule.CreateProviderTransfer4Command(command).FirstAsync();
+            if (isFailure)
+            {
+                _logger.Error(error);
                 return;
+            }
 
             var sendingUnitName = $"RuleName= '{rule.GetCurrentOption().Name}' viewRule.Id= '{commandViewRule.GetCurrentOption.Id}'";
             var providerStatusBuilder = transfer.CreateProviderStatusBuilder(sendingUnitName);
@@ -183,6 +213,7 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
 
             RaiseProviderResultRx.OnNext(providerResult);
         }
+
         #endregion
 
 
@@ -192,6 +223,25 @@ namespace Domain.InputDataModel.Base.ProvidersConcrete.ByRuleDataProviders
         {
            base.Dispose();
            RaiseProviderResultRx?.Dispose();
+        }
+        #endregion
+
+
+
+        #region NestedClass
+        private class ChangeRuleTracker
+        {
+            //Можно добавить RX событие по смене Rule
+            private Rule<TIn> _currentRule;
+            public bool CheckChange(Rule<TIn> newRule)
+            {
+                if (newRule != _currentRule)
+                {
+                    _currentRule = newRule;
+                    return true;
+                }
+                return false;
+            }
         }
         #endregion
     }

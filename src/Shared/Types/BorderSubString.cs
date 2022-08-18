@@ -17,8 +17,8 @@ namespace Shared.Types
     public class BorderSubString
     {
         #region prop
-        public string StartCh { get; set; }
-        public string EndCh { get; set; }
+        public string? StartCh { get; set; }
+        public string? EndCh { get; set; }
         public bool StartInclude { get; set; }
         public bool EndInclude { get; set; }
         public DelimiterSign DelimiterSign { get; set; }

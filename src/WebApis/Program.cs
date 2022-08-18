@@ -35,8 +35,8 @@ namespace WebApiSwc
 
         public static string GetVersion()
         {
-            const string version = "CWS Ver7.26";
-            return $"{version}  [28.09.2020]  [Relise. Add alwaysTake prop in Filter]";
+            const string version = "CWS Ver7.60";
+            return $"{version}  [18.08.2022]  [Fix bug if StringInsertModelExt NOT found for CRC]";
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

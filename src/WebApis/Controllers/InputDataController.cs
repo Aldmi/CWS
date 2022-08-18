@@ -7,13 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using App.Services.InputData;
-using Autofac.Features.Indexed;
 using AutoMapper;
 using CSharpFunctionalExtensions;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.InData;
-using Infrastructure.Background.Abstarct;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -29,102 +27,28 @@ namespace WebApiSwc.Controllers
     public class InputDataController : Controller
     {
         #region fields
-
-        private readonly ISimpleBackground _backgroundMessageBrokConsum;
         private readonly InputDataApplyService<AdInputType> _inputDataApplyService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
-
         #endregion
-
 
 
 
         #region ctor
-
         public InputDataController(IConfiguration config,
-                                   IIndex<string, ISimpleBackground> background,
                                    InputDataApplyService<AdInputType> inputDataApplyService,
                                    IMapper mapper,
                                    ILogger logger)
-                                  
         {
             _inputDataApplyService = inputDataApplyService;
             _mapper = mapper;
             _logger = logger;
-            var backgroundName= config["MessageBrokerConsumer4InData:Name"]; //TODO: работу с _backgroundMessageBrokConsum вынести в отдельный сервис
-            _backgroundMessageBrokConsum = background[backgroundName];
         }
-
         #endregion
 
 
 
-
         #region Api
-
-        // GET api/InputData/GetMessageBrokerConsumerBgState
-        [HttpGet("GetMessageBrokerConsumerBgState")]
-        public async Task<IActionResult> GetMessageBrokerConsumerBgState()
-        {          
-            var bgState = _backgroundMessageBrokConsum.IsStarted ? "Started" : "Stoped";
-            await Task.CompletedTask;
-            return new JsonResult(bgState);
-        }
-
-
-        /// <summary>
-        /// Запустить бекграунд слушателя выходных сообшений от messageBroker
-        /// </summary>
-        // GET api/InputData/StartMessageBrokerConsumerBg
-        [HttpPut("StartMessageBrokerConsumerBg")]
-        public async Task<IActionResult> StartMessageBrokerConsumerBg()
-        {
-            try
-            {
-                if (_backgroundMessageBrokConsum.IsStarted)
-                {
-                    ModelState.AddModelError("StartMessageBrokerConsumerBg", "Listener already started !!!");
-                    return BadRequest(ModelState);
-                }
-
-                await _backgroundMessageBrokConsum.StartAsync(CancellationToken.None);
-                return Ok("Listener starting");
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "{Type}", "Ошибка в InputDataController/StartMessageBrokerConsumerBg");
-                throw;
-            }
-        }
-
-
-        /// <summary>
-        /// Запустить бекграунд слушателя выходных сообшений от messageBroker
-        /// </summary>
-        [HttpPut("StopMessageBrokerConsumerBg")]
-        public async Task<IActionResult> StopMessageBrokerConsumerBg()
-        {
-            try
-            {
-                if (!_backgroundMessageBrokConsum.IsStarted)
-                {
-                    ModelState.AddModelError("StopMessageBrokerConsumerBg", "Listener already staopped !!!");
-                    return BadRequest(ModelState);
-                }
-
-                await _backgroundMessageBrokConsum.StopAsync(CancellationToken.None);
-                return Ok("Listener Stoping");
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "{Type}", "Ошибка в InputDataController/StopMessageBrokerConsumerBg");
-                throw;
-            }
-        }
-
-
-
         [HttpPost("SendData4Devices")]
         public async Task<IActionResult> SendData4Devices([FromBody] IReadOnlyList<InputData<AdInputTypeDto>> inputDatasDto)
         {
@@ -220,197 +144,173 @@ namespace WebApiSwc.Controllers
                                                                       [FromHeader] string exchangeName = "",
                                                                       [FromHeader] string directHandlerName = "",
                                                                       [FromHeader] string dataAction = "",
-                                                                      [FromHeader] string command = "None") // [FromHeader] string fileEncoding = "Windows-1251"
+                                                                      [FromHeader] string command = "None")
         {
-            var xmlFile = userfile;
-            if (xmlFile == null)
-            {
-                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", "xmlFile == null");
-                return BadRequest("SendDataXmlMultipart4Devices. xmlFile == null");
-            }
-            var values = xmlFile.FileName.Split('+');
+            //TODO: убрать выбор способа передачи имен. Сделать 2 метода контроллера с разными способами.
+            var values = userfile.FileName.Split('+');
             if (values.Length == 2)
             {
                 var fileName = values[0];
                 dataAction = values[1];
                 deviceName ??= fileName;//Если deviceName не переданн в заголовке 
-                var str = fileName != null ? $"FileName= {fileName}" : "FileName= NULL";
+                var str = $"FileName= {fileName}";
                 _logger.Information("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", str);
             }
-            if (string.IsNullOrEmpty(deviceName))
+            var (_, isFailureHeader, (actionParse, commandParse), errorHeader) = AcceptHeaders(deviceName, dataAction, command);
+            if (isFailureHeader)
             {
-                ModelState.AddModelError("SendDataXmlMultipart4Devices", "deviceName == null");
-                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "deviceName == null");
-                return BadRequest(ModelState);
+                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", errorHeader);
+                return BadRequest($"SendDataXmlMultipart4Devices. {errorHeader}");
             }
-            if (!Enum.TryParse(dataAction, out DataAction dataActionParsed))
+            var (_, isFailureXml, xmlDto, erroXml) = await AcceptXmlFile<AdInputType4XmlDtoContainer>(userfile);
+            if (isFailureXml)
             {
-                ModelState.AddModelError("SendDataXmlMultipart4Devices", "DataAction Error Parse");
-                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "DataAction Error Parse");
-                return BadRequest(ModelState);
+                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", erroXml);
+                return BadRequest($"SendDataXmlMultipart4Devices. {erroXml}");
             }
-            if (!Enum.TryParse(command, out Command4Device commandParse))
-            {
-                ModelState.AddModelError("SendDataXmlMultipart4Devices", "Command4Device Error Parse");
-                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "Command4Device Error Parse");
-                return BadRequest(ModelState);
-            }
-
             try
             {
-                if (xmlFile.Length > 0)
+                var trains = xmlDto.Trains;
+                InitDataId(trains);
+                var data = _mapper.Map<List<AdInputType>>(trains);
+                var inputData = new InputData<AdInputType>
                 {
-                    await using var memoryStream = new MemoryStream();
-                    await xmlFile.CopyToAsync(memoryStream);
-                    memoryStream.Position = 0;
-                    const string encoding = "utf-8";
-                    #region Debug
-                    //System.IO.File.WriteAllBytes(@"D:\\InDataXml_NewAd.xml", memoryStream.ToArray());
-                    var xmlContent = Encoding.GetEncoding(encoding).GetString(memoryStream.ToArray()); //utf-8   "Windows-1251"
-                    _logger.Debug($"{xmlContent}");
-                    #endregion
-
-                    using var reader = new StreamReader(memoryStream, Encoding.GetEncoding(encoding), true);
-                    var serializer = new XmlSerializer(typeof(AdInputType4XmlDtoContainer));
-                    var adInputType4XmlList = (AdInputType4XmlDtoContainer)serializer.Deserialize(reader);
-                    var trains = adInputType4XmlList.Trains;
-                    InitDataId(trains);
-                    var data = _mapper.Map<List<AdInputType>>(adInputType4XmlList.Trains); //TODO: выставить язык из запроса для всех данных AdInputType
-                    var inputData = new InputData<AdInputType>
-                    {
-                        DeviceName = deviceName,
-                        ExchangeName = exchangeName,
-                        DirectHandlerName = directHandlerName,
-                        DataAction = dataActionParsed,
-                        Command = commandParse,
-                        Data = data
-                    };
-                    var res = await InputDataHandler(new List<InputData<AdInputType>> { inputData });
-                    return res;
-                }
-
-                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "Размер XML файла равен 0");
-                return BadRequest("Размер XML файла равен 0");
+                    DeviceName = deviceName,
+                    ExchangeName = exchangeName,
+                    DirectHandlerName = directHandlerName,
+                    DataAction = actionParse,
+                    Command = commandParse,
+                    Data = data
+                };
+                var res = await InputDataHandler(new List<InputData<AdInputType>> { inputData });
+                return res;
             }
             catch (Exception ex)
             {
-                _logger.Error(ex ,"{Type}", "Ошибка в InputDataController");
+                _logger.Error(ex ,"{Type}", "Ошибка Mapping");
                 throw;
             }
         }
 
 
         /// <summary>
-        /// username - ДЛЯ ПОДДЕРЖКИ СТАРОЙ ВЕРСИИ
+        /// Отправить бегущую строку на 1 Device.
+        /// Формат POST запроса Multipart.
+        /// XML передается как файл с именем username в FromForm виде.
         /// </summary>
-        /// <param name="username">Имя фала</param>
+        /// <param name="userfile">Имя фала</param>
         /// <param name="deviceName"></param>
         /// <param name="exchangeName"></param>
         /// <param name="directHandlerName"></param>
         /// <param name="dataAction"></param>
         /// <param name="command"></param>
         /// <returns></returns>
-        [HttpPost("SendDataXmlMultipart4DevicesOld")]
-        public async Task<IActionResult> SendDataXmlMultipart4DevicesOld([FromForm] IFormFile username,
+        [HttpPost("SendCreepLineXmlMultipart4Devices")]
+        public async Task<IActionResult> SendCreepLineXmlMultipart4Devices([FromForm] IFormFile userfile,
                                                                       [FromHeader] string deviceName,
                                                                       [FromHeader] string exchangeName = "",
                                                                       [FromHeader] string directHandlerName = "",
                                                                       [FromHeader] string dataAction = "",
-                                                                      [FromHeader] string command = "None") // [FromHeader] string fileEncoding = "Windows-1251"
+                                                                      [FromHeader] string command = "None")
         {
-            var xmlFile = username;
-            if (xmlFile == null)
-            {
-                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", "xmlFile == null");
-                return BadRequest("SendDataXmlMultipart4Devices. xmlFile == null");
-            }
-            var values = xmlFile.FileName.Split('+');
+            //TODO: убрать выбор способа передачи имен. Сделать 2 метода контроллера с разными способами.
+            var values = userfile.FileName.Split('+');
             if (values.Length == 2)
             {
                 var fileName = values[0];
                 dataAction = values[1];
-                deviceName = deviceName ?? fileName;//Если deviceName не переданн в заголовке 
-                var str = fileName != null ? $"FileName= {fileName}" : "FileName= NULL";
+                deviceName ??= fileName;//Если deviceName не переданн в заголовке 
+                var str = $"FileName= {fileName}";
                 _logger.Information("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", str);
             }
-            if (string.IsNullOrEmpty(deviceName))
+            var (_, isFailureHeader, (actionParse, commandParse), errorHeader) = AcceptHeaders(deviceName, dataAction, command);
+            if (isFailureHeader)
             {
-                ModelState.AddModelError("SendDataXmlMultipart4Devices", "deviceName == null");
-                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "deviceName == null");
-                return BadRequest(ModelState);
+                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", errorHeader);
+                return BadRequest($"SendDataXmlMultipart4Devices. {errorHeader}");
             }
-            if (!Enum.TryParse(dataAction, out DataAction dataActionParsed))
+            var (_, isFailureXml, xmlDto, erroXml) = await AcceptXmlFile<CreepingLine4XmlDto>(userfile);
+            if (isFailureXml)
             {
-                ModelState.AddModelError("SendDataXmlMultipart4Devices", "DataAction Error Parse");
-                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "DataAction Error Parse");
-                return BadRequest(ModelState);
+                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", erroXml);
+                return BadRequest($"SendDataXmlMultipart4Devices. {erroXml}");
             }
-            if (!Enum.TryParse(command, out Command4Device commandParse))
-            {
-                ModelState.AddModelError("SendDataXmlMultipart4Devices", "Command4Device Error Parse");
-                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "Command4Device Error Parse");
-                return BadRequest(ModelState);
-            }
-
             try
             {
-
-                if (xmlFile.Length > 0)
+                var trains = xmlDto;
+               // InitDataId(trains); //TODO: выставить Id
+                var data = _mapper.Map<AdInputType>(trains);
+                var inputData = new InputData<AdInputType>
                 {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await xmlFile.CopyToAsync(memoryStream);
-                        memoryStream.Position = 0;
-                        const string encoding = "utf-8";
-                        #region Debug
-                        //System.IO.File.WriteAllBytes(@"D:\\InDataXml_NewAd.xml", memoryStream.ToArray());
-                        var xmlContent = Encoding.GetEncoding(encoding).GetString(memoryStream.ToArray()); //utf-8   "Windows-1251"
-                        _logger.Debug($"{xmlContent}");
-                        #endregion
-                        using (var reader = new StreamReader(memoryStream, Encoding.GetEncoding(encoding), true))
-                        {
-                            var serializer = new XmlSerializer(typeof(AdInputType4XmlDtoContainer));
-                            var adInputType4XmlList = (AdInputType4XmlDtoContainer)serializer.Deserialize(reader);
-                            var trains = adInputType4XmlList.Trains;
-                            InitDataId(trains);
-                            var data = _mapper.Map<List<AdInputType>>(adInputType4XmlList.Trains); //TODO: выставить язык из запроса для всех данных AdInputType
-                            var inputData = new InputData<AdInputType>
-                            {
-                                DeviceName = deviceName,
-                                ExchangeName = exchangeName,
-                                DirectHandlerName = directHandlerName,
-                                DataAction = dataActionParsed,
-                                Command = commandParse,
-                                Data = data
-                            };
-                            var res = await InputDataHandler(new List<InputData<AdInputType>> { inputData });
-                            return res;
-                        }
-                    }
-                }
-
-                _logger.Warning("{Type} {MessageShort}", "Ошибка в InputDataController/SendDataXmlMultipart4Devices", "Размер XML файла равен 0");
-                return BadRequest("Размер XML файла равен 0");
+                    DeviceName = deviceName,
+                    ExchangeName = exchangeName,
+                    DirectHandlerName = directHandlerName,
+                    DataAction = actionParse,
+                    Command = commandParse,
+                    Data = new List<AdInputType>{data}
+                };
+                var res = await InputDataHandler(new List<InputData<AdInputType>> { inputData });
+                return res;
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "{Type}", "Ошибка в InputDataController");
+                _logger.Error(ex, "{Type}", "Ошибка Mapping");
                 throw;
             }
         }
 
 
 
-
-        /// <summary>
-        /// helthCheck по адресу api/InputData/SendDataXml4Devices
-        /// Нужно для Клиентского ПО, для поднятия флага ISConnect 
-        /// </summary>
-        // GET api/InputData/SendDataXml4Devices
-        [HttpGet("SendDataXmlMultipart4Devices")]
-        public IActionResult SendDataXml4DevicesGet()
+        private async Task<Result<TXmlDto>> AcceptXmlFile<TXmlDto>(IFormFile xmlFile)
         {
-            return Ok();
+            if (xmlFile == null)
+            {
+                return Result.Failure<TXmlDto>("xmlFile == null");
+            }
+            if (xmlFile.Length == 0)
+            {
+                return Result.Failure<TXmlDto>("Размер XML файла равен 0");
+            }
+            try
+            {
+                await using var memoryStream = new MemoryStream();
+                await xmlFile.CopyToAsync(memoryStream);
+                memoryStream.Position = 0;
+                const string encoding = "utf-8";
+
+                #region Debug
+                //System.IO.File.WriteAllBytes(@"D:\\InDataXml_NewAd.xml", memoryStream.ToArray());
+                var xmlContent = Encoding.GetEncoding(encoding).GetString(memoryStream.ToArray()); //utf-8   "Windows-1251"
+                _logger.Debug($"{xmlContent}");
+                #endregion
+
+                using var reader = new StreamReader(memoryStream, Encoding.GetEncoding(encoding), true);
+                var serializer = new XmlSerializer(typeof(TXmlDto));
+                var dto = (TXmlDto)serializer.Deserialize(reader);
+                return Result.Ok(dto);
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure<TXmlDto>($"Ошибка преобразования XML файла к Dto объекту.  Exception= '{ex}'");
+            }
+        }
+
+
+        private Result<(DataAction actionParse, Command4Device commandParse)> AcceptHeaders(string deviceName, string dataAction, string command)
+        {
+            if (string.IsNullOrEmpty(deviceName))
+            {
+                return Result.Failure<(DataAction, Command4Device)>("DataAction Error Parse");
+            }
+            if (!Enum.TryParse(dataAction, out DataAction dataActionParsed))
+            {
+                return Result.Failure<(DataAction, Command4Device)>("deviceName == null");
+            }
+            if (!Enum.TryParse(command, out Command4Device commandParse))
+            {
+                return Result.Failure<(DataAction, Command4Device)>("Command4Device Error Parse");
+            }
+            return Result.Ok((dataActionParsed, commandParse));
         }
 
         #endregion

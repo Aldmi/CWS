@@ -1,4 +1,5 @@
-﻿using Domain.InputDataModel.Autodictor.ForProviderImpl.IndependentInseartsImpl.Handlers;
+﻿using Domain.InputDataModel.Autodictor.Entities;
+using Domain.InputDataModel.Autodictor.ForProviderImpl.IndependentInseartsImpl.Handlers;
 using Domain.InputDataModel.Shared.StringInseartService.IndependentInseart.IndependentInseartHandlers;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
 
@@ -20,6 +21,7 @@ namespace Domain.InputDataModel.Autodictor.ForProviderImpl.IndependentInseartsIm
                 "Addition" => new AdditionInsH(insertModel),
                 "Stations" => new StationsInsH(insertModel),
                 "StationsCut" => new StationsCutInsH(insertModel),
+                "StationsCutInv" => new StationsCutInvInsH(insertModel),
                 "StationArrival" => new StationArrivalInsH(insertModel),
                 "StationDeparture" => new StationDepartureInsH(insertModel),
                 "Note" => new NoteInsH(insertModel),
@@ -42,6 +44,9 @@ namespace Domain.InputDataModel.Autodictor.ForProviderImpl.IndependentInseartsIm
                 "Lang" => new LangInsH(insertModel),
                 "VagonDirection" => new VagonDirectionInsH(insertModel),
                 "Emergency" => new EmergencyInsH(insertModel),
+                "Category"=> new CategoryInsH(insertModel),
+                "CreepingLine" => new CreepingLineInsH(insertModel),
+                "Route" => new RouteInsH(insertModel),
                 _ => null
             };
         }

@@ -141,9 +141,7 @@ namespace Domain.InputDataModel.Shared.StringInseartService.Model
 
 
         #region Disposable
-        public void Dispose()
-        {
-        }
+        public void Dispose() { }
         #endregion
     }
 }

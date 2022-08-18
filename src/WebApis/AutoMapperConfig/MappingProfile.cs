@@ -1,19 +1,19 @@
 ﻿using System;
-using System.Globalization;
 using App.Services.Agregators;
 using AutoMapper;
 using Domain.Device;
+using Domain.Device.MiddleWares4InData;
 using Domain.Device.Repository.Entities;
-using Domain.Device.Repository.Entities.MiddleWareOption;
 using Domain.Device.Repository.Entities.ResponseProduser;
 using Domain.Exchange;
 using Domain.Exchange.Repository.Entities;
 using Domain.InputDataModel.Autodictor.Entities;
 using Domain.InputDataModel.Autodictor.Model;
 using Domain.InputDataModel.Shared.StringInseartService.Model;
+using Domain.InputDataModel.Shared.StringInseartService.Model.InlineStringInsert;
 using Infrastructure.Dal.EfCore.Entities.Device;
 using Infrastructure.Dal.EfCore.Entities.Exchange;
-using Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers;
+using Infrastructure.Dal.EfCore.Entities.InlineStringInsertModel;
 using Infrastructure.Dal.EfCore.Entities.ResponseProduser;
 using Infrastructure.Dal.EfCore.Entities.StringInsertModelExt;
 using Infrastructure.Dal.EfCore.Entities.Transport;
@@ -26,10 +26,11 @@ using WebApiSwc.DTO.JSON.DevicesStateDto;
 using WebApiSwc.DTO.JSON.InputTypesDto;
 using WebApiSwc.DTO.JSON.OptionsDto.DeviceOption;
 using WebApiSwc.DTO.JSON.OptionsDto.ExchangeOption;
+using WebApiSwc.DTO.JSON.OptionsDto.InlineStringInsertModel;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption;
 using WebApiSwc.DTO.JSON.OptionsDto.ProduserUnionOption;
+using WebApiSwc.DTO.JSON.OptionsDto.StringInsertModelExt;
 using WebApiSwc.DTO.JSON.OptionsDto.TransportOption;
-using WebApiSwc.DTO.JSON.Shared;
 using WebApiSwc.DTO.XML;
 
 namespace WebApiSwc.AutoMapperConfig
@@ -60,7 +61,7 @@ namespace WebApiSwc.AutoMapperConfig
             #endregion
 
 
-            #region AdInputType xml in ProcessedItemsInBatch mapping
+            #region AdInputType4XmlDto -> AdInputType mapping
             CreateMap<AdInputType4XmlDto, AdInputType>().ConstructUsing(src => new AdInputType(
                 src.Id,
                 ConvertString2Int(src.ScheduleId),
@@ -123,8 +124,24 @@ namespace WebApiSwc.AutoMapperConfig
                     NameAliasRu = src.DaysOfGoingAlias,
                     NameAliasEng = src.DaysOfGoingAliasENG
                 },
-                new Emergency(src.EmergencySituation)
-                )).ForAllMembers(opt => opt.Ignore());
+                new Emergency(src.EmergencySituation),
+                new Category(src.TypeName),
+                null,
+                new Route(src.Route, src.RouteEng))
+            ).ForAllMembers(opt => opt.Ignore());
+            #endregion
+
+
+            #region CreepingLine4XmlDto -> AdInputType mapping
+            CreateMap<CreepingLine4XmlDto, AdInputType>().ConstructUsing(src => new AdInputType(
+                src.Id,
+                new CreepingLine(
+                    src.Message,
+                    src.Message,
+                    TimeSpan.FromMilliseconds(src.Duration),
+                    (new DateTime(1970, 1, 1)).AddMilliseconds(src.StarTime)),
+                Lang.Ru
+            )).ForAllMembers(opt => opt.Ignore());
             #endregion
 
 
@@ -153,7 +170,10 @@ namespace WebApiSwc.AutoMapperConfig
                 src.Addition,
                 src.Note,
                 src.DaysFollowing,
-                src.Emergency
+                src.Emergency,
+                src.Category,
+                src.CreepingLine,
+                src.Route
                 )).ForAllMembers(opt => opt.Ignore());
             #endregion
 
@@ -209,8 +229,36 @@ namespace WebApiSwc.AutoMapperConfig
                  context.Mapper.Map<StringHandlerMiddleWareOption>(src.StringHandlerMiddleWareOption),
                   context.Mapper.Map<MathematicFormula>(src.MathematicFormula)
               )).ForAllMembers(opt => opt.Ignore());
+
+            #endregion
+
+
+            #region InlineStringInsertModel mapping
+            CreateMap<InlineStringInsertModel, InlineStringInsertModelDto>();
+
+            CreateMap<InlineStringInsertModelDto, InlineStringInsertModel>()
+                .ConstructUsing((src, context) => new InlineStringInsertModel(
+                    src.Key,
+                    src.InlineStr,
+                    src.Description
+                )).ForAllMembers(opt => opt.Ignore());
+
+
+            CreateMap<InlineStringInsertModel, EfInlineStringInsertModel>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => 0))
+                .ForMember(dest => dest.Key, opt => opt.MapFrom(src => src.Key))
+                .ForMember(dest => dest.InlineStr, opt => opt.MapFrom(src => src.InlineStr))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+
+            CreateMap<EfInlineStringInsertModel, InlineStringInsertModel>()
+                .ConstructUsing((src, context) => new InlineStringInsertModel(
+                    src.Key,
+                    src.InlineStr,
+                    src.Description
+                )).ForAllMembers(opt => opt.Ignore());
             #endregion
         }
+
 
 
         private static int? ConvertString2NullableInt(string str)

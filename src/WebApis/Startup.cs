@@ -136,7 +136,8 @@ namespace WebApiSwc
                 builder.RegisterModule(new ControllerAutofacModule());
                 builder.RegisterModule(new MessageBrokerAutofacModule());
                 builder.RegisterModule(new BlConfigAutofacModule());
-
+                builder.RegisterModule(new ServicesAutofacModule());
+                
                 var inTypeName = AppConfiguration["InputDataModel"];
                 switch (inTypeName)
                 {
@@ -145,6 +146,7 @@ namespace WebApiSwc
                         builder.RegisterModule(new ProduserUnionAutofacModule<AdInputType>());
                         builder.RegisterModule(new BlStorageAutofacModule<AdInputType>());
                         builder.RegisterModule(new BlBuildAutofacModule<AdInputType>());
+                        builder.RegisterModule(new PagedAutofacModule<AdInputType>());
                         builder.RegisterModule(new MediatorsAutofacModule<AdInputType>());
                         builder.RegisterModule(new ExchangeAutofacModule<AdInputType>());
                         builder.RegisterModule(new DeviceAutofacModule<AdInputType>());
@@ -206,6 +208,8 @@ namespace WebApiSwc
                 Console.WriteLine(ex.Message);
             }
 
+
+            //Инициализация системы и настройка Фоновых процессов.
             var inTypeName = AppConfiguration["InputDataModel"];
             switch (inTypeName)
             {
@@ -273,13 +277,10 @@ namespace WebApiSwc
         private void ApplicationStarted<TInType>(IHostApplicationLifetime lifetimeApp, ILifetimeScope scope) where TInType : InputTypeBase
         {
             //ЗАПУСК БЕКГРАУНДА ОПРОСА ШИНЫ ДАННЫХ
-            scope.Resolve<ConsumerMessageBroker4InputData<TInType>>();//перед запуском bg нужно создать ConsumerMessageBroker4InputData
-            bool.TryParse(AppConfiguration["MessageBrokerConsumer4InData:AutoStart"], out var autoStart);
-            if (autoStart)
+            var consumerMb= scope.Resolve<ConsumerMessageBroker4InputData<TInType>>();
+            if (consumerMb.BgAutoStart)
             {
-                var backgroundName = AppConfiguration["MessageBrokerConsumer4InData:Name"];
-                var bgConsumer = scope.ResolveNamed<ISimpleBackground>(backgroundName);
-                lifetimeApp.ApplicationStarted.Register(() => bgConsumer.StartAsync(CancellationToken.None));
+                lifetimeApp.ApplicationStarted.Register(async () => await consumerMb.StartConsumerBg());
             }
 
             //ЗАПУСК БЕКГРАУНДА ОПРОСА УСТРОЙСТВ
@@ -434,10 +435,21 @@ namespace WebApiSwc
             }
             catch (Exception ex)
             {
-                logger.Error($"ОШИБКА СОЗДАНИЕ СПИСКА ПРОДЮССЕРОВ НА БАЗЕ ОПЦИЙ  {ex}");
+                logger.Error($"ОШИБКА СОЗДАНИЕ СПИСКА ОПЦИЙ StringInsertModelExt  {ex}");
             }
 
-            //СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ--------------------------------------------------
+            //СОЗДАНИЕ СПИСКА ОПЦИЙ ДЛЯ ИНЛАЙН ВСТАВОК В СТРОКУ--------------------------------------------
+            try
+            {
+                var builderInlineStrIns = scope.Resolve<BuildInlineStringInsertModel>();
+                await builderInlineStrIns.BuildAll();
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"ОШИБКА СОЗДАНИЕ СПИСКА ОПЦИЙ InlineStringInsertModel  {ex}");
+            }
+
+            //СОЗДАНИЕ СПИСКА УСТРОЙСТВ НА БАЗЕ ОПЦИЙ------------------------------------------------------
             try
             {
                 var buildDeviceService = scope.Resolve<BuildDeviceService<TInType>>();

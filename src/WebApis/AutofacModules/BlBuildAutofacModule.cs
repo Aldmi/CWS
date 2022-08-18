@@ -12,6 +12,7 @@ namespace WebApiSwc.AutofacModules
             builder.RegisterType<BuildDeviceService<TIn>>().InstancePerDependency();
             builder.RegisterType<BuildProdusersUnionService<TIn>>().InstancePerDependency();
             builder.RegisterType<BuildStringInsertModelExt>().InstancePerDependency();
+            builder.RegisterType<BuildInlineStringInsertModel>().InstancePerDependency();
         }
     }
 }

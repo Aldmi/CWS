@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Shared.Paged;
 using WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption;
+using WebApiSwc.DTO.JSON.OptionsDto.PagingOption;
 
 namespace WebApiSwc.DTO.JSON.OptionsDto.DeviceOption
 {
@@ -18,6 +20,9 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.DeviceOption
 
         [Required(ErrorMessage = "Список ключей ExchangeKeys не может быть пуст")]
         public List<string> ExchangeKeys { get; set; }
+        
         public MiddleWareInDataOptionDto MiddleWareMediator { get; set; }
+        
+        public PagedOptionDto Paging { get; set; }
     }
 }

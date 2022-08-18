@@ -27,3 +27,8 @@ IExhangeBehavior
 rule - типа Command = "reset"                     - выполняется когда приходит команда
 rule - типа Resolution = "булево выражение"       - выполняется когда выражение == true
 rulr - ------                                     - выполняется всегда.
+
+
+
+Создание DockerImage командой build:
+D:\Git\CWS\src> docker build -t webapiswc -f Dockerfile .

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using Domain.InputDataModel.Base.Enums;
 using Domain.InputDataModel.Base.Response.ResponseInfos;
+using Domain.InputDataModel.Base.Response.ResponseValidators;
 using Infrastructure.Transport.Base.DataProvidert;
 using Shared.Extensions;
 using Shared.Helpers;
@@ -27,7 +27,7 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
 
         #region prop
         public int TimeRespone => _transfer.Response.Option.TimeRespone;         //Время на ответ
-        public BaseResponseInfo OutputData { get; private set; }
+        public BaseResponseInfo ResponseInfo { get; private set; }
         public bool IsOutDataValid { get; private set; }
         public ProviderStatus ProviderStatus { get; private set; }
         /// <summary>
@@ -64,9 +64,10 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
             var validator = _transfer.Response.Validator;
             var respInfo = validator.Validate(data);
             IsOutDataValid = respInfo.IsOutDataValid;
-            OutputData = respInfo;
+            ResponseInfo = respInfo;
             return IsOutDataValid;
         }
+
         #endregion
 
 
@@ -82,7 +83,7 @@ namespace Domain.InputDataModel.Base.ProvidersAbstract
             var validator = _transfer.Response.Validator;
             var respInfo = validator.Validate(stringResponse);
             IsOutDataValid = respInfo.IsOutDataValid;
-            OutputData = respInfo;
+            ResponseInfo = respInfo;
             return IsOutDataValid;
         }
         #endregion

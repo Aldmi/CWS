@@ -3,15 +3,9 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>d8d09599-5b7a-48cc-80a3-343acb1cdeb5</ProjectGuid>
-    <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
-    <DockerServiceName>webapiswc</DockerServiceName>
+    <ProjectGuid>7fe96b8f-7fed-4678-9500-3d7e4e699f16</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="docker-compose - Copy.override.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
-    </None>
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
