@@ -5,6 +5,7 @@ namespace Shared.MiddleWares.Converters.StringConverters
     /// <summary>
     /// Дополняет пробелами строку до длинны указанной в _option.Lenght.
     /// Если длинна строки больше или равна _option.Lenght, то дополнение не происходит.
+    ///  Дополнение происходит сивмолами _option.PaddingChar
     /// </summary>
     public class PadRightStringConverter : BaseStringConverter
     {
@@ -16,16 +17,18 @@ namespace Shared.MiddleWares.Converters.StringConverters
 
 
         /// <summary>
-        /// null- заменяю на " ", и дополняет пробелами
+        /// null- заменяю на PaddingChar, и дополняет PaddingChar
         /// </summary>
         protected override string NullHandler()
         {
-            return ConvertChild(" ", 1);
+            var paddingChar = _option.PaddingChar ?? ' ';
+            return ConvertChild(paddingChar.ToString(), 1);
         }
 
         protected override string ConvertChild(string inProp, int dataId)
         {
-            var res = inProp.PadRight(_option.Lenght);
+            var paddingChar = _option.PaddingChar ?? ' ';
+            var res = inProp.PadRight(_option.Lenght, paddingChar);
             return res;
         }
     }

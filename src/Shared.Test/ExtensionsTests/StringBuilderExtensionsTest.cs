@@ -93,5 +93,14 @@ namespace Shared.Test.ExtensionsTests
             exception.Should().BeOfType<ArgumentNullException>();
             exception.Message.Should().Contain("newValue НЕ может быть null");
         }
+        
+                
+        [Fact]
+        public void Test()
+        {
+            var ts = TimeSpan.FromMinutes(5);
+            var min=ts.ToString("%m");
+        }
+        
     }
 }

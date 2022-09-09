@@ -90,6 +90,5 @@ namespace MappingTest
             //Asert
             model.MathematicFormula.Expr.Should().Be("x+10");
         }
-
     }
 }

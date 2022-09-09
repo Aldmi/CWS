@@ -3,5 +3,6 @@
     public class EfPadRightStringConverterOption
     {
         public int Lenght { get; set; }
+        public char? PaddingChar { get; set; }
     }
 }

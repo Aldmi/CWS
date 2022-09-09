@@ -47,8 +47,23 @@ namespace DeviceForExchnage.Test.ConverterTests
             //Asert
             res.Should().Be("     ");
         }
+        
+        
+        [Fact]
+        public void NullString_Padright_5Spaces()
+        {
+            //Arrage
+            var converer = new PadRightStringConverter(Option);
+            string str = null;
 
+            //Act
+            var res = converer.Convert(str, 0);
 
+            //Asert
+            res.Should().Be("     ");
+        }
+        
+        
         [Fact]
         public void NotInseart_Spaces()
         {
@@ -76,6 +91,63 @@ namespace DeviceForExchnage.Test.ConverterTests
 
             //Asert
             res.Should().Be(str);
+        }
+        
+        
+        [Fact]
+        public void NullString_With_PaddingChar_Option_Padright_5Spaces()
+        {
+            //Arrage
+            var converer = new PadRightStringConverter(new PadRightStringConverterOption
+            {
+                Lenght = 5,
+                PaddingChar = '_'
+            });
+            string str = null;
+
+            //Act
+            var res = converer.Convert(str, 0);
+
+            //Asert
+            res.Should().Be("_____");
+        }
+        
+        
+        [Fact]
+        public void Inseart_With_PaddingChar_Option_Padright_5Spaces()
+        {
+            //Arrage
+            var converer = new PadRightStringConverter(new PadRightStringConverterOption
+            {
+                Lenght = 5,
+                PaddingChar = '_'
+            });
+            string str = "123";
+
+            //Act
+            var res = converer.Convert(str, 0);
+
+            //Asert
+            res.Should().Be("123__");
+        }
+        
+        
+        [Fact]
+        public void Inseart_String_Spase_With_PaddingChar_Option_Padright_5Spaces()
+        {
+            //Arrage
+            var converer = new PadRightStringConverter(new PadRightStringConverterOption
+            {
+                Lenght = 5,
+                PaddingChar = '_'
+            });
+            string str = "1  ";
+
+            //Act
+            var res = converer.Convert(str, 0);
+
+            //Asert
+            res.Should().Be("1  __");
         }
     }
 }

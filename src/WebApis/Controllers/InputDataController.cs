@@ -219,21 +219,21 @@ namespace WebApiSwc.Controllers
             {
                 var fileName = values[0];
                 dataAction = values[1];
-                deviceName ??= fileName;//Если deviceName не переданн в заголовке 
+                deviceName ??= fileName;//Если deviceName не передан в заголовке 
                 var str = $"FileName= {fileName}";
-                _logger.Information("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", str);
+                _logger.Information("{Type} {MessageShort}", "InputDataController/SendCreepLineXmlMultipart4Devices", str);
             }
             var (_, isFailureHeader, (actionParse, commandParse), errorHeader) = AcceptHeaders(deviceName, dataAction, command);
             if (isFailureHeader)
             {
-                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", errorHeader);
-                return BadRequest($"SendDataXmlMultipart4Devices. {errorHeader}");
+                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendCreepLineXmlMultipart4Devices", errorHeader);
+                return BadRequest($"SendCreepLineXmlMultipart4Devices. {errorHeader}");
             }
             var (_, isFailureXml, xmlDto, erroXml) = await AcceptXmlFile<CreepingLine4XmlDto>(userfile);
             if (isFailureXml)
             {
-                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendDataXmlMultipart4Devices", erroXml);
-                return BadRequest($"SendDataXmlMultipart4Devices. {erroXml}");
+                _logger.Warning("{Type} {MessageShort}", "InputDataController/SendCreepLineXmlMultipart4Devices", erroXml);
+                return BadRequest($"SendCreepLineXmlMultipart4Devices. {erroXml}");
             }
             try
             {
