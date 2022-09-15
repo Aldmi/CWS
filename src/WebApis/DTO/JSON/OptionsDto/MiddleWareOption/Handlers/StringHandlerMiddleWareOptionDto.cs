@@ -22,5 +22,6 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Handlers
         public ToUpperConverterOptionDto ToUpperConverterOption { get; set; }
         public PadRighOptimalFillingConverterOptionDto PadRighOptimalFillingConverterOption { get; set; }
         public SubStringConverterOptionDto SubStringConverterOption { get; set; }
+        public PadRightStrStringConverterOptionDto PadRightStrStringConverterOption { get; set; }
     }
 } 

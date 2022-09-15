@@ -22,5 +22,6 @@ namespace Infrastructure.Dal.EfCore.Entities.MiddleWare.Handlers
         public EfToUpperConverterOption ToUpperConverterOption { get; set; }
         public EfPadRighOptimalFillingConverterOption PadRighOptimalFillingConverterOption { get; set; }
         public EfSubStringConverterOption SubStringConverterOption { get; set; }
+        public EfPadRightStrStringConverterOption PadRightStrStringConverterOption { get; set; }
     }
 }

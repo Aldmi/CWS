@@ -25,18 +25,19 @@ namespace Shared.MiddleWares.HandlersOption
     /// </summary>
     public class UnitStringConverterOption
     {
-        public LimitStringConverterOption LimitStringConverterOption { get; set; }
-        public SubStringMemConverterOption SubStringMemConverterOption { get; set; }
-        public InseartEndLineMarkerConverterOption InseartEndLineMarkerConverterOption { get; set; }
-        public InsertAtEndOfLineConverterOption InsertAtEndOfLineConverterOption { get; set; }
-        public PadRightStringConverterOption PadRightStringConverterOption { get; set; }
-        public PadRighCharWeightStringConverterOption PadRighCharWeightStringConverterOption { get; set; }
-        public ReplaseStringConverterOption ReplaseStringConverterOption { get; set; }
-        public ReplaseCharStringConverterOption ReplaseCharStringConverterOption { get; set; }
-        public ToLowerConverterOption ToLowerConverterOption { get; set; }
-        public ToUpperConverterOption ToUpperConverterOption { get; set; }
-        public PadRighOptimalFillingConverterOption PadRighOptimalFillingConverterOption { get; set; }
-        public SubStringConverterOption SubStringConverterOption { get; set; }
+        public LimitStringConverterOption? LimitStringConverterOption { get; set; }
+        public SubStringMemConverterOption? SubStringMemConverterOption { get; set; }
+        public InseartEndLineMarkerConverterOption? InseartEndLineMarkerConverterOption { get; set; }
+        public InsertAtEndOfLineConverterOption? InsertAtEndOfLineConverterOption { get; set; }
+        public PadRightStringConverterOption? PadRightStringConverterOption { get; set; }
+        public PadRighCharWeightStringConverterOption? PadRighCharWeightStringConverterOption { get; set; }
+        public ReplaseStringConverterOption? ReplaseStringConverterOption { get; set; }
+        public ReplaseCharStringConverterOption? ReplaseCharStringConverterOption { get; set; }
+        public ToLowerConverterOption? ToLowerConverterOption { get; set; }
+        public ToUpperConverterOption? ToUpperConverterOption { get; set; }
+        public PadRighOptimalFillingConverterOption? PadRighOptimalFillingConverterOption { get; set; }
+        public SubStringConverterOption? SubStringConverterOption { get; set; }
+        public PadRightStrStringConverterOption? PadRightStrStringConverterOption { get; set; }
 
         public IConverterMiddleWare<string> CreateConverter()
         {
@@ -52,6 +53,7 @@ namespace Shared.MiddleWares.HandlersOption
             if (ToUpperConverterOption != null) return new ToUpperConverter(ToUpperConverterOption);
             if (PadRighOptimalFillingConverterOption != null) return new PadRighOptimalFillingConverter(PadRighOptimalFillingConverterOption);
             if (SubStringConverterOption != null) return new SubStringConverter(SubStringConverterOption);
+            if (PadRightStrStringConverterOption != null) return new PadRightStrStringConverter(PadRightStrStringConverterOption);
 
             throw new NotSupportedException("В UnitStringConverterOption необходимо указать хотя бы одну опцию");
         }

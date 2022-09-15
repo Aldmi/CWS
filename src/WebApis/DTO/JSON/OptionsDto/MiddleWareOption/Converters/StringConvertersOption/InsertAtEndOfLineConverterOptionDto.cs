@@ -4,7 +4,8 @@ namespace WebApiSwc.DTO.JSON.OptionsDto.MiddleWareOption.Converters.StringConver
 {
     public class InsertAtEndOfLineConverterOptionDto
     {
-        [Required(ErrorMessage = "InsertAtEndOfLineConverterOption. Строка для вставки не может быть NULL")]
+        [Required(AllowEmptyStrings = true)]
+        [StringLength(50, MinimumLength = 1)]
         public string EndLine { get; set; }
     }
 }

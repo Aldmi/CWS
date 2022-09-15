@@ -3,9 +3,8 @@
 namespace Shared.MiddleWares.Converters.StringConverters
 {
     /// <summary>
-    /// Дополняет пробелами строку до длинны указанной в _option.Lenght.
+    /// Дополняет строку символом _option.PaddingChar до длинны указанной в _option.Lenght.
     /// Если длинна строки больше или равна _option.Lenght, то дополнение не происходит.
-    ///  Дополнение происходит сивмолами _option.PaddingChar
     /// </summary>
     public class PadRightStringConverter : BaseStringConverter
     {
