@@ -361,5 +361,27 @@ namespace Shared.Test
             res.IsSuccess.Should().BeFalse();
             res.Error.Should().Be("BorderSubString.Calc(...)  delemiter не может быть null или пуст.");
         }
+        
+        
+        [Fact]
+        public void DEBUG()
+        {
+            //Arrange
+            var str = "0xA50xC70x100x0D0x010x010x000x020x10 СТРОКА  0x030x400xA60xA60xA60xA60xA60xA60xA60xA60xA60xA60xA60xA60xA60xA60xA60xA60xA60xA60xA60x{CRC8Maxim:X2_CRC_Left_Border_Before_A5}";
+            var border = new BorderSubString
+            {
+                StartCh = "0xA5",
+                EndCh = "0x{CRC",
+                StartInclude = false,
+                EndInclude = false,
+            };
+
+            //Act
+            var res = border.Calc(str, null);
+
+            //Assert
+            res.IsSuccess.Should().BeFalse();
+            res.Error.Should().Be("BorderSubString.Calc(...)  delemiter не может быть null или пуст.");
+        }
     }
 }
